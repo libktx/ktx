@@ -1,0 +1,143 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusPluginVersion"
+    classpath "com.netflix.nebula:gradle-extra-configurations-plugin:$configurationsPluginVersion"
+  }
+}
+
+apply plugin: 'distribution'
+apply plugin: 'io.codearte.nexus-staging'
+
+subprojects {
+  apply plugin: 'maven'
+  apply plugin: 'kotlin'
+  apply plugin: 'signing'
+  apply plugin: 'nebula.provided-base'
+
+  ext {
+    isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
+  }
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+  }
+
+  sourceCompatibility = 1.6
+  targetCompatibility = 1.6
+  group = 'com.github.czyzby'
+  version = libVersion
+  archivesBaseName = projectName
+
+  configurations {
+    deployerJars
+  }
+
+  jar {
+    from project.sourceSets.main.allSource
+    from project.sourceSets.main.output
+    baseName = archivesBaseName
+  }
+
+  dependencies {
+    provided "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    deployerJars "org.apache.maven.wagon:wagon-ssh:$wagonVersion"
+    deployerJars "org.apache.maven.wagon:wagon-http:$wagonVersion"
+  }
+
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+  }
+
+  task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  artifacts {
+    archives javadocJar, sourcesJar
+  }
+
+  signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+  }
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+          authentication(userName: ossrhUsername, password: ossrhPassword)
+        }
+
+        pom.project {
+          name = projectName
+          packaging 'jar'
+          description = projectDesc
+          url 'http://github.com/czyzby/ktx'
+
+          licenses {
+            license {
+              name 'The Apache License, Version 2.0'
+              url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            }
+          }
+          
+          scm {
+            connection 'scm:git:git@github.com:czyzby/ktx.git'
+            developerConnection 'scm:git:git@github.com:czyzby/ktx.git'
+            url 'http://github.com/czyzby/ktx/'
+          }
+
+          developers {
+            developer {
+              id 'mj'
+              name 'MJ'
+              email 'john.hervicc@gmail.com'
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+nexusStaging {
+  packageGroup = 'com.github.czyzby'
+  username = ossrhUsername
+  password = ossrhPassword
+}
+
+distributions {
+  main {
+    baseName = libVersion
+    contents {
+      project.subprojects.each { sub ->
+        into('lib') {
+          from sub.jar
+        }
+        into('src') {
+          from sub.sourcesJar
+        }
+        into('doc') {
+          from sub.javadocJar
+        }
+      }
+    }
+  }
+}
