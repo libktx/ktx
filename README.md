@@ -1,4 +1,5 @@
-# KTX: *K*o*t*lin utilities for LibGD*X* applications
+# KTX
+**K**o**t**lin utilities for LibGD**X** applications.
 
 ### About the project
 
