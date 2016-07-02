@@ -43,7 +43,6 @@ inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(initialCapacity: Int = def
   return map
 }
 
-
 /**
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.

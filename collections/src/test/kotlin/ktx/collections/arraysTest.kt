@@ -40,6 +40,8 @@ class ArraysTest {
     val array: GdxArray<String>? = GdxArray.with("1", "2", "3")
     assertEquals(3, array.size())
     assertEquals(array!!.size, array.size())
+    val nullArray: GdxArray<Any>? = null
+    assertEquals(0, nullArray.size())
   }
 
   @Test
@@ -48,6 +50,8 @@ class ArraysTest {
     assertFalse(array.isEmpty())
     val emptyArray = GdxArray<Any>()
     assertTrue(emptyArray.isEmpty())
+    val nullArray: GdxArray<Any>? = null
+    assertTrue(nullArray.isEmpty())
   }
 
   @Test
@@ -56,6 +60,8 @@ class ArraysTest {
     assertTrue(array.isNotEmpty())
     val emptyArray = GdxArray<Any>()
     assertFalse(emptyArray.isNotEmpty())
+    val nullArray: GdxArray<Any>? = null
+    assertFalse(nullArray.isNotEmpty())
   }
 
   @Test

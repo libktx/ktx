@@ -39,7 +39,7 @@ inline fun <Type> gdxSetOf(vararg elements: Type, initialCapacity: Int = default
  * A method wrapper over [ObjectSet.size] variable compatible with nullable types.
  * @return current amount of elements in the set.
  */
-inline fun <Type> ObjectSet<Type>?.size(): Int = if (this == null) 0 else this.size
+inline fun <Type> ObjectSet<Type>?.size(): Int = this?.size ?: 0
 
 /**
  * @return true if the set is null or has no elements.
@@ -54,23 +54,23 @@ inline fun <Type> ObjectSet<Type>?.isNotEmpty(): Boolean = this != null && this.
 /**
  * @param elements will be iterated over and added to the set.
  */
-fun <Type> ObjectSet<Type>.addAll(elements: Iterable<Type>) {
-  elements.forEach { this.add(it) }
-}
+fun <Type> ObjectSet<Type>.addAll(elements: Iterable<Type>) =
+    elements.forEach { this.add(it) }
+
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> ObjectSet<Type>.removeAll(elements: Iterable<Type>) {
-  elements.forEach { this.remove(it) }
-}
+fun <Type> ObjectSet<Type>.removeAll(elements: Iterable<Type>) =
+    elements.forEach { this.remove(it) }
+
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> ObjectSet<Type>.removeAll(elements: Array<out Type>) {
-  elements.forEach { this.remove(it) }
-}
+fun <Type> ObjectSet<Type>.removeAll(elements: Array<out Type>) =
+    elements.forEach { this.remove(it) }
+
 
 /**
  * Allows to append elements to sets with pleasant, chainable `set + element0 + element1` syntax.

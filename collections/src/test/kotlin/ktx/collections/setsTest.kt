@@ -38,6 +38,8 @@ class SetsTest {
     val set: ObjectSet<String>? = ObjectSet.with("1", "2", "3")
     assertEquals(3, set.size())
     assertEquals(set!!.size, set.size())
+    val nullSet: ObjectSet<Any>? = null
+    assertEquals(0, nullSet.size())
   }
 
   @Test
@@ -46,6 +48,8 @@ class SetsTest {
     assertFalse(set.isEmpty())
     val emptySet = ObjectSet<Any>()
     assertTrue(emptySet.isEmpty())
+    val nullSet: ObjectSet<Any>? = null
+    assertTrue(nullSet.isEmpty())
   }
 
   @Test
@@ -54,6 +58,8 @@ class SetsTest {
     assertTrue(set.isNotEmpty())
     val emptySet = ObjectSet<Any>()
     assertFalse(emptySet.isNotEmpty())
+    val nullSet: ObjectSet<Any>? = null
+    assertFalse(nullSet.isNotEmpty())
   }
 
   @Test

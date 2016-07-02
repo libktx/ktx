@@ -32,7 +32,7 @@ inline fun <Type : Any> gdxArrayOf(vararg elements: Type): GdxArray<Type> = GdxA
  * A method wrapper over [Array.size] variable compatible with nullable types.
  * @return current amount of elements in the array.
  */
-inline fun <Type> GdxArray<Type>?.size(): Int = if (this == null) 0 else this.size
+inline fun <Type> GdxArray<Type>?.size(): Int = this?.size ?: 0
 
 /**
  * @return true if the array is null or has no elements.
@@ -70,31 +70,31 @@ fun <Type> GdxArray<Type>.removeLast(): Type? {
 fun <Type> GdxArray<Type>.getOrElse(index: Int, alternative: Type): Type {
   if (index >= this.size) return alternative
   val element = this[index]
-  return if (element == null) alternative else element
+  return element ?: alternative
 }
 
 /**
  * @param elements will be iterated over and added to the array.
  */
-fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) {
+fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) =
   elements.forEach { this.add(it) }
-}
+
 
 /**
  * @param elements will be iterated over and removed from the array.
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
-fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean = false) {
+fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean = false) =
   elements.forEach { this.removeValue(it, identity) }
-}
+
 
 /**
  * @param elements will be iterated over and removed from the array.
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
-fun <Type> GdxArray<Type>.removeAll(elements: Array<out Type>, identity: Boolean = false) {
+fun <Type> GdxArray<Type>.removeAll(elements: Array<out Type>, identity: Boolean = false) =
   elements.forEach { this.removeValue(it, identity) }
-}
+
 
 /**
  * Allows to append elements to arrays with pleasant, chainable `array + element0 + element1` syntax.
