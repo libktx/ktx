@@ -107,7 +107,6 @@ class ArraysTest {
     assertTrue("3" in array)
   }
 
-
   @Test
   fun shouldRemoveAllValuesFromCustomIterable() {
     val array = GdxArray.with("1", "2", "3")
@@ -212,6 +211,20 @@ class ArraysTest {
     val array = GdxArray.with("1", "2", "3", "4")
     array + "5" - "2" + GdxArray.with("7") - GdxArray.with("4", "6")
     assertEquals(GdxArray.with("1", "3", "5", "7"), array)
+  }
+
+  @Test
+  fun shouldFindElementsWithInOperator() {
+    val array = GdxArray.with("1")
+    val identityCheck = false // Will compare with equals(Object).
+    assertTrue(array.contains("1", identityCheck)) // Standard LibGDX API.
+    assertTrue("1" in array)
+    assertTrue(array.contains("1")) // Operator method alias.
+
+    array.removeValue("1", identityCheck)
+    assertFalse(array.contains("1", identityCheck)) // Standard LibGDX API.
+    assertFalse("1" in array)
+    assertFalse(array.contains("1"))
   }
 
   @Test

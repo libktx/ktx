@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.IntArray as GdxIntArray
 /**
  * Default LibGDX array size used by most constructors.
  */
-val defaultArraySize = 16
+const val defaultArraySize = 16
 
 /**
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
@@ -155,6 +155,13 @@ operator fun <Type> GdxArray<Type>.minus(elements: Array<out Type>): GdxArray<Ty
   this.removeAll(elements)
   return this
 }
+
+/**
+ * Allows to check if an array contains an element using the "in" operator.
+ * @param element might be in the array.
+ * @return true if the element is equal to any value stored in the array.
+ */
+operator fun <Type> GdxArray<Type>.contains(element: Type): Boolean = this.contains(element, false)
 
 /**
  * Allows to iterate over the array with access to [MutableIterator], which allows to remove elements from the collection

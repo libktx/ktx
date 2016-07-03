@@ -1,1 +1,1 @@
-include 'collections', 'i18n'
+include 'actors', 'collections', 'i18n', 'inject'

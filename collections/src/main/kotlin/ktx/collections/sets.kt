@@ -8,11 +8,11 @@ import com.badlogic.gdx.utils.ObjectSet
 /**
  * Default LibGDX set size used by most constructors.
  */
-val defaultSetSize = 51
+const val defaultSetSize = 51
 /**
  * Default LibGDX map and set load factor used by most constructors.
  */
-val defaultLoadFactor = 0.8f
+const val defaultLoadFactor = 0.8f
 
 /**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary.
@@ -57,20 +57,17 @@ inline fun <Type> ObjectSet<Type>?.isNotEmpty(): Boolean = this != null && this.
 fun <Type> ObjectSet<Type>.addAll(elements: Iterable<Type>) =
     elements.forEach { this.add(it) }
 
-
 /**
  * @param elements will be iterated over and removed from the set.
  */
 fun <Type> ObjectSet<Type>.removeAll(elements: Iterable<Type>) =
     elements.forEach { this.remove(it) }
 
-
 /**
  * @param elements will be iterated over and removed from the set.
  */
 fun <Type> ObjectSet<Type>.removeAll(elements: Array<out Type>) =
     elements.forEach { this.remove(it) }
-
 
 /**
  * Allows to append elements to sets with pleasant, chainable `set + element0 + element1` syntax.

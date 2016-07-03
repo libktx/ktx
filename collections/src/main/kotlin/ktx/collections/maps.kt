@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap
 /**
  * Default LibGDX map size used by most constructors.
  */
-val defaultMapSize = 51
+const val defaultMapSize = 51
 
 /**
  * @param key the passed value will be linked with this key.
