@@ -1,4 +1,5 @@
 # KTX
+
 **K**o**t**lin utilities for LibGD**X** applications.
 
 ### About the project
@@ -13,11 +14,10 @@ from scratch. Considering how much work it takes to prepare a game framework/eng
 The two biggest issues with LibGDX are the facts that some of its modules were clearly not designed to be extended
 (*raise a hand if you never copy-pasted a `Scene2D` actor in sheer frustration, as a simple class extension was not enough!*)
 and that it is written in *Java*. Do not get me wrong: Java 8 was a huge step forward, but since you likely want to support
-legacy Android devices and WebGL (through GWT), you're stuck with Java 6 (or 7, which still is not a lot better, to be
-honest). Switching to Kotlin - with its extension functions, inline methods, builders, operator overriding, pleasant syntax,
-easier generics and whatnot - certainly helps. But since LibGDX was not designed with Kotlin in mind, there's still
-*a lot of work* to be done to make use of all the shiny new features. *A lot of work* that has to be done *once*, if you
-think about it.
+legacy Android devices and WebGL (through GWT), you're stuck with Java 6 or 7. Switching to Kotlin - with its extension
+functions, inline methods, builders, operator overriding, pleasant syntax, easier generics and whatnot - certainly helps.
+But since LibGDX was not designed with Kotlin in mind, there's still *a lot of work* to be done to make use of all the
+shiny new features. *A lot of work* that has to be done *once*, if you think about it.
 
 **KTX** aims to make LibGDX Kotlin-friendly, without turning the API upside down. This is **not** a new framework by any
 means.
@@ -32,6 +32,7 @@ a recent release).
 
 The modules present in **KTX** are:
 
+- [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
 - [collections](collections): utilities for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple functions that make internationalization less verbose and easier to use.
 
