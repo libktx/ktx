@@ -149,4 +149,46 @@ class ActorsTest {
     assertEquals(0f, MIN_ALPHA, tolerance)
     assertEquals(1f, MAX_ALPHA, tolerance)
   }
+
+  @Test
+  fun shouldChangeKeyboardFocus() {
+    val stage = getMockStage()
+    val actor = Actor()
+    stage.addActor(actor)
+    assertNotEquals(stage.keyboardFocus, actor)
+
+    actor.setKeyboardFocus()
+    assertEquals(stage.keyboardFocus, actor)
+
+    actor.setKeyboardFocus(false)
+    assertNotEquals(stage.keyboardFocus, actor)
+    assertNull(stage.keyboardFocus)
+
+    val newFocus = Actor()
+    stage.keyboardFocus = newFocus
+    actor.setKeyboardFocus(false) // Should not clear or change stage's focused actor if not currently focused.
+    assertNotNull(stage.keyboardFocus)
+    assertEquals(newFocus, stage.keyboardFocus)
+  }
+
+  @Test
+  fun shouldChangeScrollFocus() {
+    val stage = getMockStage()
+    val actor = Actor()
+    stage.addActor(actor)
+    assertNotEquals(stage.scrollFocus, actor)
+
+    actor.setScrollFocus()
+    assertEquals(stage.scrollFocus, actor)
+
+    actor.setScrollFocus(false)
+    assertNotEquals(stage.scrollFocus, actor)
+    assertNull(stage.scrollFocus)
+
+    val newFocus = Actor()
+    stage.scrollFocus = newFocus
+    actor.setScrollFocus(false) // Should not clear or change stage's focused actor if not currently focused.
+    assertNotNull(stage.scrollFocus)
+    assertEquals(newFocus, stage.scrollFocus)
+  }
 }

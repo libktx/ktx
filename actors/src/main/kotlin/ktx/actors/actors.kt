@@ -110,3 +110,34 @@ var Stage.alpha: Float
   set(value) {
     this.root.color.a = value
   }
+
+
+/**
+ * Modifies current stage keyboard focus if this actor is currently shown.
+ * @param focus if true, will set current keyboard focus to this actor. If false and the actor is currently focused,
+ *    will clear keyboard focus of actor's stage.
+ */
+fun Actor.setKeyboardFocus(focus: Boolean = true) {
+  if (this.stage != null) {
+    if (focus) {
+      stage.keyboardFocus = this
+    } else if (stage.keyboardFocus === this) {
+      stage.keyboardFocus = null
+    }
+  }
+}
+
+/**
+ * Modifies current stage scroll focus if this actor is currently shown.
+ * @param focus if true, will set current scroll focus to this actor. If false and the actor is currently focused,
+ *    will clear scroll focus of actor's stage.
+ */
+fun Actor.setScrollFocus(focus: Boolean = true) {
+  if (this.stage != null) {
+    if (focus) {
+      stage.scrollFocus = this
+    } else if (stage.scrollFocus === this) {
+      stage.scrollFocus = null
+    }
+  }
+}
