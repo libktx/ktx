@@ -1,12 +1,13 @@
 # KTX: math utilities
 
-Math extensions and operator overloads for LibGDX math-related API.
+Math extensions and operator overloads for LibGDX math API.
 
 ### Why?
 
-Java does not feature operator overloading, which leads to weird constructs like `vector.add(a).sub(b)`. However, when
-using Kotlin a much more readable syntax like `vector + a - b` is possible to achieve - but then again, LibGDX method
-names do not match the required Kotlin operator identifiers. Extension operator functions are necessary to make it work.
+Java does not feature operator overloading, which leads to weird constructs like `vector.add(a).sub(b)`. Kotlin brings
+the possibility to use a much more readable and natural syntax with its operators overloading: `vector + a - b`. However,
+LibGDX API does not match Kotlin naming conventions (necessary for operators to work), which means extension functions
+are necessary to make it work like that.
 
 ### Guide
 
@@ -31,11 +32,26 @@ much faster to calculate and yields the same results in most cases.
 
 Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be used for any `Shape2D` implementation
 (like `Rectangle`, `Ellipse` or `Circle`). For example, given `vec: Vector2` and `rect: Rectangle` variables, you can
-call `vec in rect` (or `vec !in rect`) to check if the rectangle (not) contains the point stored by the vector.
+call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or doesn't) the point stored by the vector.
+
+#### `Vector3`
+
+- `vec3` is a global factory function that can create `Vector3` instances with named parameters for extra readability.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide current values according to the second vector.
+- Unary `-` operator (a single minus before the vector) allows to negate all vector values.
+- `*` and `/` can be used with floats and ints to multiply or divide all vector values.
+- `++` and `--` operators can be used to increment and decrement x, y and z values of the vector. Note that since
+`Vector3` class is mutable, both these operations modify the internal state of the vector. This means that both `++vector`
+and `vector++` are effectively the same, as previous state of the vector is not kept (to limit the amount of constructed
+objects).
+- `Vector3` instances can be destructed to tree float variables in one step with `val (x, y, z) = vector3` syntax thanks
+to `component1()`, `component2()` and `component3` operator methods.
+- `Vector3` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
+(or equal) overall length, similarly to how `Vector2` now works.
 
 ### Alternatives
 
-Sadly, it does not seem that there are any math-related Kotlin libraries that would make LibGDX math API usage more
-natural. You can try browsing through existing general purpose LibGDX utility extensions - some of them contain static
-methods for various math operations missing in the official API.
+Sadly, it does not seem that there are any public math-related Kotlin libraries that would make LibGDX math API usage more
+natural. You can try browsing through existing general purpose LibGDX extensions - some of them contain static methods
+for various math operations missing in the official API.
 
