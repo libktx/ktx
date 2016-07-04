@@ -66,6 +66,57 @@ listeners are invoked with the new `I18NBundle` instance. Attaching a listener t
 is a good idea. The syntax is pretty simple: `I18n.addListener { myView.reload() }`. You can also remove any listener
 with `removeListener` or `clearListeners` methods.
 
+
+#### Automatic `BundleLine` enum generation
+
+You can use the following Gradle script to generate a Kotlin enum implementing `BundleLine` according to an existing
+`.properties` bundle:
+
+```Groovy
+task nls << {
+  def project = 'core'             // Will contain generated enum class. 
+  def source = 'src/main/kotlin'   // Kotlin source path of the project.
+  def pack = 'com.your.company'    // Enum target package.
+  def name = 'Nls'                 // Enum class name.
+  def fileName = 'nls.kt'          // Name of Kotlin file containing the enum.
+  def bundle = 'core/assets/i18n/nls.properties' // Path to i18n bundle file.
+
+  println("Processing i18n bundle file at ${bundle}...")
+  def builder = new StringBuilder()
+  builder.append("""package ${pack}
+import ktx.i18n.BundleLine
+/** Generated from ${bundle} file. */
+enum class ${name} : BundleLine {
+""")
+  def newLine = System.getProperty("line.separator")
+  file(bundle).eachLine {
+    def data = it.trim()
+    def separator = data.indexOf('=')
+    if (!data.isEmpty() && separator > 0 && !data.startsWith('#')) {
+      def id = data.substring(0, separator)
+      builder.append('    ').append(id).append(',').append(newLine)
+    }
+  }
+  builder.append('    ;').append(newLine).append('}').append(newLine)
+
+  source = source.replace('/', File.separator)
+  pack = pack.replace('.', File.separator)
+  def path = project + File.separator + source + File.separator + pack +
+      File.separator + fileName
+  println("Saving i18n bundle enum at ${path}...")
+  def enumFile = file(path)
+  delete enumFile
+  enumFile.getParentFile().mkdirs()
+  enumFile.createNewFile()
+  enumFile << builder << newLine
+  println("Done. I18n bundle enum generated.")
+}
+```
+
+The first few lines contain task configuration, so make sure to pass the correct paths and names before running the task
+with `gradle nls` or `./gradlew nls`. Be careful: current task implementation **replaces** the enum class at the selected
+path. If you want to modify enum source, you should edit the task itself.
+
 ### Alternatives
 
 - [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) features simple and powerful support for
