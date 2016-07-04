@@ -49,6 +49,18 @@ to `component1()`, `component2()` and `component3` operator methods.
 - `Vector3` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
 (or equal) overall length, similarly to how `Vector2` now works.
 
+#### `Matrix3`
+
+- `mat3` is a human-readable global factory function that allows to easily create `Matrix3` instances.
+- Unary `-` operator (a single minus before the matrix) can be used to negate all matrix values.
+- `!` operator before the matrix inverts it, calling `inv()`.
+- `+` and `-` can be used to add and subtract values from other matrices.
+- `*` operator can be used to right-multiply the matrix with another matrix using `mul(Matrix3)` method.
+- `*` operator can be used to scale the X and Y components of the matrix with a float of a vector using `scl` methods.
+- `Vector3` can be multiplied with a `Matrix3` using `*` operator.
+- `Matrix3` instances can be destructed into nine float variables (each representing one of its cells) thanks to the
+`component1()` - `component9()` operator functions.
+
 ### Alternatives
 
 Sadly, it does not seem that there are any public math-related Kotlin libraries that would make LibGDX math API usage more
