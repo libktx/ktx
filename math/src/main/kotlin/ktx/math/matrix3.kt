@@ -106,6 +106,12 @@ operator fun Matrix3.times(scale: Vector3): Matrix3 = this.scl(scale)
 operator fun Vector3.times(matrix3: Matrix3): Vector3 = this.mul(matrix3)
 
 /**
+ * @param matrix3 this vector will be left-multiplied by this matrix assuming the last component is 1f.
+ * @return this [Vector2] storing the result.
+ */
+operator fun Vector2.times(matrix3: Matrix3): Vector2 = this.mul(matrix3)
+
+/**
  * Operator function that allows to deconstruct this matrix.
  * @return first row, first column.
  */

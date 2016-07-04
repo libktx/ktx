@@ -35,8 +35,10 @@ The modules present in **KTX** are:
 - [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
 - [collections](collections): utilities for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple functions that make internationalization less verbose and easier to use.
+- [math](math): operator overloads for LibGDX math API and general math utilities.
 
-Note that most of the code is tested. Going through the tests can be a great way of learning the API.
+Afraid to use some third-party code? Run the test suites yourself. *Every* function and class added by these extensions
+features in at least one test. Going through the tests can be a great way of learning the API.
 
 ### Gradle
 

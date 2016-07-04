@@ -153,7 +153,18 @@ class Matrix3Test {
   }
 
   @Test
-  fun shouldMultiplyMatricesWithVector() {
+  fun shouldMultiplyVector2WithMatrices() {
+    val vector = vec2(1f, 2f)
+    vector * mat3(
+        1f, 2f, 3f,
+        4f, 5f, 6f,
+        7f, 8f, 9f)
+    assertEquals(1f * 1f + 2f * 2f + 1f * 3f, vector.x, floatTolerance)
+    assertEquals(1f * 4f + 2f * 5f + 1f * 6f, vector.y, floatTolerance)
+  }
+
+  @Test
+  fun shouldMultiplyVector3WithMatrices() {
     val vector = vec3(1f, 2f, 3f)
     vector * mat3(
         1f, 2f, 3f,
@@ -175,12 +186,15 @@ class Matrix3Test {
         4f, 5f, 6f,
         7f, 8f, 9f
     )
+
     assertEquals(1f, x0y0, floatTolerance)
     assertEquals(2f, x0y1, floatTolerance)
     assertEquals(3f, x0y2, floatTolerance)
+
     assertEquals(4f, x1y0, floatTolerance)
     assertEquals(5f, x1y1, floatTolerance)
     assertEquals(6f, x1y2, floatTolerance)
+
     assertEquals(7f, x2y0, floatTolerance)
     assertEquals(8f, x2y1, floatTolerance)
     assertEquals(9f, x2y2, floatTolerance)

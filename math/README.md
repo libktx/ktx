@@ -57,9 +57,21 @@ to `component1()`, `component2()` and `component3` operator methods.
 - `+` and `-` can be used to add and subtract values from other matrices.
 - `*` operator can be used to right-multiply the matrix with another matrix using `mul(Matrix3)` method.
 - `*` operator can be used to scale the X and Y components of the matrix with a float of a vector using `scl` methods.
-- `Vector3` can be multiplied with a `Matrix3` using `*` operator.
+- `Vector3` and `Vector2` instances can be multiplied with a `Matrix3` using `*` operator.
 - `Matrix3` instances can be destructed into nine float variables (each representing one of its cells) thanks to the
 `component1()` - `component9()` operator functions.
+
+#### `Matrix4`
+
+- `mat4` is a human-readable global factory function that allows to easily create `Matrix4` instances.
+- Unary `-` operator (a single minus before the matrix) can be used to negate all matrix values.
+- `!` operator before the matrix inverts it, calling `inv()`.
+- `+` and `-` can be used to add and subtract values from other matrices.
+- `*` operator can be used to right-multiply the matrix with another matrix using `mul(Matrix4)` method.
+- `*` operator can be used to scale the X and Y components of the matrix with a float of a vector using `scl` methods.
+- `Vector3` instances can be multiplied with a `Matrix4` using `*` operator.
+- `Matrix4` instances can be destructed into sixteen float variables (each representing one of its cells) thanks to the
+`component1()` - `component16()` operator functions.
 
 ### Alternatives
 
