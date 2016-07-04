@@ -1,4 +1,0 @@
-dependencies {
-  compile "com.github.czyzby:ktx-gui:$libVersion"
-}
-
