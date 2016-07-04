@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package ktx.math
 
 import com.badlogic.gdx.math.Vector2
@@ -103,10 +101,17 @@ operator fun Vector2.dec(): Vector2 = this.sub(1f, 1f)
  * Operator function that allows to deconstruct this vector.
  * @return X component.
  */
-inline operator fun Vector2.component1(): Float = this.x
+operator fun Vector2.component1(): Float = this.x
 
 /**
  * Operator function that allows to deconstruct this vector.
  * @return Y component.
  */
-inline operator fun Vector2.component2(): Float = this.y
+operator fun Vector2.component2(): Float = this.y
+
+/**
+ * Allows to compare which [Vector2] has greater overall length.
+ * @param vector2 will be compared to this vector.
+ * @return 1 if this vector has greater length. 0 if vectors are equal. -1 if the other vector is greater.
+ */
+operator fun Vector2.compareTo(vector2: Vector2): Int = this.len2().compareTo(vector2.len2())

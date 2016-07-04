@@ -1,6 +1,5 @@
 package ktx.math
 
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.junit.Assert.*
 import org.junit.Test
@@ -126,5 +125,23 @@ class Vector2Test {
     val (x, y) = Vector2(10f, 10f)
     assertEquals(10f, x, floatTolerance)
     assertEquals(10f, y, floatTolerance)
+  }
+
+  @Test
+  fun shouldCompareVectors() {
+    val vec1 = Vector2(10f, 10f)
+    val vec2 = Vector2(10f, -20f) // This vector has the greatest overall length.
+    val vec3 = Vector2(10f, 10f)
+
+    assertTrue(vec1 < vec2)
+    assertTrue(vec1 <= vec2)
+    assertFalse(vec1 > vec2)
+    assertFalse(vec1 >= vec2)
+
+    assertTrue(vec1 == vec3) // Actually, this one uses equals, not compareTo.
+    assertTrue(vec1 >= vec3)
+    assertTrue(vec1 <= vec3)
+    assertFalse(vec1 < vec3)
+    assertFalse(vec1 > vec3)
   }
 }

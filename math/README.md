@@ -22,6 +22,12 @@ and `vector++` are effectively the same, as previous state of the vector is not 
 objects).
 - `Vector2` instances can be destructed to two float variables in one step with `val (x, y) = vector2` syntax thanks to
 `component1()` and `component2()` operator methods.
+- `Vector2` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
+(or equal) overall length. While this certainly does not fit all use cases, we consider it the most commonly compared
+value. It can be used to determine which vector is further from a certain common point (for example, which *Box2D* `Body`
+is further from the center of the `World` or which touch event is further from the `Viewport` center). It can be also
+used to quickly determine which velocity or force is greater. Note that length *squared* is actually compared, as it is
+much faster to calculate and yields the same results in most cases.
 
 Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be used for any `Shape2D` implementation
 (like `Rectangle`, `Ellipse` or `Circle`). For example, given `vec: Vector2` and `rect: Rectangle` variables, you can

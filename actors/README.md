@@ -21,6 +21,7 @@ a `Group` with `actor in group` syntax.
 - `Stage.contains(Actor)` method was added to support `in` operator. This will report `true` if the `Actor` is on the
 `Stage` (it does not have to be a direct child of `Stage` root group).
 - `Actor.alpha` and `Stage.alpha` mock-up fields were added to support easy modification of `Color.a` value.
+- `Actor.setKeyboardFocus` and `.setScrollFocus` allow to quickly (un)focus the actor on its stage.
 
 #### Event listeners
 
