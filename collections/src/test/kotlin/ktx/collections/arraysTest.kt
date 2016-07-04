@@ -11,7 +11,10 @@ import com.badlogic.gdx.utils.Array as GdxArray
 class ArraysTest {
   @Test
   fun shouldCreateArray() {
-    assertNotNull(gdxArrayOf<Any>())
+    val array = gdxArrayOf<Any>()
+    assertNotNull(array)
+    assertTrue(array is GdxArray)
+    assertEquals(0, array.size)
   }
 
   @Test

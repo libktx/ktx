@@ -77,7 +77,7 @@ fun <Type> GdxArray<Type>.getOrElse(index: Int, alternative: Type): Type {
  * @param elements will be iterated over and added to the array.
  */
 fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) =
-  elements.forEach { this.add(it) }
+    elements.forEach { this.add(it) }
 
 
 /**
@@ -85,7 +85,7 @@ fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) =
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean = false) =
-  elements.forEach { this.removeValue(it, identity) }
+    elements.forEach { this.removeValue(it, identity) }
 
 
 /**
@@ -93,7 +93,7 @@ fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean 
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Array<out Type>, identity: Boolean = false) =
-  elements.forEach { this.removeValue(it, identity) }
+    elements.forEach { this.removeValue(it, identity) }
 
 
 /**

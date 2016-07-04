@@ -5,23 +5,32 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /**
- * Tests utilities for LibGDX custom HashSet equivalent - ObjectSet.
+ * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
  * @author MJ
  */
 class SetsTest {
   @Test
   fun shouldCreateSet() {
-    assertNotNull(gdxSetOf<Any>())
+    val set = gdxSetOf<Any>()
+    assertNotNull(set)
+    assertTrue(set is ObjectSet)
+    assertEquals(0, set.size)
   }
 
   @Test
-  fun shouldCreateSetWithCustomInitialCapacity() {
-    assertNotNull(gdxSetOf<Any>(initialCapacity = 32))
+  fun shouldCreateSetsWithCustomInitialCapacity() {
+    val set = gdxSetOf<Any>(initialCapacity = 32)
+    assertNotNull(set)
+    assertTrue(set is ObjectSet)
+    assertEquals(0, set.size)
   }
 
   @Test
-  fun shouldCreateArraysWithCustomLoadFactor() {
-    assertNotNull(gdxSetOf<Any>(loadFactor = 0.4f))
+  fun shouldCreateSetsWithCustomLoadFactor() {
+    val set = gdxSetOf<Any>(loadFactor = 0.4f)
+    assertNotNull(set)
+    assertTrue(set is ObjectSet)
+    assertEquals(0, set.size)
   }
 
   @Test
@@ -205,11 +214,11 @@ class SetsTest {
 
   @Test
   fun shouldAllowToIterateWithIteratorReference() {
-    val array = ObjectSet.with("1", "2", "3")
-    assertEquals(3, array.size)
-    array.iterate { value, iterator -> if (value == "2") iterator.remove() }
-    assertEquals(2, array.size)
-    assertFalse("2" in array)
+    val set = ObjectSet.with("1", "2", "3")
+    assertEquals(3, set.size)
+    set.iterate { value, iterator -> if (value == "2") iterator.remove() }
+    assertEquals(2, set.size)
+    assertFalse("2" in set)
   }
 
   @Test

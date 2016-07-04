@@ -138,7 +138,7 @@ operator fun <Type> ObjectSet<Type>.minus(elements: Array<out Type>): ObjectSet<
  */
 inline fun <Type> ObjectSet<Type>.iterate(action: (Type, MutableIterator<Type>) -> Unit) {
   val iterator = iterator()
-  while (iterator.hasNext()) action.invoke(iterator.next(), iterator)
+  while (iterator.hasNext) action(iterator.next(), iterator)
 }
 
 /**
