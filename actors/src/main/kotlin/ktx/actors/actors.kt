@@ -33,7 +33,7 @@ fun Actor.setPosition(x: Int, y: Int) = setPosition(x.toFloat(), y.toFloat())
  */
 fun Actor.centerPosition(width: Float = this.stage.width, height: Float = this.stage.height, normalize: Boolean = true) {
   val x = (width - this.width) / 2f
-  val y = (height - this.height) / 2f;
+  val y = (height - this.height) / 2f
   if (normalize) {
     this.setPosition(x.toInt(), y.toInt())
   } else {
@@ -103,7 +103,7 @@ var Actor.alpha: Float
   }
 
 /**
- * Links to this [Stage.root.color] instance. Allows to easily modify alpha color value of stage.
+ * Links to this [Stage.root].color instance. Allows to easily modify alpha color value of stage.
  */
 var Stage.alpha: Float
   get() = this.root.color.a
