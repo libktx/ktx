@@ -33,9 +33,12 @@ a recent release).
 The modules present in **KTX** are:
 
 - [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
+- [assets](assets): assets and heavy resources management utilities.
 - [collections](collections): utilities for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple functions that make internationalization less verbose and easier to use.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
+- [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI.
+- [vis](vis): type-safe Kotlin builders for VisUI. Alternative to the [scene2d](scene2d) extension.
 
 Afraid to use some third-party code? Run the test suites yourself. *Every* function and class added by these extensions
 features in at least one test. Going through the tests can be a great way of learning the API.
@@ -46,17 +49,16 @@ The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is
 install it locally. If you consider working from sources, these are some useful Gradle tasks that you can look into:
 
 - `gradle build install` - builds the libraries' archives and pushes them to Maven Local.
-- `gradle installAll` - same as the previous one, but the tasks are always invoked in the correct order. Use when
-changing the version to avoid missing artifacts errors.
 - `gradle test` - runs unit tests in all projects.
 - `gradle clean` - removes build directories.
 - `gradle distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
 - `gradle uploadArchives` - pushes the archives to Maven Central. Requires proper `gradle.properties` with signing and
 logging data.
 - `gradle closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
-case of a non-snapshot version.
+case of a non-snapshot upload to Maven Central.
 
 ### Contribution
 
 Want to help? Great. Browse through issues (if any) to see what's currently missing or broken. Before creating any pull
 requests, be aware that the code is dedicated to public domain.
+
