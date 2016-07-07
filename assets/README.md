@@ -22,6 +22,16 @@ collections of assets en masse.
 - All exceptions get a utility `ignore()` method that you can switch at compile time (for debugging or logging) when
 needed. See `Throwable.ignore()` documentation for further details.
 
+#### `Pool`
+
+- `Pool` instances can be invoked like a function to provide new instances of objects. Basically, this syntax: `pool()`
+has the same effect as directly calling `pool.obtain()`.
+- `Pool` instances can be invoked like a one argument function to free instances of objects. Basically, this syntax:
+`pool(instance)` has the same effect as directly calling `pool.free(instance)`.
+- New instances of `Pool` can be easily created with Kotlin lambda syntax using `pool` method. For example, this pool
+would return new instances of `Entity` once empty: `pool { Entity() }`. Since this method is inlined, you should not
+worry about unnecessary extra method calls or extra objects - the `Pool` implementations are prepared at compile time.
+
 ### Alternatives
 
 - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/) feature an annotation-based asset manager implementation
