@@ -67,10 +67,9 @@ fun <Type> GdxArray<Type>.removeLast(): Type? {
  * @param alternative returned if index is out of bounds or the element is null.
  * @return a non-null value of stored element or the alternative.
  */
-fun <Type> GdxArray<Type>.getOrElse(index: Int, alternative: Type): Type {
+operator fun <Type> GdxArray<Type>.get(index: Int, alternative: Type): Type {
   if (index >= this.size) return alternative
-  val element = this[index]
-  return element ?: alternative
+  return this[index] ?: alternative
 }
 
 /**
@@ -107,7 +106,7 @@ operator fun <Type> GdxArray<Type>.plus(element: Type): GdxArray<Type> {
 }
 
 /**
- * Allows to quickly add all elements of another iterable to this array with a pleasant, chainable operator syntax.
+ * Allows to quickly addAll all elements of another iterable to this array with a pleasant, chainable operator syntax.
  * @param elements will be added to the array.
  * @return this array.
  */
@@ -117,7 +116,7 @@ operator fun <Type> GdxArray<Type>.plus(elements: Iterable<Type>): GdxArray<Type
 }
 
 /**
- * Allows to quickly add all elements of a native array to this array with a pleasant, chainable operator syntax.
+ * Allows to quickly addAll all elements of a native array to this array with a pleasant, chainable operator syntax.
  * @param elements will be added to the array.
  * @return this array.
  */

@@ -44,7 +44,7 @@ inline fun ObjectMap<*, *>?.size(): Int = this?.size ?: 0
 inline fun ObjectMap<*, *>?.isEmpty(): Boolean = this == null || this.size == 0
 
 /**
- * @return true if the mapis not null and contains at least one element.
+ * @return true if the map is not null and contains at least one element.
  */
 inline fun ObjectMap<*, *>?.isNotEmpty(): Boolean = this != null && this.size > 0
 

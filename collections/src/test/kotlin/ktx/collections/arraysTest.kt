@@ -89,10 +89,10 @@ class ArraysTest {
   @Test
   fun shouldReturnAlternativeIfElementIsNull() {
     val array = GdxArray.with("0", null, "2")
-    assertEquals("0", array.getOrElse(0, "3"))
-    assertEquals("3", array.getOrElse(1, "3"))
-    assertEquals("2", array.getOrElse(2, "3"))
-    assertEquals("3", array.getOrElse(3, "3"))
+    assertEquals("0", array.get(0, "3"))
+    assertEquals("3", array[1, "3"]) // This method is also available through square bracket operator.
+    assertEquals("2", array.get(2, "3"))
+    assertEquals("3", array[3, "3"])
   }
 
   @Test
