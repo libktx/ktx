@@ -94,6 +94,25 @@ operator fun Stage.minus(actor: Actor): Stage {
 }
 
 /**
+ * Checks this actor's position and size and makes sure that it is kept within its parent actor bounds (or [Stage]).
+ */
+fun Actor.keepWithinParent() {
+  val parentWidth: Float
+  val parentHeight: Float
+  if (this.stage != null && this.parent === this.stage.root) {
+    parentWidth = this.stage.width
+    parentHeight = this.stage.height
+  } else {
+    parentWidth = this.parent.width
+    parentHeight = this.parent.height
+  }
+  if (this.x < 0f) this.x = 0f
+  if (this.right > parentWidth) this.x = parentWidth - this.width
+  if (this.y < 0f) this.y = 0f
+  if (this.top > parentHeight) this.y = parentHeight - this.height
+}
+
+/**
  * Links to this actor's [Actor.color] instance. Allows to easily modify alpha color value.
  */
 var Actor.alpha: Float

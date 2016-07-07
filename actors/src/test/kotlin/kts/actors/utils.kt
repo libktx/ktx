@@ -12,7 +12,10 @@ import org.mockito.Mockito
  */
 internal fun getMockStage(): Stage {
   mockGraphics()
-  return Stage(Mockito.mock(Viewport::class.java), Mockito.mock(Batch::class.java))
+  val viewport = Mockito.mock(Viewport::class.java)
+  Mockito.`when`(viewport.worldWidth).thenReturn(800f)
+  Mockito.`when`(viewport.worldHeight).thenReturn(600f)
+  return Stage(viewport, Mockito.mock(Batch::class.java))
 }
 
 /**

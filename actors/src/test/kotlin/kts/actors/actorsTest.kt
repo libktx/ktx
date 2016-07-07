@@ -191,4 +191,61 @@ class ActorsTest {
     assertNotNull(stage.scrollFocus)
     assertEquals(newFocus, stage.scrollFocus)
   }
+
+  @Test
+  fun shouldKeepActorWithinParent() {
+    val parent = Group()
+    val actor = Actor()
+    actor.setSize(100f, 100f)
+    actor.setPosition(4000f, 4000f)
+    parent.setSize(800f, 600f)
+    parent.addActor(actor)
+    assertTrue(actor.x + actor.width > parent.width)
+    assertTrue(actor.y + actor.height > parent.height)
+
+    actor.keepWithinParent()
+    assertFalse(actor.x + actor.width > parent.width)
+    assertFalse(actor.y + actor.height > parent.height)
+    assertFalse(actor.x < 0f)
+    assertFalse(actor.y < 0f)
+    assertEquals(parent.width, actor.x + actor.width, floatTolerance)
+    assertEquals(parent.height, actor.y + actor.height, floatTolerance)
+
+    actor.setPosition(-4000f, -4000f)
+    actor.keepWithinParent()
+    assertFalse(actor.x + actor.width > parent.width)
+    assertFalse(actor.y + actor.height > parent.height)
+    assertFalse(actor.x < 0f)
+    assertFalse(actor.y < 0f)
+    assertEquals(0f, actor.x, floatTolerance)
+    assertEquals(0f, actor.y, floatTolerance)
+  }
+
+  @Test
+  fun shouldKeepActorWithinStage() {
+    val stage = getMockStage()
+    val actor = Actor()
+    actor.setSize(100f, 100f)
+    actor.setPosition(4000f, 4000f)
+    stage.addActor(actor)
+    assertTrue(actor.x + actor.width > stage.width)
+    assertTrue(actor.y + actor.height > stage.height)
+
+    actor.keepWithinParent()
+    assertFalse(actor.x + actor.width > stage.width)
+    assertFalse(actor.y + actor.height > stage.height)
+    assertFalse(actor.x < 0f)
+    assertFalse(actor.y < 0f)
+    assertEquals(stage.width, actor.x + actor.width, floatTolerance)
+    assertEquals(stage.height, actor.y + actor.height, floatTolerance)
+
+    actor.setPosition(-4000f, -4000f)
+    actor.keepWithinParent()
+    assertFalse(actor.x + actor.width > stage.width)
+    assertFalse(actor.y + actor.height > stage.height)
+    assertFalse(actor.x < 0f)
+    assertFalse(actor.y < 0f)
+    assertEquals(0f, actor.x, floatTolerance)
+    assertEquals(0f, actor.y, floatTolerance)
+  }
 }
