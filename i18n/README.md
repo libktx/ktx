@@ -16,7 +16,7 @@ To start using `ktx-i18n`, you have to load `I18NBundle` instance and set it as 
 class. While a semi-global `I18NBundle` field might seem ugly (and it kind of *is*), it allows to access localized texts
 throughout the application without the usual boilerplate thanks to utility functions and the fact that you no longer have
 to worry how to pass `I18NBundle` into *X*. Setting the default bundle comes down to `I18n.defaultBundle = yourBundle`,
-although you can also let the `I18n` handle loading for you and use `I18n.load("path/to/bundle", Locale.ENGLIGH)`.
+although you can also let the `I18n` handle loading for you and use `I18n.load("path/to/bundle", Locale.ENGLISH)`.
 
 #### Basic usage
 
