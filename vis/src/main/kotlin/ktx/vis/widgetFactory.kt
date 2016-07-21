@@ -14,6 +14,11 @@ import com.kotcrab.vis.ui.widget.*
 
 /** @author Kotcrab */
 
+/**
+ * Provides methods allowing to build scene2d.ui using type-safe builders.
+ * @see [TableWidgetFactory]
+ * @see [WidgetGroupWidgetFactory]
+ */
 interface WidgetFactory<R> {
   companion object {
     val DEFAULT_STYLE = "default"
@@ -21,102 +26,143 @@ interface WidgetFactory<R> {
 
   // Non-parental widgets
 
+  /** @see [VisLabel] */
   fun label(text: String, styleName: String = DEFAULT_STYLE, init: VisLabel.() -> Unit = {}): R
       = actor(VisLabel(text, styleName), init)
 
+  /** @see [LinkLabel] */
   fun linkLabel(text: String, url: String = text, styleName: String = DEFAULT_STYLE, init: LinkLabel.() -> Unit = {}): R
       = actor(LinkLabel(text, url, styleName), init)
 
+  /** @see [VisImage] */
   fun image(drawable: Drawable, scaling: Scaling = Scaling.stretch, align: Int = Align.center,
             init: VisImage.() -> Unit = {}): R = actor(VisImage(drawable, scaling, align), init)
 
+  /** @see [VisImage] */
   fun image(drawableName: String, init: VisImage.() -> Unit = {}): R = actor(VisImage(drawableName), init)
 
+  /** @see [VisList] */
   fun <T> list(styleName: String = DEFAULT_STYLE, init: VisList<T>.() -> Unit = {}): R = actor(VisList<T>(styleName), init)
 
+  /** @see [VisProgressBar] */
+  fun progressBar(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false, init: VisProgressBar.() -> Unit = {}): R
+      = actor(VisProgressBar(min, max, step, vertical), init)
+
+  /** @see [VisProgressBar] */
   fun progressBar(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false,
-                  styleName: String = DEFAULT_STYLE, init: VisProgressBar.() -> Unit = {}): R
+                  styleName: String, init: VisProgressBar.() -> Unit = {}): R
       = actor(VisProgressBar(min, max, step, vertical, styleName), init)
 
+  /** @see [VisSelectBox] */
   fun <T> selectBox(styleName: String = DEFAULT_STYLE, init: VisSelectBox<T>.() -> Unit = {}): R
       = actor(VisSelectBox<T>(styleName), init)
 
-  fun slider(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false,
-             styleName: String = DEFAULT_STYLE, init: VisSlider.() -> Unit = {}): R
+  /** @see [VisSlider] */
+  fun slider(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false, init: VisSlider.() -> Unit = {}): R
+      = actor(VisSlider(min, max, step, vertical), init)
+
+  /** @see [VisSlider] */
+  fun slider(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false, styleName: String, init: VisSlider.() -> Unit = {}): R
       = actor(VisSlider(min, max, step, vertical, styleName), init)
 
+  /** @see [VisTextArea] */
   fun textArea(text: String = "", styleName: String = DEFAULT_STYLE, init: VisTextArea.() -> Unit = {}): R
       = actor(VisTextArea(text, styleName), init)
 
+  /** @see [HighlightTextArea] */
   fun highlightTextArea(text: String = "", styleName: String = DEFAULT_STYLE, init: HighlightTextArea.() -> Unit = {}): R =
       actor(HighlightTextArea(text, styleName), init)
 
+  /** @see [ScrollableTextArea] */
   fun scrollableTextArea(text: String = "", styleName: String = DEFAULT_STYLE, init: ScrollableTextArea.() -> Unit = {}): R =
       actor(ScrollableTextArea(text, styleName), init)
 
+  /** @see [VisTextField] */
   fun textField(text: String = "", styleName: String = DEFAULT_STYLE, init: VisTextField.() -> Unit = {}): R
       = actor(VisTextField(text, styleName), init)
 
+  /** @see [VisValidatableTextField] */
   fun validatableTextField(text: String = "", styleName: String = DEFAULT_STYLE, init: VisValidatableTextField.() -> Unit = {}): R
       = actor(VisValidatableTextField(text, styleName), init)
 
+  /** @see [Touchpad] */
   fun touchpad(deadzoneRadius: Float, styleName: String = DEFAULT_STYLE, init: Touchpad.() -> Unit = {}): R
       = actor(Touchpad(deadzoneRadius, VisUI.getSkin(), styleName), init)
 
+  /** @see [BusyBar] */
   fun busyBar(styleName: String = DEFAULT_STYLE, init: BusyBar.() -> Unit = {}): R
       = actor(BusyBar(styleName), init)
 
+  /** @see [Separator] */
   fun separator(styleName: String = DEFAULT_STYLE, init: Separator.() -> Unit = {}): R = actor(Separator(styleName), init)
 
   // Parental widgets
 
+  /** @see [Button] */
   fun button(styleName: String = DEFAULT_STYLE, init: KButton.() -> Unit = {}): R
       = actor(KButton(styleName), init)
 
+  /** @see [VisTextButton] */
   fun textButton(text: String, styleName: String = DEFAULT_STYLE, init: KVisTextButton.() -> Unit = {}): R
       = actor(KVisTextButton(text, styleName), init)
 
+  /** @see [VisImageButton] */
   fun imageButton(styleName: String = DEFAULT_STYLE, init: KVisImageButton.() -> Unit = {}): R
       = actor(KVisImageButton(styleName), init)
 
+  /** @see [VisImageButton] */
   fun imageButton(imageUp: Drawable, imageDown: Drawable = imageUp, imageChecked: Drawable = imageUp,
                   init: KVisImageButton.() -> Unit = {}): R
       = actor(KVisImageButton(imageUp, imageDown, imageChecked), init)
 
+  /** @see [VisImageTextButton] */
   fun imageTextButton(text: String, styleName: String = DEFAULT_STYLE, init: KVisImageTextButton.() -> Unit = {}): R
       = actor(KVisImageTextButton(text, styleName), init)
 
+  /** @see [VisCheckBox] */
   fun checkBox(text: String, styleName: String = DEFAULT_STYLE, init: KVisCheckBox.() -> Unit = {}): R
       = actor(KVisCheckBox(text, styleName), init)
 
+  /** @see [VisRadioButton] */
   fun radioButton(text: String, init: KVisRadioButton.() -> Unit = {}): R
       = actor(KVisRadioButton(text), init)
 
+  /** @see [VisTree] */
   fun tree(styleName: String = DEFAULT_STYLE, init: KVisTree.() -> Unit = {}): R = actor(KVisTree(styleName), init)
 
   // Parental widgets groups
 
-  fun table(defaultSpacing: Boolean = false, init: KVisTable.() -> Unit = {}): R = actor(KVisTable(defaultSpacing), init)
+  /** @see [VisTable] */
+  fun table(defaultSpacing: Boolean = false, init: KVisTable.() -> Unit): R = actor(KVisTable(defaultSpacing), init)
 
-  fun horizontalGroup(init: KHorizontalGroup.() -> Unit = {}): R = actor(KHorizontalGroup(), init)
+  /** @see [HorizontalGroup] */
+  fun horizontalGroup(init: KHorizontalGroup.() -> Unit): R = actor(KHorizontalGroup(), init)
 
-  fun horizontalFlowGroup(spacing: Float = 0f, init: KHorizontalFlowGroup.() -> Unit = {}): R
+  /** @see [HorizontalFlowGroup] */
+  fun horizontalFlowGroup(spacing: Float = 0f, init: KHorizontalFlowGroup.() -> Unit): R
       = actor(KHorizontalFlowGroup(spacing), init)
 
-  fun verticalGroup(init: KVerticalGroup.() -> Unit = {}): R = actor(KVerticalGroup(), init)
+  /** @see [VerticalGroup] */
+  fun verticalGroup(init: KVerticalGroup.() -> Unit): R = actor(KVerticalGroup(), init)
 
-  fun verticalFlowGroup(spacing: Float = 0f, init: KVerticalFlowGroup.() -> Unit = {}): R
+  /** @see [VerticalFlowGroup] */
+  fun verticalFlowGroup(spacing: Float = 0f, init: KVerticalFlowGroup.() -> Unit): R
       = actor(KVerticalFlowGroup(spacing), init)
 
+  /** @see [GridGroup] */
   fun gridGroup(itemSize: Float = 256f, spacing: Float = 8f, init: KGridGroup.() -> Unit): R
       = actor(KGridGroup(itemSize, spacing), init)
 
+  /** @see [FloatingGroup] */
   fun floatingGroup(init: KFloatingGroup.() -> Unit): R = actor(KFloatingGroup(), init)
 
-  fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): R = actor(KFloatingGroup(), init)
+  /** @see [FloatingGroup] */
+  fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): R = actor(KFloatingGroup(prefWidth, prefHeight), init)
 
+  /** @see [Stack] */
   fun stack(init: KStack.() -> Unit): R = actor(KStack(), init)
 
+  /** @see [Actor] */
   fun <T : Actor> actor(actor: T, init: T.() -> Unit): R {
     actor.init()
     return addActorToWidgetGroup(actor)
@@ -126,6 +172,10 @@ interface WidgetFactory<R> {
 }
 
 @Suppress("UNCHECKED_CAST")
+/**
+ * Implemented by classes providing type-safe builders. Requires that [addActorToWidgetGroup]
+ * returns [Cell] instance with actor being added to [Table].
+ */
 interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   // Non-parental widgets
 
@@ -144,11 +194,17 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun <T> list(styleName: String, init: VisList<T>.() -> Unit): Cell<VisList<T>>
       = super.list(styleName, init) as Cell<VisList<T>>
 
+  override fun progressBar(min: Float, max: Float, step: Float, vertical: Boolean, init: VisProgressBar.() -> Unit): Cell<VisProgressBar>
+      = super.progressBar(min, max, step, vertical, init) as Cell<VisProgressBar>
+
   override fun progressBar(min: Float, max: Float, step: Float, vertical: Boolean, styleName: String, init: VisProgressBar.() -> Unit): Cell<VisProgressBar>
       = super.progressBar(min, max, step, vertical, styleName, init) as Cell<VisProgressBar>
 
   override fun <T> selectBox(styleName: String, init: VisSelectBox<T>.() -> Unit): Cell<VisSelectBox<T>>
       = super.selectBox(styleName, init) as Cell<VisSelectBox<T>>
+
+  override fun slider(min: Float, max: Float, step: Float, vertical: Boolean, init: VisSlider.() -> Unit): Cell<VisSlider>
+      = super.slider(min, max, step, vertical, init) as Cell<VisSlider>
 
   override fun slider(min: Float, max: Float, step: Float, vertical: Boolean, styleName: String, init: VisSlider.() -> Unit): Cell<VisSlider>
       = super.slider(min, max, step, vertical, styleName, init) as Cell<VisSlider>
@@ -177,82 +233,70 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun separator(styleName: String, init: Separator.() -> Unit): Cell<Separator>
       = super.separator(styleName, init) as Cell<Separator>
 
-  override fun <T : Actor> actor(actor: T, init: T.() -> Unit): Cell<T> = super.actor(actor, init) as Cell<T>
-
   // Parental widgets
 
-  override fun button(styleName: String, init: KButton.() -> Unit): Cell<Button> {
-    return super.button(styleName, init) as Cell<Button>
-  }
+  override fun button(styleName: String, init: KButton.() -> Unit): Cell<Button>
+      = super.button(styleName, init) as Cell<Button>
 
-  override fun textButton(text: String, styleName: String, init: KVisTextButton.() -> Unit): Cell<VisTextButton> {
-    return super.textButton(text, styleName, init) as Cell<VisTextButton>
-  }
+  override fun textButton(text: String, styleName: String, init: KVisTextButton.() -> Unit): Cell<VisTextButton>
+      = super.textButton(text, styleName, init) as Cell<VisTextButton>
 
-  override fun imageButton(styleName: String, init: KVisImageButton.() -> Unit): Cell<VisImageButton> {
-    return super.imageButton(styleName, init) as Cell<VisImageButton>
-  }
+  override fun imageButton(styleName: String, init: KVisImageButton.() -> Unit): Cell<VisImageButton>
+      = super.imageButton(styleName, init) as Cell<VisImageButton>
 
-  override fun imageButton(imageUp: Drawable, imageDown: Drawable, imageChecked: Drawable, init: KVisImageButton.() -> Unit): Cell<VisImageButton> {
-    return super.imageButton(imageUp, imageDown, imageChecked, init) as Cell<VisImageButton>
-  }
+  override fun imageButton(imageUp: Drawable, imageDown: Drawable, imageChecked: Drawable, init: KVisImageButton.() -> Unit): Cell<VisImageButton>
+      = super.imageButton(imageUp, imageDown, imageChecked, init) as Cell<VisImageButton>
 
-  override fun imageTextButton(text: String, styleName: String, init: KVisImageTextButton.() -> Unit): Cell<VisImageTextButton> {
-    return super.imageTextButton(text, styleName, init) as Cell<VisImageTextButton>
-  }
+  override fun imageTextButton(text: String, styleName: String, init: KVisImageTextButton.() -> Unit): Cell<VisImageTextButton>
+      = super.imageTextButton(text, styleName, init) as Cell<VisImageTextButton>
 
-  override fun checkBox(text: String, styleName: String, init: KVisCheckBox.() -> Unit): Cell<VisCheckBox> {
-    return super.checkBox(text, styleName, init) as Cell<VisCheckBox>
-  }
+  override fun checkBox(text: String, styleName: String, init: KVisCheckBox.() -> Unit): Cell<VisCheckBox>
+      = super.checkBox(text, styleName, init) as Cell<VisCheckBox>
 
-  override fun radioButton(text: String, init: KVisRadioButton.() -> Unit): Cell<VisRadioButton> {
-    return super.radioButton(text, init) as Cell<VisRadioButton>
-  }
+  override fun radioButton(text: String, init: KVisRadioButton.() -> Unit): Cell<VisRadioButton>
+      = super.radioButton(text, init) as Cell<VisRadioButton>
 
-  override fun tree(styleName: String, init: KVisTree.() -> Unit): Cell<VisTree> {
-    return super.tree(styleName, init) as Cell<VisTree>
-  }
+  override fun tree(styleName: String, init: KVisTree.() -> Unit): Cell<VisTree>
+      = super.tree(styleName, init) as Cell<VisTree>
 
   // Parental widgets groups
 
-  override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): Cell<VisTable> {
-    return super.table(defaultSpacing, init) as Cell<VisTable>
-  }
+  override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): Cell<VisTable>
+      = super.table(defaultSpacing, init) as Cell<VisTable>
 
-  override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): Cell<HorizontalGroup> {
-    return super.horizontalGroup(init) as Cell<HorizontalGroup>
-  }
+  override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): Cell<HorizontalGroup>
+      = super.horizontalGroup(init) as Cell<HorizontalGroup>
 
-  override fun horizontalFlowGroup(spacing: Float, init: KHorizontalFlowGroup.() -> Unit): Cell<HorizontalFlowGroup> {
-    return super.horizontalFlowGroup(spacing, init) as Cell<HorizontalFlowGroup>
-  }
+  override fun horizontalFlowGroup(spacing: Float, init: KHorizontalFlowGroup.() -> Unit): Cell<HorizontalFlowGroup>
+      = super.horizontalFlowGroup(spacing, init) as Cell<HorizontalFlowGroup>
 
-  override fun verticalGroup(init: KVerticalGroup.() -> Unit): Cell<VerticalGroup> {
-    return super.verticalGroup(init) as Cell<VerticalGroup>
-  }
+  override fun verticalGroup(init: KVerticalGroup.() -> Unit): Cell<VerticalGroup>
+      = super.verticalGroup(init) as Cell<VerticalGroup>
 
-  override fun verticalFlowGroup(spacing: Float, init: KVerticalFlowGroup.() -> Unit): Cell<VerticalFlowGroup> {
-    return super.verticalFlowGroup(spacing, init) as Cell<VerticalFlowGroup>
-  }
+  override fun verticalFlowGroup(spacing: Float, init: KVerticalFlowGroup.() -> Unit): Cell<VerticalFlowGroup>
+      = super.verticalFlowGroup(spacing, init) as Cell<VerticalFlowGroup>
 
-  override fun gridGroup(itemSize: Float, spacing: Float, init: KGridGroup.() -> Unit): Cell<GridGroup> {
-    return super.gridGroup(itemSize, spacing, init) as Cell<GridGroup>
-  }
+  override fun gridGroup(itemSize: Float, spacing: Float, init: KGridGroup.() -> Unit): Cell<GridGroup>
+      = super.gridGroup(itemSize, spacing, init) as Cell<GridGroup>
 
-  override fun floatingGroup(init: KFloatingGroup.() -> Unit): Cell<FloatingGroup> {
-    return super.floatingGroup(init) as Cell<FloatingGroup>
-  }
+  override fun floatingGroup(init: KFloatingGroup.() -> Unit): Cell<FloatingGroup>
+      = super.floatingGroup(init) as Cell<FloatingGroup>
 
-  override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): Cell<FloatingGroup> {
-    return super.floatingGroup(prefWidth, prefHeight, init) as Cell<FloatingGroup>
-  }
+  override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): Cell<FloatingGroup>
+      = super.floatingGroup(prefWidth, prefHeight, init) as Cell<FloatingGroup>
 
-  override fun stack(init: KStack.() -> Unit): Cell<Stack> {
-    return super.stack(init) as Cell<Stack>
-  }
+  override fun stack(init: KStack.() -> Unit): Cell<Stack>
+      = super.stack(init) as Cell<Stack>
+
+  override fun <T : Actor> actor(actor: T, init: T.() -> Unit): Cell<T>
+      = super.actor(actor, init) as Cell<T>
 }
 
 @Suppress("UNCHECKED_CAST")
+/**
+ * Implemented by widget classes providing type-safe builders. Requires that [addActorToWidgetGroup] returns [Actor]
+ * instance being added to [WidgetGroup].
+ */
 interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   // Non-parental widgets
 
@@ -273,11 +317,17 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   override fun progressBar(min: Float, max: Float, step: Float, vertical: Boolean, styleName: String, init: VisProgressBar.() -> Unit): VisProgressBar
       = super.progressBar(min, max, step, vertical, styleName, init) as VisProgressBar
 
+  override fun progressBar(min: Float, max: Float, step: Float, vertical: Boolean, init: VisProgressBar.() -> Unit): VisProgressBar
+      = super.progressBar(min, max, step, vertical, init) as VisProgressBar
+
   override fun <T> selectBox(styleName: String, init: VisSelectBox<T>.() -> Unit): VisSelectBox<T>
       = super.selectBox(styleName, init) as VisSelectBox<T>
 
   override fun slider(min: Float, max: Float, step: Float, vertical: Boolean, styleName: String, init: VisSlider.() -> Unit): VisSlider
       = super.slider(min, max, step, vertical, styleName, init) as VisSlider
+
+  override fun slider(min: Float, max: Float, step: Float, vertical: Boolean, init: VisSlider.() -> Unit): VisSlider
+      = super.slider(min, max, step, vertical, init) as VisSlider
 
   override fun textArea(text: String, styleName: String, init: VisTextArea.() -> Unit): VisTextArea
       = super.textArea(text, styleName, init) as VisTextArea
@@ -303,77 +353,59 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   override fun separator(styleName: String, init: Separator.() -> Unit): Separator
       = super.separator(styleName, init) as Separator
 
-  override fun <T : Actor> actor(actor: T, init: T.() -> Unit): T = super.actor(actor, init) as T
-
   // Parental widgets
 
-  override fun button(styleName: String, init: KButton.() -> Unit): Button {
-    return super.button(styleName, init) as Button
-  }
+  override fun button(styleName: String, init: KButton.() -> Unit): Button
+      = super.button(styleName, init) as Button
 
-  override fun textButton(text: String, styleName: String, init: KVisTextButton.() -> Unit): VisTextButton {
-    return super.textButton(text, styleName, init) as VisTextButton
-  }
+  override fun textButton(text: String, styleName: String, init: KVisTextButton.() -> Unit): VisTextButton
+      = super.textButton(text, styleName, init) as VisTextButton
 
-  override fun imageButton(styleName: String, init: KVisImageButton.() -> Unit): VisImageButton {
-    return super.imageButton(styleName, init) as VisImageButton
-  }
+  override fun imageButton(styleName: String, init: KVisImageButton.() -> Unit): VisImageButton
+      = super.imageButton(styleName, init) as VisImageButton
 
-  override fun imageButton(imageUp: Drawable, imageDown: Drawable, imageChecked: Drawable, init: KVisImageButton.() -> Unit): VisImageButton {
-    return super.imageButton(imageUp, imageDown, imageChecked, init) as VisImageButton
-  }
+  override fun imageButton(imageUp: Drawable, imageDown: Drawable, imageChecked: Drawable, init: KVisImageButton.() -> Unit): VisImageButton
+      = super.imageButton(imageUp, imageDown, imageChecked, init) as VisImageButton
 
-  override fun imageTextButton(text: String, styleName: String, init: KVisImageTextButton.() -> Unit): VisImageTextButton {
-    return super.imageTextButton(text, styleName, init) as VisImageTextButton
-  }
+  override fun imageTextButton(text: String, styleName: String, init: KVisImageTextButton.() -> Unit): VisImageTextButton
+      = super.imageTextButton(text, styleName, init) as VisImageTextButton
 
-  override fun checkBox(text: String, styleName: String, init: KVisCheckBox.() -> Unit): VisCheckBox {
-    return super.checkBox(text, styleName, init) as VisCheckBox
-  }
+  override fun checkBox(text: String, styleName: String, init: KVisCheckBox.() -> Unit): VisCheckBox
+      = super.checkBox(text, styleName, init) as VisCheckBox
 
-  override fun radioButton(text: String, init: KVisRadioButton.() -> Unit): VisRadioButton {
-    return super.radioButton(text, init) as VisRadioButton
-  }
+  override fun radioButton(text: String, init: KVisRadioButton.() -> Unit): VisRadioButton
+      = super.radioButton(text, init) as VisRadioButton
 
-  override fun tree(styleName: String, init: KVisTree.() -> Unit): VisTree {
-    return super.tree(styleName, init) as VisTree
-  }
+  override fun tree(styleName: String, init: KVisTree.() -> Unit): VisTree
+      = super.tree(styleName, init) as VisTree
 
   // Parental widgets groups
 
-  override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): VisTable {
-    return super.table(defaultSpacing, init) as VisTable
-  }
+  override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): VisTable
+      = super.table(defaultSpacing, init) as VisTable
 
-  override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): HorizontalGroup {
-    return super.horizontalGroup(init) as HorizontalGroup
-  }
+  override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): HorizontalGroup
+      = super.horizontalGroup(init) as HorizontalGroup
 
-  override fun horizontalFlowGroup(spacing: Float, init: KHorizontalFlowGroup.() -> Unit): HorizontalFlowGroup {
-    return super.horizontalFlowGroup(spacing, init) as HorizontalFlowGroup
-  }
+  override fun horizontalFlowGroup(spacing: Float, init: KHorizontalFlowGroup.() -> Unit): HorizontalFlowGroup
+      = super.horizontalFlowGroup(spacing, init) as HorizontalFlowGroup
 
-  override fun verticalGroup(init: KVerticalGroup.() -> Unit): VerticalGroup {
-    return super.verticalGroup(init) as VerticalGroup
-  }
+  override fun verticalGroup(init: KVerticalGroup.() -> Unit): VerticalGroup
+      = super.verticalGroup(init) as VerticalGroup
 
-  override fun verticalFlowGroup(spacing: Float, init: KVerticalFlowGroup.() -> Unit): VerticalFlowGroup {
-    return super.verticalFlowGroup(spacing, init) as VerticalFlowGroup
-  }
+  override fun verticalFlowGroup(spacing: Float, init: KVerticalFlowGroup.() -> Unit): VerticalFlowGroup
+      = super.verticalFlowGroup(spacing, init) as VerticalFlowGroup
 
-  override fun gridGroup(itemSize: Float, spacing: Float, init: KGridGroup.() -> Unit): GridGroup {
-    return super.gridGroup(itemSize, spacing, init) as GridGroup
-  }
+  override fun gridGroup(itemSize: Float, spacing: Float, init: KGridGroup.() -> Unit): GridGroup
+      = super.gridGroup(itemSize, spacing, init) as GridGroup
 
-  override fun floatingGroup(init: KFloatingGroup.() -> Unit): FloatingGroup {
-    return super.floatingGroup(init) as FloatingGroup
-  }
+  override fun floatingGroup(init: KFloatingGroup.() -> Unit): FloatingGroup
+      = super.floatingGroup(init) as FloatingGroup
 
-  override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): FloatingGroup {
-    return super.floatingGroup(prefWidth, prefHeight, init) as FloatingGroup
-  }
+  override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): FloatingGroup
+      = super.floatingGroup(prefWidth, prefHeight, init) as FloatingGroup
 
-  override fun stack(init: KStack.() -> Unit): Stack {
-    return super.stack(init) as Stack
-  }
+  override fun stack(init: KStack.() -> Unit): Stack = super.stack(init) as Stack
+
+  override fun <T : Actor> actor(actor: T, init: T.() -> Unit): T = super.actor(actor, init) as T
 }
