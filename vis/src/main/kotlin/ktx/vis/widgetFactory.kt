@@ -14,16 +14,14 @@ import com.kotcrab.vis.ui.widget.*
 
 /** @author Kotcrab */
 
+internal const val DEFAULT_STYLE = "default"
+
 /**
  * Provides methods allowing to build scene2d.ui using type-safe builders.
  * @see [TableWidgetFactory]
  * @see [WidgetGroupWidgetFactory]
  */
 interface WidgetFactory<R> {
-  companion object {
-    val DEFAULT_STYLE = "default"
-  }
-
   // Non-parental widgets
 
   /** @see [VisLabel] */

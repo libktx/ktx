@@ -1,3 +1,5 @@
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+    testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
