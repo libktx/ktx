@@ -22,16 +22,13 @@ class KVisTable : VisTable, TableWidgetFactory {
 
 /** @see [Button] */
 class KButton : Button, TableWidgetFactory {
-  constructor() : super()
   constructor(styleName: String) : super(VisUI.getSkin(), styleName)
-  constructor(style: ButtonStyle) : super(style)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisCheckBox] */
 class KVisCheckBox : VisCheckBox, TableWidgetFactory {
-  constructor(text: String) : super(text)
   constructor(text: String, styleName: String) : super(text, styleName)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
@@ -46,7 +43,6 @@ class KVisRadioButton : VisRadioButton, TableWidgetFactory {
 
 /** @see [VisTextButton] */
 class KVisTextButton : VisTextButton, TableWidgetFactory {
-  constructor(text: String) : super(text)
   constructor(text: String, styleName: String) : super(text, styleName)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
@@ -54,8 +50,6 @@ class KVisTextButton : VisTextButton, TableWidgetFactory {
 
 /** @see [VisImageButton] */
 class KVisImageButton : VisImageButton, TableWidgetFactory {
-  constructor(imageUp: Drawable) : super(imageUp)
-  constructor(imageUp: Drawable, imageDown: Drawable) : super(imageUp, imageDown)
   constructor(imageUp: Drawable, imageDown: Drawable, imageChecked: Drawable) : super(imageUp, imageDown, imageChecked)
   constructor(styleName: String) : super(styleName)
 
@@ -64,9 +58,6 @@ class KVisImageButton : VisImageButton, TableWidgetFactory {
 
 /** @see [VisImageTextButton] */
 class KVisImageTextButton : VisImageTextButton, TableWidgetFactory {
-  constructor(text: String, imageUp: Drawable) : super(text, imageUp)
-  constructor(text: String, styleName: String, imageUp: Drawable) : super(text, styleName, imageUp)
-  constructor(text: String, styleName: String, imageUp: Drawable, imageDown: Drawable) : super(text, styleName, imageUp, imageDown)
   constructor(text: String, styleName: String) : super(text, styleName)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
@@ -74,7 +65,6 @@ class KVisImageTextButton : VisImageTextButton, TableWidgetFactory {
 
 /** @see [VisTree] */
 class KVisTree : VisTree, WidgetGroupWidgetFactory {
-  constructor() : super()
   constructor(styleName: String) : super(styleName)
 
   override fun addActorToWidgetGroup(actor: Actor): Any {
@@ -86,7 +76,6 @@ class KVisTree : VisTree, WidgetGroupWidgetFactory {
 /** @see [Stack] */
 class KStack : Stack, WidgetGroupWidgetFactory {
   constructor() : super()
-  constructor(vararg actors: Actor) : super(*actors)
 
   override fun addActorToWidgetGroup(actor: Actor): Any {
     addActor(actor)
@@ -104,7 +93,6 @@ class KHorizontalGroup : HorizontalGroup(), WidgetGroupWidgetFactory {
 
 /** @see [HorizontalFlowGroup] */
 class KHorizontalFlowGroup : HorizontalFlowGroup, WidgetGroupWidgetFactory {
-  constructor() : super()
   constructor(spacing: Float) : super(spacing)
 
   override fun addActorToWidgetGroup(actor: Actor): Any {
@@ -123,7 +111,6 @@ class KVerticalGroup : VerticalGroup(), WidgetGroupWidgetFactory {
 
 /** @see [VerticalFlowGroup] */
 class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
-  constructor() : super()
   constructor(spacing: Float) : super(spacing)
 
   override fun addActorToWidgetGroup(actor: Actor): Any {
@@ -134,8 +121,6 @@ class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
 
 /** @see [GridGroup] */
 class KGridGroup : GridGroup, WidgetGroupWidgetFactory {
-  constructor() : super()
-  constructor(itemSize: Float) : super(itemSize)
   constructor(itemSize: Float, spacing: Float) : super(itemSize, spacing)
 
   override fun addActorToWidgetGroup(actor: Actor): Any {
