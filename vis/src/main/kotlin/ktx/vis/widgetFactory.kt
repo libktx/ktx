@@ -14,12 +14,6 @@ import com.kotcrab.vis.ui.widget.*
 
 /** @author Kotcrab */
 
-fun table(init: KVisTable.() -> Unit): KVisTable {
-  val table = KVisTable()
-  table.init()
-  return table
-}
-
 interface WidgetFactory<R> {
   companion object {
     val DEFAULT_STYLE = "default"
