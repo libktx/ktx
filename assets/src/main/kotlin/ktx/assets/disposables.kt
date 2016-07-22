@@ -79,13 +79,13 @@ fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Unit) = t
 /**
  * This method does nothing. This is a null-safe call that allows to clearly mark an exception as ignored. This approach
  * is preferred to an empty catch block, as at development time you can create custom ignore() methods for each specific
- * [Exception] types and pass some debugging or logging code to each implementation. For example:
+ * [Exception] types, import them and pass some debugging or logging code to each implementation. For example:
  *
  * fun IOException.ignore() { println("This actually happens! $this") }
  *
  * While other exceptions would still be silently ignored, by adding this method you can log all occurrences of ignored
- * IOException instances.
+ * IOException instances. Temporarily changing imports to a custom Throwable.ignore() implementation might also work.
  */
-@Suppress("unused") // It considers "Throwable?" unused and suggests to remove it...
-fun Throwable?.ignore() {
+@Suppress("unused", "NOTHING_TO_INLINE") // It considers "Throwable?" type unused and suggests to remove it...
+inline fun Throwable?.ignore() {
 }
