@@ -45,24 +45,6 @@ inline fun <Type> GdxArray<Type>?.isEmpty(): Boolean = this == null || this.size
 inline fun <Type> GdxArray<Type>?.isNotEmpty(): Boolean = this != null && this.size > 0
 
 /**
- * @return currently last element in the array or null if empty.
- */
-fun <Type> GdxArray<Type>.getLast(): Type? = if (this.size == 0) null else this.get(this.size - 1)
-
-/**
- * @return previously last element that was removed from the array or null if empty.
- */
-fun <Type> GdxArray<Type>.removeLast(): Type? {
-  if (this.size == 0) {
-    return null
-  }
-  val index = --this.size
-  val previous = this.items[index]
-  this.items[index] = null
-  return previous
-}
-
-/**
  * @param index index of the element in the array.
  * @param alternative returned if index is out of bounds or the element is null.
  * @return a non-null value of stored element or the alternative.
@@ -93,7 +75,6 @@ fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean 
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Array<out Type>, identity: Boolean = false) =
     elements.forEach { this.removeValue(it, identity) }
-
 
 /**
  * Allows to append elements to arrays with pleasant, chainable `array + element0 + element1` syntax.
