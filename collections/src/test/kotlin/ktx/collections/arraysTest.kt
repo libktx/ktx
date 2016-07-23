@@ -68,25 +68,6 @@ class ArraysTest {
   }
 
   @Test
-  fun shouldReturnLastElement() {
-    assertEquals("3", GdxArray.with("1", "2", "3").getLast())
-  }
-
-  @Test
-  fun shouldReturnNullAsLastElementIfEmpty() {
-    assertNull(GdxArray<Any>().getLast())
-  }
-
-  @Test
-  fun shouldRemoveLastElement() {
-    val array = GdxArray.with("1", "2", "3")
-    assertEquals(3, array.size)
-    val last = array.removeLast()
-    assertEquals("3", last)
-    assertEquals(2, array.size)
-  }
-
-  @Test
   fun shouldReturnAlternativeIfElementIsNull() {
     val array = GdxArray.with("0", null, "2")
     assertEquals("0", array.get(0, "3"))
