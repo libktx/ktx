@@ -1,11 +1,13 @@
 buildscript {
   repositories {
     mavenCentral()
+    jcenter()
   }
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusPluginVersion"
     classpath "com.netflix.nebula:gradle-extra-configurations-plugin:$configurationsPluginVersion"
+    classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
   }
 }
 
@@ -17,6 +19,7 @@ subprojects {
   apply plugin: 'kotlin'
   apply plugin: 'signing'
   apply plugin: 'nebula.provided-base'
+  apply plugin: 'org.jetbrains.dokka'
 
   ext {
     isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
@@ -55,8 +58,15 @@ subprojects {
 
   task javadocJar(type: Jar) {
     classifier = 'javadoc'
-    from javadoc
+    from "$buildDir/dokkaJavadoc"
   }
+
+  task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = "javadoc"
+    outputDirectory = "$buildDir/dokkaJavadoc"
+  }
+
+  javadocJar.dependsOn("dokkaJavadoc")
 
   task sourcesJar(type: Jar) {
     classifier = 'sources'
@@ -64,7 +74,7 @@ subprojects {
   }
 
   artifacts {
-    archives javadocJar, sourcesJar
+    archives jar, javadocJar, sourcesJar
   }
 
   signing {
