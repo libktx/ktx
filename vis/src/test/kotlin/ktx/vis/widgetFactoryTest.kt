@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -13,7 +14,8 @@ import org.junit.Test
  * @param FR return type of [WidgetFactory] under test
  * @author Kotcrab
  */
-interface WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
+@Ignore("Base class for others tests should not be tested")
+abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
   @Test
   fun shouldCreateLabel() = testFactoryMethod({ it.label("label") })
 
@@ -122,11 +124,11 @@ interface WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
   @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })
 
-  fun testFactoryMethod(factoryMethodUnderTestProvider: (F) -> FR)
+  abstract fun testFactoryMethod(factoryMethodUnderTestProvider: (F) -> FR)
 }
 
 abstract class TableWidgetFactoryTest(val tableBasedGroupUnderTestProvider: (TableWidgetFactory.() -> Unit) -> WidgetGroup)
-: WidgetFactoryTest<TableWidgetFactory, Cell<*>> {
+: WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
   override fun testFactoryMethod(factoryMethodUnderTestProvider: (TableWidgetFactory) -> Cell<*>) {
     var initInvoked = false
     tableBasedGroupUnderTestProvider {
@@ -143,7 +145,7 @@ abstract class TableWidgetFactoryTest(val tableBasedGroupUnderTestProvider: (Tab
 }
 
 abstract class WidgetGroupWidgetFactoryTest(val groupUnderTestProvider: (WidgetGroupWidgetFactory.() -> Unit) -> WidgetGroup)
-: WidgetFactoryTest<WidgetGroupWidgetFactory, Any> {
+: WidgetFactoryTest<WidgetGroupWidgetFactory, Any>() {
   override fun testFactoryMethod(factoryMethodUnderTestProvider: (WidgetGroupWidgetFactory) -> Any) {
     var initInvoked = false
     groupUnderTestProvider {
