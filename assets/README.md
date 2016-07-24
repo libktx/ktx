@@ -121,6 +121,102 @@ worry about unnecessary extra method calls or extra objects - the `Pool` impleme
 `toLocalFile`, `toExternalFile` or `toAbsoluteFile`. This is basically a utility for accessing `Gdx.files.getFileHandle`
 method with a pleasant Kotlin syntax.
 
+### Usage examples
+
+Obtaining a `FileHandle` instance:
+```Kotlin
+import ktx.assets.*
+
+val fileHandle = "my/file.png".toInternalFile()
+```
+
+Working with LibGDX `Pool`:
+```Kotlin
+import ktx.assets.*
+
+val pool = pool { "String." }
+val obtained: String = pool() // "String."
+pool(obtained) // Returned instance to the pool.
+```
+
+Gracefully disposing assets:
+```Kotlin
+import ktx.assets.*
+
+texture.disposeSafely()
+music.dispose { exception ->
+  println(exception.message)
+}
+```
+
+Disposing collections of assets:
+```Kotlin
+import ktx.assets.*
+
+val textures: Array<Texture> = getMyTextures() // Works with any Iterable, too!
+
+textures.dispose() // Throws exceptions.
+textures.disposeSafely() // Ignores exceptions.
+textures.dispose { exception -> } // Allows to handle exceptions.
+```
+
+Setting global `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+Assets.manager = myManager
+```
+
+Scheduling assets for loading by global `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+load<Texture>("image.png")
+```
+
+Using field delegate which will eventually point to a `Texture` (after its fully loaded by the global `AssetManager`):
+```Kotlin
+import ktx.assets.*
+
+class MyClass {
+  val image by load<Texture>("image.png")
+  // image is Texture == true
+}
+```
+
+Immediately extracting a **fully loaded** asset from the global `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+val texture = asset<Texture>("image.png")
+```
+
+Using an asset loaded on the first getter call rather than scheduled for loading:
+```Kotlin
+import ktx.assets.*
+
+class MyClass {
+  val loadedOnlyWhenNeeded by loadOnDemand<Texture>("image.png")
+  // loadedOnlyWhenNeeded is Texture == true
+}
+```
+
+Checking if asset is already loaded by the global `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+if (isLoaded<Texture>("image.png") {
+  // ...
+}
+```
+
+Unloading an asset from the global `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+unload("image.png")
+```
+
 ### Alternatives
 
 - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/) feature an annotation-based asset manager implementation
