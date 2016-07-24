@@ -55,7 +55,6 @@ inline fun info(cause: Throwable, tag: String = "[INFO] ", message: () -> String
 
 /**
  * Logs a message on the error level.
- * @param cause its stack trace will be printed.
  * @param message inlined lambda which will be evaluated only if error logs are currently on. The string result of this
  *    function will be created ONLY when needed, reducing the impact of creating new strings at runtime.
  * @see Application.LOG_ERROR
@@ -75,7 +74,7 @@ inline fun error(tag: String = "[ERROR]", message: () -> String) {
  * @see Application.getLogLevel
  */
 inline fun error(cause: Throwable, tag: String = "[ERROR]", message: () -> String) {
-  if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(tag, message(), cause);
+  if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(tag, message(), cause)
 }
 
 /**
@@ -190,7 +189,7 @@ class Logger(val tag: String,
    * @see Application.getLogLevel
    */
   inline fun error(cause: Throwable, message: () -> String) {
-    if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(errorTag, message(), cause);
+    if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(errorTag, message(), cause)
   }
 }
 
