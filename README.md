@@ -36,6 +36,7 @@ The modules present in **KTX** are:
 - [assets](assets): assets and heavy resources management utilities.
 - [collections](collections): utilities for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple functions that make internationalization less verbose and easier to use.
+- [log](log): minimal runtime overhead cross-platform logging.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
 - [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI.
 - [vis](vis): type-safe Kotlin builders for VisUI. Alternative to the [scene2d](scene2d) extension.
