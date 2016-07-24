@@ -8,12 +8,24 @@ import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.util.ToastManager
 import com.kotcrab.vis.ui.widget.VisTable
+import com.kotcrab.vis.ui.widget.VisWindow
+import com.kotcrab.vis.ui.widget.toast.ToastTable
 
 /** @author Kotcrab */
 
 /** Begins creation of UI using type-safe builder, uses [VisTable] as base widget container. */
-inline fun table(init: KVisTable.() -> Unit): VisTable = actor(KVisTable(), init)
+inline fun table(setVisDefaults: Boolean = false, init: KVisTable.() -> Unit): VisTable = actor(KVisTable(setVisDefaults), init)
+
+/**
+ * Begins creation of UI using type-safe builder, uses [ToastTable] as base widget container.
+ * @see [ToastManager]
+ */
+inline fun toastTable(setVisDefaults: Boolean = false, init: KToastTable.() -> Unit): ToastTable = actor(KToastTable(setVisDefaults), init)
+
+/** Begins creation of UI using type-safe builder, uses [VisWindow] as base widget container. */
+inline fun window(title: String, styleName: String = DEFAULT_STYLE, init: KVisWindow.() -> Unit): VisWindow = actor(KVisWindow(title, styleName), init)
 
 /** Begins creation of UI using type-safe builder, uses [HorizontalGroup] as base widget container. */
 inline fun horizontalGroup(init: KHorizontalGroup.() -> Unit): HorizontalGroup = actor(KHorizontalGroup(), init)

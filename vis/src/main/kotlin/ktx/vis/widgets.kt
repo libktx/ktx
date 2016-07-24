@@ -9,13 +9,29 @@ import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
 import com.kotcrab.vis.ui.widget.*
+import com.kotcrab.vis.ui.widget.color.BasicColorPicker
+import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
+import com.kotcrab.vis.ui.widget.spinner.Spinner
+import com.kotcrab.vis.ui.widget.spinner.SpinnerModel
+import com.kotcrab.vis.ui.widget.toast.ToastTable
 
 /** @author Kotcrab */
 
 /** @see [VisTable] */
 class KVisTable : VisTable, TableWidgetFactory {
-  constructor() : super()
   constructor(setVisDefaults: Boolean) : super(setVisDefaults)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
+}
+
+class KToastTable : ToastTable, TableWidgetFactory {
+  constructor(setVisDefaults: Boolean) : super(setVisDefaults)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
+}
+
+class KVisWindow : VisWindow, TableWidgetFactory {
+  constructor(title: String, styleName: String) : super(title, styleName)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
@@ -71,6 +87,24 @@ class KVisTree : VisTree, WidgetGroupWidgetFactory {
     addActor(actor)
     return actor
   }
+}
+
+class KBasicColorPicker : BasicColorPicker, TableWidgetFactory {
+  constructor(styleName: String) : super(styleName, null)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
+}
+
+class KExtendedColorPicker : ExtendedColorPicker, TableWidgetFactory {
+  constructor(styleName: String) : super(styleName, null)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
+}
+
+class KSpinner : Spinner, TableWidgetFactory {
+  constructor(styleName: String, name: String, model: SpinnerModel) : super(styleName, name, model)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [Stack] */

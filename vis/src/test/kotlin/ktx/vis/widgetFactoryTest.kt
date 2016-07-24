@@ -2,9 +2,8 @@ package ktx.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.kotcrab.vis.ui.VisUI
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import org.junit.Assert.*
 import org.junit.Ignore
 import org.junit.Test
@@ -15,7 +14,7 @@ import org.junit.Test
  * @author Kotcrab
  */
 @Ignore("Base class for others tests should not be tested")
-abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
+abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   @Test
   fun shouldCreateLabel() = testFactoryMethod({ it.label("label") })
 
@@ -95,6 +94,15 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
   fun shouldCreateTree() = testFactoryMethod({ it.tree() })
 
   @Test
+  fun shouldCreateSpinner() = testFactoryMethod({ it.spinner("spinner", IntSpinnerModel(0, 0, 100)) })
+
+  @Test @Ignore("Unable to compile shader in test environment")
+  fun shouldCreateBasicColorPicker() = testFactoryMethod({ it.basicColorPicker() })
+
+  @Test @Ignore("Unable to compile shader in test environment")
+  fun shouldCreateExtendedColorPicker() = testFactoryMethod({ it.extendedColorPicker() })
+
+  @Test
   fun shouldCreateTable() = testFactoryMethod({ it.table { } })
 
   @Test
@@ -122,40 +130,57 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> {
   fun shouldCreateStack() = testFactoryMethod({ it.stack { } })
 
   @Test
+  fun shouldCreateScrollPane() = testFactoryMethod({ it.scrollPane(table { }) })
+
+  @Test
+  fun shouldCreateSplitPane() = testFactoryMethod({ it.splitPane(table { }, table { }) })
+
+  @Test
+  fun shouldCreateSplitPaneFromStyle() = testFactoryMethod({ it.splitPane(table { }, table { }, styleName = "default-vertical") })
+
+  @Test
+  fun shouldCreateMultiSplitPane() = testFactoryMethod({ it.multiSplitPane() })
+
+  @Test
+  fun shouldCreateMultiSplitPaneFromStyle() = testFactoryMethod({ it.multiSplitPane(styleName = "default-vertical") })
+
+  @Test
+  fun shouldCreateContainer() = testFactoryMethod({ it.container(table { }) })
+
+  @Test
+  fun shouldCreateCollapsible() = testFactoryMethod({ it.collapsible(table { }) })
+
+  @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })
 
-  abstract fun testFactoryMethod(factoryMethodUnderTestProvider: (F) -> FR)
+  abstract fun testFactoryMethod(factoryMethodUnderTest: (F) -> FR)
 }
 
-abstract class TableWidgetFactoryTest(val tableBasedGroupUnderTestProvider: (TableWidgetFactory.() -> Unit) -> WidgetGroup)
-: WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
-  override fun testFactoryMethod(factoryMethodUnderTestProvider: (TableWidgetFactory) -> Cell<*>) {
+class TableWidgetFactoryTest() : WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
+  override fun testFactoryMethod(factoryMethodUnderTest: (TableWidgetFactory) -> Cell<*>) {
     var initInvoked = false
-    tableBasedGroupUnderTestProvider {
+    table {
       initInvoked = true
-      val table = this as Table
-      val childrenBeforeWidgetAdded = table.children.size
-      val widgetCell = factoryMethodUnderTestProvider(this)
+      val childrenBeforeWidgetAdded = children.size
+      val widgetCell = factoryMethodUnderTest(this)
       assertNotNull(widgetCell)
-      assertEquals(childrenBeforeWidgetAdded + 1, table.children.size)
-      assertTrue(table.children.last() == widgetCell.actor)
+      assertEquals(childrenBeforeWidgetAdded + 1, children.size)
+      assertTrue(children.last() == widgetCell.actor)
     }
     assertTrue(initInvoked)
   }
 }
 
-abstract class WidgetGroupWidgetFactoryTest(val groupUnderTestProvider: (WidgetGroupWidgetFactory.() -> Unit) -> WidgetGroup)
-: WidgetFactoryTest<WidgetGroupWidgetFactory, Any>() {
-  override fun testFactoryMethod(factoryMethodUnderTestProvider: (WidgetGroupWidgetFactory) -> Any) {
+class WidgetGroupWidgetFactoryTest() : WidgetFactoryTest<WidgetGroupWidgetFactory, Any>() {
+  override fun testFactoryMethod(factoryMethodUnderTest: (WidgetGroupWidgetFactory) -> Any) {
     var initInvoked = false
-    groupUnderTestProvider {
+    horizontalGroup {
       initInvoked = true
-      val widgetGroup = this as WidgetGroup
-      val childrenBeforeWidgetAdded = widgetGroup.children.size
-      val widget = factoryMethodUnderTestProvider(this)
+      val childrenBeforeWidgetAdded = children.size
+      val widget = factoryMethodUnderTest(this)
       assertNotNull(widget)
-      assertEquals(childrenBeforeWidgetAdded + 1, widgetGroup.children.size)
-      assertTrue(widgetGroup.children.last() == widget)
+      assertEquals(childrenBeforeWidgetAdded + 1, children.size)
+      assertTrue(children.last() == widget)
     }
     assertTrue(initInvoked)
   }
