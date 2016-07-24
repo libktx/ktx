@@ -32,6 +32,13 @@ key2=Value with {0} argument.
   }
 
   @Test
+  fun shouldAccessBundleLinesWithBraceOperator() {
+    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
+    assertEquals("Value.", bundle["key1"])
+    assertEquals("Value with 1 argument.", bundle["key2", 1])
+  }
+
+  @Test
   fun shouldFindBundleLine() {
     val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
     assertEquals("Value.", nls("key1", bundle))
@@ -89,7 +96,6 @@ key2=Value with {0} argument.
     assertEquals(1, amount)
   }
 
-
   @Test
   fun shouldClearListeners() {
     var amount = 0
@@ -131,6 +137,13 @@ key2=Value with {0} argument.
   fun shouldReturnDefaultBundle() {
     I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
     assertEquals(I18n.defaultBundle, key1.bundle)
+  }
+
+  @Test
+  fun shouldAcceptBundleLineInstancesWithBracesOperator() {
+    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
+    assertEquals("Value.", bundle[key1])
+    assertEquals("Value with 1 argument.", bundle[key2, 1])
   }
 
   @After

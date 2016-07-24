@@ -57,6 +57,13 @@ object I18n {
 
 /**
  * @param key property name in the i18n bundle.
+ * @param args will replace the argument placeholders in the selected bundle line. The order is preserved and honored.
+ * @return formatted value mapped to the key extracted from the bundle.
+ */
+operator fun I18NBundle.get(key: String, vararg args: Any?): String = this.format(key, *args)
+
+/**
+ * @param key property name in the i18n bundle.
  * @param bundle i18n bundle which must contain the key. Defaults to bundle stored in [I18n].
  * @return value mapped to the key extracted from the bundle.
  */
@@ -89,20 +96,33 @@ interface BundleLine {
 
   /**
    * @param args will be used to format the line.
-   * @return value mapped to the selected [I18NBundle] line ID formatted with the passed arguments.
+   * @return value mapped to the selected [I18NBundle] line ID formatted with the passed args.
    */
   operator fun invoke(vararg args: Any?): String = bundle.format(toString(), *args)
 }
 
 /**
- * @param line value mapped to its ID will be extracted.
+ * @param line value mapped to its ID will be extracted. Its [toString] method should match property name in i18n bundle.
  * @return localized text from the selected bundle.
  */
 fun nls(line: BundleLine): String = line()
 
 /**
- * @param line value mapped to its ID will be extracted.
+ * @param line value mapped to its ID will be extracted. Its [toString] method should match property name in i18n bundle.
  * @param args will be used to format the bundle line.
- * @return localized text from the selected bundle.
+ * @return formatted value mapped to the key extracted from the bundle.
  */
 fun nls(line: BundleLine, vararg args: Any?): String = line(*args)
+
+/**
+ * @param line value mapped to its ID will be extracted. Its [toString] method should match property name in i18n bundle.
+ * @return localized text from the selected bundle.
+ */
+operator fun I18NBundle.get(line: BundleLine): String = this.get(line.toString())
+
+/**
+ * @param line value mapped to its ID will be extracted. Its [toString] method should match property name in i18n bundle.
+ * @param args will replace the argument placeholders in the selected bundle line. The order is preserved and honored.
+ * @return formatted value mapped to the key extracted from the bundle.
+ */
+operator fun I18NBundle.get(line: BundleLine, vararg args: Any?): String = this.format(line.toString(), *args)
