@@ -37,6 +37,87 @@ events.) Attaches `ClickListeners`.
 - Global actions can be added and removed from `Stage` with `+` and `-` operators.
 - `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
 
+### Usage examples
+
+Centering actor on a stage:
+```Kotlin
+import ktx.actors.*
+
+window.centerPosition()
+```
+
+Adding and removing actors with operators:
+```Kotlin
+import ktx.actors.*
+
+table + button
+table - label
+stage + table
+```
+
+Checking if actor is on a stage or in a group:
+```Kotlin
+import ktx.actors.*
+
+button in stage
+button in table
+```
+
+Quickly accessing actor and stage alpha color value:
+```Kotlin
+import ktx.actors.*
+
+label.alpha = 0.5f
+stage.alpha = 0.2f
+```
+
+Focusing events on actors:
+```Kotlin
+import ktx.actors.*
+
+textField.setKeyboardFocus(true)
+scrollPane.setScrollFocus(false)
+```
+
+Adding event listeners:
+```Kotlin
+import ktx.actors.*
+
+button.onChange { changeEvent, button ->
+  println("$button changed!") }
+  
+label.onClick { inputEvent, label ->
+  println("$label clicked!") }
+table.onClick { inputEvent, table, x, y ->
+  println("$table clicked at (${x}, ${y})!") }
+  
+textField.onKey { inputEvent, textField, key ->
+  println("Typed $key char in ${textField}!") }
+
+scrollPane.onScrollFocus { focusEvent, scrollPane ->
+  println("$scrollPane focus: ${event.isFocused}!") }
+textField.onKeyboardFocus { focusEvent, textField ->
+  println("$textField focus: ${event.isFocused}!") }
+```
+
+Chaining actions (`SequenceAction` utility):
+```Kotlin
+import ktx.actors.*
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
+
+val sequence = alpha(0f) then fadeIn(1f) then delay(1f) then fadeOut(1f)
+actor + sequence // Adding action to the actor.
+```
+
+Adding and removing actions to stages and actors with operators:
+```Kotlin
+import ktx.actors.*
+
+button + action - otherAction
+stage + someAction // Adds action to stage root actor,
+                   // affecting all actors on the stage.
+```
+
 ### Alternatives
 
 - [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) includes some `Scene2D` utilities, as well as some extended
