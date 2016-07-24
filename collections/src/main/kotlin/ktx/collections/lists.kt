@@ -217,6 +217,17 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
     size = 0
   }
 
+  override fun toString(): String {
+    return buildString {
+      append("[")
+      this@PooledList.forEachIndexed { id, it ->
+        append(it)
+        if (id < size - 1) append(", ")
+      }
+      append("]")
+    }
+  }
+
   /**
    * Storage class for list elements.
    * @author MJ

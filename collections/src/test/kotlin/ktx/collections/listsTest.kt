@@ -376,4 +376,11 @@ class PooledListTest {
     assertEquals(4, list.size)
     assertEquals("4", list.last)
   }
+
+  @Test
+  fun shouldConvertToString() {
+    assertEquals("[]", gdxListOf<String>().toString())
+    assertEquals("[single]", gdxListOf("single").toString())
+    assertEquals("[one, two, three]", gdxListOf("one", "two", "three").toString())
+  }
 }

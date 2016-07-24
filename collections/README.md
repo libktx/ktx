@@ -65,7 +65,7 @@ if the variable is a possible null.
 remove elements from the map.
 - Keys stored in the map can be quickly converted to an `ObjectSet` using `toGdxSet` method.
 - Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
-has to be provided - since the method is inline, no new lambda object will be created, though.d
+has to be provided - since the method is inlined, no new lambda object will be created at runtime.
 
 #### Lists
 
@@ -75,11 +75,82 @@ and iterators, limiting garbage collection. This collection should be used for s
 iterated over, and their efficient removal and insertion during iteration is necessary. It can be created with
 `gdxListOf` method. Every `Array` and `Iterable` can be converted to `PooledList` with `toGdxList` utility method.
 
+#### Note
+
+It is highly advised to use `ktx.collections.*` import when working with LibGDX collections. Kotlin standard library
+comes with multiple unoptimized utility methods for `Iterable` instances - like `-` operator that iterates over the
+whole collection to remove an element, which would be highly inefficient in case of `ObjectSet`, for example. By using
+a wildcard import of all **KTX** utilities, you can make sure that you're using the correct extension method
+implementations.
+
+IntelliJ allows to mark packages for automatic wildcard import at `Settings > Editor > Code Style > Kotlin > Imports`.
+
+### Usage examples
+
+Working with LibGDX `Array`:
+```Kotlin
+import ktx.collections.*
+
+val array = gdxArrayOf("zero", "one", "two")
+array[0] // "zero"
+"one" in array // true
+array + "three" // array[3] == "three"; array.size == 4
+array - "three" // "three" in array == false; array.size == 3
+array + arrayOf("three", "four") // array[3] == "three", array[4] = "four"
+  
+val empty = gdxArrayOf<String>()
+```
+
+Working with LibGDX `ObjectSet`:
+```Kotlin
+import ktx.collections.*
+
+val set = gdxSetOf("zero", "one", "two")
+"one" in set // true
+set + "three" // "three" in set == true; set.size = 4
+set - "three" // "three" in set == false; set.size == 3
+set + arrayOf("three", "four") // "three" in set == true; "four" in set == true
+
+val empty = gdxSetOf<String>()
+```
+
+Working with LibGDX `ObjectMap`:
+```Kotlin
+import ktx.collections.*
+
+val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
+0 in map // true
+map[0] // "zero"
+map[3] = "three" // 3 in map == true; map[3] == "three"
+
+val empty = gdxMapOf<Int, String>()
+```
+
+Working with **KTX** `PooledList`:
+```Kotlin
+import ktx.collections.*
+
+val list = gdxListOf("zero", "one", "two")
+"zero" in list // true
+list + "three" // "three" in list == true
+list.forEach { 
+  println(it) // "zero"; "one"; "two"; "three"
+  if(it == "three") list.remove() // Cheap element removal during iteration.
+} // "three" in list == false; list.toString() == "[zero, one, two]"
+
+val empty = gdxListOf<String>()
+```
+
 ### Alternatives
 
 - Kotlin standard library provides utilities for default Java collections, although you should be aware that `java.util`
 collections can cause garbage collection issues on slower devices.
 - [LibGDX Kiwi utilities](https://github.com/czyzby/gdx-lml/tree/master/kiwi) contains a module which helps with LibGDX
 collections - but since it is written with Java, `ktx-collections` is arguably easier to use in Kotlin applications. It
-is still worth looking into for its so-called lazy, disposable and immutable collections.
+is still worth looking into for its so-called *lazy*, *disposable* and *immutable* collections.
+- [Koloboke](https://github.com/leventov/Koloboke) contains efficient implementations of sets and maps that can use
+unboxed primitive types as keys or values. While, (un)fortunately, its API design and implementation is most likely
+significantly better than LibGDX collections (to be honest), it is also a huge dependency due to the sheer amount of
+available collections. Note that Koloboke collections are compatible with `java.util` collections API, while LibGDX
+collections are not - Koloboke maps and sets can fully benefit from Kotlin standard library utilities.
 
