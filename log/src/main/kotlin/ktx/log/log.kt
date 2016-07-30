@@ -84,21 +84,21 @@ inline fun error(cause: Throwable, tag: String = "[ERROR]", message: () -> Strin
  * @param infoPrefix will proceed [tag] in info logs.
  * @param errorPrefix will proceed [tag] in error logs.
  */
-class Logger(val tag: String,
+open class Logger(open val tag: String,
              debugPrefix: String = "[DEBUG] ", infoPrefix: String = "[INFO]  ", errorPrefix: String = "[ERROR] ") {
   // Implementation note: tags are not private as they are referenced by the inlined methods.
   /**
    * Will proceed all debug logs.
    */
-  val debugTag = "$debugPrefix$tag"
+  open val debugTag = "$debugPrefix$tag"
   /**
    * Will proceed all info logs.
    */
-  val infoTag = "$infoPrefix$tag"
+  open val infoTag = "$infoPrefix$tag"
   /**
    * Will proceed all error logs.
    */
-  val errorTag = "$errorPrefix$tag"
+  open val errorTag = "$errorPrefix$tag"
 
   /**
    * Logs a message on the info level.
