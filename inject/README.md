@@ -73,11 +73,21 @@ val randomProvider = provider<Random>() // Type of `randomProvider` variable is 
 val random = randomProvider()
 ```
 
+Injection on demand (_lazy_ injection):
+```Kotlin
+import ktx.inject.*
+
+class ClassWithLazyInjectedValue {
+  val lazyInjection by lazy { inject<Random>() }
+}
+```
+
 Accessing static `Context` instance:
 ```Kotlin
 import ktx.inject.*
 
-ContextContainer.defaultContext.clear()
+val context = ContextContainer.defaultContext
+context.clear()
 ```
 
 ### Implementation notes
