@@ -120,14 +120,20 @@ worry about unnecessary extra method calls or extra objects - the `Pool` impleme
 - Any Kotlin string can be quickly converted to a `FileHandle` instance using `toClasspathFile`, `toInternalFile`,
 `toLocalFile`, `toExternalFile` or `toAbsoluteFile`. This is basically a utility for accessing `Gdx.files.getFileHandle`
 method with a pleasant Kotlin syntax.
+- `file` utility function allows to quickly obtain a `FileHandle` instance. It features an optional `type` parameter
+which allows to choose the `FileType`, while defaulting to the most common `Internal`.
 
 ### Usage examples
 
-Obtaining a `FileHandle` instance:
+Obtaining `FileHandle` instances:
 ```Kotlin
+import com.badlogic.gdx.Files.FileType.*
 import ktx.assets.*
 
 val fileHandle = "my/file.png".toInternalFile()
+
+val internal = file("my/file.png")
+val absolute = file("/home/ktx/my/file.png", type = Absolute);
 ```
 
 Working with LibGDX `Pool`:

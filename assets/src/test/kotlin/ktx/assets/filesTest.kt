@@ -1,16 +1,11 @@
 package ktx.assets
 
-import com.badlogic.gdx.Files
-
-import com.badlogic.gdx.Files.FileType
 import com.badlogic.gdx.Files.FileType.*
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.files.FileHandle
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 /**
  * Tests files-related utilities.
@@ -60,5 +55,13 @@ class FilesTest {
     assertNotNull(file)
     assertEquals(Absolute, file.type())
     assertEquals("/home/mock/absolute.file", file.path())
+  }
+
+  @Test
+  fun shouldCreateFile() {
+    val file = file("mock.file")
+    assertNotNull(file)
+    assertEquals(Internal, file.type())
+    assertEquals("mock.file", file.path())
   }
 }
