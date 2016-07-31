@@ -40,6 +40,7 @@ The modules present in **KTX** are:
 - [log](log): minimal runtime overhead cross-platform logging.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
 - [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI.
+- [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles.
 - [vis](vis): type-safe Kotlin builders for VisUI. Alternative to the [scene2d](scene2d) extension.
 
 Afraid to use some third-party code? Run the test suites yourself. *Every* function and class added by these extensions
