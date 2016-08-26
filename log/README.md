@@ -132,6 +132,28 @@ try {
 }
 ```
 
+Extending `Logger` implementation with a custom tag format:
+```Kotlin
+import ktx.log.Logger
+
+/** Logs current date additionally to the log message. */
+class TimeLogger(tag: String) : Logger(tag) {
+  override val debugTag: String
+    get() = "[DEBUG] ${Date()} $tag"
+  override val infoTag: String
+    get() = "[INFO]  ${Date()} $tag"
+  override val errorTag: String
+    get() = "[ERROR] ${Date()} $tag"
+}
+
+/** Creates loggers that include current time in logs. */
+inline fun <reified T : Any> myLogger(): Logger = TimeLogger(T::class.java.name)
+
+// Usage:
+val logger = myLogger<MyClass>()
+logger.info { "Works like the usual logger." }
+```
+
 ### Alternatives
 
 - [SLF4J](http://www.slf4j.org/) is a common logging facade for Java applications. Note that each LibGDX platform would
