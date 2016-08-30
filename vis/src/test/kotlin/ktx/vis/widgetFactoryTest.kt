@@ -3,6 +3,7 @@ package ktx.vis
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.kotcrab.vis.ui.VisUI
+import com.kotcrab.vis.ui.widget.ButtonBar
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import org.junit.Assert.*
 import org.junit.Ignore
@@ -154,6 +155,12 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   fun shouldCreateCollapsible() = testFactoryMethod({ it.collapsible(table { }) })
 
   @Test
+  fun shouldCreateButtonBar() = testFactoryMethod({ it.buttonBar { } })
+
+  @Test
+  fun shouldCreateButtonBarWithCustomOrder() = testFactoryMethod({ it.buttonBar(ButtonBar.WINDOWS_ORDER) { } })
+
+  @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })
 
   abstract fun testFactoryMethod(factoryMethodUnderTest: (F) -> FR)
@@ -174,8 +181,8 @@ class TableWidgetFactoryTest() : WidgetFactoryTest<TableWidgetFactory, Cell<*>>(
   }
 }
 
-class WidgetGroupWidgetFactoryTest() : WidgetFactoryTest<WidgetGroupWidgetFactory, Any>() {
-  override fun testFactoryMethod(factoryMethodUnderTest: (WidgetGroupWidgetFactory) -> Any) {
+class WidgetGroupWidgetFactoryTest() : WidgetFactoryTest<WidgetGroupWidgetFactory, Actor>() {
+  override fun testFactoryMethod(factoryMethodUnderTest: (WidgetGroupWidgetFactory) -> Actor) {
     var initInvoked = false
     horizontalGroup {
       initInvoked = true

@@ -208,6 +208,13 @@ interface WidgetFactory<R> {
   /** @see [CollapsibleWidget] */
   fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit = {}): R = actor(CollapsibleWidget(table), init)
 
+  /** @see [ButtonBar] */
+  fun buttonBar(order: String? = null, tableContainerInit: VisTable.() -> Unit = {}, init: KButtonBar.() -> Unit): R {
+    val bar = if (order == null) KButtonBar() else KButtonBar(order)
+    bar.init()
+    return actor(bar.createTable(), tableContainerInit)
+  }
+
   /** @see [Actor] */
   fun <T : Actor> actor(actor: T, init: T.() -> Unit): R {
     actor.init()
@@ -369,16 +376,19 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): Cell<CollapsibleWidget>
       = super.collapsible(table, init) as Cell<CollapsibleWidget>
 
+  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): Cell<VisTable>
+      = super.buttonBar(order, tableContainerInit, init) as Cell<VisTable>
+
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): Cell<T>
       = super.actor(actor, init) as Cell<T>
 }
 
 @Suppress("UNCHECKED_CAST")
 /**
- * Implemented by widget classes providing type-safe builders. Requires that [addActorToWidgetGroup] returns [Actor]
- * instance being added to [WidgetGroup].
+ * Implemented by widget classes providing type-safe builders. Requires that [addActorToWidgetGroup] returns
+ * received [Actor] instance.
  */
-interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
+interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
   // Non-parental widgets
 
   override fun label(text: String, styleName: String, init: VisLabel.() -> Unit): VisLabel = super.label(text, styleName, init) as VisLabel
@@ -523,5 +533,18 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): CollapsibleWidget
       = super.collapsible(table, init) as CollapsibleWidget
 
+  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): VisTable
+      = super.buttonBar(order, tableContainerInit, init) as VisTable
+
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): T = super.actor(actor, init) as T
+}
+
+/**
+ * Implemented by classes that wants to utilize type-safe builders however they require actors to be added manually using
+ * class custom methods. Good example is [ButtonBar].
+ */
+interface VoidWidgetFactory : WidgetGroupWidgetFactory {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
+    return actor
+  }
 }

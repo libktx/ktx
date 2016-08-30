@@ -39,7 +39,6 @@ class KButtonTable : VisTable, TableWidgetFactory {
     }
     return add(actor)
   }
-
 }
 
 /** @see [ToastTable] */
@@ -103,7 +102,7 @@ class KVisImageTextButton : VisImageTextButton, TableWidgetFactory {
 class KVisTree : VisTree, WidgetGroupWidgetFactory {
   constructor(styleName: String) : super(styleName)
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -130,11 +129,17 @@ class KSpinner : Spinner, TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
+/** @see [ButtonBar] */
+class KButtonBar : ButtonBar, VoidWidgetFactory {
+  constructor() : super()
+  constructor(order: String) : super(order)
+}
+
 /** @see [Stack] */
 class KStack : Stack, WidgetGroupWidgetFactory {
   constructor() : super()
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -142,7 +147,7 @@ class KStack : Stack, WidgetGroupWidgetFactory {
 
 /** @see [HorizontalGroup] */
 class KHorizontalGroup : HorizontalGroup(), WidgetGroupWidgetFactory {
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -152,7 +157,7 @@ class KHorizontalGroup : HorizontalGroup(), WidgetGroupWidgetFactory {
 class KHorizontalFlowGroup : HorizontalFlowGroup, WidgetGroupWidgetFactory {
   constructor(spacing: Float) : super(spacing)
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -160,7 +165,7 @@ class KHorizontalFlowGroup : HorizontalFlowGroup, WidgetGroupWidgetFactory {
 
 /** @see [VerticalGroup] */
 class KVerticalGroup : VerticalGroup(), WidgetGroupWidgetFactory {
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -170,7 +175,7 @@ class KVerticalGroup : VerticalGroup(), WidgetGroupWidgetFactory {
 class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
   constructor(spacing: Float) : super(spacing)
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -180,7 +185,7 @@ class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
 class KGridGroup : GridGroup, WidgetGroupWidgetFactory {
   constructor(itemSize: Float, spacing: Float) : super(itemSize, spacing)
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
@@ -191,7 +196,7 @@ class KFloatingGroup : FloatingGroup, WidgetGroupWidgetFactory {
   constructor() : super()
   constructor(prefWidth: Float, prefHeight: Float) : super(prefWidth, prefHeight)
 
-  override fun addActorToWidgetGroup(actor: Actor): Any {
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
   }
