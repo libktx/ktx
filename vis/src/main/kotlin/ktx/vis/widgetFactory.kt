@@ -10,6 +10,7 @@ import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.util.adapter.ListAdapter
 import com.kotcrab.vis.ui.widget.*
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
 import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
@@ -215,6 +216,13 @@ interface WidgetFactory<R> {
     return actor(bar.createTable(), tableContainerInit)
   }
 
+  /** @see [ListView] */
+  fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit = {}, init: KListView<ItemT>.() -> Unit = {}): R {
+    val view = KListView(itemAdapter)
+    view.init()
+    return actor(view.mainTable, tableContainerInit)
+  }
+
   /** @see [Actor] */
   fun <T : Actor> actor(actor: T, init: T.() -> Unit): R {
     actor.init()
@@ -379,6 +387,9 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): Cell<VisTable>
       = super.buttonBar(order, tableContainerInit, init) as Cell<VisTable>
 
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): Cell<VisTable>
+      = super.listView(itemAdapter, tableContainerInit, init) as Cell<VisTable>
+
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): Cell<T>
       = super.actor(actor, init) as Cell<T>
 }
@@ -535,6 +546,9 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
 
   override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): VisTable
       = super.buttonBar(order, tableContainerInit, init) as VisTable
+
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): VisTable
+      = super.listView(itemAdapter, tableContainerInit, init) as VisTable
 
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): T = super.actor(actor, init) as T
 }

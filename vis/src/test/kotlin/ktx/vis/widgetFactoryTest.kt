@@ -2,7 +2,9 @@ package ktx.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.VisUI
+import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
 import com.kotcrab.vis.ui.widget.ButtonBar
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import org.junit.Assert.*
@@ -159,6 +161,9 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
 
   @Test
   fun shouldCreateButtonBarWithCustomOrder() = testFactoryMethod({ it.buttonBar(ButtonBar.WINDOWS_ORDER) { } })
+
+  @Test
+  fun shouldCreateListView() = testFactoryMethod({ it.listView(SimpleListAdapter(Array<String>())) })
 
   @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })

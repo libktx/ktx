@@ -8,6 +8,7 @@ import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.util.adapter.ListAdapter
 import com.kotcrab.vis.ui.widget.*
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
 import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
@@ -133,6 +134,11 @@ class KSpinner : Spinner, TableWidgetFactory {
 class KButtonBar : ButtonBar, VoidWidgetFactory {
   constructor() : super()
   constructor(order: String) : super(order)
+}
+
+/** @see [ListView] */
+class KListView<ItemT> : ListView<ItemT>, VoidWidgetFactory {
+  constructor(adapter: ListAdapter<ItemT>) : super(adapter)
 }
 
 /** @see [Stack] */
