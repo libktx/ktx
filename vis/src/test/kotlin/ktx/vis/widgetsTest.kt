@@ -11,6 +11,8 @@ import org.junit.Test
 
 class VisTableWidgetFactoryTest() : TableBasedWidgetTest({ table(false, it) })
 
+class ButtonTableWidgetFactoryTest() : TableBasedWidgetTest({ buttonTable(false, it) })
+
 class ToastTableFactoryTest() : TableBasedWidgetTest({ toastTable(false, it) })
 
 class WindowWidgetFactoryTest() : TableBasedWidgetTest({ window("title", DEFAULT_STYLE, it) })
@@ -78,5 +80,17 @@ abstract class WidgetGroupBasedWidgetTest(val widgetProvider: (WidgetGroupWidget
       assertTrue(widgetGroup.children.last() == widget)
     }
     assertTrue(initInvoked)
+  }
+}
+
+class KButtonTableTest : NeedsLibgdx() {
+  @Test
+  fun shouldAddActorToButtonGroup() {
+    var actorAdded = false
+    buttonTable {
+      val buttonCell = button { }
+      actorAdded = buttonGroup.buttons.contains(buttonCell.actor)
+    }
+    assertTrue(actorAdded)
   }
 }

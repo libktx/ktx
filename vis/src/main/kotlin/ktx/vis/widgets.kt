@@ -24,12 +24,32 @@ class KVisTable : VisTable, TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
+/**
+ * [VisTable] that a appends all buttons to internal [ButtonGroup] before adding them to table. Others actors are
+ * added to table normally.
+ */
+class KButtonTable : VisTable, TableWidgetFactory {
+  val buttonGroup: ButtonGroup<Button> = ButtonGroup()
+
+  constructor(setVisDefaults: Boolean) : super(setVisDefaults)
+
+  override fun addActorToWidgetGroup(actor: Actor): Cell<*> {
+    if (actor is Button) {
+      buttonGroup.add(actor)
+    }
+    return add(actor)
+  }
+
+}
+
+/** @see [ToastTable] */
 class KToastTable : ToastTable, TableWidgetFactory {
   constructor(setVisDefaults: Boolean) : super(setVisDefaults)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
+/** @see [VisWindow] */
 class KVisWindow : VisWindow, TableWidgetFactory {
   constructor(title: String, styleName: String) : super(title, styleName)
 
@@ -89,18 +109,21 @@ class KVisTree : VisTree, WidgetGroupWidgetFactory {
   }
 }
 
+/** @see [BasicColorPicker] */
 class KBasicColorPicker : BasicColorPicker, TableWidgetFactory {
   constructor(styleName: String) : super(styleName, null)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
+/** @see [ExtendedColorPicker] */
 class KExtendedColorPicker : ExtendedColorPicker, TableWidgetFactory {
   constructor(styleName: String) : super(styleName, null)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
+/** @see [Spinner] */
 class KSpinner : Spinner, TableWidgetFactory {
   constructor(styleName: String, name: String, model: SpinnerModel) : super(styleName, name, model)
 

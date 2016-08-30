@@ -106,6 +106,9 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   fun shouldCreateTable() = testFactoryMethod({ it.table { } })
 
   @Test
+  fun shouldCreateButtonTable() = testFactoryMethod({ it.buttonTable { } })
+
+  @Test
   fun shouldCreateHorizontalGroup() = testFactoryMethod({ it.horizontalGroup { } })
 
   @Test

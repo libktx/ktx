@@ -18,6 +18,9 @@ import com.kotcrab.vis.ui.widget.toast.ToastTable
 /** Begins creation of UI using type-safe builder, uses [VisTable] as base widget container. */
 inline fun table(setVisDefaults: Boolean = false, init: KVisTable.() -> Unit): VisTable = actor(KVisTable(setVisDefaults), init)
 
+/** Begins creation of UI using type-safe builder, uses [KButtonTable] as base widget container. */
+inline fun buttonTable(setVisDefaults: Boolean = false, init: KButtonTable.() -> Unit): VisTable = actor(KButtonTable(setVisDefaults), init)
+
 /**
  * Begins creation of UI using type-safe builder, uses [ToastTable] as base widget container.
  * @see [ToastManager]

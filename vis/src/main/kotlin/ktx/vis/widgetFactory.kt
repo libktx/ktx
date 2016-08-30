@@ -149,6 +149,9 @@ interface WidgetFactory<R> {
   /** @see [VisTable] */
   fun table(defaultSpacing: Boolean = false, init: KVisTable.() -> Unit): R = actor(KVisTable(defaultSpacing), init)
 
+  /** @see [KButtonTable] */
+  fun buttonTable(defaultSpacing: Boolean = false, init: KButtonTable.() -> Unit): R = actor(KButtonTable(defaultSpacing), init)
+
   /** @see [HorizontalGroup] */
   fun horizontalGroup(init: KHorizontalGroup.() -> Unit): R = actor(KHorizontalGroup(), init)
 
@@ -316,6 +319,9 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): Cell<VisTable>
       = super.table(defaultSpacing, init) as Cell<VisTable>
 
+  override fun buttonTable(defaultSpacing: Boolean, init: KButtonTable.() -> Unit): Cell<KButtonTable>
+      = super.buttonTable(defaultSpacing, init) as Cell<KButtonTable>
+
   override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): Cell<HorizontalGroup>
       = super.horizontalGroup(init) as Cell<HorizontalGroup>
 
@@ -347,6 +353,12 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
 
   override fun splitPane(firstWidget: Actor, secondWidget: Actor, vertical: Boolean, styleName: String, init: VisSplitPane.() -> Unit): Cell<VisSplitPane>
       = super.splitPane(firstWidget, secondWidget, vertical, styleName, init) as Cell<VisSplitPane>
+
+  override fun splitPane(firstWidget: Actor, secondWidget: Actor, vertical: Boolean, init: VisSplitPane.() -> Unit): Cell<VisSplitPane>
+      = super.splitPane(firstWidget, secondWidget, vertical, init) as Cell<VisSplitPane>
+
+  override fun multiSplitPane(vertical: Boolean, init: MultiSplitPane.() -> Unit): Cell<MultiSplitPane>
+      = super.multiSplitPane(vertical, init) as Cell<MultiSplitPane>
 
   override fun multiSplitPane(vertical: Boolean, styleName: String, init: MultiSplitPane.() -> Unit): Cell<MultiSplitPane>
       = super.multiSplitPane(vertical, styleName, init) as Cell<MultiSplitPane>
@@ -462,6 +474,9 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   override fun table(defaultSpacing: Boolean, init: KVisTable.() -> Unit): VisTable
       = super.table(defaultSpacing, init) as VisTable
 
+  override fun buttonTable(defaultSpacing: Boolean, init: KButtonTable.() -> Unit): KButtonTable
+      = super.buttonTable(defaultSpacing, init) as KButtonTable
+
   override fun horizontalGroup(init: KHorizontalGroup.() -> Unit): HorizontalGroup
       = super.horizontalGroup(init) as HorizontalGroup
 
@@ -493,8 +508,14 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Any> {
   override fun splitPane(firstWidget: Actor, secondWidget: Actor, vertical: Boolean, styleName: String, init: VisSplitPane.() -> Unit): VisSplitPane
       = super.splitPane(firstWidget, secondWidget, vertical, styleName, init) as VisSplitPane
 
+  override fun splitPane(firstWidget: Actor, secondWidget: Actor, vertical: Boolean, init: VisSplitPane.() -> Unit): VisSplitPane
+      = super.splitPane(firstWidget, secondWidget, vertical, init) as VisSplitPane
+
   override fun multiSplitPane(vertical: Boolean, styleName: String, init: MultiSplitPane.() -> Unit): MultiSplitPane
       = super.multiSplitPane(vertical, styleName, init) as MultiSplitPane
+
+  override fun multiSplitPane(vertical: Boolean, init: MultiSplitPane.() -> Unit): MultiSplitPane
+      = super.multiSplitPane(vertical, init) as MultiSplitPane
 
   override fun <T : Actor> container(actor: T, init: Container<T>.() -> Unit): Container<T>
       = super.container(actor, init) as Container<T>
