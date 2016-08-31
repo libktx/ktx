@@ -6,10 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.kotcrab.vis.ui.VisUI
-import com.kotcrab.vis.ui.layout.FloatingGroup
-import com.kotcrab.vis.ui.layout.GridGroup
-import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
-import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.layout.*
 import com.kotcrab.vis.ui.util.adapter.ListAdapter
 import com.kotcrab.vis.ui.widget.*
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
@@ -177,6 +174,9 @@ interface WidgetFactory<R> {
   /** @see [FloatingGroup] */
   fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): R
       = actor(KFloatingGroup(prefWidth, prefHeight), init)
+
+  fun dragPane(widgetGroup: WidgetGroup, init: KDragPane.() -> Unit): R
+      = actor(KDragPane(widgetGroup), init)
 
   /** @see [Stack] */
   fun stack(init: KStack.() -> Unit): R = actor(KStack(), init)
@@ -358,6 +358,9 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): Cell<FloatingGroup>
       = super.floatingGroup(prefWidth, prefHeight, init) as Cell<FloatingGroup>
 
+  override fun dragPane(widgetGroup: WidgetGroup, init: KDragPane.() -> Unit): Cell<DragPane>
+      = super.dragPane(widgetGroup, init) as Cell<DragPane>
+
   override fun stack(init: KStack.() -> Unit): Cell<Stack>
       = super.stack(init) as Cell<Stack>
 
@@ -518,6 +521,9 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
 
   override fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): FloatingGroup
       = super.floatingGroup(prefWidth, prefHeight, init) as FloatingGroup
+
+  override fun dragPane(widgetGroup: WidgetGroup, init: KDragPane.() -> Unit): DragPane
+      = super.dragPane(widgetGroup, init) as DragPane
 
   override fun stack(init: KStack.() -> Unit): Stack = super.stack(init) as Stack
 

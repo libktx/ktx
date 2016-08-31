@@ -4,10 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.kotcrab.vis.ui.VisUI
-import com.kotcrab.vis.ui.layout.FloatingGroup
-import com.kotcrab.vis.ui.layout.GridGroup
-import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
-import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.layout.*
 import com.kotcrab.vis.ui.util.adapter.ListAdapter
 import com.kotcrab.vis.ui.widget.*
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
@@ -203,6 +200,17 @@ class KFloatingGroup : FloatingGroup, WidgetGroupWidgetFactory {
   constructor(prefWidth: Float, prefHeight: Float) : super(prefWidth, prefHeight)
 
   override fun addActorToWidgetGroup(actor: Actor): Actor {
+    addActor(actor)
+    return actor
+  }
+}
+
+class KDragPane : DragPane, WidgetGroupWidgetFactory {
+  constructor(group: WidgetGroup) : super(group)
+
+  override fun addActorToWidgetGroup(actor: Actor): Actor {
+    // addActor is not deprecated in DragPane but it's deprecated in Container, in Java warning wouldn't be shown here
+    @Suppress("DEPRECATION")
     addActor(actor)
     return actor
   }

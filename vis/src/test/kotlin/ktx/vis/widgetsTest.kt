@@ -1,5 +1,6 @@
 package ktx.vis
 
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
@@ -49,6 +50,8 @@ class FloatingGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest(::floatingGr
 
 class FloatingGroupWidgetFactoryTestWithPrefSize() : WidgetGroupBasedWidgetTest({ floatingGroup(1f, 1f, it) })
 
+class DragPaneWidgetFactoryTest() : WidgetGroupBasedWidgetTest({ actor(KDragPane(HorizontalGroup()), it) })
+
 abstract class TableBasedWidgetTest(val widgetProvider: (TableWidgetFactory.() -> Unit) -> Table) : NeedsLibgdx() {
   @Test
   fun shouldAddActorToGroup() {
@@ -92,5 +95,16 @@ class KButtonTableTest : NeedsLibgdx() {
       actorAdded = buttonGroup.buttons.contains(buttonCell.actor)
     }
     assertTrue(actorAdded)
+  }
+}
+
+class ValidatorTest : NeedsLibgdx() {
+  @Test
+  fun shouldCreateValidator() {
+    var initInvoked = false
+    validator {
+      initInvoked = true
+    }
+    assertTrue(initInvoked)
   }
 }

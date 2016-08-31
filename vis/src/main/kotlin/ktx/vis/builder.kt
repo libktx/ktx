@@ -2,13 +2,16 @@ package ktx.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.utils.Disableable
 import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
 import com.kotcrab.vis.ui.util.ToastManager
+import com.kotcrab.vis.ui.util.form.FormValidator
 import com.kotcrab.vis.ui.widget.VisTable
 import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.toast.ToastTable
@@ -61,4 +64,12 @@ inline fun stack(init: KStack.() -> Unit): Stack = actor(KStack(), init)
 inline fun <T : Actor> actor(actor: T, init: T.() -> Unit): T {
   actor.init()
   return actor
+}
+
+/**  Creates and returns new [FormValidator] for use with type-safe builders. */
+inline fun validator(targetToDisable: Disableable? = null, messageLabel: Label? = null, styleName: String = DEFAULT_STYLE,
+                     init: FormValidator.() -> Unit): FormValidator {
+  val validator = FormValidator(targetToDisable, messageLabel, styleName)
+  validator.init()
+  return validator
 }

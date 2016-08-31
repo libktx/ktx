@@ -2,6 +2,7 @@ package ktx.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
@@ -131,6 +132,9 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
 
   @Test
   fun shouldCreateFloatingGroupFromPrefSize() = testFactoryMethod({ it.floatingGroup(1f, 1f) {} })
+
+  @Test
+  fun shouldCreateDragPane() = testFactoryMethod({ it.dragPane(HorizontalGroup(), {}) })
 
   @Test
   fun shouldCreateStack() = testFactoryMethod({ it.stack { } })
