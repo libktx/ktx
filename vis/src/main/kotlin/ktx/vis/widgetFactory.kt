@@ -13,10 +13,45 @@ import com.kotcrab.vis.ui.widget.color.BasicColorPicker
 import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
 import com.kotcrab.vis.ui.widget.spinner.Spinner
 import com.kotcrab.vis.ui.widget.spinner.SpinnerModel
+import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 
 /** @author Kotcrab */
 
 const val DEFAULT_STYLE = "default"
+
+
+/**
+ * Represents result of [WidgetFactory] method when created widget can't be added to [WidgetGroup] directly.
+ * For example [TabbedPane] is not a [Actor] instance and provides separate method for accessing widget that needs to be
+ * added to UI layout (in that case table containing tabs buttons).
+ * Allows to access both the widget itself and the result of it's method providing UI widget.
+ *
+ * Note that when using type-safe builders there is no need to ever store instances of those classes, usually you only
+ * need access to cell object which can be done directly after calling method returning this class. When you need access
+ * to both object use Kotlin destructuring declarations.
+ */
+open class FactoryPair<out W, out R>(val widget: W, internal val result: R) {
+  operator fun component1(): W {
+    return widget
+  }
+
+  open operator fun component2(): R {
+    return result
+  }
+}
+
+/**
+ * See [FactoryPair]. Because result of method providing UI widget was added to [Table] instance it is wrapped
+ * in [Cell] object.
+ */
+class FactoryCellTablePair<out W>(widget: W, val cell: Cell<VisTable>) :
+    FactoryPair<W, Cell<VisTable>>(widget, cell)
+
+/**
+ * See [FactoryPair].
+ */
+class FactoryTablePair<out W>(widget: W, val container: VisTable) :
+    FactoryPair<W, VisTable>(widget, container)
 
 /**
  * Provides methods allowing to build scene2d.ui using type-safe builders.
@@ -145,41 +180,42 @@ interface WidgetFactory<R> {
   // Parental widgets groups
 
   /** @see [VisTable] */
-  fun table(defaultSpacing: Boolean = false, init: KVisTable.() -> Unit): R = actor(KVisTable(defaultSpacing), init)
+  fun table(defaultSpacing: Boolean = false, init: KVisTable.() -> Unit = {}): R = actor(KVisTable(defaultSpacing), init)
 
   /** @see [KButtonTable] */
-  fun buttonTable(defaultSpacing: Boolean = false, init: KButtonTable.() -> Unit): R = actor(KButtonTable(defaultSpacing), init)
+  fun buttonTable(defaultSpacing: Boolean = false, init: KButtonTable.() -> Unit = {}): R = actor(KButtonTable(defaultSpacing), init)
 
   /** @see [HorizontalGroup] */
-  fun horizontalGroup(init: KHorizontalGroup.() -> Unit): R = actor(KHorizontalGroup(), init)
+  fun horizontalGroup(init: KHorizontalGroup.() -> Unit = {}): R = actor(KHorizontalGroup(), init)
 
   /** @see [HorizontalFlowGroup] */
-  fun horizontalFlowGroup(spacing: Float = 0f, init: KHorizontalFlowGroup.() -> Unit): R
+  fun horizontalFlowGroup(spacing: Float = 0f, init: KHorizontalFlowGroup.() -> Unit = {}): R
       = actor(KHorizontalFlowGroup(spacing), init)
 
   /** @see [VerticalGroup] */
-  fun verticalGroup(init: KVerticalGroup.() -> Unit): R = actor(KVerticalGroup(), init)
+  fun verticalGroup(init: KVerticalGroup.() -> Unit = {}): R = actor(KVerticalGroup(), init)
 
   /** @see [VerticalFlowGroup] */
-  fun verticalFlowGroup(spacing: Float = 0f, init: KVerticalFlowGroup.() -> Unit): R
+  fun verticalFlowGroup(spacing: Float = 0f, init: KVerticalFlowGroup.() -> Unit = {}): R
       = actor(KVerticalFlowGroup(spacing), init)
 
   /** @see [GridGroup] */
-  fun gridGroup(itemSize: Float = 256f, spacing: Float = 8f, init: KGridGroup.() -> Unit): R
+  fun gridGroup(itemSize: Float = 256f, spacing: Float = 8f, init: KGridGroup.() -> Unit = {}): R
       = actor(KGridGroup(itemSize, spacing), init)
 
   /** @see [FloatingGroup] */
-  fun floatingGroup(init: KFloatingGroup.() -> Unit): R = actor(KFloatingGroup(), init)
+  fun floatingGroup(init: KFloatingGroup.() -> Unit = {}): R = actor(KFloatingGroup(), init)
 
   /** @see [FloatingGroup] */
-  fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit): R
+  fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGroup.() -> Unit = {}): R
       = actor(KFloatingGroup(prefWidth, prefHeight), init)
 
-  fun dragPane(widgetGroup: WidgetGroup, init: KDragPane.() -> Unit): R
+  /** @see [DragPane] */
+  fun dragPane(widgetGroup: WidgetGroup, init: KDragPane.() -> Unit = {}): R
       = actor(KDragPane(widgetGroup), init)
 
   /** @see [Stack] */
-  fun stack(init: KStack.() -> Unit): R = actor(KStack(), init)
+  fun stack(init: KStack.() -> Unit = {}): R = actor(KStack(), init)
 
   // Others
 
@@ -204,29 +240,40 @@ interface WidgetFactory<R> {
       = actor(MultiSplitPane(vertical, styleName), init)
 
   /** @see [Container] */
-  fun <T : Actor> container(actor: T, init: Container<T>.() -> Unit = {}): R = actor(Container<T>(actor), init)
+  fun <T : Actor> container(actor: T? = null, init: Container<T>.() -> Unit = {}): R = actor(Container<T>(actor), init)
 
   /** @see [CollapsibleWidget] */
   fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit = {}): R = actor(CollapsibleWidget(table), init)
 
   /** @see [ButtonBar] */
-  fun buttonBar(order: String? = null, tableContainerInit: VisTable.() -> Unit = {}, init: KButtonBar.() -> Unit): R {
+  fun buttonBar(order: String? = null, tableContainerInit: VisTable.() -> Unit = {}, init: KButtonBar.() -> Unit): FactoryPair<ButtonBar, R> {
     val bar = if (order == null) KButtonBar() else KButtonBar(order)
+    val pair = FactoryPair(bar, actor(bar.createTable(), tableContainerInit))
     bar.init()
-    return actor(bar.createTable(), tableContainerInit)
+    return pair
   }
 
   /** @see [ListView] */
-  fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit = {}, init: KListView<ItemT>.() -> Unit = {}): R {
+  fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit = {}, init: KListView<ItemT>.() -> Unit = {}): FactoryPair<ListView<ItemT>, R> {
     val view = KListView(itemAdapter)
+    val pair = FactoryPair(view, actor(view.mainTable, tableContainerInit))
     view.init()
-    return actor(view.mainTable, tableContainerInit)
+    return pair
+  }
+
+  /** @see [TabbedPane] */
+  fun tabbedPane(styleName: String = DEFAULT_STYLE, tableContainerInit: VisTable.() -> Unit = {}, init: KTabbedPane.() -> Unit): FactoryPair<TabbedPane, R> {
+    val pane = KTabbedPane(styleName)
+    val pair = FactoryPair(pane, actor(pane.table, tableContainerInit))
+    pane.init()
+    return pair
   }
 
   /** @see [Actor] */
   fun <T : Actor> actor(actor: T, init: T.() -> Unit): R {
+    val result = addActorToWidgetGroup(actor)
     actor.init()
-    return addActorToWidgetGroup(actor)
+    return result
   }
 
   fun addActorToWidgetGroup(actor: Actor): R
@@ -381,21 +428,31 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun multiSplitPane(vertical: Boolean, styleName: String, init: MultiSplitPane.() -> Unit): Cell<MultiSplitPane>
       = super.multiSplitPane(vertical, styleName, init) as Cell<MultiSplitPane>
 
-  override fun <T : Actor> container(actor: T, init: Container<T>.() -> Unit): Cell<Container<T>>
+  override fun <T : Actor> container(actor: T?, init: Container<T>.() -> Unit): Cell<Container<T>>
       = super.container(actor, init) as Cell<Container<T>>
 
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): Cell<CollapsibleWidget>
       = super.collapsible(table, init) as Cell<CollapsibleWidget>
 
-  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): Cell<VisTable>
-      = super.buttonBar(order, tableContainerInit, init) as Cell<VisTable>
+  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): FactoryCellTablePair<ButtonBar> {
+    val (bar, cell) = super.buttonBar(order, tableContainerInit, init)
+    return FactoryCellTablePair(bar, cell as Cell<VisTable>)
+  }
 
-  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): Cell<VisTable>
-      = super.listView(itemAdapter, tableContainerInit, init) as Cell<VisTable>
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryCellTablePair<ListView<ItemT>> {
+    val (view, cell) = super.listView(itemAdapter, tableContainerInit, init)
+    return FactoryCellTablePair(view, cell as Cell<VisTable>)
+  }
+
+  override fun tabbedPane(styleName: String, tableContainerInit: VisTable.() -> Unit, init: KTabbedPane.() -> Unit): FactoryCellTablePair<TabbedPane> {
+    val (pane, cell) = super.tabbedPane(styleName, tableContainerInit, init)
+    return FactoryCellTablePair(pane, cell as Cell<VisTable>)
+  }
 
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): Cell<T>
       = super.actor(actor, init) as Cell<T>
 }
+
 
 @Suppress("UNCHECKED_CAST")
 /**
@@ -544,17 +601,26 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
   override fun multiSplitPane(vertical: Boolean, init: MultiSplitPane.() -> Unit): MultiSplitPane
       = super.multiSplitPane(vertical, init) as MultiSplitPane
 
-  override fun <T : Actor> container(actor: T, init: Container<T>.() -> Unit): Container<T>
+  override fun <T : Actor> container(actor: T?, init: Container<T>.() -> Unit): Container<T>
       = super.container(actor, init) as Container<T>
 
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): CollapsibleWidget
       = super.collapsible(table, init) as CollapsibleWidget
 
-  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): VisTable
-      = super.buttonBar(order, tableContainerInit, init) as VisTable
+  override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): FactoryTablePair<ButtonBar> {
+    val (bar, table) = super.buttonBar(order, tableContainerInit, init)
+    return FactoryTablePair(bar, table as VisTable)
+  }
 
-  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): VisTable
-      = super.listView(itemAdapter, tableContainerInit, init) as VisTable
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryTablePair<ListView<ItemT>> {
+    val (view, table) = super.listView(itemAdapter, tableContainerInit, init)
+    return FactoryTablePair(view, table as VisTable)
+  }
+
+  override fun tabbedPane(styleName: String, tableContainerInit: VisTable.() -> Unit, init: KTabbedPane.() -> Unit): FactoryTablePair<TabbedPane> {
+    val (pane, table) = super.tabbedPane(styleName, tableContainerInit, init)
+    return FactoryTablePair(pane, table as VisTable)
+  }
 
   override fun <T : Actor> actor(actor: T, init: T.() -> Unit): T = super.actor(actor, init) as T
 }

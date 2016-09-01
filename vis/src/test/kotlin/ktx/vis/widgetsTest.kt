@@ -4,8 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
+import com.kotcrab.vis.ui.widget.tabbedpane.Tab
+import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import org.junit.Assert.*
 import org.junit.Test
+import org.mockito.Mockito
 
 /** @author Kotcrab */
 
@@ -106,5 +109,159 @@ class ValidatorTest : NeedsLibgdx() {
       initInvoked = true
     }
     assertTrue(initInvoked)
+  }
+}
+
+class KTabbedPaneTest : NeedsLibgdx() {
+  @Test
+  fun shouldCreateTab() {
+    val tabTitle = "Test Tab"
+    var tab: Tab? = null
+    var tabbedPane: TabbedPane? = null
+    table {
+      tabbedPane = tabbedPane {
+        tab(tabTitle) {
+          tab = this
+        }
+      }.widget
+    }
+    assertNotNull(tab)
+    assertEquals(tab!!.tabTitle, tabTitle)
+    assertEquals(tabbedPane!!.tabs.size, 1)
+  }
+
+  @Test
+  fun shouldAllowToAddStandardTabManually() {
+    table {
+      tabbedPane {
+        add(Mockito.mock(Tab::class.java))
+      }
+    }
+  }
+
+  @Test
+  fun shouldAllowToInsertStandardTabManually() {
+    table {
+      tabbedPane {
+        insert(0, Mockito.mock(Tab::class.java))
+      }
+    }
+  }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun shouldThrowExceptionOnManualTabAdd() {
+    table {
+      tabbedPane {
+        add(tab("") {})
+      }
+    }
+  }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun shouldThrowExceptionOnManualTabInsert() {
+    table {
+      tabbedPane {
+        insert(0, tab("") {})
+      }
+    }
+  }
+
+  @Test
+  fun shouldCreateTabContent() {
+    var tab: Tab? = null
+    table {
+      tabbedPane {
+        tab("") {
+          tab = this
+          label("")
+        }
+      }
+    }
+    assertNotNull(tab)
+    assertEquals(tab!!.contentTable.children.size, 1)
+  }
+
+  @Test
+  fun shouldAddTabContentToTable() {
+    verticalGroup {
+      val content = table()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+          label("")
+        }
+      }
+      assertEquals(content.children.size, 1)
+    }
+  }
+
+  @Test
+  fun shouldAddTabContentToTableCell() {
+    table {
+      val content = table()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+          label("")
+        }
+      }
+      assertEquals(content.actor.children.size, 1)
+    }
+  }
+
+  @Test
+  fun shouldAddTabContentToContainerCell() {
+    table {
+      val content = container<Table>()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+
+        }
+      }
+      assertNotNull(content.actor.actor)
+    }
+  }
+
+  @Test
+  fun shouldAddTabContentToContainer() {
+    verticalGroup {
+      val content = container<Table>()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+
+        }
+      }
+      assertNotNull(content.actor)
+    }
+  }
+
+  @Test
+  fun shouldAddTabContentToWidgetGroup() {
+    verticalGroup {
+      val content = verticalGroup()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+
+        }
+      }
+      assertEquals(content.children.size, 1)
+    }
+  }
+
+  @Test
+  fun shouldAddTabContentToWidgetGroupCell() {
+    table {
+      val content = verticalGroup()
+      tabbedPane {
+        addTabContentsTo(content)
+        tab("") {
+
+        }
+      }
+      assertEquals(content.actor.children.size, 1)
+    }
   }
 }

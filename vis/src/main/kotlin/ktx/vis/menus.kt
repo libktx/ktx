@@ -52,7 +52,7 @@ fun PopupMenu.menuItem(text: String, drawable: Drawable, styleName: String = DEF
     = actor(MenuItem(text, drawable, styleName), init)
 
 private fun <T : MenuItem> PopupMenu.actor(actor: T, init: T.() -> Unit): T {
-  actor.init()
   addItem(actor)
+  actor.init()
   return actor
 }

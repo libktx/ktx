@@ -161,13 +161,16 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   fun shouldCreateCollapsible() = testFactoryMethod({ it.collapsible(table { }) })
 
   @Test
-  fun shouldCreateButtonBar() = testFactoryMethod({ it.buttonBar { } })
+  fun shouldCreateButtonBar() = testFactoryMethod({ it.buttonBar { }.result })
 
   @Test
-  fun shouldCreateButtonBarWithCustomOrder() = testFactoryMethod({ it.buttonBar(ButtonBar.WINDOWS_ORDER) { } })
+  fun shouldCreateButtonBarWithCustomOrder() = testFactoryMethod({ it.buttonBar(ButtonBar.WINDOWS_ORDER) { }.result })
 
   @Test
-  fun shouldCreateListView() = testFactoryMethod({ it.listView(SimpleListAdapter(Array<String>())) })
+  fun shouldCreateTabbedPane() = testFactoryMethod({ it.tabbedPane { }.result })
+
+  @Test
+  fun shouldCreateListView() = testFactoryMethod({ it.listView(SimpleListAdapter(Array<String>())).result })
 
   @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })
