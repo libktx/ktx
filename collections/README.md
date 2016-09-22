@@ -44,7 +44,7 @@ if the variable is a possible null.
 with a compatible element type or another collection storing values of the same type. Both operator invocations can be
 chained.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
-- `iterate` method allows to iterate over collection's elements, while providing reference to `MutableInterator`. Can be
+- `iterate` method allows to iterate over collection's elements, while providing reference to `MutableIterator`. Can be
 used to easily remove collection elements during iteration.
 - Every iterable and array can be converted to `ObjectSet` using `toGdxSet` method.
 - `IntArray` can be converted to `IntSet` using `toGdxSet` method.
