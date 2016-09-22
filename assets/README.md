@@ -211,7 +211,7 @@ Checking if asset is already loaded by the global `AssetManager`:
 ```Kotlin
 import ktx.assets.*
 
-if (isLoaded<Texture>("image.png") {
+if (isLoaded<Texture>("image.png")) {
   // ...
 }
 ```
@@ -232,4 +232,4 @@ model-view-controller framework built on top of LibGDX. It features its own asse
 injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
-Java applications, though - **KTX** syntax feels more natural when using Kotlin.
+Java applications though - **KTX** syntax should feel more natural when using Kotlin.
