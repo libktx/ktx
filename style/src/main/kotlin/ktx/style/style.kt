@@ -98,7 +98,7 @@ fun Skin.color(name: String, red: Float, green: Float, blue: Float, alpha: Float
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.button(name: String = defaultStyle, extend: String? = null, init: ButtonStyle.() -> Unit) =
     addStyle(name, if (extend == null) ButtonStyle() else ButtonStyle(get(extend)), init)
@@ -108,7 +108,7 @@ inline fun Skin.button(name: String = defaultStyle, extend: String? = null, init
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [CheckBoxStyle] added to the [Skin] with the selected name
+ * @return a new instance of [CheckBoxStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.checkBox(name: String = defaultStyle, extend: String? = null, init: CheckBoxStyle.() -> Unit) =
     addStyle(name, if (extend == null) CheckBoxStyle() else CheckBoxStyle(get(extend)), init)
@@ -118,7 +118,7 @@ inline fun Skin.checkBox(name: String = defaultStyle, extend: String? = null, in
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ImageButtonStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ImageButtonStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.imageButton(name: String = defaultStyle, extend: String? = null, init: ImageButtonStyle.() -> Unit) =
     addStyle(name, if (extend == null) ImageButtonStyle() else ImageButtonStyle(get(extend)), init)
@@ -128,7 +128,7 @@ inline fun Skin.imageButton(name: String = defaultStyle, extend: String? = null,
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ImageTextButtonStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ImageTextButtonStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.imageTextButton(name: String = defaultStyle, extend: String? = null, init: ImageTextButtonStyle.() -> Unit) =
     addStyle(name, if (extend == null) ImageTextButtonStyle() else ImageTextButtonStyle(get(extend)), init)
@@ -138,7 +138,7 @@ inline fun Skin.imageTextButton(name: String = defaultStyle, extend: String? = n
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [LabelStyle] added to the [Skin] with the selected name
+ * @return a new instance of [LabelStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.label(name: String = defaultStyle, extend: String? = null, init: LabelStyle.() -> Unit) =
     addStyle(name, if (extend == null) LabelStyle() else LabelStyle(get(extend)), init)
@@ -148,7 +148,7 @@ inline fun Skin.label(name: String = defaultStyle, extend: String? = null, init:
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ListStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ListStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.list(name: String = defaultStyle, extend: String? = null, init: ListStyle.() -> Unit) =
     addStyle(name, if (extend == null) ListStyle() else ListStyle(get(extend)), init)
@@ -158,7 +158,7 @@ inline fun Skin.list(name: String = defaultStyle, extend: String? = null, init: 
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ProgressBarStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ProgressBarStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.progressBar(name: String = defaultStyle, extend: String? = null, init: ProgressBarStyle.() -> Unit) =
     addStyle(name, if (extend == null) ProgressBarStyle() else ProgressBarStyle(get(extend)), init)
@@ -168,7 +168,7 @@ inline fun Skin.progressBar(name: String = defaultStyle, extend: String? = null,
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ScrollPaneStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ScrollPaneStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.scrollPane(name: String = defaultStyle, extend: String? = null, init: ScrollPaneStyle.() -> Unit) =
     addStyle(name, if (extend == null) ScrollPaneStyle() else ScrollPaneStyle(get(extend)), init)
@@ -178,7 +178,7 @@ inline fun Skin.scrollPane(name: String = defaultStyle, extend: String? = null, 
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [SelectBoxStyle] added to the [Skin] with the selected name
+ * @return a new instance of [SelectBoxStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.selectBox(name: String = defaultStyle, extend: String? = null, init: SelectBoxStyle.() -> Unit) =
     addStyle(name, if (extend == null) SelectBoxStyle() else SelectBoxStyle(get(extend)), init)
@@ -188,7 +188,7 @@ inline fun Skin.selectBox(name: String = defaultStyle, extend: String? = null, i
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [SliderStyle] added to the [Skin] with the selected name
+ * @return a new instance of [SliderStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.slider(name: String = defaultStyle, extend: String? = null, init: SliderStyle.() -> Unit) =
     addStyle(name, if (extend == null) SliderStyle() else SliderStyle(get(extend)), init)
@@ -198,7 +198,7 @@ inline fun Skin.slider(name: String = defaultStyle, extend: String? = null, init
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [SplitPaneStyle] added to the [Skin] with the selected name
+ * @return a new instance of [SplitPaneStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.splitPane(name: String = defaultStyle, extend: String? = null, init: SplitPaneStyle.() -> Unit) =
     addStyle(name, if (extend == null) SplitPaneStyle() else SplitPaneStyle(get<SplitPaneStyle>(extend)), init)
@@ -208,7 +208,7 @@ inline fun Skin.splitPane(name: String = defaultStyle, extend: String? = null, i
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name
+ * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.textButton(name: String = defaultStyle, extend: String? = null, init: TextButtonStyle.() -> Unit) =
     addStyle(name, if (extend == null) TextButtonStyle() else TextButtonStyle(get(extend)), init)
@@ -218,7 +218,7 @@ inline fun Skin.textButton(name: String = defaultStyle, extend: String? = null, 
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name
+ * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.textField(name: String = defaultStyle, extend: String? = null, init: TextFieldStyle.() -> Unit) =
     addStyle(name, if (extend == null) TextFieldStyle() else TextFieldStyle(get(extend)), init)
@@ -228,7 +228,7 @@ inline fun Skin.textField(name: String = defaultStyle, extend: String? = null, i
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name
+ * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.textTooltip(name: String = defaultStyle, extend: String? = null, init: TextTooltipStyle.() -> Unit) =
     addStyle(name, if (extend == null) TextTooltipStyle() else TextTooltipStyle(get(extend)), init)
@@ -238,7 +238,7 @@ inline fun Skin.textTooltip(name: String = defaultStyle, extend: String? = null,
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [TouchpadStyle] added to the [Skin] with the selected name
+ * @return a new instance of [TouchpadStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.touchpad(name: String = defaultStyle, extend: String? = null, init: TouchpadStyle.() -> Unit) =
     addStyle(name, if (extend == null) TouchpadStyle() else TouchpadStyle(get(extend)), init)
@@ -248,7 +248,7 @@ inline fun Skin.touchpad(name: String = defaultStyle, extend: String? = null, in
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [TreeStyle] added to the [Skin] with the selected name
+ * @return a new instance of [TreeStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.tree(name: String = defaultStyle, extend: String? = null, init: TreeStyle.() -> Unit) =
     addStyle(name, if (extend == null) TreeStyle() else TreeStyle(get(extend)), init)
@@ -258,7 +258,7 @@ inline fun Skin.tree(name: String = defaultStyle, extend: String? = null, init: 
  * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
  *    this style.
  * @param init will be applied to the style instance. Inlined.
- * @return a new instance of [WindowStyle] added to the [Skin] with the selected name
+ * @return a new instance of [WindowStyle] added to the [Skin] with the selected name.
  */
 inline fun Skin.window(name: String = defaultStyle, extend: String? = null, init: WindowStyle.() -> Unit) =
     addStyle(name, if (extend == null) WindowStyle() else WindowStyle(get(extend)), init)

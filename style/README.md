@@ -254,6 +254,8 @@ recompilation of the application, allowing for GUI tweaks without restarting. Wh
 prototyping phase, it also requires the developer to prepare `Skin` reloading and GUI rebuilding code to make it work.
 - [USL](https://github.com/kotcrab/VisEditor/wiki/USL) is a DSL that compiles to LibGDX JSON skin files. While similar
 to JSON in structure, it adds some more features like packages handling and style inheritance. Furthermore, it features
-no runtime overhead, as it is translated to plain skin JSON data. However, since it relies on LibGDX JSON skin loading
-(based on reflection) and currently contains no editor capable of code completion, it suffers from the same issues.
+no runtime overhead, as it is translated to plain skin JSON data. Its style inheritance mechanism might prove more
+flexible than `ktx-style`, as you can extend styles even if they do not share the same class. However, since it relies
+on LibGDX JSON skin loading (based on reflection) and currently contains no editor capable of code completion, it still
+suffers from the same issues as regular JSON.
 
