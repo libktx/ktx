@@ -1,3 +1,5 @@
+[![Travis CI](https://travis-ci.org/czyzby/ktx.svg?branch=master)](https://travis-ci.org/czyzby/ktx)
+
 # KTX
 
 **K**o**t**lin utilities for LibGD**X** applications.
