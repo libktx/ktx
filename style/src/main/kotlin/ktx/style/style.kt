@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip.TextTooltipStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.GdxRuntimeException
 
 /**
@@ -66,7 +65,7 @@ inline operator fun <reified Resource : Any> Skin.set(name: String, resource: Re
     this.add(name, resource, Resource::class.java)
 
 /**
- * Utility function for adding existing styles to the skin.
+ * Utility function for adding existing styles to the skin. Mostly for internal use.
  * @param name name of the style as it will appear in the [Skin] instance.
  * @param style non-null existing style instance.
  * @param init will be applied to the style instance. Inlined.

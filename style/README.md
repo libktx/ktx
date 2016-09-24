@@ -134,7 +134,8 @@ skin(myAtlas) {
 }
 ```
 
-Nested style definitions - creating a `LabelStyle` and a `Color` on demand to customize `TooltipStyle`:
+Nested style definitions - creating a `LabelStyle` and a `Color` on demand to customize `TooltipStyle` (all three
+resources will be available in the skin afterwards):
 ```Kotlin
 import com.badlogic.gdx.graphics.Color
 import ktx.style.*
@@ -169,6 +170,17 @@ skin {
     // fonts and colors, but should NEVER be used for Drawable instances: getDrawable(String)
     // should be called instead. In the example above, <ScrollPaneStyle> could be omitted:
     listStyle = get("selectList")
+  }
+}
+```
+
+Adding custom widget style with similar Kotlin builder syntax:
+```Kotlin
+import ktx.style.*
+
+skin {
+  addStyle("customStyleName", CustomButtonStyle()) {
+    customProperty = true
   }
 }
 ```
@@ -242,9 +254,9 @@ skin(myAtlas) {
 ```
 
 What's best about it, enums do not actually make your code _longer_, as they require the same exact amount of characters
-to write with static imports - while having the advantage of powerful code completion of your IDE of choice. As long as
-you don't need to create assets at runtime with custom unpredictable IDs, we encourage you to store your drawables,
-fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
+to write with static imports - while having the advantage of powerful code completion of your IDE of choice and validation
+at compile time. As long as you don't need to create assets at runtime with custom unpredictable IDs, we encourage you
+to store your drawables, fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
 
 ### Alternatives
 
@@ -258,4 +270,3 @@ no runtime overhead, as it is translated to plain skin JSON data. Its style inhe
 flexible than `ktx-style`, as you can extend styles even if they do not share the same class. However, since it relies
 on LibGDX JSON skin loading (based on reflection) and currently contains no editor capable of code completion, it still
 suffers from the same issues as regular JSON.
-

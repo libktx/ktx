@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import org.junit.Assert.*
-import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mockito
 
@@ -147,8 +146,7 @@ class StyleTest {
     assertEquals(1f, style.pressedOffsetX)
   }
 
-  @Test // TODO Include in test suite once the constructor is fixed.
-  @Ignore("CheckBoxStyle copy constructor is broken in LibGDX 1.9.3 and does not copy every property.")
+  @Test
   fun shouldExtendCheckBoxStyle() {
     val skin = skin {
       checkBox("base") {
