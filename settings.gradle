@@ -1,1 +1,1 @@
-include 'actors', 'assets', 'collections', 'i18n', 'inject', 'log', 'math', 'scene2d', 'style', 'vis'
+include 'actors', 'assets', 'collections', 'i18n', 'inject', 'log', 'math', 'scene2d', 'style', 'vis', 'vis-style'

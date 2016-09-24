@@ -1,0 +1,5 @@
+dependencies {
+    compile project(":style")
+    compile "com.github.czyzby:ktx-style:$libVersion"
+    compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+}
