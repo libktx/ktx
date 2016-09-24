@@ -4,18 +4,18 @@ Utilities for creating VisUI widgets using Kotlin type-safe builders.
 
 ### Why?
 
-While libGDX layout managers are simple enough to use directly in Kotlin or Java it leads to cluttered and too verbose code. 
-Fortunately we can improve it by using [Kotlin type-safe builders](https://kotlinlang.org/docs/reference/type-safe-builders.html).
-
-Consider using [ktx-actors](https://github.com/czyzby/ktx/tree/master/actors) module to improve event handling using extension 
-methods like `onChange` and `onClick`.
+While LibGDX layout managers are simple enough to use directly in Kotlin or Java, their usage usually leads to overly
+verbose code. GUI layouts presented in HTML, XML and other readable markup languages are easier to reason about than
+cluttered Java code. Fortunately, Kotlin [type-safe builders](https://Kotlinlang.org/docs/reference/type-safe-builders.html)
+allow to write DSL that is both as readable as markup languages and as powerful as Java.
 
 ### Guide
 
-To start creating UI layout you call one of top level function from `builder.kt` such as `table { }`, `verticalGroup { }`, `gridGroup { }`
-and so on. Every VisUI and libGDX WidgetGroup has equivalent method. Those method returns `WidgetGroup` instance
-that you can add to other `WidgetGroup` or in case of root table directly to Stage:
-```kotlin
+To start creating UI layout, call one of top level functions from `builder.kt` such as `table { }`, `verticalGroup { }`
+or `gridGroup { }`. Every VisUI and LibGDX `WidgetGroup` has an equivalent method. By passing lambdas to these methods,
+you can fully customize their content with extension functions for each `Actor`, as well as invoke any internal methods:
+
+```Kotlin
 val root = table {
   setFillParent(true)
   label("Hello, World!")
@@ -23,49 +23,53 @@ val root = table {
 stage.addActor(root)
 ```
 
-Inside closure you get access to all methods that created `WidgetGroup` provides. You can also create and immediately add 
+The closures get full access to all public methods that chosen `WidgetGroup` has. You can also create and immediately add 
 new widgets to group simply by invoking methods from `WidgetFactory` interface, which is available from all type-safe 
-builders. Every libGDX and VisUI widget and `WidgetGroup` has equivalent method, for example 
-`label`, `textButton`, `textField`, `table`, `verticalGroup` etc.
+builders.
 
-In libGDX `WidgetGroups` can be divided into two types: `Table`-like where you use `add()` to append new widget to group, you
-get `Cell<Actor>` in return. The rest of `WidgetGroups` uses `addActor` and does not return anything. Access to 
-`Cell` when adding actors to `Table` is very important because it provides all methods to customize layout. Ktx-vis handles 
-this division in very transparent way: when you are creating widgets inside `table { }` closure all factory methods will 
-return `Cell<ActorType>`. When you are inside `verticalGroup { }`, `gridGroup { }` or other `WidgetGroup` factory methods 
-will return just `ActorType`. Example:
-```kotlin
+In LibGDX `WidgetGroup` classes can be divided into two types: `Table`-like, where all actors are stored in fully
+customizable `Cell` instances and regular groups, which handle children rendering internally. If the root actor extends
+`Table` class, its actor-adding methods return `Cell` instance that you can use to set up individual actor properties:
+
+```Kotlin
 table {
-  val cell = label("") 
-  val actor = label("").actor // extracting VisLabel from Cell 
-  label("").grow() // change returned Cell property
+  val cell = label("") // Assigning cell for further use.
+  val actor = label("").actor // Extracting VisLabel from Cell. 
+  label("").pad(1f).grow() // Adding VisLabel, changing Cell properties.
 }
 
 verticalGroup { 
-  val label = label("") // inside standard WidgetGroup just created actor is returned
+  val label = label("") // No Cell wrapping: not a Table.
 }
 ```
 
-#### A note about KWidgets
-In ktx-vis there are many widgets that starts with `K` followed by their original names. Those widgets purpose is to provide
-interface for using type-safe builders, there is no need use them directly. In fact all APIs will return widgets
-with their normal type however inside closures you will have access to them since they by implementing `WidgetFactory`
-interface allows to utilize type-safe builders.
+#### Additional extensions
+
+Consider using [ktx-actors](../actors) module to improve event handling with lambda-friendly extension methods like
+`onChange` and `onClick`.
+
+#### Note about `KWidgets`
+In `ktx-vis` there are many utility widget classes starting with `K` followed by their original names. Those widgets
+purpose is to provide syntax sugar for type-safe builders, and there is usually no need use them directly. In fact, all
+factory methods for root actors already return the extended widgets where necessary to help you with GUI building.
 
 #### Tooltips
-Ktx-vis provides extension methods for creating VisUI tooltips:
-```kotlin
+`ktx-vis` provides extension methods for creating VisUI tooltips:
+```Kotlin
 label("Label with tooltip") {
   addTextTooltip("Tooltip text")
 }
 ```
-- `addTextTooltip` adds text tooltip
-- `addTooltip` adds tooltip with custom content
+
+These methods include:
+
+- `addTextTooltip` - adds simple text tooltip.
+- `addTooltip` - adds tooltip with fully customized content.
 
 #### Menus
 
-Menus and PopupMenus are created in very similar way to UI layouts.
-```kotlin
+`Menu` and `PopupMenu` instances are created in very similar way to UI layouts.
+```Kotlin
 val menu = popupMenu {
   menuItem("First Item")
   menuItem("Second Item")
@@ -75,15 +79,17 @@ val menu = popupMenu {
     }
   }
 }
-//...
+// ...
 menu.showMenu(stage, 0f, 0f)
 ```
+
 See examples section for `MenuBar` usage.
 
 ### Usage examples
 
-Creating `VisWindow`:
-```kotlin
+Creating a `VisWindow`, immediately added to a `Stage`:
+
+```Kotlin
 stage.addActor(window("Window") {
   isModal = true
   label("Hello from Window")
@@ -91,7 +97,8 @@ stage.addActor(window("Window") {
 ```
 
 Creating a `MenuBar`:
-```kotlin
+
+```Kotlin
 val menuBar = menuBar {
   menu("File") {
     menuItem("New") {
@@ -112,10 +119,11 @@ val menuBar = menuBar {
 }
 rootTable.add(menuBar.table).top().growX().row()
 ```
+
 ![](http://dl.kotcrab.com/github/ktx/menu.png)
 
 Creating `ButtonGroup`:
-```kotlin
+```Kotlin
 buttonTable {
     checkBox("First")
     checkBox("Second")
@@ -124,18 +132,22 @@ buttonTable {
     buttonGroup.setMaxCheckCount(1)
 }
 ```
-`ButtonTable` is a specialized `Table` that adds all `Buttons` to internal `ButtonGroup`
 
-Creating `ButtonBar`:
-```kotlin
+`ButtonTable` is a specialized `Table` that adds all `Button` instances to internal `ButtonGroup`, allowing to keep
+minimum and maximum counts of buttons checked at once.
+
+Creating a `ButtonBar`:
+
+```Kotlin
 buttonBar {
   setButton(APPLY, textButton("Accept"))
   setButton(CANCEL, textButton("Cancel"))
 }
 ```
 
-Creating a `TabbedPane` with tabs:
-```kotlin
+Creating a `TabbedPane` with multiple tabs:
+
+```Kotlin
 table {
   tabbedPane("vertical") {
     tab("Tab1") {
@@ -155,10 +167,12 @@ table {
   }.cell.growY()
 }
 ```
+
 ![](http://dl.kotcrab.com/github/ktx/tabs.png)
 
-Creating form using `FormValidator`:
-```kotlin
+Creating a form using `FormValidator`:
+
+```Kotlin
 table(true) {
   validator {
     defaults().left()
@@ -184,12 +198,14 @@ table(true) {
   }
 }
 ```
+
 ![](http://dl.kotcrab.com/github/ktx/form.png)
 
-Creating `ListView`:
-```kotlin
+Creating a `ListView`:
+
+```Kotlin
 import com.badlogic.gdx.utils.Array as GdxArray
-//...
+// ...
 
 table(true) {
   val osList = GdxArray<String>()
@@ -205,10 +221,14 @@ table(true) {
   }
 }
 ```
+
 ![](http://dl.kotcrab.com/github/ktx/list.png)
 
 
 ### Alternatives
 
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using HTML-like syntax.
-- Creating layout directly in Kotlin or Java
+- Creating layouts with [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) directly in Kotlin or Java.
+- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
+HTML-like syntax. It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However,
+it lacks first-class Kotlin support and the flexibility of a powerful programming language.
+
