@@ -1,0 +1,6 @@
+dependencies {
+    testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    // Includes Scene2D skin used in tests:
+    testCompile "com.kotcrab.vis:vis-ui:$visUiVersion"
+}

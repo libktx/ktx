@@ -22,7 +22,7 @@ But since LibGDX was not designed with Kotlin in mind, there's still *a lot of w
 shiny new features. *A lot of work* that has to be done *once*, if you think about it.
 
 **KTX** aims to make LibGDX Kotlin-friendly, without turning the API upside down. This is **not** a new framework by any
-means.
+means. Most guides and examples assume that the user of these libraries is at least a bit familiar with the LibGDX API.
 
 ### Modules
 
@@ -41,7 +41,7 @@ The modules present in **KTX** are:
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead.
 - [log](log): minimal runtime overhead cross-platform logging.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
-- [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI. *(Not yet implemented.)*
+- [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI. *(Not complete.)*
 - [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles.
 - [vis](vis): type-safe Kotlin builders for VisUI. Alternative to the [scene2d](scene2d) extension.
 - [vis-style](vis-style): enhances `Skin` API with type-safe builders of VisUI widget styles. Extension of [style](style) module.
@@ -52,7 +52,8 @@ features in at least one unit test.
 ### Gradle
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is not included, so you might want to
-install it locally. If you consider working from sources, these are some useful Gradle tasks that you can look into:
+install it locally. Scripts should be compatible with Gradle `2.14+` and `3.+`. If you consider working from sources,
+these are some useful Gradle tasks that you can look into:
 
 - `gradle build install` - builds the libraries' archives and pushes them to Maven Local.
 - `gradle test` - runs unit tests in all projects.
