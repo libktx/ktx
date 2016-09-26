@@ -29,3 +29,5 @@ open class NeedsLibGDX {
     }
   }
 }
+
+const val TOLERANCE = 0.0001f
