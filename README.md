@@ -49,10 +49,27 @@ The modules present in **KTX** are:
 Afraid to use some third-party code? Run the test suites yourself. *Every* function and class added by these extensions
 features in at least one unit test.
 
+### Dependencies
+
+**KTX** libraries are not officially released yet. Eventually, all stable releases will be available through Maven
+Central and [here](https://github.com/czyzby/ktx/releases). However, you can use preview snapshot releases from
+`https://oss.sonatype.org/content/repositories/snapshots/`.
+
+All libraries follow the same naming schema - this is an example Gradle dependency:
+
+```Groovy
+compile "com.github.czyzby:ktx-$module:$ktxVersion"
+```
+
+Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
+compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
+the snapshots). For example, current version is `1.9.4-SNAPSHOT`. Note that even snapshots should be more or less
+stable, as libraries are not pushed to Maven Central if they do not pass the tests.
+
 ### Gradle
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is not included, so you might want to
-install it locally. Scripts should be compatible with Gradle `2.14+` and `3.+`. If you consider working from sources,
+install it locally. Scripts should be compatible with Gradle `2.1+` and `3.+`. If you consider working from sources,
 these are some useful Gradle tasks that you can look into:
 
 - `gradle build install` - builds the libraries' archives and pushes them to Maven Local.
