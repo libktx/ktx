@@ -1,14 +1,18 @@
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Tree
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.scenes.scene2d.ui.*
 
-/* Inlined factory methods of trees' children. */
+/* Inlined factory methods of tree widget and trees' children. */
 
-// TODO Factory methods: Tree.
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked on the widget. Inlined.
+ * @return a new [Tree] instance.
+ */
+inline fun tree(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                init: KTreeWidget.() -> Unit) = actor(KTreeWidget(skin, style), init)
 
 /**
  * Utility method for adding existing [Actor] instances to trees with an inlined type-safe builder block.
