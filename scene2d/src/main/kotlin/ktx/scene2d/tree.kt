@@ -3,7 +3,7 @@ package ktx.scene2d
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
-/* Inlined factory methods of tree widget and trees' children. */
+/* Inlined factory methods of tree widget and its children. */
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
