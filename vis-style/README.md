@@ -9,3 +9,8 @@ GUI stylesheets similarly to `ktx-style`.
 Implementation note: `FileChooserStyle` is not included, as it is basically a desktop-only widget that would not even
 work (or compile - see GWT) on most platforms. Adding a similar extension method for `FileChooserStyle` would be pretty
 straightforward: see `visStyle.kt` for code samples.
+
+#### Additional documentation
+
+- [VisUI wiki.](https://github.com/kotcrab/vis-editor/wiki/VisUI)
+- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)

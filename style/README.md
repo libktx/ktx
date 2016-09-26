@@ -270,3 +270,7 @@ no runtime overhead, as it is translated to plain skin JSON data. Its style inhe
 flexible than `ktx-style`, as you can extend styles even if they do not share the same class. However, since it relies
 on LibGDX JSON skin loading (based on reflection) and currently contains no editor capable of code completion, it still
 suffers from the same issues as regular JSON.
+
+#### Additional documentation
+
+- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)

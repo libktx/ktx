@@ -18,7 +18,7 @@ object I18n {
     set(value) {
       field = value
       for (listener in listeners) {
-        listener.invoke(value)
+        listener(value)
       }
     }
 

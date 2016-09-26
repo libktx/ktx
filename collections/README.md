@@ -154,3 +154,7 @@ significantly better than LibGDX collections (to be honest), it is also a huge d
 available collections. Note that Koloboke collections are compatible with `java.util` collections API, while LibGDX
 collections are not - Koloboke maps and sets can fully benefit from Kotlin standard library utilities.
 
+#### Additional documentation
+
+- [LibGDX collections article.](https://github.com/libgdx/libgdx/wiki/Collections)
+

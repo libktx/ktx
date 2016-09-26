@@ -213,3 +213,7 @@ I18n.addListener { bundle ->
 internationalization of `Scene2D` widgets (internally using LibGDX `I18NBundle` API). However, it requires you to create
 views with HTML-like syntax rather than with Java (or Kotlin) code.
 
+#### Additional documentation
+
+- [`I18NBundle` article.](https://github.com/libgdx/libgdx/wiki/Internationalization-and-Localization)
+

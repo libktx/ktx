@@ -233,3 +233,8 @@ injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
 Java applications though - **KTX** syntax should feel more natural when using Kotlin.
+
+#### Additional documentation
+
+- [`AssetManager` article.](https://github.com/libgdx/libgdx/wiki/Managing-your-assets)
+- [`FileHandle` article.](https://github.com/libgdx/libgdx/wiki/File-handling)

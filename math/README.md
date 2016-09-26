@@ -79,3 +79,8 @@ Sadly, it does not seem that there are any public math-related Kotlin libraries 
 natural. You can try browsing through existing general purpose LibGDX extensions - some of them contain static methods
 for various math operations missing in the official API.
 
+#### Additional documentation
+
+- [LibGDX math utilities article.](https://github.com/libgdx/libgdx/wiki/Math-utilities)
+- [`Vectors` and `Matrices` article.](https://github.com/libgdx/libgdx/wiki/Vectors%2C-matrices%2C-quaternions)
+

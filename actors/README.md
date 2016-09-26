@@ -126,3 +126,7 @@ widgets to address some of the LibGDX API problems. It is written in Java, thoug
 library, which contain some `Scene2D` helpers.
 - [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) makes it easier to build `Scene2D` views
 thanks to its HTML-inspired syntax.
+
+#### Additional documentation
+
+- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)

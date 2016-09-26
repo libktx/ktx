@@ -166,3 +166,7 @@ that wraps around LibGDX cross-platform logging. It allows to include class name
 to *SLF4J*, it uses string templates to avoid creation of new strings (unless necessary). However, it still suffers from
 *vararg* method calls.
 
+#### Additional documentation
+
+- [LibGDX logging article.](https://github.com/libgdx/libgdx/wiki/Logging)
+

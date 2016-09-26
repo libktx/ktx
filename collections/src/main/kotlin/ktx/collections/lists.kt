@@ -329,7 +329,7 @@ object NodePool : Pool<Node<Any>>() {
   /**
    * Utility method that allows to use this pool for any kind of objects.
    */
-  @Suppress("CAST_NEVER_SUCCEEDS")
+  @Suppress("CAST_NEVER_SUCCEEDS", "UNCHECKED_CAST")
   fun <T> pool(): Pool<Node<T>> = this as Pool<Node<T>>
 }
 

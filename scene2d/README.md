@@ -201,3 +201,10 @@ refactor critical code to use `this` for safety.
 HTML-like syntax. It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However,
 it lacks first-class Kotlin support and the flexibility of a powerful programming language.
 - [ktx-vis](../vis) features type-safe builders of [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widgets.
+
+#### Additional documentation
+
+- [Scene2D article.](https://github.com/libgdx/libgdx/wiki/Scene2d)
+- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
+- [`Table` article.](https://github.com/libgdx/libgdx/wiki/Table)
+- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)
