@@ -5,6 +5,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Tests inlined factory methods of Tree-based root actors.
+ * @author MJ
+ */
 class TreeFactoryTest : NeedsLibGDX() {
   @Before
   fun setDefaultSkin() {

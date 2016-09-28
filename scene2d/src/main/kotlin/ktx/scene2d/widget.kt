@@ -11,9 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
  * Common interface applied to so-called "parental" widgets.
  * @author MJ
  */
-interface KWidget {
+interface KWidget<out Storage> {
   /**
-   * Internal utility method for adding actors to the groups.
+   * Internal utility method for adding actors to the group. Assumes the actor is stored in a container.
+   * @param actor will be added to this group.
+   * @return storage object, wrapping around the actor or the actor itself if there is no storage object.
+   * @see Node
+   * @see Cell
+   */
+  fun storeActor(actor: Actor): Storage
+
+  /**
+   * Internal utility method for adding actors to the group.
    * @param actor will be added to this group.
    * @return actor passed as the parameter.
    */
@@ -24,7 +33,7 @@ interface KWidget {
  * Common interface applied to widgets that extend the original [Table] and keep their children in [Cell] instances.
  * @author MJ
  */
-interface KTable : KWidget {
+interface KTable : KWidget<Cell<*>> {
   /**
    * @param actor will be added to this widget.
    * @return [Cell] instance wrapping around the actor.
@@ -32,6 +41,7 @@ interface KTable : KWidget {
    */
   fun <T : Actor> add(actor: T): Cell<T>
 
+  override fun storeActor(actor: Actor) = add(actor)
   override fun <T : Actor> appendActor(actor: T): T {
     add(actor)
     return actor
@@ -43,7 +53,7 @@ interface KTable : KWidget {
  * collection.
  * @author MJ
  */
-interface KGroup : KWidget {
+interface KGroup : KWidget<Actor> {
   /**
    * @param actor will be added to this group.
    * @see [Group.addActor]
@@ -63,6 +73,7 @@ interface KGroup : KWidget {
     return actor;
   }
 
+  override fun storeActor(actor: Actor) = add(actor)
   override fun <T : Actor> appendActor(actor: T): T {
     addActor(actor)
     return actor;
@@ -73,13 +84,14 @@ interface KGroup : KWidget {
  * Common interface applied to widgets that keep their children in [Tree] [Node] instances.
  * @author MJ
  */
-interface KTree : KWidget {
+interface KTree : KWidget<KNode> {
   /**
    * @param actor will be placed in a [Node] inside this widget.
    * @return [Node] instance containing the actor.
    */
   fun add(actor: Actor): KNode
 
+  override fun storeActor(actor: Actor) = add(actor)
   override fun <T : Actor> appendActor(actor: T): T {
     add(actor)
     return actor

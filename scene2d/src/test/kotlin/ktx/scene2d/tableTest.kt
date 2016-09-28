@@ -5,6 +5,10 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Tests inlined factory methods of Table-based root actors.
+ * @author MJ
+ */
 class TableFactoriesTest : NeedsLibGDX() {
   @Before
   fun setDefaultSkin() {

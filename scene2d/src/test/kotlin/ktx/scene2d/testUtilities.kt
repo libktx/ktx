@@ -10,7 +10,12 @@ import com.kotcrab.vis.ui.VisUI
 import org.mockito.Mockito
 
 /**
- * Tests that require mocked libGDX environment must inherit from this class.
+ * Utility value for numeric tests.
+ */
+const val TOLERANCE = 0.0001f
+
+/**
+ * Tests that require mocked libGDX environment should inherit from this class.
  * @author Kotcrab
  */
 open class NeedsLibGDX {
@@ -18,10 +23,10 @@ open class NeedsLibGDX {
     init {
       LwjglNativesLoader.load()
 
-      Gdx.app = Mockito.mock(Application::class.java)
       Gdx.graphics = Mockito.mock(Graphics::class.java)
-      Gdx.files = LwjglFiles()
+      Gdx.app = Mockito.mock(Application::class.java)
       Gdx.gl = Mockito.mock(GL20::class.java)
+      Gdx.files = LwjglFiles()
       Gdx.gl20 = Gdx.gl
 
       // Includes a default skin filled with styles of all Scene2D widgets:
@@ -29,5 +34,3 @@ open class NeedsLibGDX {
     }
   }
 }
-
-const val TOLERANCE = 0.0001f

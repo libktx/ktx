@@ -3,18 +3,31 @@ package ktx.scene2d
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.ui.Button
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * Tests [KGroup] interface: base for all simple WidgetGroup-based parental actors.
+ * @author MJ
+ */
 class KGroupTest {
   @Test
   fun shouldAddWidgetToGroupAndReturnIt() {
     val group = TestGroup()
     val actor = Actor()
-    val result = group.add(actor)
+    val result = group.appendActor(actor)
+    assertTrue(actor in group.children)
+    assertSame(actor, result)
+  }
+
+  @Test
+  fun shouldAddWidgetToGroupAndReturnTheActorInsteadOfStorageObject() {
+    val group = TestGroup()
+    val actor = Actor()
+    val result: Actor = group.storeActor(actor)
     assertTrue(actor in group.children)
     assertSame(actor, result)
   }
@@ -22,6 +35,68 @@ class KGroupTest {
   class TestGroup : Group(), KGroup
 }
 
+/**
+ * Tests [KTable] interface: base for all Table-based parental actors.
+ * @author MJ
+ */
+class KTableTest {
+  @Test
+  fun shouldAddWidgetToGroupAndReturnIt() {
+    val group = TestTable()
+    val actor = Actor()
+    val result = group.appendActor(actor)
+    assertTrue(actor in group.children)
+    assertSame(actor, result)
+  }
+
+  @Test
+  fun shouldAddWidgetToGroupAndReturnItsCell() {
+    val group = TestTable()
+    val actor = Actor()
+    val result: Cell<*> = group.storeActor(actor)
+    assertTrue(actor in group.children)
+    assertSame(actor, result.actor)
+  }
+
+  class TestTable : Table(), KTable
+}
+
+/**
+ * Tests [KTree] interface: base for all parental actors operating on tree nodes.
+ * @author MJ
+ */
+class KTreeTest : NeedsLibGDX() {
+  @Test
+  fun shouldAddWidgetToGroupAndReturnIt() {
+    val group = TestTree()
+    val actor = Actor()
+    val result = group.appendActor(actor)
+    assertTrue(actor in group.children)
+    assertSame(actor, result)
+  }
+
+  @Test
+  fun shouldAddWidgetToGroupAndReturnItsCell() {
+    val group = TestTree()
+    val actor = Actor()
+    val result: Node = group.storeActor(actor)
+    assertTrue(actor in group.children)
+    assertSame(actor, result.actor)
+  }
+
+  class TestTree : Tree(VisUI.getSkin()), KTree {
+    override fun add(actor: Actor): KNode {
+      val node = KNode(actor)
+      add(node)
+      return node
+    }
+  }
+}
+
+/**
+ * Tests KTX custom actor: [KButtonTable].
+ * @author MJ
+ */
 class KButtonTableTest : NeedsLibGDX() {
   @Test
   fun shouldAddButtonsToButtonGroup() {
@@ -37,6 +112,10 @@ class KButtonTableTest : NeedsLibGDX() {
   }
 }
 
+/**
+ * Testing KTX-adapted widget: [KContainer].
+ * @author MJ
+ */
 class KContainerTest {
   @Test
   fun shouldStoreChild() {
@@ -55,6 +134,11 @@ class KContainerTest {
   }
 }
 
+/**
+ * Testing "mock" actor - [KTree], based on tree's [Node] and implementing [KTree] interface for extra interface
+ * building utility.
+ * @author MJ
+ */
 class KNodeTest {
   @Test
   fun shouldCreateNestedNodes() {
@@ -67,12 +151,10 @@ class KNodeTest {
   }
 }
 
-fun t() {
-  table {
-    color = Color.RED
-  }
-}
-
+/**
+ * Testing KTX-adapted widget: [KScrollPane].
+ * @author MJ
+ */
 class KScrollPaneTest : NeedsLibGDX() {
   @Test
   fun shouldStoreChild() {
@@ -91,6 +173,10 @@ class KScrollPaneTest : NeedsLibGDX() {
   }
 }
 
+/**
+ * Testing KTX-adapted widget: [KSplitPane].
+ * @author MJ
+ */
 class KSplitPaneTest {
   @Test
   fun shouldStoreTwoChildren() {
@@ -113,7 +199,11 @@ class KSplitPaneTest {
   }
 }
 
-class KTreeTest : NeedsLibGDX() {
+/**
+ * Testing KTX-adapted widget: [KTreeWidget].
+ * @author MJ
+ */
+class KTreeWidgetTest : NeedsLibGDX() {
   @Test
   fun shouldSpawnNodes() {
     val tree = KTreeWidget(VisUI.getSkin(), defaultStyle)
@@ -125,3 +215,6 @@ class KTreeTest : NeedsLibGDX() {
     assertSame(node, tree.nodes.first())
   }
 }
+
+// Note: other Scene2D widgets are not tested, as they do not implement any custom logic and simply inherit from KGroup
+// or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly implemented.
