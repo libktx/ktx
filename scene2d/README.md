@@ -30,7 +30,12 @@ There are factory methods of other parental actors only in form of children of o
 - *Child* actors. These actors cannot have children at all. `image`, `label`, `list`, `progressBar`, `selectBox`,
 `slider`, `textArea`, `textField` and `touchpad` are considered child actors.
 
-You usually start with a *root* actor and - using its factory methods - fill it with children:
+Some *root* actors do not usually make sense as other actors' children: a good example might be the `Window`, which was
+clearly designed to be added directly to the `Stage`. That is why there are no factory methods for `Window` and `Dialog`
+classes as children of other groups simply because this is a very specific and rare use case. Other widgets should be
+available in one form or another.
+
+You usually start with a single *root* actor and - using its factory methods - fill it with children:
 
 ```Kotlin
 import ktx.scene2d.*
@@ -191,6 +196,11 @@ table {
 
 We would suggest to go with the more readable `this`-less syntax during prototyping to speed things up, but eventually
 refactor critical code to use `this` for safety.
+
+#### Synergy
+
+Pair this library with [`ktx-style`](../style) for type-safe styles building and [`ktx-actors`](../actors) for useful
+extension methods for `Scene2D` API.
 
 ### Alternatives
 

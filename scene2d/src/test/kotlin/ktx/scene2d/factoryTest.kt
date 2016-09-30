@@ -1,19 +1,121 @@
 package ktx.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 
-class NonInlinedActorFactoriesTest : NeedsLibGDX() {
+/**
+ * Tests factory methods without init blocks.
+ * @author MJ
+ */
+class InitBlockActorFactoriesTest : NeedsLibGDX() {
+  @Before
+  fun setDefaultSkin() {
+    Scene2DSkin.defaultSkin = VisUI.getSkin()
+  }
 
+  @Test
+  fun shouldCreateButton() {
+    var widget: Button? = null
+    val parent = table {
+      widget = button()
+    }
+    assertNotNull(widget)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateButtonGroup() {
+    var widget: KButtonTable? = null
+    val parent = table {
+      widget = buttonGroup(minCheckedCount = 1, maxCheckedCount = 2)
+    }
+    assertNotNull(widget)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateCheckBox() {
+    var widget: CheckBox? = null
+    val parent = table {
+      widget = checkBox("Test.")
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateContainer() {
+    var widget: Container<Actor>? = null
+    val parent = table {
+      widget = container()
+    }
+    assertNotNull(widget)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateHorizontalGroup() {
+    var widget: HorizontalGroup? = null
+    val parent = table {
+      widget = horizontalGroup()
+    }
+    assertNotNull(widget)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImage() {
+    var widget: Image? = null
+    val parent = table {
+      widget = image(drawable = "button")
+    }
+    assertNotNull(widget)
+    assertEquals(VisUI.getSkin().getDrawable("button"), widget!!.drawable)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImageButton() {
+    var widget: ImageButton? = null
+    val parent = table {
+      widget = imageButton()
+    }
+    assertNotNull(widget)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImageTextButton() {
+    var widget: ImageTextButton? = null
+    val parent = table {
+      widget = imageTextButton("Test.")
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateLabel() {
+    var widget: Label? = null
+    val parent = table {
+      widget = label("Test.")
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertTrue(widget in parent.children)
+  }
 }
 
 /**
- * Tests inlined methods
+ * Tests inlined factory methods with init blocks.
  */
 class InlinedActorFactoriesTest : NeedsLibGDX() {
   @Before
@@ -58,5 +160,126 @@ class InlinedActorFactoriesTest : NeedsLibGDX() {
         }
       }
     }
+  }
+
+  @Test
+  fun shouldCreateButton() {
+    var widget: Button? = null
+    val parent = table {
+      widget = button {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateButtonGroup() {
+    var widget: KButtonTable? = null
+    val parent = table {
+      widget = buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateCheckBox() {
+    var widget: CheckBox? = null
+    val parent = table {
+      widget = checkBox("Test.") {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateContainer() {
+    var widget: Container<Actor>? = null
+    val parent = table {
+      widget = container {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateHorizontalGroup() {
+    var widget: HorizontalGroup? = null
+    val parent = table {
+      widget = horizontalGroup {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImage() {
+    var widget: Image? = null
+    val parent = table {
+      widget = image(drawable = "button") {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(VisUI.getSkin().getDrawable("button"), widget!!.drawable)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImageButton() {
+    var widget: ImageButton? = null
+    val parent = table {
+      widget = imageButton {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateImageTextButton() {
+    var widget: ImageTextButton? = null
+    val parent = table {
+      widget = imageTextButton("Test.") {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
+  }
+
+  @Test
+  fun shouldCreateLabel() {
+    var widget: Label? = null
+    val parent = table {
+      widget = label("Test.") {
+        color = Color.CYAN
+      }
+    }
+    assertNotNull(widget)
+    assertEquals("Test.", widget!!.text.toString())
+    assertEquals(Color.CYAN, widget!!.color)
+    assertTrue(widget in parent.children)
   }
 }

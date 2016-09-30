@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -40,22 +42,175 @@ inline fun <S, A : Actor> KWidget<S>.actor(actor: A, init: A.(S) -> Unit): A {
 }
 
 /**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Button] instance added to this group.
+ */
+inline fun KWidget<*>.button(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KButton(skin, style))
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Button] instance added to this group.
+ */
+inline fun <S> KWidget<S>.button(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                 init: KButton.(S) -> Unit) = actor(KButton(skin, style), init)
+
+/**
+ * @param minCheckedCount minimum amount of buttons checked at once.
+ * @param maxCheckedCount maximum amount of buttons checked at once.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [KButtonTable] instance (which manages an internal [ButtonGroup]) added to this group. All direct
+ *    [Button]-extending children of this widget will be added to the internal [ButtonGroup].
+ */
+inline fun KWidget<*>.buttonGroup(minCheckedCount: Int, maxCheckedCount: Int, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KButtonTable(minCheckedCount, maxCheckedCount, skin))
+
+/**
+ * @param minCheckedCount minimum amount of buttons checked at once.
+ * @param maxCheckedCount maximum amount of buttons checked at once.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [KButtonTable] instance (which manages an internal [ButtonGroup]) added to this group. All direct
+ *    [Button]-extending children of this widget will be added to the internal [ButtonGroup].
+ */
+inline fun <S> KWidget<S>.buttonGroup(minCheckedCount: Int, maxCheckedCount: Int, skin: Skin = Scene2DSkin.defaultSkin,
+                                      init: KButtonTable.(S) -> Unit) =
+    actor(KButtonTable(minCheckedCount, maxCheckedCount, skin), init)
+
+/**
+ * @param text will be displayed as [CheckBox] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [CheckBox] instance added to this group.
+ */
+inline fun KWidget<*>.checkBox(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KCheckBox(text, skin, style))
+
+/**
+ * @param text will be displayed as [CheckBox] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [CheckBox] instance added to this group.
+ */
+inline fun <S> KWidget<S>.checkBox(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                   init: KCheckBox.(S) -> Unit) = actor(KCheckBox(text, skin, style), init)
+
+/**
+ * @return a [Container] instance added to this group. Note that this actor might store only a single child.
+ */
+inline fun KWidget<*>.container() = appendActor(KContainer<Actor>())
+
+/**
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Container] instance added to this group. Note that this actor might store only a single child.
+ */
+inline fun <S> KWidget<S>.container(init: KContainer<Actor>.(S) -> Unit) = actor(KContainer<Actor>(), init)
+
+/**
+ * @return a [HorizontalGroup] instance added to this group.
+ */
+inline fun KWidget<*>.horizontalGroup() = appendActor(KHorizontalGroup())
+
+/**
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [HorizontalGroup] instance added to this group.
+ */
+inline fun <S> KWidget<S>.horizontalGroup(init: KHorizontalGroup.(S) -> Unit) = actor(KHorizontalGroup(), init)
+
+/**
+ * @param drawable name of a drawable stored in the chosen skin.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Image] instance added to this group.
+ */
+inline fun KWidget<*>.image(drawable: String, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(Image(skin.getDrawable(drawable)))
+
+/**
+ * @param drawable name of a drawable stored in the chosen skin.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Image] instance added to this group.
+ */
+inline fun <S> KWidget<S>.image(drawable: String, skin: Skin = Scene2DSkin.defaultSkin, init: Image.(S) -> Unit) =
+    actor(Image(skin.getDrawable(drawable)), init)
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [ImageButton] instance added to this group.
+ */
+inline fun KWidget<*>.imageButton(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KImageButton(skin, style))
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Button] instance added to this group.
+ */
+inline fun <S> KWidget<S>.imageButton(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                      init: KImageButton.(S) -> Unit) = actor(KImageButton(skin, style), init)
+
+/**
+ * @param text will be displayed as [ImageTextButton] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [ImageTextButton] instance added to this group.
+ */
+inline fun KWidget<*>.imageTextButton(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KImageTextButton(text, skin, style))
+
+/**
+ * @param text will be displayed as [ImageTextButton] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [ImageTextButton] instance added to this group.
+ */
+inline fun <S> KWidget<S>.imageTextButton(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                          init: KImageTextButton.(S) -> Unit) =
+    actor(KImageTextButton(text, skin, style), init)
+
+/**
  * @param text will be displayed on the label.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @return a [Label] instance added to this group.
  */
-fun KWidget<*>.label(text: CharSequence, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+inline fun KWidget<*>.label(text: CharSequence, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
     appendActor(Label(text, skin, style))
 
 /**
  * @param text will be displayed on the label.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
- * @param init will be invoked with the widget as "this". Consumes [Cell] that contains the widget. Inlined.
- * @return a [Label] instance.
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Label] instance added to this group.
  */
 inline fun <S> KWidget<S>.label(text: CharSequence, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
                                 init: Label.(S) -> Unit) = actor(Label(text, skin, style), init)
 
-// TODO Factory methods of all actors.
+// TODO List ProgressBar KScrollPane SelectBox Slider KSplitPane KStack KTable TextArea TextField Touchpad KTree KVerticalGroup
+// Note: List and SelectBox items need to be explicitly set after widget creation, otherwise they will not be visible.
