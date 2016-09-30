@@ -124,7 +124,7 @@ class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(s
   }
 }
 
-/**  Extends [CheckBox] API with type-safe widget builders.
+/** Extends [CheckBox] API with type-safe widget builders.
  * @author MJ */
 class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, style), KTable
 
@@ -138,7 +138,7 @@ class KContainer<T : Actor>() : Container<T>(), KGroup {
   }
 }
 
-/**  Extends [Dialog] API with type-safe widget builders.
+/** Extends [Dialog] API with type-safe widget builders.
  * @author MJ */
 class KDialog(title: String, skin: Skin, style: String) : Dialog(title, skin, style), KTable
 
@@ -146,15 +146,26 @@ class KDialog(title: String, skin: Skin, style: String) : Dialog(title, skin, st
  * @author MJ */
 class KHorizontalGroup : HorizontalGroup(), KGroup
 
-/**  Extends [ImageButton] API with type-safe widget builders.
+/** Extends [ImageButton] API with type-safe widget builders.
  * @author MJ */
 class KImageButton(skin: Skin, style: String) : ImageButton(skin, style), KTable
 
-/**  Extends [ImageTextButton] API with type-safe widget builders.
+/** Extends [ImageTextButton] API with type-safe widget builders.
  * @author MJ */
 class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButton(text, skin, style), KTable
 
-/**  Extends [Tree] [Node] API with type-safe widget builders.
+/** Extends LibGDX List widget with items building method.
+ * @author MJ */
+class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2d.ui.List<T>(skin, style) {
+  /**
+   * Allows to add items to the list with builder-like syntax.
+   */
+  operator fun T.unaryMinus() {
+    items.add(this)
+  }
+}
+
+/** Extends [Tree] [Node] API with type-safe widget builders.
  * @author MJ */
 class KNode(actor: Actor) : Node(actor), KTree {
   override fun add(actor: Actor): KNode {
@@ -173,6 +184,17 @@ class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KG
   }
 }
 
+/** Extends [SelectBox] with items building method.
+ * @author MJ */
+class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
+  /**
+   * Allows to add items to the select box with builder-like syntax.
+   */
+  operator fun T.unaryMinus() {
+    items.add(this)
+  }
+}
+
 /** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
  * with [setFirstWidget] or [setSecondWidget].
@@ -187,19 +209,19 @@ class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null,
   }
 }
 
-/**  Extends [Stack] API with type-safe widget builders.
+/** Extends [Stack] API with type-safe widget builders.
  * @author MJ */
 class KStack : Stack(), KGroup
 
-/**  Extends [Table] API with type-safe widget builders.
+/** Extends [Table] API with type-safe widget builders.
  * @author MJ */
 class KTableWidget(skin: Skin) : Table(skin), KTable
 
-/**  Extends [TextButton] API with type-safe widget builders.
+/** Extends [TextButton] API with type-safe widget builders.
  * @author MJ */
 class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, skin, style), KTable
 
-/**  Extends [Tree] API with type-safe widget builders.
+/** Extends [Tree] API with type-safe widget builders.
  * @author MJ */
 class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
   override fun add(actor: Actor): KNode {
@@ -213,6 +235,6 @@ class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
  * @author MJ */
 class KVerticalGroup : VerticalGroup(), KGroup
 
-/**  Extends [Window] API with type-safe widget builders.
+/** Extends [Window] API with type-safe widget builders.
  * @author MJ */
 class KWindow(title: String, skin: Skin, style: String) : Window(title, skin, style), KTable

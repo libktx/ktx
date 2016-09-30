@@ -1,10 +1,10 @@
 package ktx.scene2d
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
 import org.junit.Test
@@ -110,6 +110,18 @@ class KButtonTableTest : NeedsLibGDX() {
     assertTrue(actor in buttonTable.children)
     assertTrue(button in buttonTable.children)
   }
+
+  @Test
+  fun shouldHonorCheckedButtonsConstraints() {
+    val buttonTable = KButtonTable(1, 2, Skin())
+    val buttons = arrayOf(Button(), Button(), Button())
+    buttons.forEach { buttonTable.add(it) }
+    assertEquals(1, buttons.filter { it.isChecked }.count())
+    buttons.forEach { it.isChecked = true }
+    assertEquals(2, buttons.filter { it.isChecked }.count())
+    buttons.forEach { it.isChecked = false }
+    assertEquals(1, buttons.filter { it.isChecked }.count())
+  }
 }
 
 /**
@@ -131,6 +143,23 @@ class KContainerTest {
     val container = KContainer<Actor>()
     container.addActor(Actor())
     container.addActor(Actor()) // Throws.
+  }
+}
+
+/**
+ * Testing KTX-adapted widget: [KListWidget].
+ * @author MJ
+ */
+class KListWidgetTest : NeedsLibGDX() {
+  @Test
+  fun shouldAddItems() {
+    val list = KListWidget<String>(VisUI.getSkin(), defaultStyle)
+    list.apply {
+      -"one"
+      -"two"
+      -"three"
+    }
+    assertEquals(GdxArray.with("one", "two", "three"), list.items)
   }
 }
 
@@ -170,6 +199,23 @@ class KScrollPaneTest : NeedsLibGDX() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
     scrollPane.addActor(Actor())
     scrollPane.addActor(Actor()) // Throws.
+  }
+}
+
+/**
+ * Testing KTX-adapted widget: [KSelectBox].
+ * @author MJ
+ */
+class KSelectBoxTest : NeedsLibGDX() {
+  @Test
+  fun shouldAddItems() {
+    val selectBox = KSelectBox<String>(VisUI.getSkin(), defaultStyle)
+    selectBox.apply {
+      -"one"
+      -"two"
+      -"three"
+    }
+    assertEquals(GdxArray.with("one", "two", "three"), selectBox.items)
   }
 }
 
