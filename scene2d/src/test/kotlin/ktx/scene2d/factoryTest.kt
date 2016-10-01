@@ -101,6 +101,33 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
 
   @Test
   fun shouldCreateSplitPane() = test { splitPane() }
+
+  @Test
+  fun shouldCreateStack() = test { stack() }
+
+  @Test
+  fun shouldCreateTable() = test { table() }
+
+  @Test
+  fun shouldCreateTextArea() = test(widget = { textArea("Test.") },
+      validate = {
+        assertEquals("Test.", it.text)
+      })
+
+  @Test
+  fun shouldCreateTextField() = test(widget = { textField("Test.") },
+      validate = {
+        assertEquals("Test.", it.text)
+      })
+
+  @Test
+  fun shouldCreateTouchpad() = test { touchpad(deadzone = 10f) }
+
+  @Test
+  fun shouldCreateTree() = test { tree() }
+
+  @Test
+  fun shouldCreateVerticalGroup() = test { verticalGroup() }
 }
 
 /**
@@ -288,6 +315,61 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun shouldCreateSplitPane() = test {
     splitPane {
+      color = Color.BLUE
+    }
+  }
+
+  @Test
+  fun shouldCreateStack() = test {
+    stack {
+      color = Color.BLUE
+    }
+  }
+
+  @Test
+  fun shouldCreateTable() = test(widget = {
+    table {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals(Scene2DSkin.defaultSkin, it.skin)
+  })
+
+  @Test
+  fun shouldCreateTextArea() = test(widget = {
+    textArea("Test.") {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals("Test.", it.text)
+  })
+
+  @Test
+  fun shouldCreateTextField() = test(widget = {
+    textField("Test.") {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals("Test.", it.text)
+  })
+
+  @Test
+  fun shouldCreateTouchpad() = test {
+    touchpad(deadzone = 10f) {
+      color = Color.BLUE
+    }
+  }
+
+  @Test
+  fun shouldCreateTree() = test {
+    tree {
+      color = Color.BLUE
+    }
+  }
+
+  @Test
+  fun shouldCreateVerticalGroup() = test {
+    verticalGroup {
       color = Color.BLUE
     }
   }

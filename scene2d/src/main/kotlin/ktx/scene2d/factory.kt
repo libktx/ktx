@@ -393,5 +393,126 @@ inline fun <S> KWidget<S>.splitPane(vertical: Boolean = false,
                                     skin: Skin = Scene2DSkin.defaultSkin, init: KSplitPane.(S) -> Unit) =
     actor(KSplitPane(vertical, skin, style), init)
 
-// TODO KStack KTable TextArea TextField Touchpad KTree KVerticalGroup
-// Note: List and SelectBox items need to be explicitly set after widget creation, otherwise they will not be visible.
+/**
+ * @return a [Stack] instance added to this group.
+ */
+inline fun KWidget<*>.stack() = appendActor(KStack())
+
+/**
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Stack] instance added to this group.
+ */
+inline fun <S> KWidget<S>.stack(init: KStack.(S) -> Unit) = actor(KStack(), init)
+
+/**
+ * @param skin [Skin] instance that will be applied to some table children. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Table] instance added to this group.
+ */
+inline fun KWidget<*>.table(skin: Skin = Scene2DSkin.defaultSkin) = appendActor(KTableWidget(skin))
+
+/**
+ * @param skin [Skin] instance that will be applied to some table children. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Table] instance added to this group.
+ */
+inline fun <S> KWidget<S>.table(skin: Skin = Scene2DSkin.defaultSkin, init: KTableWidget.(S) -> Unit) =
+    actor(KTableWidget(skin), init)
+
+/**
+ * @param text initial text displayed by the area. Defaults to empty string.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [TextArea] instance added to this group.
+ */
+inline fun KWidget<*>.textArea(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(TextArea(text, skin, style))
+
+/**
+ * @param text initial text displayed by the area. Defaults to empty string.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [TextArea] instance added to this group.
+ */
+inline fun <S> KWidget<S>.textArea(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                   init: TextArea.(S) -> Unit) = actor(TextArea(text, skin, style), init)
+
+/**
+ * @param text initial text displayed by the field. Defaults to empty string.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [TextField] instance added to this group.
+ */
+inline fun KWidget<*>.textField(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(TextField(text, skin, style))
+
+/**
+ * @param text initial text displayed by the field. Defaults to empty string.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [TextField] instance added to this group.
+ */
+inline fun <S> KWidget<S>.textField(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                    init: TextField.(S) -> Unit) = actor(TextField(text, skin, style), init)
+
+/**
+ * @param deadzone the distance from the center of the touchpad required for the knob to be moved.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Touchpad] instance added to this group.
+ */
+inline fun KWidget<*>.touchpad(deadzone: Float, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(Touchpad(deadzone, skin, style))
+
+/**
+ * @param deadzone the distance from the center of the touchpad required for the knob to be moved.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Touchpad] instance added to this group.
+ */
+inline fun <S> KWidget<S>.touchpad(deadzone: Float, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                   init: Touchpad.(S) -> Unit) = actor(Touchpad(deadzone, skin, style), init)
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Tree] instance added to this group.
+ */
+inline fun KWidget<*>.tree(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KTreeWidget(skin, style))
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Tree] instance added to this group.
+ */
+inline fun <S> KWidget<S>.tree(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                               init: KTreeWidget.(S) -> Unit) = actor(KTreeWidget(skin, style), init)
+
+/**
+ * @return a [VerticalGroup] instance added to this group.
+ */
+inline fun KWidget<*>.verticalGroup() = appendActor(KVerticalGroup())
+
+/**
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [HorizontalGroup] instance added to this group.
+ */
+inline fun <S> KWidget<S>.verticalGroup(init: KVerticalGroup.(S) -> Unit) = actor(KVerticalGroup(), init)
