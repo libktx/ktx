@@ -1,4 +1,6 @@
 [![Travis CI](https://travis-ci.org/czyzby/ktx.svg?branch=master)](https://travis-ci.org/czyzby/ktx)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.czyzby/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.0.4-orange.svg)](http://kotlinlang.org/)
 
 # KTX
 
@@ -41,7 +43,7 @@ The modules present in **KTX** are:
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead.
 - [log](log): minimal runtime overhead cross-platform logging.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
-- [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI. *(Not complete.)*
+- [scene2d](scene2d): type-safe Kotlin builders for Scene2D GUI.
 - [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles.
 - [vis](vis): type-safe Kotlin builders for VisUI. Alternative to the [scene2d](scene2d) extension.
 - [vis-style](vis-style): enhances `Skin` API with type-safe builders of VisUI widget styles. Extension of [style](style) module.
@@ -51,9 +53,10 @@ features in at least one unit test.
 
 ### Dependencies
 
-**KTX** libraries are not officially released yet. Eventually, all stable releases will be available through Maven
-Central and [here](https://github.com/czyzby/ktx/releases). However, you can use preview snapshot releases from
-`https://oss.sonatype.org/content/repositories/snapshots/`.
+**KTX** libraries are currently in beta. While tested and stable enough, we want to give them a little bit more time
+and get some user feedback before a stable release. All versions are available through Maven Central and
+[here](https://github.com/czyzby/ktx/releases). You can also use the preview snapshot releases from
+`https://oss.sonatype.org/content/repositories/snapshots/` repository.
 
 All libraries follow the same naming schema - this is an example Gradle dependency:
 
@@ -63,7 +66,7 @@ compile "com.github.czyzby:ktx-$module:$ktxVersion"
 
 Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
 compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
-the snapshots). For example, current version is `1.9.4-SNAPSHOT`. Note that even snapshots should be more or less
+the snapshots). For example, current version is `1.9.4-b1`. Note that even snapshots should be more or less
 stable, as libraries are not pushed to Maven Central if they do not pass the tests.
 
 ### Gradle

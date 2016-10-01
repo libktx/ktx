@@ -66,7 +66,13 @@ subprojects {
     outputDirectory = "$buildDir/dokkaJavadoc"
   }
 
-  javadocJar.dependsOn("dokkaJavadoc")
+  javadocJar.dependsOn('dokkaJavadoc')
+  
+  task dokkaZip(type: Zip) {
+    from "$buildDir/dokka"
+  }
+
+  dokkaZip.dependsOn('dokka')
 
   task sourcesJar(type: Jar) {
     classifier = 'sources'
@@ -146,6 +152,9 @@ distributions {
         }
         into('doc') {
           from sub.javadocJar
+        }
+        into('dokka') {
+          from sub.dokkaZip
         }
       }
     }
