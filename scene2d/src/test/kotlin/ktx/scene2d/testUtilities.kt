@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.badlogic.gdx.graphics.GL20
 import com.kotcrab.vis.ui.VisUI
+import org.junit.Before
 import org.mockito.Mockito
 
 /**
@@ -18,7 +19,7 @@ const val TOLERANCE = 0.0001f
  * Tests that require mocked libGDX environment should inherit from this class.
  * @author Kotcrab
  */
-open class NeedsLibGDX {
+abstract class NeedsLibGDX {
   private companion object {
     init {
       LwjglNativesLoader.load()
@@ -32,5 +33,10 @@ open class NeedsLibGDX {
       // Includes a default skin filled with styles of all Scene2D widgets:
       VisUI.load()
     }
+  }
+
+  @Before
+  fun setDefaultSkin() {
+    Scene2DSkin.defaultSkin = VisUI.getSkin()
   }
 }

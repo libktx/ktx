@@ -5,20 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
-import org.junit.Test
 import org.junit.Assert.*
-import org.junit.Before
+import org.junit.Test
 
 /**
  * Tests factory methods without init blocks.
  * @author MJ
  */
 class InitBlockActorFactoriesTest : NeedsLibGDX() {
-  @Before
-  fun setDefaultSkin() {
-    Scene2DSkin.defaultSkin = VisUI.getSkin()
-  }
-
   @Test
   fun shouldCreateButton() {
     var widget: Button? = null
@@ -118,11 +112,6 @@ class InitBlockActorFactoriesTest : NeedsLibGDX() {
  * Tests inlined factory methods with init blocks.
  */
 class InlinedActorFactoriesTest : NeedsLibGDX() {
-  @Before
-  fun setDefaultSkin() {
-    Scene2DSkin.defaultSkin = VisUI.getSkin()
-  }
-
   /**
    * Tests and showcases how generic [KWidget] API - and its additional inlined methods - give access to specific actor
    * storage objects like [Cell] or [Node] through init block parameter.

@@ -4,10 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
 import org.junit.Test
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [KGroup] interface: base for all simple WidgetGroup-based parental actors.

@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
 
@@ -70,13 +71,13 @@ interface KGroup : KWidget<Actor> {
    */
   fun <T : Actor> add(actor: T): T {
     addActor(actor)
-    return actor;
+    return actor
   }
 
   override fun storeActor(actor: Actor) = add(actor)
   override fun <T : Actor> appendActor(actor: T): T {
     addActor(actor)
-    return actor;
+    return actor
   }
 }
 
@@ -163,6 +164,15 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
   operator fun T.unaryMinus() {
     items.add(this)
   }
+
+  /**
+   * Utility method. If the internal array with items stored by this widget was modified, use this method to safely
+   * refresh the items that this widget draws.
+   */
+  fun refreshItems() {
+    // Internal items array has to be copied, as it is cleared by the setter method...
+    setItems(GdxArray(items))
+  }
 }
 
 /** Extends [Tree] [Node] API with type-safe widget builders.
@@ -192,6 +202,15 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
    */
   operator fun T.unaryMinus() {
     items.add(this)
+  }
+
+  /**
+   * Utility method. If the internal array with items stored by this widget was modified, use this method to safely
+   * refresh the items that this widget draws.
+   */
+  fun refreshItems() {
+    // Internal items array has to be copied, as it is cleared by the setter method...
+    items = GdxArray(items)
   }
 }
 
