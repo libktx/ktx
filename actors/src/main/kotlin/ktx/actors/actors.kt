@@ -130,7 +130,6 @@ var Stage.alpha: Float
     this.root.color.a = value
   }
 
-
 /**
  * Modifies current stage keyboard focus if this actor is currently shown.
  * @param focus if true, will set current keyboard focus to this actor. If false and the actor is currently focused,
