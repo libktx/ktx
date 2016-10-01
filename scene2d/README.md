@@ -143,8 +143,9 @@ interface, which gives access to inlined builder methods that allows to customiz
 `Cell` instances. Regular `WidgetGroup`-extending widgets now implement `KGroup` interface, which allows to build their
 children with type-safe builder syntax.
 
-The only exceptions from the naming scheme are the `KTableWidget` and `KTreeWidget`, which extend `Table` and `Tree`
-respectively.
+The only exceptions from the naming scheme are the `KTableWidget`, `KTreeWidget` and `KListWidget`, which extend `Table`,
+`Tree` and `List` respectively. Also, `KListWidget` factory methods are named `listWidget` and `listWidgetOf` instead
+of `list` or `listOf` to avoid collisions with Kotlin standard library.
 
 You generally do not have to worry about the `KWidgets`: you can still reference these by their original extended class.
 This is basically just an internal representation: we choose not to create entirely new class hierarchy for the builders

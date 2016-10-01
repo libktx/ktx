@@ -161,6 +161,22 @@ class KListWidgetTest : NeedsLibGDX() {
     }
     assertEquals(GdxArray.with("one", "two", "three"), list.items)
   }
+
+  @Test
+  fun shouldNotClearItemsOnRefresh() {
+    // Normally list.setItems(list.items) clears the items instead, as the internal "setter" implementation clear the
+    // internal array and copies the one passed as the argument, even if both are the same object.
+    val list = KListWidget<String>(VisUI.getSkin(), defaultStyle)
+    list.items.apply {
+      add("one")
+      add("two")
+      add("three")
+    }
+    assertEquals(3, list.items.size)
+    list.refreshItems() // Fails the test: list.setItems(list.items)
+    assertEquals(3, list.items.size)
+    assertEquals(GdxArray.with("one", "two", "three"), list.items)
+  }
 }
 
 /**
@@ -215,6 +231,22 @@ class KSelectBoxTest : NeedsLibGDX() {
       -"two"
       -"three"
     }
+    assertEquals(GdxArray.with("one", "two", "three"), selectBox.items)
+  }
+
+  @Test
+  fun shouldNotClearItemsOnRefresh() {
+    // Normally actor.items = actor.items clears the items instead, as the internal "setter" implementation clear the
+    // internal array and copies the one passed as the argument, even if both are the same object.
+    val selectBox = KSelectBox<String>(VisUI.getSkin(), defaultStyle)
+    selectBox.items.apply {
+      add("one")
+      add("two")
+      add("three")
+    }
+    assertEquals(3, selectBox.items.size)
+    selectBox.refreshItems() // Fails the test: selectBox.items = selectBox.items
+    assertEquals(3, selectBox.items.size)
     assertEquals(GdxArray.with("one", "two", "three"), selectBox.items)
   }
 }

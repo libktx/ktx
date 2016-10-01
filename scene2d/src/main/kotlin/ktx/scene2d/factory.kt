@@ -5,6 +5,7 @@ package ktx.scene2d
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /* Factory methods of groups' children. */
 
@@ -164,7 +165,7 @@ inline fun KWidget<*>.imageButton(style: String = defaultStyle, skin: Skin = Sce
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  *    Inlined.
- * @return a [Button] instance added to this group.
+ * @return a [ImageButton] instance added to this group.
  */
 inline fun <S> KWidget<S>.imageButton(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
                                       init: KImageButton.(S) -> Unit) = actor(KImageButton(skin, style), init)
@@ -212,5 +213,185 @@ inline fun KWidget<*>.label(text: CharSequence, style: String = defaultStyle, sk
 inline fun <S> KWidget<S>.label(text: CharSequence, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
                                 init: Label.(S) -> Unit) = actor(Label(text, skin, style), init)
 
-// TODO List ProgressBar KScrollPane SelectBox Slider KSplitPane KStack KTable TextArea TextField Touchpad KTree KVerticalGroup
+/**
+ * @param items optional LibGDX array of list widget items. Defaults to null.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a List widget instance added to this group.
+ * @param I type of items stored by this widget. Usually items are converted to string and displayed.
+ */
+inline fun <I> KWidget<*>.listWidgetOf(items: GdxArray<I>? = null, style: String = defaultStyle,
+                                       skin: Skin = Scene2DSkin.defaultSkin): KListWidget<I> {
+  val list = appendActor(KListWidget<I>(skin, style))
+  if (items != null && items.size > 0) {
+    list.setItems(items)
+  }
+  return list
+}
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined. Allows to fill list's items.
+ * @return a List widget instance added to this group.
+ * @param I type of items stored by this widget. Usually items are converted to string and displayed.
+ * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
+ */
+inline fun <I, S> KWidget<S>.listWidget(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                        init: KListWidget<I>.(S) -> Unit): KListWidget<I> {
+  val list = KListWidget<I>(skin, style)
+  list.init(storeActor(list))
+  list.refreshItems()
+  return list
+}
+
+/**
+ * @param min minimum value displayed by the bar. Defaults to 0.
+ * @param min maximum value displayed by the bar. Defaults to 1.
+ * @param step the size of a single step between two values. Defaults to 0.01.
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [ProgressBar] instance added to this group.
+ */
+inline fun KWidget<*>.progressBar(min: Float = 0f, max: Float = 1f, step: Float = 0.01f, vertical: Boolean = false,
+                                  style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                                  skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(ProgressBar(min, max, step, vertical, skin, style))
+
+/**
+ * @param min minimum value displayed by the bar. Defaults to 0.
+ * @param min maximum value displayed by the bar. Defaults to 1.
+ * @param step the size of a single step between two values. Defaults to 0.01.
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [ProgressBar] instance added to this group.
+ */
+inline fun <S> KWidget<S>.progressBar(min: Float = 0f, max: Float = 1f, step: Float = 0.01f, vertical: Boolean = false,
+                                      style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                                      skin: Skin = Scene2DSkin.defaultSkin, init: ProgressBar.(S) -> Unit) =
+    actor(ProgressBar(min, max, step, vertical, skin, style), init)
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [ScrollPane] instance added to this group. Note that this actor may have only a single child.
+ */
+inline fun KWidget<*>.scrollPane(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KScrollPane(skin, style))
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [ScrollPane] instance added to this group. Note that this actor may have only a single child.
+ */
+inline fun <S> KWidget<S>.scrollPane(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                     init: KScrollPane.(S) -> Unit) = actor(KScrollPane(skin, style), init)
+
+/**
+ * @param items optional LibGDX array [SelectBox] items. Defaults to null.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [SelectBox] instance added to this group.
+ * @param I type of items stored by this widget. Usually items are converted to string and displayed.
+ */
+inline fun <I> KWidget<*>.selectBoxOf(items: GdxArray<I>? = null, style: String = defaultStyle,
+                                      skin: Skin = Scene2DSkin.defaultSkin): KSelectBox<I> {
+  val selectBox = appendActor(KSelectBox<I>(skin, style))
+  if (items != null && items.size > 0) {
+    selectBox.items = items
+  }
+  return selectBox
+}
+
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined. Allows to fill list's items.
+ * @return a [SelectBox] instance added to this group.
+ * @param I type of items stored by this widget. Usually items are converted to string and displayed.
+ * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
+ */
+inline fun <I, S> KWidget<S>.selectBox(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                       init: KSelectBox<I>.(S) -> Unit): KSelectBox<I> {
+  val selectBox = KSelectBox<I>(skin, style)
+  selectBox.init(storeActor(selectBox))
+  selectBox.refreshItems()
+  return selectBox
+}
+
+/**
+ * @param min minimum value displayed by the slider. Defaults to 0.
+ * @param min maximum value displayed by the slider. Defaults to 1.
+ * @param step the size of a single step between two values. Defaults to 0.01.
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [Slider] instance added to this group.
+ */
+inline fun KWidget<*>.slider(min: Float = 0f, max: Float = 1f, step: Float = 0.01f, vertical: Boolean = false,
+                             style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                             skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(Slider(min, max, step, vertical, skin, style))
+
+/**
+ * @param min minimum value displayed by the slider. Defaults to 0.
+ * @param min maximum value displayed by the slider. Defaults to 1.
+ * @param step the size of a single step between two values. Defaults to 0.01.
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [Slider] instance added to this group.
+ */
+inline fun <S> KWidget<S>.slider(min: Float = 0f, max: Float = 1f, step: Float = 0.01f, vertical: Boolean = false,
+                                 style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                                 skin: Skin = Scene2DSkin.defaultSkin, init: Slider.(S) -> Unit) =
+    actor(Slider(min, max, step, vertical, skin, style), init)
+
+/**
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [SplitPane] instance added to this group. Note that this actor can store only two children.
+ */
+inline fun KWidget<*>.splitPane(vertical: Boolean = false,
+                                style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                                skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KSplitPane(vertical, skin, style))
+
+/**
+ * @param vertical true if the widget is vertical, false if horizontal.
+ * @param style name of the widget style. Defaults to [defaultVerticalStyle] if the widget is vertical or
+ *    [defaultHorizontalStyle] if the widget is horizontal.
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [SplitPane] instance added to this group. Note that this actor can store only two children.
+ */
+inline fun <S> KWidget<S>.splitPane(vertical: Boolean = false,
+                                    style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                                    skin: Skin = Scene2DSkin.defaultSkin, init: KSplitPane.(S) -> Unit) =
+    actor(KSplitPane(vertical, skin, style), init)
+
+// TODO KStack KTable TextArea TextField Touchpad KTree KVerticalGroup
 // Note: List and SelectBox items need to be explicitly set after widget creation, otherwise they will not be visible.

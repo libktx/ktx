@@ -3,7 +3,9 @@ package ktx.scene2d
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.List as ListWidget
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
 import org.junit.Test
@@ -12,106 +14,99 @@ import org.junit.Test
  * Tests factory methods without init blocks.
  * @author MJ
  */
-class InitBlockActorFactoriesTest : NeedsLibGDX() {
-  @Test
-  fun shouldCreateButton() {
-    var widget: Button? = null
-    val parent = table {
-      widget = button()
-    }
-    assertNotNull(widget)
-    assertTrue(widget in parent.children)
+class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
+  private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<*>.() -> T?) {
+    val parent = table {}
+    val child = parent.widget()
+    assertNotNull(child)
+    assertTrue(child in parent.children)
+    validate(child!!)
   }
 
   @Test
-  fun shouldCreateButtonGroup() {
-    var widget: KButtonTable? = null
-    val parent = table {
-      widget = buttonGroup(minCheckedCount = 1, maxCheckedCount = 2)
-    }
-    assertNotNull(widget)
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateButton() = test { button() }
 
   @Test
-  fun shouldCreateCheckBox() {
-    var widget: CheckBox? = null
-    val parent = table {
-      widget = checkBox("Test.")
-    }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateButtonGroup() = test { buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) }
 
   @Test
-  fun shouldCreateContainer() {
-    var widget: Container<Actor>? = null
-    val parent = table {
-      widget = container()
-    }
-    assertNotNull(widget)
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateCheckBox() = test(widget = { checkBox("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      })
 
   @Test
-  fun shouldCreateHorizontalGroup() {
-    var widget: HorizontalGroup? = null
-    val parent = table {
-      widget = horizontalGroup()
-    }
-    assertNotNull(widget)
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateContainer() = test { container() }
 
   @Test
-  fun shouldCreateImage() {
-    var widget: Image? = null
-    val parent = table {
-      widget = image(drawable = "button")
-    }
-    assertNotNull(widget)
-    assertEquals(VisUI.getSkin().getDrawable("button"), widget!!.drawable)
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateHorizontalGroup() = test { horizontalGroup() }
 
   @Test
-  fun shouldCreateImageButton() {
-    var widget: ImageButton? = null
-    val parent = table {
-      widget = imageButton()
-    }
-    assertNotNull(widget)
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateImage() = test(widget = { image(drawable = "button") },
+      validate = {
+        assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
+      })
 
   @Test
-  fun shouldCreateImageTextButton() {
-    var widget: ImageTextButton? = null
-    val parent = table {
-      widget = imageTextButton("Test.")
-    }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateImageButton() = test { imageButton() }
 
   @Test
-  fun shouldCreateLabel() {
-    var widget: Label? = null
-    val parent = table {
-      widget = label("Test.")
-    }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertTrue(widget in parent.children)
-  }
+  fun shouldCreateImageTextButton() = test(widget = { imageTextButton("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      })
+
+  @Test
+  fun shouldCreateLabel() = test(widget = { label("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      })
+
+  @Test
+  fun shouldCreateList() = test { listWidgetOf<String>() }
+
+  @Test
+  fun shouldCreateListWithItems() = test(widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      })
+
+  @Test
+  fun shouldCreateProgressBar() = test(widget = { progressBar(min = 1f, max = 2f, step = 0.5f) },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      })
+
+  @Test
+  fun shouldCreateScrollPane() = test { scrollPane() }
+
+  @Test
+  fun shouldCreateSelectBox() = test { selectBoxOf<String>() }
+
+  @Test
+  fun shouldCreateSelectBoxWithItems() = test(widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      })
+
+  @Test
+  fun shouldCreateSlider() = test(widget = { slider(min = 1f, max = 2f, step = 0.5f) },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      })
+
+  @Test
+  fun shouldCreateSplitPane() = test { splitPane() }
 }
 
 /**
  * Tests inlined factory methods with init blocks.
  */
-class InlinedActorFactoriesTest : NeedsLibGDX() {
+class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   /**
    * Tests and showcases how generic [KWidget] API - and its additional inlined methods - give access to specific actor
    * storage objects like [Cell] or [Node] through init block parameter.
@@ -151,124 +146,149 @@ class InlinedActorFactoriesTest : NeedsLibGDX() {
     }
   }
 
+  private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<Cell<*>>.() -> T?) {
+    val parent = table {}
+    val child = parent.widget()
+    assertNotNull(child)
+    assertTrue(child in parent.children)
+    assertEquals("For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
+        Color.BLUE, child!!.color)
+    validate(child)
+  }
+
+
   @Test
-  fun shouldCreateButton() {
-    var widget: Button? = null
-    val parent = table {
-      widget = button {
-        color = Color.CYAN
-      }
+  fun shouldCreateButton() = test {
+    button {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
   }
 
   @Test
-  fun shouldCreateButtonGroup() {
-    var widget: KButtonTable? = null
-    val parent = table {
-      widget = buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
-        color = Color.CYAN
-      }
+  fun shouldCreateButtonGroup() = test {
+    buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
   }
 
   @Test
-  fun shouldCreateCheckBox() {
-    var widget: CheckBox? = null
-    val parent = table {
-      widget = checkBox("Test.") {
-        color = Color.CYAN
-      }
+  fun shouldCreateCheckBox() = test(widget = {
+    checkBox("Test.") {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
+  }, validate = {
+    assertEquals("Test.", it.text.toString())
+  })
+
+  @Test
+  fun shouldCreateContainer() = test {
+    container {
+      color = Color.BLUE
+    }
   }
 
   @Test
-  fun shouldCreateContainer() {
-    var widget: Container<Actor>? = null
-    val parent = table {
-      widget = container {
-        color = Color.CYAN
-      }
+  fun shouldCreateHorizontalGroup() = test {
+    horizontalGroup {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
   }
 
   @Test
-  fun shouldCreateHorizontalGroup() {
-    var widget: HorizontalGroup? = null
-    val parent = table {
-      widget = horizontalGroup {
-        color = Color.CYAN
-      }
+  fun shouldCreateImage() = test(widget = {
+    image(drawable = "button") {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
+  }, validate = {
+    assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
+  })
+
+  @Test
+  fun shouldCreateImageButton() = test {
+    imageButton {
+      color = Color.BLUE
+    }
   }
 
   @Test
-  fun shouldCreateImage() {
-    var widget: Image? = null
-    val parent = table {
-      widget = image(drawable = "button") {
-        color = Color.CYAN
-      }
+  fun shouldCreateImageTextButton() = test(widget = {
+    imageTextButton("Test.") {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals(VisUI.getSkin().getDrawable("button"), widget!!.drawable)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
+  }, validate = {
+    assertEquals("Test.", it.text.toString())
+  })
+
+  @Test
+  fun shouldCreateLabel() = test(widget = {
+    label("Test.") {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals("Test.", it.text.toString())
+  })
+
+  @Test
+  fun shouldCreateList() = test(widget = {
+    listWidget<String, Cell<*>> {
+      color = Color.BLUE
+      assertTrue(it is Cell<*>)
+      // Adding list items:
+      -"one"
+      -"two"
+      -"three"
+    }
+  }, validate = {
+    assertEquals(GdxArray.with("one", "two", "three"), it.items)
+  })
+
+  @Test
+  fun shouldCreateProgressBar() = test(widget = {
+    progressBar(min = 1f, max = 2f, step = 0.5f) {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals(1f, it.minValue, TOLERANCE)
+    assertEquals(2f, it.maxValue, TOLERANCE)
+    assertEquals(0.5f, it.stepSize, TOLERANCE)
+  })
+
+  @Test
+  fun shouldCreateScrollPane() = test {
+    scrollPane {
+      color = Color.BLUE
+    }
   }
 
   @Test
-  fun shouldCreateImageButton() {
-    var widget: ImageButton? = null
-    val parent = table {
-      widget = imageButton {
-        color = Color.CYAN
-      }
+  fun shouldCreateSelectBox() = test(widget = {
+    selectBox<String, Cell<*>> {
+      color = Color.BLUE
+      assertTrue(it is Cell<*>)
+      // Adding select box items:
+      -"one"
+      -"two"
+      -"three"
     }
-    assertNotNull(widget)
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
-  }
+  }, validate = {
+    assertEquals(GdxArray.with("one", "two", "three"), it.items)
+  })
 
   @Test
-  fun shouldCreateImageTextButton() {
-    var widget: ImageTextButton? = null
-    val parent = table {
-      widget = imageTextButton("Test.") {
-        color = Color.CYAN
-      }
+  fun shouldCreateSlider() = test(widget = {
+    slider(min = 1f, max = 2f, step = 0.5f) {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
-  }
+  }, validate = {
+    assertEquals(1f, it.minValue, TOLERANCE)
+    assertEquals(2f, it.maxValue, TOLERANCE)
+    assertEquals(0.5f, it.stepSize, TOLERANCE)
+  })
 
   @Test
-  fun shouldCreateLabel() {
-    var widget: Label? = null
-    val parent = table {
-      widget = label("Test.") {
-        color = Color.CYAN
-      }
+  fun shouldCreateSplitPane() = test {
+    splitPane {
+      color = Color.BLUE
     }
-    assertNotNull(widget)
-    assertEquals("Test.", widget!!.text.toString())
-    assertEquals(Color.CYAN, widget!!.color)
-    assertTrue(widget in parent.children)
   }
 }
