@@ -443,6 +443,7 @@ inline fun KWidget<*>.textArea(text: String = "", style: String = defaultStyle, 
 inline fun <S> KWidget<S>.textArea(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
                                    init: TextArea.(S) -> Unit) = actor(TextArea(text, skin, style), init)
 
+
 /**
  * @param text initial text displayed by the field. Defaults to empty string.
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -463,6 +464,27 @@ inline fun KWidget<*>.textField(text: String = "", style: String = defaultStyle,
  */
 inline fun <S> KWidget<S>.textField(text: String = "", style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
                                     init: TextField.(S) -> Unit) = actor(TextField(text, skin, style), init)
+
+/**
+ * @param text will be displayed as [TextButton] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @return a [TextButton] instance added to this group.
+ */
+inline fun KWidget<*>.textButton(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin) =
+    appendActor(KTextButton(text, skin, style))
+
+/**
+ * @param text will be displayed as [TextButton] text.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ *    contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ *    Inlined.
+ * @return a [TextButton] instance added to this group.
+ */
+inline fun <S> KWidget<S>.textButton(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+                                     init: KTextButton.(S) -> Unit) = actor(KTextButton(text, skin, style), init)
 
 /**
  * @param deadzone the distance from the center of the touchpad required for the knob to be moved.

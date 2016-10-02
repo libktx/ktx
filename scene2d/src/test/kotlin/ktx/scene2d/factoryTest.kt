@@ -115,6 +115,12 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       })
 
   @Test
+  fun shouldCreateTextButton() = test(widget = { textButton("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      })
+
+  @Test
   fun shouldCreateTextField() = test(widget = { textField("Test.") },
       validate = {
         assertEquals("Test.", it.text)
@@ -342,6 +348,15 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     }
   }, validate = {
     assertEquals("Test.", it.text)
+  })
+
+  @Test
+  fun shouldCreateTextButton() = test(widget = {
+    textButton("Test.") {
+      color = Color.BLUE
+    }
+  }, validate = {
+    assertEquals("Test.", it.text.toString())
   })
 
   @Test
