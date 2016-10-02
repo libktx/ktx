@@ -74,9 +74,10 @@ This snippet would create a `Table` instance with a single `Button` child, which
 practical nesting limit: as long as you do not manually set up circular references (actors being parents of themselves),
 your widget hierarchies should *just work*.
 
-When it comes to widget customization, only parameters crucial to construct the actors are present in factory methods.
-For example, `Label` requires some text that it can draw, so it has a `CharSequence` (`String` or `StringBuilder`)
-parameter. However, most other settings must be changed manually inside widgets' blocks by invoking their methods:
+When it comes to widget customization, only data crucial to construct the actors is present in factory methods
+as parameters. For example, `Label` requires some text that it can draw, so it has a `CharSequence` (`String` or
+`StringBuilder`) parameter. However, most other settings must be changed manually inside widgets' blocks by invoking
+their methods - even if they are as common as `Color`:
 
 ```Kotlin
 import ktx.scene2d.*
@@ -90,6 +91,9 @@ table {
   }
 }
 ```
+
+This was a design choice - instead of basically duplicating the whole `Scene2D` widgets API in method parameters, we
+decided to simply expose the widgets themselves instance during building.
 
 You basically have full access to the `Scene2D` widgets API - type-safe Kotlin builders is just syntax sugar. Some
 properties are Kotlin-compatible (`color = Color.RED`), most are not (`setWrap(true)`), but it should be pretty
@@ -154,7 +158,111 @@ This is basically just an internal representation: we choose not to create entir
 
 ### Usage examples
 
-TODO.
+Loading and setting of the default application's `Skin`:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+
+Scene2DSkin.defaultSkin = Skin(Gdx.files.internal("ui.json"))
+// Note: ktx-assets module might help with skin loading and files management.
+```
+
+Creating a `Table` with a `Label` child:
+```Kotlin
+import ktx.scene2d.*
+
+table {
+  label("Hello world!")
+}
+```
+![Table](img/00.png)
+
+Creating a `Table` with customized background image and a `Label` with custom color:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.graphics.Color
+
+table {
+  background("button")
+  label("Hello world!") {
+    color = Color.CORAL
+  }
+}
+```
+!Background](img/01.png)
+
+Manipulating `Cell` properties of `Window` and its children:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.graphics.Color
+
+window(title = "Hello world!") {
+  button { cell ->
+    // Changing button properties - button is "this":
+    color = Color.CORAL
+    // Changing cell properties:
+    cell.fillX().row()
+  }
+  table {
+    // Changing nested table properties:
+    defaults().pad(2f)
+    // Adding table children:
+    label("Nested")
+    label("table")
+    label("of")
+    label("labels.")
+    // Cell of the nested actor is also available through "it":
+    it.spaceBottom(10f).row()
+  }
+  textButton(text = "Click me!")
+  // Packing the root window:
+  pack()
+}
+```
+![Window](img/02.png)
+
+Creating `Tree` of `Label` instances:
+```Kotlin
+import ktx.scene2d.*
+
+tree {
+  label("Node")
+  label("Node")
+  label("Nest") { node ->
+    node {
+      label("Nested") { node ->
+        node.label("Nested")
+      }
+      label("Nested")
+    }
+  }
+  label("Node")
+}
+```
+![Tree](img/03.png)
+
+Creating `List` and `SelectBox` widgets storing strings:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+
+table {
+  // List and SelectBox generics represent the type of items that
+  // they store and type of their parent actor container (like Cell).
+  listWidget<String, Cell<*>> {
+    -"First."
+    -"Second"
+    -"Third."
+  }
+  selectBox<String, Cell<*>> {
+    -"First"
+    -"Second"
+    -"Third"
+  }
+}
+```
+![List](img/04.png)
 
 ### Known issues
 
