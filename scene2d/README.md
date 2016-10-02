@@ -190,7 +190,7 @@ table {
   }
 }
 ```
-!Background](img/01.png)
+![Background](img/01.png)
 
 Manipulating `Cell` properties of `Window` and its children:
 ```Kotlin
