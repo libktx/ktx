@@ -20,6 +20,7 @@ subprojects {
   apply plugin: 'signing'
   apply plugin: 'nebula.provided-base'
   apply plugin: 'org.jetbrains.dokka'
+  apply plugin: 'jacoco'
 
   ext {
     isReleaseVersion = !libVersion.endsWith("SNAPSHOT")

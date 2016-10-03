@@ -18,10 +18,10 @@ from scratch. Considering how much work it takes to prepare a game framework/eng
 The two biggest issues with LibGDX are the facts that some of its modules were clearly not designed to be extended
 (*raise a hand if you never copy-pasted a `Scene2D` actor in sheer frustration, as a simple class extension was not enough!*)
 and that it is written in *Java*. Do not get me wrong: Java 8 was a huge step forward, but since you likely want to support
-legacy Android devices and WebGL (through GWT), you're stuck with Java 6 or 7. Switching to Kotlin - with its extension
-functions, inline methods, builders, operator overriding, pleasant syntax, easier generics and whatnot - certainly helps.
-But since LibGDX was not designed with Kotlin in mind, there's still *a lot of work* to be done to make use of all the
-shiny new features. *A lot of work* that has to be done *once*, if you think about it.
+legacy Android devices, you're stuck with Java 6 or 7(-ish). Switching to Kotlin - with its extension functions, inlined
+methods, builders, operator overriding, pleasant syntax, easier generics and whatnot - certainly helps. But since LibGDX
+was not designed with Kotlin in mind, there's still *a lot of work* to be done to make use of all the shiny new features.
+*A lot of work* that has to be done *once*, if you think about it.
 
 **KTX** aims to make LibGDX Kotlin-friendly, without turning the API upside down. This is **not** a new framework by any
 means. Most guides and examples assume that the user of these libraries is at least a bit familiar with the LibGDX API.
@@ -37,6 +37,7 @@ a recent release).
 The modules present in **KTX** are:
 
 - [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
+- [app](app): `ApplicationListener` abstract implementations and other general LibGDX utilities.
 - [assets](assets): assets and heavy resources management utilities.
 - [collections](collections): utilities for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple functions that make internationalization less verbose and easier to use.
@@ -49,7 +50,8 @@ The modules present in **KTX** are:
 - [vis-style](vis-style): enhances `Skin` API with type-safe builders of VisUI widget styles. Extension of [style](style) module.
 
 Afraid to use some third-party code? Run the test suites yourself. *Every* function and class added by these extensions
-features in at least one unit test.
+features in at least one unit test. *Reported code coverage is not impressive though, as the tools are unable to calculate
+coverage of inlined methods. (And there are plenty of these in some modules.)*
 
 ### Dependencies
 
@@ -88,4 +90,3 @@ case of a non-snapshot upload to Maven Central.
 
 Want to help? Great. Browse through issues (if any) to see what's currently missing or broken. Before creating any pull
 requests, be aware that the code is dedicated to public domain.
-
