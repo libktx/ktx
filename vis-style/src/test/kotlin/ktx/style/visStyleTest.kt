@@ -1,12 +1,14 @@
 package ktx.style
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.kotcrab.vis.ui.Sizes
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter.SimpleListAdapterStyle
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator.FormValidatorStyle
 import com.kotcrab.vis.ui.widget.BusyBar.BusyBarStyle
 import com.kotcrab.vis.ui.widget.LinkLabel.LinkLabelStyle
+import com.kotcrab.vis.ui.widget.ListViewStyle
 import com.kotcrab.vis.ui.widget.Menu.MenuStyle
 import com.kotcrab.vis.ui.widget.MenuBar.MenuBarStyle
 import com.kotcrab.vis.ui.widget.MenuItem.MenuItemStyle
@@ -189,6 +191,37 @@ class VisStyleTest {
     val style = skin.get<LinkLabelStyle>("new")
     assertEquals(Color.RED, style.fontColor)
     assertEquals(drawable, style.background)
+  }
+
+  @Test
+  fun shouldAddListViewStyle() {
+    val scrollPane = Mockito.mock(ScrollPaneStyle::class.java)
+    val skin = skin {
+      listView {
+        scrollPaneStyle = scrollPane
+      }
+    }
+    val style = skin.get<ListViewStyle>(defaultStyle)
+    assertEquals(scrollPane, style.scrollPaneStyle)
+  }
+
+  @Test
+  fun shouldExtendListViewStyle() {
+    val scrollPane = ScrollPaneStyle()
+    val drawable = Mockito.mock(Drawable::class.java)
+    scrollPane.background = drawable
+    val skin = skin {
+      listView("base") {
+        scrollPaneStyle = scrollPane
+      }
+      listView("new", extend = "base") {
+        scrollPaneStyle.corner = drawable
+      }
+    }
+    val style = skin.get<ListViewStyle>("new")
+    // ScrollPaneStyle is copied, so nested properties are checked:
+    assertEquals(drawable, style.scrollPaneStyle.background)
+    assertEquals(drawable, style.scrollPaneStyle.corner)
   }
 
   @Test

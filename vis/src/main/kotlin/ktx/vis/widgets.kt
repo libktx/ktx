@@ -138,7 +138,7 @@ class KButtonBar : ButtonBar, VoidWidgetFactory {
 
 /** @see [ListView] */
 class KListView<ItemT> : ListView<ItemT>, VoidWidgetFactory {
-  constructor(adapter: ListAdapter<ItemT>) : super(adapter)
+  constructor(adapter: ListAdapter<ItemT>, styleName: String) : super(adapter, styleName)
 }
 
 /** @see [Stack] */

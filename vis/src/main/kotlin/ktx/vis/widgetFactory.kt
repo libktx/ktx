@@ -254,8 +254,9 @@ interface WidgetFactory<R> {
   }
 
   /** @see [ListView] */
-  fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit = {}, init: KListView<ItemT>.() -> Unit = {}): FactoryPair<ListView<ItemT>, R> {
-    val view = KListView(itemAdapter)
+  fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, styleName: String = DEFAULT_STYLE,
+                       tableContainerInit: VisTable.() -> Unit = {}, init: KListView<ItemT>.() -> Unit = {}): FactoryPair<ListView<ItemT>, R> {
+    val view = KListView(itemAdapter, styleName)
     val pair = FactoryPair(view, actor(view.mainTable, tableContainerInit))
     view.init()
     return pair
@@ -439,8 +440,8 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
     return FactoryCellTablePair(bar, cell as Cell<VisTable>)
   }
 
-  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryCellTablePair<ListView<ItemT>> {
-    val (view, cell) = super.listView(itemAdapter, tableContainerInit, init)
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, styleName: String, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryCellTablePair<ListView<ItemT>> {
+    val (view, cell) = super.listView(itemAdapter, styleName, tableContainerInit, init)
     return FactoryCellTablePair(view, cell as Cell<VisTable>)
   }
 
@@ -612,8 +613,8 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
     return FactoryTablePair(bar, table as VisTable)
   }
 
-  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryTablePair<ListView<ItemT>> {
-    val (view, table) = super.listView(itemAdapter, tableContainerInit, init)
+  override fun <ItemT> listView(itemAdapter: ListAdapter<ItemT>, styleName: String, tableContainerInit: VisTable.() -> Unit, init: KListView<ItemT>.() -> Unit): FactoryTablePair<ListView<ItemT>> {
+    val (view, table) = super.listView(itemAdapter, styleName, tableContainerInit, init)
     return FactoryTablePair(view, table as VisTable)
   }
 

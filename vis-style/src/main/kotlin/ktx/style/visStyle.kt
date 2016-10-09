@@ -6,6 +6,7 @@ import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter.SimpleListAdapterStyle
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator.FormValidatorStyle
 import com.kotcrab.vis.ui.widget.BusyBar.BusyBarStyle
 import com.kotcrab.vis.ui.widget.LinkLabel.LinkLabelStyle
+import com.kotcrab.vis.ui.widget.ListViewStyle
 import com.kotcrab.vis.ui.widget.Menu.MenuStyle
 import com.kotcrab.vis.ui.widget.MenuBar.MenuBarStyle
 import com.kotcrab.vis.ui.widget.MenuItem.MenuItemStyle
@@ -85,6 +86,16 @@ inline fun Skin.formValidator(name: String = defaultStyle, extend: String? = nul
  */
 inline fun Skin.linkLabel(name: String = defaultStyle, extend: String? = null, init: LinkLabelStyle.() -> Unit) =
     addStyle(name, if (extend == null) LinkLabelStyle() else LinkLabelStyle(get(extend)), init)
+
+/**
+ * @param name name of the style as it will appear in the [Skin] instance.
+ * @param extend optional name of an _existing_ style of the same type. Its values will be copied and used as base for
+ *    this style.
+ * @param init will be applied to the style instance. Inlined.
+ * @return a new instance of [ListViewStyle] added to the [Skin] with the selected name.
+ */
+inline fun Skin.listView(name: String = defaultStyle, extend: String? = null, init: ListViewStyle.() -> Unit) =
+    addStyle(name, if (extend == null) ListViewStyle() else ListViewStyle(get(extend)), init)
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
