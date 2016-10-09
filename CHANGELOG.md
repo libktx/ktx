@@ -1,5 +1,7 @@
 #### 1.9.4-SNAPSHOT
 
+- **[FEATURE]** (`ktx-vis`) Added `ListViewStyle` support to `ListView` factory methods.
+- **[FEATURE]** (`ktx-vis-style`) Added `ListViewStyle` factory method: `listView`.
 - **[FIX]** (`ktx-scene2d`) Added missing `TextButton` factory methods.
 
 #### 1.9.4-b1
