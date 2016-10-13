@@ -234,16 +234,6 @@ class KTabbedPane : TabbedPane {
     tab.init()
     return tab
   }
-
-  override fun add(tab: Tab?) {
-    if (tab is KTab) throw IllegalArgumentException("When using tab type-safe builder (KTabbedPane#tab) do not add tab to pane manually.")
-    super.add(tab)
-  }
-
-  override fun insert(index: Int, tab: Tab?) {
-    if (tab is KTab) throw IllegalArgumentException("When using tab type-safe builder (KTabbedPane#tab) do not add tab to pane manually.")
-    super.insert(index, tab)
-  }
 }
 
 /** On tab switch, tab content will be added to provided widget group instance. Previous content will be cleared. */

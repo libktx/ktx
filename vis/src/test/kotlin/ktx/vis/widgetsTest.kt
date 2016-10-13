@@ -148,24 +148,6 @@ class KTabbedPaneTest : NeedsLibgdx() {
     }
   }
 
-  @Test(expected = IllegalArgumentException::class)
-  fun shouldThrowExceptionOnManualTabAdd() {
-    table {
-      tabbedPane {
-        add(tab("") {})
-      }
-    }
-  }
-
-  @Test(expected = IllegalArgumentException::class)
-  fun shouldThrowExceptionOnManualTabInsert() {
-    table {
-      tabbedPane {
-        insert(0, tab("") {})
-      }
-    }
-  }
-
   @Test
   fun shouldCreateTabContent() {
     var tab: Tab? = null
