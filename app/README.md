@@ -5,10 +5,10 @@ Abstract `ApplicationListener` implementations and general LibGDX utilities.
 ### Why?
 
 LibGDX offers some basic `ApplicationListener` implementations in form of `ApplicationAdapter` and `Game`, but both are
-pretty basic. They do not handle screen clearing, smooth view transitions or fixed rendering time step, all of which
-often have to be set up manually in LibGDX applications. This module aims to provide a solid base for your custom
-`ApplicationListener`: if you do not have your favorite setup implemented just yet, it might be a good idea to base it
-on abstract classes provided by `ktx-app`.
+pretty basic. They do not handle screen clearing or fixed rendering time step, both of which often have to be set up
+manually in LibGDX applications. This module aims to provide a simple base for your custom `ApplicationListener`: if you
+do not have your favorite setup implemented just yet, it might be a good idea to base it on abstract classes provided
+by `ktx-app`.
 
 ### Guide
 
@@ -24,6 +24,10 @@ implementation if you like working from scratch.
 
 - `clearScreen` is an inlined utility function that hides the OpenGL calls, allowing to clear the screen with a chosen
 color.
+- `LetterboxingViewport` combines `ScreenViewport` and `FitViewport` behavior: it targets a specific aspect ratio and
+applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
+similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
+different screen sizes.
 
 ### Usage examples
 
@@ -62,12 +66,22 @@ class MyApplication : KotlinApplication(fixedTimeStep = 1f / 60f, maxDeltaTime =
 }
 ```
 
+Creating and customizing a new `LetterboxingViewport`:
+
+```Kotlin
+import ktx.app.LetterboxingViewport
+
+val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
+// Updating viewport on resize:
+viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
+```
+
 ### Alternatives
 
 There are some general purpose LibGDX utility libraries out there, but most lack first-class Kotlin support.
 
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
-library with similar scope to `ktx-app`.
+library with some classes similar to `ktx-app`.
 - [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
 HTML-like syntax. It also features a custom `ApplicationListener` implementation, which helps with managing `Scene2D`
 screens.
@@ -78,4 +92,4 @@ initiates and handles annotated view instances.
 #### Additional documentation
 
 - [The life cycle article.](https://github.com/libgdx/libgdx/wiki/The-life-cycle)
-
+- [Viewports article.](https://github.com/libgdx/libgdx/wiki/Viewports)
