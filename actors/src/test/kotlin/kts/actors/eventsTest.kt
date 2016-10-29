@@ -1,8 +1,9 @@
 package kts.actors
 
+import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent
@@ -61,6 +62,38 @@ class EventsTest {
     event.type = keyTyped
     actor.fire(event)
     assertEquals('a', typed)
+  }
+
+  @Test
+  fun shouldAttachKeyDownListener() {
+    val actor = Actor()
+    var pressed: Int? = null
+    val listener = actor.onKeyDown { event, actor, keyCode -> pressed = keyCode }
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+
+    assertNull(pressed)
+    val event = InputEvent()
+    event.keyCode = Keys.A
+    event.type = keyDown
+    actor.fire(event)
+    assertEquals(Keys.A, pressed)
+  }
+
+  @Test
+  fun shouldAttachKeyUpListener() {
+    val actor = Actor()
+    var released: Int? = null
+    val listener = actor.onKeyUp { event, actor, keyCode -> released = keyCode }
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+
+    assertNull(released)
+    val event = InputEvent()
+    event.keyCode = Keys.A
+    event.type = keyUp
+    actor.fire(event)
+    assertEquals(Keys.A, released)
   }
 
   @Test

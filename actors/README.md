@@ -29,6 +29,8 @@ a `Group` with `actor in group` syntax.
 - Lambda-compatible `Actor.onClick` methods were added. (More verbose version has access to local coordinates of the click
 events.) Attaches `ClickListeners`.
 - Lambda-compatible `Actor.onKey` method was added. Allows to listen to `InputEvents` with `keyTyped` type.
+- Lambda-compatible `Actor.onKeyDown` and `Actor.onKeyUp` methods were added. They allow to listen to `InputEvents`
+with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see LibGDX `Keys` class).
 - Lambda-compatible `Actor.onScrollFocus` method was added. Allows to listen to `FocusEvents` with `scroll` type.
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
 

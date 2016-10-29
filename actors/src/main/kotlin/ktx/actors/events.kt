@@ -1,7 +1,7 @@
 package ktx.actors
 
 import com.badlogic.gdx.scenes.scene2d.*
-import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scrol
  * @param listener invoked each time a [ChangeEvent] is fired for this actor.
  * @return [ChangeListener] instance.
  */
-inline fun <Widget : Actor> Widget.onChange(crossinline listener: (event: ChangeEvent, Widget) -> Unit): ChangeListener {
+inline fun <Widget : Actor> Widget.onChange(crossinline listener: (event: ChangeEvent, actor: Widget) -> Unit): ChangeListener {
   val changeListener = object : ChangeListener() {
     override fun changed(event: ChangeEvent, actor: Actor) = listener(event, this@onChange)
   }
@@ -27,7 +27,7 @@ inline fun <Widget : Actor> Widget.onChange(crossinline listener: (event: Change
  * @param listener invoked each time this actor is clicked. The received floats are local x and y coordinates of the actor.
  * @return [ClickListener] instance.
  */
-inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEvent, Widget, x: Float, y: Float) -> Unit)
+inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit)
     : ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, this@onClick, x, y)
@@ -41,7 +41,7 @@ inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEv
  * @param listener invoked each time this actor is clicked.
  * @return [ClickListener] instance.
  */
-inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEvent, Widget) -> Unit): ClickListener {
+inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEvent, actor: Widget) -> Unit): ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, this@onClick)
   }
@@ -56,7 +56,8 @@ inline fun <Widget : Actor> Widget.onClick(crossinline listener: (event: InputEv
  * @return [EventListener] instance.
  */
 inline fun <Widget : Actor> Widget.onKey(catchEvent: Boolean = false,
-                                         crossinline listener: (event: InputEvent, Widget, Char) -> Unit): EventListener {
+                                         crossinline listener: (event: InputEvent, actor: Widget, character: Char) -> Unit)
+    : EventListener {
   val keyListener = EventListener { event ->
     if (event is InputEvent && event.type === keyTyped) {
       listener(event, this@onKey, event.character)
@@ -68,6 +69,44 @@ inline fun <Widget : Actor> Widget.onKey(catchEvent: Boolean = false,
 }
 
 /**
+ * Attaches an [EventListener] optimized to listen for keyDown type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * @param listener invoked each time this actor is keyboard-focused and a key is pressed.
+ * @return [EventListener] instance.
+ */
+inline fun <Widget : Actor> Widget.onKeyDown(catchEvent: Boolean = false,
+                                             crossinline listener: (event: InputEvent, actor: Widget, keyCode: Int) -> Unit)
+    : EventListener {
+  val keyDownListener = EventListener { event ->
+    if (event is InputEvent && event.type === keyDown) {
+      listener(event, this@onKeyDown, event.keyCode)
+      catchEvent
+    } else false
+  }
+  this.addListener(keyDownListener)
+  return keyDownListener
+}
+
+/**
+ * Attaches an [EventListener] optimized to listen for keyUp type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * @param listener invoked each time this actor is keyboard-focused and a key is released.
+ * @return [EventListener] instance.
+ */
+inline fun <Widget : Actor> Widget.onKeyUp(catchEvent: Boolean = false,
+                                           crossinline listener: (event: InputEvent, actor: Widget, keyCode: Int) -> Unit)
+    : EventListener {
+  val keyUpListener = EventListener { event ->
+    if (event is InputEvent && event.type === keyUp) {
+      listener(event, this@onKeyUp, event.keyCode)
+      catchEvent
+    } else false
+  }
+  this.addListener(keyUpListener)
+  return keyUpListener
+}
+
+/**
  * Attaches an [EventListener] optimized to listen for scroll focus events fired for this actor.
  * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
  * @param listener will be invoked each time scroll focus status changes on this actor. [FocusEvent.isFocused] can be used
@@ -75,7 +114,8 @@ inline fun <Widget : Actor> Widget.onKey(catchEvent: Boolean = false,
  * @return [EventListener] instance.
  */
 inline fun <Widget : Actor> Widget.onScrollFocus(catchEvent: Boolean = false,
-                                                 crossinline listener: (FocusEvent, Widget) -> Unit): EventListener {
+                                                 crossinline listener: (event: FocusEvent, actor: Widget) -> Unit)
+    : EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === scroll) {
       listener(event, this@onScrollFocus)
@@ -94,7 +134,8 @@ inline fun <Widget : Actor> Widget.onScrollFocus(catchEvent: Boolean = false,
  * @return [EventListener] instance.
  */
 inline fun <Widget : Actor> Widget.onKeyboardFocus(catchEvent: Boolean = false,
-                                                   crossinline listener: (FocusEvent, Widget) -> Unit): EventListener {
+                                                   crossinline listener: (event: FocusEvent, actor: Widget) -> Unit)
+    : EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === keyboard) {
       listener(event, this@onKeyboardFocus)

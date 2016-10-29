@@ -1,5 +1,7 @@
 #### 1.9.4-SNAPSHOT
 
+- **[FEATURE]** (`ktx-actors`) Added `Actor.onKeyUp` and `Actor.onKeyDown` extension methods that attach
+`EventListener` implementations listening to `InputEvent` instances.
 - **[FEATURE]** (`ktx-vis`) Added `ListViewStyle` support to `ListView` factory methods.
 - **[FEATURE]** (`ktx-vis`) Added top level `tab()` method.
 - **[FEATURE]** (`ktx-vis-style`) Added `ListViewStyle` factory method: `listView`.
