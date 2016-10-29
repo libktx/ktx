@@ -68,8 +68,11 @@ compile "com.github.czyzby:ktx-$module:$ktxVersion"
 
 Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
 compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
-the snapshots). For example, current version is `1.9.4-b1`. Note that even snapshots should be more or less
-stable, as libraries are not pushed to Maven Central if they do not pass the tests.
+the snapshots). For example, the first release was `1.9.4-b1`. You can browse through our releases
+[here](https://search.maven.org/#search%7Cga%7C1%7Cktx).
+
+Note that even snapshots should be more or less stable, as libraries are not pushed to Maven Central if they do not pass
+the unit tests.
 
 ### Gradle
 
@@ -86,7 +89,7 @@ logging data.
 - `gradle closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
 case of a non-snapshot upload to Maven Central.
 
-### Contribution
+### [Contribution](CONTRIBUTING.md)
 
-Want to help? Great. Browse through issues (if any) to see what's currently missing or broken. Before creating any pull
-requests, be aware that the code is dedicated to public domain.
+Want to help? Browse through the issues to see what's currently missing or broken. Before creating any pull requests,
+be aware that the code is dedicated to [public domain](LICENSE.md).
