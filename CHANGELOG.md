@@ -1,5 +1,7 @@
 #### 1.9.4-SNAPSHOT
 
+#### 1.9.4-b2
+
 - **[FEATURE]** (`ktx-actors`) Added `Actor.onKeyUp` and `Actor.onKeyDown` extension methods that attach
 `EventListener` implementations listening to `InputEvent` instances.
 - **[FEATURE]** (`ktx-app`) Implemented `ktx-app` module.
