@@ -1,4 +1,6 @@
-#### 1.9.4-SNAPSHOT
+#### 1.9.5-SNAPSHOT
+
+- **[UPDATE]** Updated to LibGDX 1.9.5.
 
 #### 1.9.4-b2
 
@@ -12,6 +14,7 @@
 
 #### 1.9.4-b1
 
+- **[UPDATE]** Updated to LibGDX 1.9.4.
 - **[FEATURE]** (`ktx-actors`) Implemented `ktx-actors` module.
 - **[FEATURE]** (`ktx-assets`) Implemented `ktx-assets` module.
 - **[FEATURE]** (`ktx-collections`) Implemented `ktx-collections` module.
@@ -23,3 +26,4 @@
 - **[FEATURE]** (`ktx-style`) Implemented `ktx-style` module.
 - **[FEATURE]** (`ktx-vis`) Implemented `ktx-vis` module.
 - **[FEATURE]** (`ktx-vis-style`) Implemented `ktx-vis-style` module.
+

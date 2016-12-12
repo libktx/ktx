@@ -1,6 +1,6 @@
 [![Travis CI](https://travis-ci.org/czyzby/ktx.svg?branch=master)](https://travis-ci.org/czyzby/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.czyzby/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.0.4-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.0.5-orange.svg)](http://kotlinlang.org/)
 
 # KTX
 

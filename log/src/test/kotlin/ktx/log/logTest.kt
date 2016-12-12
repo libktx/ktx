@@ -410,5 +410,7 @@ class LogTest {
     override fun getNativeHeap(): Long = 0L
     override fun getNet(): Net? = null
     override fun getJavaHeap(): Long = 0L
+    override fun setApplicationLogger(applicationLogger: ApplicationLogger?) = Unit
+    override fun getApplicationLogger(): ApplicationLogger? = null
   }
 }
