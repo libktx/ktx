@@ -133,6 +133,8 @@ subprojects {
   }
 }
 
+project(':vis-style').compileKotlin.dependsOn(project(':style').install)
+
 nexusStaging {
   packageGroup = 'com.github.czyzby'
   username = ossrhUsername
