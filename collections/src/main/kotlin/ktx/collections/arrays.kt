@@ -14,6 +14,12 @@ import com.badlogic.gdx.utils.IntArray as GdxIntArray
 const val defaultArraySize = 16
 
 /**
+ * Returns the last valid index for the array.
+ */
+val <T> GdxArray<T>.lastIndex: Int
+  get() = size - 1
+
+/**
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array.
