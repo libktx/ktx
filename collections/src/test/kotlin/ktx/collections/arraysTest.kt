@@ -68,6 +68,14 @@ class ArraysTest {
   }
 
   @Test
+  fun shouldReturnLastValidIndex() {
+    val array: GdxArray<String> = GdxArray.with("1", "2", "3")
+    assertEquals(array.lastIndex, 2)
+    val emptyArray = GdxArray<Any>()
+    assertEquals(emptyArray.lastIndex, -1)
+  }
+
+  @Test
   fun shouldReturnAlternativeIfElementIsNull() {
     val array = GdxArray.with("0", null, "2")
     assertEquals("0", array.get(0, "3"))
