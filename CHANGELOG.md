@@ -1,5 +1,10 @@
 #### 1.9.5-SNAPSHOT
 
+- **[FEATURE]** (`ktx-collections`) Added null-safe `size()` method to LibGDX `IntArray`, `FloatArray` and `BooleanArray`
+collections.
+- **[FEATURE]** (`ktx-collections`) Added null-safe extension property `lastIndex` to LibGDX `ArrayList` equivalents:
+`Array`, `IntArray`, `FloatArray` and `BooleanArray`.
+
 #### 1.9.5-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.5.

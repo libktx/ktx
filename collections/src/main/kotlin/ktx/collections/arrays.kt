@@ -14,10 +14,28 @@ import com.badlogic.gdx.utils.IntArray as GdxIntArray
 const val defaultArraySize = 16
 
 /**
- * Returns the last valid index for the array.
+ * Returns the last valid index for the array. -1 if the array is empty.
  */
-val <T> GdxArray<T>.lastIndex: Int
-  get() = size - 1
+val <Type> GdxArray<Type>?.lastIndex: Int
+  get() = size() - 1
+
+/**
+ * Returns the last valid index for the array. -1 if the array is empty.
+ */
+val GdxIntArray?.lastIndex: Int
+  get() = size() - 1
+
+/**
+ * Returns the last valid index for the array. -1 if the array is empty.
+ */
+val GdxFloatArray?.lastIndex: Int
+  get() = size() - 1
+
+/**
+ * Returns the last valid index for the array. -1 if the array is empty.
+ */
+val GdxBooleanArray?.lastIndex: Int
+  get() = size() - 1
 
 /**
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
@@ -39,6 +57,24 @@ inline fun <Type : Any> gdxArrayOf(vararg elements: Type): GdxArray<Type> = GdxA
  * @return current amount of elements in the array.
  */
 inline fun <Type> GdxArray<Type>?.size(): Int = this?.size ?: 0
+
+/**
+ * A method wrapper over [IntArray.size] variable compatible with nullable types.
+ * @return current amount of elements in the array.
+ */
+inline fun GdxIntArray?.size(): Int = this?.size ?: 0
+
+/**
+ * A method wrapper over [FloatArray.size] variable compatible with nullable types.
+ * @return current amount of elements in the array.
+ */
+inline fun GdxFloatArray?.size(): Int = this?.size ?: 0
+
+/**
+ * A method wrapper over [BooleanArray.size] variable compatible with nullable types.
+ * @return current amount of elements in the array.
+ */
+inline fun GdxBooleanArray?.size(): Int = this?.size ?: 0
 
 /**
  * @return true if the array is null or has no elements.

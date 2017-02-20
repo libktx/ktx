@@ -3,6 +3,9 @@ package ktx.collections
 import org.junit.Assert.*
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
+import com.badlogic.gdx.utils.BooleanArray as GdxBooleanArray
+import com.badlogic.gdx.utils.FloatArray as GdxFloatArray
+import com.badlogic.gdx.utils.IntArray as GdxIntArray
 
 /**
  * Tests utilities for LibGDX custom ArrayList equivalent - Array.
@@ -68,11 +71,51 @@ class ArraysTest {
   }
 
   @Test
-  fun shouldReturnLastValidIndex() {
-    val array: GdxArray<String> = GdxArray.with("1", "2", "3")
-    assertEquals(array.lastIndex, 2)
+  fun shouldReturnLastValidIndexOfArray() {
+    val array = GdxArray.with("1", "2", "3")
+    assertEquals(2, array.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfEmptyArray() {
     val emptyArray = GdxArray<Any>()
-    assertEquals(emptyArray.lastIndex, -1)
+    assertEquals(-1, emptyArray.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfIntArray() {
+    val array = GdxIntArray.with(1, 2, 3)
+    assertEquals(2, array.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfEmptyIntArray() {
+    val emptyArray = GdxIntArray()
+    assertEquals(-1, emptyArray.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfFloatArray() {
+    val array = GdxFloatArray.with(1f, 2f, 3f)
+    assertEquals(2, array.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfEmptyFloatArray() {
+    val emptyArray = GdxFloatArray()
+    assertEquals(-1, emptyArray.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfBooleanArray() {
+    val array = GdxBooleanArray.with(true, false, true)
+    assertEquals(2, array.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnLastValidIndexOfEmptyBooleanArray() {
+    val emptyArray = GdxBooleanArray()
+    assertEquals(-1, emptyArray.lastIndex)
   }
 
   @Test
