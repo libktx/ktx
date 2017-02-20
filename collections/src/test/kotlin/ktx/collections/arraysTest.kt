@@ -42,11 +42,38 @@ class ArraysTest {
   }
 
   @Test
-  fun shouldReportSize() {
-    val array: GdxArray<String>? = GdxArray.with("1", "2", "3")
+  fun shouldReportSizeOfArray() {
+    val array = GdxArray.with("1", "2", "3")
     assertEquals(3, array.size())
     assertEquals(array!!.size, array.size())
     val nullArray: GdxArray<Any>? = null
+    assertEquals(0, nullArray.size())
+  }
+
+  @Test
+  fun shouldReportSizeOfIntArray() {
+    val array = GdxIntArray.with(1, 2, 3)
+    assertEquals(3, array.size())
+    assertEquals(array!!.size, array.size())
+    val nullArray: GdxIntArray? = null
+    assertEquals(0, nullArray.size())
+  }
+
+  @Test
+  fun shouldReportSizeOfFloatArray() {
+    val array = GdxFloatArray.with(1f, 2f, 3f)
+    assertEquals(3, array.size())
+    assertEquals(array!!.size, array.size())
+    val nullArray: GdxFloatArray? = null
+    assertEquals(0, nullArray.size())
+  }
+
+  @Test
+  fun shouldReportSizeOfBooleanArray() {
+    val array = GdxBooleanArray.with(true, false, true)
+    assertEquals(3, array.size())
+    assertEquals(array!!.size, array.size())
+    val nullArray: GdxBooleanArray? = null
     assertEquals(0, nullArray.size())
   }
 
@@ -83,6 +110,12 @@ class ArraysTest {
   }
 
   @Test
+  fun shouldReturnNegativeLastIndexForNullArray() {
+    val nullArray: GdxArray<Any>? = null
+    assertEquals(-1, nullArray.lastIndex)
+  }
+
+  @Test
   fun shouldReturnLastValidIndexOfIntArray() {
     val array = GdxIntArray.with(1, 2, 3)
     assertEquals(2, array.lastIndex)
@@ -92,6 +125,12 @@ class ArraysTest {
   fun shouldReturnLastValidIndexOfEmptyIntArray() {
     val emptyArray = GdxIntArray()
     assertEquals(-1, emptyArray.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnNegativeLastIndexForNullIntArray() {
+    val nullArray: GdxIntArray? = null
+    assertEquals(-1, nullArray.lastIndex)
   }
 
   @Test
@@ -107,6 +146,12 @@ class ArraysTest {
   }
 
   @Test
+  fun shouldReturnNegativeLastIndexForNullFloatArray() {
+    val nullArray: GdxFloatArray? = null
+    assertEquals(-1, nullArray.lastIndex)
+  }
+
+  @Test
   fun shouldReturnLastValidIndexOfBooleanArray() {
     val array = GdxBooleanArray.with(true, false, true)
     assertEquals(2, array.lastIndex)
@@ -116,6 +161,12 @@ class ArraysTest {
   fun shouldReturnLastValidIndexOfEmptyBooleanArray() {
     val emptyArray = GdxBooleanArray()
     assertEquals(-1, emptyArray.lastIndex)
+  }
+
+  @Test
+  fun shouldReturnNegativeLastIndexForNullBooleanArray() {
+    val nullArray: GdxBooleanArray? = null
+    assertEquals(-1, nullArray.lastIndex)
   }
 
   @Test
