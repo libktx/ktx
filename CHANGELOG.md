@@ -1,5 +1,7 @@
-#### 1.9.5-SNAPSHOT
+#### 1.9.6-b1
 
+- **[UPDATE]** Updated to LibGDX 1.9.6.
+- **[UPDATE]** Updated to Kotlin 1.1.0.
 - **[FEATURE]** (`ktx-collections`) Added null-safe `size()` method to LibGDX `IntArray`, `FloatArray` and `BooleanArray`
 collections.
 - **[FEATURE]** (`ktx-collections`) Added null-safe extension property `lastIndex` to LibGDX `ArrayList` equivalents:
