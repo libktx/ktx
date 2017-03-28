@@ -2,7 +2,8 @@ language: java
 jdk:
   - oraclejdk8
 
-script: gradle assemble install check -x dokka -x dokkaJavadoc
+install: gradle assemble install -x dokka -x dokkaJavadoc
+script: gradle check
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
