@@ -1,3 +1,7 @@
+#### 1.9.6-SNAPSHOT
+
+- **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` to LibGDX `ArrayList` equivalent: `Array`.
+
 #### 1.9.6-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.6.

@@ -21,10 +21,13 @@ necessary.
 - `Array` instances can be constructed with `gdxArrayOf` methods, similarly to how you create native arrays in Kotlin.
 - Null-safe `isEmpty()`, `isNotEmpty()` and `size()` methods where added. They allow you to inspect the collection even
 if the variable is a possible null.
+- Null-safe property `lastIndex` was added. It returns index of last element in the list or `-1` if the list is empty
+or null.
 - `+` and `-` operators were overridden: they allow to add and remove elements from the collection. They can be invoked
 with a compatible element type or another collection storing values of the same type. Both operator invocations can be
 chained.
 - `getLast` and `removeLast` utility extension methods were added.
+- Utility `sortDescending`, `sortBy` and `sortByDescending` extension methods were added to ease list sorting.
 - Get-or-else extension method was added and is available through `array[index, alternative]` syntax.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows to iterate over collection's elements, while providing reference to `MutableInterator`. Can be
