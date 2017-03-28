@@ -89,7 +89,7 @@ class MapsTest {
   fun shouldAllowToIterateWithIteratorReference() {
     val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
     assertEquals(3, map.size)
-    map.iterate { key, value, iterator -> if (value == "1") iterator.remove() }
+    map.iterate { _, value, iterator -> if (value == "1") iterator.remove() }
     assertEquals(2, map.size)
     assertFalse(1 in map)
     assertFalse(map.containsValue("1", false))
@@ -243,7 +243,7 @@ class MapsTest {
     val keyToRemove = 1
     val map = gdxIdentityMapOf(keyToRemove to "1", 2 to "2", 3 to "3")
     assertEquals(3, map.size)
-    map.iterate { key, value, iterator -> if (value == "1") iterator.remove() }
+    map.iterate { _, value, iterator -> if (value == "1") iterator.remove() }
     assertEquals(2, map.size)
     assertFalse(keyToRemove in map)
     assertFalse(map.containsValue("1", false))
