@@ -323,6 +323,42 @@ class ArraysTest {
   }
 
   @Test
+  fun shouldSortElementsInDescendingNaturalOrder() {
+    val array = GdxArray.with(1, 2, 3)
+    assertEquals(1, array[0])
+    assertEquals(2, array[1])
+    assertEquals(3, array[2])
+    array.sortDescending()
+    assertEquals(3, array[0])
+    assertEquals(2, array[1])
+    assertEquals(1, array[2])
+  }
+
+  @Test
+  fun shouldSortElementsByHigherOrderFunction() {
+    val array = GdxArray.with("Twenty-one", "Eleven", "One")
+    assertEquals("Twenty-one", array[0])
+    assertEquals("Eleven", array[1])
+    assertEquals("One", array[2])
+    array.sortBy { it.length }
+    assertEquals("One", array[0])
+    assertEquals("Eleven", array[1])
+    assertEquals("Twenty-one", array[2])
+  }
+
+  @Test
+  fun shouldSortElementsByHigherOrderFunctionInDescendingOrder() {
+    val array = GdxArray.with("One", "Eleven", "Twenty-one")
+    assertEquals("One", array[0])
+    assertEquals("Eleven", array[1])
+    assertEquals("Twenty-one", array[2])
+    array.sortByDescending { it.length }
+    assertEquals("Twenty-one", array[0])
+    assertEquals("Eleven", array[1])
+    assertEquals("One", array[2])
+  }
+
+  @Test
   fun shouldConvertArrayToSet() {
     val array = GdxArray.with("1", "2", "3").toGdxSet()
     assertEquals(3, array.size)

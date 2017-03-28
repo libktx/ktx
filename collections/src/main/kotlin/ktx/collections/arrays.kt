@@ -198,6 +198,27 @@ inline fun <Type> GdxArray<Type>.iterate(action: (Type, MutableIterator<Type>) -
 }
 
 /**
+ * Sorts elements in the array in-place descending according to their natural sort order.
+ */
+fun <Type : Comparable<Type>> GdxArray<out Type>.sortDescending(): Unit {
+  this.sort(reverseOrder())
+}
+
+/**
+ * Sorts elements in the array in-place according to natural sort order of the value returned by specified [selector] function.
+ */
+inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortBy(crossinline selector: (Type) -> R?): Unit {
+  if (size > 1) this.sort(compareBy(selector))
+}
+
+/**
+ * Sorts elements in the array in-place descending according to natural sort order of the value returned by specified [selector] function.
+ */
+inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossinline selector: (Type) -> R?): Unit {
+  if (size > 1) this.sort(compareByDescending(selector))
+}
+
+/**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary. Defaults to array size.
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
  * @return values copied from this array stored in a LibGDX set.
