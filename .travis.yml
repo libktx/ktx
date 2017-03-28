@@ -2,6 +2,8 @@ language: java
 jdk:
   - oraclejdk8
 
+script: gradle assemble install check -x dokka -x dokkaJavadoc
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
