@@ -39,22 +39,16 @@ subprojects {
   version = libVersion
   archivesBaseName = projectName
 
-  configurations {
-    deployerJars
-  }
-
-  jar {
-    from project.sourceSets.main.output
-    baseName = archivesBaseName
-  }
-
   dependencies {
     provided "com.badlogicgames.gdx:gdx:$gdxVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    deployerJars "org.apache.maven.wagon:wagon-ssh:$wagonVersion"
-    deployerJars "org.apache.maven.wagon:wagon-http:$wagonVersion"
+  }
+
+  jar {
+    from project.sourceSets.main.output
+    baseName = archivesBaseName
   }
 
   task javadocJar(type: Jar) {

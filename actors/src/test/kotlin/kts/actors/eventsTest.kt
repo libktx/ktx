@@ -17,6 +17,7 @@ import org.junit.Test
  * Tests events and listeners utilities.
  * @author MJ
  */
+@Suppress("UNUSED_PARAMETER") // Unused lambda parameters showcase the listeners API.
 class EventsTest {
   @Test
   fun shouldAttachChangeListener() {
@@ -35,7 +36,6 @@ class EventsTest {
     val listener = actor.onClick { event, actor -> }
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    // Input events require too much mocks to work. It is assumed ClickListener is implemented properly.
     assertTrue(listener is ClickListener)
   }
 
