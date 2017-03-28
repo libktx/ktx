@@ -131,7 +131,7 @@ class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, 
 
 /** Extends [Container] API with type-safe widget builders. Note that this widget may store only a single child.
  * @author MJ */
-class KContainer<T : Actor>() : Container<T>(), KGroup {
+class KContainer<T : Actor> : Container<T>(), KGroup {
   @Suppress("UNCHECKED_CAST")
   override fun addActor(actor: Actor?) {
     if (this.actor != null) throw IllegalStateException("Container may store only a single child.")

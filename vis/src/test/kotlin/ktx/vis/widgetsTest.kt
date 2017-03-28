@@ -12,14 +12,13 @@ import org.mockito.Mockito
 
 /** @author Kotcrab */
 
+class VisTableWidgetFactoryTest : TableBasedWidgetTest({ table(false, it) })
 
-class VisTableWidgetFactoryTest() : TableBasedWidgetTest({ table(false, it) })
+class ButtonTableWidgetFactoryTest : TableBasedWidgetTest({ buttonTable(false, it) })
 
-class ButtonTableWidgetFactoryTest() : TableBasedWidgetTest({ buttonTable(false, it) })
+class ToastTableFactoryTest : TableBasedWidgetTest({ toastTable(false, it) })
 
-class ToastTableFactoryTest() : TableBasedWidgetTest({ toastTable(false, it) })
-
-class WindowWidgetFactoryTest() : TableBasedWidgetTest({ window("title", DEFAULT_STYLE, it) })
+class WindowWidgetFactoryTest : TableBasedWidgetTest({ window("title", DEFAULT_STYLE, it) })
 
 class ButtonWidgetFactoryTest : TableBasedWidgetTest({ actor(KButton(DEFAULT_STYLE), it) })
 
@@ -35,25 +34,25 @@ class VisImageTextButtonWidgetFactoryTest : TableBasedWidgetTest({ actor(KVisIma
 
 class VisTreeWidgetFactoryTest : WidgetGroupBasedWidgetTest({ actor(KVisTree(DEFAULT_STYLE), it) })
 
-class StackWidgetFactoryTest() : WidgetGroupBasedWidgetTest(::stack)
+class StackWidgetFactoryTest : WidgetGroupBasedWidgetTest(::stack)
 
 class SpinnerWidgetFactoryTest : TableBasedWidgetTest({ actor(KSpinner(DEFAULT_STYLE, "", IntSpinnerModel(0, 0, 100)), it) })
 
-class HorizontalGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest(::horizontalGroup)
+class HorizontalGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest(::horizontalGroup)
 
-class HorizontalFlowGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest({ horizontalFlowGroup(0f, it) })
+class HorizontalFlowGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest({ horizontalFlowGroup(0f, it) })
 
-class VerticalGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest(::verticalGroup)
+class VerticalGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest(::verticalGroup)
 
-class VerticalFlowGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest({ verticalFlowGroup(0f, it) })
+class VerticalFlowGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest({ verticalFlowGroup(0f, it) })
 
-class GridGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest({ gridGroup(1f, 1f, it) })
+class GridGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest({ gridGroup(1f, 1f, it) })
 
-class FloatingGroupWidgetFactoryTest() : WidgetGroupBasedWidgetTest(::floatingGroup)
+class FloatingGroupWidgetFactoryTest : WidgetGroupBasedWidgetTest(::floatingGroup)
 
-class FloatingGroupWidgetFactoryTestWithPrefSize() : WidgetGroupBasedWidgetTest({ floatingGroup(1f, 1f, it) })
+class FloatingGroupWidgetFactoryTestWithPrefSize : WidgetGroupBasedWidgetTest({ floatingGroup(1f, 1f, it) })
 
-class DragPaneWidgetFactoryTest() : WidgetGroupBasedWidgetTest({ actor(KDragPane(HorizontalGroup()), it) })
+class DragPaneWidgetFactoryTest : WidgetGroupBasedWidgetTest({ actor(KDragPane(HorizontalGroup()), it) })
 
 abstract class TableBasedWidgetTest(val widgetProvider: (TableWidgetFactory.() -> Unit) -> Table) : NeedsLibgdx() {
   @Test

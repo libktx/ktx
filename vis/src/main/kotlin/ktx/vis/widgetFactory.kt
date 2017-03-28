@@ -245,6 +245,10 @@ interface WidgetFactory<R> {
   /** @see [CollapsibleWidget] */
   fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit = {}): R = actor(CollapsibleWidget(table), init)
 
+  /** @see [HorizontalCollapsibleWidget] */
+  fun horizontalCollapsible(table: Table, init: HorizontalCollapsibleWidget.() -> Unit = {}): R =
+      actor(HorizontalCollapsibleWidget(table), init)
+
   /** @see [ButtonBar] */
   fun buttonBar(order: String? = null, tableContainerInit: VisTable.() -> Unit = {}, init: KButtonBar.() -> Unit): FactoryPair<ButtonBar, R> {
     val bar = if (order == null) KButtonBar() else KButtonBar(order)
@@ -435,6 +439,9 @@ interface TableWidgetFactory : WidgetFactory<Cell<*>> {
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): Cell<CollapsibleWidget>
       = super.collapsible(table, init) as Cell<CollapsibleWidget>
 
+  override fun horizontalCollapsible(table: Table, init: HorizontalCollapsibleWidget.() -> Unit): Cell<*>
+      = super.horizontalCollapsible(table, init) as Cell<HorizontalCollapsibleWidget>
+
   override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): FactoryCellTablePair<ButtonBar> {
     val (bar, cell) = super.buttonBar(order, tableContainerInit, init)
     return FactoryCellTablePair(bar, cell as Cell<VisTable>)
@@ -607,6 +614,9 @@ interface WidgetGroupWidgetFactory : WidgetFactory<Actor> {
 
   override fun collapsible(table: Table, init: CollapsibleWidget.() -> Unit): CollapsibleWidget
       = super.collapsible(table, init) as CollapsibleWidget
+
+  override fun horizontalCollapsible(table: Table, init: HorizontalCollapsibleWidget.() -> Unit): HorizontalCollapsibleWidget
+      = super.horizontalCollapsible(table, init) as HorizontalCollapsibleWidget
 
   override fun buttonBar(order: String?, tableContainerInit: VisTable.() -> Unit, init: KButtonBar.() -> Unit): FactoryTablePair<ButtonBar> {
     val (bar, table) = super.buttonBar(order, tableContainerInit, init)

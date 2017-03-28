@@ -19,9 +19,7 @@ import com.kotcrab.vis.ui.widget.toast.ToastTable
 /** @author Kotcrab */
 
 /** @see [VisTable] */
-class KVisTable : VisTable, TableWidgetFactory {
-  constructor(setVisDefaults: Boolean) : super(setVisDefaults)
-
+class KVisTable(setVisDefaults: Boolean) : VisTable(setVisDefaults), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
@@ -29,10 +27,8 @@ class KVisTable : VisTable, TableWidgetFactory {
  * [VisTable] that a appends all buttons to internal [ButtonGroup] before adding them to table. Others actors are
  * added to table normally.
  */
-class KButtonTable : VisTable, TableWidgetFactory {
+class KButtonTable(setVisDefaults: Boolean) : VisTable(setVisDefaults), TableWidgetFactory {
   val buttonGroup: ButtonGroup<Button> = ButtonGroup()
-
-  constructor(setVisDefaults: Boolean) : super(setVisDefaults)
 
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> {
     if (actor is Button) {
@@ -43,44 +39,32 @@ class KButtonTable : VisTable, TableWidgetFactory {
 }
 
 /** @see [ToastTable] */
-class KToastTable : ToastTable, TableWidgetFactory {
-  constructor(setVisDefaults: Boolean) : super(setVisDefaults)
-
+class KToastTable(setVisDefaults: Boolean) : ToastTable(setVisDefaults), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisWindow] */
-class KVisWindow : VisWindow, TableWidgetFactory {
-  constructor(title: String, styleName: String) : super(title, styleName)
-
+class KVisWindow(title: String, styleName: String) : VisWindow(title, styleName), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [Button] */
-class KButton : Button, TableWidgetFactory {
-  constructor(styleName: String) : super(VisUI.getSkin(), styleName)
-
+class KButton(styleName: String) : Button(VisUI.getSkin(), styleName), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisCheckBox] */
-class KVisCheckBox : VisCheckBox, TableWidgetFactory {
-  constructor(text: String, styleName: String) : super(text, styleName)
-
+class KVisCheckBox(text: String, styleName: String) : VisCheckBox(text, styleName), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisRadioButton] */
-class KVisRadioButton : VisRadioButton, TableWidgetFactory {
-  constructor(text: String) : super(text)
-
+class KVisRadioButton(text: String) : VisRadioButton(text), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisTextButton] */
-class KVisTextButton : VisTextButton, TableWidgetFactory {
-  constructor(text: String, styleName: String) : super(text, styleName)
-
+class KVisTextButton(text: String, styleName: String) : VisTextButton(text, styleName), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
@@ -93,16 +77,12 @@ class KVisImageButton : VisImageButton, TableWidgetFactory {
 }
 
 /** @see [VisImageTextButton] */
-class KVisImageTextButton : VisImageTextButton, TableWidgetFactory {
-  constructor(text: String, styleName: String) : super(text, styleName)
-
+class KVisImageTextButton(text: String, styleName: String) : VisImageTextButton(text, styleName), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [VisTree] */
-class KVisTree : VisTree, WidgetGroupWidgetFactory {
-  constructor(styleName: String) : super(styleName)
-
+class KVisTree(styleName: String) : VisTree(styleName), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
@@ -110,23 +90,17 @@ class KVisTree : VisTree, WidgetGroupWidgetFactory {
 }
 
 /** @see [BasicColorPicker] */
-class KBasicColorPicker : BasicColorPicker, TableWidgetFactory {
-  constructor(styleName: String) : super(styleName, null)
-
+class KBasicColorPicker(styleName: String) : BasicColorPicker(styleName, null), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [ExtendedColorPicker] */
-class KExtendedColorPicker : ExtendedColorPicker, TableWidgetFactory {
-  constructor(styleName: String) : super(styleName, null)
-
+class KExtendedColorPicker(styleName: String) : ExtendedColorPicker(styleName, null), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
 /** @see [Spinner] */
-class KSpinner : Spinner, TableWidgetFactory {
-  constructor(styleName: String, name: String, model: SpinnerModel) : super(styleName, name, model)
-
+class KSpinner(styleName: String, name: String, model: SpinnerModel) : Spinner(styleName, name, model), TableWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Cell<*> = add(actor)
 }
 
@@ -137,14 +111,11 @@ class KButtonBar : ButtonBar, VoidWidgetFactory {
 }
 
 /** @see [ListView] */
-class KListView<ItemT> : ListView<ItemT>, VoidWidgetFactory {
-  constructor(adapter: ListAdapter<ItemT>, styleName: String) : super(adapter, styleName)
-}
+class KListView<ItemT>(adapter: ListAdapter<ItemT>, styleName: String)
+  : ListView<ItemT>(adapter, styleName), VoidWidgetFactory
 
 /** @see [Stack] */
-class KStack : Stack, WidgetGroupWidgetFactory {
-  constructor() : super()
-
+class KStack : Stack(), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
@@ -160,9 +131,7 @@ class KHorizontalGroup : HorizontalGroup(), WidgetGroupWidgetFactory {
 }
 
 /** @see [HorizontalFlowGroup] */
-class KHorizontalFlowGroup : HorizontalFlowGroup, WidgetGroupWidgetFactory {
-  constructor(spacing: Float) : super(spacing)
-
+class KHorizontalFlowGroup(spacing: Float) : HorizontalFlowGroup(spacing), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
@@ -178,9 +147,7 @@ class KVerticalGroup : VerticalGroup(), WidgetGroupWidgetFactory {
 }
 
 /** @see [VerticalFlowGroup] */
-class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
-  constructor(spacing: Float) : super(spacing)
-
+class KVerticalFlowGroup(spacing: Float) : VerticalFlowGroup(spacing), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
@@ -188,9 +155,7 @@ class KVerticalFlowGroup : VerticalFlowGroup, WidgetGroupWidgetFactory {
 }
 
 /** @see [GridGroup] */
-class KGridGroup : GridGroup, WidgetGroupWidgetFactory {
-  constructor(itemSize: Float, spacing: Float) : super(itemSize, spacing)
-
+class KGridGroup(itemSize: Float, spacing: Float) : GridGroup(itemSize, spacing), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     addActor(actor)
     return actor
@@ -209,9 +174,7 @@ class KFloatingGroup : FloatingGroup, WidgetGroupWidgetFactory {
 }
 
 /** @see [DragPane] */
-class KDragPane : DragPane, WidgetGroupWidgetFactory {
-  constructor(group: WidgetGroup) : super(group)
-
+class KDragPane(group: WidgetGroup) : DragPane(group), WidgetGroupWidgetFactory {
   override fun addActorToWidgetGroup(actor: Actor): Actor {
     // addActor is not deprecated in DragPane but it's deprecated in Container, in Java warning wouldn't be shown here
     @Suppress("DEPRECATION")
@@ -221,9 +184,7 @@ class KDragPane : DragPane, WidgetGroupWidgetFactory {
 }
 
 /** @see [TabbedPane] */
-class KTabbedPane : TabbedPane {
-  constructor(styleName: String) : super(styleName)
-
+class KTabbedPane(styleName: String) : TabbedPane(styleName) {
   /**
    * Begins creation of new tab using type-safe builder, newly created tab will be added to tabbed pane automatically
    * so there is no need to call [add] manually.

@@ -18,7 +18,7 @@ import org.junit.Test
  * @author Kotcrab
  */
 @Ignore("Base class for others tests should not be tested")
-abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
+abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   @Test
   fun shouldCreateLabel() = testFactoryMethod({ it.label("label") })
 
@@ -161,6 +161,9 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   fun shouldCreateCollapsible() = testFactoryMethod({ it.collapsible(table { }) })
 
   @Test
+  fun shouldCreateHorizontalCollapsible() = testFactoryMethod({ it.horizontalCollapsible(table { }) })
+
+  @Test
   fun shouldCreateButtonBar() = testFactoryMethod({ it.buttonBar { }.result })
 
   @Test
@@ -178,7 +181,7 @@ abstract class WidgetFactoryTest<F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
   abstract fun testFactoryMethod(factoryMethodUnderTest: (F) -> FR)
 }
 
-class TableWidgetFactoryTest() : WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
+class TableWidgetFactoryTest : WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
   override fun testFactoryMethod(factoryMethodUnderTest: (TableWidgetFactory) -> Cell<*>) {
     var initInvoked = false
     table {
@@ -193,7 +196,7 @@ class TableWidgetFactoryTest() : WidgetFactoryTest<TableWidgetFactory, Cell<*>>(
   }
 }
 
-class WidgetGroupWidgetFactoryTest() : WidgetFactoryTest<WidgetGroupWidgetFactory, Actor>() {
+class WidgetGroupWidgetFactoryTest : WidgetFactoryTest<WidgetGroupWidgetFactory, Actor>() {
   override fun testFactoryMethod(factoryMethodUnderTest: (WidgetGroupWidgetFactory) -> Actor) {
     var initInvoked = false
     horizontalGroup {

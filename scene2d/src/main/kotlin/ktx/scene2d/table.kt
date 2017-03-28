@@ -1,6 +1,5 @@
 package ktx.scene2d
 
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
 /* Inlined factory methods of table-based root widgets. */
