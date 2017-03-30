@@ -2,8 +2,10 @@
 
 - **[UPDATE]** Updated to Kotlin 1.1.1.
 - **[UPDATE]** Updated to VisUI 1.3.0.
-- **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` to LibGDX  `Array`.
-- **[FEATURE]** (`ktx-vis`) Added builder methods for `HorizontalCollapsibleWidget` to parental actors: `horizontalCollapsible`.
+- **[FEATURE]** (`ktx-actors`) Added `txt` extension properties to `Label` and `TextButton` widgets.
+- **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
+- **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
+added to all parental actors.
 
 #### 1.9.6-b1
 
@@ -42,4 +44,3 @@ collections.
 - **[FEATURE]** (`ktx-style`) Implemented `ktx-style` module.
 - **[FEATURE]** (`ktx-vis`) Implemented `ktx-vis` module.
 - **[FEATURE]** (`ktx-vis-style`) Implemented `ktx-vis-style` module.
-

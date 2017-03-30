@@ -39,6 +39,13 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Global actions can be added and removed from `Stage` with `+` and `-` operators.
 - `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
 
+#### Widgets
+
+- `txt` extension property added to `Label` and `TextButton` widgets. Since types of `getText` and `setText`
+methods in both of this widgets are not compatible (get returns `StringBuilder`, set consumes a `CharSequence`), an
+extension was necessary to let these widgets fully benefit from idiomatic Kotlin properties syntax. Since Kotlin
+properties cannot overshadow Java methods, property was renamed to still hopefully readable `txt`.
+
 ### Usage examples
 
 Centering actor on a stage:
@@ -118,6 +125,22 @@ import ktx.actors.*
 button + action - otherAction
 stage + someAction // Adds action to stage root actor,
                    // affecting all actors on the stage.
+```
+
+Accessing and changing text of `Label` and `TextButton` widgets:
+
+```Kotlin
+import ktx.actors.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+
+val label = Label("text", skin)
+label.txt // Returns "text".
+label.txt = "new" // Changes current Label text to "new".
+
+val button = TextButton("Click me!", skin)
+button.txt // Returns "Click me!".
+button.txt = "Drag me!" // Changes TextButton text to "Drag me!".
 ```
 
 ### Alternatives
