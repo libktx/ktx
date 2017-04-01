@@ -20,6 +20,17 @@ optional `ApplicationListener` methods, it also automatically clears the screen 
 time step duration and max time step with its constructor parameters. This is a solid base for your `ApplicationListener`
 implementation if you like working from scratch.
 
+#### `KtxApplicationListener`
+- `KtxApplicationListener` is an `ApplicationListener` equivalent.
+Because libgdx does not utilize Java 8's 'default' for interface methods, this
+is necessary to avoid having to implement each method, even ones you do not use. Keeps your codebase more clean.
+The default implementation of each method does nothing.
+####
+
+#### `KtxInputProcessor`
+- `KtxInputProcessor` is an `InputProcessor` equivalent, similar in vein as `KtxApplicationListener`
+####
+
 #### Miscellaneous utilities
 
 - `clearScreen` is an inlined utility function that hides the OpenGL calls, allowing to clear the screen with a chosen
@@ -74,6 +85,29 @@ import ktx.app.LetterboxingViewport
 val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
 // Updating viewport on resize:
 viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
+```
+
+```Kotlin
+class MyApplicationListener : KtxApplicationListener {
+  // Maybe you only care about these two methods, only implement the ones you want to use.
+  // This can be used used in place of `KotlinApplication` if you want full control over the game loop
+  // and will write it yourself
+  override fun create() { }
+  override fun render() { }
+}
+```
+
+```Kotlin
+class MyApplicationListener : KtxInputProcessor {
+  // Maybe you only care about these two methods, only implement the ones you want to use.
+  override fun keyTyped(character: Char) { 
+    return false
+  }
+
+  override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) { 
+    return false
+  }
+}
 ```
 
 ### Alternatives

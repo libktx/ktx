@@ -34,6 +34,18 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Lambda-compatible `Actor.onScrollFocus` method was added. Allows to listen to `FocusEvents` with `scroll` type.
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
 
+##### `KtxInputListener`
+Wrapping class around `InputListener`. Methods not implemented have default implementations which no nothing.
+```Kotlin
+class MyInputListener : KtxInputListener() {
+  // Only implement the methods you care about.
+  override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) { }
+  override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
+    return false
+  }
+}
+```
+
 #### Actions
 
 - Global actions can be added and removed from `Stage` with `+` and `-` operators.
