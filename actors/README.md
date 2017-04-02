@@ -148,6 +148,8 @@ button.txt = "Drag me!" // Changes TextButton text to "Drag me!".
 Extending `KtxInputListener`:
 
 ```Kotlin
+import ktx.actors.KtxInputListener
+
 class MyInputListener : KtxInputListener() {
   // Implement the methods that handle events you plan to listen to:
   override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
