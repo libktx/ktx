@@ -123,23 +123,13 @@ class KotlinApplicationTest {
     }
   }
 
-  class MyApplicationListener : KtxApplicationListener {
-    override fun resize(width: Int, height: Int) = Unit
-    override fun create() = Unit
-    override fun render() = Unit
-    override fun resume() = Unit
-    override fun dispose() = Unit
-    override fun pause() = Unit
+  @Suppress("unused")
+  class `Should implement KtxApplicationAdapter with no methods overridden` : KtxApplicationAdapter {
+    // Guarantees all KtxApplicationAdapter methods are optional to implement.
   }
 
-  class MyInputProcessor : KtxInputProcessor {
-    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
-    override fun keyDown(keycode: Int) = false
-    override fun keyTyped(character: Char) = false
-    override fun keyUp(keycode: Int) = false
-    override fun mouseMoved(screenX: Int, screenY: Int) = false
-    override fun scrolled(amount: Int) = false
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
-    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+  @Suppress("unused")
+  class `Should implement KtxInputAdapter with no methods overridden` : KtxInputAdapter {
+    // Guarantees all KtxInputAdapter methods are optional to implement.
   }
 }

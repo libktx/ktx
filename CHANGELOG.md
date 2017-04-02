@@ -2,10 +2,10 @@
 
 - **[UPDATE]** Updated to Kotlin 1.1.1.
 - **[UPDATE]** Updated to VisUI 1.3.0.
-- **[FEATURE]** (`ktx-app`) Added `KtxApplicationListener`, a wrapping interface around `ApplicationListener`
-- **[FEATURE]** (`ktx-app`) Added `KtxInputProcessor`, a wrapping interface around `InputProcessor`
+- **[FEATURE]** (`ktx-app`) Added `KtxApplicationAdapter` which makes implementing all of `ApplicationListener` methods optional.
+- **[FEATURE]** (`ktx-app`) Added `KtxInputAdapter` which makes implementing all of `InputProcessor` methods optional.
 - **[FEATURE]** (`ktx-actors`) Added `txt` extension properties to `Label` and `TextButton` widgets.
-- **[FEATURE]** (`ktx-actors`) Added `KtxInputListener`, a wrapping interface around `InputListener`
+- **[FEATURE]** (`ktx-actors`) Added `KtxInputListener`: an `InputListener` extension with parameter types improvements.
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
 added to all parental actors.

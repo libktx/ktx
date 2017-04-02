@@ -147,9 +147,8 @@ inline fun <Widget : Actor> Widget.onKeyboardFocus(catchEvent: Boolean = false,
 }
 
 /**
- * Extends [com.badlogic.gdx.scenes.scene2d.InputListener] for the sole purpose of getting
- * guarantees on nullability as well as optional methods.
- * Methods not implemented have a default implementation.
+ * Extends [com.badlogic.gdx.scenes.scene2d.InputListener] for the sole purpose of getting guarantees on nullability.
+ * Provides no-op implementations of all methods, making them optional to implement.
  */
 open class KtxInputListener : InputListener() {
   override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) = Unit
@@ -162,5 +161,4 @@ open class KtxInputListener : InputListener() {
   override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = false
   override fun touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) = Unit
   override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = Unit
-  override fun handle(event: Event) = false
 }

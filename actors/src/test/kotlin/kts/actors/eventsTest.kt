@@ -127,17 +127,8 @@ class EventsTest {
     assertTrue(focused)
   }
 
-  class MyInputListenerTest : KtxInputListener() {
-    override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) = Unit
-    override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor?) = Unit
-    override fun keyDown(event: InputEvent, keycode: Int) = false
-    override fun keyTyped(event: InputEvent, character: Char) = false
-    override fun keyUp(event: InputEvent, keycode: Int) = false
-    override fun mouseMoved(event: InputEvent, x: Float, y: Float) = false
-    override fun scrolled(event: InputEvent, x: Float, y: Float, amount: Int) = false
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = false
-    override fun touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) = Unit
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = Unit
-    override fun handle(event: Event) = false
+  @Suppress("unused")
+  class `Should extend KtxInputListener with no methods overridden` : KtxInputListener() {
+    // Guarantees all KtxInputListener methods are optional to implement.
   }
 }

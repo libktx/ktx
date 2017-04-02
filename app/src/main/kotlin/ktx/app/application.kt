@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.GL20
  *    reported by [Gdx.graphics]. Defaults to 1/60.
  * @param maxDeltaTime maximum time (in seconds) stored by the application listener for fixed time step calculations.
  *    Defaults to 1 second.
- * @author MJ
  */
 abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
                                  protected val maxDeltaTime: Float = 1f) : ApplicationListener {
@@ -49,10 +48,10 @@ abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
 }
 
 /**
- * Wrapping interface around [com.badlogic.gdx.ApplicationListener].
- * Provides empty implementations of all methods (so they're optional)
+ * Wrapping interface around [com.badlogic.gdx.ApplicationListener]. Provides no-op implementations of all methods,
+ * making them optional to implement.
  */
-interface KtxApplicationListener : ApplicationListener {
+interface KtxApplicationAdapter : ApplicationListener {
   override fun resize(width: Int, height: Int) = Unit
   override fun create() = Unit
   override fun render() = Unit
@@ -62,10 +61,10 @@ interface KtxApplicationListener : ApplicationListener {
 }
 
 /**
- * Wrapping interface around [com.badlogic.gdx.InputProcessor].
- * Provides empty implementations of all methods (so they're optional)
+ * Wrapping interface around [com.badlogic.gdx.InputProcessor]. Provides empty implementations of all methods,
+ * making them optional to implement.
  */
-interface KtxInputProcessor : InputProcessor {
+interface KtxInputAdapter : InputProcessor {
   override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
   override fun keyDown(keycode: Int) = false
   override fun keyTyped(character: Char) = false
@@ -84,6 +83,6 @@ interface KtxInputProcessor : InputProcessor {
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun clearScreen(red: Float, green: Float, blue: Float) {
-  Gdx.gl.glClearColor(red, green, blue, 1f);
-  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+  Gdx.gl.glClearColor(red, green, blue, 1f)
+  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 }

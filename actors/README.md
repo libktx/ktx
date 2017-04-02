@@ -33,18 +33,8 @@ events.) Attaches `ClickListeners`.
 with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see LibGDX `Keys` class).
 - Lambda-compatible `Actor.onScrollFocus` method was added. Allows to listen to `FocusEvents` with `scroll` type.
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
-
-##### `KtxInputListener`
-Wrapping class around `InputListener`. Methods not implemented have default implementations which no nothing.
-```Kotlin
-class MyInputListener : KtxInputListener() {
-  // Only implement the methods you care about.
-  override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) { }
-  override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
-    return false
-  }
-}
-```
+- `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
+improvements (nullability data).
 
 #### Actions
 
@@ -153,6 +143,18 @@ label.txt = "new" // Changes current Label text to "new".
 val button = TextButton("Click me!", skin)
 button.txt // Returns "Click me!".
 button.txt = "Drag me!" // Changes TextButton text to "Drag me!".
+```
+
+Extending `KtxInputListener`:
+
+```Kotlin
+class MyInputListener : KtxInputListener() {
+  // Implement the methods that handle events you plan to listen to:
+  override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+    // Do something on mouse click.
+    return true
+  }
+}
 ```
 
 ### Alternatives
