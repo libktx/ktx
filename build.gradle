@@ -23,14 +23,14 @@ subprojects {
   apply plugin: 'jacoco'
 
   ext {
-    isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
+    isReleaseVersion = !libVersion.endsWith('SNAPSHOT')
   }
 
   repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
 
   sourceCompatibility = 1.6
@@ -57,7 +57,7 @@ subprojects {
   }
 
   task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "javadoc"
+    outputFormat = 'javadoc'
     outputDirectory = "$buildDir/dokkaJavadoc"
   }
 
@@ -79,7 +79,7 @@ subprojects {
   }
 
   signing {
-    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    required { isReleaseVersion && gradle.taskGraph.hasTask('uploadArchives') }
     sign configurations.archives
   }
 
@@ -88,11 +88,11 @@ subprojects {
       mavenDeployer {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
           authentication(userName: ossrhUsername, password: ossrhPassword)
         }
 
-        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
           authentication(userName: ossrhUsername, password: ossrhPassword)
         }
 
@@ -127,8 +127,6 @@ subprojects {
     }
   }
 }
-
-project(':vis-style').compileKotlin.dependsOn(project(':style').install)
 
 nexusStaging {
   packageGroup = 'com.github.czyzby'
