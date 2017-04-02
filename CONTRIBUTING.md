@@ -17,4 +17,5 @@ an issue with your proposal first). API changes or new modules have to be discus
   - **[UPDATE]** - update of one of project dependencies.
   - **[FIX]** - bug fix.
 - Some libraries (like `ktx-collections` or `ktx-math`) list all of the features in their `README.md` files to ease
-their usage. When updating one of these projects, please add description of your change to the file.
+their usage. When updating one of these projects, please add description of your change to the file. Also, add all
+necessary imports in KTX examples to make it easier to try them out.
