@@ -37,9 +37,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.46742782"
-     inkscape:cx="205.13692"
-     inkscape:cy="417.70116"
+     inkscape:zoom="1"
+     inkscape:cx="146.37774"
+     inkscape:cy="115.94527"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -82,7 +82,7 @@
             <dc:title>KTX</dc:title>
           </cc:Agent>
         </dc:publisher>
-        <dc:identifier></dc:identifier>
+        <dc:identifier />
         <cc:license
            rdf:resource="https://unlicense.org/" />
       </cc:Work>
@@ -93,18 +93,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-852.3622)">
-    <path
-       style="fill:#168ed8;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 0,852.36216 200,0 -100,99.99999 100,100.00005 -200,0 z"
-       id="rect3350"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
-    <path
-       style="fill:#f88909;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 100,852.36214 100,0 L 0,1052.3622 0,952.36215 Z"
-       id="rect4163"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
     <rect
        style="fill:#168ed8;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect4187"
@@ -112,19 +100,30 @@
        height="190"
        x="270"
        y="862.36212" />
-    <rect
+    <path
        style="fill:#168ed8;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 200,852.36212 200,0 50,25.00008 -50,24.99992 -200,0 z"
        id="rect4185"
-       width="200"
-       height="50"
-       x="200"
-       y="852.36212" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
     <path
        style="fill:#f88909;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 400,852.36211 0,50.00004 150,149.99995 50,10e-5 0,-50 -150,-150.00009 z"
        id="rect4208-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />
+    <path
+       style="fill:#168ed8;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0,852.36216 100,4e-5 80,10 -80,89.99995 100,100.00005 -200,0 10,-50 -10,-50 z"
+       id="rect3350"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc" />
+    <path
+       style="fill:#f88909;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 100,852.36214 100,0 L 0,1052.3622 0,952.36215 Z"
+       id="rect4163"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#168ed8;fill-opacity:1;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 600,852.36215 0,50 -150,150.00005 -50,0 0,-50 150,-150.00005 z"
