@@ -31,13 +31,13 @@ Current **KTX** modules:
 - [scene2d](scene2d): type-safe Kotlin builders for `Scene2D` GUI.
 - [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles. Replace your JSON skin file today!
 - [vis](vis): type-safe Kotlin builders for `VisUI`. An _alternative_ to the [scene2d](scene2d) module.
-- [vis-style](vis-style): enhances `Skin` API with type-safe builders of VisUI widget styles. An _extension_ of [style](style) module.
+- [vis-style](vis-style): enhances `Skin` API with type-safe builders of `VisUI` widget styles. An _extension_ of [style](style) module.
 
 Note that most guides and examples assume that the reader is at least a bit familiar with the LibGDX API.
 
-Afraid to use some third-party code? Run the test suites yourself. We try to keep *every* function and class fully unit tested.
-*Reported code coverage may not be so impressive though, as the coverage tools are currently unable to calculate coverage of
-inlined methods. And there are plenty of these in some modules.*
+Afraid to use some third-party code? Browse through the sources, run the test suites. While certainly not perfect, we try to keep to
+keep the public API clean and *every* features fully unit tested. *Reported code coverage may not be so impressive though, as the
+coverage tools are currently unable to calculate coverage of inlined methods. And there are plenty of these in some modules.*
 
 ### Dependencies
 
@@ -60,7 +60,14 @@ the snapshots). For example, the first official beta release was compiled agains
 Note that even snapshots should be more or less stable, as libraries are not pushed to Maven Central if they do not pass
 the unit tests.
 
-### [Contribution and working from sources](CONTRIBUTING.md)
+### Documentation
 
-If you want to help, read the [contribution](CONTRIBUTING.md) guideline and browse through the issues to see what's currently
-to do. Before creating any pull requests, be aware that the code is dedicated to [public domain](LICENSE.md).
+Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through the
+directories in root folder to find out more about each library.
+
+### [Contribution and working from sources](.github/CONTRIBUTING.md)
+
+If you want to help, read the [contribution](.github/CONTRIBUTING.md) guideline and browse through the issues to see
+what's currently to do. Don't be afraid to create issues just to ask a question or make a request for any kind of
+improvements. Before creating any pull requests, be aware that the code is dedicated to
+[public domain](.github/LICENSE.md).
