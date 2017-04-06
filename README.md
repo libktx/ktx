@@ -2,9 +2,9 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.czyzby/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.1.1-orange.svg)](http://kotlinlang.org/)
 
-# KTX
+![KTX](.github/ktx-logo.png "KTX")
 
-**K**o**t**lin utilities for LibGD**X** applications.
+_**K**o**t**lin utilities for LibGD**X** applications._
 
 ### About the project
 
