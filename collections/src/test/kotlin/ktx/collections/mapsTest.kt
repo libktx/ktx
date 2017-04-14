@@ -290,4 +290,9 @@ class MapsTest {
     assertTrue(1 in map) // Tests contains extension (in operator).
     assertTrue(2 !in map)
   }
+
+  @Test
+  fun `should provide alias for compatibility with other LibGDX collections`() {
+    assertTrue(GdxMap<Any, Any>() is ObjectMap<Any, Any>)
+  }
 }

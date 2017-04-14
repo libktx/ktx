@@ -256,4 +256,9 @@ class SetsTest {
     assertTrue(2 in arrayAsSet)
     assertTrue(3 in arrayAsSet)
   }
+
+  @Test
+  fun `should provide alias for compatibility with other LibGDX collections`() {
+    assertTrue(GdxSet<Any>() is ObjectSet<Any>)
+  }
 }

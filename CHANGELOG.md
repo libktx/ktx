@@ -7,6 +7,14 @@
 - **[FEATURE]** (`ktx-actors`) Added `txt` extension properties to `Label` and `TextButton` widgets.
 - **[FEATURE]** (`ktx-actors`) Added `KtxInputListener`: an `InputListener` extension with parameter types improvements.
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
+- **[FEATURE]** (`ktx-collections`) Added type aliases to LibGDX collections to avoid name collisions with standard library:
+  - `GdxArray`: `com.badlogic.gdx.utils.Array`
+  - `GdxIntArray`: `com.badlogic.gdx.utils.IntArray`
+  - `GdxFloatArray`: `com.badlogic.gdx.utils.FloatArray`
+  - `GdxBooleanArray`: `com.badlogic.gdx.utils.BooleanArray`
+  - `GdxSet`: `com.badlogic.gdx.utils.ObjectSet`
+  - `GdxMap`: `com.badlogic.gdx.utils.ObjectMap`
+  - `GdxList`: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
 added to all parental actors.
 

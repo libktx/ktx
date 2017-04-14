@@ -35,6 +35,11 @@ used to easily remove collection elements during iteration.
 - Every iterable and array can be converted to `Array` using `toGdxArray` method.
 - `IntArray`, `BooleanArray` and `FloatArray` can be converted to corresponding LibGDX primitive collections using
 `toGdxArray` method.
+- Type aliases added for LibGDX collections to avoid collisions with the standard library:
+  - `GdxArray`: `com.badlogic.gdx.utils.Array`
+  - `GdxIntArray`: `com.badlogic.gdx.utils.IntArray`
+  - `GdxFloatArray`: `com.badlogic.gdx.utils.FloatArray`
+  - `GdxBooleanArray`: `com.badlogic.gdx.utils.BooleanArray`
 
 #### Sets
 
@@ -51,6 +56,7 @@ chained.
 used to easily remove collection elements during iteration.
 - Every iterable and array can be converted to `ObjectSet` using `toGdxSet` method.
 - `IntArray` can be converted to `IntSet` using `toGdxSet` method.
+- Type alias added for consistency with other collections: `GdxSet` - `com.badlogic.gdx.utils.ObjectSet`.
 
 #### Maps
 
@@ -69,6 +75,7 @@ remove elements from the map.
 - Keys stored in the map can be quickly converted to an `ObjectSet` using `toGdxSet` method.
 - Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
 has to be provided - since the method is inlined, no new lambda object will be created at runtime.
+- Type alias added for consistency with other collections: `GdxMap` - `com.badlogic.gdx.utils.ObjectMap`.
 
 #### Lists
 
@@ -77,6 +84,7 @@ the `Iterable` interface (making it rather unpleasant to use), a custom `PooledL
 and iterators, limiting garbage collection. This collection should be used for storage of objects that are often
 iterated over, and their efficient removal and insertion during iteration is necessary. It can be created with
 `gdxListOf` method. Every `Array` and `Iterable` can be converted to `PooledList` with `toGdxList` utility method.
+It features a `GdxList` type alias for consistency with other collections.
 
 #### Note
 

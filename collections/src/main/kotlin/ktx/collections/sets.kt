@@ -5,6 +5,9 @@ package ktx.collections
 import com.badlogic.gdx.utils.IntSet
 import com.badlogic.gdx.utils.ObjectSet
 
+/** Alias for [com.badlogic.gdx.utils.ObjectSet]. Added for consistency with other collections and factory methods. */
+typealias GdxSet<Element> = ObjectSet<Element>
+
 /**
  * Default LibGDX set size used by most constructors.
  */
@@ -19,8 +22,8 @@ const val defaultLoadFactor = 0.8f
  * @param loadFactor decides under what load the set is resized.
  * @return a new [ObjectSet].
  */
-fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor): ObjectSet<Type> =
-    ObjectSet(initialCapacity, loadFactor)
+fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor): GdxSet<Type> =
+    GdxSet(initialCapacity, loadFactor)
 
 /**
  * @param elements will be initially stored in the set.
@@ -29,8 +32,8 @@ fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = d
  * @return a new [ObjectSet].
  */
 inline fun <Type> gdxSetOf(vararg elements: Type, initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor):
-    ObjectSet<Type> {
-  val set = ObjectSet<Type>(initialCapacity, loadFactor)
+    GdxSet<Type> {
+  val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(*elements)
   return set
 }
@@ -39,34 +42,34 @@ inline fun <Type> gdxSetOf(vararg elements: Type, initialCapacity: Int = default
  * A method wrapper over [ObjectSet.size] variable compatible with nullable types.
  * @return current amount of elements in the set.
  */
-inline fun <Type> ObjectSet<Type>?.size(): Int = this?.size ?: 0
+inline fun <Type> GdxSet<Type>?.size(): Int = this?.size ?: 0
 
 /**
  * @return true if the set is null or has no elements.
  */
-inline fun <Type> ObjectSet<Type>?.isEmpty(): Boolean = this == null || this.size == 0
+inline fun <Type> GdxSet<Type>?.isEmpty(): Boolean = this == null || this.size == 0
 
 /**
  * @return true if the set is not null and contains at least one element.
  */
-inline fun <Type> ObjectSet<Type>?.isNotEmpty(): Boolean = this != null && this.size > 0
+inline fun <Type> GdxSet<Type>?.isNotEmpty(): Boolean = this != null && this.size > 0
 
 /**
  * @param elements will be iterated over and added to the set.
  */
-fun <Type> ObjectSet<Type>.addAll(elements: Iterable<Type>) =
+fun <Type> GdxSet<Type>.addAll(elements: Iterable<Type>) =
     elements.forEach { this.add(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> ObjectSet<Type>.removeAll(elements: Iterable<Type>) =
+fun <Type> GdxSet<Type>.removeAll(elements: Iterable<Type>) =
     elements.forEach { this.remove(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> ObjectSet<Type>.removeAll(elements: Array<out Type>) =
+fun <Type> GdxSet<Type>.removeAll(elements: Array<out Type>) =
     elements.forEach { this.remove(it) }
 
 /**
@@ -74,7 +77,7 @@ fun <Type> ObjectSet<Type>.removeAll(elements: Array<out Type>) =
  * @param element will be added to the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.plus(element: Type): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.plus(element: Type): GdxSet<Type> {
   this.add(element)
   return this
 }
@@ -84,7 +87,7 @@ operator fun <Type> ObjectSet<Type>.plus(element: Type): ObjectSet<Type> {
  * @param elements will be added to the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.plus(elements: Iterable<Type>): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.plus(elements: Iterable<Type>): GdxSet<Type> {
   this.addAll(elements)
   return this
 }
@@ -94,7 +97,7 @@ operator fun <Type> ObjectSet<Type>.plus(elements: Iterable<Type>): ObjectSet<Ty
  * @param elements will be added to the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.plus(elements: Array<out Type>): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.plus(elements: Array<out Type>): GdxSet<Type> {
   this.addAll(elements, 0, elements.size)
   return this
 }
@@ -104,7 +107,7 @@ operator fun <Type> ObjectSet<Type>.plus(elements: Array<out Type>): ObjectSet<T
  * @param element will be removed from the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.minus(element: Type): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.minus(element: Type): GdxSet<Type> {
   this.remove(element)
   return this
 }
@@ -114,7 +117,7 @@ operator fun <Type> ObjectSet<Type>.minus(element: Type): ObjectSet<Type> {
  * @param elements will be removed from the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.minus(elements: Iterable<Type>): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.minus(elements: Iterable<Type>): GdxSet<Type> {
   this.removeAll(elements)
   return this
 }
@@ -124,7 +127,7 @@ operator fun <Type> ObjectSet<Type>.minus(elements: Iterable<Type>): ObjectSet<T
  * @param elements will be removed from the set.
  * @return this set.
  */
-operator fun <Type> ObjectSet<Type>.minus(elements: Array<out Type>): ObjectSet<Type> {
+operator fun <Type> GdxSet<Type>.minus(elements: Array<out Type>): GdxSet<Type> {
   this.removeAll(elements)
   return this
 }
@@ -136,7 +139,7 @@ operator fun <Type> ObjectSet<Type>.minus(elements: Array<out Type>): ObjectSet<
  *      argument is the element from the set, the second is the set iterator. The iterator is guaranteed to be the same
  *      instance during one iteration.
  */
-inline fun <Type> ObjectSet<Type>.iterate(action: (Type, MutableIterator<Type>) -> Unit) {
+inline fun <Type> GdxSet<Type>.iterate(action: (Type, MutableIterator<Type>) -> Unit) {
   val iterator = iterator()
   while (iterator.hasNext) action(iterator.next(), iterator)
 }
@@ -147,7 +150,7 @@ inline fun <Type> ObjectSet<Type>.iterate(action: (Type, MutableIterator<Type>) 
  * @param initialCapacity initial size of the backing array. Defaults to set size.
  * @return values copied from this set stored in a LibGDX array.
  */
-inline fun <reified Type : Any> ObjectSet<Type>.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size):
+inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size):
     com.badlogic.gdx.utils.Array<Type> {
   val array = com.badlogic.gdx.utils.Array<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
@@ -160,8 +163,8 @@ inline fun <reified Type : Any> ObjectSet<Type>.toGdxArray(ordered: Boolean = tr
  * @return values copied from this iterable stored in a LibGDX set.
  */
 fun <Type> Iterable<Type>.toGdxSet(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor):
-    ObjectSet<Type> {
-  val set = ObjectSet<Type>(initialCapacity, loadFactor)
+    GdxSet<Type> {
+  val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
   return set
 }
@@ -172,7 +175,7 @@ fun <Type> Iterable<Type>.toGdxSet(initialCapacity: Int = defaultSetSize, loadFa
  * @return values copied from this iterable stored in a LibGDX set.
  */
 fun <Type> Array<Type>.toGdxSet(initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor):
-    ObjectSet<Type> = gdxSetOf(*this, initialCapacity = initialCapacity, loadFactor = loadFactor)
+    GdxSet<Type> = gdxSetOf(*this, initialCapacity = initialCapacity, loadFactor = loadFactor)
 
 /**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary. Defaults to this array size.

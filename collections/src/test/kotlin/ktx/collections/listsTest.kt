@@ -46,6 +46,11 @@ class ListsTest {
     assertEquals("1", list.first)
     assertEquals("3", list.last)
   }
+
+  @Test
+  fun `should provide alias for compatibility with other LibGDX collections`() {
+    assertTrue(GdxList<Any>(NodePool) is PooledList<Any>)
+  }
 }
 
 /**

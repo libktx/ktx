@@ -2,11 +2,14 @@
 
 package ktx.collections
 
-import com.badlogic.gdx.utils.ObjectSet
-import com.badlogic.gdx.utils.Array as GdxArray
-import com.badlogic.gdx.utils.BooleanArray as GdxBooleanArray
-import com.badlogic.gdx.utils.FloatArray as GdxFloatArray
-import com.badlogic.gdx.utils.IntArray as GdxIntArray
+/** Alias for [com.badlogic.gdx.utils.Array] avoiding name collision with the standard library. */
+typealias GdxArray<Element> = com.badlogic.gdx.utils.Array<Element>
+/** Alias for [com.badlogic.gdx.utils.BooleanArray] avoiding name collision with the standard library. */
+typealias GdxBooleanArray = com.badlogic.gdx.utils.BooleanArray
+/** Alias for [com.badlogic.gdx.utils.FloatArray] avoiding name collision with the standard library. */
+typealias GdxFloatArray = com.badlogic.gdx.utils.FloatArray
+/** Alias for [com.badlogic.gdx.utils.IntArray] avoiding name collision with the standard library. */
+typealias GdxIntArray = com.badlogic.gdx.utils.IntArray
 
 /**
  * Default LibGDX array size used by most constructors.
@@ -224,8 +227,8 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
  * @return values copied from this array stored in a LibGDX set.
  */
 fun <Type : Any> GdxArray<Type>.toGdxSet(initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor):
-    ObjectSet<Type> {
-  val set = ObjectSet<Type>(initialCapacity, loadFactor)
+    GdxSet<Type> {
+  val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
   return set
 }

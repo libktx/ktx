@@ -2,10 +2,6 @@ package ktx.collections
 
 import org.junit.Assert.*
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
-import com.badlogic.gdx.utils.BooleanArray as GdxBooleanArray
-import com.badlogic.gdx.utils.FloatArray as GdxFloatArray
-import com.badlogic.gdx.utils.IntArray as GdxIntArray
 
 /**
  * Tests utilities for LibGDX custom ArrayList equivalent - Array.
@@ -419,5 +415,13 @@ class ArraysTest {
     assertEquals(true, booleanArray[0])
     assertEquals(false, booleanArray[1])
     assertEquals(true, booleanArray[2])
+  }
+
+  @Test
+  fun `should provide aliases for collections with conflicting names`() {
+    assertTrue(GdxArray<Any>() is com.badlogic.gdx.utils.Array<Any>)
+    assertTrue(GdxIntArray() is com.badlogic.gdx.utils.IntArray)
+    assertTrue(GdxFloatArray() is com.badlogic.gdx.utils.FloatArray)
+    assertTrue(GdxBooleanArray() is com.badlogic.gdx.utils.BooleanArray)
   }
 }

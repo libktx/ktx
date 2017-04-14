@@ -5,6 +5,9 @@ import ktx.collections.NodePool.clear
 import ktx.collections.PooledList.Node
 import java.util.NoSuchElementException
 
+/** Alias for [ktx.collections.PooledList]. Added for consistency with other collections and factory methods. */
+typealias GdxList<Element> = PooledList<Element>
+
 /**
  * LinkedList equivalent for LibGDX applications that caches its nodes and iterator to generate as little garbage as
  * possible. As opposed to LibGDX PooledLinkedList, this list implements [Iterable] and has more Kotlin-friendly syntax
