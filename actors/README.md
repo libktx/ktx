@@ -20,7 +20,7 @@ a `Group` with `actor in group` syntax.
 - `Group` and `Stage` support actor adding and removal through `+` and `-` operators.
 - `Stage.contains(Actor)` method was added to support `in` operator. This will report `true` if the `Actor` is on the
 `Stage` (it does not have to be a direct child of `Stage` root group).
-- `Actor.alpha` and `Stage.alpha` mock-up fields were added to support easy modification of `Color.a` value.
+- `Actor.alpha` and `Stage.alpha` inlined extension properties were added to support easy modification of `Color.a` value.
 - `Actor.setKeyboardFocus` and `.setScrollFocus` allow to quickly (un)focus the actor on its stage.
 
 #### Event listeners
@@ -43,7 +43,7 @@ improvements (nullability data).
 
 #### Widgets
 
-- `txt` extension property added to `Label` and `TextButton` widgets. Since types of `getText` and `setText`
+- `txt` inlined extension properties added to `Label` and `TextButton` widgets. Since types of `getText` and `setText`
 methods in both of this widgets are not compatible (get returns `StringBuilder`, set consumes a `CharSequence`), an
 extension was necessary to let these widgets fully benefit from idiomatic Kotlin properties syntax. Since Kotlin
 properties cannot overshadow Java methods, property was renamed to still hopefully readable `txt`.

@@ -115,7 +115,7 @@ fun Actor.keepWithinParent() {
 /**
  * Links to this actor's [Actor.color] instance. Allows to easily modify alpha color value.
  */
-var Actor.alpha: Float
+inline var Actor.alpha: Float
   get() = this.color.a
   set(value) {
     this.color.a = value
@@ -124,7 +124,7 @@ var Actor.alpha: Float
 /**
  * Links to this [Stage.root].color instance. Allows to easily modify alpha color value of stage.
  */
-var Stage.alpha: Float
+inline var Stage.alpha: Float
   get() = this.root.color.a
   set(value) {
     this.root.color.a = value
