@@ -16,6 +16,7 @@
   - **`GdxSet`**: `com.badlogic.gdx.utils.ObjectSet`
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
+- **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
 added to all parental actors.
 

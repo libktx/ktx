@@ -19,25 +19,25 @@ const val defaultArraySize = 16
 /**
  * Returns the last valid index for the array. -1 if the array is empty.
  */
-val <Type> GdxArray<Type>?.lastIndex: Int
+inline val <Type> GdxArray<Type>?.lastIndex: Int
   get() = size() - 1
 
 /**
  * Returns the last valid index for the array. -1 if the array is empty.
  */
-val GdxIntArray?.lastIndex: Int
+inline val GdxIntArray?.lastIndex: Int
   get() = size() - 1
 
 /**
  * Returns the last valid index for the array. -1 if the array is empty.
  */
-val GdxFloatArray?.lastIndex: Int
+inline val GdxFloatArray?.lastIndex: Int
   get() = size() - 1
 
 /**
  * Returns the last valid index for the array. -1 if the array is empty.
  */
-val GdxBooleanArray?.lastIndex: Int
+inline val GdxBooleanArray?.lastIndex: Int
   get() = size() - 1
 
 /**

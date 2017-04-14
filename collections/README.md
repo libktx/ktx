@@ -21,8 +21,8 @@ necessary.
 - `Array` instances can be constructed with `gdxArrayOf` methods, similarly to how you create native arrays in Kotlin.
 - Null-safe `isEmpty()`, `isNotEmpty()` and `size()` methods where added. They allow you to inspect the collection even
 if the variable is a possible null.
-- Null-safe property `lastIndex` was added. It returns index of last element in the list or `-1` if the list is empty
-or null.
+- Null-safe inlined extension property `lastIndex` was added. It returns index of last element in the list - or `-1` if
+the list is null or empty.
 - `+` and `-` operators were overridden: they allow to add and remove elements from the collection. They can be invoked
 with a compatible element type or another collection storing values of the same type. Both operator invocations can be
 chained.
