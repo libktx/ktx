@@ -7,8 +7,9 @@ the fastest way to contact the developers.
 ## Pull requests
 
 - Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
-- Make sure to include unit tests of your code. As a side note: vanilla `JUnit` was probably not the best choice for
-a testing framework of a Kotlin-based project, so it is OK to include your favorite Kotlin alternative.
+- Make sure to include unit tests of your code. Older tests are not idiomatic Kotlin code and were written with vanilla
+JUnit and Mockito - all new tests should use [KotlinTest](https://github.com/kotlintest/kotlintest) framework along with
+[Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
 - If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue (or create
 an issue with your proposal first). API changes or new modules have to be discussed with the maintainers first.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
