@@ -24,55 +24,55 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateButton() = test { button() }
+  fun `should create Button`() = test { button() }
 
   @Test
-  fun shouldCreateButtonGroup() = test { buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) }
+  fun `should create ButtonGroup`() = test { buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) }
 
   @Test
-  fun shouldCreateCheckBox() = test(widget = { checkBox("Test.") },
+  fun `should create CheckBox`() = test(widget = { checkBox("Test.") },
       validate = {
         assertEquals("Test.", it.text.toString())
       })
 
   @Test
-  fun shouldCreateContainer() = test { container() }
+  fun `should create Container`() = test { container() }
 
   @Test
-  fun shouldCreateHorizontalGroup() = test { horizontalGroup() }
+  fun `should create HorizontalGroup`() = test { horizontalGroup() }
 
   @Test
-  fun shouldCreateImage() = test(widget = { image(drawable = "button") },
+  fun `should create Image`() = test(widget = { image(drawable = "button") },
       validate = {
         assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
       })
 
   @Test
-  fun shouldCreateImageButton() = test { imageButton() }
+  fun `should create ImageButton`() = test { imageButton() }
 
   @Test
-  fun shouldCreateImageTextButton() = test(widget = { imageTextButton("Test.") },
+  fun `should create ImageTextButton`() = test(widget = { imageTextButton("Test.") },
       validate = {
         assertEquals("Test.", it.text.toString())
       })
 
   @Test
-  fun shouldCreateLabel() = test(widget = { label("Test.") },
+  fun `should create Label`() = test(widget = { label("Test.") },
       validate = {
         assertEquals("Test.", it.text.toString())
       })
 
   @Test
-  fun shouldCreateList() = test { listWidgetOf<String>() }
+  fun `should create List`() = test { listWidgetOf<String>() }
 
   @Test
-  fun shouldCreateListWithItems() = test(widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
+  fun `should create ListWithItems`() = test(widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
       validate = {
         assertEquals(GdxArray.with("one", "two", "three"), it.items)
       })
 
   @Test
-  fun shouldCreateProgressBar() = test(widget = { progressBar(min = 1f, max = 2f, step = 0.5f) },
+  fun `should create ProgressBar`() = test(widget = { progressBar(min = 1f, max = 2f, step = 0.5f) },
       validate = {
         assertEquals(1f, it.minValue, TOLERANCE)
         assertEquals(2f, it.maxValue, TOLERANCE)
@@ -80,19 +80,19 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       })
 
   @Test
-  fun shouldCreateScrollPane() = test { scrollPane() }
+  fun `should create ScrollPane`() = test { scrollPane() }
 
   @Test
-  fun shouldCreateSelectBox() = test { selectBoxOf<String>() }
+  fun `should create SelectBox`() = test { selectBoxOf<String>() }
 
   @Test
-  fun shouldCreateSelectBoxWithItems() = test(widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
+  fun `should create SelectBoxWithItems`() = test(widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
       validate = {
         assertEquals(GdxArray.with("one", "two", "three"), it.items)
       })
 
   @Test
-  fun shouldCreateSlider() = test(widget = { slider(min = 1f, max = 2f, step = 0.5f) },
+  fun `should create Slider`() = test(widget = { slider(min = 1f, max = 2f, step = 0.5f) },
       validate = {
         assertEquals(1f, it.minValue, TOLERANCE)
         assertEquals(2f, it.maxValue, TOLERANCE)
@@ -100,40 +100,40 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       })
 
   @Test
-  fun shouldCreateSplitPane() = test { splitPane() }
+  fun `should create SplitPane`() = test { splitPane() }
 
   @Test
-  fun shouldCreateStack() = test { stack() }
+  fun `should create Stack`() = test { stack() }
 
   @Test
-  fun shouldCreateTable() = test { table() }
+  fun `should create Table`() = test { table() }
 
   @Test
-  fun shouldCreateTextArea() = test(widget = { textArea("Test.") },
+  fun `should create TextArea`() = test(widget = { textArea("Test.") },
       validate = {
         assertEquals("Test.", it.text)
       })
 
   @Test
-  fun shouldCreateTextButton() = test(widget = { textButton("Test.") },
+  fun `should create TextButton`() = test(widget = { textButton("Test.") },
       validate = {
         assertEquals("Test.", it.text.toString())
       })
 
   @Test
-  fun shouldCreateTextField() = test(widget = { textField("Test.") },
+  fun `should create TextField`() = test(widget = { textField("Test.") },
       validate = {
         assertEquals("Test.", it.text)
       })
 
   @Test
-  fun shouldCreateTouchpad() = test { touchpad(deadzone = 10f) }
+  fun `should create Touchpad`() = test { touchpad(deadzone = 10f) }
 
   @Test
-  fun shouldCreateTree() = test { tree() }
+  fun `should create Tree`() = test { tree() }
 
   @Test
-  fun shouldCreateVerticalGroup() = test { verticalGroup() }
+  fun `should create VerticalGroup`() = test { verticalGroup() }
 }
 
 /**
@@ -145,7 +145,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
    * storage objects like [Cell] or [Node] through init block parameter.
    */
   @Test
-  fun shouldGiveAccessToWidgetSpecificStorageObjects() {
+  fun `should give access to widget specific storage objects`() {
     stack {
       // In regular groups, children blocks point to the new actor as both 'this' and 'it'.
       label("Actor") {
@@ -189,23 +189,22 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     validate(child)
   }
 
-
   @Test
-  fun shouldCreateButton() = test {
+  fun `should create Button`() = test {
     button {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateButtonGroup() = test {
+  fun `should create ButtonGroup`() = test {
     buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateCheckBox() = test(widget = {
+  fun `should create CheckBox`() = test(widget = {
     checkBox("Test.") {
       color = Color.BLUE
     }
@@ -214,21 +213,21 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateContainer() = test {
+  fun `should create Container`() = test {
     container {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateHorizontalGroup() = test {
+  fun `should create HorizontalGroup`() = test {
     horizontalGroup {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateImage() = test(widget = {
+  fun `should create Image`() = test(widget = {
     image(drawable = "button") {
       color = Color.BLUE
     }
@@ -237,14 +236,14 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateImageButton() = test {
+  fun `should create ImageButton`() = test {
     imageButton {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateImageTextButton() = test(widget = {
+  fun `should create ImageTextButton`() = test(widget = {
     imageTextButton("Test.") {
       color = Color.BLUE
     }
@@ -253,7 +252,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateLabel() = test(widget = {
+  fun `should create Label`() = test(widget = {
     label("Test.") {
       color = Color.BLUE
     }
@@ -262,7 +261,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateList() = test(widget = {
+  fun `should create List`() = test(widget = {
     listWidget<String, Cell<*>> {
       color = Color.BLUE
       assertTrue(it is Cell<*>)
@@ -276,7 +275,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateProgressBar() = test(widget = {
+  fun `should create ProgressBar`() = test(widget = {
     progressBar(min = 1f, max = 2f, step = 0.5f) {
       color = Color.BLUE
     }
@@ -287,14 +286,14 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateScrollPane() = test {
+  fun `should create ScrollPane`() = test {
     scrollPane {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateSelectBox() = test(widget = {
+  fun `should create SelectBox`() = test(widget = {
     selectBox<String, Cell<*>> {
       color = Color.BLUE
       assertTrue(it is Cell<*>)
@@ -308,7 +307,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateSlider() = test(widget = {
+  fun `should create Slider`() = test(widget = {
     slider(min = 1f, max = 2f, step = 0.5f) {
       color = Color.BLUE
     }
@@ -319,21 +318,21 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateSplitPane() = test {
+  fun `should create SplitPane`() = test {
     splitPane {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateStack() = test {
+  fun `should create Stack`() = test {
     stack {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateTable() = test(widget = {
+  fun `should create Table`() = test(widget = {
     table {
       color = Color.BLUE
     }
@@ -342,7 +341,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateTextArea() = test(widget = {
+  fun `should create TextArea`() = test(widget = {
     textArea("Test.") {
       color = Color.BLUE
     }
@@ -351,7 +350,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateTextButton() = test(widget = {
+  fun `should create TextButton`() = test(widget = {
     textButton("Test.") {
       color = Color.BLUE
     }
@@ -360,7 +359,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateTextField() = test(widget = {
+  fun `should create TextField`() = test(widget = {
     textField("Test.") {
       color = Color.BLUE
     }
@@ -369,21 +368,21 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   })
 
   @Test
-  fun shouldCreateTouchpad() = test {
+  fun `should create Touchpad`() = test {
     touchpad(deadzone = 10f) {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateTree() = test {
+  fun `should create Tree`() = test {
     tree {
       color = Color.BLUE
     }
   }
 
   @Test
-  fun shouldCreateVerticalGroup() = test {
+  fun `should create VerticalGroup`() = test {
     verticalGroup {
       color = Color.BLUE
     }

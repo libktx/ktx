@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
  *    [TooltipManager.getInstance].
  * @return a new [TextTooltip] instance added to the actor.
  */
-fun Actor.addTextTooltip(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+fun Actor.addTextTooltip(text: String,
+                         style: String = defaultStyle,
+                         skin: Skin = Scene2DSkin.defaultSkin,
                          tooltipManager: TooltipManager = TooltipManager.getInstance()): TextTooltip {
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
   this.addListener(tooltip)
@@ -30,9 +32,11 @@ fun Actor.addTextTooltip(text: String, style: String = defaultStyle, skin: Skin 
  *    [TextTooltip] as its parameter, so it can be modified with the *it* reference as well. See usage examples.
  * @return a new [TextTooltip] instance added to the actor.
  */
-inline fun Actor.addTextTooltip(text: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun Actor.addTextTooltip(text: String,
+                                style:String = defaultStyle,
+                                skin: Skin = Scene2DSkin.defaultSkin,
                                 tooltipManager: TooltipManager = TooltipManager.getInstance(),
-                                init: Label.(TextTooltip) -> Unit): TextTooltip {
+                                init: (@Scene2dDsl Label).(TextTooltip) -> Unit): TextTooltip {
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
   tooltip.actor.init(tooltip)
   this.addListener(tooltip)
@@ -50,7 +54,8 @@ inline fun Actor.addTextTooltip(text: String, style: String = defaultStyle, skin
  *    [Tooltip] as its parameter, so it can be modified with the *it* reference. See usage examples.
  * @return a new [Tooltip] instance added to this actor.
  */
-inline fun Actor.addTooltip(background: String? = null, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun Actor.addTooltip(background: String? = null,
+                            skin: Skin = Scene2DSkin.defaultSkin,
                             tooltipManager: TooltipManager = TooltipManager.getInstance(),
                             init: KTableWidget.(Tooltip<KTableWidget>) -> Unit): Tooltip<KTableWidget> {
   val table = KTableWidget(skin)

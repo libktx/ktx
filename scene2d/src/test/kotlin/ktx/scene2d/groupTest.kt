@@ -10,7 +10,7 @@ import org.junit.Test
  */
 class GroupFactoriesTest : NeedsLibGDX() {
   @Test
-  fun shouldCreateStacks() {
+  fun `should create Stacks`() {
     val widget = stack {
       height = 100f
     }
@@ -19,7 +19,7 @@ class GroupFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateHorizontalGroups() {
+  fun `should create HorizontalGroups`() {
     val widget = horizontalGroup {
       height = 100f
     }
@@ -28,7 +28,7 @@ class GroupFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateVerticalGroups() {
+  fun `should create VerticalGroups`() {
     val widget = verticalGroup {
       height = 100f
     }
@@ -37,7 +37,7 @@ class GroupFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateContainers() {
+  fun `should create Containers`() {
     val widget = container {
       height = 100f
     }
@@ -46,7 +46,7 @@ class GroupFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateSplitPanes() {
+  fun `should create SplitPanes`() {
     val widget = splitPane {
       height = 100f
     }
@@ -55,7 +55,7 @@ class GroupFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateScrollPanes() {
+  fun `should create ScrollPanes`() {
     val widget = scrollPane {
       height = 100f
     }

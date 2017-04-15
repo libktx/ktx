@@ -9,7 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
  * @param init will be invoked on the table. Inlined.
  * @return a new [Table] instance.
  */
-inline fun table(skin: Skin = Scene2DSkin.defaultSkin, init: KTableWidget.() -> Unit) = actor(KTableWidget(skin), init)
+inline fun table(skin: Skin = Scene2DSkin.defaultSkin,
+                 init: KTableWidget.() -> Unit) = actor(KTableWidget(skin), init)
 
 /**
  * @param title will be displayed as window's title.
@@ -18,7 +19,9 @@ inline fun table(skin: Skin = Scene2DSkin.defaultSkin, init: KTableWidget.() -> 
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Window] instance.
  */
-inline fun window(title: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun window(title: String,
+                  style: String = defaultStyle,
+                  skin: Skin = Scene2DSkin.defaultSkin,
                   init: KWindow.() -> Unit) = actor(KWindow(title, skin, style), init)
 
 /**
@@ -28,7 +31,9 @@ inline fun window(title: String, style: String = defaultStyle, skin: Skin = Scen
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Dialog] instance.
  */
-inline fun dialog(title: String, style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun dialog(title: String,
+                  style: String = defaultStyle,
+                  skin: Skin = Scene2DSkin.defaultSkin,
                   init: KDialog.() -> Unit) = actor(KDialog(title, skin, style), init)
 
 /**
@@ -39,5 +44,7 @@ inline fun dialog(title: String, style: String = defaultStyle, skin: Skin = Scen
  * @return a new [KButtonTable] instance, which manages a [ButtonGroup] internally. All [Button] instances added
  *    directly to this widget will registered in the [ButtonGroup].
  */
-inline fun buttonGroup(minCheckedCount: Int, maxCheckedCount: Int, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun buttonGroup(minCheckedCount: Int,
+                       maxCheckedCount: Int,
+                       skin: Skin = Scene2DSkin.defaultSkin,
                        init: KButtonTable.() -> Unit) = actor(KButtonTable(minCheckedCount, maxCheckedCount, skin), init)

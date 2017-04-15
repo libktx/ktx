@@ -37,8 +37,10 @@ inline fun container(init: KContainer<Actor>.() -> Unit) = actor(KContainer<Acto
  * @param init will be invoked on the widget. Inlined.
  * @return a new [SplitPane] instance.
  */
-inline fun splitPane(vertical: Boolean = false, style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-                     skin: Skin = Scene2DSkin.defaultSkin, init: KSplitPane.() -> Unit) = actor(KSplitPane(vertical, skin, style), init)
+inline fun splitPane(vertical: Boolean = false,
+                     style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+                     skin: Skin = Scene2DSkin.defaultSkin,
+                     init: KSplitPane.() -> Unit) = actor(KSplitPane(vertical, skin, style), init)
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -46,5 +48,6 @@ inline fun splitPane(vertical: Boolean = false, style: String = if (vertical) de
  * @param init will be invoked on the widget. Inlined.
  * @return a new [ScrollPane] instance.
  */
-inline fun scrollPane(style: String = defaultStyle, skin: Skin = Scene2DSkin.defaultSkin,
+inline fun scrollPane(style: String = defaultStyle,
+                      skin: Skin = Scene2DSkin.defaultSkin,
                       init: KScrollPane.() -> Unit) = actor(KScrollPane(skin, style), init)

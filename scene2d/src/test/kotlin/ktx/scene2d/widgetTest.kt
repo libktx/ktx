@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
  */
 class KGroupTest {
   @Test
-  fun shouldAddWidgetToGroupAndReturnIt() {
+  fun `should add widget to group and return it`() {
     val group = TestGroup()
     val actor = Actor()
     val result = group.appendActor(actor)
@@ -24,7 +24,7 @@ class KGroupTest {
   }
 
   @Test
-  fun shouldAddWidgetToGroupAndReturnTheActorInsteadOfStorageObject() {
+  fun `should add widget to group and return the actor instead of storage object`() {
     val group = TestGroup()
     val actor = Actor()
     val result: Actor = group.storeActor(actor)
@@ -41,7 +41,7 @@ class KGroupTest {
  */
 class KTableTest {
   @Test
-  fun shouldAddWidgetToGroupAndReturnIt() {
+  fun `should add widget to group and return it`() {
     val group = TestTable()
     val actor = Actor()
     val result = group.appendActor(actor)
@@ -50,7 +50,7 @@ class KTableTest {
   }
 
   @Test
-  fun shouldAddWidgetToGroupAndReturnItsCell() {
+  fun `should add widget to group and return its cell`() {
     val group = TestTable()
     val actor = Actor()
     val result: Cell<*> = group.storeActor(actor)
@@ -67,7 +67,7 @@ class KTableTest {
  */
 class KTreeTest : NeedsLibGDX() {
   @Test
-  fun shouldAddWidgetToGroupAndReturnIt() {
+  fun `should add Widget to group and return it`() {
     val group = TestTree()
     val actor = Actor()
     val result = group.appendActor(actor)
@@ -76,7 +76,7 @@ class KTreeTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldAddWidgetToGroupAndReturnItsCell() {
+  fun `should add widget to group and return its cell`() {
     val group = TestTree()
     val actor = Actor()
     val result: Node = group.storeActor(actor)
@@ -99,7 +99,7 @@ class KTreeTest : NeedsLibGDX() {
  */
 class KButtonTableTest : NeedsLibGDX() {
   @Test
-  fun shouldAddButtonsToButtonGroup() {
+  fun `should add Buttons to ButtonGroup`() {
     val buttonTable = KButtonTable(1, 2, Skin())
     val actor = Actor()
     buttonTable.add(actor)
@@ -112,7 +112,7 @@ class KButtonTableTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldHonorCheckedButtonsConstraints() {
+  fun `should honor checked buttons constraints`() {
     val buttonTable = KButtonTable(1, 2, Skin())
     val buttons = arrayOf(Button(), Button(), Button())
     buttons.forEach { buttonTable.add(it) }
@@ -130,7 +130,7 @@ class KButtonTableTest : NeedsLibGDX() {
  */
 class KContainerTest {
   @Test
-  fun shouldStoreChild() {
+  fun `should store child`() {
     val container = KContainer<Actor>()
     val actor = Actor()
     container.addActor(actor)
@@ -139,7 +139,7 @@ class KContainerTest {
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldFailToStoreMultipleChildren() {
+  fun `should fail to store multiple children`() {
     val container = KContainer<Actor>()
     container.addActor(Actor())
     container.addActor(Actor()) // Throws.
@@ -152,7 +152,7 @@ class KContainerTest {
  */
 class KListWidgetTest : NeedsLibGDX() {
   @Test
-  fun shouldAddItems() {
+  fun `should add items`() {
     val list = KListWidget<String>(VisUI.getSkin(), defaultStyle)
     list.apply {
       -"one"
@@ -163,7 +163,7 @@ class KListWidgetTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldNotClearItemsOnRefresh() {
+  fun `should not clear items on refresh`() {
     // Normally list.setItems(list.items) clears the items instead, as the internal "setter" implementation clear the
     // internal array and copies the one passed as the argument, even if both are the same object.
     val list = KListWidget<String>(VisUI.getSkin(), defaultStyle)
@@ -186,7 +186,7 @@ class KListWidgetTest : NeedsLibGDX() {
  */
 class KNodeTest {
   @Test
-  fun shouldCreateNestedNodes() {
+  fun `should create nested nodes`() {
     val node = KNode(Actor())
     val actor = Actor()
     val nested = node.add(actor)
@@ -202,7 +202,7 @@ class KNodeTest {
  */
 class KScrollPaneTest : NeedsLibGDX() {
   @Test
-  fun shouldStoreChild() {
+  fun `should store child`() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
     val actor = Actor()
     scrollPane.addActor(actor)
@@ -211,7 +211,7 @@ class KScrollPaneTest : NeedsLibGDX() {
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldFailToStoreMultipleChildren() {
+  fun `should fail to store multiple children`() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
     scrollPane.addActor(Actor())
     scrollPane.addActor(Actor()) // Throws.
@@ -224,7 +224,7 @@ class KScrollPaneTest : NeedsLibGDX() {
  */
 class KSelectBoxTest : NeedsLibGDX() {
   @Test
-  fun shouldAddItems() {
+  fun `should add items`() {
     val selectBox = KSelectBox<String>(VisUI.getSkin(), defaultStyle)
     selectBox.apply {
       -"one"
@@ -235,7 +235,7 @@ class KSelectBoxTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldNotClearItemsOnRefresh() {
+  fun `should not clear items on refresh`() {
     // Normally actor.items = actor.items clears the items instead, as the internal "setter" implementation clear the
     // internal array and copies the one passed as the argument, even if both are the same object.
     val selectBox = KSelectBox<String>(VisUI.getSkin(), defaultStyle)
@@ -257,7 +257,7 @@ class KSelectBoxTest : NeedsLibGDX() {
  */
 class KSplitPaneTest {
   @Test
-  fun shouldStoreTwoChildren() {
+  fun `should store two children`() {
     val splitPane = KSplitPane(false, VisUI.getSkin(), defaultHorizontalStyle)
     val first = Actor()
     splitPane.addActor(first)
@@ -269,7 +269,7 @@ class KSplitPaneTest {
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldFailToStoreMoreThanTwoChildren() {
+  fun `should fail to store more than two children`() {
     val splitPane = KSplitPane(false, VisUI.getSkin(), defaultHorizontalStyle)
     splitPane.addActor(Actor())
     splitPane.addActor(Actor())
@@ -283,7 +283,7 @@ class KSplitPaneTest {
  */
 class KTreeWidgetTest : NeedsLibGDX() {
   @Test
-  fun shouldSpawnNodes() {
+  fun `should spawn nodes`() {
     val tree = KTreeWidget(VisUI.getSkin(), defaultStyle)
     val actor = Actor()
     val node = tree.add(actor)
@@ -294,5 +294,6 @@ class KTreeWidgetTest : NeedsLibGDX() {
   }
 }
 
-// Note: other Scene2D widgets are not tested, as they do not implement any custom logic and simply inherit from KGroup
-// or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly implemented.
+// Note: other extended Scene2D widgets are not tested, as they do not implement any custom logic and simply inherit
+// from KGroup  or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
+// implemented - we are basically relying on LibGDX to behave correctly.

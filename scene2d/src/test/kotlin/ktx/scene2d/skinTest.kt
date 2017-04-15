@@ -6,7 +6,7 @@ import org.junit.Test
 
 class Scene2DSkinTest {
   @Test
-  fun shouldInvokeSkinReloadListeners() {
+  fun `should invoke skin reload listeners`() {
     var invoked = false
     Scene2DSkin.addListener { invoked = true }
     Scene2DSkin.defaultSkin = Skin() // Invokes setter, should trigger listeners.
@@ -14,7 +14,7 @@ class Scene2DSkinTest {
   }
 
   @Test
-  fun shouldRemoveListeners() {
+  fun `should remove listeners`() {
     var amount = 0
     val listener: (Skin) -> Unit = { amount++ }
     Scene2DSkin.addListener(listener)
@@ -28,7 +28,7 @@ class Scene2DSkinTest {
   }
 
   @Test
-  fun shouldClearListeners() {
+  fun `should clear listeners`() {
     var amount = 0
     Scene2DSkin.addListener { amount++ }
     Scene2DSkin.addListener { amount++ }

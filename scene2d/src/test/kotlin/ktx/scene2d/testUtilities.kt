@@ -1,14 +1,12 @@
 package ktx.scene2d
 
-import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.badlogic.gdx.graphics.GL20
 import com.kotcrab.vis.ui.VisUI
+import com.nhaarman.mockito_kotlin.mock
 import org.junit.Before
-import org.mockito.Mockito
 
 /**
  * Utility value for numeric tests.
@@ -24,9 +22,9 @@ abstract class NeedsLibGDX {
     init {
       LwjglNativesLoader.load()
 
-      Gdx.graphics = Mockito.mock(Graphics::class.java)
-      Gdx.app = Mockito.mock(Application::class.java)
-      Gdx.gl = Mockito.mock(GL20::class.java)
+      Gdx.graphics = mock()
+      Gdx.app = mock()
+      Gdx.gl = mock<GL20>()
       Gdx.files = LwjglFiles()
       Gdx.gl20 = Gdx.gl
 

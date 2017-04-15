@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * Common interface applied to so-called "parental" widgets.
  * @author MJ
  */
+@Scene2dDsl
 interface KWidget<out Storage> {
   /**
    * Internal utility method for adding actors to the group. Assumes the actor is stored in a container.
@@ -34,6 +35,7 @@ interface KWidget<out Storage> {
  * Common interface applied to widgets that extend the original [Table] and keep their children in [Cell] instances.
  * @author MJ
  */
+@Scene2dDsl
 interface KTable : KWidget<Cell<*>> {
   /**
    * @param actor will be added to this widget.
@@ -54,6 +56,7 @@ interface KTable : KWidget<Cell<*>> {
  * collection.
  * @author MJ
  */
+@Scene2dDsl
 interface KGroup : KWidget<Actor> {
   /**
    * @param actor will be added to this group.
@@ -85,6 +88,7 @@ interface KGroup : KWidget<Actor> {
  * Common interface applied to widgets that keep their children in [Tree] [Node] instances.
  * @author MJ
  */
+@Scene2dDsl
 interface KTree : KWidget<KNode> {
   /**
    * @param actor will be placed in a [Node] inside this widget.
@@ -101,6 +105,7 @@ interface KTree : KWidget<KNode> {
 
 /** Extends [Button] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KButton(skin: Skin, style: String) : Button(skin, style), KTable
 
 /**
@@ -111,6 +116,7 @@ class KButton(skin: Skin, style: String) : Button(skin, style), KTable
  * @param minCheckCount minimum amount of checked buttons.
  * @param maxCheckCount maximum amount of checked buttons.
  */
+@Scene2dDsl
 class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(skin), KTable {
   val buttonGroup = ButtonGroup<Button>()
 
@@ -127,10 +133,12 @@ class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(s
 
 /** Extends [CheckBox] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, style), KTable
 
 /** Extends [Container] API with type-safe widget builders. Note that this widget may store only a single child.
  * @author MJ */
+@Scene2dDsl
 class KContainer<T : Actor> : Container<T>(), KGroup {
   @Suppress("UNCHECKED_CAST")
   override fun addActor(actor: Actor?) {
@@ -141,22 +149,27 @@ class KContainer<T : Actor> : Container<T>(), KGroup {
 
 /** Extends [Dialog] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KDialog(title: String, skin: Skin, style: String) : Dialog(title, skin, style), KTable
 
 /** Extends [HorizontalGroup] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KHorizontalGroup : HorizontalGroup(), KGroup
 
 /** Extends [ImageButton] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KImageButton(skin: Skin, style: String) : ImageButton(skin, style), KTable
 
 /** Extends [ImageTextButton] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButton(text, skin, style), KTable
 
 /** Extends LibGDX List widget with items building method.
  * @author MJ */
+@Scene2dDsl
 class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2d.ui.List<T>(skin, style) {
   /**
    * Allows to add items to the list with builder-like syntax.
@@ -177,6 +190,7 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
 
 /** Extends [Tree] [Node] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KNode(actor: Actor) : Node(actor), KTree {
   override fun add(actor: Actor): KNode {
     val node = KNode(actor)
@@ -187,6 +201,7 @@ class KNode(actor: Actor) : Node(actor), KTree {
 
 /** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
  * @author MJ */
+@Scene2dDsl
 class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     if (this.widget != null) throw IllegalStateException("ScrollPane may store only a single child.")
@@ -196,6 +211,7 @@ class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KG
 
 /** Extends [SelectBox] with items building method.
  * @author MJ */
+@Scene2dDsl
 class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
@@ -218,6 +234,7 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
  * with [setFirstWidget] or [setSecondWidget].
  * @author MJ */
+@Scene2dDsl
 class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
@@ -230,18 +247,22 @@ class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null,
 
 /** Extends [Stack] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KStack : Stack(), KGroup
 
 /** Extends [Table] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KTableWidget(skin: Skin) : Table(skin), KTable
 
 /** Extends [TextButton] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, skin, style), KTable
 
 /** Extends [Tree] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
   override fun add(actor: Actor): KNode {
     val node = KNode(actor)
@@ -252,8 +273,10 @@ class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
 
 /** Extends [VerticalGroup] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KVerticalGroup : VerticalGroup(), KGroup
 
 /** Extends [Window] API with type-safe widget builders.
  * @author MJ */
+@Scene2dDsl
 class KWindow(title: String, skin: Skin, style: String) : Window(title, skin, style), KTable

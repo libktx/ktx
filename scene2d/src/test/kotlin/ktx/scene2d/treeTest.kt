@@ -9,7 +9,7 @@ import org.junit.Test
  */
 class TreeFactoryTest : NeedsLibGDX() {
   @Test
-  fun shouldCreateTables() {
+  fun `should create Trees`() {
     val widget = tree {
       height = 100f
     }

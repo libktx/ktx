@@ -19,7 +19,6 @@ const val defaultHorizontalStyle = "default-horizontal"
 /**
  * Utility storage for global [Skin] object. The skin will be used by the widget factory methods by default if no custom
  * alternative skin instance is passed as an alternative.
- * @author MJ
  */
 object Scene2DSkin {
   private val listeners = com.badlogic.gdx.utils.Array<(Skin) -> Unit>(4)

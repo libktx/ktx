@@ -15,7 +15,7 @@ import org.junit.Test
  */
 class TooltipFactoriesTest : NeedsLibGDX() {
   @Test
-  fun shouldAddTextTooltip() {
+  fun `should add TextTooltip`() {
     val actor = Actor()
     val tooltip = actor.addTextTooltip("Test.")
     assertNotNull(tooltip)
@@ -24,7 +24,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldAddTextTooltipWithBuildingBlock() {
+  fun `should add TextTooltip with building block`() {
     val actor = Actor()
     val tooltip = actor.addTextTooltip("Test.") {
       // TextTooltip should be available as lambda parameter:
@@ -41,7 +41,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldAddTooltipWithBuildingBlock() {
+  fun `should add Tooltip with building block`() {
     val actor = Actor()
     val tooltip = actor.addTooltip {
       // Tooltip should be available as lambda parameter:

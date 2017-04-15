@@ -74,6 +74,19 @@ This snippet would create a `Table` instance with a single `Button` child, which
 practical nesting limit: as long as you do not manually set up circular references (actors being parents of themselves),
 your widget hierarchies should *just work*.
 
+Thanks to `@DslMarker` Kotlin API, you cannot implicitly access parents from within children blocks, which resolves most
+scoping issues. For example, `Label` is not a `Group` and it cannot have children, so this code would not compile:
+
+```Kotlin
+import ktx.scene2d.*
+
+table {
+  label("Not a real parent.") {
+    label("Invalid.") // Does not compile: outside of table scope.
+  }
+}
+```
+
 When it comes to widget customization, only data crucial to construct the actors is present in factory methods
 as parameters. For example, `Label` requires some text that it can draw, so it has a `CharSequence` (`String` or
 `StringBuilder`) parameter. However, most other settings must be changed manually inside widgets' blocks by invoking
@@ -264,22 +277,22 @@ table {
 ```
 ![List](img/04.png)
 
-### Known issues
+### Migration guide
 
-Because of how the scopes work, children building blocks have full access to all parent methods. For example, this code
-would compile:
+Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
+full access to all parent methods. For example, this code would compile prior to 19:
 
 ```Kotlin
 table {
   label("") {
-    label("") {
-      pad(4f)
+    label("") { // Error in 1.9.6-b2+: outside of table block.
+      pad(4f) // Error in 1.9.6-b2+: cannot access table methods implicitly.
     }
   }
 }
 ```
 
-As weird as it might seem, the snippet above would be an equivalent to:
+As weird as it might seem, the snippet above would have been an equivalent to:
 
 ```Kotlin
 table {
@@ -289,22 +302,10 @@ table {
 }
 ```
 
-We obviously cannot change Kotlin's scoping rules, but these kind of "formatting errors" can be easily avoided if you
-are ready to pay the cost of verbosity - by proceeding all calls with `this.`, you can no longer invoke parents' methods
-in nested children blocks:
-
-```Kotlin
-table {
-  this.label("") {
-    this.label("") { // Compile error: Label has no 'label' method.
-      this.pad(4f) // Compile error: Label has no 'pad' method.
-    }
-  }
-}
-```
-
-We would suggest to go with the more readable `this`-less syntax during prototyping to speed things up, but eventually
-refactor critical code to use `this` for safety.
+Since `1.9.6-b2` version and usage of `@DslMarker` API, this is no longer possible. Implicit usage of parents' API
+outside of their building block no longer compiles. All implicit method calls to parental actors must be either explicit
+or moved to the correct building block in order to migrate from `1.9.6-b1` and earlier versions. If you had no scoping
+issues in your GUI code, the migration should be absolutely painless.
 
 #### Synergy
 

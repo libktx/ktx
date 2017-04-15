@@ -17,8 +17,11 @@
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[FEATURE]** (`ktx-scene2d`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
+- **[CHANGE]** (`ktx-scene2d`) Due to `@DslMarker` introduction, implicit access to parental widgets is no longer possible
+in children building blocks. See `ktx-scene2d` documentation for more info on the migration.
 - **[FEATURE]** (`ktx-style`) `Skin` instance is now available under lambda parameter of `skin` method init blocks.
-- **[FEATURE]** (`ktx-style`, `ktx-style-vis`) Improved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
+- **[FEATURE]** (`ktx-style`, `ktx-style-vis`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
 - **[CHANGE]** (`ktx-style`, `ktx-style-vis`) Due to `@DslMarker` introduction, implicit access to `Skin` instance is no longer possible.
 See `ktx-style` documentation for more info on the migration.
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods

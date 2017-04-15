@@ -10,7 +10,7 @@ import org.junit.Test
  */
 class TableFactoriesTest : NeedsLibGDX() {
   @Test
-  fun shouldCreateTables() {
+  fun `should create Tables`() {
     val widget = table {
       height = 100f
     }
@@ -20,7 +20,7 @@ class TableFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateWindows() {
+  fun `should create Windows`() {
     val widget = window(title = "test") {
       height = 100f
     }
@@ -31,7 +31,7 @@ class TableFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateDialogs() {
+  fun `should create Dialogs`() {
     val widget = dialog(title = "test") {
       height = 100f
     }
@@ -42,7 +42,7 @@ class TableFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun shouldCreateButtonGroups() {
+  fun `should create ButtonGroups`() {
     val widget = buttonGroup(minCheckedCount = 1, maxCheckedCount = 1) {
       height = 100f
     }
