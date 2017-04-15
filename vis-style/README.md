@@ -1,12 +1,14 @@
 # KTX: VisUI style builders
 
-Type-safe builders of VisUI widget styles.
+Type-safe builders of **VisUI** widget styles.
 
-See [`ktx-style`](../style) documentation for more informations about this module. Additionally to features provided by
-the mentioned library, `ktx-style-vis` provides factory methods for VisUI widget styles, allowing to build type-safe
-GUI stylesheets similarly to `ktx-style`.
+This is an extension of [`ktx-style`](../style) module. See its documentation to get started with type-safe stylesheet
+builders for `Scene2D` widgets.
 
-Implementation note: `FileChooserStyle` is not included, as it is basically a desktop-only widget that would not even
+Additionally to features provided by the `ktx-style` library, `ktx-style-vis` comes with factory methods for most
+[VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widget styles.
+
+_Implementation note_: `FileChooserStyle` is not included, as it is basically a desktop-only widget that would not even
 work (or compile - see GWT) on most platforms. Adding a similar extension method for `FileChooserStyle` would be pretty
 straightforward: see `visStyle.kt` for code samples.
 

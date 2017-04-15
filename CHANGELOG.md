@@ -4,7 +4,7 @@
 - **[UPDATE]** Updated to VisUI 1.3.0.
 - **[FEATURE]** (`ktx-app`) Added `KtxApplicationAdapter` which makes implementing all of `ApplicationListener` methods optional.
 - **[FEATURE]** (`ktx-app`) Added `KtxInputAdapter` which makes implementing all of `InputProcessor` methods optional.
-- **[FEATURE]** (`ktx-actors`) Added `txt` inlined extension properties to `Label` and `TextButton` widgets.
+- **[FEATURE]** (`ktx-actors`) Added inlined `txt` extension properties to `Label` and `TextButton` widgets.
 - **[FEATURE]** (`ktx-actors`) Added `KtxInputListener`: an `InputListener` extension with parameter types improvements.
 - **[FEATURE]** (`ktx-actors`) `alpha` extension properties of `Actor` and `Stage` are now inlined.
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
@@ -17,6 +17,10 @@
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[FEATURE]** (`ktx-style`) `Skin` instance is now available under lambda parameter of `skin` method init blocks.
+- **[FEATURE]** (`ktx-style`, `ktx-style-vis`) Improved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
+- **[CHANGE]** (`ktx-style`, `ktx-style-vis`) Due to `@DslMarker` introduction, implicit access to `Skin` instance is no longer possible.
+See `ktx-style` documentation for more info on the migration.
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
 added to all parental actors.
 

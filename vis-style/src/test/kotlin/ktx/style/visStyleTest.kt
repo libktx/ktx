@@ -27,13 +27,13 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerWidgetStyle
 import com.kotcrab.vis.ui.widget.spinner.Spinner.SpinnerStyle
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane.TabbedPaneStyle
 import com.kotcrab.vis.ui.widget.toast.Toast.ToastStyle
+import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mockito
 
 class VisStyleTest {
   @Test
-  fun shouldAddSizes() {
+  fun `should add Sizes`() {
     val skin = skin {
       sizes {
         borderSize = 1f
@@ -44,7 +44,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendSizes() {
+  fun `should extend Sizes`() {
     val skin = skin {
       sizes("base") {
         borderSize = 1f
@@ -59,7 +59,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddBusyBarStyle() {
+  fun `should add BusyBarStyle`() {
     val skin = skin {
       busyBar {
         height = 1
@@ -70,7 +70,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendBusyBarStyle() {
+  fun `should extend BusyBarStyle`() {
     val skin = skin {
       busyBar("base") {
         height = 1
@@ -85,7 +85,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddColorPickerStyle() {
+  fun `should add ColorPickerStyle`() {
     val skin = skin {
       colorPicker {
         titleFontColor = Color.RED
@@ -96,11 +96,11 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendColorPickerStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend ColorPickerStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       colorPicker("base") {
-        pickerStyle = colorPickerWidget {}
+        pickerStyle = it.colorPickerWidget {}
         titleFontColor = Color.RED
       }
       colorPicker("new", extend = "base") {
@@ -113,8 +113,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddColorPickerWidgetStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add ColorPickerWidgetStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       colorPickerWidget {
         barSelector = drawable
@@ -125,8 +125,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendColorPickerWidgetStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend ColorPickerWidgetStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       colorPickerWidget("base") {
         barSelector = drawable
@@ -141,7 +141,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddFormValidatorStyle() {
+  fun `should add FormValidatorStyle`() {
     val skin = skin {
       formValidator {
         colorTransitionDuration = 1f
@@ -152,7 +152,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendFormValidatorStyle() {
+  fun `should extend FormValidatorStyle`() {
     val skin = skin {
       formValidator("base") {
         colorTransitionDuration = 1f
@@ -167,7 +167,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddLinkLabelStyle() {
+  fun `should add LinkLabelStyle`() {
     val skin = skin {
       linkLabel {
         fontColor = Color.RED
@@ -178,8 +178,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendLinkLabelStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend LinkLabelStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       linkLabel("base") {
         fontColor = Color.RED
@@ -194,8 +194,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddListViewStyle() {
-    val scrollPane = Mockito.mock(ScrollPaneStyle::class.java)
+  fun `should add ListViewStyle`() {
+    val scrollPane = mock<ScrollPaneStyle>()
     val skin = skin {
       listView {
         scrollPaneStyle = scrollPane
@@ -206,9 +206,9 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendListViewStyle() {
+  fun `should extend ListViewStyle`() {
     val scrollPane = ScrollPaneStyle()
-    val drawable = Mockito.mock(Drawable::class.java)
+    val drawable = mock<Drawable>()
     scrollPane.background = drawable
     val skin = skin {
       listView("base") {
@@ -225,8 +225,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddMenuStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add MenuStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       menu {
         border = drawable
@@ -237,8 +237,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendMenuStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend MenuStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       menu("base") {
         border = drawable
@@ -253,8 +253,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddMenuBarStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add MenuBarStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       menuBar {
         background = drawable
@@ -265,8 +265,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendMenuBarStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend MenuBarStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       menuBar("base") {
         background = drawable
@@ -278,7 +278,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddMenuItemStyle() {
+  fun `should add MenuItemStyle`() {
     val skin = skin {
       menuItem {
         pressedOffsetX = 1f
@@ -289,7 +289,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendMenuItemStyle() {
+  fun `should extend MenuItemStyle`() {
     val skin = skin {
       menuItem("base") {
         pressedOffsetX = 1f
@@ -304,8 +304,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddMultiSplitPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add MultiSplitPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       multiSplitPane {
         handle = drawable
@@ -316,8 +316,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendMultiSplitPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend MultiSplitPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       multiSplitPane("base") {
         handle = drawable
@@ -332,8 +332,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddPopupMenuStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add PopupMenuStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       popupMenu {
         background = drawable
@@ -344,8 +344,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendPopupMenuStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend PopupMenuStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       popupMenu("base") {
         background = drawable
@@ -360,8 +360,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddSeparatorStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add SeparatorStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       separator {
         background = drawable
@@ -372,8 +372,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendSeparatorStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend SeparatorStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       separator("base") {
         background = drawable
@@ -388,8 +388,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddSimpleListAdapterStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add SimpleListAdapterStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       simpleListAdapter {
         background = drawable
@@ -400,8 +400,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendSimpleListAdapterStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend SimpleListAdapterStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       simpleListAdapter("base") {
         background = drawable
@@ -416,8 +416,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddSpinnerStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add SpinnerStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       spinner {
         down = drawable
@@ -428,8 +428,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendSpinnerStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend SpinnerStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       spinner("base") {
         down = drawable
@@ -444,8 +444,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddTabbedPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add TabbedPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       tabbedPane {
         background = drawable
@@ -456,8 +456,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendTabbedPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend TabbedPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       tabbedPane("base") {
         background = drawable
@@ -472,8 +472,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddToastStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add ToastStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       toast {
         background = drawable
@@ -484,9 +484,9 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendToastStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
-    val buttonStyle = Mockito.mock(VisImageButtonStyle::class.java)
+  fun `should extend ToastStyle`() {
+    val drawable = mock<Drawable>()
+    val buttonStyle = mock<VisImageButtonStyle>()
     val skin = skin {
       toast("base") {
         background = drawable
@@ -501,7 +501,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisCheckBoxStyle() {
+  fun `should add VisCheckBoxStyle`() {
     val skin = skin {
       visCheckBox {
         pressedOffsetX = 1f
@@ -512,7 +512,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisCheckBoxStyle() {
+  fun `should extend VisCheckBoxStyle`() {
     val skin = skin {
       visCheckBox("base") {
         pressedOffsetX = 1f
@@ -527,7 +527,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisImageButtonStyle() {
+  fun `should add VisImageButtonStyle`() {
     val skin = skin {
       visImageButton {
         pressedOffsetX = 1f
@@ -538,7 +538,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisImageButtonStyle() {
+  fun `should extend VisImageButtonStyle`() {
     val skin = skin {
       visImageButton("base") {
         pressedOffsetX = 1f
@@ -553,7 +553,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisImageTextButtonStyle() {
+  fun `should add VisImageTextButtonStyle`() {
     val skin = skin {
       visImageTextButton {
         pressedOffsetX = 1f
@@ -564,7 +564,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisImageTextButtonStyle() {
+  fun `should extend VisImageTextButtonStyle`() {
     val skin = skin {
       visImageTextButton("base") {
         pressedOffsetX = 1f
@@ -579,8 +579,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisSplitPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add VisSplitPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       visSplitPane {
         handle = drawable
@@ -591,8 +591,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisSplitPaneStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend VisSplitPaneStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       visSplitPane("base") {
         handle = drawable
@@ -607,7 +607,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisTextButtonStyle() {
+  fun `should add VisTextButtonStyle`() {
     val skin = skin {
       visTextButton {
         pressedOffsetX = 1f
@@ -618,7 +618,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisTextButtonStyle() {
+  fun `should extend VisTextButtonStyle`() {
     val skin = skin {
       visTextButton("base") {
         pressedOffsetX = 1f
@@ -633,7 +633,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisTextFieldStyle() {
+  fun `should add VisTextFieldStyle`() {
     val skin = skin {
       visTextField {
         fontColor = Color.CYAN
@@ -644,7 +644,7 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisTextFieldStyle() {
+  fun `should extend VisTextFieldStyle`() {
     val skin = skin {
       visTextField("base") {
         fontColor = Color.CYAN
@@ -659,8 +659,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldAddVisTooltipStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should add VisTooltipStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       visTooltip {
         background = drawable
@@ -671,8 +671,8 @@ class VisStyleTest {
   }
 
   @Test
-  fun shouldExtendVisTooltipStyle() {
-    val drawable = Mockito.mock(Drawable::class.java)
+  fun `should extend VisTooltipStyle`() {
+    val drawable = mock<Drawable>()
     val skin = skin {
       visTooltip("base") {
         background = drawable

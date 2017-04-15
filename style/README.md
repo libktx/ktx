@@ -13,15 +13,15 @@ suffers from no extension mechanism, which leads to data duplication.
 
 Kotlin type-safe builders can make style definitions less verbose than usual, as easily readable as JSON and basically
 as fast to parse as hand-written Java code thanks to inlined functions and no reflection usage. By converting your JSON
-skins into `ktx-style` builders, you speed up your application setup time.
-
+skins into `ktx-style` builders, you speed up your application startup time.
+ 
 ### Guide
 
 `Skin` instances can be constructed with `skin` functions, both of which accept a Kotlin-style init block.
 
-You can quickly extract assets from `Skin` using the `skin.get<DesiredClass>("resourceName")` syntax. This method can be
-used for all kinds of resources, _except_ for `Drawable` instances - since there are many possible implementations, they
-need to be extracted with the `getDrawable` method.
+You can quickly extract assets from `Skin` using the `skin.get<DesiredClass>("resourceName")` syntax. When the compiler
+can "guess" the type of variable, this can be shortened even further into `skin["resourceName"]`. This method can be
+used for all kinds of resources that can be stored in a `Skin`.
 
 `get` and `set` operator functions were added. `Skin` assets can now be accessed with brace operators:
 ```Kotlin
@@ -29,6 +29,7 @@ val skin = Skin()
 skin["name"] = BitmapFont()
 val font: BitmapFont = skin["name"]
 ```
+
 Note that both of these functions use reified generics, so they need to be able to "extract" the variable type from
 context. For example, `val font = skin["name"]` would not compile, as the compiler would not be able to guess that
 instance of `BitmapFont` class is requested.
@@ -93,9 +94,10 @@ Creating a new `ButtonStyle` named `"default"` with drawables extracted from the
 import ktx.style.*
 
 skin(myAtlas) {
+  // Skin is available under `it` parameter, so you can access other resources.
   button { 
-    up = getDrawable("buttonUp")
-    down = getDrawable("buttonDown")
+    up = it["buttonUp"] // Automatically extracts drawable with buttonUp name.
+    down = it["buttonDown"]
   }
 }
 ```
@@ -107,11 +109,11 @@ import ktx.style.*
 
 skin(myAtlas) {
   button {
-    up = getDrawable("buttonUp")
-    down = getDrawable("buttonDown")
+    up = it["buttonUp"]
+    down = it["buttonDown"]
   }
   button("toggle", extend = defaultStyle) {
-    checked = getDrawable("buttonChecked")
+    checked = it["buttonChecked"]
   }
 }
 ```
@@ -128,25 +130,25 @@ skin(myAtlas) {
     fontColor = Color.WHITE
   }
   textTooltip {
-    label = labelStyle
-    background = getDrawable("tooltipBackground")
+    label = labelStyle // or it[defaultStyle]
+    background = it["tooltipBackground"]
   }
 }
 ```
 
-Nested style definitions - creating a `LabelStyle` and a `Color` on demand to customize `TooltipStyle` (all three
-resources will be available in the skin afterwards):
+Nested style definitions with renamed `skin` parameter - creating a `LabelStyle` and a `Color` on demand to customize
+`TooltipStyle` (all three resources will be available in the skin afterwards):
 ```Kotlin
 import com.badlogic.gdx.graphics.Color
 import ktx.style.*
 
-skin(myAtlas) {
+skin(myAtlas) { skin ->
   textTooltip {
-    label = label("tooltipText") {
-      font = getFont("arial")
-      fontColor = color("black", 0f, 0f, 0f)
+    label = skin.label("tooltipText") {
+      font = skin["arial"]
+      fontColor = skin.color("black", 0f, 0f, 0f)
     }
-    background = getDrawable("tooltipBackground")
+    background = skin["tooltipBackground"]
   }
 }
 ```
@@ -164,12 +166,11 @@ skin {
     // Customize ListStyle...
   }
   selectBox {
-    scrollStyle = get<ScrollPaneStyle>("selectScroll")
+    scrollStyle = it["selectScroll"]
+    listStyle = it["selectList"]
     // Note: generics are mostly optional, as Kotlin is smart enough to guess the type of
     // requested asset and insert its class automatically. This applies to most assets like
-    // fonts and colors, but should NEVER be used for Drawable instances: getDrawable(String)
-    // should be called instead. In the example above, <ScrollPaneStyle> could be omitted:
-    listStyle = get("selectList")
+    // fonts, colors, styles, drawables and texture regions.
   }
 }
 ```
@@ -179,7 +180,7 @@ Adding custom widget style with similar Kotlin builder syntax:
 import ktx.style.*
 
 skin {
-  addStyle("customStyleName", CustomButtonStyle()) {
+  addStyle("customStyleName", YourCustomWidgetStyle()) {
     customProperty = true
   }
 }
@@ -198,11 +199,11 @@ possible. For example, take a look at these `ButtonStyle` definitions:
 
 ```Kotlin
 button {
-  up = getDrawable("buttonUp")
-  down = getDrawable("buttonDown")
+  up = it["buttonUp"]
+  down = it["buttonDown"]
 }
 button("toggle", extend = defaultStyle) {
-  checked = getDrawable("buttonChecked")
+  checked = it["buttonChecked"]
 }
 ```
 
@@ -244,11 +245,11 @@ import your.company.Drawables.*
 
 skin(myAtlas) {
   button {
-    up = getDrawable(buttonUp())
-    down = getDrawable(buttonDown())
+    up = it[buttonUp()]
+    down = it[buttonDown()]
   }
   button(Buttons.toggle(), extend = defaultStyle) {
-    checked = getDrawable(buttonChecked())
+    checked = it[buttonChecked()]
   }
 }
 ```
@@ -257,6 +258,55 @@ What's best about it, enums do not actually make your code _longer_, as they req
 to write with static imports - while having the advantage of powerful code completion of your IDE of choice and validation
 at compile time. As long as you don't need to create assets at runtime with custom unpredictable IDs, we encourage you
 to store your drawables, fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
+
+#### Migration guide
+
+Prior to introduction of Kotlin 1.1 features, style declarations could be nested:
+
+```Kotlin
+skin {
+  label {
+    label {
+      // This would not compile with the latest version.
+    }
+  }
+}
+```
+
+Kotlin `@DslMarker` API allowed us to improve scoping issues and now implicit access to `Skin` in style building blocks
+is no longer possible. If you used `ktx-style` prior to `1.9.6-b2`, you need to explicitly access `Skin` resources and
+methods. The `Skin` instance is now also available as the lambda parameter of `skin` block (under `it`, unless renamed)
+to ease its access.
+
+```Kotlin
+// Before 1.9.6-b2:
+skin(atlas) {
+  label {
+    font = getFont("arial")
+    fontColor = color("black", 0f, 0f, 0f)
+  }
+}
+
+// After @DslMarker introduction:
+skin(atlas) {
+  label {
+    font = it["arial"]
+    fontColor = it.color("black", 0f, 0f, 0f)
+  }
+}
+
+// Idiomatic GUI style building - no nested declarations:
+skin(atlas) {
+  color("black", 0f, 0f, 0f)
+  label {
+    font = it["arial"]
+    fontColor = it["black"]
+  }
+}
+```
+
+It might look scary at first, but it actually improves the GUI style building safety (fixing scoping issues),
+discourages nested styles declarations and shortens access to most common resources with `it["assetName"]` syntax.
 
 ### Alternatives
 
