@@ -12,11 +12,10 @@ for the existing API to make assets usage more natural in Kotlin applications.
 
 #### Assets
 
-- `load` method can be used to schedule asynchronous loading of an asset. It returns an asset wrapper, which can be
-used as delegate property, as well as used directly to manage the asset. Usually the asset will not be available until
-`Assets.manager.finishLoading` or looped `Assets.manager.update` are called. Custom `AssetManager` instance can be passed
-to loading methods if prefer not to use statics. You can use string file paths or `AssetDescriptor` instances to load
-the asset. Typical usage:
+- `AssetManager.load` extension method can be used to schedule asynchronous loading of an asset. It returns an asset
+wrapper, which can be used as delegate property, as well as used directly to manage the asset. Usually the asset will
+not be available until `AssetManager.finishLoading` or looped `AssetManager.update` are called. You can use string file
+paths or `AssetDescriptor` instances to load the asset. Typical usage:
 ```Kotlin
 // Eagerly loading an asset:
 val wrapper = load<Texture>("test.png")
@@ -24,35 +23,37 @@ wrapper.finishLoading()
 val texture = wrapper.asset
 
 // Delegate field:
-class Test {
-  val texture by load<Texture>("test.png")
+class Test(assetManager: AssetManager) {
+  val texture by assetManager.load<Texture>("test.png")
   // Type of texture property is Texture.
 }
 ```
-- `asset` utility method can be used to access an already loaded asset, omitting the wrapper altogether. This is the
-preferred way of accessing assets from the `AssetManager`, provided that they were already scheduled for asynchronous
-loading and fully loaded. Typical usage: `val texture = asset<Texture>("test.png")`. Note that this method will fail if
-asset is not loaded yet.
-- `loadOnDemand` is similar to the `load` utility method, but it provides an asset wrapper that loads the asset eagerly
-on first get call. It will not schedule the asset for asynchronous loading - instead, it will block current thread until
-the asset is loaded on the first access. Use for lightweight assets that should be (rarely) loaded only when requested.
-Typical usage:
+- `AssetManager.getAsset` utility extension method can be used to access an already loaded asset, without having to pass
+class to the manager to specify asset type. This is the preferred way of accessing assets from the `AssetManager`,
+provided that they were already scheduled for asynchronous loading and fully loaded. Typical usage:
+`val texture: Texture = assetManager.getAsset("test.png")`. Note that this method will fail if asset is not loaded yet.
+- `AssetManager.loadOnDemand` is similar to the `load` utility method, but it provides an asset wrapper that loads the
+asset eagerly on first get call. It will not schedule the asset for asynchronous loading - instead, it will block current
+thread until the asset is loaded on the first access. Use for lightweight assets that should be (rarely) loaded only when
+requested. Typical usage:
 ```Kotlin
 // Eagerly loading an asset:
-val wrapper = loadOnDemand<Texture>("test.png")
-val texture = wrapper.asset // Will load the asset.
+val texture = by assetManager.loadOnDemand<Texture>("test.png")
+// Asset will be loaded upon first `texture` usage.
 
 // Delegate field:
-class Test {
-  val texture by loadOnDemand<Texture>("test.png")
+class Test(assetManager: AssetManager) {
+  val texture by assetManager.loadOnDemand<Texture>("test.png")
   // Type of texture property is Texture. It will be loaded on first `texture` access.
 }
 ```
-- `isLoaded` is a utility method that allows to check if a particular asset is already loaded. For example:
-`isLoaded<Texture>("test.png")`.
-- `unload` is a utility method that attempts to unload an asset from the `AssetManager`. Contrary to manual
+- `AssetManager.unloadSafely` is a utility method that attempts to unload an asset from the `AssetManager`. Contrary to
 `AssetManager.unload` call, this is a graceful method that will not throw any exceptions if the asset was not even
-loaded. Typical usage: `unload("test.png")`.
+loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")`.
+- `AssetManager.unload` extension method consuming a exception handling block was added, so you can gracefully handle
+exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
+- `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
+instances registered in the `AssetManager`.
 - Global `AssetManager` instance is accessible (and modifiable) through `Assets.manager` utility field. Since it is
 advised to share and reuse a single `AssetManager` instance in the application and LibGDX already goes crazy with the
 statics thanks to `Gdx.files` and whatnot, this `AssetManager` instance was added to reduce asset-related boilerplate.
@@ -72,14 +73,20 @@ enum class Images {
   enemy;
 
   val path = "images/${name}.png"
-  fun load() = load<Texture>(path)
-  operator fun invoke() = asset<Texture>(path)
+  fun load() = manager.load<Texture>(path)
+  operator fun invoke() = manager.getAsset<Texture>(path)
+  companion object {
+    lateinit var manager: AssetManager
+  }
 }
 ```
 Operator `invoke()` function brings asset accessing boilerplate to mininum: `enumName()`. Thanks to wildcard imports, we
 can access `logo`, `player` and `enemy` enum instances directly:
 ```Kotlin
 import com.example.Images.*
+
+// Setting AssetManager instance:
+Images.manager = myAssetManager
 
 // Scheduling logo loading:
 logo.load()
@@ -167,62 +174,68 @@ textures.disposeSafely() // Ignores exceptions.
 textures.dispose { exception -> } // Allows to handle exceptions.
 ```
 
-Setting global `AssetManager`:
+Scheduling assets loading by an `AssetManager`:
 ```Kotlin
 import ktx.assets.*
 
-Assets.manager = myManager
+assetManager.load<Texture>("image.png")
 ```
 
-Scheduling assets for loading by global `AssetManager`:
+Using field delegate which will eventually point to a `Texture` (after its fully loaded by an `AssetManager`):
 ```Kotlin
 import ktx.assets.*
+import com.badlogic.gdx.assets.AssetManager
 
-load<Texture>("image.png")
-```
-
-Using field delegate which will eventually point to a `Texture` (after its fully loaded by the global `AssetManager`):
-```Kotlin
-import ktx.assets.*
-
-class MyClass {
+class MyClass(assetManager: AssetManager) {
   val image by load<Texture>("image.png")
   // image is Texture == true
 }
 ```
 
-Immediately extracting a **fully loaded** asset from the global `AssetManager`:
+Immediately extracting a **fully loaded** asset from an `AssetManager`:
 ```Kotlin
 import ktx.assets.*
 
-val texture = asset<Texture>("image.png")
+val texture: Texture = assetManager.getAsset("image.png")
 ```
 
 Using an asset loaded on the first getter call rather than scheduled for loading:
 ```Kotlin
 import ktx.assets.*
+import com.badlogic.gdx.assets.AssetManager
 
-class MyClass {
-  val loadedOnlyWhenNeeded by loadOnDemand<Texture>("image.png")
+class MyClass(assetManager: AssetManager) {
+  val loadedOnlyWhenNeeded by assetManager.loadOnDemand<Texture>("image.png")
   // loadedOnlyWhenNeeded is Texture == true
 }
 ```
 
-Checking if asset is already loaded by the global `AssetManager`:
+Unloading an asset from an `AssetManager`, ignoring exceptions:
 ```Kotlin
 import ktx.assets.*
 
-if (isLoaded<Texture>("image.png")) {
-  // ...
-}
+assetManager.unloadSafely("image.png")
 ```
 
-Unloading an asset from the global `AssetManager`:
+Unloading an asset from an `AssetManager`, handling exceptions:
 ```Kotlin
 import ktx.assets.*
 
-unload("image.png")
+assetManager.unload("image.png") { exception -> exception.printStackTrace() }
 ```
+
+Managing `AssetLoader` instances of an `AssetManager`:
+```Kotlin
+import ktx.assets.*
+
+// Settings custom AssetLoader:
+val myCustomLoader = CustomLoader()
+assetManager.setLoader(myCustomLoader) // No need to pass class.
+
+// Accessing an AssetLoader:
+val loader = assetManager.getLoader<MyAsset>()
+```
+
 
 ### Alternatives
 
