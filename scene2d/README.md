@@ -314,14 +314,14 @@ tree {
   val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
     setWrap(true)
   }.node(expanded = true).inNode
-  // Nodes are available only for direct children of trees.
+  // Nodes are available only for children of trees.
 }
 ```
 
 ### Migration guide
 
 Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
-full access to all parent methods. For example, this code would compile prior to 19:
+full access to all parent methods. For example, this code would compile prior to `1.9.4-b2`:
 
 ```Kotlin
 table {
