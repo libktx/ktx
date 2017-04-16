@@ -4,7 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.utils.Align
 import com.kotcrab.vis.ui.VisUI
+import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
@@ -39,7 +42,7 @@ class KGroupTest {
  * Tests [KTable] interface: base for all Table-based parental actors.
  * @author MJ
  */
-class KTableTest {
+class KTableTest : NeedsLibGDX() {
   @Test
   fun `should add widget to group and return it`() {
     val group = TestTable()
@@ -58,6 +61,82 @@ class KTableTest {
     assertSame(actor, result.actor)
   }
 
+  @Test
+  fun `should provide access to children cells`() {
+    val table = TestTable()
+    table.apply {
+      val label = label("Test")
+      val cell: Cell<Label> = label.inCell
+      assertNotNull(cell)
+      assertSame(label, cell.actor)
+    }
+  }
+
+  @Test
+  fun `should allow to configure children cells`() {
+    val table = TestTable()
+    table.apply {
+      val cell: Cell<Label> = label("Test") {}.cell(
+          grow = true, // Overridden.
+          growX = false, // Overridden.
+          growY = false, // Overridden.
+          expand = true, // Overridden.
+          expandX = true,
+          expandY = false,
+          fill = true, // Overridden.
+          fillX = false,
+          fillY = true,
+          uniform = true, // Overridden.
+          uniformX = false,
+          uniformY = true,
+          align = Align.center,
+          colspan = 3,
+          width = 100f, // Overridden.
+          minWidth = 10f,
+          preferredWidth = 50f,
+          maxWidth = 150f,
+          height = 75f, // Overridden.
+          minHeight = 5f,
+          preferredHeight = 25f,
+          maxHeight = 55f,
+          pad = 42f, // Overridden.
+          padTop = 6f,
+          padLeft = 7f,
+          padRight = 8f,
+          padBottom = 9f,
+          space = 24f, // Overridden.
+          spaceTop = 26f,
+          spaceLeft = 27f,
+          spaceRight = 28f,
+          spaceBottom = 29f,
+          row = true
+      ).inCell
+      assertEquals(1, cell.expandX)
+      assertEquals(0, cell.expandY)
+      assertEquals(0f, cell.fillX, TOLERANCE)
+      assertEquals(1f, cell.fillY, TOLERANCE)
+      assertFalse(cell.uniformX)
+      assertTrue(cell.uniformY)
+      assertEquals(Align.center, cell.align)
+      assertEquals(3, cell.colspan)
+      assertEquals(10f, cell.minWidth, TOLERANCE)
+      assertEquals(50f, cell.prefWidth, TOLERANCE)
+      assertEquals(150f, cell.maxWidth, TOLERANCE)
+      assertEquals(5f, cell.minHeight, TOLERANCE)
+      assertEquals(25f, cell.prefHeight, TOLERANCE)
+      assertEquals(55f, cell.maxHeight, TOLERANCE)
+      assertEquals(6f, cell.padTop, TOLERANCE)
+      assertEquals(7f, cell.padLeft, TOLERANCE)
+      assertEquals(8f, cell.padRight, TOLERANCE)
+      assertEquals(9f, cell.padBottom, TOLERANCE)
+      assertEquals(26f, cell.spaceTop, TOLERANCE)
+      assertEquals(27f, cell.spaceLeft, TOLERANCE)
+      assertEquals(28f, cell.spaceRight, TOLERANCE)
+      assertEquals(29f, cell.spaceBottom, TOLERANCE)
+      assertTrue(cell.isEndRow) // .row() was called.
+    }
+  }
+
   class TestTable : Table(), KTable
 }
 
@@ -67,7 +146,7 @@ class KTableTest {
  */
 class KTreeTest : NeedsLibGDX() {
   @Test
-  fun `should add Widget to group and return it`() {
+  fun `should add widget to group and return it`() {
     val group = TestTree()
     val actor = Actor()
     val result = group.appendActor(actor)
@@ -82,6 +161,35 @@ class KTreeTest : NeedsLibGDX() {
     val result: Node = group.storeActor(actor)
     assertTrue(actor in group.children)
     assertSame(actor, result.actor)
+  }
+
+  @Test
+  fun `should provide access to children nodes`() {
+    val tree = TestTree()
+    tree.apply {
+      val label = label("Test")
+      val node: KNode = label.inNode
+      assertNotNull(node)
+      assertSame(label, node.actor)
+    }
+  }
+
+  @Test
+  fun `should allow to configure children nodes`() {
+    val tree = TestTree()
+    val icon = mock<Drawable>()
+    tree.apply {
+      val node: KNode = label("Test") {}.node(
+          icon = icon,
+          selectable = false,
+          expanded = true,
+          userObject = "Test"
+      ).inNode
+      assertSame(icon, node.icon)
+      assertFalse(node.isSelectable)
+      assertTrue(node.isExpanded)
+      assertEquals("Test", node.`object`)
+    }
   }
 
   class TestTree : Tree(VisUI.getSkin()), KTree {

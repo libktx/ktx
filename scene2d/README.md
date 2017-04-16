@@ -277,6 +277,47 @@ table {
 ```
 ![List](img/04.png)
 
+Accessing `Cell` instances with`Table` children outside of building blocks:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+
+table {
+  val label: Label = label("Cell properties modified.").cell(expand = true)
+  val cell: Cell<Label> = label("Wrapped in cell.").inCell
+  val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
+  val afterBuildingBlock: Cell<Label> = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.cell(expand = true).inCell
+
+  // Cells are available only for direct children of tables (or its extensions). 
+  stack {
+    // These would not compile:
+    label("Invalid.").cell(expand = true)
+    label("Invalid").inCell
+  }
+}
+```
+
+Accessing `Node` instances with `Table` children outside of building blocks (note that `KNote` is **KTX** custom wrapper
+of LibGDX `Tree.Node` with additional building API support):
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+
+tree {
+  val label: Label = label("Node properties modified.").node(expanded = true)
+  val cell: Node = label("Wrapped in node.").inNode
+  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
+  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.node(expanded = true).inNode
+  // Nodes are available only for direct children of trees.
+}
+```
+
 ### Migration guide
 
 Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had

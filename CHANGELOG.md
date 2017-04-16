@@ -17,6 +17,14 @@
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[FEATURE]** (`ktx-scene2d`) `inCell` extension property added to `Table` children. Now you can easily access `Cell`
+instance outside of the actors' building blocks.
+- **[FEATURE]** (`ktx-scene2d`) `inNode` extension property added to `Tree` children. Now you can easily access `Node`
+instance outside of the actors' building blocks.
+- **[FEATURE]** (`ktx-scene2d`) fluent `cell` extension method added to `Table` children, allowing to configure `Cell`
+properties outside of actors' building blocks.
+- **[FEATURE]** (`ktx-scene2d`) fluent `node` extension method added to `Tree` children, allowing to configure `Node`
+properties outside of actors' building blocks.
 - **[FEATURE]** (`ktx-scene2d`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
 - **[CHANGE]** (`ktx-scene2d`) Due to `@DslMarker` introduction, implicit access to parental widgets is no longer possible
 in children building blocks. See `ktx-scene2d` documentation for more info on the migration.

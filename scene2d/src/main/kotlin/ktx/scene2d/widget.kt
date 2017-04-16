@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
@@ -44,11 +45,136 @@ interface KTable : KWidget<Cell<*>> {
    */
   fun <T : Actor> add(actor: T): Cell<T>
 
-  override fun storeActor(actor: Actor) = add(actor)
+  override fun storeActor(actor: Actor): Cell<*> {
+    val cell = add(actor)
+    actor.userObject = cell
+    return cell
+  }
+
   override fun <T : Actor> appendActor(actor: T): T {
-    add(actor)
+    val cell = add(actor)
+    actor.userObject = cell
     return actor
   }
+
+  /**
+   * Allows to customize properties of the [Cell] storing this actor.
+   * @param grow if true, expands and fills the cell vertically and horizontally. Defaults to false.
+   * @param growX if true, expands and fills the cell horizontally. Defaults to false. Overrides [grow].
+   * @param growY if true, expands and fills the cell vertically. Defaults to false. Overrides [grow].
+   * @param expand if true, expands the cell vertically and horizontally. Overrides [growX], [growY].
+   * @param expandX if true, expands the cell horizontally. Overrides [expand].
+   * @param expandY if true, expands the cell vertically. Overrides [expand].
+   * @param fill if true, the actor will fill the whole cell area vertically and horizontally. Overrides [growX], [growY].
+   * @param fillX if true, the actor will fill the whole cell area horizontally. Overrides [fill].
+   * @param fillY if true, the actor will fill the whole cell area vertically. Overrides [fill].
+   * @param uniform see [Cell.uniform].
+   * @param uniformX see [Cell.uniformX]. Overrides [uniform].
+   * @param uniformY see [Cell.uniformY]. Overrides [uniform].
+   * @param align actor alignment in the cell. See [com.badlogic.gdx.utils.Align].
+   * @param colspan amount of columns taken by the cell.
+   * @param width sets maximum, preferred and minimum width of the cell in viewport units.
+   * @param minWidth sets minimum width of the cell. Overrides [width].
+   * @param preferredWidth sets preferred width of the cell. Overrides [width].
+   * @param maxWidth sets maximum width of the cell. Overrides [width].
+   * @param height sets maximum, preferred and minimum height of the cell in viewport units.
+   * @param minHeight sets minimum height of the cell. Overrides [height].
+   * @param preferredHeight sets preferred height of the cell. Overrides [height].
+   * @param maxHeight sets maximum height of the cell. Overrides [height].
+   * @param pad top, left, right and bottom padding value in viewport units. Contrary to [space], paddings are summed.
+   * @param padTop top padding value. Overrides [pad].
+   * @param padLeft left padding value. Overrides [pad].
+   * @param padRight right padding value. Overrides [pad].
+   * @param padBottom bottom padding value. Overrides [pad].
+   * @param space top, left, right and bottom spacing value in viewport units. Contrary to [pad], spacings are not summed.
+   * @param spaceTop top spacing value. Overrides [space].
+   * @param spaceLeft left spacing value. Overrides [space].
+   * @param spaceRight right spacing value. Overrides [space].
+   * @param spaceBottom bottom spacing value. Overrides [space].
+   * @param row if true, another row of actors will be started after this cell. Defaults to false.
+   * @return this actor.
+   * @see inCell
+   */
+  fun <T : Actor> T.cell(grow: Boolean = false,
+                         growX: Boolean = false,
+                         growY: Boolean = false,
+                         expand: Boolean? = null,
+                         expandX: Boolean? = null,
+                         expandY: Boolean? = null,
+                         fill: Boolean? = null,
+                         fillX: Boolean? = null,
+                         fillY: Boolean? = null,
+                         uniform: Boolean? = null,
+                         uniformX: Boolean? = null,
+                         uniformY: Boolean? = null,
+                         align: Int? = null,
+                         colspan: Int? = null,
+                         width: Float? = null,
+                         minWidth: Float? = null,
+                         preferredWidth: Float? = null,
+                         maxWidth: Float? = null,
+                         height: Float? = null,
+                         minHeight: Float? = null,
+                         preferredHeight: Float? = null,
+                         maxHeight: Float? = null,
+                         pad: Float? = null,
+                         padTop: Float? = null,
+                         padLeft: Float? = null,
+                         padRight: Float? = null,
+                         padBottom: Float? = null,
+                         space: Float? = null,
+                         spaceTop: Float? = null,
+                         spaceLeft: Float? = null,
+                         spaceRight: Float? = null,
+                         spaceBottom: Float? = null,
+                         row: Boolean = false): T {
+    val cell = this.inCell
+    if (grow) cell.grow()
+    if (growX) cell.growX()
+    if (growY) cell.growY()
+    expand?.let { cell.expand(it, it) }
+    expandX?.let { cell.expand(it, expandY ?: expand ?: false) }
+    expandY?.let { cell.expand(expandX ?: expand ?: false, it) }
+    fill?.let { cell.fill(it, it) }
+    fillX?.let { cell.fill(it, fillY ?: fill ?: false) }
+    fillY?.let { cell.fill(fillX ?: fill ?: false, it) }
+    uniform?.let { cell.uniform(it, it) }
+    uniformX?.let { cell.uniform(it, uniformY ?: uniform ?: false) }
+    uniformY?.let { cell.uniform(uniformX ?: uniform ?: false, it) }
+    align?.let { cell.align(it) }
+    colspan?.let { cell.colspan(colspan) }
+    width?.let { cell.width(it) }
+    minWidth?.let { cell.minWidth(it) }
+    preferredWidth?.let { cell.prefWidth(it) }
+    maxWidth?.let { cell.maxWidth(it) }
+    height?.let { cell.height(it) }
+    minHeight?.let { cell.minHeight(it) }
+    preferredHeight?.let { cell.prefHeight(it) }
+    maxHeight?.let { cell.maxHeight(it) }
+    pad?.let { cell.pad(it) }
+    padTop?.let { cell.padTop(it) }
+    padLeft?.let { cell.padLeft(it) }
+    padRight?.let { cell.padRight(it) }
+    padBottom?.let { cell.padBottom(it) }
+    space?.let { cell.space(it) }
+    spaceTop?.let { cell.spaceTop(it) }
+    spaceLeft?.let { cell.spaceLeft(it) }
+    spaceRight?.let { cell.spaceRight(it) }
+    spaceBottom?.let { cell.spaceBottom(it) }
+    if (row) cell.row()
+    return this
+  }
+
+  /**
+   * Allows to access [Cell] in this actor is stored in the [Table]. Relies on the [Actor.userObject] mechanism.
+   * @throws IllegalStateException if actor was improperly added to the [Table] or does not have its [Cell] instance
+   *    assigned as user object.
+   * @see cell
+   */
+  @Suppress("UNCHECKED_CAST")
+  val <T : Actor> T.inCell: Cell<T> get() = userObject as? Cell<T> ?:
+      throw IllegalStateException("This actor has no declared Cell. " +
+          "Was it properly added to the table? Was its user object cleared?")
 }
 
 /**
@@ -96,11 +222,48 @@ interface KTree : KWidget<KNode> {
    */
   fun add(actor: Actor): KNode
 
-  override fun storeActor(actor: Actor) = add(actor)
+  override fun storeActor(actor: Actor): KNode {
+    val node = add(actor)
+    actor.userObject = node
+    return node
+  }
+
   override fun <T : Actor> appendActor(actor: T): T {
-    add(actor)
+    val node = add(actor)
+    actor.userObject = node
     return actor
   }
+
+  /**
+   * Allows to customize properties of the [Node] storing this actor .
+   * @param icon will be drawn next to the actor.
+   * @param expanded true to expand the node, false to hide its children.
+   * @param selectable if false, this node cannot be selected.
+   * @param userObject custom object assigned to the node.
+   * @return this actor.
+   * @see inNode
+   */
+  fun <T : Actor> T.node(icon: Drawable? = null,
+                         expanded: Boolean? = null,
+                         selectable: Boolean? = null,
+                         userObject: Any? = null): T {
+    val node = inNode
+    icon?.let { node.icon = icon }
+    expanded?.let { node.isExpanded = expanded }
+    selectable?.let { node.isSelectable = selectable }
+    node.`object` = userObject
+    return this
+  }
+
+  /**
+   * Allows to access [Node] in this actor is stored in the [Tree]. Relies on the [Actor.userObject] mechanism.
+   * @throws IllegalStateException if actor was improperly added to the [Tree] or does not have its [Node] instance
+   *    assigned as user object.
+   * @see node
+   */
+  val <T : Actor> T.inNode: KNode get() = userObject as? KNode ?:
+      throw IllegalStateException("This actor has no declared Node. " +
+          "Was it properly added to the tree? Was its user object cleared?")
 }
 
 /** Extends [Button] API with type-safe widget builders.
