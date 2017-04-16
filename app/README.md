@@ -126,7 +126,7 @@ val font = BitmapFont()
 batch.use {
   font.draw(it, "KTX!", 100f, 100f)
 }
-// The snippet about is an equivalent to:
+// The snippet above is an equivalent to:
 // batch.begin()
 // font.draw(batch, "KTX!", 100f, 100f)
 // batch.end()
