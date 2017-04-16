@@ -18,6 +18,8 @@ throughout the application without the usual boilerplate thanks to utility funct
 to worry how to pass `I18NBundle` into *X*. Setting the default bundle comes down to `I18n.defaultBundle = yourBundle`,
 although you can also let the `I18n` handle loading for you and use `I18n.load("path/to/bundle", Locale.ENGLISH)`.
 
+**Note: static `I18NBundle` instance was deprecated in `1.9.6-b2` and will be removed in the next release.**
+
 #### Basic usage
 
 There are two basic functions in the `ktx-i18n` module that you are likely to use throughout the application: `nls` with

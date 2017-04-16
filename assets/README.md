@@ -12,12 +12,6 @@ for the existing API to make assets usage more natural in Kotlin applications.
 
 #### Assets
 
-- Global `AssetManager` instance is accessible (and modifiable) through `Assets.manager` utility field. Since it is
-advised to share and reuse a single `AssetManager` instance in the application and LibGDX already goes crazy with the
-statics thanks to `Gdx.files` and whatnot, this `AssetManager` instance was added to reduce asset-related boilerplate.
-If a utility asset loading (or accessing) method accepts an `AssetManager` instance, this global manager will be used by
-default to save you the trouble of getting your `AssetManager` manually. Note that its usage is completely optional and
-you can omit it entirely, while still benefiting from asset loading utility methods.
 - `load` method can be used to schedule asynchronous loading of an asset. It returns an asset wrapper, which can be
 used as delegate property, as well as used directly to manage the asset. Usually the asset will not be available until
 `Assets.manager.finishLoading` or looped `Assets.manager.update` are called. Custom `AssetManager` instance can be passed
@@ -59,6 +53,13 @@ class Test {
 - `unload` is a utility method that attempts to unload an asset from the `AssetManager`. Contrary to manual
 `AssetManager.unload` call, this is a graceful method that will not throw any exceptions if the asset was not even
 loaded. Typical usage: `unload("test.png")`.
+- Global `AssetManager` instance is accessible (and modifiable) through `Assets.manager` utility field. Since it is
+advised to share and reuse a single `AssetManager` instance in the application and LibGDX already goes crazy with the
+statics thanks to `Gdx.files` and whatnot, this `AssetManager` instance was added to reduce asset-related boilerplate.
+If a utility asset loading (or accessing) method accepts an `AssetManager` instance, this global manager will be used by
+default to save you the trouble of getting your `AssetManager` manually. Its usage is completely optional and
+you can omit it entirely, while still benefiting from asset loading utility methods. **Note: global `AssetManager`
+instance has been deprecated in `1.9.6-b2` and will be removed after the next release.**
 
 ##### Implementation tip: type-safe assets
 

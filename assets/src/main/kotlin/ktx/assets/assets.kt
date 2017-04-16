@@ -11,6 +11,7 @@ import kotlin.reflect.KProperty
  * Stores global [AssetManager] instance.
  * @author MJ
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 object Assets {
   /**
    * Global [AssetManager] instance, used by default by the utility loading methods. Should never be set to null and -
@@ -119,6 +120,7 @@ class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
  *    default.
  * @return [Asset] wrapper which allows to access the asset once it is loaded.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 inline fun <reified Type : Any> load(path: String, parameters: AssetLoaderParameters<Type>? = null,
                                      manager: AssetManager = Assets.manager): Asset<Type> {
   val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
@@ -132,6 +134,7 @@ inline fun <reified Type : Any> load(path: String, parameters: AssetLoaderParame
  *    default.
  * @return [Asset] wrapper which allows to access the asset once it is loaded.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 fun <Type> load(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Asset<Type> {
   manager.load(assetDescriptor)
   return ManagedAsset(manager, assetDescriptor)
@@ -145,6 +148,7 @@ fun <Type> load(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = 
  * @return [Asset] wrapper which will eagerly load the asset on first request.
  * @see DelayedAsset
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 inline fun <reified Type : Any> loadOnDemand(path: String, parameters: AssetLoaderParameters<Type>? = null,
                                              manager: AssetManager = Assets.manager): Asset<Type> =
     DelayedAsset(manager, AssetDescriptor(path, Type::class.java, parameters))
@@ -156,6 +160,7 @@ inline fun <reified Type : Any> loadOnDemand(path: String, parameters: AssetLoad
  * @return [Asset] wrapper which will eagerly load the asset on first request.
  * @see DelayedAsset
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 fun <Type> loadOnDemand(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Asset<Type> =
     DelayedAsset(manager, assetDescriptor)
 
@@ -184,6 +189,7 @@ inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: As
  * @return requested asset instance.
  * @throws GdxRuntimeException if asset was not loaded yet.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 inline fun <reified Type : Any> asset(path: String, manager: AssetManager = Assets.manager): Type =
     manager[path, Type::class.java]
 
@@ -194,6 +200,7 @@ inline fun <reified Type : Any> asset(path: String, manager: AssetManager = Asse
  * @return requested asset instance.
  * @throws GdxRuntimeException if asset was not loaded yet.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 fun <Type> asset(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Type =
     manager[assetDescriptor]
 
@@ -202,6 +209,7 @@ fun <Type> asset(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager =
  * @param manager [AssetManager] instance which might have been used to load the asset.
  * @return true if an asset of the selected type is currently loaded and stored in the asset manager. False otherwise.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 inline fun <reified Type : Any> isLoaded(path: String, manager: AssetManager = Assets.manager): Boolean =
     manager.isLoaded(path, Type::class.java)
 
@@ -210,6 +218,7 @@ inline fun <reified Type : Any> isLoaded(path: String, manager: AssetManager = A
  * @param manager [AssetManager] instance which might have been used to load the asset. Will attempt to unload the
  *    asset instance with this manager.
  */
+@Deprecated("Static access to AssetManager will be removed after the next release.")
 fun unload(path: String, manager: AssetManager = Assets.manager) {
   try {
     manager.unload(path)

@@ -2,11 +2,13 @@
 
 - **[UPDATE]** Updated to Kotlin 1.1.1.
 - **[UPDATE]** Updated to VisUI 1.3.0.
-- **[FEATURE]** (`ktx-app`) Added `KtxApplicationAdapter` which makes implementing all of `ApplicationListener` methods optional.
-- **[FEATURE]** (`ktx-app`) Added `KtxInputAdapter` which makes implementing all of `InputProcessor` methods optional.
 - **[FEATURE]** (`ktx-actors`) Added inlined `txt` extension properties to `Label` and `TextButton` widgets.
 - **[FEATURE]** (`ktx-actors`) Added `KtxInputListener`: an `InputListener` extension with parameter types improvements.
 - **[FEATURE]** (`ktx-actors`) `alpha` extension properties of `Actor` and `Stage` are now inlined.
+- **[FEATURE]** (`ktx-app`) Added `KtxApplicationAdapter` interface which makes implementing all of `ApplicationListener` methods optional.
+- **[FEATURE]** (`ktx-app`) Added `KtxInputAdapter` interface which makes implementing all of `InputProcessor` methods optional.
+- **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container was deprecated. Static access to `AssetManager`
+will be removed in the next release.
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
 - **[FEATURE]** (`ktx-collections`) Added type aliases to LibGDX collections to avoid name collisions with standard library:
   - **`GdxArray`**: `com.badlogic.gdx.utils.Array`
@@ -17,6 +19,10 @@
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container was deprecated. Static access to `I18NBundle` will be
+removed in the next release.
+- **[CHANGE]** (`ktx-inject`) Static `Context` instance container was deprecated. Static access to `Context` will be
+removed in the next release.
 - **[FEATURE]** (`ktx-scene2d`) `inCell` extension property added to `Table` children. Now you can easily access `Cell`
 instance outside of the actors' building blocks.
 - **[FEATURE]** (`ktx-scene2d`) `inNode` extension property added to `Tree` children. Now you can easily access `Node`

@@ -9,6 +9,7 @@ import java.util.Locale
  * Utility storage for global [I18NBundle] object.
  * @author MJ
  */
+@Deprecated("Static access to I18NBundle will be removed after the next release.")
 object I18n {
   private val listeners = com.badlogic.gdx.utils.Array<(I18NBundle?) -> Unit>(4)
   /**
@@ -67,6 +68,8 @@ operator fun I18NBundle.get(key: String, vararg args: Any?): String = this.forma
  * @param bundle i18n bundle which must contain the key. Defaults to bundle stored in [I18n].
  * @return value mapped to the key extracted from the bundle.
  */
+@Deprecated("Static access to I18NBundle will be removed after the next release.",
+    replaceWith = ReplaceWith("I18NBundle.get", imports = "ktx.i18n.*"))
 fun nls(key: String, bundle: I18NBundle = I18n.defaultBundle!!): String = bundle.get(key)
 
 /**
@@ -75,6 +78,8 @@ fun nls(key: String, bundle: I18NBundle = I18n.defaultBundle!!): String = bundle
  * @param bundle i18n bundle which must contain the key. Defaults to bundle stored in [I18n].
  * @return formatted value mapped to the key extracted from the bundle.
  */
+@Deprecated("Static access to I18NBundle will be removed after the next release.",
+    replaceWith = ReplaceWith("I18NBundle.get", imports = "ktx.i18n.*"))
 fun nls(key: String, vararg args: Any?, bundle: I18NBundle = I18n.defaultBundle!!): String = bundle.format(key, *args)
 
 /**

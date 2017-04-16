@@ -36,6 +36,8 @@ default, it will use the static `Context` instance.
 With `register` function, you can customize your `Context` with a syntax similar to the usual type-safe Kotlin builders.
 `bind` and `bindSingleton` can be used to register new providers and singletons in the context.
 
+**Note: static access to `Context` instance was deprecated in `1.9.6-b2` and will be removed in the next release.**
+
 ### Usage examples
 
 Registering a provider:

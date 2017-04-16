@@ -137,6 +137,7 @@ class InjectionException(message: String, cause: Throwable? = null) : RuntimeExc
  * @see provider
  * @see register
  */
+@Deprecated("Static access to Context will be removed after the next release.")
 object ContextContainer {
   /**
    * Application's default [Context] instance.
@@ -150,6 +151,8 @@ object ContextContainer {
  * @param Type must match the exact type used to bind the provider or singleton.
  * @return an instance of the selected type.
  */
+@Deprecated("Static access to Context will be removed after the next release.",
+    replaceWith = ReplaceWith("Context.inject", imports = "ktx.inject.Context"))
 inline fun <reified Type : Any> inject(context: Context = ContextContainer.defaultContext): Type = context.inject()
 
 /**
@@ -158,6 +161,8 @@ inline fun <reified Type : Any> inject(context: Context = ContextContainer.defau
  * @param Type must match the exact type used to bind the provider or singleton.
  * @return an instance of the provider which spawns instances of the selected type.
  */
+@Deprecated("Static access to Context will be removed after the next release.",
+    replaceWith = ReplaceWith("Context.provider", imports = "ktx.inject.Context"))
 inline fun <reified Type : Any> provider(context: Context = ContextContainer.defaultContext): () -> Type =
     context.provider()
 
@@ -167,5 +172,7 @@ inline fun <reified Type : Any> provider(context: Context = ContextContainer.def
  * @see Context.bind
  * @see Context.bindSingleton
  */
+@Deprecated("Static access to Context will be removed after the next release.",
+    replaceWith = ReplaceWith("Context.apply", imports = "ktx.inject.Context"))
 inline fun register(context: Context = ContextContainer.defaultContext, registration: Context.() -> Unit) =
     context.registration()
