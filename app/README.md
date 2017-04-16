@@ -35,6 +35,8 @@ color.
 applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
 similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
 different screen sizes.
+- `use` inlined extension methods added to `Batch` and `ShaderProgram`. They allow to omit the `begin()` and `end()`
+calls before using batches and shader programs.
 
 ### Usage examples
 
@@ -113,6 +115,21 @@ import ktx.app.LetterboxingViewport
 val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
 // Updating viewport on resize:
 viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
+```
+
+Using a `Batch`:
+
+```Kotlin
+val batch = SpriteBatch()
+val font = BitmapFont()
+// Drawing the font with batch:
+batch.use {
+  font.draw(it, "KTX!", 100f, 100f)
+}
+// The snippet about is an equivalent to:
+// batch.begin()
+// font.draw(batch, "KTX!", 100f, 100f)
+// batch.end()
 ```
 
 ### Alternatives
