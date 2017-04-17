@@ -11,6 +11,9 @@ import org.junit.Test
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 
+/**
+ * Tests general utilities related to LibGDX graphics API.
+ */
 class GraphicsTest {
   @Test
   fun `should construct Color`() {

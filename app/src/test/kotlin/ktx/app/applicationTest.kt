@@ -13,20 +13,13 @@ import org.junit.Test
 
 /**
  * Tests [KotlinApplication] - KTX equivalent of [com.badlogic.gdx.ApplicationAdapter].
- * @author MJ
  */
 class KotlinApplicationTest {
   @Before
-  fun setUpOpenGL() {
+  fun `set up OpenGL`() {
     Gdx.gl20 = mock<GL20>()
     Gdx.gl = Gdx.gl20
   }
-
-  private fun mockGraphicsWithDeltaTime(delta: Float): Graphics =
-      mock<Graphics> {
-        on(it.deltaTime) doReturn delta
-        on(it.rawDeltaTime) doReturn delta
-      }
 
   @Test
   fun `should not render if delta time is lower than fixed time step`() {
@@ -96,12 +89,28 @@ class KotlinApplicationTest {
     assertEquals(5, app.renderedTimes)
   }
 
+  @Suppress("unused")
+  class `should implement KtxApplicationAdapter with no methods overridden` : KtxApplicationAdapter {
+    // Guarantees all KtxApplicationAdapter methods are optional to implement.
+  }
+
+  @Suppress("unused")
+  class `should implement KtxInputAdapter with no methods overridden` : KtxInputAdapter {
+    // Guarantees all KtxInputAdapter methods are optional to implement.
+  }
+
   @After
-  fun clearStatics() {
+  fun `clear static LibGDX variables`() {
     Gdx.graphics = null
     Gdx.gl = null
     Gdx.gl20 = null
   }
+
+  private fun mockGraphicsWithDeltaTime(delta: Float) =
+      mock<Graphics> {
+        on(it.deltaTime) doReturn delta
+        on(it.rawDeltaTime) doReturn delta
+      }
 
   /**
    * Example implementation of [KotlinApplication]. Reports rendering data for tests.
@@ -121,15 +130,5 @@ class KotlinApplicationTest {
       lastDelta = delta
       renderedTimes++
     }
-  }
-
-  @Suppress("unused")
-  class `Should implement KtxApplicationAdapter with no methods overridden` : KtxApplicationAdapter {
-    // Guarantees all KtxApplicationAdapter methods are optional to implement.
-  }
-
-  @Suppress("unused")
-  class `Should implement KtxInputAdapter with no methods overridden` : KtxInputAdapter {
-    // Guarantees all KtxInputAdapter methods are optional to implement.
   }
 }
