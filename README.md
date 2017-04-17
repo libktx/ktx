@@ -71,4 +71,4 @@ directories in root folder to find out more about each library.
 If you want to help, read the [contribution](.github/CONTRIBUTING.md) guideline and browse through the issues to see
 what's currently to do. Don't be afraid to create issues just to ask a question or make a request for any kind of
 improvements. Before creating any pull requests, be aware that the code is dedicated to
-[public domain](.github/LICENSE.md).
+[public domain](LICENSE.txt).
