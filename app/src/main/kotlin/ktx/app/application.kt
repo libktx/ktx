@@ -3,7 +3,6 @@ package ktx.app
 import com.badlogic.gdx.ApplicationListener
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.graphics.GL20
 
 /**
  * Abstract implementation of [ApplicationListener] similar in scope to [com.badlogic.gdx.ApplicationAdapter]. Provides
@@ -25,7 +24,7 @@ abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
     timeSinceLastRender = Math.min(timeSinceLastRender + Gdx.graphics.rawDeltaTime, maxDeltaTime)
     while (timeSinceLastRender >= fixedTimeStep) {
       timeSinceLastRender -= fixedTimeStep
-      clearScreen(0f, 0f, 0f)
+      clearScreen(0f, 0f, 0f, 1f)
       render(fixedTimeStep)
     }
   }
@@ -73,16 +72,4 @@ interface KtxInputAdapter : InputProcessor {
   override fun scrolled(amount: Int) = false
   override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
   override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
-}
-
-/**
- * Clears current screen with the selected color. Inlined to lower the total method count. Assumes alpha is 1f.
- * @param red red color value.
- * @param green green color value.
- * @param blue blue color value.
- */
-@Suppress("NOTHING_TO_INLINE")
-inline fun clearScreen(red: Float, green: Float, blue: Float) {
-  Gdx.gl.glClearColor(red, green, blue, 1f)
-  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 }
