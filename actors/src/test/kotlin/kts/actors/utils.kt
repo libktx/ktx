@@ -5,23 +5,18 @@ import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.Viewport
-import org.mockito.Mockito
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 
-/**
- * @return [Stage] with mocked viewport and batch
- */
-internal fun getMockStage(): Stage {
-  mockGraphics()
-  val viewport = Mockito.mock(Viewport::class.java)
-  Mockito.`when`(viewport.worldWidth).thenReturn(800f)
-  Mockito.`when`(viewport.worldHeight).thenReturn(600f)
-  return Stage(viewport, Mockito.mock(Batch::class.java))
-}
-
-/**
- * Mocks [Gdx.graphics] instance.
- */
-internal fun mockGraphics() {
-  // Referenced by Stage constructor...
-  Gdx.graphics = Mockito.mock(Graphics::class.java)
+/** @return [Stage] with mocked viewport and batch. */
+internal fun getMockStage(
+    viewportWidth: Float = 800f,
+    viewportHeight: Float = 600f
+): Stage {
+  Gdx.graphics = mock<Graphics>() // Referenced by Stage constructor.
+  val viewport = mock<Viewport> {
+    on(it.worldWidth) doReturn viewportWidth
+    on(it.worldHeight) doReturn viewportHeight
+  }
+  return Stage(viewport, mock<Batch>())
 }

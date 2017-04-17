@@ -11,58 +11,61 @@ import org.junit.Test
 
 /**
  * Tests [Action] utilities.
- * @author MJ
  */
 class ActionsTest {
   @Test
-  fun shouldAttachGlobalActionsToStageWithPlus() {
+  fun `should attach global actions to stage with +`() {
     val stage = getMockStage()
     val action = MockAction()
-    assertFalse(action in stage.root.actions)
+
     stage + action
+
     assertTrue(action in stage.root.actions)
-    assertEquals(stage.root, action.actor)
+    assertSame(stage.root, action.actor)
   }
 
   @Test
-  fun shouldRemoveGlobalActionsFromStageWithMinus() {
+  fun `should remove global actions from stage with -`() {
     val stage = getMockStage()
     val action = MockAction()
     stage.addAction(action)
-    assertTrue(action in stage.root.actions)
-    assertEquals(stage.root, action.actor)
+
     stage - action
+
     assertFalse(action in stage.root.actions)
     assertNotEquals(stage.root, action.actor)
   }
 
   @Test
-  fun shouldAttachActionsToActorWithPlus() {
+  fun `should attach actions to actors with +`() {
     val actor = Actor()
     val action = MockAction()
-    assertFalse(action in actor.actions)
+
     actor + action
+
     assertTrue(action in actor.actions)
     assertEquals(actor, action.actor)
   }
 
   @Test
-  fun shouldRemoveActionsFromActorWithMinus() {
+  fun `should remove actions from actors with -`() {
     val actor = Actor()
     val action = MockAction()
     actor.addAction(action)
-    assertTrue(action in actor.actions)
-    assertEquals(actor, action.actor)
+
     actor - action
+
     assertFalse(action in actor.actions)
     assertNotEquals(actor, action.actor)
   }
 
   @Test
-  fun shouldChainActionsIntoSequences() {
+  fun `should chain actions into sequences`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
+
     val sequence = firstAction.then(secondAction) // === firstAction then secondAction
+
     assertTrue(sequence is SequenceAction)
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
@@ -70,12 +73,14 @@ class ActionsTest {
   }
 
   @Test
-  fun shouldChainMultipleActionsIntoSequences() {
+  fun `should chain multiple actions into sequences`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
-    // Note that the second "then" is a different extension function - it prevents from creating multiple sequences.
+
+    // / Note that the second "then" is a different extension function - it prevents from creating multiple sequences.
     val sequence = firstAction then secondAction then thirdAction
+
     assertTrue(sequence is SequenceAction)
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
@@ -84,10 +89,12 @@ class ActionsTest {
   }
 
   @Test
-  fun shouldCreateParallelActions() {
+  fun `should create parallel actions`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
+
     val parallel = firstAction.parallelTo(secondAction) // === firstAction parallelTo secondAction
+
     assertTrue(parallel is ParallelAction)
     assertTrue(firstAction in parallel.actions)
     assertTrue(secondAction in parallel.actions)
@@ -95,12 +102,14 @@ class ActionsTest {
   }
 
   @Test
-  fun shouldChainParallelActions() {
+  fun `should chain parallel actions`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
+
     // Note that the second "parallelTo" is a different extension function - it prevents from creating multiple parallels.
     val parallel = firstAction parallelTo secondAction parallelTo thirdAction
+
     assertTrue(parallel is ParallelAction)
     assertTrue(firstAction in parallel.actions)
     assertTrue(secondAction in parallel.actions)
@@ -109,16 +118,14 @@ class ActionsTest {
   }
 
   @Test
-  fun shouldCreateActionsRepeatingForever() {
+  fun `should create actions repeating forever`() {
     val action = MockAction().repeatForever()
+
     assertTrue(action is RepeatAction)
     assertEquals(RepeatAction.FOREVER, action.count)
   }
 
-  /**
-   * Action testing utility.
-   * @author MJ
-   */
+  /** Action testing utility. */
   class MockAction : Action() {
     var acted = false
     override fun act(delta: Float): Boolean {

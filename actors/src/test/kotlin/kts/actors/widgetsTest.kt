@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.nhaarman.mockito_kotlin.mock
 import ktx.actors.txt
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import com.badlogic.gdx.utils.Array as GdxArray
 
 class WidgetsTest {
@@ -26,48 +26,44 @@ class WidgetsTest {
     // constructors. Label will not successfully construct an instance without a BitmapFont.
     LwjglNativesLoader.load()
 
-    Gdx.graphics = Mockito.mock(Graphics::class.java)
-    Gdx.app = Mockito.mock(Application::class.java)
-    Gdx.gl = Mockito.mock(GL20::class.java)
+    Gdx.graphics = mock<Graphics>()
+    Gdx.app = mock<Application>()
+    Gdx.gl20 = mock<GL20>()
     Gdx.files = LwjglFiles()
-    Gdx.gl20 = Gdx.gl
+    Gdx.gl = Gdx.gl20
   }
 
   @Test
   fun `should read text property of a Label`() {
-    val given = Label("text", LabelStyle(BitmapFont(), Color.BLACK))
+    val label = Label("text", LabelStyle(BitmapFont(), Color.BLACK))
 
-    val expect = given.txt
-
-    assertEquals("text", expect)
+    assertEquals("text", label.txt)
   }
 
   @Test
   fun `should write text property of a Label`() {
-    val given = Label("text", LabelStyle(BitmapFont(), Color.BLACK))
+    val label = Label("text", LabelStyle(BitmapFont(), Color.BLACK))
 
-    given.txt = "replaced"
+    label.txt = "replaced"
 
-    val expect = given.text.toString()
-    assertEquals("replaced", expect)
+    val text = label.text.toString()
+    assertEquals("replaced", text)
   }
 
   @Test
   fun `should read text property of a TextButton`() {
-    val given = TextButton("text", TextButtonStyle().apply { font = BitmapFont() })
+    val button = TextButton("text", TextButtonStyle().apply { font = BitmapFont() })
 
-    val expect = given.txt
-
-    assertEquals("text", expect)
+    assertEquals("text", button.txt)
   }
 
   @Test
   fun `should write text property of a TextButton`() {
-    val given = TextButton("text", TextButtonStyle().apply { font = BitmapFont() })
+    val button = TextButton("text", TextButtonStyle().apply { font = BitmapFont() })
 
-    given.txt = "replaced"
+    button.txt = "replaced"
 
-    val expect = given.text.toString()
-    assertEquals("replaced", expect)
+    val text = button.text.toString()
+    assertEquals("replaced", text)
   }
 }
