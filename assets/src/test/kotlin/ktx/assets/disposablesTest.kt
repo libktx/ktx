@@ -1,157 +1,168 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.GdxRuntimeException
+import com.nhaarman.mockito_kotlin.doThrow
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyZeroInteractions
 import org.junit.Assert.*
 import org.junit.Test
-import org.mockito.Mock
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [Disposable] utilities.
- * @author MJ
  */
 class DisposablesTest {
   @Test
-  fun shouldSafelyDisposeHeavyResources() {
-    val disposable = MockDisposable()
-    assertFalse(disposable.disposed)
+  fun `should safely dispose heavy resources`() {
+    val disposable = mock<Disposable>()
+
     disposable.disposeSafely()
-    assertTrue(disposable.disposed)
+
+    verify(disposable).dispose()
   }
 
   @Test
-  fun shouldSilentlyIgnoreExceptionsDuringSafeDisposing() {
-    val disposable = BrokenDisposable() // Always throws RuntimeException on dispose().
+  fun `should silently ignore exceptions during safe disposing`() {
+    val disposable = mock<Disposable> {
+      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+    }
+
     disposable.disposeSafely() // Should not throw any exceptions.
-    assertNotNull(disposable)
+
+    verify(disposable).dispose()
   }
 
-  private fun getNullDisposable(): Disposable? = null
   @Test
-  fun shouldSilentlyIgnoreNullsDuringSafeDisposing() {
-    val disposable = getNullDisposable() // Always returns null.
+  fun `should Silently Ignore Nulls During Safe Disposing`() {
+    val disposable: Disposable? = null
+
     disposable.disposeSafely()
+
     assertNull(disposable)
   }
 
   @Test
-  fun shouldDisposeWithCatchBlock() {
-    val disposable = MockDisposable()
-    assertFalse(disposable.disposed)
+  fun `should Dispose With Catch Block`() {
+    val disposable = mock<Disposable>()
+
     disposable.dispose { ex -> fail(ex.message) } // Fails on error.
-    assertTrue(disposable.disposed)
+
+    verify(disposable).dispose()
   }
 
   @Test
-  fun shouldPassExceptionsToCatchBlock() {
-    val disposable = BrokenDisposable()
-    var caught = false
-    disposable.dispose { caught = true }
-    assertTrue(caught)
+  fun `should pass exceptions to catch block`() {
+    val exception = GdxRuntimeException("Expected.")
+    var thrown: Exception? = null
+    val disposable = mock<Disposable> {
+      on(it.dispose()) doThrow exception
+    }
+
+    disposable.dispose { thrown = it }
+
+    assertSame(exception, thrown)
+    verify(disposable).dispose()
   }
 
   @Test
-  fun shouldDisposeIterablesOfAssets() {
-    val disposables = GdxArray.with(MockDisposable(), MockDisposable(), MockDisposable())
-    disposables.forEach { assertFalse(it.disposed) }
+  fun `should dispose iterables of assets`() {
+    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+
     disposables.dispose()
-    disposables.forEach { assertTrue(it.disposed) }
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldIgnoreNullsDuringIterablesDisposing() {
-    val disposables = GdxArray.with(MockDisposable(), MockDisposable(), getNullDisposable())
-    disposables.forEach { if (it is MockDisposable) assertFalse(it.disposed) }
+  fun `should ignore nulls during iterables disposing`() {
+    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), null)
+
     disposables.dispose()
-    disposables.forEach { if (it is MockDisposable) assertTrue(it.disposed) }
+
+    disposables.forEach { it?.let { verify(it).dispose() } }
   }
 
   @Test
   fun shouldSafelyDisposeIterablesOfAssets() {
-    val disposables = GdxArray.with(BrokenDisposable(), MockDisposable(), getNullDisposable())
-    disposables.forEach { if (it is MockDisposable) assertFalse(it.disposed) }
+    val disposables = GdxArray.with(mock<Disposable>(), null, mock<Disposable> {
+      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+    })
+
     disposables.disposeSafely()
-    disposables.forEach { if (it is MockDisposable) assertTrue(it.disposed) }
+
+    disposables.forEach { it?.let { verify(it).dispose() } }
   }
 
   @Test
-  fun shouldDisposeIterablesOfAssetsWithCatchBlock() {
-    val disposables = GdxArray.with(MockDisposable(), MockDisposable(), MockDisposable())
-    disposables.forEach { assertFalse(it.disposed) }
-    disposables.dispose { ex -> fail(ex.message) } // Fails on exceptions.
-    disposables.forEach { assertTrue(it.disposed) }
+  fun `should dispose iterables of assets with catch block`() {
+    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+
+    disposables.dispose { fail(it.message) } // Fails on unexpected exception.
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldPassExceptionOnDisposeOfIterablesOfAssetsWithCatchBlock() {
-    val disposables = GdxArray.with(BrokenDisposable(), MockDisposable(), getNullDisposable())
-    var exceptions = 0
-    disposables.forEach { if (it is MockDisposable) assertFalse(it.disposed) }
-    disposables.dispose { exceptions++ } // Increments exceptions counter on exception.
-    disposables.forEach { if (it is MockDisposable) assertTrue(it.disposed) }
-    assertEquals(1, exceptions) // BrokenDisposable should throw an exception.
+  fun `should pass exception on dispose of iterables of assets with catch block`() {
+    val exception = GdxRuntimeException("Expected.")
+    val disposables = GdxArray.with(mock<Disposable>(), null, mock<Disposable> {
+      on(it.dispose()) doThrow exception
+    })
+
+    disposables.dispose { assertSame(exception, it) }
+
+    disposables.forEach { it?.let { verify(it).dispose() } }
   }
 
   @Test
-  fun shouldDisposeArraysOfAssets() {
-    val disposables = arrayOf(MockDisposable(), MockDisposable(), MockDisposable())
-    disposables.forEach { assertFalse(it.disposed) }
+  fun `should dispose arrays of assets`() {
+    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+
     disposables.dispose()
-    disposables.forEach { assertTrue(it.disposed) }
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldSafelyDisposeArraysOfAssets() {
-    val disposables = arrayOf(MockDisposable(), BrokenDisposable(), MockDisposable())
-    disposables.forEach { if (it is MockDisposable) assertFalse(it.disposed) }
+  fun `should safely dispose arrays of assets`() {
+    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable> {
+      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+    })
+
     disposables.disposeSafely()
-    disposables.forEach { if (it is MockDisposable) assertTrue(it.disposed) }
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldDisposeArraysOfAssetsWithCatchBlock() {
-    val disposables = arrayOf(MockDisposable(), MockDisposable(), MockDisposable())
-    disposables.forEach { assertFalse(it.disposed) }
-    disposables.dispose { ex -> fail(ex.message) } // Fails on exceptions.
-    disposables.forEach { assertTrue(it.disposed) }
+  fun `should dispose arrays of assets with catch block`() {
+    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+
+    disposables.dispose { fail(it.message) } // Fails on unexpected exception.
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldPassExceptionOnDisposeOfArraysOfAssetsWithCatchBlock() {
-    val disposables = GdxArray.with(BrokenDisposable(), MockDisposable(), BrokenDisposable())
-    var exceptions = 0
-    disposables.forEach { if (it is MockDisposable) assertFalse(it.disposed) }
-    disposables.dispose { exceptions++ } // Increments exceptions counter on exception.
-    disposables.forEach { if (it is MockDisposable) assertTrue(it.disposed) }
-    assertEquals(2, exceptions) // BrokenDisposables should throw an exception.
+  fun `should pass exception on dispose of arrays of assets with catch block`() {
+    val exception = GdxRuntimeException("Expected.")
+    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable> {
+      on(it.dispose()) doThrow exception
+    })
+
+    disposables.dispose { assertSame(exception, it) }
+
+    disposables.forEach { verify(it).dispose() }
   }
 
   @Test
-  fun shouldIgnoreExceptionsWithANoOp() {
-    val exception = RuntimeException("Should be unmodified.")
-    val message = exception.message
-    val cause = exception.cause
+  fun `should ignore exceptions with a no-op`() {
+    val exception = mock<Exception>()
+
     exception.ignore()
-    assertSame(message, exception.message)
-    assertSame(cause, exception.cause)
-  }
 
-  /**
-   * Allows to test [Disposable] utilities.
-   * @author MJ
-   */
-  class MockDisposable : Disposable {
-    var disposed = false
-    override fun dispose() {
-      disposed = true
-    }
-  }
-
-  /**
-   * Allows to test [Disposable] utilities.
-   * @author MJ
-   */
-  class BrokenDisposable : Disposable {
-    override fun dispose() = throw RuntimeException()
+    verifyZeroInteractions(exception)
   }
 }

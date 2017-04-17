@@ -8,7 +8,6 @@ import java.io.File
 
 /**
  * Provides [FileHandle] instances based on [File].
- * @author MJ
  */
 class MockFiles : Files { // Implementation note: believe it or not, this was easier to set up than Mockito.
   override fun classpath(path: String): FileHandle = getFileHandle(path, Classpath)
@@ -25,6 +24,5 @@ class MockFiles : Files { // Implementation note: believe it or not, this was ea
 
 /**
  * Exposes protected ([File], [FileType]) constructor of [FileHandle].
- * @author MJ
  */
 class MockFileHandle(file: File, type: FileType?) : FileHandle(file, type)

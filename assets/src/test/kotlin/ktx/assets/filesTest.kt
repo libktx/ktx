@@ -9,59 +9,73 @@ import org.junit.Test
 
 /**
  * Tests files-related utilities.
- * @author MJ
  */
 class FilesTest {
   @Before
-  fun mockFiles() {
+  fun `mock Files`() {
     Gdx.files = MockFiles()
   }
 
   @Test
-  fun shouldConvertStringToClasspathFileHandle() {
+  fun `should convert string to classpath FileHandle`() {
     val file = "my/package/classpath.file".toClasspathFile()
+
     assertNotNull(file)
     assertEquals(Classpath, file.type())
     assertEquals("my/package/classpath.file", file.path())
   }
 
   @Test
-  fun shouldConvertStringToInternalFileHandle() {
+  fun `should convert string to internal FileHandle`() {
     val file = "internal.file".toInternalFile()
+
     assertNotNull(file)
     assertEquals(Internal, file.type())
     assertEquals("internal.file", file.path())
   }
 
   @Test
-  fun shouldConvertStringToLocalFileHandle() {
+  fun `should convert string to local FileHandle`() {
     val file = "local.file".toLocalFile()
+
     assertNotNull(file)
     assertEquals(Local, file.type())
     assertEquals("local.file", file.path())
   }
 
   @Test
-  fun shouldConvertStringToExternalFileHandle() {
+  fun `should convert string to external FileHandle`() {
     val file = "some/directory/external.file".toExternalFile()
+
     assertNotNull(file)
     assertEquals(External, file.type())
     assertEquals("some/directory/external.file", file.path())
   }
 
   @Test
-  fun shouldConvertStringToAbsoluteFileHandle() {
+  fun `should convert string to absolute FileHandle`() {
     val file = "/home/mock/absolute.file".toAbsoluteFile()
+
     assertNotNull(file)
     assertEquals(Absolute, file.type())
     assertEquals("/home/mock/absolute.file", file.path())
   }
 
   @Test
-  fun shouldCreateFile() {
+  fun `should create FileHandle with default type`() {
     val file = file("mock.file")
+
     assertNotNull(file)
     assertEquals(Internal, file.type())
     assertEquals("mock.file", file.path())
+  }
+
+  @Test
+  fun `should create FileHandle with custom type`() {
+    val file = file("/home/ktx/mock.file", type = Absolute)
+
+    assertNotNull(file)
+    assertEquals(Absolute, file.type())
+    assertEquals("/home/ktx/mock.file", file.path())
   }
 }

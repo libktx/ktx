@@ -20,13 +20,12 @@ import org.junit.Test
 
 /**
  * Tests asset-related utilities and [AssetManager] extensions.
- * @author MJ
  */
 class AssetsTest {
   val assetManager: AssetManager = managerWithMockAssetLoader()
 
   @Before
-  fun mockFiles() {
+  fun `mock files`() {
     Gdx.files = MockFiles()
   }
 
@@ -450,7 +449,6 @@ private fun AssetManager.loadAll() {
 
 /**
  * Represents a mock-up asset. Implements [Disposable] for testing utility.
- * @author MJ
  * @param data path of the file.
  * @param additional optional string value passed with [MockParameter].
  */
@@ -464,7 +462,6 @@ class MockAsset(val data: String, val additional: String?) : Disposable {
 /**
  * Mocks asynchronous file loading. Sets [MockAsset.data] as file path. Extracts [MockAsset.additional] from
  * [MockParameter] (if present).
- * @author MJ
  */
 class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
     AsynchronousAssetLoader<MockAsset, MockParameter>(fileHandleResolver) {
@@ -485,10 +482,7 @@ class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
   override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?):
       Array<AssetDescriptor<Any>>? = null
 
-  /**
-   * Allows to set [MockAsset.additional].
-   * @author MJ
-   */
+  /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
   class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
 }
 
