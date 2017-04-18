@@ -30,17 +30,17 @@ extension methods to `AssetManager` to provide an alternative to equivalent util
 removed in the next release.
 - **[CHANGE]** (`ktx-inject`) Static `Context` instance container was deprecated. Static access to `Context` will be
 removed in the next release.
-- **[FEATURE]** (`ktx-scene2d`) `inCell` extension property added to `Table` children. Now you can easily access `Cell`
+- **[FEATURE]** (`ktx-scene2d`, `ktx-vis`) `inCell` extension property added to `Table` children. Now you can easily access `Cell`
 instance outside of the actors' building blocks.
-- **[FEATURE]** (`ktx-scene2d`) `inNode` extension property added to `Tree` children. Now you can easily access `Node`
+- **[FEATURE]** (`ktx-scene2d`, `ktx-vis`) `inNode` extension property added to `Tree` children. Now you can easily access `Node`
 instance outside of the actors' building blocks.
-- **[FEATURE]** (`ktx-scene2d`) fluent `cell` extension method added to `Table` children, allowing to configure `Cell`
+- **[FEATURE]** (`ktx-scene2d`, `ktx-vis`) fluent `cell` extension method added to `Table` children, allowing to configure `Cell`
 properties outside of actors' building blocks.
-- **[FEATURE]** (`ktx-scene2d`) fluent `node` extension method added to `Tree` children, allowing to configure `Node`
+- **[FEATURE]** (`ktx-scene2d`, `ktx-vis`) fluent `node` extension method added to `Tree` children, allowing to configure `Node`
 properties outside of actors' building blocks.
-- **[FEATURE]** (`ktx-scene2d`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
-- **[CHANGE]** (`ktx-scene2d`) Due to `@DslMarker` introduction, implicit access to parental widgets is no longer possible
-in children building blocks. See `ktx-scene2d` documentation for more info on the migration.
+- **[FEATURE]** (`ktx-scene2d`, `ktx-vis`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
+- **[CHANGE]** (`ktx-scene2d`, `ktx-vis`) Due to `@DslMarker` introduction, implicit access to parental widgets is no longer possible
+in children building blocks. See `ktx-scene2d` or `ktx-vis` documentation for more info on the migration.
 - **[CHANGE]** (`ktx-scene2d`) `KNode.invoke` extension method was moved directly to `KNode` API and no longer has to be imported.
 - **[FEATURE]** (`ktx-style`) `Skin` instance is now available under lambda parameter of `skin` method init blocks.
 - **[FEATURE]** (`ktx-style`, `ktx-style-vis`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
@@ -48,6 +48,8 @@ in children building blocks. See `ktx-scene2d` documentation for more info on th
 See `ktx-style` documentation for more info on the migration.
 - **[FEATURE]** (`ktx-vis`) Added support for `HorizontalCollapsibleWidget`: `horizontalCollapsible` builder methods
 added to all parental actors.
+- **[FEATURE]** (`ktx-vis`) Added support for `VisTree` building using type-safe API.
+- **[CHANGE]** (`ktx-vis`) Cells and nodes are now available as lambda parameters. See `ktx-vis` documentation for migration guide.
 
 #### 1.9.6-b1
 
