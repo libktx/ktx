@@ -235,6 +235,29 @@ window(title = "Hello world!") {
 ```
 ![Window](img/02.png)
 
+Accessing `Cell` instances of`Table` children outside of building blocks:
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+
+table {
+  val label: Label = label("Cell properties modified.").cell(expand = true)
+  val cell: Cell<Label> = label("Wrapped in cell.").inCell
+  val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
+  val afterBuildingBlock: Cell<Label> = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.cell(expand = true).inCell
+
+  // Cells are available only for direct children of tables (or its extensions). 
+  stack {
+    // These would not compile:
+    label("Invalid.").cell(expand = true)
+    label("Invalid").inCell
+  }
+}
+```
+
 Creating `Tree` of `Label` instances:
 ```Kotlin
 import ktx.scene2d.*
@@ -254,6 +277,24 @@ tree {
 }
 ```
 ![Tree](img/03.png)
+
+Accessing `Node` instances of `Tree` children outside of building blocks (note that `KNode` is **KTX** custom wrapper
+of LibGDX `Tree.Node` with additional building API support):
+```Kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+
+tree {
+  val label: Label = label("Node properties modified.").node(expanded = true)
+  val cell: Node = label("Wrapped in node.").inNode
+  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
+  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.node(expanded = true).inNode
+  // Nodes are available only for children of trees.
+}
+```
 
 Creating `List` and `SelectBox` widgets storing strings:
 ```Kotlin
@@ -277,51 +318,10 @@ table {
 ```
 ![List](img/04.png)
 
-Accessing `Cell` instances with`Table` children outside of building blocks:
-```Kotlin
-import ktx.scene2d.*
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-
-table {
-  val label: Label = label("Cell properties modified.").cell(expand = true)
-  val cell: Cell<Label> = label("Wrapped in cell.").inCell
-  val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
-  val afterBuildingBlock: Cell<Label> = label("Not limited to no init block actors.") {
-    setWrap(true)
-  }.cell(expand = true).inCell
-
-  // Cells are available only for direct children of tables (or its extensions). 
-  stack {
-    // These would not compile:
-    label("Invalid.").cell(expand = true)
-    label("Invalid").inCell
-  }
-}
-```
-
-Accessing `Node` instances with `Table` children outside of building blocks (note that `KNote` is **KTX** custom wrapper
-of LibGDX `Tree.Node` with additional building API support):
-```Kotlin
-import ktx.scene2d.*
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
-
-tree {
-  val label: Label = label("Node properties modified.").node(expanded = true)
-  val cell: Node = label("Wrapped in node.").inNode
-  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
-  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
-    setWrap(true)
-  }.node(expanded = true).inNode
-  // Nodes are available only for children of trees.
-}
-```
-
 ### Migration guide
 
 Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
-full access to all parent methods. For example, this code would compile prior to `1.9.4-b2`:
+full access to all parent methods. For example, this code would compile prior to `1.9.6-b2`:
 
 ```Kotlin
 table {

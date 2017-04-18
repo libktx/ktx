@@ -14,13 +14,3 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree
 inline fun tree(style: String = defaultStyle,
                 skin: Skin = Scene2DSkin.defaultSkin,
                 init: KTreeWidget.() -> Unit) = actor(KTreeWidget(skin, style), init)
-
-/**
- * Allows to inline a function block on a [KNode]. Syntax sugar for nested [Tree] nodes creation.
- * @param init will be invoked on this node.
- * @return this node.
- */
-inline operator fun KNode.invoke(init: KNode.() -> Unit): KNode {
-  this.init()
-  return this
-}

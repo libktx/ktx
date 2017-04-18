@@ -360,6 +360,16 @@ class KNode(actor: Actor) : Node(actor), KTree {
     add(node)
     return node
   }
+
+  /**
+   * Allows to inline a function block on a [KNode]. Syntax sugar for nested [Tree] nodes creation.
+   * @param init will be invoked on this node.
+   * @return this node.
+   */
+  inline operator fun invoke(init: KNode.() -> Unit): KNode {
+    this.init()
+    return this
+  }
 }
 
 /** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
