@@ -19,6 +19,8 @@ as improve existing asynchronous APIs to feel more like Kotlin.
 Other asynchronous operations utilities include:
 - `schedule` and `interval` functions were added to simplify LibGDX `Timer` API. Normally it requires the user to extend
 an abstract class - these utility functions allow to use idiomatic Kotlin lambdas syntax.
+- `HttpRequestResult` is a thread-safe wrapper of `HttpResponse` that reads and caches HTTP response content. These
+objects are returned by the coroutines-based HTTP requests API.
 
 ### Usage examples
 

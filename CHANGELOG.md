@@ -18,6 +18,7 @@ extension methods to `AssetManager` to provide an alternative to equivalent util
 - **[FEATURE]** (`ktx-assets`) Added `getLoader` and `setLoader` extension methods to `AssetManager` for `AssetLoader` handling.
 - **[FEATURE]** (`ktx-async`) Implemented a new KTX module with multi-threaded operations utilities: `ktx-async`.
   - `schedule` and `interval` utility methods added to ease the use of `com.badlogic.gdx.utils.Timer` API.
+  - Added `HttpRequestResult`: a thread-safe `HttpResponse` wrapper that addresses [libgdx#4700](https://github.com/libgdx/libgdx/issues/4700).
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
 - **[FEATURE]** (`ktx-collections`) Added type aliases to LibGDX collections to avoid name collisions with standard library:
   - **`GdxArray`**: `com.badlogic.gdx.utils.Array`
