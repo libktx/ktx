@@ -41,6 +41,7 @@ properties outside of actors' building blocks.
 - **[FEATURE]** (`ktx-scene2d`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
 - **[CHANGE]** (`ktx-scene2d`) Due to `@DslMarker` introduction, implicit access to parental widgets is no longer possible
 in children building blocks. See `ktx-scene2d` documentation for more info on the migration.
+- **[CHANGE]** (`ktx-scene2d`) `KNode.invoke` extension method was moved directly to `KNode` API and no longer has to be imported.
 - **[FEATURE]** (`ktx-style`) `Skin` instance is now available under lambda parameter of `skin` method init blocks.
 - **[FEATURE]** (`ktx-style`, `ktx-style-vis`) Resolved DSL scoping issues with Kotlin 1.1 `@DslMarker` API.
 - **[CHANGE]** (`ktx-style`, `ktx-style-vis`) Due to `@DslMarker` introduction, implicit access to `Skin` instance is no longer possible.
