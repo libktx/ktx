@@ -1,1 +1,13 @@
-include 'actors', 'app', 'assets', 'collections', 'i18n', 'inject', 'log', 'math', 'scene2d', 'style', 'vis', 'vis-style'
+include 'actors',
+        'app',
+        'assets',
+        'async',
+        'collections',
+        'i18n',
+        'inject',
+        'log',
+        'math',
+        'scene2d',
+        'style',
+        'vis',
+        'vis-style'

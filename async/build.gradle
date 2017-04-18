@@ -1,0 +1,10 @@
+kotlin {
+  experimental {
+    coroutines 'enable'
+  }
+}
+
+dependencies {
+  provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  provided "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
+}
