@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
-import com.kotcrab.vis.ui.widget.ButtonBar
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import org.junit.Assert.*
 import org.junit.Ignore
@@ -18,7 +17,7 @@ import org.junit.Test
  * @author Kotcrab
  */
 @Ignore("Base class for others tests should not be tested")
-abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibgdx() {
+abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibGDX() {
   @Test
   fun shouldCreateLabel() = testFactoryMethod({ it.label("label") })
 
@@ -164,40 +163,34 @@ abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibgdx() 
   fun shouldCreateHorizontalCollapsible() = testFactoryMethod({ it.horizontalCollapsible(table { }) })
 
   @Test
-  fun shouldCreateButtonBar() = testFactoryMethod({ it.buttonBar { }.result })
+  fun shouldCreateTabbedPane() = testFactoryMethod({ it.tabbedPane { }.table })
 
   @Test
-  fun shouldCreateButtonBarWithCustomOrder() = testFactoryMethod({ it.buttonBar(ButtonBar.WINDOWS_ORDER) { }.result })
-
-  @Test
-  fun shouldCreateTabbedPane() = testFactoryMethod({ it.tabbedPane { }.result })
-
-  @Test
-  fun shouldCreateListView() = testFactoryMethod({ it.listView(SimpleListAdapter(Array<String>())).result })
+  fun shouldCreateListView() = testFactoryMethod({ it.listView(SimpleListAdapter(Array<String>())).mainTable })
 
   @Test
   fun shouldCreateActor() = testFactoryMethod({ it.actor(Actor(), {}) })
 
-  abstract fun testFactoryMethod(factoryMethodUnderTest: (F) -> FR)
+  abstract fun testFactoryMethod(factoryMethodUnderTest: (F) -> Actor)
 }
 
 class TableWidgetFactoryTest : WidgetFactoryTest<TableWidgetFactory, Cell<*>>() {
-  override fun testFactoryMethod(factoryMethodUnderTest: (TableWidgetFactory) -> Cell<*>) {
+  override fun testFactoryMethod(factoryMethodUnderTest: (TableWidgetFactory) -> Actor) {
     var initInvoked = false
     table {
       initInvoked = true
       val childrenBeforeWidgetAdded = children.size
-      val widgetCell = factoryMethodUnderTest(this)
-      assertNotNull(widgetCell)
+      val widget = factoryMethodUnderTest(this)
+      assertNotNull(widget)
       assertEquals(childrenBeforeWidgetAdded + 1, children.size)
-      assertTrue(children.last() == widgetCell.actor)
+      assertTrue(children.last() == widget)
     }
     assertTrue(initInvoked)
   }
 }
 
-class WidgetGroupWidgetFactoryTest : WidgetFactoryTest<WidgetGroupWidgetFactory, Actor>() {
-  override fun testFactoryMethod(factoryMethodUnderTest: (WidgetGroupWidgetFactory) -> Actor) {
+class WidgetGroupWidgetFactoryTest : WidgetFactoryTest<WidgetFactory<Actor>, Actor>() {
+  override fun testFactoryMethod(factoryMethodUnderTest: (WidgetFactory<Actor>) -> Actor) {
     var initInvoked = false
     horizontalGroup {
       initInvoked = true
@@ -210,5 +203,3 @@ class WidgetGroupWidgetFactoryTest : WidgetFactoryTest<WidgetGroupWidgetFactory,
     assertTrue(initInvoked)
   }
 }
-
-

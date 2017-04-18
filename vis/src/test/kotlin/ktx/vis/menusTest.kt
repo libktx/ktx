@@ -6,7 +6,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /** @author Kotcrab */
-class MenusTest : NeedsLibgdx() {
+class MenusTest : NeedsLibGDX() {
   @Test
   fun shouldCreatePopupMenu() {
     var initInvoked = false

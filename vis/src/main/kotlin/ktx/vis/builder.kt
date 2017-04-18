@@ -1,10 +1,7 @@
 package ktx.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Stack
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.Disableable
 import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
@@ -15,6 +12,7 @@ import com.kotcrab.vis.ui.util.form.FormValidator
 import com.kotcrab.vis.ui.widget.VisTable
 import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab
+import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.toast.ToastTable
 
 /** @author Kotcrab */
@@ -62,13 +60,21 @@ inline fun floatingGroup(prefWidth: Float, prefHeight: Float, init: KFloatingGro
 /** Begins creation of UI using type-safe builder, uses [Stack] as base widget container. */
 inline fun stack(init: KStack.() -> Unit): Stack = actor(KStack(), init)
 
-inline fun <T : Actor> actor(actor: T, init: T.() -> Unit): T {
+/**
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param init will be invoked on the widget. Inlined.
+ * @return a new [Tree] instance.
+ */
+inline fun tree(style: String = DEFAULT_STYLE, init: KVisTree.() -> Unit) = actor(KVisTree(style), init)
+
+
+inline fun <T : Actor> actor(actor: T, init: (@VisDsl T).() -> Unit): T {
   actor.init()
   return actor
 }
 
 /** Begins creation of [Tab] using type-safe builder, note that returned [Tab] must be manually added to [TabbedPane]. */
-inline fun tab(title: String, savable: Boolean = false, closeableByUser: Boolean = true, init: KTab.() -> Unit): Tab {
+inline fun tab(title: String, savable: Boolean = false, closeableByUser: Boolean = true, init: (@VisDsl KTab).() -> Unit): Tab {
   val tab = KTab(title, savable, closeableByUser)
   tab.init()
   return tab

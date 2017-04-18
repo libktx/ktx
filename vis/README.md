@@ -27,22 +27,6 @@ The closures get full access to all public methods that chosen `WidgetGroup` has
 new widgets to group simply by invoking methods from `WidgetFactory` interface, which is available from all type-safe 
 builders.
 
-In LibGDX `WidgetGroup` classes can be divided into two types: `Table`-like, where all actors are stored in fully
-customizable `Cell` instances and regular groups, which handle children rendering internally. If the root actor extends
-`Table` class, its actor-adding methods return `Cell` instance that you can use to set up individual actor properties:
-
-```Kotlin
-table {
-  val cell = label("") // Assigning cell for further use.
-  val actor = label("").actor // Extracting VisLabel from Cell. 
-  label("").pad(1f).grow() // Adding VisLabel, changing Cell properties.
-}
-
-verticalGroup { 
-  val label = label("") // No Cell wrapping: not a Table.
-}
-```
-
 #### Additional extensions
 
 Consider using [ktx-actors](../actors) module to improve event handling with lambda-friendly extension methods like
@@ -56,6 +40,8 @@ factory methods for root actors already return the extended widgets where necess
 #### Tooltips
 `ktx-vis` provides extension methods for creating VisUI tooltips:
 ```Kotlin
+import ktx.vis.*
+
 label("Label with tooltip") {
   addTextTooltip("Tooltip text")
 }
@@ -70,6 +56,8 @@ These methods include:
 
 `Menu` and `PopupMenu` instances are created in very similar way to UI layouts.
 ```Kotlin
+import ktx.vis.*
+
 val menu = popupMenu {
   menuItem("First Item")
   menuItem("Second Item")
@@ -79,7 +67,6 @@ val menu = popupMenu {
     }
   }
 }
-// ...
 menu.showMenu(stage, 0f, 0f)
 ```
 
@@ -90,6 +77,8 @@ See examples section for `MenuBar` usage.
 Creating a `VisWindow`, immediately added to a `Stage`:
 
 ```Kotlin
+import ktx.vis.*
+
 stage.addActor(window("Window") {
   isModal = true
   label("Hello from Window")
@@ -99,6 +88,8 @@ stage.addActor(window("Window") {
 Creating a `MenuBar`:
 
 ```Kotlin
+import ktx.vis.*
+
 val menuBar = menuBar {
   menu("File") {
     menuItem("New") {
@@ -120,10 +111,12 @@ val menuBar = menuBar {
 rootTable.add(menuBar.table).top().growX().row()
 ```
 
-![](http://dl.kotcrab.com/github/ktx/menu.png)
+![](img/menu.png)
 
 Creating `ButtonGroup`:
 ```Kotlin
+import ktx.vis.*
+
 buttonTable {
     checkBox("First")
     checkBox("Second")
@@ -139,17 +132,45 @@ minimum and maximum counts of buttons checked at once.
 Creating a `ButtonBar`:
 
 ```Kotlin
+import ktx.vis.*
+import com.kotcrab.vis.ui.widget.ButtonBar.ButtonType
+
 buttonBar {
-  setButton(APPLY, textButton("Accept"))
-  setButton(CANCEL, textButton("Cancel"))
+  setButton(ButtonType.APPLY, textButton("Accept"))
+  setButton(ButtonType.CANCEL, textButton("Cancel"))
 }
 ```
+
+Creating `Tree` of `Label` instances:
+```Kotlin
+import ktx.scene2d.*
+
+tree {
+  label("Node")
+  label("Node")
+  label("Nest") { node ->
+    node {
+      label("Nested") { node ->
+        node.label("Nested")
+      }
+      label("Nested")
+    }
+  }
+  label("Node")
+}
+```
+![Tree](img/tree.png)
 
 Creating a `TabbedPane` with multiple tabs:
 
 ```Kotlin
-table {
-  tabbedPane("vertical") {
+import ktx.vis.*
+
+table { cell ->
+  cell.grow()
+
+  tabbedPane("vertical", { cell ->
+    cell.growY()
     tab("Tab1") {
       label("Inside tab 1")
     }
@@ -159,53 +180,54 @@ table {
     tab("Tab3") {
       label("Inside tab 3")
     }
-
-    addTabContentsTo(table().grow())
-    //OR addTabContentsTo(container<Table>().grow())
-
+  }).apply {
+    addTabContentsTo(table().cell(grow = true))
+    //OR addTabContentsTo(container<Table>().cell(grow = true))
     switchTab(0)
-  }.cell.growY()
+  }
 }
 ```
 
-![](http://dl.kotcrab.com/github/ktx/tabs.png)
+![](img/tabs.png)
 
 Creating a form using `FormValidator`:
 
 ```Kotlin
+import ktx.vis.*
+
 table(true) {
   validator {
     defaults().left()
 
     label("Name: ")
-    notEmpty(validatableTextField().grow().actor, "Name can't be empty")
+    notEmpty(validatableTextField().cell(grow = true), "Name can't be empty")
     row()
 
     label("Age: ")
-    val ageField = validatableTextField().grow().actor
+    val ageField = validatableTextField().cell(grow = true)
     notEmpty(ageField, "Age can't be empty")
     integerNumber(ageField, "Age must be number")
     valueGreaterThan(ageField, "You must be at least 18 years old", 18f, true)
     row()
 
-    checked(checkBox("Accept terms").colspan(2).actor, "You must accept terms")
+    checked(checkBox("Accept terms").cell(colspan = 2), "You must accept terms")
     row()
 
-    table(true) {
-      setMessageLabel(label("").width(200f).actor)
-      addDisableTarget(textButton("Accept").right().actor)
-    }.colspan(2)
+    setMessageLabel(label("").cell(minWidth = 200f))
+    addDisableTarget(textButton("Accept").cell(align = Align.right))
   }
 }
 ```
 
-![](http://dl.kotcrab.com/github/ktx/form.png)
+![](img/form.png)
 
 Creating a `ListView`:
 
 ```Kotlin
+import ktx.vis.*
 import com.badlogic.gdx.utils.Array as GdxArray
-// ...
+import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter.SelectionMode
+import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
 
 table(true) {
   val osList = GdxArray<String>()
@@ -214,7 +236,7 @@ table(true) {
   osList.add("Mac")
 
   val adapter = SimpleListAdapter(osList)
-  adapter.selectionMode = SINGLE
+  adapter.selectionMode = SelectionMode.SINGLE
   listView(adapter) {
     header = label("ListView header")
     footer = label("ListView footer")
@@ -222,8 +244,97 @@ table(true) {
 }
 ```
 
-![](http://dl.kotcrab.com/github/ktx/list.png)
+![](img/list.png)
 
+Accessing `Cell` instances with`Table` children outside of building blocks:
+```Kotlin
+import ktx.vis.*
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+
+table {
+  val label: Label = label("Cell properties modified.").cell(expand = true)
+  val cell: Cell<Label> = label("Wrapped in cell.").inCell
+  val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
+  val afterBuildingBlock: Cell<Label> = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.cell(expand = true).inCell
+
+  // Cells are available only for direct children of tables (or its extensions). 
+  stack {
+    // These would not compile:
+    label("Invalid.").cell(expand = true)
+    label("Invalid").inCell
+  }
+}
+```
+
+Accessing `Node` instances with `Table` children outside of building blocks (note that `KNode` is **KTX** custom wrapper
+of LibGDX `Tree.Node` with additional building API support):
+```Kotlin
+import ktx.vis.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+
+tree {
+  val label: VisLabel = label("Node properties modified.").node(expanded = true)
+  val cell: Node = label("Wrapped in node.").inNode
+  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
+  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
+    setWrap(true)
+  }.node(expanded = true).inNode
+  // Nodes are available only for children of trees.
+}
+```
+
+### Migration guide
+
+Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
+full access to all parent methods. For example, this code would compile prior to `1.9.6-b2`:
+
+```Kotlin
+table {
+  label("") {
+    label("") { // Error in 1.9.6-b2+: outside of table block.
+      pad(4f) // Error in 1.9.6-b2+: cannot access table methods implicitly.
+    }
+  }
+}
+```
+
+As weird as it might seem, the snippet above would have been an equivalent to:
+
+```Kotlin
+table {
+  label("")
+  label("")
+  pad(4f) // Pad is actually applied to the Table instance.
+}
+```
+
+Since `1.9.6-b2` version and usage of `@DslMarker` API, this is no longer possible. Implicit usage of parents' API
+outside of their building block no longer compiles. All implicit method calls to parental actors must be either explicit
+or moved to the correct building block in order to migrate from `1.9.6-b1` and earlier versions.
+
+Prior to `1.9.6-b2+` builders called from Table widgets were returning `Cell<Actor>`, this is no longer the case. All builders
+are now returning `Actor` instance. `Cell` properties can be modified using new `.cell` syntax. `Cell` is also available
+as lambda parameter
+```kotlin
+table {
+  button { cell ->
+    cell.fillX().row()
+  }
+  textButton(text = "Click me!").cell(grow = true)
+}
+```
+Comparison of old and new methods
+```kotlin
+table {
+  val oldButton: Button = button().grow().right().actor // Old way of modifying cell
+  val newButton: Button = button().cell(grow = true, align = Align.right) // New way using .cell method
+  val newButton2: Button = button { cell -> cell.grow().right() } // New way using Cell passed as lambda parameter
+}
+```
 
 ### Alternatives
 

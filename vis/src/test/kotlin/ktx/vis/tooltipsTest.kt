@@ -9,7 +9,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** @author Kotcrab */
-class TooltipsTest : NeedsLibgdx() {
+class TooltipsTest : NeedsLibGDX() {
   @Test
   fun shouldCreateTooltip() {
     val actor = Actor()
