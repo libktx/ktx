@@ -15,7 +15,8 @@ import com.badlogic.gdx.InputProcessor
  */
 abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
                                  protected val maxDeltaTime: Float = 1f) : ApplicationListener {
-  private var timeSinceLastRender = 0f
+  protected var timeSinceLastRender = 0f
+                private set
 
   override fun resize(width: Int, height: Int) {
   }
