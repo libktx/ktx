@@ -15,6 +15,9 @@ import com.badlogic.gdx.InputProcessor
  */
 abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
                                  protected val maxDeltaTime: Float = 1f) : ApplicationListener {
+  /** Internal control variable used to sure fixed time step durations. In seconds. Might not match the actual time
+   * since the last [render] call in case of subsequent [render] calls on devices unable to run the application at the
+   * chosen time step rate.*/
   protected var timeSinceLastRender = 0f
                 private set
 
