@@ -1,11 +1,22 @@
 package ktx.async
 
-import com.badlogic.gdx.Net.HttpRequest
-import com.badlogic.gdx.Net.HttpResponse
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Net.*
+import com.badlogic.gdx.backends.lwjgl.LwjglNet
 import com.badlogic.gdx.net.HttpStatus
+import com.badlogic.gdx.utils.GdxRuntimeException
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doAnswer
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import io.kotlintest.matchers.shouldThrow
+import me.alexpanov.net.FreePortFinder
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
 
 /**
@@ -108,4 +119,57 @@ class HttpTest {
       status: Int = 200,
       headers: Map<String, List<String>> = emptyMap()
   ) = HttpRequestResult(url, method, status, content, headers)
+}
+
+/**
+ * Tests [KtxAsync.httpRequest] API.
+ */
+class AsynchronousHttpRequestsTest {
+  val port = FreePortFinder.findFreeLocalPort()
+  @get:Rule
+  val wireMock = WireMockRule(port)
+
+  @Test
+  fun `should perform asynchronous HTTP request`() = `coroutine test`(timeLimitMillis = 10000L) { ktxAsync ->
+    Gdx.net = LwjglNet()
+    wireMock.stubFor(get("/test").willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "text/plain")
+        .withBody("Test HTTP request.")))
+
+    ktxAsync {
+      val response = httpRequest(url = "http://localhost:$port/test", method = "GET")
+
+      assertEquals("http://localhost:$port/test", response.url)
+      assertEquals(200, response.statusCode)
+      assertEquals("GET", response.method)
+      assertEquals("Test HTTP request.", response.contentAsString)
+      assertEquals(listOf("text/plain"), response.getHeader("Content-Type"))
+    }
+  }
+
+  @Test
+  fun `should rethrown exceptions of asynchronous HTTP request`() = `coroutine test` { ktxAsync ->
+    Gdx.net = mock {
+      // Always reports the action as failed to the listener:
+      on(it.sendHttpRequest(any(), any())) doAnswer {
+        val listener = it.getArgument<HttpResponseListener>(1)
+        scheduler.execute {
+          listener.failed(GdxRuntimeException("Expected."))
+        }
+      }
+    }
+
+    ktxAsync {
+      shouldThrow<GdxRuntimeException> {
+        httpRequest(url = "http://example.com", method = "GET")
+      }
+    }
+  }
+
+  @After
+  fun `clear context`() {
+    Gdx.net = null
+    `destroy coroutines context`()
+  }
 }
