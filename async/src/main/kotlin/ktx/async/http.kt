@@ -91,8 +91,8 @@ internal class KtxHttpResponseListener(
 
   private inline fun complete(action: () -> Unit) {
     if (!completed) {
-      action()
       completed = true
+      action()
     }
   }
 }

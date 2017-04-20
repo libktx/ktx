@@ -136,7 +136,10 @@ class AsynchronousHttpRequestsTest {
         .withBody("Test HTTP request.")))
 
     ktxAsync {
-      val response = httpRequest(url = "http://localhost:$port/test", method = "GET")
+      val response = httpRequest(
+          url = "http://localhost:$port/test",
+          method = "GET",
+          headers = mapOf("Accept" to "text/plain"))
 
       assertEquals("http://localhost:$port/test", response.url)
       assertEquals(200, response.statusCode)
