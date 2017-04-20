@@ -107,6 +107,27 @@ class AsyncTest {
   }
 
   @Test
+  fun `should suspend coroutine and resume on next frame`() = `coroutine test` { ktxAsync ->
+    val app = Gdx.app as TestApplication
+    ktxAsync {
+      val frameId = app.frameId
+      skipFrame()
+      val nextFrameId = app.frameId
+
+      assertNotEquals(frameId, nextFrameId)
+      assertEquals(frameId, nextFrameId - 1)
+    }
+  }
+
+  @Test
+  fun `should cancel frame skip`() = `cancelled coroutine test`(cancelAfterMillis = 0L) { ktxAsync, _ ->
+    ktxAsync {
+      skipFrame()
+      fail("Should be cancelled.")
+    }
+  }
+
+  @Test
   fun `should delay coroutine execution`() = `with timer` { timer ->
     `coroutine test` { ktxAsync ->
       val beforeExecution = System.currentTimeMillis()
@@ -123,7 +144,29 @@ class AsyncTest {
   }
 
   @Test
-  fun `should perform asynchronous action`() = `coroutine test`(executorConcurrencyLevel = 1) { ktxAsync ->
+  fun `should not delay coroutine execution given nonexistent delay`() = `with timer` { timer ->
+    `coroutine test` { ktxAsync ->
+      ktxAsync {
+        delay(0f)
+
+        // Should resume immediately without invoking the timer:
+        verify(timer, never()).scheduleTask(any(), any())
+      }
+    }
+  }
+
+  @Test
+  fun `should cancel delay task`() = `with timer` {
+    `cancelled coroutine test` { ktxAsync, _ ->
+      ktxAsync {
+        delay(0.05f)
+        fail("Should be cancelled.")
+      }
+    }
+  }
+
+  @Test
+  fun `should perform asynchronous action`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
     ktxAsync {
       val (result, thread) = asynchronous { "Test." to Thread.currentThread() }
 
@@ -133,11 +176,22 @@ class AsyncTest {
   }
 
   @Test
-  fun `should handle asynchronous action exceptions`() = `coroutine test`(executorConcurrencyLevel = 1) { ktxAsync ->
+  fun `should handle asynchronous action exceptions`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
     ktxAsync {
       shouldThrow<GdxRuntimeException> {
         asynchronous { throw GdxRuntimeException("Expected.") }
       }
+    }
+  }
+
+  @Test
+  fun `should cancel asynchronous actions`() = `cancelled coroutine test`(concurrencyLevel = 1) { ktxAsync, _ ->
+    ktxAsync {
+      asynchronous {
+        Thread.sleep(50L) // Making sure the test runner is able to cancel the task before it is finished.
+        "test"
+      }
+      fail("Should cancel asynchronous action.")
     }
   }
 

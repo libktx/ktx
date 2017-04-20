@@ -8,11 +8,9 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doAnswer
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldThrow
+import kotlinx.coroutines.experimental.CancellableContinuation
 import me.alexpanov.net.FreePortFinder
 import org.junit.After
 import org.junit.Assert.*
@@ -165,6 +163,93 @@ class AsynchronousHttpRequestsTest {
         httpRequest(url = "http://example.com", method = "GET")
       }
     }
+  }
+
+  @Test
+  fun `should cancel HTTP request`() = `cancelled coroutine test`(testDurationMillis = 250) { ktxAsync, assert ->
+    Gdx.net = spy(LwjglNet())
+    wireMock.stubFor(get("/test").willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "text/plain")
+        .withBody("Test HTTP request.")
+        .withFixedDelay(50)))
+
+    ktxAsync {
+      httpRequest(url = "http://localhost:$port/test", method = "GET")
+      fail("Should be cancelled.")
+    }
+
+    assert {
+      verify(Gdx.net).cancelHttpRequest(any())
+    }
+  }
+
+  // HTTP response listener:
+
+  @Test
+  fun `should invoke cancellation action once`() {
+    var executionsAmount = 0
+    val listener = KtxHttpResponseListener(mock(), mock(), onCancel = { executionsAmount++ })
+
+    listener.cancelled()
+    listener.cancelled()
+    listener.cancelled()
+
+    assertEquals(1, executionsAmount)
+  }
+
+  @Test
+  fun `should exceptionally resume coroutine once`() {
+    val exception = GdxRuntimeException("Expected.")
+    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
+      on(it.isActive) doReturn true
+    }
+    val listener = KtxHttpResponseListener(mock(), coroutine, mock())
+
+    listener.failed(exception)
+    listener.failed(exception)
+    listener.failed(exception)
+
+    verify(coroutine, times(1)).resumeWithException(exception)
+  }
+
+  @Test
+  fun `should resume coroutine once`() {
+    val request = mock<HttpRequest> {
+      on(it.url) doReturn "http://example.com"
+      on(it.method) doReturn "GET"
+    }
+    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
+      on(it.isActive) doReturn true
+    }
+    val response = mock<HttpResponse>()
+    val listener = KtxHttpResponseListener(request, coroutine, mock())
+
+    listener.handleHttpResponse(response)
+    listener.handleHttpResponse(response)
+    listener.handleHttpResponse(response)
+
+    verify(coroutine, times(1)).resume(any())
+  }
+
+  @Test
+  fun `should not exceptionally resume inactive coroutine`() {
+    val coroutine = mock<CancellableContinuation<HttpRequestResult>>()
+    val listener = KtxHttpResponseListener(mock(), coroutine, mock())
+
+    listener.failed(GdxRuntimeException("Expected."))
+
+    verify(coroutine, never()).resumeWithException(any())
+  }
+
+  @Test
+  fun `should not resume inactive coroutine`() {
+    val coroutine = mock<CancellableContinuation<HttpRequestResult>>()
+    val listener = KtxHttpResponseListener(mock(), coroutine, mock())
+
+    listener.handleHttpResponse(mock())
+
+    verify(coroutine, never()).resume(any())
   }
 
   @After

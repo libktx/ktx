@@ -1,12 +1,9 @@
 package ktx.async
 
-import com.badlogic.gdx.Net.HttpRequest
-import com.badlogic.gdx.Net.HttpResponse
+import com.badlogic.gdx.Net.*
+import kotlinx.coroutines.experimental.CancellableContinuation
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
-
-/** Thrown when unable to finish HTTP request. */
-class HttpResponseException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
 
 /**
  * Stores result of a [HttpRequest]. A safer alternative to [HttpResponse].
@@ -61,3 +58,41 @@ fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResu
     content = this.result ?: ByteArray(0),
     headers = this.headers ?: emptyMap()
 )
+
+/**
+ * Internal implementation of [HttpResponseListener] based on coroutines.
+ * @param httpRequest listens to the HTTP response of this request.
+ * @param continuation will be resumed once the response is received.
+ * @param onCancel optional operation executed if the coroutine is cancelled during the HTTP request.
+ */
+internal class KtxHttpResponseListener(
+    val httpRequest: HttpRequest,
+    val continuation: CancellableContinuation<HttpRequestResult>,
+    val onCancel: ((HttpRequest) -> Unit)?
+) : HttpResponseListener {
+  @Volatile var completed = false
+    private set
+
+  override fun cancelled() = complete {
+    onCancel?.invoke(httpRequest)
+  }
+
+  override fun failed(exception: Throwable) = complete {
+    if (continuation.isActive) {
+      continuation.resumeWithException(exception)
+    }
+  }
+
+  override fun handleHttpResponse(httpResponse: HttpResponse) = complete {
+    if (continuation.isActive) {
+      continuation.resume(httpResponse.toHttpRequestResult(httpRequest))
+    }
+  }
+
+  private inline fun complete(action: () -> Unit) {
+    if (!completed) {
+      action()
+      completed = true
+    }
+  }
+}

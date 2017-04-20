@@ -1,19 +1,19 @@
 package ktx.async
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Net.*
+import com.badlogic.gdx.Net.HttpRequest
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import ktx.async.KtxAsync.isOnRenderingThread
 import java.io.InputStream
 import kotlin.coroutines.experimental.AbstractCoroutineContextElement
 import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.ContinuationInterceptor
-import kotlin.coroutines.experimental.suspendCoroutine
 
 /**
  * Uses LibGDX threading model to support Kotlin coroutines. All basic operations are executed on the main rendering
@@ -50,10 +50,27 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
 
   /** Suspends the current execution. Schedules an asynchronous task with LibGDX [Timer] API, which resumes the
    * execution after the chosen delay has passed.
-   * @param seconds delay used to schedule [Timer.Task]. */
-  suspend fun delay(seconds: Float): Unit = suspendCoroutine { continuation ->
-    schedule(delaySeconds = seconds) {
+   * @param seconds delay used to schedule [Timer.Task]. If not higher than zero, coroutine will be resumed without
+   *    delay. */
+  suspend fun delay(seconds: Float): Unit = suspendCancellableCoroutine { continuation ->
+    if (seconds > 0f) {
+      schedule(delaySeconds = seconds) {
+        if (continuation.isActive) {
+          continuation.resume(Unit)
+        }
+      }
+    } else if (continuation.isActive) {
       continuation.resume(Unit)
+    }
+  }
+
+  /** Suspends the execution of the coroutine until the next application rendering frame. Resumes the execution
+   * using _Gdx.app.postRunnable_ mechanism. */
+  suspend fun skipFrame(): Unit = suspendCancellableCoroutine { continuation ->
+    Gdx.app.postRunnable {
+      if (continuation.isActive) {
+        continuation.resume(Unit)
+      }
     }
   }
 
@@ -62,12 +79,14 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
    * the rendering thread.
    * @param action inlined. Any thrown exceptions are caught and rethrown on the rendering thread.
    */
-  suspend fun <Result> asynchronous(action: () -> Result): Result = suspendCoroutine { continuation ->
+  suspend fun <Result> asynchronous(action: () -> Result): Result = suspendCancellableCoroutine { continuation ->
     asyncExecutor.submit {
-      try {
-        continuation.resume(action())
-      } catch (exception: Throwable) {
-        continuation.resumeWithException(exception)
+      if (continuation.isActive) {
+        try {
+          continuation.resume(action())
+        } catch (exception: Throwable) {
+          continuation.resumeWithException(exception)
+        }
       }
     }
   }
@@ -83,6 +102,8 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
    * @param contentStream body of the request. Alternative to [content]. Pair of an [InputStream] along with its size.
    * @param followRedirects whether 301 and 302 redirects are followed. Defaults to true.
    * @param includeCredentials whether a cross-origin request will include credentials. Relevant only on web platforms.
+   * @param onCancel executed when the HTTP request is cancelled through coroutine cancellation. Optional, should be
+   *    passed only if coroutine's [Job.cancel] can be called.
    * @return [HttpRequestResult] storing HTTP response data.
    * @see HttpRequest
    * */
@@ -94,8 +115,9 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
       content: String? = null,
       contentStream: Pair<InputStream, Long>? = null,
       followRedirects: Boolean = true,
-      includeCredentials: Boolean = false
-  ): HttpRequestResult = suspendCoroutine { continuation ->
+      includeCredentials: Boolean = false,
+      onCancel: ((HttpRequest) -> Unit)? = null
+  ): HttpRequestResult = suspendCancellableCoroutine { continuation ->
     val httpRequest = HttpRequest(method).apply {
       this.url = url
       this.timeOut = timeout
@@ -105,19 +127,13 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
       contentStream?.let { setContent(it.first, it.second) }
       headers.forEach { header, value -> setHeader(header, value) }
     }
-    Gdx.net.sendHttpRequest(httpRequest, object : HttpResponseListener {
-      override fun cancelled() {
-        continuation.resumeWithException(HttpResponseException("Unexpected error: HTTP request was cancelled."))
+    val listener = KtxHttpResponseListener(httpRequest, continuation, onCancel)
+    Gdx.net.sendHttpRequest(httpRequest, listener)
+    continuation.invokeOnCompletion {
+      if (continuation.isCancelled && !listener.completed) {
+        Gdx.net.cancelHttpRequest(httpRequest)
       }
-
-      override fun failed(exception: Throwable) {
-        continuation.resumeWithException(exception)
-      }
-
-      override fun handleHttpResponse(httpResponse: HttpResponse) {
-        continuation.resume(httpResponse.toHttpRequestResult(httpRequest))
-      }
-    })
+    }
   }
 }
 
