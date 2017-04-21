@@ -423,5 +423,8 @@ class ArraysTest {
     assertTrue(GdxIntArray() is com.badlogic.gdx.utils.IntArray)
     assertTrue(GdxFloatArray() is com.badlogic.gdx.utils.FloatArray)
     assertTrue(GdxBooleanArray() is com.badlogic.gdx.utils.BooleanArray)
+    assertTrue(GdxCharArray() is com.badlogic.gdx.utils.CharArray)
+    assertTrue(GdxLongArray() is com.badlogic.gdx.utils.LongArray)
+    assertTrue(GdxShortArray() is com.badlogic.gdx.utils.ShortArray)
   }
 }

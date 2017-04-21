@@ -40,6 +40,9 @@ used to easily remove collection elements during iteration.
   - `GdxIntArray`: `com.badlogic.gdx.utils.IntArray`
   - `GdxFloatArray`: `com.badlogic.gdx.utils.FloatArray`
   - `GdxBooleanArray`: `com.badlogic.gdx.utils.BooleanArray`
+  - `GdxCharArray`: `com.badlogic.gdx.utils.CharArray`
+  - `GdxLongArray`: `com.badlogic.gdx.utils.LongArray`
+  - `GdxShortArray`: `com.badlogic.gdx.utils.ShortArray`
 
 #### Sets
 

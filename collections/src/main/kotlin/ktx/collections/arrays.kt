@@ -10,6 +10,12 @@ typealias GdxBooleanArray = com.badlogic.gdx.utils.BooleanArray
 typealias GdxFloatArray = com.badlogic.gdx.utils.FloatArray
 /** Alias for [com.badlogic.gdx.utils.IntArray] avoiding name collision with the standard library. */
 typealias GdxIntArray = com.badlogic.gdx.utils.IntArray
+/** Alias for [com.badlogic.gdx.utils.CharArray] avoiding name collision with the standard library. */
+typealias GdxCharArray = com.badlogic.gdx.utils.CharArray
+/** Alias for [com.badlogic.gdx.utils.LongArray] avoiding name collision with the standard library. */
+typealias GdxLongArray = com.badlogic.gdx.utils.LongArray
+/** Alias for [com.badlogic.gdx.utils.ShortArray] avoiding name collision with the standard library. */
+typealias GdxShortArray = com.badlogic.gdx.utils.ShortArray
 
 /**
  * Default LibGDX array size used by most constructors.
