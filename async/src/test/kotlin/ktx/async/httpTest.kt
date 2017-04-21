@@ -236,6 +236,24 @@ class AsynchronousHttpRequestsTest {
   }
 
   @Test
+  fun `should allow to complete HTTP request once`() {
+    val exception = GdxRuntimeException("Expected.")
+    val onCancel = mock<(HttpRequest) -> Unit>()
+    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
+      on(it.isActive) doReturn true
+    }
+    val listener = KtxHttpResponseListener(mock(), coroutine, mock())
+
+    listener.failed(exception)
+    listener.handleHttpResponse(mock())
+    listener.cancelled()
+
+    verify(coroutine, times(1)).resumeWithException(exception)
+    verify(coroutine, never()).resume(any())
+    verifyZeroInteractions(onCancel)
+  }
+
+  @Test
   fun `should not exceptionally resume inactive coroutine`() {
     val coroutine = mock<CancellableContinuation<HttpRequestResult>>()
     val listener = KtxHttpResponseListener(mock(), coroutine, mock())
