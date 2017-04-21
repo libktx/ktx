@@ -26,9 +26,11 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
   /** Main rendering thread. Do not modify manually.
    * @see initiate */
   lateinit var mainThread: Thread
+    internal set
   /** [AsyncExecutor] instance used to execute tasks outside of main rendering thread.
    * @see createExecutor */
   lateinit var asyncExecutor: AsyncExecutor
+    internal set
 
   override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T>
       = KtxContinuation(continuation)
@@ -83,12 +85,15 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
   }
 
   /**
-   * Suspends execution and submits a task to the [asyncExecutor]. After the task is finished, resumes the execution on
+   * Suspends execution and submits a task to an [AsyncExecutor]. After the task is finished, resumes the execution on
    * the rendering thread.
+   * @param executor will execute the asynchronous action. Defaults to [asyncExecutor].
    * @param action inlined. Any thrown exceptions are caught and rethrown on the rendering thread.
    */
-  suspend fun <Result> asynchronous(action: () -> Result): Result = suspendCancellableCoroutine { continuation ->
-    asyncExecutor.submit {
+  suspend fun <Result> asynchronous(
+      executor: AsyncExecutor = asyncExecutor,
+      action: () -> Result): Result = suspendCancellableCoroutine { continuation ->
+    executor.submit {
       if (continuation.isActive) {
         try {
           continuation.resume(action())

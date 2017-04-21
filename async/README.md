@@ -32,7 +32,9 @@ Currently supported suspending utility methods available from the `KtxAsync` con
     directly in the coroutine block on the main rendering thread - using it in asynchronous actions executed on
     different threads yields undefined behavior.
 - `asynchronous`: performs an operation on a different thread using `AsyncExecutor`, resuming coroutine with its result.
-    Context must have been initialized with a non-zero and non-negative amount of threads in order to use this method.
+    If an `AsyncExecutor` is not passed as a parameter, context's default executor will be used instead. Note that
+    context must have been initialized with a non-zero and non-negative amount of threads in order to use this method
+    with default executor.
 - `httpRequest`: wraps around `Gdx.net` API, allowing to perform suspending HTTP requests that resume once the response
     is received.
 
@@ -130,7 +132,7 @@ class MyApp : KtxApplicationAdapter {
 }
 ```
 
-Starting a coroutine, which performs operation on the `AsyncExecutor` thread:
+Starting a coroutine, which performs operation on the context's `AsyncExecutor` thread:
 
 ```Kotlin
 import ktx.async.*
@@ -139,7 +141,24 @@ ktxAsync {
   println("Before async: ${Thread.currentThread()}")
   val result = asynchronous {
     println("During async: ${Thread.currentThread()}")
-    "Hello from async executor!"
+    "Hello from the async executor!"
+  }
+  println("After async: $result, ${Thread.currentThread()}")
+}
+```
+
+Starting a coroutine, which performs operation on a custom `AsyncExecutor` thread:
+
+```Kotlin
+import ktx.async.*
+import com.badlogic.gdx.utils.async.AsyncExecutor
+
+val executor = AsyncExecutor(1)
+ktxAsync {
+  println("Before async: ${Thread.currentThread()}")
+  val result = asynchronous(executor) {
+    println("During async: ${Thread.currentThread()}")
+    "Hello from a custom async executor!"
   }
   println("After async: $result, ${Thread.currentThread()}")
 }

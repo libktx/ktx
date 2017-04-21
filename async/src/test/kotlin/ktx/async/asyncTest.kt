@@ -2,6 +2,7 @@ package ktx.async
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldThrow
 import org.junit.After
@@ -170,6 +171,20 @@ class AsyncTest {
     ktxAsync {
       val (result, thread) = asynchronous { "Test." to Thread.currentThread() }
 
+      assertEquals("Test.", result)
+      assertNotSame(KtxAsync.mainThread, thread)
+    }
+  }
+
+  @Test
+  fun `should perform asynchronous action with a custom executor`() = `coroutine test` { ktxAsync ->
+    KtxAsync.asyncExecutor = mock()
+    val executor = AsyncExecutor(1)
+
+    ktxAsync {
+      val (result, thread) = asynchronous(executor) { "Test." to Thread.currentThread() }
+
+      verifyZeroInteractions(KtxAsync.asyncExecutor)
       assertEquals("Test.", result)
       assertNotSame(KtxAsync.mainThread, thread)
     }
