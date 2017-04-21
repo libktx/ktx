@@ -67,6 +67,10 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
   /** Suspends the execution of the coroutine until the next application rendering frame. Resumes the execution
    * using _Gdx.app.postRunnable_ mechanism.
    *
+   * This method should be used only **directly** in the coroutines launched in [KtxAsync] context - the behavior when
+   * called from within asynchronous blocks (e.g. [asynchronous]) is undefined, and might change the execution thread
+   * to the main rendering thread, modifying the original suspending method behavior.
+   *
    * _Note:_ due to [com.badlogic.gdx.Application] implementations on some platforms, this method might not skip frame
    * on the first call in `create` method of application listener, as all runnables are executed before actually
    * starting the rendering. It should work as expected otherwise. */
