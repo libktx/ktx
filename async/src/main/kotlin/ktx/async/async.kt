@@ -65,7 +65,11 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
   }
 
   /** Suspends the execution of the coroutine until the next application rendering frame. Resumes the execution
-   * using _Gdx.app.postRunnable_ mechanism. */
+   * using _Gdx.app.postRunnable_ mechanism.
+   *
+   * _Note:_ due to [com.badlogic.gdx.Application] implementations on some platforms, this method might not skip frame
+   * on the first call in `create` method of application listener, as all runnables are executed before actually
+   * starting the rendering. It should work as expected otherwise. */
   suspend fun skipFrame(): Unit = suspendCancellableCoroutine { continuation ->
     Gdx.app.postRunnable {
       if (continuation.isActive) {
