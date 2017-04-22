@@ -15,7 +15,7 @@ for the existing API to make assets usage more natural in Kotlin applications.
 - `AssetManager.load` extension method can be used to schedule asynchronous loading of an asset. It returns an asset
 wrapper, which can be used as delegate property, as well as used directly to manage the asset. Usually the asset will
 not be available until `AssetManager.finishLoading` or looped `AssetManager.update` are called. You can use string file
-paths or `AssetDescriptor` instances to load the asset. Typical usage:
+paths or `AssetDescriptor` instances to load the asset. Usage example:
 ```Kotlin
 // Eagerly loading an asset:
 val wrapper = load<Texture>("test.png")
@@ -30,12 +30,16 @@ class Test(assetManager: AssetManager) {
 ```
 - `AssetManager.getAsset` utility extension method can be used to access an already loaded asset, without having to pass
 class to the manager to specify asset type. This is the preferred way of accessing assets from the `AssetManager`,
-provided that they were already scheduled for asynchronous loading and fully loaded. Typical usage:
-`val texture: Texture = assetManager.getAsset("test.png")`. Note that this method will fail if asset is not loaded yet.
+provided that they were already scheduled for asynchronous loading and fully loaded. Note that this method will fail if
+asset is not loaded yet. Usage example:
+```Kotlin
+val texture: Texture = assetManager.getAsset("test.png")
+```
+
 - `AssetManager.loadOnDemand` is similar to the `load` utility method, but it provides an asset wrapper that loads the
 asset eagerly on first get call. It will not schedule the asset for asynchronous loading - instead, it will block current
 thread until the asset is loaded on the first access. Use for lightweight assets that should be (rarely) loaded only when
-requested. Typical usage:
+requested. Usage example:
 ```Kotlin
 // Eagerly loading an asset:
 val texture = by assetManager.loadOnDemand<Texture>("test.png")
@@ -43,8 +47,8 @@ val texture = by assetManager.loadOnDemand<Texture>("test.png")
 
 // Delegate field:
 class Test(assetManager: AssetManager) {
-  val texture by assetManager.loadOnDemand<Texture>("test.png")
-  // Type of texture property is Texture. It will be loaded on first `texture` access.
+  val texture: Texture by assetManager.loadOnDemand("test.png")
+  // Asset will be loaded on first `texture` access.
 }
 ```
 - `AssetManager.unloadSafely` is a utility method that attempts to unload an asset from the `AssetManager`. Contrary to
@@ -187,7 +191,7 @@ import ktx.assets.*
 import com.badlogic.gdx.assets.AssetManager
 
 class MyClass(assetManager: AssetManager) {
-  val image by load<Texture>("image.png")
+  val image by assetManager.load<Texture>("image.png")
   // image is Texture == true
 }
 ```
@@ -235,7 +239,6 @@ assetManager.setLoader(myCustomLoader) // No need to pass class.
 // Accessing an AssetLoader:
 val loader = assetManager.getLoader<MyAsset>()
 ```
-
 
 ### Alternatives
 

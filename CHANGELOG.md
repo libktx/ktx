@@ -1,5 +1,7 @@
 #### 1.9.6-SNAPSHOT
 
+- **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
+depending on the global `AssetManager` were removed.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
 - **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
 - **[FEATURE]** (`ktx-i18n`) `nls` property and method added to `BundleLine` for extra readability.

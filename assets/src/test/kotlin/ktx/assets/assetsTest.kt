@@ -32,7 +32,7 @@ class AssetsTest {
   @Test
   fun `should schedule asset loading`() {
     val assetWrapper = assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assertTrue(assetWrapper.isLoaded())
     val asset = assetWrapper.asset
@@ -44,7 +44,7 @@ class AssetsTest {
   @Test
   fun `should schedule asset loading with parameters`() {
     val assetWrapper = assetManager.load("test", MockParameter("additional"))
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assertTrue(assetWrapper.isLoaded())
     val asset = assetWrapper.asset
@@ -57,7 +57,7 @@ class AssetsTest {
   @Test
   fun `should schedule asset loading with AssetDescriptor`() {
     val assetWrapper = assetManager.loadAsset(assetDescriptor<MockAsset>("test"))
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assertTrue(assetWrapper.isLoaded())
     val asset = assetWrapper.asset
@@ -71,7 +71,7 @@ class AssetsTest {
     val assetWrapper = assetManager.loadOnDemand<MockAsset>("test")
 
     assertFalse(assetWrapper.isLoaded())
-    assetManager.loadAll()
+    assetManager.finishLoading()
     // Loading was not supposed to be scheduled, should be still unloaded:
     assertFalse(assetWrapper.isLoaded())
     // Loaded on first asset getter call:
@@ -87,7 +87,7 @@ class AssetsTest {
     val assetWrapper = assetManager.loadOnDemand("test", MockParameter("additional"))
 
     assertFalse(assetWrapper.isLoaded())
-    assetManager.loadAll()
+    assetManager.finishLoading()
     // Loading was not supposed to be scheduled, should be still unloaded:
     assertFalse(assetWrapper.isLoaded())
     // Loaded on first asset getter call:
@@ -104,7 +104,7 @@ class AssetsTest {
     val assetWrapper = assetManager.loadOnDemand(assetDescriptor<MockAsset>("test"))
 
     assertFalse(assetWrapper.isLoaded())
-    assetManager.loadAll()
+    assetManager.finishLoading()
     // Loading was not supposed to be scheduled, should be still unloaded:
     assertFalse(assetWrapper.isLoaded())
     // Loaded on first asset getter call:
@@ -118,7 +118,7 @@ class AssetsTest {
   @Test
   fun `should extract loaded asset with explicit type from manager`() {
     assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     val asset = assetManager.getAsset<MockAsset>("test")
     assertTrue(asset is MockAsset)
@@ -134,7 +134,7 @@ class AssetsTest {
   @Test
   fun `should unload asset gracefully`() {
     assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
     val asset = assetManager.getAsset<MockAsset>("test")
 
     assetManager.unloadSafely("test")
@@ -159,7 +159,7 @@ class AssetsTest {
   @Test
   fun `should ignore exception due to multiple asset unload requests`() {
     assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assetManager.unloadSafely("test")
     assetManager.unloadSafely("test")
@@ -170,7 +170,7 @@ class AssetsTest {
   @Test
   fun `should unload asset handling exception`() {
     assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
     val asset = assetManager.getAsset<MockAsset>("test")
 
     assetManager.unload("test") {
@@ -208,7 +208,7 @@ class AssetsTest {
     }
 
     val test = TestDelegate()
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assertTrue(test.asset is MockAsset)
     assertEquals(assetManager["test"], test.asset)
@@ -218,7 +218,7 @@ class AssetsTest {
   @Test
   fun `should delegate local variable to scheduled asset`() {
     val asset by assetManager.load<MockAsset>("test")
-    assetManager.loadAll()
+    assetManager.finishLoading()
 
     assertTrue(asset is MockAsset)
     assertEquals(assetManager["test"], asset)
@@ -440,14 +440,6 @@ private fun managerWithMockAssetLoader() = AssetManager().apply {
 }
 
 /**
- * Spin-waits on [AssetManager.update].
- */
-private fun AssetManager.loadAll() {
-  while (!update()) {
-  }
-}
-
-/**
  * Represents a mock-up asset. Implements [Disposable] for testing utility.
  * @param data path of the file.
  * @param additional optional string value passed with [MockParameter].
@@ -484,249 +476,4 @@ class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
 
   /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
   class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
-}
-
-@Suppress("DEPRECATION")
-@Deprecated("Tests deprecated API.")
-class GlobalAssetManagerTest {
-  @Before
-  fun mockFiles() {
-    Gdx.files = MockFiles()
-    // Clearing global AssetManager and adding MockAsset loader:
-    Assets.manager.clear()
-    Assets.manager.setLoader(MockAsset::class.java, MockAssetLoader(Assets.manager.fileHandleResolver))
-  }
-
-  @Test
-  fun shouldScheduleAssetLoading() {
-    val assetWrapper = load<MockAsset>("test")
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading()
-    assertTrue(assetWrapper.isLoaded())
-    val asset = assetWrapper.asset
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test
-  fun shouldScheduleAssetLoadingWithParameters() {
-    // Note that loading parameters instance allows to omit generic parameter.
-    val assetWrapper = load("test", MockParameter("additional"))
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading()
-    assertTrue(assetWrapper.isLoaded())
-    val asset = assetWrapper.asset
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-    assertEquals("additional", asset.additional)
-  }
-
-  @Test
-  fun shouldScheduleAssetLoadingWithDescriptor() {
-    // Note that asset descriptor instance allows to omit generic parameter in load.
-    val assetWrapper = load(assetDescriptor<MockAsset>("test"))
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading()
-    assertTrue(assetWrapper.isLoaded())
-    val asset = assetWrapper.asset
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test
-  fun shouldLoadOnDemand() {
-    val assetWrapper = loadOnDemand<MockAsset>("test")
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading() // Loading was not supposed to be scheduled, should be still unloaded.
-    assertFalse(assetWrapper.isLoaded())
-
-    val asset = assetWrapper.asset
-    assertTrue(assetWrapper.isLoaded())
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test
-  fun shouldLoadOnDemandWithParameters() {
-    val assetWrapper = loadOnDemand("test", MockParameter("additional"))
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading() // Loading was not supposed to be scheduled, should be still unloaded.
-    assertFalse(assetWrapper.isLoaded())
-
-    val asset = assetWrapper.asset
-    assertTrue(assetWrapper.isLoaded())
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-    assertEquals("additional", asset.additional)
-  }
-
-  @Test
-  fun shouldLoadOnDemandWithDescriptor() {
-    val assetWrapper = loadOnDemand(assetDescriptor<MockAsset>("test"))
-    assertFalse(assetWrapper.isLoaded())
-    finishLoading() // Loading was not supposed to be scheduled, should be still unloaded.
-    assertFalse(assetWrapper.isLoaded())
-
-    val asset = assetWrapper.asset
-    assertTrue(assetWrapper.isLoaded())
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test
-  fun shouldExtractLoadedAssetFromManager() {
-    Assets.manager.load("test", MockAsset::class.java)
-    finishLoading()
-    val asset = asset<MockAsset>("test")
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test(expected = GdxRuntimeException::class)
-  fun shouldFailToExtractUnloadedAsset() {
-    asset<MockAsset>("unloaded")
-  }
-
-  @Test
-  fun shouldExtractLoadedAssetFromManagerWithDescriptor() {
-    Assets.manager.load("test", MockAsset::class.java)
-    finishLoading()
-    val asset = asset(assetDescriptor<MockAsset>("test"))
-    assertTrue(asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), asset)
-    assertEquals("test", asset.data)
-  }
-
-  @Test(expected = GdxRuntimeException::class)
-  fun shouldFailToExtractUnloadedAssetWithDescriptor() {
-    asset(assetDescriptor<MockAsset>("unloaded"))
-  }
-
-  @Test
-  fun shouldReportIfLoaded() {
-    Assets.manager.load("test", MockAsset::class.java)
-    assertFalse(isLoaded<MockAsset>("test"))
-
-    finishLoading()
-    assertTrue(isLoaded<MockAsset>("test"))
-
-    Assets.manager.unload("test")
-    assertFalse(isLoaded<MockAsset>("test"))
-  }
-
-  @Test
-  fun shouldUnloadAsset() {
-    Assets.manager.load("test", MockAsset::class.java)
-    finishLoading()
-    assertTrue(Assets.manager.isLoaded("test", MockAsset::class.java))
-    val asset = Assets.manager.get("test", MockAsset::class.java)
-    assertFalse(asset.disposed)
-
-    unload("test")
-    assertFalse(Assets.manager.isLoaded("test", MockAsset::class.java))
-    assertTrue(asset.disposed)
-  }
-
-  @Test
-  fun shouldAttemptToUnloadAndIgnoreFailureEvenIfAssetNotLoaded() {
-    unload("test") // Assets.manager.unload("test") would normally throw an exception.
-  }
-
-  @Test
-  fun shouldDelegateFieldToScheduledAsset() {
-    class TestDelegate {
-      val asset by load<MockAsset>("test")
-    }
-
-    val test = TestDelegate()
-    finishLoading()
-    assertTrue(test.asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), test.asset)
-    assertEquals("test", test.asset.data)
-  }
-
-  @Test(expected = GdxRuntimeException::class)
-  fun shouldThrowIfUsingDelegateFieldBeforeLoading() {
-    class TestDelegate {
-      val asset by load<MockAsset>("test")
-    }
-
-    val test = TestDelegate()
-    test.asset.data
-  }
-
-  @Test
-  fun shouldDelegateFieldToEagerlyLoadedAsset() {
-    class TestDelegate {
-      val asset by loadOnDemand<MockAsset>("test")
-    }
-
-    val test = TestDelegate()
-    assertTrue(test.asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), test.asset)
-    assertEquals("test", test.asset.data)
-    assertTrue(test.asset === test.asset) // Caches same instance?
-  }
-
-  @Test
-  fun shouldDelegateFieldToScheduledAssetWithDescriptor() {
-    class TestDelegate {
-      val asset by load(assetDescriptor<MockAsset>("test"))
-    }
-
-    val test = TestDelegate()
-    finishLoading()
-    assertTrue(test.asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), test.asset)
-    assertEquals("test", test.asset.data)
-  }
-
-  @Test(expected = GdxRuntimeException::class)
-  fun shouldThrowIfUsingDelegateFieldBeforeLoadingWithDescriptor() {
-    class TestDelegate {
-      val asset by load(assetDescriptor<MockAsset>("test"))
-    }
-
-    val test = TestDelegate()
-    test.asset.data
-  }
-
-  @Test
-  fun shouldDelegateFieldToEagerlyLoadedAssetWithDescriptor() {
-    class TestDelegate {
-      val asset by loadOnDemand(assetDescriptor<MockAsset>("test"))
-    }
-
-    val test = TestDelegate()
-    assertTrue(test.asset is MockAsset)
-    assertEquals(Assets.manager.get("test", MockAsset::class.java), test.asset)
-    assertEquals("test", test.asset.data)
-    assertTrue(test.asset === test.asset) // Caches same instance?
-  }
-
-  @Test
-  fun shouldDelegateFieldToAssetLoadedOnDemand() {
-    class TestDelegate {
-      val asset by loadOnDemand<MockAsset>("test")
-    }
-
-    val test = TestDelegate()
-    // Note that finishLoading (AssetManager.update) does not have to be called - asset is loaded on first getter call.
-    assertTrue(test.asset is MockAsset)
-    assertEquals("test", test.asset.data)
-  }
-
-  /**
-   * Spin-waits on [AssetManager.update].
-   */
-  private fun finishLoading() {
-    Assets.manager.loadAll()
-  }
 }
