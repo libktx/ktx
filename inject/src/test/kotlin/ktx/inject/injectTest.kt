@@ -1,27 +1,30 @@
 package ktx.inject
 
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.Random
 
 /**
- * Tests KTX dependency injection module.
- * @author MJ
+ * Tests the KTX dependency injection module: [Context] implementation.
  */
 class DependencyInjectionTest {
   val context = Context()
 
   @Test
-  fun shouldRegisterComponents() {
+  fun `should register components`() {
     context.bind { listOf<Any>() }
+
     assertTrue(List::class.java in context)
   }
 
   @Test
-  fun shouldInjectComponents() {
+  fun `should inject components`() {
     context.bind { mutableListOf<Any>() }
-    assertTrue(MutableList::class.java in context)
+
     val list = context.inject<MutableList<String>>()
+
+    assertTrue(MutableList::class.java in context)
     assertNotNull(list)
     list.add("Test")
     assertEquals(1, list.size)
@@ -29,11 +32,12 @@ class DependencyInjectionTest {
   }
 
   @Test
-  fun shouldBindSingletons() {
+  fun `should bind singletons`() {
     val singleton = Random()
-    context.bindSingleton(singleton)
-    assertTrue(context.contains<Random>())
 
+    context.bindSingleton(singleton)
+
+    assertTrue(context.contains<Random>())
     val provided = context.inject<Random>()
     assertSame(singleton, provided)
     assertSame(context.inject<Random>(), context.inject<Random>())
@@ -44,21 +48,25 @@ class DependencyInjectionTest {
   }
 
   @Test
-  fun shouldBindSingletonsToMultipleTypes() {
-    assertFalse(context.contains<String>())
-    assertFalse(context.contains<CharSequence>())
-    context.bindSingleton(java.lang.String("Singleton"), String::class.java, CharSequence::class.java)
+  fun `should bind singletons to multiple types`() {
+    val singleton = java.lang.String("Singleton")
+
+    context.bindSingleton(singleton, String::class.java, CharSequence::class.java)
+
     assertTrue(context.contains<String>())
     assertTrue(context.contains<CharSequence>())
+    assertSame(singleton, context.inject<String>())
     assertSame(context.inject<String>(), context.provider<CharSequence>()())
-    assertNotSame(context.inject<String>(), "Singleton")
+    assertNotSame("Singleton", context.inject<String>())
   }
 
   @Test
-  fun shouldInjectProviders() {
+  fun `should inject providers`() {
     context.bind { Random() }
-    assertTrue(context.contains<Random>())
+
     val provider = context.provider<Random>()
+
+    assertTrue(context.contains<Random>())
     assertNotNull(provider)
     val random1 = provider()
     val random2 = provider()
@@ -68,56 +76,66 @@ class DependencyInjectionTest {
   }
 
   @Test
-  fun shouldInjectBindProvidersToMultipleTypes() {
-    assertFalse(context.contains<String>())
-    assertFalse(context.contains<CharSequence>())
+  fun `should bind providers to multiple types`() {
     context.bind(String::class.java, CharSequence::class.java) { java.lang.String("New") }
+
     assertTrue(context.contains<String>())
     assertTrue(context.contains<CharSequence>())
     assertNotSame(context.inject<String>(), context.provider<CharSequence>()())
   }
 
   @Test
-  fun shouldInjectContext() {
+  fun `should inject context`() {
+    val injected = context.inject<Context>()
+
+    assertNotNull(injected)
     assertTrue(Context::class.java in context)
     assertTrue(context.contains<Context>())
-    val injected = context.inject<Context>()
-    assertNotNull(injected)
     assertSame(context, injected)
   }
 
   @Test
-  fun shouldRemoveProvidersExceptForContextProvider() {
+  fun `should remove providers on clear except for context provider`() {
     context.bind { "Test" }
-    assertTrue(context.contains<Context>())
-    assertTrue(context.contains<String>())
+
     context.clear()
+
     assertTrue(context.contains<Context>())
     assertFalse(context.contains<String>())
   }
 
   @Test
-  fun shouldFillStaticContext() {
-    assertEquals(ContextContainer.defaultContext, inject<Context>())
-    register {
+  fun `should fill context with builder DSL`() {
+    context.register {
       bind { Random() }
-      bindSingleton(java.lang.String("Singleton"))
+      bindSingleton("Test")
     }
-    val random = inject<Random>()
-    assertNotSame(random, inject<Random>())
-    val randomProvider = provider<Random>()
-    assertNotSame(random, randomProvider())
 
-    val singleton = inject<String>()
-    assertSame(singleton, inject<String>())
-    assertNotSame("Singleton", singleton)
-    val singletonProvider = provider<String>()
-    assertSame(singleton, singletonProvider())
-    assertNotSame("Singleton", singletonProvider())
+    assertTrue(context.contains<Random>())
+    assertTrue(context.contains<String>())
+  }
 
-    ContextContainer.defaultContext.clear()
-    assertFalse(ContextContainer.defaultContext.contains<Random>())
-    assertFalse(ContextContainer.defaultContext.contains<String>())
-    assertTrue(ContextContainer.defaultContext.contains<Context>())
+  @Test(expected = InjectionException::class)
+  fun `should throw exception upon injection of missing type`() {
+    context.inject<String>()
+  }
+
+  @Test(expected = InjectionException::class)
+  fun `should throw exception upon injection of provider of missing type`() {
+    context.provider<String>()
+  }
+
+  @Test
+  fun `should inject instances with invocation syntax`() {
+    context.bind { Random() }
+
+    val injected: Random = context()
+
+    assertNotNull(injected)
+  }
+
+  @After
+  fun `clear context`() {
+    context.clear()
   }
 }
