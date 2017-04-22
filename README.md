@@ -1,5 +1,5 @@
 [![Travis CI](https://travis-ci.org/czyzby/ktx.svg?branch=master)](https://travis-ci.org/czyzby/ktx)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.czyzby/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.1.1-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.6-red.svg)](https://libgdx.badlogicgames.com/)
 
@@ -51,13 +51,14 @@ and get some user feedback before a stable release. All versions are available t
 All libraries follow the same naming schema - this is an example Gradle dependency:
 
 ```Groovy
-compile "com.github.czyzby:ktx-$module:$ktxVersion"
+compile "io.github.libktx:ktx-$module:$ktxVersion"
 ```
 
 Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
 compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
-the snapshots). For example, the first official beta release was compiled against LibGDX `1.9.4`, so it was named
-`1.9.4-b1`. You can browse through our releases [here](https://search.maven.org/#search%7Cga%7C1%7Cktx).
+the snapshots). For example, the first official beta release with the recent group ID was compiled against LibGDX
+`1.9.6`, so it was named `1.9.6-b2`. You can browse through our releases
+[here](https://search.maven.org/#search%7Cga%7C1%7Cktx).
 
 Note that even snapshots should be more or less stable, as libraries are not pushed to Maven Central if they do not pass
 the unit tests.

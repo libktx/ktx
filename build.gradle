@@ -35,7 +35,7 @@ subprojects {
 
   sourceCompatibility = 1.6
   targetCompatibility = 1.6
-  group = 'com.github.czyzby'
+  group = libGroup
   version = libVersion
   archivesBaseName = projectName
 
