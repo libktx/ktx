@@ -1,5 +1,9 @@
 #### 1.9.6-SNAPSHOT
 
+- **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
+- **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
+- **[FEATURE]** (`ktx-i18n`) `nls` property and method added to `BundleLine` for extra readability.
+
 #### 1.9.6-b2
 
 - **[UPDATE]** Updated to Kotlin 1.1.1.
