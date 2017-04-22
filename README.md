@@ -1,9 +1,9 @@
-[![Travis CI](https://travis-ci.org/czyzby/ktx.svg?branch=master)](https://travis-ci.org/czyzby/ktx)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-style.svg)](https://search.maven.org/#search%7Cga%7C1%7Cktx)
+[![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.1.1-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.6-red.svg)](https://libgdx.badlogicgames.com/)
 
-[![KTX](.github/ktx-logo.png "KTX")](https://github.com/czyzby/ktx)
+[![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
 
 _**K**o**t**lin utilities for LibGD**X** applications._
 
@@ -45,7 +45,7 @@ coverage tools are currently unable to calculate coverage of inlined methods. An
 
 **KTX** libraries are currently almost out of beta. While tested and stable enough, we want to give them a little bit more time
 and get some user feedback before a stable release. All versions are available through Maven Central and
-[here](https://github.com/czyzby/ktx/releases). You can also use the preview snapshot releases from
+[here](https://github.com/libktx/ktx/releases). You can also use the preview snapshot releases from
 `https://oss.sonatype.org/content/repositories/snapshots/` repository.
 
 All libraries follow the same naming schema - this is an example Gradle dependency:
