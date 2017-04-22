@@ -79,6 +79,7 @@ remove elements from the map.
 - Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
 has to be provided - since the method is inlined, no new lambda object will be created at runtime.
 - Type alias added for consistency with other collections: `GdxMap` - `com.badlogic.gdx.utils.ObjectMap`.
+- All LibGDX maps now feature `component1()` and `component2()` operator extension methods, so they can be destructed.
 
 #### Lists
 
@@ -138,6 +139,14 @@ map[0] // "zero"
 map[3] = "three" // 3 in map == true; map[3] == "three"
 
 val empty = gdxMapOf<Int, String>()
+```
+
+Iterating over LibGDX maps:
+```Kotlin
+val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
+map.forEach { (key, value) ->
+  println("$value was mapped to $key.")
+}
 ```
 
 Working with **KTX** `PooledList`:

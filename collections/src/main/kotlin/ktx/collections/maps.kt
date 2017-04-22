@@ -271,3 +271,87 @@ operator fun IntMap<*>.contains(key: Int): Boolean = this.containsKey(key)
  * @return old value associated with the key or null if none.
  */
 operator fun <Value> IntMap<Value>.set(key: Int, value: Value): Value? = this.put(key, value)
+
+/**
+ * Allows to destruct [ObjectMap.Entry] into key and value components.
+ * @return [ObjectMap.Entry.key]
+ */
+inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component1() = key!!
+
+/**
+ * Allows to destruct [ObjectMap.Entry] into key and value components. Nullable, since [ObjectMap] allows null values.
+ * @return [ObjectMap.Entry.value]
+ */
+inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component2(): Value? = value
+
+/**
+ * Allows to destruct [IdentityMap.Entry] into key and value components.
+ * @return [IdentityMap.Entry.key]
+ */
+inline operator fun <Key, Value> IdentityMap.Entry<Key, Value>.component1() = key!!
+
+/**
+ * Allows to destruct [IdentityMap.Entry] into key and value components. Nullable, since [IdentityMap] allows null values.
+ * @return [IdentityMap.Entry.value]
+ */
+inline operator fun <Key, Value> IdentityMap.Entry<Key, Value>.component2(): Value? = value
+
+/**
+ * Allows to destruct [IntMap.Entry] into key and value components.
+ * @return [IntMap.Entry.key]
+ */
+inline operator fun <Value> IntMap.Entry<Value>.component1() = key
+
+/**
+ * Allows to destruct [IntMap.Entry] into key and value components. Nullable, since [IntMap] allows null values.
+ * @return [IntMap.Entry.value]
+ */
+inline operator fun <Value> IntMap.Entry<Value>.component2(): Value? = value
+
+/**
+ * Allows to destruct [LongMap.Entry] into key and value components.
+ * @return [LongMap.Entry.key]
+ */
+inline operator fun <Value> LongMap.Entry<Value>.component1() = key
+
+/**
+ * Allows to destruct [LongMap.Entry] into key and value components. Nullable, since [LongMap] allows null values.
+ * @return [LongMap.Entry.value]
+ */
+inline operator fun <Value> LongMap.Entry<Value>.component2(): Value? = value
+
+/**
+ * Allows to destruct [IntIntMap.Entry] into key and value components.
+ * @return [IntIntMap.Entry.key]
+ */
+inline operator fun IntIntMap.Entry.component1() = key
+
+/**
+ * Allows to destruct [IntIntMap.Entry] into key and value components.
+ * @return [IntIntMap.Entry.value]
+ */
+inline operator fun IntIntMap.Entry.component2() = value
+
+/**
+ * Allows to destruct [IntFloatMap.Entry] into key and value components.
+ * @return [IntFloatMap.Entry.key]
+ */
+inline operator fun IntFloatMap.Entry.component1() = key
+
+/**
+ * Allows to destruct [IntFloatMap.Entry] into key and value components.
+ * @return [IntFloatMap.Entry.value]
+ */
+inline operator fun IntFloatMap.Entry.component2() = value
+
+/**
+ * Allows to destruct [ObjectIntMap.Entry] into key and value components.
+ * @return [ObjectIntMap.Entry.key]
+ */
+inline operator fun <Value> ObjectIntMap.Entry<Value>.component1() = key!!
+
+/**
+ * Allows to destruct [ObjectIntMap.Entry] into key and value components.
+ * @return [ObjectIntMap.Entry.value]
+ */
+inline operator fun <Value> ObjectIntMap.Entry<Value>.component2() = value

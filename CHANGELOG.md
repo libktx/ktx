@@ -30,6 +30,8 @@ extension methods to `AssetManager` to provide an alternative to equivalent util
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
 - **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[FEATURE]** (`ktx-collections`) Added `component1()` and `component2()` operator extension methods to `Entry` classes
+of LibGDX maps to simplify map iteration syntax.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container was deprecated. Static access to `I18NBundle` will be
 removed in the next release.
 - **[CHANGE]** (`ktx-inject`) Static `Context` instance container was deprecated. Static access to `Context` will be

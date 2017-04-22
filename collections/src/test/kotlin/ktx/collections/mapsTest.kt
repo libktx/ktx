@@ -216,7 +216,6 @@ class MapsTest {
     assertEquals("another", map[otherKey])
   }
 
-
   @Test
   fun shouldCheckIfIdentityMapContainsKeyWithInOperator() {
     val map = IdentityMap<String, String>()
@@ -294,5 +293,89 @@ class MapsTest {
   @Test
   fun `should provide alias for compatibility with other LibGDX collections`() {
     assertTrue(GdxMap<Any, Any>() is ObjectMap<Any, Any>)
+  }
+
+  @Test
+  fun `should destruct ObjectMap#Entry into key and value`() {
+    val entry = ObjectMap.Entry<String, String>()
+    entry.key = "Key"
+    entry.value = "Value"
+
+    val (key, value) = entry
+
+    assertEquals("Key", key)
+    assertEquals("Value", value)
+  }
+
+  @Test
+  fun `should destruct IdentityMap#Entry into key and value`() {
+    val entry = IdentityMap.Entry<String, String>()
+    entry.key = "Key"
+    entry.value = "Value"
+
+    val (key, value) = entry
+
+    assertEquals("Key", key)
+    assertEquals("Value", value)
+  }
+
+  @Test
+  fun `should destruct IntMap#Entry into key and value`() {
+    val entry = IntMap.Entry<String>()
+    entry.key = 10
+    entry.value = "Value"
+
+    val (key, value) = entry
+
+    assertEquals(10, key)
+    assertEquals("Value", value)
+  }
+
+  @Test
+  fun `should destruct LongMap#Entry into key and value`() {
+    val entry = LongMap.Entry<String>()
+    entry.key = 10L
+    entry.value = "Value"
+
+    val (key, value) = entry
+
+    assertEquals(10L, key)
+    assertEquals("Value", value)
+  }
+
+  @Test
+  fun `should destruct IntIntMap#Entry into key and value`() {
+    val entry = IntIntMap.Entry()
+    entry.key = 10
+    entry.value = 20
+
+    val (key, value) = entry
+
+    assertEquals(10, key)
+    assertEquals(20, value)
+  }
+
+  @Test
+  fun `should destruct IntFloatMap#Entry into key and value`() {
+    val entry = IntFloatMap.Entry()
+    entry.key = 10
+    entry.value = 20f
+
+    val (key, value) = entry
+
+    assertEquals(10, key)
+    assertEquals(20f, value)
+  }
+
+  @Test
+  fun `should destruct ObjectIntMap#Entry into key and value`() {
+    val entry = ObjectIntMap.Entry<String>()
+    entry.key = "Key"
+    entry.value = 10
+
+    val (key, value) = entry
+
+    assertEquals("Key", key)
+    assertEquals(10, value)
   }
 }
