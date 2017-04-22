@@ -24,6 +24,7 @@ Current **KTX** modules:
 - [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
 - [app](app): `ApplicationListener` abstract implementations and other general LibGDX application utilities.
 - [assets](assets): resources management utilities.
+- [async](async): [coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.

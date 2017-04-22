@@ -17,6 +17,17 @@ will be removed in the next release.
 - **[FEATURE]** (`ktx-assets`) Added `load`, `loadAsset`, `loadOnDemand`, `getAsset`, `unload` and `unloadSafety`
 extension methods to `AssetManager` to provide an alternative to equivalent utility functions using static manager instance.
 - **[FEATURE]** (`ktx-assets`) Added `getLoader` and `setLoader` extension methods to `AssetManager` for `AssetLoader` handling.
+- **[FEATURE]** (`ktx-async`) Implemented a new KTX module with multi-threaded operations utilities: `ktx-async`.
+  - Implemented coroutines context using LibGDX threading model: `KtxAsync`. It resumes suspending operations on the
+    main rendering thread with `Gdx.app.postRunnable` utility. It has to be initiated on the main thread with
+    `enableKtxCoroutines`.
+  - Added utility `ktxAsync` function which launches non-blocking coroutine using `KtxAsync` context.
+  - Added `skipFrame` method that suspends the coroutine and resumes it on the next frame using `Gdx.app.postRunnable`.
+  - Added `delay` method that offers non-blocking coroutine suspensions for the given period of time.
+  - Added `httpRequest` method that performs asynchronous suspending HTTP request using LibGDX `Net` API.
+  - Added `asynchronous` method, which allows to perform suspending operations on a separate thread.
+  - `schedule` and `interval` utility methods added to ease the use of `com.badlogic.gdx.utils.Timer` API.
+  - Added `HttpRequestResult`: a thread-safe `HttpResponse` wrapper that addresses [libgdx#4700](https://github.com/libgdx/libgdx/issues/4700).
 - **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
 - **[FEATURE]** (`ktx-collections`) Added type aliases to LibGDX collections to avoid name collisions with standard library:
   - **`GdxArray`**: `com.badlogic.gdx.utils.Array`
