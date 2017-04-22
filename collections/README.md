@@ -141,8 +141,10 @@ map[3] = "three" // 3 in map == true; map[3] == "three"
 val empty = gdxMapOf<Int, String>()
 ```
 
-Iterating over LibGDX maps:
+Iterating over LibGDX maps with destructing syntax:
 ```Kotlin
+import ktx.collections.*
+
 val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
 map.forEach { (key, value) ->
   println("$value was mapped to $key.")
