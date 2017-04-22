@@ -1,4 +1,4 @@
-# KTX: async
+# KTX: coroutines support and threading utilities
 
 [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) support and general asynchronous operations
 utilities for LibGDX applications.
