@@ -27,8 +27,9 @@ all necessary imports in KTX examples in `README.md` files to make it easier to 
 ## Working from sources
 
 ```bash
-git clone https://github.com/czyzby/ktx.git
+git clone https://github.com/libktx/ktx.git
 cd ktx
+git checkout develop
 ```
 
 ### Build tool
@@ -55,7 +56,7 @@ LibGDX version that it was compiled against) with optional `-b#` or `-SNAPSHOT` 
 - Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both Maven Local and
 Maven Central.
 - Run `gradle distZip` to prepare archive with KTX sources, compiled binary and documentation.
-- Upload the archive to [releases](https://github.com/czyzby/ktx/releases) section. Tag should match released version.
+- Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. Tag should match released version.
 Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
 description. Note that a release is not necessary for snapshot versions.
 
