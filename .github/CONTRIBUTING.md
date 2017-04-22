@@ -6,6 +6,9 @@ the fastest way to contact the developers.
 
 ## Pull requests
 
+- The latest changes are always in the `develop` branch. `master` branch is frozen between releases. Make sure to
+checkout `develop` branch before starting your work and set `develop` as the target branch before creating a pull
+request.
 - Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
 - Make sure to include unit tests of your code. Older tests are not idiomatic Kotlin code and were written with vanilla
 JUnit and Mockito - all new tests should use [KotlinTest](https://github.com/kotlintest/kotlintest) framework along with
