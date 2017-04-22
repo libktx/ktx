@@ -102,7 +102,7 @@ subprojects {
           name = projectName
           packaging 'jar'
           description = projectDesc
-          url 'http://github.com/czyzby/ktx'
+          url 'http://github.com/libktx/ktx'
 
           licenses {
             license {
@@ -112,9 +112,9 @@ subprojects {
           }
           
           scm {
-            connection 'scm:git:git@github.com:czyzby/ktx.git'
-            developerConnection 'scm:git:git@github.com:czyzby/ktx.git'
-            url 'http://github.com/czyzby/ktx/'
+            connection 'scm:git:git@github.com:libktx/ktx.git'
+            developerConnection 'scm:git:git@github.com:libktx/ktx.git'
+            url 'http://github.com/libktx/ktx/'
           }
 
           developers {
@@ -131,7 +131,7 @@ subprojects {
 }
 
 nexusStaging {
-  packageGroup = 'com.github.czyzby'
+  packageGroup = libGroup
   username = ossrhUsername
   password = ossrhPassword
 }
