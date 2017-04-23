@@ -135,6 +135,17 @@ method with a pleasant Kotlin syntax.
 - `file` utility function allows to quickly obtain a `FileHandle` instance. It features an optional `type` parameter
 which allows to choose the `FileType`, while defaulting to the most common `Internal`.
 
+#### `FileHandleResolver`
+
+- `FileType.getResolver` extension method was added to quickly construct `FileHandleResolver` instances for the chosen
+file types.
+- `FileHandleResolver.withPrefix` extension method was added to ease decoration of `FileHandleResolver` instances with
+`PrefixFileHandleResolver`.
+- `FileHandleResolver.forResolutions` extension method was added to ease decoration of `FileHandleResolver` instances
+with `ResolutionFileResolver`.
+- `resolution` factory function was added to construct `ResolutionFileResolver.Resolution` instances with idiomatic
+Kotlin syntax.
+
 ### Usage examples
 
 Obtaining `FileHandle` instances:
@@ -238,6 +249,36 @@ assetManager.setLoader(myCustomLoader) // No need to pass class.
 
 // Accessing an AssetLoader:
 val loader = assetManager.getLoader<MyAsset>()
+```
+
+Creating an `InternalFileHandleResolver`:
+
+```Kotlin
+import ktx.assets.getResolver
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver()
+```
+
+Decorating `FileHandleResolver` with `PrefixFileHandleResolver`:
+
+```Kotlin
+import ktx.assets.*
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver().withPrefix("folder/")
+
+```
+
+Decorating `FileHandleResolver` with `ResolutionFileResolver`:
+```Kotlin
+import ktx.assets.*
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver().forResolutions(
+    resolution(width = 800, height = 600),
+    resolution(width = 1024, height = 768)
+)
 ```
 
 ### Alternatives
