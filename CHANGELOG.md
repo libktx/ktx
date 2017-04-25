@@ -1,5 +1,6 @@
 #### 1.9.6-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.1.2.
 - **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
 depending on the global `AssetManager` were removed.
 - **[FEATURE]** (`ktx-assets`) Added `FileType.getResolver` extension method creating `FileHandleResolver` instances.
