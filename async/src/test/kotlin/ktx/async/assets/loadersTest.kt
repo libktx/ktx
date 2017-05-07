@@ -2,6 +2,7 @@ package ktx.async.assets
 
 import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.loaders.AssetLoader
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
@@ -42,7 +43,7 @@ class AssetLoaderStorageTest {
   @Test
   fun `should return null when requested main loader for known type without appropriate suffix`() {
     val storage = AssetLoaderStorage()
-    storage.setLoader(String::class.java, mock(), suffix = ".txt")
+    storage.setLoader(String::class.java, mockStringLoader(), suffix = ".txt")
 
     val loader = storage.getLoader(String::class.java)
 
@@ -52,7 +53,7 @@ class AssetLoaderStorageTest {
   @Test
   fun `should return null when requested loader for known type with invalid suffix`() {
     val storage = AssetLoaderStorage()
-    storage.setLoader(String::class.java, mock(), suffix = ".txt")
+    storage.setLoader(String::class.java, mockStringLoader(), suffix = ".txt")
 
     val loader = storage.getLoader(String::class.java, path = "invalid.md")
 
@@ -111,5 +112,13 @@ class AssetLoaderStorageTest {
     assertSame(stringLoader, loader)
   }
 
-  private fun mockStringLoader() = mock<AssetLoader<String, AssetLoaderParameters<String>>>()
+  @Test(expected = AssetStorageException::class)
+  fun `should reject loader that does not extend SynchronousAssetLoader or AsynchronousAssetLoader`() {
+    val storage = AssetLoaderStorage()
+    val invalidLoader = mock<AssetLoader<String, AssetLoaderParameters<String>>>()
+
+    storage.setLoader(String::class.java, invalidLoader)
+  }
+
+  private fun mockStringLoader() = mock<SynchronousAssetLoader<String, AssetLoaderParameters<String>>>()
 }

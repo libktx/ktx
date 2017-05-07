@@ -44,12 +44,20 @@ internal class AssetLoaderStorage {
    *    also become the main loader for the given type.
    */
   fun <Asset> setLoader(type: Class<Asset>, loader: Loader<Asset>, suffix: String? = null) {
+    validate(loader)
     getOrCreateLoadersContainer(type).apply {
       if (suffix.isNullOrEmpty()) {
         mainLoader = loader
       } else {
         loadersBySuffix.put(suffix, loader)
       }
+    }
+  }
+
+  private fun <Asset> validate(loader: Loader<Asset>) {
+    if (loader !is SynchronousLoader<Asset> && loader !is AsynchronousLoader<Asset>) {
+      throw AssetStorageException("Unable to register loader: $loader. " +
+          "Asset loaders must extend either SynchronousAssetLoader or AsynchronousAssetLoader.")
     }
   }
 
