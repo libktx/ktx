@@ -58,13 +58,9 @@ loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")
 exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
-- Global `AssetManager` instance is accessible (and modifiable) through `Assets.manager` utility field. Since it is
-advised to share and reuse a single `AssetManager` instance in the application and LibGDX already goes crazy with the
-statics thanks to `Gdx.files` and whatnot, this `AssetManager` instance was added to reduce asset-related boilerplate.
-If a utility asset loading (or accessing) method accepts an `AssetManager` instance, this global manager will be used by
-default to save you the trouble of getting your `AssetManager` manually. Its usage is completely optional and
-you can omit it entirely, while still benefiting from asset loading utility methods. **Note: global `AssetManager`
-instance has been deprecated in `1.9.6-b2` and will be removed after the next release.**
+
+Note: if you can use coroutines in your project, [`ktx-async`](../async) module provides a lightweight coroutines-based
+alternative to `AssetManager` that can greatly simplify your asset loading code.
 
 ##### Implementation tip: type-safe assets
 
@@ -291,6 +287,8 @@ injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
 Java applications though - **KTX** syntax should feel more natural when using Kotlin.
+- [`ktx-async`](../async) module provides `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
+It was extracted to `ktx-async` module due to the coroutines usage.
 
 #### Additional documentation
 

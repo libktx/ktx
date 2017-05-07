@@ -1,12 +1,14 @@
 #### 1.9.6-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.1.2.
+- **[UPDATE]** Updated to Kotlin Coroutines to 0.15.
 - **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
 depending on the global `AssetManager` were removed.
 - **[FEATURE]** (`ktx-assets`) Added `FileType.getResolver` extension method creating `FileHandleResolver` instances.
 - **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.withPrefix` extension method decorating resolvers with `PrefixFileHandleResolver`.
 - **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.forResolutions` extension method decorating resolvers with `ResolutionFileResolver`.
 - **[FEATURE]** (`ktx-assets`) Added `resolution` function constructing `ResolutionFileResolver.Resolution` instances.
+- **[FEATURE]** (`ktx-async`) Added `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
 - **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
 - **[FEATURE]** (`ktx-i18n`) `nls` property and method added to `BundleLine` for extra readability.
