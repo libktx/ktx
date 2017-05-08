@@ -31,6 +31,9 @@ import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+/**
+ * Tests building utilities of VisUI widget styles.
+ */
 class VisStyleTest {
   @Test
   fun `should add Sizes`() {
@@ -39,6 +42,7 @@ class VisStyleTest {
         borderSize = 1f
       }
     }
+
     val style = skin.get<Sizes>(defaultStyle)
     assertEquals(1f, style.borderSize)
   }
@@ -53,6 +57,7 @@ class VisStyleTest {
         buttonBarSpacing = 1f
       }
     }
+
     val style = skin.get<Sizes>("new")
     assertEquals(1f, style.borderSize)
     assertEquals(1f, style.buttonBarSpacing)
@@ -65,6 +70,7 @@ class VisStyleTest {
         height = 1
       }
     }
+
     val style = skin.get<BusyBarStyle>(defaultStyle)
     assertEquals(1, style.height)
   }
@@ -79,6 +85,7 @@ class VisStyleTest {
         segmentWidth = 1
       }
     }
+
     val style = skin.get<BusyBarStyle>("new")
     assertEquals(1, style.height)
     assertEquals(1, style.segmentWidth)
@@ -91,6 +98,7 @@ class VisStyleTest {
         titleFontColor = Color.RED
       }
     }
+
     val style = skin.get<ColorPickerStyle>(defaultStyle)
     assertEquals(Color.RED, style.titleFontColor)
   }
@@ -107,6 +115,7 @@ class VisStyleTest {
         stageBackground = drawable
       }
     }
+
     val style = skin.get<ColorPickerStyle>("new")
     assertEquals(Color.RED, style.titleFontColor)
     assertEquals(drawable, style.stageBackground)
@@ -120,6 +129,7 @@ class VisStyleTest {
         barSelector = drawable
       }
     }
+
     val style = skin.get<ColorPickerWidgetStyle>(defaultStyle)
     assertEquals(drawable, style.barSelector)
   }
@@ -135,6 +145,7 @@ class VisStyleTest {
         cross = drawable
       }
     }
+
     val style = skin.get<ColorPickerWidgetStyle>("new")
     assertEquals(drawable, style.barSelector)
     assertEquals(drawable, style.cross)
@@ -147,6 +158,7 @@ class VisStyleTest {
         colorTransitionDuration = 1f
       }
     }
+
     val style = skin.get<FormValidatorStyle>(defaultStyle)
     assertEquals(1f, style.colorTransitionDuration)
   }
@@ -161,6 +173,7 @@ class VisStyleTest {
         errorLabelColor = Color.RED
       }
     }
+
     val style = skin.get<FormValidatorStyle>("new")
     assertEquals(1f, style.colorTransitionDuration)
     assertEquals(Color.RED, style.errorLabelColor)
@@ -173,6 +186,7 @@ class VisStyleTest {
         fontColor = Color.RED
       }
     }
+
     val style = skin.get<LinkLabelStyle>(defaultStyle)
     assertEquals(Color.RED, style.fontColor)
   }
@@ -188,6 +202,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<LinkLabelStyle>("new")
     assertEquals(Color.RED, style.fontColor)
     assertEquals(drawable, style.background)
@@ -201,6 +216,7 @@ class VisStyleTest {
         scrollPaneStyle = scrollPane
       }
     }
+
     val style = skin.get<ListViewStyle>(defaultStyle)
     assertEquals(scrollPane, style.scrollPaneStyle)
   }
@@ -218,6 +234,7 @@ class VisStyleTest {
         scrollPaneStyle.corner = drawable
       }
     }
+
     val style = skin.get<ListViewStyle>("new")
     // ScrollPaneStyle is copied, so nested properties are checked:
     assertEquals(drawable, style.scrollPaneStyle.background)
@@ -232,6 +249,7 @@ class VisStyleTest {
         border = drawable
       }
     }
+
     val style = skin.get<MenuStyle>(defaultStyle)
     assertEquals(drawable, style.border)
   }
@@ -247,6 +265,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<MenuStyle>("new")
     assertEquals(drawable, style.border)
     assertEquals(drawable, style.background)
@@ -260,6 +279,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<MenuBarStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -273,6 +293,7 @@ class VisStyleTest {
       }
       menuBar("new", extend = "base") {}
     }
+
     val style = skin.get<MenuBarStyle>("new")
     assertEquals(drawable, style.background)
   }
@@ -284,6 +305,7 @@ class VisStyleTest {
         pressedOffsetX = 1f
       }
     }
+
     val style = skin.get<MenuItemStyle>(defaultStyle)
     assertEquals(1f, style.pressedOffsetX)
   }
@@ -298,6 +320,7 @@ class VisStyleTest {
         pressedOffsetY = 1f
       }
     }
+
     val style = skin.get<MenuItemStyle>("new")
     assertEquals(1f, style.pressedOffsetX)
     assertEquals(1f, style.pressedOffsetY)
@@ -311,6 +334,7 @@ class VisStyleTest {
         handle = drawable
       }
     }
+
     val style = skin.get<MultiSplitPaneStyle>(defaultStyle)
     assertEquals(drawable, style.handle)
   }
@@ -326,6 +350,7 @@ class VisStyleTest {
         handleOver = drawable
       }
     }
+
     val style = skin.get<MultiSplitPaneStyle>("new")
     assertEquals(drawable, style.handle)
     assertEquals(drawable, style.handleOver)
@@ -339,6 +364,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<PopupMenuStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -354,6 +380,7 @@ class VisStyleTest {
         border = drawable
       }
     }
+
     val style = skin.get<PopupMenuStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(drawable, style.border)
@@ -367,6 +394,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<SeparatorStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -382,6 +410,7 @@ class VisStyleTest {
         thickness = 1
       }
     }
+
     val style = skin.get<SeparatorStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(1, style.thickness)
@@ -395,6 +424,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<SimpleListAdapterStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -410,6 +440,7 @@ class VisStyleTest {
         selection = drawable
       }
     }
+
     val style = skin.get<SimpleListAdapterStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(drawable, style.selection)
@@ -423,6 +454,7 @@ class VisStyleTest {
         down = drawable
       }
     }
+
     val style = skin.get<SpinnerStyle>(defaultStyle)
     assertEquals(drawable, style.down)
   }
@@ -438,6 +470,7 @@ class VisStyleTest {
         up = drawable
       }
     }
+
     val style = skin.get<SpinnerStyle>("new")
     assertEquals(drawable, style.down)
     assertEquals(drawable, style.up)
@@ -451,6 +484,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<TabbedPaneStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -466,6 +500,7 @@ class VisStyleTest {
         vertical = true
       }
     }
+
     val style = skin.get<TabbedPaneStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(true, style.vertical)
@@ -479,6 +514,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<ToastStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -487,6 +523,7 @@ class VisStyleTest {
   fun `should extend ToastStyle`() {
     val drawable = mock<Drawable>()
     val buttonStyle = mock<VisImageButtonStyle>()
+
     val skin = skin {
       toast("base") {
         background = drawable
@@ -495,6 +532,7 @@ class VisStyleTest {
         closeButtonStyle = buttonStyle
       }
     }
+
     val style = skin.get<ToastStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(buttonStyle, style.closeButtonStyle)
@@ -507,6 +545,7 @@ class VisStyleTest {
         pressedOffsetX = 1f
       }
     }
+
     val style = skin.get<VisCheckBoxStyle>(defaultStyle)
     assertEquals(1f, style.pressedOffsetX)
   }
@@ -521,6 +560,7 @@ class VisStyleTest {
         pressedOffsetY = 1f
       }
     }
+
     val style = skin.get<VisCheckBoxStyle>("new")
     assertEquals(1f, style.pressedOffsetX)
     assertEquals(1f, style.pressedOffsetY)
@@ -533,6 +573,7 @@ class VisStyleTest {
         pressedOffsetX = 1f
       }
     }
+
     val style = skin.get<VisImageButtonStyle>(defaultStyle)
     assertEquals(1f, style.pressedOffsetX)
   }
@@ -547,6 +588,7 @@ class VisStyleTest {
         pressedOffsetY = 1f
       }
     }
+
     val style = skin.get<VisImageButtonStyle>("new")
     assertEquals(1f, style.pressedOffsetX)
     assertEquals(1f, style.pressedOffsetY)
@@ -559,6 +601,7 @@ class VisStyleTest {
         pressedOffsetX = 1f
       }
     }
+
     val style = skin.get<VisImageTextButtonStyle>(defaultStyle)
     assertEquals(1f, style.pressedOffsetX)
   }
@@ -573,6 +616,7 @@ class VisStyleTest {
         pressedOffsetY = 1f
       }
     }
+
     val style = skin.get<VisImageTextButtonStyle>("new")
     assertEquals(1f, style.pressedOffsetX)
     assertEquals(1f, style.pressedOffsetY)
@@ -586,6 +630,7 @@ class VisStyleTest {
         handle = drawable
       }
     }
+
     val style = skin.get<VisSplitPaneStyle>(defaultStyle)
     assertEquals(drawable, style.handle)
   }
@@ -601,6 +646,7 @@ class VisStyleTest {
         handleOver = drawable
       }
     }
+
     val style = skin.get<VisSplitPaneStyle>("new")
     assertEquals(drawable, style.handle)
     assertEquals(drawable, style.handleOver)
@@ -613,6 +659,7 @@ class VisStyleTest {
         pressedOffsetX = 1f
       }
     }
+
     val style = skin.get<VisTextButtonStyle>(defaultStyle)
     assertEquals(1f, style.pressedOffsetX)
   }
@@ -627,6 +674,7 @@ class VisStyleTest {
         pressedOffsetY = 1f
       }
     }
+
     val style = skin.get<VisTextButtonStyle>("new")
     assertEquals(1f, style.pressedOffsetX)
     assertEquals(1f, style.pressedOffsetY)
@@ -639,6 +687,7 @@ class VisStyleTest {
         fontColor = Color.CYAN
       }
     }
+
     val style = skin.get<VisTextFieldStyle>(defaultStyle)
     assertEquals(Color.CYAN, style.fontColor)
   }
@@ -653,6 +702,7 @@ class VisStyleTest {
         disabledFontColor = Color.BLACK
       }
     }
+
     val style = skin.get<VisTextFieldStyle>("new")
     assertEquals(Color.CYAN, style.fontColor)
     assertEquals(Color.BLACK, style.disabledFontColor)
@@ -666,6 +716,7 @@ class VisStyleTest {
         background = drawable
       }
     }
+
     val style = skin.get<TooltipStyle>(defaultStyle)
     assertEquals(drawable, style.background)
   }
@@ -680,6 +731,7 @@ class VisStyleTest {
       visTooltip("new", extend = "base") {
       }
     }
+
     val style = skin.get<TooltipStyle>("new")
     assertEquals(drawable, style.background)
   }
