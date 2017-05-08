@@ -6,7 +6,6 @@ import org.junit.Test
 
 /**
  * Tests inlined factory methods of Table-based root actors.
- * @author MJ
  */
 class TableFactoriesTest : NeedsLibGDX() {
   @Test
