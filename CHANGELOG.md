@@ -8,6 +8,13 @@ depending on the global `AssetManager` were removed.
 - **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.withPrefix` extension method decorating resolvers with `PrefixFileHandleResolver`.
 - **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.forResolutions` extension method decorating resolvers with `ResolutionFileResolver`.
 - **[FEATURE]** (`ktx-assets`) Added `resolution` function constructing `ResolutionFileResolver.Resolution` instances.
+- **[FEATURE]** (`ktx-box2d`) Implemented a new **KTX** module with Box2D physics engine utilities: `ktx-box2d`.
+  - `world` factory method constructing `World` instances.
+  - `World.body` extension method providing type-safe builder DSL for `Body` instances.
+  - `FixtureDef` builder methods supporting all shapes (`CircleShape`, `PolygonShape`, `ChainShape`, `EdgeShape`).
+  - `FixtureDef.filder` extension methods simplifying `Filter` properties setup.
+  - `BodyDefinition` is a `BodyDef` extension providing `Body` building DSL. Used internally by `World.body`.
+  - `earthGravity` property allowing to set `World` gravity roughly matching Earth's gravity.
 - **[FEATURE]** (`ktx-async`) Added `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
 - **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
