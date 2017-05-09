@@ -12,7 +12,6 @@ import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
-import org.mockito.Mockito
 
 /** @author Kotcrab */
 
@@ -154,7 +153,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
   fun shouldAllowToAddStandardTabManually() {
     table {
       tabbedPane {
-        add(Mockito.mock(Tab::class.java))
+        add(mock<Tab>())
       }
     }
   }
@@ -163,7 +162,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
   fun shouldAllowToInsertStandardTabManually() {
     table {
       tabbedPane {
-        insert(0, Mockito.mock(Tab::class.java))
+        insert(0, mock<Tab>())
       }
     }
   }

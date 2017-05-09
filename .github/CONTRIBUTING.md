@@ -11,8 +11,8 @@ checkout `develop` branch before starting your work and set `develop` as the tar
 request.
 - Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
 - Make sure to include unit tests of your code. Older tests are not idiomatic Kotlin code and were written with vanilla
-JUnit and Mockito - all new tests should use [KotlinTest](https://github.com/kotlintest/kotlintest) framework along with
-[Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
+JUnit, along with helpers from [KotlinTest](https://github.com/kotlintest/kotlintest) and
+[Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) if applicable.
 - If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue (or create
 an issue with your proposal first). API changes or new modules have to be discussed with the maintainers first.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
