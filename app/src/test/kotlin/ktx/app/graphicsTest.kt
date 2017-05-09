@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
 
 /**
  * Tests general utilities related to LibGDX graphics API.
