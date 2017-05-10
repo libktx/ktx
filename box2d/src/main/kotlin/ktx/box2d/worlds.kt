@@ -2,6 +2,7 @@ package ktx.box2d
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.World
 
 /**
@@ -14,14 +15,16 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
 
 /**
  * Type-safe [Body] building DSl.
+ * @param type [BodyType] of the constructed [Body]. Matches LibGDX default of [BodyType.StaticBody].
  * @param init inlined. Invoked on a [BodyDefinition] instance, which provides access to [Body] properties, as well as
  *    fixture building DSL.
  * @return a fully constructed [Body] instance with all defined fixtures.
  * @see BodyDefinition
  * @see FixtureDefinition
  */
-inline fun World.body(init: BodyDefinition.() -> Unit): Body {
+inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit): Body {
   val bodyDefinition = BodyDefinition()
+  bodyDefinition.type = type
   bodyDefinition.init()
   val body = createBody(bodyDefinition)
   body.userData = bodyDefinition.userData

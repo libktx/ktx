@@ -25,22 +25,22 @@ class FixturesTest : Box2DTest() {
       assertEquals(3.toShort(), groupIndex)
     }
   }
-}
 
-@Test
-fun `should copy filter properties into filter of FixtureDef`() {
-  val fixtureDefinition = FixtureDef()
-  val filter = Filter().apply {
-    categoryBits = 1
-    maskBits = 2
-    groupIndex = 3
-  }
+  @Test
+  fun `should copy filter properties into filter of FixtureDef`() {
+    val fixtureDefinition = FixtureDef()
+    val filter = Filter().apply {
+      categoryBits = 1
+      maskBits = 2
+      groupIndex = 3
+    }
 
-  fixtureDefinition.filter(filter)
+    fixtureDefinition.filter(filter)
 
-  fixtureDefinition.filter.apply {
-    assertEquals(1.toShort(), categoryBits)
-    assertEquals(2.toShort(), maskBits)
-    assertEquals(3.toShort(), groupIndex)
+    fixtureDefinition.filter.apply {
+      assertEquals(1.toShort(), categoryBits)
+      assertEquals(2.toShort(), maskBits)
+      assertEquals(3.toShort(), groupIndex)
+    }
   }
 }

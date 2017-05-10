@@ -1,7 +1,7 @@
 package ktx.box2d
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
 import com.badlogic.gdx.physics.box2d.CircleShape
 import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.World
@@ -9,7 +9,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /**
- * Tests [World] utilities.
+ * Tests [World] utilities and extension methods.
  */
 class WorldsTest : Box2DTest() {
   @Test
@@ -40,6 +40,18 @@ class WorldsTest : Box2DTest() {
 
     assertNotNull(body)
     assertSame(world, body.world)
+    assertEquals(StaticBody, body.type)
+  }
+
+  @Test
+  fun `should construct a Body of chosen BodyType`() {
+    val world = createWorld()
+
+    val body = world.body(type = KinematicBody) { }
+
+    assertNotNull(body)
+    assertSame(world, body.world)
+    assertEquals(KinematicBody, body.type)
   }
 
   @Test
