@@ -225,37 +225,3 @@ inline fun World.body(init: BodyDefinition.() -> Unit): Body {
   }
   return body
 }
-
-/**
- * Utility extension method for setting up of [FixtureDef.filter].
- * @param category filter category bits. See [Filter.categoryBits].
- * @param mask filter mask bits. See [Filter.maskBits].
- * @param group filter group index. See [Filter.groupIndex].
- * @return [FixtureDef.filter] of this [FixtureDef] instance.
- * @see Filter
- */
-fun FixtureDef.filter(
-    category: Short = filter.categoryBits,
-    mask: Short = filter.maskBits,
-    group: Short = filter.groupIndex): Filter {
-  val filter: Filter = filter
-  filter.categoryBits = category
-  filter.maskBits = mask
-  filter.groupIndex = group
-  return filter
-}
-
-/**
- * Utility extension method for setting up of [FixtureDef.filter]. Allows to copy an existing [Filter] instance to avoid
- * copying each property manually.
- * @param filter its properties will be copied.
- * @return [FixtureDef.filter] of this [FixtureDef] instance.
- * @see Filter
- */
-fun FixtureDef.filter(filter: Filter): Filter {
-  val fixtureFilter = this.filter
-  fixtureFilter.categoryBits = filter.categoryBits
-  fixtureFilter.maskBits = filter.maskBits
-  fixtureFilter.groupIndex = filter.groupIndex
-  return fixtureFilter
-}

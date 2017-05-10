@@ -299,42 +299,6 @@ class WorldsTest : Box2DTest() {
 }
 
 /**
- * Tests utility extensions related to body fixtures.
- */
-class FixturesTest : Box2DTest() {
-  @Test
-  fun `should set filter properties of FixtureDef`() {
-    val fixtureDefinition = FixtureDef()
-
-    fixtureDefinition.filter(category = 1, mask = 2, group = 3)
-
-    fixtureDefinition.filter.apply {
-      assertEquals(1.toShort(), categoryBits)
-      assertEquals(2.toShort(), maskBits)
-      assertEquals(3.toShort(), groupIndex)
-    }
-  }
-
-  @Test
-  fun `should copy filter properties into filter of FixtureDef`() {
-    val fixtureDefinition = FixtureDef()
-    val filter = Filter().apply {
-      categoryBits = 1
-      maskBits = 2
-      groupIndex = 3
-    }
-
-    fixtureDefinition.filter(filter)
-
-    fixtureDefinition.filter.apply {
-      assertEquals(1.toShort(), categoryBits)
-      assertEquals(2.toShort(), maskBits)
-      assertEquals(3.toShort(), groupIndex)
-    }
-  }
-}
-
-/**
  * Initiates Box2D native library. Provides comparison methods for some Box2D data objects that are difficult to verify.
  */
 abstract class Box2DTest {

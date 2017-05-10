@@ -21,7 +21,7 @@ the following shapes:
   - `loop`: looped `ChainShape`.
   - `edge`: looped `EdgeShape`.
   - `fixture`: a custom `Shape` passed as parameter.
-- `FixtureDef.filter` extension methods simplify `Filter` API.
+- `FixtureDef.filter` extension methods aim to simplify `Filter` API usage.
 - `earthGravity` is a constant that roughly matches Earth's gravity.
 
 ### Usage examples
@@ -145,7 +145,10 @@ val body = world.body {
   type = DynamicBody
   circle(radius = 1f) {
     restitution = 0.5f
-    filter(category = 0x01, mask = 0x02)
+    filter {
+      categoryBits = 0x01
+      maskBits = 0x02
+    }
   }
   box(width = 2f, height = 2f) {
     density = 40f
