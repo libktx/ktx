@@ -5,9 +5,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.badlogic.gdx.physics.box2d.CircleShape
 import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.World
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.spy
-import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -93,27 +90,35 @@ class WorldsTest : Box2DTest() {
   }
 
   @Test
-  fun `should dispose of Body fixture shapes by default`() {
-    val shape = spy(CircleShape())
+  fun `should set custom user data of bodies`() {
     val world = createWorld()
+    val data = Any()
 
-    world.body {
-      fixture(shape) {}
+    val body = world.body {
+      userData = data
     }
 
-    verify(shape).dispose()
+    assertSame(data, body.userData)
   }
 
   @Test
-  fun `should not dispose of Body fixture shapes if explicitly forbidden`() {
-    val shape = spy(CircleShape())
+  fun `should set custom user data of fixtures`() {
     val world = createWorld()
+    val circleData = Any()
+    val boxData = Any()
 
-    world.body {
-      disposeOfShapes = false // This allows to reuse Shape instances to create multiple bodies.
-      fixture(shape) {}
+    val body = world.body {
+      circle {
+        userData = circleData
+      }
+      box {
+        userData = boxData
+      }
     }
 
-    verify(shape, never()).dispose()
+    val circle = body.fixtureList[0]
+    assertSame(circleData, circle.userData)
+    val box = body.fixtureList[1]
+    assertSame(boxData, box.userData)
   }
 }

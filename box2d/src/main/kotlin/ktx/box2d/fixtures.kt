@@ -1,7 +1,21 @@
 package ktx.box2d
 
 import com.badlogic.gdx.physics.box2d.Filter
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
+
+/**
+ * Box2D building DSL utility class. [FixtureDef] extension exposing new properties. Note that when using fixture
+ * builders from [BodyDefinition], [FixtureDefinition.shape] field should not be modified - fixture's shape of the
+ * chosen type will already be set in the [FixtureDefinition] instance.
+ * @see BodyDefinition
+ */
+@Box2DDsl
+class FixtureDefinition : FixtureDef() {
+  /** Custom data object assigned to [Fixture.getUserData]. Allows to store additional data about the [Fixture] without
+   * having to override the class. Defaults to null. */
+  var userData: Any? = null
+}
 
 /**
  * Utility extension method for setting up of [FixtureDef.filter]. Allows to copy an existing [Filter] instance to avoid
@@ -23,10 +37,3 @@ fun FixtureDef.filter(filter: Filter): Filter {
  * @param init inlined. Uses [FixtureDef.filter] as `this`.
  */
 inline fun FixtureDef.filter(init: (@Box2DDsl Filter).() -> Unit) = filter.init()
-
-/**
- * Box2D building DSL utility class. [FixtureDef] extension exposing new properties.
- * @see BodyDefinition
- */
-@Box2DDsl
-class FixtureDefinition: FixtureDef()

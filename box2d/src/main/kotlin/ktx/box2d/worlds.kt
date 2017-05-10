@@ -18,15 +18,15 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
  *    fixture building DSL.
  * @return a fully constructed [Body] instance with all defined fixtures.
  * @see BodyDefinition
+ * @see FixtureDefinition
  */
 inline fun World.body(init: BodyDefinition.() -> Unit): Body {
   val bodyDefinition = BodyDefinition()
   bodyDefinition.init()
   val body = createBody(bodyDefinition)
-  val dispose = bodyDefinition.disposeOfShapes
-  for (fixture in bodyDefinition.fixtureDefinitions) {
-    body.createFixture(fixture)
-    if (dispose) fixture.shape.dispose()
+  body.userData = bodyDefinition.userData
+  for (fixtureDefinition in bodyDefinition.fixtureDefinitions) {
+    body.createFixture(fixtureDefinition).userData = fixtureDefinition.userData
   }
   return body
 }

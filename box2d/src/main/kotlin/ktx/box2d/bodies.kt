@@ -8,13 +8,15 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * Box2D building DSL utility class. [BodyDef] extension storing [FixtureDef] instances in [fixtureDefinitions]
  * collection. Provides inlined building methods that construct fixture definitions.
  * @see body
+ * @see FixtureDefinition
  */
 @Box2DDsl
 class BodyDefinition : BodyDef() {
-  /** If true, all fixture shapes will be disposed of after constructing this body. Defaults to true. If false, shapes
-   * will not be disposed after creation of the fixtures, allowing for [Shape] instances reuse among multiple bodies. */
-  var disposeOfShapes = true
-  /** Stores [FixtureDef] instances of all currently defined fixtures of this body.*/
+  /** Custom data object assigned to [Body.getUserData]. Allows to store additional data about the [Body] without having
+   * to override the class. Defaults to null. */
+  var userData: Any? = null
+  /** Stores [FixtureDefinition] instances of all currently defined fixtures of this body. Should not be modified
+   * manually - instead, use [fixture] or one of building methods for fixtures of a specific shape. */
   val fixtureDefinitions = GdxArray<FixtureDefinition>(4)
 
   /**
