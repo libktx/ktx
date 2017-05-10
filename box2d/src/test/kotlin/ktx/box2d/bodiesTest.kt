@@ -3,20 +3,16 @@ package ktx.box2d
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.spy
-import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.*
-import org.junit.BeforeClass
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
- * Tests [BodyDefinition] - KTX extension of Box2D BodyDef with FixtureDef factory methods.
+ * Tests Box2D bodies utilities and [BodyDefinition] - KTX extension of Box2D BodyDef with [FixtureDefinition] factory
+ * methods.
  */
-class BodyDefinitionTest : Box2DTest() {
+class BodiesTest : Box2DTest() {
   @Test
   fun `should construct FixtureDef with a custom shape`() {
     val bodyDefinition = BodyDefinition()
@@ -36,7 +32,7 @@ class BodyDefinitionTest : Box2DTest() {
   fun `should construct FixtureDef with a CircleShape`() {
     val bodyDefinition = BodyDefinition()
 
-    val fixtureDef = bodyDefinition.circle(radius = 1f, x = 2f, y = 3f) {
+    val fixtureDef = bodyDefinition.circle(radius = 1f, position = Vector2(2f, 3f)) {
       density = 0.5f
       assertTrue(it is CircleShape)
     }
@@ -57,7 +53,7 @@ class BodyDefinitionTest : Box2DTest() {
     val fixtureDef = bodyDefinition.box(
         width = 2f,
         height = 2f,
-        center = Vector2(1f, 1f),
+        position = Vector2(1f, 1f),
         angle = 90f * MathUtils.degreesToRadians) {
       density = 0.5f
       assertTrue(it is PolygonShape)
@@ -188,159 +184,5 @@ class BodyDefinitionTest : Box2DTest() {
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
-  }
-}
-
-/**
- * Tests [World] utilities.
- */
-class WorldsTest : Box2DTest() {
-  @Test
-  fun `should roughly match Earth's gravity`() {
-    assertEquals(0f, earthGravity.x)
-    assertEquals(-9.8f, earthGravity.y)
-  }
-
-  @Test
-  fun `should create World with default gravity`() {
-    val world = createWorld()
-
-    assertEquals(Vector2(0f, 0f), world.gravity)
-  }
-
-  @Test
-  fun `should create World with custom gravity`() {
-    val world = createWorld(gravity = Vector2(1f, 1f), allowSleep = false)
-
-    assertEquals(Vector2(1f, 1f), world.gravity)
-  }
-
-  @Test
-  fun `should construct a Body`() {
-    val world = createWorld()
-
-    val body = world.body { }
-
-    assertNotNull(body)
-    assertSame(world, body.world)
-  }
-
-  @Test
-  fun `should construct a customized Body with a Fixture`() {
-    val world = createWorld()
-
-    val body = world.body {
-      type = DynamicBody
-      circle(radius = 2f) {
-        density = 0.5f
-      }
-    }
-
-    assertSame(world, body.world)
-    assertEquals(DynamicBody, body.type)
-    assertEquals(1, body.fixtureList.size)
-    val fixture = body.fixtureList[0]
-    assertEquals(0.5f, fixture.density)
-    assertTrue(fixture.shape is CircleShape)
-    assertEquals(2f, fixture.shape.radius)
-  }
-
-  @Test
-  fun `should construct a customized Body with multiple Fixture instances`() {
-    val world = createWorld()
-
-    val body = world.body {
-      type = DynamicBody
-      circle(radius = 2f) {
-        density = 0.5f
-      }
-      edge(from = Vector2(1f, 1f), to = Vector2(2f, 2f)) {
-        density = 0.75f
-      }
-    }
-
-    assertSame(world, body.world)
-    assertEquals(DynamicBody, body.type)
-    assertEquals(2, body.fixtureList.size)
-    val circle = body.fixtureList[0]
-    assertEquals(0.5f, circle.density)
-    assertTrue(circle.shape is CircleShape)
-    assertEquals(2f, circle.shape.radius)
-    val edge = body.fixtureList[1]
-    assertEquals(0.75f, edge.density)
-    assertTrue(edge.shape is EdgeShape)
-    assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), edge.shape as EdgeShape)
-  }
-
-  @Test
-  fun `should dispose of Body fixture shapes by default`() {
-    val shape = spy(CircleShape())
-    val world = createWorld()
-
-    world.body {
-      fixture(shape) {}
-    }
-
-    verify(shape).dispose()
-  }
-
-  @Test
-  fun `should not dispose of Body fixture shapes if explicitly forbidden`() {
-    val shape = spy(CircleShape())
-    val world = createWorld()
-
-    world.body {
-      disposeOfShapes = false // This allows to reuse Shape instances to create multiple bodies.
-      fixture(shape) {}
-    }
-
-    verify(shape, never()).dispose()
-  }
-}
-
-/**
- * Initiates Box2D native library. Provides comparison methods for some Box2D data objects that are difficult to verify.
- */
-abstract class Box2DTest {
-  protected fun assertChainEquals(vertices: Array<Vector2>, shape: ChainShape) {
-    val tolerance = 0.0001f
-    assertEquals("${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
-        vertices.size, shape.vertexCount)
-    val vertex = Vector2()
-    vertices.forEachIndexed { index, expected ->
-      shape.getVertex(index, vertex)
-      val errorMessage = "Vertex at $index should equal $expected, $vertex found instead."
-      assertEquals(errorMessage, expected.x, vertex.x, tolerance)
-      assertEquals(errorMessage, expected.y, vertex.y, tolerance)
-    }
-  }
-
-  protected fun assertPolygonEquals(vertices: Array<Vector2>, shape: PolygonShape) {
-    val tolerance = 0.0001f
-    assertEquals("${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
-        vertices.size, shape.vertexCount)
-    val vertex = Vector2()
-    vertices.forEachIndexed { index, expected ->
-      shape.getVertex(index, vertex)
-      val errorMessage = "Vertex at $index should equal $expected, $vertex found instead."
-      assertEquals(errorMessage, expected.x, vertex.x, tolerance)
-      assertEquals(errorMessage, expected.y, vertex.y, tolerance)
-    }
-  }
-
-  protected fun assertEdgeEquals(from: Vector2, to: Vector2, edgeShape: EdgeShape) {
-    val vertex = Vector2()
-    edgeShape.getVertex1(vertex)
-    assertEquals(from, vertex)
-    edgeShape.getVertex2(vertex)
-    assertEquals(to, vertex)
-  }
-
-  private companion object {
-    @JvmStatic
-    @BeforeClass
-    fun `initiate Box2D`() {
-      Box2D.init()
-    }
   }
 }

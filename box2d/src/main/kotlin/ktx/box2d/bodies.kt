@@ -2,15 +2,7 @@ package ktx.box2d
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import kotlin.annotation.AnnotationTarget.*
 import com.badlogic.gdx.utils.Array as GdxArray
-
-/**
- * Marks KTX Box2D type-safe builders.
- */
-@DslMarker
-@Target(CLASS, TYPE_PARAMETER, FUNCTION, TYPE, TYPEALIAS)
-annotation class Box2DDsl
 
 /**
  * Box2D building DSL utility class. [BodyDef] extension storing [FixtureDef] instances in [fixtureDefinitions]
@@ -23,38 +15,41 @@ class BodyDefinition : BodyDef() {
    * will not be disposed after creation of the fixtures, allowing for [Shape] instances reuse among multiple bodies. */
   var disposeOfShapes = true
   /** Stores [FixtureDef] instances of all currently defined fixtures of this body.*/
-  val fixtureDefinitions = GdxArray<FixtureDef>(4)
+  val fixtureDefinitions = GdxArray<FixtureDefinition>(4)
 
   /**
    * Utility builder method for constructing fixtures of custom shape type.
    * @param shape will be set as [FixtureDef] type.
    * @param init inlined. Allows to modify [FixtureDef] properties. Receives [shape] as first (`it`) argument.
+   * @see circle
+   * @see box
+   * @see chain
+   * @see loop
+   * @see edge
    */
   inline fun <ShapeType : Shape> fixture(
       shape: ShapeType,
-      init: (@Box2DDsl FixtureDef).(ShapeType) -> Unit): FixtureDef {
-    val fixture = FixtureDef()
-    fixture.shape = shape
-    fixture.init(shape)
-    fixtureDefinitions.add(fixture)
-    return fixture
+      init: FixtureDefinition.(ShapeType) -> Unit): FixtureDefinition {
+    val fixtureDefinition = FixtureDefinition()
+    fixtureDefinition.shape = shape
+    fixtureDefinition.init(shape)
+    fixtureDefinitions.add(fixtureDefinition)
+    return fixtureDefinition
   }
 
   /**
    * Utility builder method for constructing fixtures with [CircleShape].
    * @param radius radius of the [CircleShape]. Defaults to 1f.
-   * @param x X offset of the fixture. Defaults to 0f.
-   * @param y Y offset of the fixture. Defaults to 0f.
+   * @param position offset of the circle position in relation to the body center. Defaults to (0f, 0f).
    * @param init inlined. Allows to modify [FixtureDef] properties. Receives [CircleShape] as first (`it`) argument.
    */
   inline fun circle(
       radius: Float = 1f,
-      x: Float = 0f,
-      y: Float = 0f,
-      init: (@Box2DDsl FixtureDef).(CircleShape) -> Unit): FixtureDef {
+      position: Vector2 = Vector2.Zero,
+      init: FixtureDefinition.(CircleShape) -> Unit): FixtureDefinition {
     val shape = CircleShape()
     shape.radius = radius
-    shape.position = Vector2(x, y)
+    shape.position = position
     return fixture(shape, init)
   }
 
@@ -63,7 +58,7 @@ class BodyDefinition : BodyDef() {
    * [PolygonShape.setAsBox] methods - this method consumes actual _not halved_ box width and height sizes.
    * @param width width of the box shape. Defaults to 1f.
    * @param height height of the box shape. Defaults to 1f
-   * @param center offset of the fixture. Defaults to (0f, 0f).
+   * @param position offset of the box position in relation to body center. Defaults to (0f, 0f).
    * @param angle angle of the box in radians. Defaults to 0f.
    * @param init inlined. Allows to modify [FixtureDef] properties. Receives [PolygonShape] as first (`it`) argument.
    * @see PolygonShape.setAsBox
@@ -71,11 +66,11 @@ class BodyDefinition : BodyDef() {
   inline fun box(
       width: Float = 1f,
       height: Float = 1f,
-      center: Vector2 = Vector2.Zero,
+      position: Vector2 = Vector2.Zero,
       angle: Float = 0f,
-      init: (@Box2DDsl FixtureDef).(PolygonShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
     val shape = PolygonShape()
-    shape.setAsBox(width / 2f, height / 2f, center, angle)
+    shape.setAsBox(width / 2f, height / 2f, position, angle)
     return fixture(shape, init)
   }
 
@@ -90,7 +85,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun polygon(
       vertices: FloatArray? = null,
-      init: (@Box2DDsl FixtureDef).(PolygonShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
     val shape = PolygonShape()
     if (vertices != null) shape.set(vertices)
     return fixture(shape, init)
@@ -104,7 +99,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun polygon(
       vararg vertices: Vector2,
-      init: (@Box2DDsl FixtureDef).(PolygonShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
     val shape = PolygonShape()
     shape.set(vertices)
     return fixture(shape, init)
@@ -118,7 +113,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun chain(
       vararg vertices: Vector2,
-      init: (@Box2DDsl FixtureDef).(ChainShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
     return fixture(shape, init)
@@ -134,7 +129,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun chain(
       vertices: FloatArray,
-      init: (@Box2DDsl FixtureDef).(ChainShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
     return fixture(shape, init)
@@ -148,7 +143,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun loop(
       vararg vertices: Vector2,
-      init: (@Box2DDsl FixtureDef).(ChainShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
     return fixture(shape, init)
@@ -165,7 +160,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun loop(
       vertices: FloatArray,
-      init: (@Box2DDsl FixtureDef).(ChainShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
     return fixture(shape, init)
@@ -181,47 +176,9 @@ class BodyDefinition : BodyDef() {
   inline fun edge(
       from: Vector2,
       to: Vector2,
-      init: (@Box2DDsl FixtureDef).(EdgeShape) -> Unit): FixtureDef {
+      init: FixtureDefinition.(EdgeShape) -> Unit): FixtureDefinition {
     val shape = EdgeShape()
     shape.set(from, to)
     return fixture(shape, init)
   }
-}
-
-/**
- * [World] factory function.
- * @param gravity world's gravity applied to bodies on each step. Defaults to no gravity (0f, 0f).
- * @param allowSleep if true, inactive bodies will not be simulated. Improves performance. Defaults to true.
- * @return a new [World] instance with given parameters.
- */
-fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = World(gravity, allowSleep)
-
-/**
- * Roughly matches Earth gravity of 9.80665 m/s^2. Moves bodies down on the Y axis.
- *
- * Note that [Vector2] class is mutable, so this vector can be modified. Use this property as read-only.
- *
- * Usage example:
- * val world = createWorld(gravity = earthGravity)
- * @see createWorld
- */
-val earthGravity = Vector2(0f, -9.8f)
-
-/**
- * Type-safe [Body] building DSl.
- * @param init inlined. Invoked on a [BodyDefinition] instance, which provides access to [Body] properties, as well as
- *    fixture building DSL.
- * @return a fully constructed [Body] instance with all defined fixtures.
- * @see BodyDefinition
- */
-inline fun World.body(init: BodyDefinition.() -> Unit): Body {
-  val bodyDefinition = BodyDefinition()
-  bodyDefinition.init()
-  val body = createBody(bodyDefinition)
-  val dispose = bodyDefinition.disposeOfShapes
-  for (fixture in bodyDefinition.fixtureDefinitions) {
-    body.createFixture(fixture)
-    if (dispose) fixture.shape.dispose()
-  }
-  return body
 }

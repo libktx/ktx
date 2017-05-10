@@ -23,3 +23,10 @@ fun FixtureDef.filter(filter: Filter): Filter {
  * @param init inlined. Uses [FixtureDef.filter] as `this`.
  */
 inline fun FixtureDef.filter(init: (@Box2DDsl Filter).() -> Unit) = filter.init()
+
+/**
+ * Box2D building DSL utility class. [FixtureDef] extension exposing new properties.
+ * @see BodyDefinition
+ */
+@Box2DDsl
+class FixtureDefinition: FixtureDef()
