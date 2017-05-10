@@ -29,6 +29,8 @@ class AssetStorage(
     val executor: AsyncExecutor = KtxAsync.asyncExecutor,
     useDefaultLoaders: Boolean = true
 ) : Disposable {
+  /** Used by [loadJson] to deserialize loaded JSON files into objects. */
+  val jsonLoader = Json()
   @Suppress("LeakingThis")
   private val asAssetManager: AssetManager = AssetManagerWrapper(this)
   private val loaderStorage = AssetLoaderStorage()
@@ -128,6 +130,54 @@ class AssetStorage(
       descriptor: AssetDescriptor<Asset>): Asset {
     KtxAsync.asynchronous(executor) { asynchronousLoader.loadAsync(asAssetManager, descriptor) }
     return asynchronousLoader.loadSync(asAssetManager, descriptor)
+  }
+
+  /**
+   * A dedicated method for asynchronous loading of JSON assets. Since loaders are tied to a specific type, JSON loader
+   * could not have been implemented using standard [AssetLoader] mechanism without sacrificing its flexibility. Note
+   * that if the JSON represents a collection of values or objects of known type, [loadJsonCollection] should be used
+   * instead.
+   * @param Asset type of object after deserialization.
+   * @param path path to the JSON asset consistent with the [fileResolver] file type.
+   * @return a fully loaded [Asset] representing deserialized JSON.
+   * @see loadJsonCollection
+   * @see jsonLoader
+   */
+  inline suspend fun <reified Asset : Any> loadJson(path: String): Asset = loadJson(path, Asset::class.java)
+
+  /**
+   * A dedicated method for asynchronous loading of JSON assets. Since loaders are tied to a specific type, JSON loader
+   * could not have been implemented using standard [AssetLoader] mechanism without sacrificing its flexibility. Note
+   * that if the JSON does not represent a collection of values or objects, or element types are unknown prior to
+   * deserialization, [loadJson] should be used instead.
+   * @param Asset type of collection after deserialization.
+   * @param Element type of collection elements after deserialization.
+   * @param path path to the JSON asset consistent with the [fileResolver] file type.
+   * @return a fully loaded [Asset] representing deserialized JSON.
+   * @see loadJson
+   * @see jsonLoader
+   */
+  inline suspend fun <reified Asset : Any, reified Element : Any> loadJsonCollection(path: String): Asset =
+      loadJson(path, Asset::class.java, Element::class.java)
+
+  /**
+   * Internal JSON loading method exposed for inlined methods. See [loadJson] and [loadJsonCollection].
+   * @param path to the JSON asset consistent with the [fileResolver] file type.
+   * @param type type of object or collection after deserialization.
+   * @param elementType type of objects stored in the collections. Optional. Relevant only if the JSON file represents
+   *    a collection of values of known type.
+   * @return a fully loaded [Asset] representing deserialized JSON.
+   */
+  suspend fun <Asset : Any> loadJson(path: String, type: Class<Asset>, elementType: Class<*>? = null): Asset {
+    assets[path]?.apply {
+      @Suppress("UNCHECKED_CAST")
+      return this as Asset
+    }
+    val asset = KtxAsync.asynchronous(executor) {
+      jsonLoader.fromJson(type, elementType, fileResolver.resolve(path))
+    }
+    add(path, asset)
+    return asset
   }
 
   /**

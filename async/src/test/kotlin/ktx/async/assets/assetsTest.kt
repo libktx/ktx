@@ -35,6 +35,7 @@ import org.junit.Assert.*
 import org.junit.BeforeClass
 import org.junit.Test
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3d
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [AssetStorage]: coroutines-based asset manager.
@@ -554,6 +555,74 @@ class AssetStorageTest {
   }
 
   @Test
+  fun `should load JSON assets`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      val asset = storage.loadJson<JsonExample>("ktx/async/assets/object.json")
+
+      assertTrue(asset is JsonExample)
+      assertEquals(10, asset.testInt)
+      assertEquals("Content.", asset.testString)
+      assertTrue(storage.isLoaded("ktx/async/assets/object.json"))
+      assertSame(asset, storage.get<JsonExample>("ktx/async/assets/object.json"))
+      storage.dispose()
+    }
+  }
+
+  @Test
+  fun `should return loaded JSON asset if trying to load the same asset`()
+      = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      val asset = storage.loadJson<JsonExample>("ktx/async/assets/object.json")
+
+      assertSame(asset, storage.loadJson<JsonExample>("ktx/async/assets/object.json"))
+      assertSame(asset, storage.load<JsonExample>("ktx/async/assets/object.json"))
+    }
+  }
+
+  @Test
+  fun `should load JSON collection assets`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      val asset = storage.loadJsonCollection<GdxArray<JsonExample>, JsonExample>("ktx/async/assets/collection.json")
+
+      assertTrue(asset is GdxArray<*>)
+      assertEquals(2, asset.size)
+      assertTrue(storage.isLoaded("ktx/async/assets/collection.json"))
+      assertSame(asset, storage.get<GdxArray<JsonExample>>("ktx/async/assets/collection.json"))
+      asset[0].apply {
+        assertTrue(this is JsonExample)
+        assertEquals(10, testInt)
+        assertEquals("Content.", testString)
+      }
+      asset[1].apply {
+        assertTrue(this is JsonExample)
+        assertEquals(20, testInt)
+        assertEquals("Test.", testString)
+      }
+      storage.dispose()
+    }
+  }
+
+  @Test
+  fun `should return loaded JSON collection asset if trying to load the same asset`()
+      = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      val asset = storage.loadJsonCollection<GdxArray<JsonExample>, JsonExample>("ktx/async/assets/collection.json")
+
+      assertSame(asset, storage.loadJsonCollection<GdxArray<JsonExample>, JsonExample>("ktx/async/assets/collection.json"))
+      assertSame(asset, storage.loadJson<GdxArray<JsonExample>>("ktx/async/assets/collection.json"))
+      assertSame(asset, storage.load<GdxArray<JsonExample>>("ktx/async/assets/collection.json"))
+    }
+  }
+
+  @Test
   fun `should create AssetDescriptor`() {
     val storage = assetStorage()
 
@@ -850,6 +919,12 @@ class AssetStorageTest {
   @After
   fun dispose() {
     `destroy coroutines context`()
+  }
+
+  /** Used for JSON loading tests. */
+  class JsonExample {
+    var testInt = 0
+    var testString = ""
   }
 
   companion object {

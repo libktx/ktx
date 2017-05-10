@@ -391,6 +391,19 @@ ktxAsync {
 }
 ```
 
+Asynchronous JSON files loading:
+```Kotlin
+import ktx.async.ktxAsync
+import com.badlogic.gdx.utils.Array as GdxArray
+
+ktxAsync {
+  val json = storage.loadJson<MyJsonType>("my.json")
+
+  // JSON arrays can be loaded to typed collections using a separate method:
+  val collection = storage.loadJsonCollection<GdxArray<ElementType>, ElementType>("array.json")
+}
+```
+
 ### Alternatives
 
 - Standard Kotlin coroutines libraries might be used along with custom thread pools. They do not offer the same level
