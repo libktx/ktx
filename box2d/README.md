@@ -216,6 +216,26 @@ val body = world.body {
 
 ![CircleShape](img/circle-custom.png)
 
+Adding callbacks invoked after creation of `Body` and `Fixture` instances:
+
+```Kotlin
+import ktx.box2d.*
+
+val body = world.body {
+  onCreate { body ->
+    // Will be called when the body and all of its fixtures are built.
+  }
+
+  circle {
+    onCreate { fixture ->
+      // Will be called when this particular fixture is created. Note
+      // that at invocation time the Box2D body of this fixture might
+      // not be fully constructed yet.
+    }
+  }
+}
+```
+
 #### Synergy
 
 Pair this library with [`ktx-math`](../math) for `Vector2` factory methods, operator overloads and other math-related

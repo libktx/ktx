@@ -15,6 +15,18 @@ class FixtureDefinition : FixtureDef() {
   /** Custom data object assigned to [Fixture.getUserData]. Allows to store additional data about the [Fixture] without
    * having to override the class. Defaults to null. */
   var userData: Any? = null
+
+  /** Invoked after the [Fixture] is fully constructed.
+   * @see onCreate */
+  var creationCallback: ((Fixture) -> Unit)? = null
+
+  /**
+   * @param callback will be invoked after the [Fixture] defined by this object will be fully constructed.
+   * @see creationCallback
+   */
+  fun onCreate(callback: (Fixture) -> Unit) {
+    creationCallback = callback
+  }
 }
 
 /**

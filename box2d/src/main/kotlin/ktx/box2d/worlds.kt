@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World
 fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = World(gravity, allowSleep)
 
 /**
- * Type-safe [Body] building DSl.
+ * Type-safe [Body] building DSL.
  * @param type [BodyType] of the constructed [Body]. Matches LibGDX default of [BodyType.StaticBody].
  * @param init inlined. Invoked on a [BodyDefinition] instance, which provides access to [Body] properties, as well as
  *    fixture building DSL.
@@ -26,11 +26,27 @@ inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition
   val bodyDefinition = BodyDefinition()
   bodyDefinition.type = type
   bodyDefinition.init()
+  return create(bodyDefinition)
+}
+
+/**
+ * Handles additional building properties provided by [BodyDefinition] and [FixtureDefinition]. Prefer this method
+ * over [World.createBody] when using [BodyDefinition] directly.
+ * @param bodyDefinition stores [Body] properties and optional [Fixture] definitions.
+ * @return a fully constructed [Body] instance with all defined fixtures.
+ * @see BodyDefinition
+ * @see FixtureDefinition
+ * @see body
+ */
+fun World.create(bodyDefinition: BodyDefinition): Body {
   val body = createBody(bodyDefinition)
   body.userData = bodyDefinition.userData
   for (fixtureDefinition in bodyDefinition.fixtureDefinitions) {
-    body.createFixture(fixtureDefinition).userData = fixtureDefinition.userData
+    val fixture = body.createFixture(fixtureDefinition)
+    fixture.userData = fixtureDefinition.userData
+    fixtureDefinition.creationCallback?.let { it(fixture) }
   }
+  bodyDefinition.creationCallback?.let { it(body) }
   return body
 }
 

@@ -1,10 +1,8 @@
 package ktx.box2d
 
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
-import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.EdgeShape
-import com.badlogic.gdx.physics.box2d.World
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -132,5 +130,35 @@ class WorldsTest : Box2DTest() {
     assertSame(circleData, circle.userData)
     val box = body.fixtureList[1]
     assertSame(boxData, box.userData)
+  }
+
+  @Test
+  fun `should invoke body creation callback`() {
+    val world = createWorld()
+    var callbackParameter: Body? = null
+
+    val body = world.body {
+      onCreate {
+        callbackParameter = it
+      }
+    }
+
+    assertSame(body, callbackParameter)
+  }
+
+  @Test
+  fun `should invoke fixture creation callback`() {
+    val world = createWorld()
+    var callbackParameter: Fixture? = null
+
+    val body = world.body {
+      circle {
+        onCreate {
+          callbackParameter = it
+        }
+      }
+    }
+
+    assertSame(body.fixtureList[0], callbackParameter)
   }
 }

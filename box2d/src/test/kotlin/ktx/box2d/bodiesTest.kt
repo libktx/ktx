@@ -204,6 +204,16 @@ class BodiesTest : Box2DTest() {
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
   }
 
+  @Test
+  fun `should replace creation callback`() {
+    val bodyDefinition = BodyDefinition()
+    val callback = { _: Body -> }
+
+    bodyDefinition.onCreate(callback)
+
+    assertSame(callback, bodyDefinition.creationCallback)
+  }
+
   // Body extension tests:
 
   @Test
@@ -402,6 +412,20 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+  }
+
+  @Test
+  fun `should invoke fixture creation callback`() {
+    val body = createBody()
+    var callbackParameter: Fixture? = null
+
+    val fixture = body.circle {
+      onCreate {
+        callbackParameter = it
+      }
+    }
+
+    assertSame(fixture, callbackParameter)
   }
 
   private fun createBody(): Body = World(Vector2.Zero, true).createBody(BodyDef())

@@ -1,8 +1,10 @@
 package ktx.box2d
 
 import com.badlogic.gdx.physics.box2d.Filter
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Test
 
 /**
@@ -42,5 +44,15 @@ class FixturesTest : Box2DTest() {
       assertEquals(2.toShort(), maskBits)
       assertEquals(3.toShort(), groupIndex)
     }
+  }
+
+  @Test
+  fun `should replace creation callback`() {
+    val fixtureDefinition = FixtureDefinition()
+    val callback = { _: Fixture -> }
+
+    fixtureDefinition.onCreate(callback)
+
+    assertSame(callback, fixtureDefinition.creationCallback)
   }
 }

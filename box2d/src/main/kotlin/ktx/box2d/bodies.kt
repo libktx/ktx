@@ -15,6 +15,9 @@ class BodyDefinition : BodyDef() {
   /** Custom data object assigned to [Body.getUserData]. Allows to store additional data about the [Body] without having
    * to override the class. Defaults to null. */
   var userData: Any? = null
+  /** Invoked after the [Body] is fully constructed.
+   * @see onCreate */
+  var creationCallback: ((Body) -> Unit)? = null
   /** Stores [FixtureDefinition] instances of all currently defined fixtures of this body. Should not be modified
    * manually - instead, use [fixture] or one of building methods for fixtures of a specific shape. */
   val fixtureDefinitions = GdxArray<FixtureDefinition>(4)
@@ -215,6 +218,14 @@ class BodyDefinition : BodyDef() {
     shape.set(fromX, fromY, toX, toY)
     return fixture(shape, init)
   }
+
+  /**
+   * @param callback will be invoked after the [Body] defined by this object will be fully constructed.
+   * @see creationCallback
+   */
+  fun onCreate(callback: (Body) -> Unit) {
+    creationCallback = callback
+  }
 }
 
 /**
@@ -236,6 +247,7 @@ inline fun <ShapeType : Shape> Body.fixture(
   fixtureDefinition.init(shape)
   val fixture = createFixture(fixtureDefinition)
   fixture.userData = fixtureDefinition.userData
+  fixtureDefinition.creationCallback?.let { it(fixture) }
   return fixture
 }
 
