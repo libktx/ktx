@@ -192,6 +192,29 @@ class BodyDefinition : BodyDef() {
     shape.set(from, to)
     return fixture(shape, init)
   }
+
+  /**
+   * Utility builder method for constructing fixtures with [EdgeShape]. Note that this method consumes floats instead of
+   * [Vector2] instances, which might be less concise, but also creates slightly less garbage. This method is advised to
+   * be used instead of the [Vector2]-consuming variant on mobile devices.
+   * @param fromX position of first point of the [EdgeShape] on X axis. See [EdgeShape.getVertex1].
+   * @param fromY position of first point of the [EdgeShape] on Y axis. See [EdgeShape.getVertex1].
+   * @param toX position of second point of the [EdgeShape] on X axis. See [EdgeShape.getVertex2].
+   * @param toY position of second point of the [EdgeShape] on Y axis. See [EdgeShape.getVertex2].
+   * @param init inlined. Allows to modify [FixtureDef] properties. Receives [EdgeShape] as first (`it`) argument.
+   * @return [FixtureDefinition] with [Fixture] properties.
+   * @see EdgeShape.set
+   */
+  inline fun edge(
+      fromX: Float,
+      fromY: Float,
+      toX: Float,
+      toY: Float,
+      init: FixtureDefinition.(EdgeShape) -> Unit): FixtureDefinition {
+    val shape = EdgeShape()
+    shape.set(fromX, fromY, toX, toY)
+    return fixture(shape, init)
+  }
 }
 
 /**
@@ -368,5 +391,28 @@ inline fun Body.edge(
     init: FixtureDefinition.(EdgeShape) -> Unit): Fixture {
   val shape = EdgeShape()
   shape.set(from, to)
+  return fixture(shape, init)
+}
+
+/**
+ * Utility builder method for constructing fixtures with [EdgeShape]. Note that this method consumes floats instead of
+ * [Vector2] instances, which might be less concise, but also creates slightly less garbage. This method is advised to
+ * be used instead of the [Vector2]-consuming variant on mobile devices.
+ * @param fromX position of first point of the [EdgeShape] on X axis. See [EdgeShape.getVertex1].
+ * @param fromY position of first point of the [EdgeShape] on Y axis. See [EdgeShape.getVertex1].
+ * @param toX position of second point of the [EdgeShape] on X axis. See [EdgeShape.getVertex2].
+ * @param toY position of second point of the [EdgeShape] on Y axis. See [EdgeShape.getVertex2].
+ * @param init inlined. Allows to modify [FixtureDef] properties. Receives [EdgeShape] as first (`it`) argument.
+ * @return a fully constructed [Fixture] with [EdgeShape].
+ * @see EdgeShape.set
+ */
+inline fun Body.edge(
+    fromX: Float,
+    fromY: Float,
+    toX: Float,
+    toY: Float,
+    init: FixtureDefinition.(EdgeShape) -> Unit): Fixture {
+  val shape = EdgeShape()
+  shape.set(fromX, fromY, toX, toY)
   return fixture(shape, init)
 }

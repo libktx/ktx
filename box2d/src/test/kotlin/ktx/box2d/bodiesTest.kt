@@ -188,6 +188,22 @@ class BodiesTest : Box2DTest() {
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
   }
 
+  @Test
+  fun `should construct FixtureDef with an EdgeShape with float points`() {
+    val bodyDefinition = BodyDefinition()
+
+    val fixtureDef = bodyDefinition.edge(fromX = 1f, fromY = 2f, toX = 3f, toY = 4f) {
+      density = 0.5f
+      assertTrue(it is EdgeShape)
+    }
+
+    assertTrue(fixtureDef.shape is EdgeShape)
+    val shape = fixtureDef.shape as EdgeShape
+    assertEdgeEquals(Vector2(1f, 2f), Vector2(3f, 4f), shape)
+    assertEquals(0.5f, fixtureDef.density)
+    assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+  }
+
   // Body extension tests:
 
   @Test
@@ -366,6 +382,23 @@ class BodiesTest : Box2DTest() {
     assertTrue(fixture.shape is EdgeShape)
     val shape = fixture.shape as EdgeShape
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), shape)
+    assertEquals(0.5f, fixture.density)
+    assertSame(body, fixture.body)
+    assertTrue(fixture in body.fixtureList)
+  }
+
+  @Test
+  fun `should construct Fixture with an EdgeShape with float points`() {
+    val body = createBody()
+
+    val fixture = body.edge(fromX = 1f, fromY = 2f, toX = 3f, toY = 4f) {
+      density = 0.5f
+      assertTrue(it is EdgeShape)
+    }
+
+    assertTrue(fixture.shape is EdgeShape)
+    val shape = fixture.shape as EdgeShape
+    assertEdgeEquals(Vector2(1f, 2f), Vector2(3f, 4f), shape)
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
