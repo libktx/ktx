@@ -15,6 +15,7 @@ depending on the global `AssetManager` were removed.
   - `FixtureDef` builder methods supporting all shapes (`CircleShape`, `PolygonShape`, `ChainShape`, `EdgeShape`).
   - `FixtureDef.filder` extension methods simplifying `Filter` properties setup.
   - `BodyDefinition` is a `BodyDef` extension providing `Body` building DSL. Used internally by `World.body`.
+  - `fixture`, `circle`, `box`, `polygon`, `chain`, `loop` and `edge` extension `Fixture` building methods added to `Body`.
   - `earthGravity` property allowing to set `World` gravity roughly matching Earth's gravity.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
 - **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.

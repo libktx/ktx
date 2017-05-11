@@ -12,8 +12,8 @@ construction code readability could certainly be improved. Kotlin type-safe buil
 `ktx-box2d` provides some extensions and utilities that aim improve *Box2D* API:
 
 - `createWorld` factory method eases the construction of `World` instances.
-- `World.body` extension method provides `Body` type-safe building DSL that supports customizing fixtures with
-the following shapes:
+- `World.body` and `Body` extension methods provide `Fixture` type-safe building DSL that supports customizing fixtures
+with the following shapes:
   - `box`:`PolygonShape` as a box.
   - `circle`: `CircleShape`.
   - `polygon`: `PolygonShape`.
@@ -50,10 +50,17 @@ Creating a `Body` with a `PolygonShape` box `Fixture`:
 ```Kotlin
 import ktx.box2d.body
 
+
+// Building body from scratch:
 val body = world.body {
   box(width = 2f, height = 1f) {
     density = 40f
   }
+}
+
+// Adding box polygon fixture to an existing body:
+val fixture = body.box(width = 2f, height = 1f) {
+  density = 40f
 }
 ```
 
@@ -66,10 +73,16 @@ Creating a `Body` with a custom `PolygonShape` `Fixture`:
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
+// Building body from scratch:
 val body = world.body {
   polygon(Vector2(-1f, -1f), Vector2(0f, 1f), Vector2(1f, -1f)) {
     density = 40f
   }
+}
+
+// Adding polygon fixture to an existing body:
+val fixture = body.polygon(Vector2(-1f, -1f), Vector2(0f, 1f), Vector2(1f, -1f)) {
+  density = 40f
 }
 ```
 
@@ -80,10 +93,16 @@ Creating a `Body` with a `CircleShape` `Fixture`:
 ```Kotlin
 import ktx.box2d.body
 
+// Building body from scratch:
 val body = world.body {
   circle(radius = 1f) {
     restitution = 0.5f
   }
+}
+
+// Adding circle fixture to an existing body:
+val fixture = body.circle(radius = 1f) {
+  restitution = 0.5f
 }
 ```
 
@@ -95,10 +114,16 @@ Creating a `Body` with a `ChainShape` `Fixture`:
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
+// Building body from scratch:
 val body = world.body {
   chain(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), Vector2(1f, 1f)) {
     friction = 0.5f
   }
+}
+
+// Adding chain fixture to an existing body:
+val fixture = body.chain(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), Vector2(1f, 1f)) {
+  friction = 0.5f
 }
 ```
 
@@ -110,10 +135,16 @@ Creating a `Body` with a looped `ChainShape` `Fixture`:
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
+// Building body from scratch:
 val body = world.body {
   loop(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), Vector2(1f, 1f)) {
     friction = 0.5f
   }
+}
+
+// Adding looped chain fixture to an existing body:
+val fixture = body.loop(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), Vector2(1f, 1f)) {
+  friction = 0.5f
 }
 ```
 
@@ -125,10 +156,16 @@ Creating a `Body` with an `EdgeShape` `Fixture`:
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
+// Building body from scratch:
 val body = world.body {
   edge(from = Vector2(-1f, -1f), to = Vector2(1f, 1f)) {
     restitution = 1f
   }
+}
+
+// Adding edge fixture to an existing body:
+val fixture = body.edge(from = Vector2(-1f, -1f), to = Vector2(1f, 1f)) {
+  restitution = 1f
 }
 ```
 
@@ -164,6 +201,7 @@ val body = world.body {
 Customizing `Shape` of a `Fixture`:
 
 ```Kotlin
+import ktx.box2d.*
 
 val body = world.body {
   // Shapes are available as the default `it` parameter of fixture
