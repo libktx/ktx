@@ -32,6 +32,8 @@ import org.junit.AfterClass
 import org.junit.Assert.*
 import org.junit.BeforeClass
 import org.junit.Test
+import java.util.Collections
+import java.util.IdentityHashMap
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3d
@@ -1023,7 +1025,7 @@ class AssetStorageTest {
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val expectedTextureReferences = AtomicInteger(0)
 
-    (1..50).forEach {
+    repeat(50) {
       ktxAsync {
         repeat(ThreadLocalRandom.current().nextInt(0, 10)) { skipFrame() }
         expectedTextureReferences.incrementAndGet()
@@ -1109,6 +1111,30 @@ class AssetStorageTest {
 
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
       storage.unload("ktx/async/assets/texture.png")
+    }
+  }
+
+  @Test
+  fun `should suspend other coroutines until asset is loaded`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val assets = Collections.newSetFromMap(IdentityHashMap<Any, Boolean>())
+    val loader = mock<SynchronousAssetLoader<Any, AssetLoaderParameters<Any>>> {
+      on(it.load(any(), any(), any(), anyOrNull())) doAnswer {
+        Thread.sleep(200L)
+        Any()
+      }
+    }
+    storage.setLoader(loader)
+
+    repeat(5) {
+      ktxAsync {
+        val asset = storage.load<Any>("mock")
+
+        assertTrue(storage.isLoaded("mock"))
+        assets.add(asset)
+        assertEquals(1, assets.size)
+        verify(loader, times(1)).load(any(), any(), any(), anyOrNull())
+      }
     }
   }
 
