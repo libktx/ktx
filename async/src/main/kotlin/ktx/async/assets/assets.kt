@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import ktx.async.KtxAsync
 import java.util.ArrayList
+import kotlin.coroutines.experimental.suspendCoroutine
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 import com.badlogic.gdx.utils.Array as GdxArray
@@ -37,6 +38,7 @@ class AssetStorage(
   private val loaderStorage = AssetLoaderStorage()
   private val dependencies = ObjectMap<String, List<String>>()
   private val referenceCounts = ObjectIntMap<String>()
+  private val scheduledAssets = ObjectMap<String, MutableList<() -> Unit>>()
 
   /** Internal assets storage. Exposed for inlined methods. Should be accessed only from the rendering thread. Do not
    * modify manually.
@@ -73,6 +75,7 @@ class AssetStorage(
    * @param parameters optional loading parameters passed to the appropriate [AssetLoader] instance.
    * @return fully loaded instance of [Asset].
    * @throws AssetStorageException if unable to load the asset.
+   * @see loadJson
    */
   inline suspend fun <reified Asset : Any> load(path: String, parameters: AssetLoaderParameters<Asset>? = null): Asset
       = load(getAssetDescriptor(path, parameters))
@@ -93,12 +96,18 @@ class AssetStorage(
     val path = assetDescriptor.fileName
     if (!isDependency) referenceCounts.getAndIncrement(path, 0, 1)
     assets[path]?.apply {
+      incrementDependenciesReferenceCounts(assetDescriptor)
       @Suppress("UNCHECKED_CAST")
       return this as Asset
     }
+    scheduledAssets[path]?.let {
+      incrementDependenciesReferenceCounts(assetDescriptor)
+      return waitForAsset(path, it)
+    }
     resolveFile(assetDescriptor)
-    val loader = getLoader(assetDescriptor.type, path)
-        ?: throw AssetStorageException("No loader available for assets of type: ${assetDescriptor.type} for file: $path.")
+    val loader = getLoader(assetDescriptor.type, path) ?: throwNoLoaderException(assetDescriptor)
+    val loadingCallbacks = mutableListOf<() -> Unit>()
+    scheduledAssets.put(path, loadingCallbacks)
     loader.getDependencies(assetDescriptor)?.let { handleAssetDependencies(path, it) }
     currentlyLoadedAsset = path
     val asset = try {
@@ -113,8 +122,29 @@ class AssetStorage(
     }
     add(path, asset)
     currentlyLoadedAsset = null
+    scheduledAssets.remove(path) ?: throwAsynchronousUnloadingException(path)
+    if (loadingCallbacks.isNotEmpty()) {
+      loadingCallbacks.forEach { it() }
+    }
     return asset
   }
+
+  private suspend fun <Asset> waitForAsset(
+      path: String,
+      loadingCallbacks: MutableList<() -> Unit>): Asset = suspendCoroutine {
+    loadingCallbacks.add {
+      @Suppress("UNCHECKED_CAST")
+      val asset = assets[path] as Asset? ?: throwAsynchronousUnloadingException(path)
+      it.resume(asset)
+    }
+  }
+
+  private fun throwNoLoaderException(asset: AssetDescriptor<*>): Nothing =
+      throw AssetStorageException("No loader available for assets of type: ${asset.type} for file: ${asset.fileName}.")
+
+  private fun throwAsynchronousUnloadingException(path: String): Nothing =
+      throw AssetStorageException("$path asset was scheduled for loading and got prematurely unloaded asynchronously." +
+          " Avoid manual unloading of asset dependencies.")
 
   private suspend fun handleAssetDependencies(
       assetPath: String,
@@ -128,6 +158,20 @@ class AssetStorage(
       if (!isLoaded(dependencyPath)) {
         load(it, isDependency = true)
       }
+    }
+  }
+
+  private fun incrementDependenciesReferenceCounts(asset: AssetDescriptor<*>) {
+    val dependenciesQueue = Queue<AssetDescriptor<*>>()
+    val assetLoader = getLoader(asset.type, asset.fileName) ?: throwNoLoaderException(asset)
+    assetLoader.getDependencies(asset)?.forEach { dependenciesQueue.addLast(it) }
+    while (dependenciesQueue.size > 0) {
+      val dependency = dependenciesQueue.removeLast()
+      val path = dependency.fileName
+      referenceCounts.getAndIncrement(path, 0, 1)
+      resolveFile(dependency)
+      val loader = getLoader(dependency.type, path) ?: throwNoLoaderException(dependency)
+      loader.getDependencies(dependency)?.forEach { dependenciesQueue.addLast(it) }
     }
   }
 
@@ -199,12 +243,21 @@ class AssetStorage(
       @Suppress("UNCHECKED_CAST")
       return this as Asset
     }
+    scheduledAssets[path]?.let {
+      return waitForAsset(path, it)
+    }
+    val loadingCallbacks = mutableListOf<() -> Unit>()
+    scheduledAssets.put(path, loadingCallbacks)
     currentlyLoadedAsset = normalizedPath
     val asset = KtxAsync.asynchronous(executor) {
       jsonLoader.fromJson(type, elementType, fileResolver.resolve(normalizedPath))
     }
     add(path, asset)
     currentlyLoadedAsset = null
+    scheduledAssets.remove(path) ?: throwAsynchronousUnloadingException(path)
+    if (loadingCallbacks.isNotEmpty()) {
+      loadingCallbacks.forEach { it() }
+    }
     return asset
   }
 
@@ -333,6 +386,7 @@ class AssetStorage(
     assets.clear()
     dependencies.clear()
     referenceCounts.clear()
+    scheduledAssets.clear()
   }
 
   /**

@@ -32,6 +32,8 @@ import org.junit.AfterClass
 import org.junit.Assert.*
 import org.junit.BeforeClass
 import org.junit.Test
+import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.atomic.AtomicInteger
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3d
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -928,8 +930,6 @@ class AssetStorageTest {
       assertEquals(1, storage.getReferencesCount("ktx/async/assets/object.json"))
       assertSame(asset, storage.loadJson<JsonExample>("ktx/async/assets/object.json"))
       assertEquals(2, storage.getReferencesCount("ktx/async/assets/object.json"))
-      assertSame(asset, storage.load<JsonExample>("ktx/async/assets/object.json"))
-      assertEquals(3, storage.getReferencesCount("ktx/async/assets/object.json"))
     }
   }
 
@@ -988,8 +988,127 @@ class AssetStorageTest {
       assertEquals(2, storage.getReferencesCount("ktx/async/assets/collection.json"))
       assertSame(asset, storage.loadJson<GdxArray<JsonExample>>("ktx/async/assets/collection.json"))
       assertEquals(3, storage.getReferencesCount("ktx/async/assets/collection.json"))
-      assertSame(asset, storage.load<GdxArray<JsonExample>>("ktx/async/assets/collection.json"))
-      assertEquals(4, storage.getReferencesCount("ktx/async/assets/collection.json"))
+    }
+  }
+
+  @Test
+  fun `should increase dependency reference counts recursively`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      storage.load<Skin>("ktx/async/assets/skin.json")
+      storage.load<Skin>("ktx/async/assets/skin.json")
+      storage.load<Skin>("ktx/async/assets/skin.json")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertEquals(3, storage.getReferencesCount("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertEquals(3, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      assertEquals(3, storage.getReferencesCount("ktx/async/assets/texture.png"))
+
+      storage.load<TextureAtlas>("ktx/async/assets/skin.atlas")
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertEquals(4, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      assertEquals(4, storage.getReferencesCount("ktx/async/assets/texture.png"))
+
+      storage.dispose()
+    }
+  }
+
+  @Test
+  fun `should not throw exception when trying to load the same asset on multiple coroutines at the same time`()
+      = `coroutine test`(concurrencyLevel = 1, timeLimitMillis = 60000L) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val expectedTextureReferences = AtomicInteger(0)
+
+    (1..50).forEach { id ->
+      ktxAsync {
+        repeat(ThreadLocalRandom.current().nextInt(0, 10)) { skipFrame() }
+        expectedTextureReferences.incrementAndGet()
+        val asset = storage.load<Texture>("ktx/async/assets/texture.png")
+
+        assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+        assertEquals(expectedTextureReferences.get(), storage.getReferencesCount("ktx/async/assets/texture.png"))
+        assertSame(asset, storage.get<Texture>("ktx/async/assets/texture.png"))
+        skipFrame()
+        assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+        assertEquals(expectedTextureReferences.get(), storage.getReferencesCount("ktx/async/assets/texture.png"))
+        expectedTextureReferences.decrementAndGet()
+        storage.unload("ktx/async/assets/texture.png")
+      }
+    }
+  }
+
+  @Test
+  fun `should not throw exception when trying to load assets with same dependencies on multiple coroutines at the same time`()
+      = `coroutine test`(concurrencyLevel = 1, timeLimitMillis = 20000L) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      storage.load<Skin>("ktx/async/assets/skin.json")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      skipFrame()
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/skin.json")
+    }
+
+    ktxAsync {
+      storage.load<TextureAtlas>("ktx/async/assets/skin.atlas")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/skin.atlas")
+    }
+
+    ktxAsync {
+      storage.load<Skin>("ktx/async/assets/skin.json")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/texture.png")
+    }
+
+    ktxAsync {
+      storage.load<TextureAtlas>("ktx/async/assets/skin.atlas")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      skipFrame()
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/texture.png")
+    }
+
+    ktxAsync {
+      storage.load<ParticleEffect3d>("ktx/async/assets/particle.p3d")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/particle.p3d"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      skipFrame()
+      assertTrue(storage.isLoaded("ktx/async/assets/particle.p3d"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/texture.png")
+    }
+
+    ktxAsync {
+      storage.load<Texture>("ktx/async/assets/texture.png")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      skipFrame()
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/texture.png")
+    }
+
+    ktxAsync {
+      storage.load<Texture>("ktx/async/assets/texture.png")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      storage.unload("ktx/async/assets/texture.png")
     }
   }
 
