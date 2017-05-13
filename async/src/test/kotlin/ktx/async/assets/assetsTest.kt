@@ -1019,11 +1019,11 @@ class AssetStorageTest {
 
   @Test
   fun `should not throw exception when trying to load the same asset on multiple coroutines at the same time`()
-      = `coroutine test`(concurrencyLevel = 1, timeLimitMillis = 60000L) { ktxAsync ->
+      = `coroutine test`(concurrencyLevel = 4, timeLimitMillis = 60000L) { ktxAsync ->
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val expectedTextureReferences = AtomicInteger(0)
 
-    (1..50).forEach { id ->
+    (1..50).forEach {
       ktxAsync {
         repeat(ThreadLocalRandom.current().nextInt(0, 10)) { skipFrame() }
         expectedTextureReferences.incrementAndGet()
@@ -1043,7 +1043,7 @@ class AssetStorageTest {
 
   @Test
   fun `should not throw exception when trying to load assets with same dependencies on multiple coroutines at the same time`()
-      = `coroutine test`(concurrencyLevel = 1, timeLimitMillis = 20000L) { ktxAsync ->
+      = `coroutine test`(concurrencyLevel = 2, timeLimitMillis = 20000L) { ktxAsync ->
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
 
     ktxAsync {
