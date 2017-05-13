@@ -96,12 +96,10 @@ class AssetStorage(
     val path = assetDescriptor.fileName
     if (!isDependency) referenceCounts.getAndIncrement(path, 0, 1)
     assets[path]?.apply {
-      incrementDependenciesReferenceCounts(assetDescriptor)
       @Suppress("UNCHECKED_CAST")
       return this as Asset
     }
     scheduledAssets[path]?.let {
-      incrementDependenciesReferenceCounts(assetDescriptor)
       return waitForAsset(path, it)
     }
     resolveFile(assetDescriptor)
@@ -158,20 +156,6 @@ class AssetStorage(
       if (!isLoaded(dependencyPath)) {
         load(it, isDependency = true)
       }
-    }
-  }
-
-  private fun incrementDependenciesReferenceCounts(asset: AssetDescriptor<*>) {
-    val dependenciesQueue = Queue<AssetDescriptor<*>>()
-    val assetLoader = getLoader(asset.type, asset.fileName) ?: throwNoLoaderException(asset)
-    assetLoader.getDependencies(asset)?.forEach { dependenciesQueue.addLast(it) }
-    while (dependenciesQueue.size > 0) {
-      val dependency = dependenciesQueue.removeLast()
-      val path = dependency.fileName
-      referenceCounts.getAndIncrement(path, 0, 1)
-      resolveFile(dependency)
-      val loader = getLoader(dependency.type, path) ?: throwNoLoaderException(dependency)
-      loader.getDependencies(dependency)?.forEach { dependenciesQueue.addLast(it) }
     }
   }
 

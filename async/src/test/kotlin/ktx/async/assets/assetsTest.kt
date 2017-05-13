@@ -1005,17 +1005,53 @@ class AssetStorageTest {
       assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
       assertEquals(3, storage.getReferencesCount("ktx/async/assets/skin.json"))
       assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
-      assertEquals(3, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
-      assertEquals(3, storage.getReferencesCount("ktx/async/assets/texture.png"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/texture.png"))
 
       storage.load<TextureAtlas>("ktx/async/assets/skin.atlas")
       assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
-      assertEquals(4, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertEquals(2, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
-      assertEquals(4, storage.getReferencesCount("ktx/async/assets/texture.png"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/texture.png"))
 
       storage.dispose()
+    }
+  }
+
+  @Test
+  fun `should recursively unload dependencies of assets scheduled multiple times`()
+      = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+
+    ktxAsync {
+      storage.load<Skin>("ktx/async/assets/skin.json")
+      storage.load<Skin>("ktx/async/assets/skin.json")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertEquals(2, storage.getReferencesCount("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/texture.png"))
+
+      storage.unload("ktx/async/assets/skin.json")
+
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/skin.json"))
+      assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
+      assertEquals(1, storage.getReferencesCount("ktx/async/assets/texture.png"))
+
+      storage.unload("ktx/async/assets/skin.json")
+
+      assertFalse(storage.isLoaded("ktx/async/assets/skin.json"))
+      assertEquals(0, storage.getReferencesCount("ktx/async/assets/skin.json"))
+      assertFalse(storage.isLoaded("ktx/async/assets/skin.atlas"))
+      assertEquals(0, storage.getReferencesCount("ktx/async/assets/skin.atlas"))
+      assertFalse(storage.isLoaded("ktx/async/assets/texture.png"))
+      assertEquals(0, storage.getReferencesCount("ktx/async/assets/texture.png"))
     }
   }
 
@@ -1072,7 +1108,7 @@ class AssetStorageTest {
 
       assertTrue(storage.isLoaded("ktx/async/assets/skin.json"))
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
-      storage.unload("ktx/async/assets/texture.png")
+      storage.unload("ktx/async/assets/skin.json")
     }
 
     ktxAsync {
@@ -1083,7 +1119,7 @@ class AssetStorageTest {
       skipFrame()
       assertTrue(storage.isLoaded("ktx/async/assets/skin.atlas"))
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
-      storage.unload("ktx/async/assets/texture.png")
+      storage.unload("ktx/async/assets/skin.atlas")
     }
 
     ktxAsync {
@@ -1094,7 +1130,7 @@ class AssetStorageTest {
       skipFrame()
       assertTrue(storage.isLoaded("ktx/async/assets/particle.p3d"))
       assertTrue(storage.isLoaded("ktx/async/assets/texture.png"))
-      storage.unload("ktx/async/assets/texture.png")
+      storage.unload("ktx/async/assets/particle.p3d")
     }
 
     ktxAsync {
