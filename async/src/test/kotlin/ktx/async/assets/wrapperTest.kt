@@ -176,6 +176,26 @@ class AssetManagerWrapperTest {
   }
 
   @Test
+  fun `should delegate 'getDependencies'`() {
+    KStubbing(storage).on(storage.getDependencies("file")) doReturn listOf("a", "b", "c")
+
+    val dependencies = wrapper.getDependencies("file")
+
+    verify(storage).getDependencies("file")
+    assertEquals(GdxArray.with("a", "b", "c"), dependencies)
+  }
+
+  @Test
+  fun `should delegate 'getReferenceCount'`() {
+    KStubbing(storage).on(storage.getReferencesCount("file")) doReturn 7
+
+    val referencesCount = wrapper.getReferenceCount("file")
+
+    verify(storage).getReferencesCount("file")
+    assertEquals(7, referencesCount)
+  }
+
+  @Test
   fun `should delegate 'load'`() = `loading test` { path ->
     wrapper.load(path, String::class.java)
   }

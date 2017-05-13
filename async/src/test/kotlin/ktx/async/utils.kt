@@ -14,11 +14,12 @@ import org.junit.Assert.assertTrue
 import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.atomic.AtomicReference
 
 /** Single-threaded executor for asynchronous timed tasks. */
-val scheduler = Executors.newScheduledThreadPool(1)
+val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 
 /**
  * Stores posted [Runnable] instances in a thread-safe queuer and allows to run them en masse. Coroutines context

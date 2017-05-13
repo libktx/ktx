@@ -89,6 +89,11 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage) : AssetManage
     assetStorage.setLoader(type, loader as Loader<T>, suffix)
   }
 
+  override fun getDependencies(fileName: String): GdxArray<String> =
+      GdxArray.with(*assetStorage.getDependencies(fileName).toTypedArray())
+
+  override fun getReferenceCount(fileName: String): Int = assetStorage.getReferencesCount(fileName)
+
   @Deprecated("AssetStorage does not have to be updated.", ReplaceWith("Nothing"))
   override fun update(millis: Int): Boolean = assetStorage.currentlyLoadedAsset == null
 
@@ -96,11 +101,7 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage) : AssetManage
   override fun update(): Boolean = assetStorage.currentlyLoadedAsset == null
 
   @Deprecated("Unsupported operation.", ReplaceWith("Nothing"))
-  override fun setReferenceCount(fileName: String, refCount: Int) {
-  }
-
-  @Deprecated("AssetStorage does not track dependencies.", ReplaceWith("Nothing"))
-  override fun getDependencies(fileName: String): GdxArray<String> = GdxArray()
+  override fun setReferenceCount(fileName: String, refCount: Int) = Unit
 
   @Deprecated("Since AssetStorage does not force asset scheduling up front, it cannot track the file loading progress.",
       ReplaceWith("AssetStorage.currentlyLoadedAsset"))
@@ -108,9 +109,6 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage) : AssetManage
 
   @Deprecated("AssetStorage does not maintain an assets queue.", ReplaceWith("Nothing"))
   override fun getQueuedAssets(): Int = 0
-
-  @Deprecated("AssetStorage does not track dependencies.", ReplaceWith("Nothing"))
-  override fun getReferenceCount(fileName: String): Int = 0
 
   @Deprecated("AssetStorage loads assets via coroutines. It does not maintain an assets queue.", ReplaceWith("Nothing"))
   override fun finishLoading() = throw GdxRuntimeException("Unable to force loading of all assets.")
