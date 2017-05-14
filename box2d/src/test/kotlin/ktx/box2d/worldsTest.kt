@@ -21,6 +21,7 @@ class WorldsTest : Box2DTest() {
     val world = createWorld()
 
     assertEquals(Vector2(0f, 0f), world.gravity)
+    world.dispose()
   }
 
   @Test
@@ -28,6 +29,7 @@ class WorldsTest : Box2DTest() {
     val world = createWorld(gravity = Vector2(1f, 1f), allowSleep = false)
 
     assertEquals(Vector2(1f, 1f), world.gravity)
+    world.dispose()
   }
 
   @Test
@@ -39,6 +41,7 @@ class WorldsTest : Box2DTest() {
     assertNotNull(body)
     assertSame(world, body.world)
     assertEquals(StaticBody, body.type)
+    world.dispose()
   }
 
   @Test
@@ -50,6 +53,7 @@ class WorldsTest : Box2DTest() {
     assertNotNull(body)
     assertSame(world, body.world)
     assertEquals(KinematicBody, body.type)
+    world.dispose()
   }
 
   @Test
@@ -70,6 +74,7 @@ class WorldsTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertTrue(fixture.shape is CircleShape)
     assertEquals(2f, fixture.shape.radius)
+    world.dispose()
   }
 
   @Test
@@ -97,6 +102,7 @@ class WorldsTest : Box2DTest() {
     assertEquals(0.75f, edge.density)
     assertTrue(edge.shape is EdgeShape)
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), edge.shape as EdgeShape)
+    world.dispose()
   }
 
   @Test
@@ -109,6 +115,7 @@ class WorldsTest : Box2DTest() {
     }
 
     assertSame(data, body.userData)
+    world.dispose()
   }
 
   @Test
@@ -130,6 +137,7 @@ class WorldsTest : Box2DTest() {
     assertSame(circleData, circle.userData)
     val box = body.fixtureList[1]
     assertSame(boxData, box.userData)
+    world.dispose()
   }
 
   @Test
@@ -144,6 +152,7 @@ class WorldsTest : Box2DTest() {
     }
 
     assertSame(body, callbackParameter)
+    world.dispose()
   }
 
   @Test
@@ -160,5 +169,6 @@ class WorldsTest : Box2DTest() {
     }
 
     assertSame(body.fixtureList[0], callbackParameter)
+    world.dispose()
   }
 }

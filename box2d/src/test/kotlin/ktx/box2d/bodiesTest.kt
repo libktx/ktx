@@ -46,6 +46,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(3f, shape.position.y)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -66,6 +67,7 @@ class BodiesTest : Box2DTest() {
     assertPolygonEquals(arrayOf(Vector2(2f, 0f), Vector2(2f, 2f), Vector2(0f, 2f), Vector2(0f, 0f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -83,6 +85,7 @@ class BodiesTest : Box2DTest() {
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -100,6 +103,7 @@ class BodiesTest : Box2DTest() {
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -117,6 +121,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -134,6 +139,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -152,6 +158,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -170,6 +177,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -186,6 +194,7 @@ class BodiesTest : Box2DTest() {
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -202,6 +211,7 @@ class BodiesTest : Box2DTest() {
     assertEdgeEquals(Vector2(1f, 2f), Vector2(3f, 4f), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    shape.dispose()
   }
 
   @Test
@@ -230,6 +240,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -249,6 +260,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -270,6 +282,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -306,6 +319,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -324,6 +338,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -342,6 +357,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -360,6 +376,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -378,6 +395,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -395,6 +413,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -412,6 +431,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    body.world.dispose()
   }
 
   @Test
@@ -426,6 +446,7 @@ class BodiesTest : Box2DTest() {
     }
 
     assertSame(fixture, callbackParameter)
+    body.world.dispose()
   }
 
   private fun createBody(): Body = World(Vector2.Zero, true).createBody(BodyDef())
