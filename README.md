@@ -58,11 +58,11 @@ compile "io.github.libktx:ktx-$module:$ktxVersion"
 Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
 compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
 the snapshots). For example, the first official beta release with the recent group ID was compiled against LibGDX
-`1.9.6`, so it was named `1.9.6-b2`. You can browse through our releases
-[here](https://search.maven.org/#search%7Cga%7C1%7Cktx).
+`1.9.6` and its version was `1.9.6-b2`. You can browse through our releases
+[here](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22).
 
-Note that even snapshots should be more or less stable, as libraries are not pushed to Maven Central if they do not pass
-the unit tests.
+Note that even snapshots should be more or less stable, as libraries are not pushed to _Maven Central_ unless they pass
+the extensive tests.
 
 ### Documentation
 
@@ -73,5 +73,4 @@ directories in root folder to find out more about each library.
 
 If you want to help, read the [contribution](.github/CONTRIBUTING.md) guideline and browse through the issues to see
 what's currently to do. Don't be afraid to create issues just to ask a question or make a request for any kind of
-improvements. Before creating any pull requests, be aware that the code is dedicated to
-[public domain](LICENSE.txt).
+improvements. Before creating any pull requests, be aware that the code is dedicated to [public domain](LICENSE.txt).
