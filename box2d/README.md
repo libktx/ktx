@@ -22,6 +22,19 @@ with the following shapes:
   - `edge`: looped `EdgeShape`.
   - `fixture`: a custom `Shape` passed as parameter.
 - `FixtureDef.filter` extension methods aim to simplify `Filter` API usage.
+- `Body` was extended with the following builder methods that ease creation of `Joint` instances:
+  - `gearJointWith`: `GearJoint`.
+  - `ropeJointWith`: `RopeJoint`.
+  - `weldJointWith`: `WeldJoint`.
+  - `motorJointWith`: `MotorJoint`.
+  - `mouseJointWith`: `MouseJoint`.
+  - `wheelJointWith`: `WheelJoint`.
+  - `pulleyJointWith`: `PulleyJoint`.
+  - `distanceJointWith`: `DistanceJoint`.
+  - `frictionJointWith`: `FrictionJoint`.
+  - `revoluteJointWith`: `RevoluteJoint`.
+  - `prismaticJointWith`: `PrismaticJoint`.
+  - `jointWith`: any `Joint` type supported by the custom `JointDef` passed as the method argument.
 - `earthGravity` is a constant that roughly matches Earth's gravity.
 
 ### Usage examples
@@ -42,6 +55,7 @@ import ktx.box2d.earthGravity
 import com.badlogic.gdx.math.Vector2
 
 val world = createWorld(gravity = Vector2(0f, -10f))
+
 val earth = createWorld(gravity = earthGravity)
 ```
 
@@ -215,6 +229,27 @@ val body = world.body {
 ```
 
 ![CircleShape](img/circle-custom.png)
+
+Creating two `Body` instances joined with a `DistanceJoint`:
+
+```Kotlin
+import ktx.box2d.*
+
+val bodyA = world.body {
+  position.set(-1f, 0f)
+  box(width = 0.5f, height = 0.5f) {}
+}
+val bodyB = world.body {
+  position.set(1f, 0f)
+  box(width = 0.5f, height = 0.5f) {}
+}
+// Extension methods for all other joint types are also available.
+val joint = bodyA.distanceJointWith(bodyB) {
+  length = 2f
+}
+```
+
+![PolygonShape + DistanceJoint](img/joint.png)
 
 Adding callbacks invoked after creation of `Body` and `Fixture` instances:
 

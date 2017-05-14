@@ -19,6 +19,9 @@ depending on the global `AssetManager` were removed.
   - `fixture`, `circle`, `box`, `polygon`, `chain`, `loop` and `edge` extension `Fixture` building methods added to `Body`.
   - `earthGravity` property allowing to set `World` gravity roughly matching Earth's gravity.
   - `onCreate` callbacks in `BodyDefinition` and `FixtureDefinition` giving access to built `Body` and `Fixture` instances in building blocks.
+  - `Body` extension methods that ease creation of `Joint` instances between 2 bodies: `jointWith`, `gearJointWith`,
+    `ropeJointWith`, `weldJointWith`, `motorJointWith`, `mouseJointWith`, `wheelJointWith`, `pulleyJointWith`,
+    `distanceJointWith`, `frictionJointWith`, `revoluteJointWith`, `prismaticJointWith`.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
 - **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
 - **[FEATURE]** (`ktx-i18n`) `nls` property and method added to `BundleLine` for extra readability.
