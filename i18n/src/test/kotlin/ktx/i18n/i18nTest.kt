@@ -1,18 +1,15 @@
 package ktx.i18n
 
-import com.badlogic.gdx.Files
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.I18NBundle
-import ktx.i18n.I18nTest.Bundle.key1
-import ktx.i18n.I18nTest.Bundle.key2
+import io.kotlintest.mock.mock
+import ktx.i18n.I18nTest.BundleEnum.key
+import ktx.i18n.I18nTest.BundleEnum.keyWithArgument
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import java.io.File
-import java.util.Locale
 
 /**
  * Tests internationalization-related classes and functions stored in *i18n.kt*.
@@ -20,134 +17,83 @@ import java.util.Locale
  */
 class I18nTest {
   val bundleContent = """
-key1=Value.
-key2=Value with {0} argument.
+key=Value.
+keyWithArgument=Value with {0} argument.
 """
   val bundleFile = FileHandle(File.createTempFile("nls", ".properties"))
-  private fun getBundleRootFileHandle() = bundleFile.sibling(bundleFile.nameWithoutExtension())
+  var bundle: I18NBundle = mock()
 
   @Before
-  fun createBundleFile() {
+  fun `create I18NBundle`() {
     bundleFile.writeString(bundleContent, false)
+    bundle = I18NBundle.createBundle(bundleFile.sibling(bundleFile.nameWithoutExtension()))
+    BundleEnum.i18nBundle = bundle
   }
 
   @Test
-  fun shouldAccessBundleLinesWithBraceOperator() {
-    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value.", bundle["key1"])
-    assertEquals("Value with 1 argument.", bundle["key2", 1])
+  fun `should access bundle lines with brace operator`() {
+    assertEquals("Value.", bundle["key"])
   }
 
   @Test
-  fun shouldFindBundleLine() {
-    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value.", nls("key1", bundle))
+  fun `should format bundle lines with brace operator and arguments`() {
+    assertEquals("Value with 1 argument.", bundle["keyWithArgument", 1])
   }
 
   @Test
-  fun shouldFindBundleLineInDefaultBundle() {
-    I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value.", nls("key1"))
+  fun `should access values of BundleLine instances with brace operator`() {
+    assertEquals("Value.", bundle[key])
   }
 
   @Test
-  fun shouldFormatBundleLine() {
-    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value with one argument.", nls("key2", args = "one", bundle = bundle))
+  fun `should format values of BundleLine instances with brace operator and arguments`() {
+    assertEquals("Value with 1 argument.", bundle[keyWithArgument, 1])
   }
 
   @Test
-  fun shouldFormatBundleLineFromDefaultBundle() {
-    I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value with one argument.", nls("key2", "one"))
-    assertEquals("Value with 1 argument.", nls("key2", args = 1))
+  fun `should find BundleLine value with nls property`() {
+    assertEquals("Value.", key.nls)
   }
 
   @Test
-  fun shouldLoadBundles() {
-    Gdx.files = Mockito.mock(Files::class.java)
-    val path = "mock/path"
-    Mockito.`when`(Gdx.files.getFileHandle(Mockito.eq(path), Mockito.any())).thenReturn(getBundleRootFileHandle())
-    I18n.load(path, Locale.ENGLISH)
-
-    assertNotNull(I18n.defaultBundle)
-    assertNotNull(I18n.defaultBundle!!.get("key1"))
+  fun `should format BundleLine value using nls method with arguments`() {
+    assertEquals("Value with 1 argument.", keyWithArgument.nls(1))
   }
 
   @Test
-  fun shouldInvokeBundleReloadListeners() {
-    var invoked = false
-    I18n.addListener { invoked = true }
-    I18n.defaultBundle = null // Invokes setter, should trigger listeners.
-    assertTrue(invoked)
+  fun `should find BundleLine value with invocation syntax`() {
+    assertEquals("Value.", key())
   }
 
   @Test
-  fun shouldRemoveListeners() {
-    var amount = 0
-    val listener: (I18NBundle?) -> Unit = { amount++ }
-    I18n.addListener(listener)
-
-    I18n.defaultBundle = null // Invokes setter, should trigger listeners.
-    assertEquals(1, amount)
-
-    I18n.removeListener(listener)
-    I18n.defaultBundle = null // Invokes setter, should trigger listeners.
-    assertEquals(1, amount)
+  fun `should format BundleLine value with invocation syntax and arguments`() {
+    assertEquals("Value with 1 argument.", keyWithArgument(1))
   }
 
-  @Test
-  fun shouldClearListeners() {
-    var amount = 0
-    I18n.addListener { amount++ }
-    I18n.addListener { amount++ }
+  @Test(expected = NotImplementedError::class)
+  fun `should prohibit bundle property access when not overridden`() {
+    val bundleLine = object : BundleLine {}
 
-    I18n.defaultBundle = null // Invokes setter, should trigger listeners.
-    assertEquals(2, amount)
-
-    I18n.clearListeners()
-    I18n.defaultBundle = null // Invokes setter, should trigger listeners.
-    assertEquals(2, amount)
-  }
-
-  /**
-   * [BundleLine] test.
-   * @author MJ
-   */
-  internal enum class Bundle : BundleLine {
-    key1,
-    key2
-  }
-
-  @Test
-  fun shouldGetLineValue() {
-    I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value.", key1()) // Static import of enum variables.
-    assertEquals("Value.", nls(key1))
-  }
-
-  @Test
-  fun shouldFormatLineValueWithArguments() {
-    I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value with 1 argument.", key2(1)) // Static import of enum variables.
-    assertEquals("Value with 1 argument.", nls(key2, 1))
-  }
-
-  @Test
-  fun shouldReturnDefaultBundle() {
-    I18n.defaultBundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals(I18n.defaultBundle, key1.bundle)
-  }
-
-  @Test
-  fun shouldAcceptBundleLineInstancesWithBracesOperator() {
-    val bundle = I18NBundle.createBundle(getBundleRootFileHandle())
-    assertEquals("Value.", bundle[key1])
-    assertEquals("Value with 1 argument.", bundle[key2, 1])
+    bundleLine.bundle
   }
 
   @After
-  fun deleteTemporaryFile() {
+  fun `delete temporary file`() {
     bundleFile.delete()
+  }
+
+  /** For [BundleLine] tests. */
+  internal enum class BundleEnum : BundleLine {
+    /** "Value." */
+    key,
+    /** "Value with {0} argument." */
+    keyWithArgument;
+
+    override val bundle: I18NBundle
+      get() = i18nBundle!!
+
+    companion object {
+      var i18nBundle: I18NBundle? = null
+    }
   }
 }

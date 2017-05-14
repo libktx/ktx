@@ -11,14 +11,12 @@ import com.nhaarman.mockito_kotlin.mock
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Job
 import org.junit.Assert.assertTrue
-import java.util.concurrent.CancellationException
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.Executors
+import java.util.concurrent.*
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.atomic.AtomicReference
 
 /** Single-threaded executor for asynchronous timed tasks. */
-val scheduler = Executors.newScheduledThreadPool(1)
+val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 
 /**
  * Stores posted [Runnable] instances in a thread-safe queuer and allows to run them en masse. Coroutines context
@@ -87,39 +85,43 @@ fun `no delay execution`() = { task: Task, _: Float -> task.run() }
  * @param timeLimitMillis if a test execution takes longer than that, it fails. Avoids endless loops. Defaults to 2.5s.
  * @param concurrencyLevel decides whether asynchronous executor is created by the context.
  * @param test prepare control variables and mocks in the first lambda. Then open the second block by invoking first
- *    lambda parameter (ktxAsync) - this is the tested suspending coroutine body.
+ *    lambda parameter (ktxAsync) - this is the tested suspending coroutine body. Supports multiple coroutines.
  * @see AsyncTest
  */
 fun `coroutine test`(
     timeLimitMillis: Long = 2500L,
     concurrencyLevel: Int = 0,
     test: (ktxAsync: (suspend KtxAsync.(CoroutineScope) -> Unit) -> Unit) -> Unit) {
-  val testStatus = AtomicReference<TestStatus>(TestStatus.STARTED)
+  val testStatuses = ConcurrentHashMap<Any, TestStatus>()
   val error = AtomicReference<Throwable>()
   val application = TestApplication()
   Gdx.app = application
   enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = concurrencyLevel)
 
   test({ coroutine ->
+    testStatuses[coroutine] = TestStatus.STARTED
     ktxAsync {
       try {
         KtxAsync.coroutine(it)
-        testStatus.set(TestStatus.FINISHED)
+        testStatuses[coroutine] = TestStatus.FINISHED
       } catch(exception: Throwable) {
         error.set(exception)
-        testStatus.set(TestStatus.FAILED)
+        testStatuses[coroutine] = TestStatus.FAILED
       }
     }
   })
 
   val startTime = System.currentTimeMillis()
-  loop@ while (true) {
-    when (testStatus.get()) {
-      TestStatus.STARTED -> application.runAll()
-      TestStatus.FINISHED -> break@loop
-      TestStatus.FAILED -> throw error.get()
-      null -> throw IllegalStateException()
+  while (true) {
+    var finishedCount = 0
+    testStatuses.values.forEach {
+      when (it) {
+        TestStatus.STARTED -> application.runAll()
+        TestStatus.FINISHED -> finishedCount++
+        TestStatus.FAILED -> throw error.get()
+      }
     }
+    if (finishedCount == testStatuses.size) break
     if (System.currentTimeMillis() - startTime > timeLimitMillis) {
       throw AssertionError("Test execution time exceeded the limit of $timeLimitMillis milliseconds.")
     }
@@ -138,7 +140,8 @@ fun `coroutine test`(
  * @param concurrencyLevel decides whether asynchronous executor is created by the context.
  * @param test prepare control variables and mocks in the first lambda. Then open the second block by invoking first
  *      lambda parameter (ktxAsync) - this is a suspending coroutine body. Optionally open third block by invoking
- *      second lambda parameter (assert) to perform additional checks after the coroutines are fully executed.
+ *      second lambda parameter (assert) to perform additional checks after the coroutines are fully executed. Does NOT
+ *      support couroutines.
  * @see AsyncTest
  * @see AsynchronousHttpRequestsTest
  */

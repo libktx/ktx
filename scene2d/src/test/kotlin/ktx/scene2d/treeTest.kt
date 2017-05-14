@@ -1,11 +1,11 @@
 package ktx.scene2d
 
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 /**
  * Tests inlined factory methods of Tree-based root actors.
- * @author MJ
  */
 class TreeFactoryTest : NeedsLibGDX() {
   @Test
@@ -13,7 +13,7 @@ class TreeFactoryTest : NeedsLibGDX() {
     val widget = tree {
       height = 100f
     }
-    Assert.assertNotNull(widget)
-    Assert.assertEquals(100f, widget.height, TOLERANCE)
+    assertNotNull(widget)
+    assertEquals(100f, widget.height, TOLERANCE)
   }
 }

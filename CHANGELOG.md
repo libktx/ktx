@@ -1,3 +1,34 @@
+#### 1.9.6-SNAPSHOT
+
+- **[UPDATE]** Updated to Kotlin 1.1.2.
+- **[UPDATE]** Updated to Kotlin Coroutines to 0.15.
+- **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
+depending on the global `AssetManager` were removed.
+- **[FEATURE]** (`ktx-assets`) Added `FileType.getResolver` extension method creating `FileHandleResolver` instances.
+- **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.withPrefix` extension method decorating resolvers with `PrefixFileHandleResolver`.
+- **[FEATURE]** (`ktx-assets`) Added `FileHandleResolver.forResolutions` extension method decorating resolvers with `ResolutionFileResolver`.
+- **[FEATURE]** (`ktx-assets`) Added `resolution` function constructing `ResolutionFileResolver.Resolution` instances.
+- **[FEATURE]** (`ktx-async`) Added `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
+- **[FEATURE]** (`ktx-box2d`) Implemented a new **KTX** module with Box2D physics engine utilities: `ktx-box2d`.
+  - `world` factory method constructing `World` instances.
+  - `World.body` extension method providing type-safe builder DSL for `Body` instances.
+  - `FixtureDef` builder methods supporting all shapes (`CircleShape`, `PolygonShape`, `ChainShape`, `EdgeShape`).
+  - `FixtureDef.filder` extension methods simplifying `Filter` properties setup.
+  - `BodyDefinition` is a `BodyDef` extension providing `Body` building DSL. Used internally by `World.body`.
+  - `FixtureDefinition` is a `FixtureDef` extension providing `Fixture` building DSL. Used internally by `BodyDefinition`.
+  - `fixture`, `circle`, `box`, `polygon`, `chain`, `loop` and `edge` extension `Fixture` building methods added to `Body`.
+  - `earthGravity` property allowing to set `World` gravity roughly matching Earth's gravity.
+  - `onCreate` callbacks in `BodyDefinition` and `FixtureDefinition` giving access to built `Body` and `Fixture` instances in building blocks.
+  - `Body` extension methods that ease creation of `Joint` instances between 2 bodies: `jointWith`, `gearJointWith`,
+    `ropeJointWith`, `weldJointWith`, `motorJointWith`, `mouseJointWith`, `wheelJointWith`, `pulleyJointWith`,
+    `distanceJointWith`, `frictionJointWith`, `revoluteJointWith`, `prismaticJointWith`.
+- **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container - `I18n` - was removed.
+- **[CHANGE]** (`ktx-i18n`) Top level `nls` functions were removed.
+- **[FEATURE]** (`ktx-i18n`) `nls` property and method added to `BundleLine` for extra readability.
+- **[CHANGE]** (`ktx-inject`) Static `Context` instance container was removed. All top level functions depending on the
+global `Context` were removed.
+- **[FEATURE]** (`ktx-inject`) `Context.register` builder method added to ease context initiation process.
+
 #### 1.9.6-b2
 
 - **[UPDATE]** Updated to Kotlin 1.1.1.

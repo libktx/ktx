@@ -17,7 +17,9 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should add TextTooltip`() {
     val actor = Actor()
+
     val tooltip = actor.addTextTooltip("Test.")
+
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)
     assertEquals("Test.", tooltip.actor.text.toString())
@@ -26,6 +28,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should add TextTooltip with building block`() {
     val actor = Actor()
+
     val tooltip = actor.addTextTooltip("Test.") {
       // TextTooltip should be available as lambda parameter:
       assertTrue(it is TextTooltip)
@@ -34,6 +37,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
       // Changing Label color:
       color = Color.BLUE
     }
+
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)
     assertEquals("Test.", tooltip.actor.text.toString())
@@ -43,6 +47,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should add Tooltip with building block`() {
     val actor = Actor()
+
     val tooltip = actor.addTooltip {
       // Tooltip should be available as lambda parameter:
       assertTrue(it is Tooltip)
@@ -53,6 +58,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
       // Adding child to Table content:
       label("Test.")
     }
+
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)
     assertEquals("Test.", (tooltip.actor.children.first() as Label).text.toString())

@@ -6,7 +6,6 @@ import org.junit.Test
 
 /**
  * Tests inlined factory methods of simple WidgetGroup-based root actors.
- * @author MJ
  */
 class GroupFactoriesTest : NeedsLibGDX() {
   @Test

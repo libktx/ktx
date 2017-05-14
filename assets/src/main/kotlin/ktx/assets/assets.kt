@@ -1,6 +1,3 @@
-// TODO Delete after static AssetManager removal:
-@file:Suppress("DEPRECATION")
-
 package ktx.assets
 
 import com.badlogic.gdx.assets.AssetDescriptor
@@ -10,18 +7,6 @@ import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import kotlin.reflect.KProperty
-
-/**
- * Stores global [AssetManager] instance.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.")
-object Assets {
-  /**
-   * Global [AssetManager] instance, used by default by the utility loading methods. Should never be set to null and -
-   * if necessary - should be replaced before invoking any asset loading methods.
-   */
-  var manager: AssetManager = AssetManager()
-}
 
 /**
  * Common interface for asset wrappers. Provides access to an asset instance which might or might not be loaded.
@@ -118,41 +103,12 @@ class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
 /**
  * @param path path of the asset. Its file type must match [AssetManager] file handle resolver (internal by default).
  * @param parameters optional asset loading parameters which might affect how the assets are loaded. Can be null.
- * @param manager [AssetManager] instance that will be used to load the asset. Global asset manager instance is used by
- *    default.
- * @return [Asset] wrapper which allows to access the asset once it is loaded.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.load", imports = "ktx.assets.*"))
-inline fun <reified Type : Any> load(path: String, parameters: AssetLoaderParameters<Type>? = null,
-                                     manager: AssetManager = Assets.manager): Asset<Type> {
-  val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
-  manager.load(assetDescriptor)
-  return ManagedAsset(manager, assetDescriptor)
-}
-
-/**
- * @param path path of the asset. Its file type must match [AssetManager] file handle resolver (internal by default).
- * @param parameters optional asset loading parameters which might affect how the assets are loaded. Can be null.
  * @return [Asset] wrapper which allows to access the asset once it is loaded.
  */
 inline fun <reified Type : Any> AssetManager.load(path: String, parameters: AssetLoaderParameters<Type>? = null): Asset<Type> {
   val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
   this.load(assetDescriptor)
   return ManagedAsset(this, assetDescriptor)
-}
-
-/**
- * @param assetDescriptor contains data necessary to load the asset.
- * @param manager [AssetManager] instance that will be used to load the asset. Global asset manager instance is used by
- *    default.
- * @return [Asset] wrapper which allows to access the asset once it is loaded.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.loadAsset", imports = "ktx.assets.*"))
-fun <Type> load(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Asset<Type> {
-  manager.load(assetDescriptor)
-  return ManagedAsset(manager, assetDescriptor)
 }
 
 /**
@@ -167,38 +123,12 @@ fun <Type> AssetManager.loadAsset(assetDescriptor: AssetDescriptor<Type>): Asset
 /**
  * @param path path of the asset. Its file type must match [AssetManager] file handle resolver (internal by default).
  * @param parameters optional asset loading parameters which might affect how the assets are loaded. Can be null.
- * @param manager [AssetManager] instance that will be _eventually_ used to load the asset. Global asset manager
- *    instance is used by default.
- * @return [Asset] wrapper which will eagerly load the asset on first request.
- * @see DelayedAsset
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.loadOnDemand", imports = "ktx.assets.*"))
-inline fun <reified Type : Any> loadOnDemand(path: String, parameters: AssetLoaderParameters<Type>? = null,
-                                             manager: AssetManager = Assets.manager): Asset<Type> =
-    DelayedAsset(manager, AssetDescriptor(path, Type::class.java, parameters))
-
-/**
- * @param path path of the asset. Its file type must match [AssetManager] file handle resolver (internal by default).
- * @param parameters optional asset loading parameters which might affect how the assets are loaded. Can be null.
  * @return [Asset] wrapper which will eagerly load the asset on first request.
  * @see DelayedAsset
  */
 inline fun <reified Type : Any> AssetManager.loadOnDemand(path: String,
                                                           parameters: AssetLoaderParameters<Type>? = null): Asset<Type> =
     DelayedAsset(this, AssetDescriptor(path, Type::class.java, parameters))
-
-/**
- * @param assetDescriptor contains data necessary to load the asset.
- * @param manager [AssetManager] instance that will be _eventually_ used to load the asset. Global asset manager
- *    instance is used by default.
- * @return [Asset] wrapper which will eagerly load the asset on first request.
- * @see DelayedAsset
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.loadOnDemand", imports = "ktx.assets.*"))
-fun <Type> loadOnDemand(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Asset<Type> =
-    DelayedAsset(manager, assetDescriptor)
 
 /**
  * @param assetDescriptor contains data necessary to load the asset.
@@ -227,18 +157,6 @@ inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: As
     AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
 
 /**
- * @param path path of the asset.
- * @param manager [AssetManager] instance that contains the requested asset. Note that the asset must have been already
- *    scheduled for loading and fully loaded for this method to work.
- * @return requested asset instance.
- * @throws GdxRuntimeException if asset was not loaded yet.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.getAsset", imports = "ktx.assets.*"))
-inline fun <reified Type : Any> asset(path: String, manager: AssetManager = Assets.manager): Type =
-    manager[path, Type::class.java]
-
-/**
  * @param path path of the asset. Note that the asset must have been already scheduled for loading and fully loaded for
  *    this method to work.
  * @return requested asset instance.
@@ -246,43 +164,6 @@ inline fun <reified Type : Any> asset(path: String, manager: AssetManager = Asse
  */
 inline fun <reified Type : Any> AssetManager.getAsset(path: String): Type
     = this[path, Type::class.java]
-
-/**
- * @param assetDescriptor contains data necessary to access the asset.
- * @param manager [AssetManager] instance that contains the requested asset. Note that the asset must have been already
- *    scheduled for loading and fully loaded for this method to work.
- * @return requested asset instance.
- * @throws GdxRuntimeException if asset was not loaded yet.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.get", imports = "com.badlogic.gdx.assets.AssetManager"))
-fun <Type> asset(assetDescriptor: AssetDescriptor<Type>, manager: AssetManager = Assets.manager): Type =
-    manager[assetDescriptor]
-
-/**
- * @param path path of the asset.
- * @param manager [AssetManager] instance which might have been used to load the asset.
- * @return true if an asset of the selected type is currently loaded and stored in the asset manager. False otherwise.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.isLoaded", imports = "com.badlogic.gdx.assets.AssetManager"))
-inline fun <reified Type : Any> isLoaded(path: String, manager: AssetManager = Assets.manager): Boolean =
-    manager.isLoaded(path, Type::class.java)
-
-/**
- * @param path path of a loaded asset.
- * @param manager [AssetManager] instance which might have been used to load the asset. Will attempt to unload the
- *    asset instance with this manager.
- */
-@Deprecated("Static access to AssetManager will be removed after the next release.",
-    replaceWith = ReplaceWith("AssetManager.unloadSafely", imports = "ktx.assets.*"))
-fun unload(path: String, manager: AssetManager = Assets.manager) {
-  try {
-    manager.unload(path)
-  } catch (exception: GdxRuntimeException) {
-    // Thrown when asset is not loaded. Ignored.
-  }
-}
 
 /**
  * @param path path of a loaded asset. Asset associated with this path will be unloaded. Any thrown exceptions will be

@@ -1,34 +1,35 @@
 ## Issues
 
 - Before submitting a bug-related issue, make sure that **its source is not the LibGDX itself**.
-- It is fine to create issues with simple questions and documentation improvement requests. In fact, issues are among
-the fastest way to contact the developers.
+- Issues are among the fastest way to contact the developers. It is fine to create issues with feature requests and
+questions about the library.
 
 ## Pull requests
 
-- The latest changes are always in the `develop` branch. `master` branch is frozen between releases. Make sure to
-checkout `develop` branch before starting your work and set `develop` as the target branch before creating a pull
-request.
+- The latest changes are always in the `develop` branch. `master` branch always matches the latest stable release. Make
+sure to checkout `develop` branch before starting your work and set `develop` as the target branch before creating
+a pull request.
 - Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
-- Make sure to include unit tests of your code. Older tests are not idiomatic Kotlin code and were written with vanilla
-JUnit and Mockito - all new tests should use [KotlinTest](https://github.com/kotlintest/kotlintest) framework along with
+- Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
+JUnit and [KotlinTest](https://github.com/kotlintest/kotlintest) can be used to write tests. Use
 [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
-- If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue (or create
-an issue with your proposal first). API changes or new modules have to be discussed with the maintainers first.
+- If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue or create
+an issue with your proposal first. API changes or new modules have to be discussed with the maintainers first.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
   - **[CHANGE]** - breaking API change.
   - **[UPDATE]** - update of one of project dependencies.
   - **[FIX]** - bug fix.
-- Some libraries (like `ktx-collections` or `ktx-math`) list all of the features in their `README.md` files to ease
-their usage. When adding new feature to these projects, please add description of your change to the file. Also, add
-all necessary imports in KTX examples in `README.md` files to make it easier to try them out.
+- Some libraries (like `ktx-collections` or `ktx-math`) list _all_ features in the `README.md` files to ease their
+usage. When adding new feature to these projects, please add description of your change to the file. Also, add all
+necessary imports in KTX examples in `README.md` files to make it easier to try them out.
 
 ## Working from sources
 
 ```bash
-git clone https://github.com/czyzby/ktx.git
+git clone https://github.com/libktx/ktx.git
 cd ktx
+git checkout develop
 ```
 
 ### Build tool
@@ -50,12 +51,12 @@ case of a non-snapshot upload to Maven Central.
 
 Releasing a new KTX version:
 
-- Change `libVersion` settings in `gradle.properties`. KTX uses the same versioning schema as LibGDX (mimicking the
+- Change `libVersion` settings in `version.txt`. KTX uses the same versioning schema as LibGDX (mimicking the
 LibGDX version that it was compiled against) with optional `-b#` or `-SNAPSHOT` suffixes depending on version status.
-- Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both Maven Local and
-Maven Central.
+- Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both _Maven Local_ and
+_Maven Central_.
 - Run `gradle distZip` to prepare archive with KTX sources, compiled binary and documentation.
-- Upload the archive to [releases](https://github.com/czyzby/ktx/releases) section. Tag should match released version.
+- Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. Tag should match released version.
 Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
 description. Note that a release is not necessary for snapshot versions.
 

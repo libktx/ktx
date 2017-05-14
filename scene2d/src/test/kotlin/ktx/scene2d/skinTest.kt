@@ -8,7 +8,9 @@ class Scene2DSkinTest {
   @Test
   fun `should invoke skin reload listeners`() {
     var invoked = false
+
     Scene2DSkin.addListener { invoked = true }
+
     Scene2DSkin.defaultSkin = Skin() // Invokes setter, should trigger listeners.
     Assert.assertTrue(invoked)
   }

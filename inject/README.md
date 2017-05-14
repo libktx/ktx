@@ -17,61 +17,70 @@ its inline functions, allows to omit the reflection and annotations usage altoge
 DSL.
 
 Why not use an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting a single source file with about
-200 lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage at
+150 lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage at
 runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
 simplicity and nearly zero overhead at runtime.
 
 ### Guide
 
-`Context` stores providers of your classes. You can access a global `Context` instance thanks to
-`ContextContainer.defaultContext`, but if you do not want to rely on statics - you can work directly with a custom
-`Context` instance and its API.
-
-`inject<Type>()` is a function that will extract an instance of the selected type from the context. By default, it will
-use the static `Context` instance. 
-
-`provider<Type>()` is a function that provides lambdas which return instances of the selected type when invoked. By
-default, it will use the static `Context` instance. 
+`Context` stores components of your application and providers of classes that you need to create dynamically.
 
 With `register` function, you can customize your `Context` with a syntax similar to the usual type-safe Kotlin builders.
-`bind` and `bindSingleton` can be used to register new providers and singletons in the context.
+`bind` and `bindSingleton` can be used to register new providers and components in the context.
 
-**Note: static access to `Context` instance was deprecated in `1.9.6-b2` and will be removed in the next release.**
+`inject<Type>()` is a function that will extract an instance of the selected type from the context. It is typically used
+when you need only a single instance directly from the `Context` upon application initiation.
+
+`provider<Type>()` is a function that returns functional objects which provide instances of the selected type when
+invoked. It should be used for all non-singleton components of the `Context` that you need to obtain dynamically.
+Instead of passing `Context` around, inject appropriate providers to your components to avoid excessive dependency on
+`ktx-inject` in your project.
 
 ### Usage examples
+
+Creating a new `Context`:
+
+```Kotlin
+val context = Context()
+```
 
 Registering a provider:
 ```Kotlin
 import ktx.inject.*
+import java.util.Random
 
-register {
-  bind { Random() } // Registered provider that returns new Random instance on each call.
+context.register {
+  // A new Random instance will be injected on each request:
+  bind { Random() }
 }
 ```
 
 Registering a singleton:
 ```Kotlin
 import ktx.inject.*
+import java.util.Random
 
-register {
-  bindSingleton(Random()) // Registered provider that returns same Random instance on each call.
+context.register {
+  // The same Random instance will be injected on each request:
+  bindSingleton(Random())
 }
 ```
 
 Injecting an instance:
 ```Kotlin
-import ktx.inject.*
+import java.util.Random
 
-val random = inject<Random>() // Type of `random` variable is Random.
+val random: Random = context.inject()
 ```
 
 Injecting a provider:
 ```Kotlin
-import ktx.inject.*
+import java.util.Random
 
-val randomProvider = provider<Random>() // Type of `randomProvider` variable is () -> Random.
+val randomProvider = context.provider<Random>()
+// Type of `randomProvider` variable is () -> Random.
 
-// Getting an instance of Random using a provider:
+// Getting an instance of Random using the provider:
 val random = randomProvider()
 ```
 
@@ -79,17 +88,10 @@ Injection on demand (_lazy_ injection):
 ```Kotlin
 import ktx.inject.*
 
-class ClassWithLazyInjectedValue {
-  val lazyInjection by lazy { inject<Random>() }
+class ClassWithLazyInjectedValue(context: Context) {
+  val lazyInjection by lazy { context.inject<Random>() }
+  // Will provide Random instance on first lazyInjection call.
 }
-```
-
-Accessing static `Context` instance:
-```Kotlin
-import ktx.inject.*
-
-val context = ContextContainer.defaultContext
-context.clear()
 ```
 
 ### Implementation notes
@@ -99,8 +101,8 @@ context.clear()
 You can think of the `Context` as a simple, huge map with `Class<T>` instances as keys and `() -> T` (so-called providers)
 as values. When you call a method like `inject<YourClass>()`, it is inlined at compile-time - hence allowing the
 framework to extract the actual `Class` object from generic argument - and used to find a provider for `YourClass`.
-Singletons (and their friends) are implemented as providers that always return the same instance of the selected type.
-It _is_ dead simple and aims to introduce as little runtime overhead as possible.
+Singletons are implemented as providers that always return the same instance of the selected type on each call. It _is_
+dead simple and aims to introduce as little runtime overhead as possible.
 
 > No scopes? Huh?
 
@@ -129,21 +131,12 @@ at all. Honestly, it's hard to get it right - single-parameter factories might n
 type-safe multi-argument factories might look _really_ awkward_ in code thanks to a ton of generics. If you need
 specialized providers, just create a simple class with `invoke` operator.
 
-> What's with the statics?
-
-A dependency injection framework that does not solve the problem of passing the context (or its equivalent) around might
-seem pretty ironic. A reflection-based DI might rely on automatic component scan to do the job, but in case of a "pure
-Kotlin" solution, we don't really want to end up with every class having a `Context` instance in its constructor. While
-not the prettiest approach out there, `val myInstance = inject<MyClass>()` is as simple as it gets. If you don't want
-to rely on the statics at all, `Context` does have a pleasant API that you can work with directly. Create a new instance
-and you're good to go.
-
 > Is this framework for me?
 
 This dependency injection system is as trivial as it gets. It will help you with platform-specific classes and gluing
 your application together, but don't expect wonders. This library might be great if you're just starting with dependency
 injection - all you need to learn is using a few simple functions. It's also hard to imagine a more lightweight
-solution: getting a provider is a single call to a single call to a map.
+solution: getting a provider is a single call to a map.
 
 If you never end up needing more features, you might consider sticking with `ktx-inject` altogether, but just so you
 know - there _are_ other Kotlin dependency injection and they work _great_ with LibGDX. There was no point in creating
@@ -155,10 +148,8 @@ overhead - this pretty much sums up the strong sides of `ktx-inject`.
 - [Kodein](https://github.com/SalomonBrys/Kodein) is a powerful, yet simple dependency injection framework written in
 Kotlin. It also detects circular dependencies and is able to pretty-print pretty much anything. While it would require
 additional benchmarking, this library *might be* slightly less efficient due to how it stores its data - **KTX** should
-keep less meta-data at runtime and create less objects overall, limiting garbage collection. This library shares pretty
-similar syntax with **KTX**, although it lacks "static" access to the context - unless you add some utility methods
-manually, you have to pass around the `Kodein` instance. If you ever feel the need for a more complex DI system, this is
-the way to go.
+keep less meta-data at runtime and create less objects overall, limiting garbage collection. If you ever feel the need
+for a more complex DI system, this is probably the way to go.
 - [Injekt](https://github.com/kohesive/injekt) is another dependency injection library written in Kotlin. It seems that
 the developer moved on to the *Kodein* project, although if you prefer *Injekt* API, it still seems viable to use.
 - [Dagger](http://google.github.io/dagger/) is a Java dependency injection library based on annotations and compile-time
@@ -176,4 +167,3 @@ might be an overkill.
 injection library with automatic component scan for LibGDX written in Java. It works even on GWT (although Kotlin does
 not work well with GWT in the first place). Reflection overhead is generally small, but hacky Kotlin-based solutions are
 obviously expected to be more efficient.
-

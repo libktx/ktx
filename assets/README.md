@@ -15,7 +15,7 @@ for the existing API to make assets usage more natural in Kotlin applications.
 - `AssetManager.load` extension method can be used to schedule asynchronous loading of an asset. It returns an asset
 wrapper, which can be used as delegate property, as well as used directly to manage the asset. Usually the asset will
 not be available until `AssetManager.finishLoading` or looped `AssetManager.update` are called. You can use string file
-paths or `AssetDescriptor` instances to load the asset. Typical usage:
+paths or `AssetDescriptor` instances to load the asset. Usage example:
 ```Kotlin
 // Eagerly loading an asset:
 val wrapper = load<Texture>("test.png")
@@ -30,12 +30,16 @@ class Test(assetManager: AssetManager) {
 ```
 - `AssetManager.getAsset` utility extension method can be used to access an already loaded asset, without having to pass
 class to the manager to specify asset type. This is the preferred way of accessing assets from the `AssetManager`,
-provided that they were already scheduled for asynchronous loading and fully loaded. Typical usage:
-`val texture: Texture = assetManager.getAsset("test.png")`. Note that this method will fail if asset is not loaded yet.
+provided that they were already scheduled for asynchronous loading and fully loaded. Note that this method will fail if
+asset is not loaded yet. Usage example:
+```Kotlin
+val texture: Texture = assetManager.getAsset("test.png")
+```
+
 - `AssetManager.loadOnDemand` is similar to the `load` utility method, but it provides an asset wrapper that loads the
 asset eagerly on first get call. It will not schedule the asset for asynchronous loading - instead, it will block current
 thread until the asset is loaded on the first access. Use for lightweight assets that should be (rarely) loaded only when
-requested. Typical usage:
+requested. Usage example:
 ```Kotlin
 // Eagerly loading an asset:
 val texture = by assetManager.loadOnDemand<Texture>("test.png")
@@ -43,8 +47,8 @@ val texture = by assetManager.loadOnDemand<Texture>("test.png")
 
 // Delegate field:
 class Test(assetManager: AssetManager) {
-  val texture by assetManager.loadOnDemand<Texture>("test.png")
-  // Type of texture property is Texture. It will be loaded on first `texture` access.
+  val texture: Texture by assetManager.loadOnDemand("test.png")
+  // Asset will be loaded on first `texture` access.
 }
 ```
 - `AssetManager.unloadSafely` is a utility method that attempts to unload an asset from the `AssetManager`. Contrary to
@@ -54,13 +58,9 @@ loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")
 exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
-- Global `AssetManager` instance is accessible (and modifiable) through `Assets.manager` utility field. Since it is
-advised to share and reuse a single `AssetManager` instance in the application and LibGDX already goes crazy with the
-statics thanks to `Gdx.files` and whatnot, this `AssetManager` instance was added to reduce asset-related boilerplate.
-If a utility asset loading (or accessing) method accepts an `AssetManager` instance, this global manager will be used by
-default to save you the trouble of getting your `AssetManager` manually. Its usage is completely optional and
-you can omit it entirely, while still benefiting from asset loading utility methods. **Note: global `AssetManager`
-instance has been deprecated in `1.9.6-b2` and will be removed after the next release.**
+
+Note: if you can use coroutines in your project, [`ktx-async`](../async) module provides a lightweight coroutines-based
+alternative to `AssetManager` that can greatly simplify your asset loading code.
 
 ##### Implementation tip: type-safe assets
 
@@ -131,6 +131,17 @@ method with a pleasant Kotlin syntax.
 - `file` utility function allows to quickly obtain a `FileHandle` instance. It features an optional `type` parameter
 which allows to choose the `FileType`, while defaulting to the most common `Internal`.
 
+#### `FileHandleResolver`
+
+- `FileType.getResolver` extension method was added to quickly construct `FileHandleResolver` instances for the chosen
+file types.
+- `FileHandleResolver.withPrefix` extension method was added to ease decoration of `FileHandleResolver` instances with
+`PrefixFileHandleResolver`.
+- `FileHandleResolver.forResolutions` extension method was added to ease decoration of `FileHandleResolver` instances
+with `ResolutionFileResolver`.
+- `resolution` factory function was added to construct `ResolutionFileResolver.Resolution` instances with idiomatic
+Kotlin syntax.
+
 ### Usage examples
 
 Obtaining `FileHandle` instances:
@@ -187,7 +198,7 @@ import ktx.assets.*
 import com.badlogic.gdx.assets.AssetManager
 
 class MyClass(assetManager: AssetManager) {
-  val image by load<Texture>("image.png")
+  val image by assetManager.load<Texture>("image.png")
   // image is Texture == true
 }
 ```
@@ -236,6 +247,35 @@ assetManager.setLoader(myCustomLoader) // No need to pass class.
 val loader = assetManager.getLoader<MyAsset>()
 ```
 
+Creating an `InternalFileHandleResolver`:
+
+```Kotlin
+import ktx.assets.getResolver
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver()
+```
+
+Decorating `FileHandleResolver` with `PrefixFileHandleResolver`:
+
+```Kotlin
+import ktx.assets.*
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver().withPrefix("folder/")
+
+```
+
+Decorating `FileHandleResolver` with `ResolutionFileResolver`:
+```Kotlin
+import ktx.assets.*
+import com.badlogic.gdx.Files.FileType
+
+val resolver = FileType.Internal.getResolver().forResolutions(
+    resolution(width = 800, height = 600),
+    resolution(width = 1024, height = 768)
+)
+```
 
 ### Alternatives
 
@@ -247,6 +287,8 @@ injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
 Java applications though - **KTX** syntax should feel more natural when using Kotlin.
+- [`ktx-async`](../async) module provides `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
+It was extracted to `ktx-async` module due to the coroutines usage.
 
 #### Additional documentation
 

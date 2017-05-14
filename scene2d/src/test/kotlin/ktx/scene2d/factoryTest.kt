@@ -12,15 +12,19 @@ import org.junit.Test
 
 /**
  * Tests factory methods without init blocks.
- * @author MJ
  */
 class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<*>.() -> T?) {
+    // Creating builder context that allows to use actors factory methods:
     val parent = table {}
+
+    // Invoking widget-specific factory method:
     val child = parent.widget()
+
+    // Ensuring the child is not null and owned by the parent:
     assertNotNull(child)
     assertTrue(child in parent.children)
-    validate(child!!)
+    validate(child!!) // Additional validation specific to widget.
   }
 
   @Test
@@ -180,13 +184,18 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   }
 
   private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<Cell<*>>.() -> T?) {
+    // Creating builder context that allows to use actors factory methods:
     val parent = table {}
+
+    // Invoking widget-specific factory method:
     val child = parent.widget()
+
+    // Ensuring the child is not null and owned by the parent:
     assertNotNull(child)
     assertTrue(child in parent.children)
     assertEquals("For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
         Color.BLUE, child!!.color)
-    validate(child)
+    validate(child) // Performing widget-specific validation.
   }
 
   @Test

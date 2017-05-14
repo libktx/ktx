@@ -5,15 +5,15 @@ package ktx.inject
  *
  * Note that [Context] instances are not considered fully thread-safe - while it is _usually_ safe to access a fully
  * built context from within multiple threads, you should override [createProvidersMap] method and return a thread-safe
- * [MutableMap] implementation to completely avoid concurrency bugs.
- *
- * @author MJ
+ * [MutableMap] implementation to avoid concurrency bugs.
  */
 open class Context {
+  @Suppress("LeakingThis")
   private val providers = createProvidersMap()
 
   init {
     // Context should be injectable:
+    @Suppress("LeakingThis")
     bindSingleton(this)
   }
 
@@ -86,6 +86,18 @@ open class Context {
   inline fun <reified Type : Any> contains(): Boolean = Type::class.java in this
 
   /**
+   * Allows to register new components in the context with builder-like DSL
+   * @param init will be invoked on this context.
+   * @return this context.
+   * @see bind
+   * @see bindSingleton
+   */
+  inline fun register(init: Context.() -> Unit): Context {
+    this.init()
+    return this
+  }
+
+  /**
    * @param provider will be bind with the selected type. If no type argument is passed, it will be bind to the same
    *    exact class as the object it provides.
    * @throws InjectionException if provider for the selected type is already defined.
@@ -116,7 +128,8 @@ open class Context {
   fun <Type : Any> bindSingleton(singleton: Type, vararg to: Class<out Type>) = bind(*to) { singleton }
 
   /**
-   * Removes all providers from the context.
+   * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and
+   * injectable with [provider] and [inject].
    */
   fun clear() {
     providers.clear()
@@ -125,54 +138,6 @@ open class Context {
 }
 
 /**
- * Thrown in case of any problems with the dependency injection mechanism
- * @author MJ
+ * Thrown in case of any problems with the dependency injection mechanism.
  */
 class InjectionException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
-
-/**
- * Contains the default [Context] instance, which is used as the default value by the global injection functions.
- * @author MJ
- * @see inject
- * @see provider
- * @see register
- */
-@Deprecated("Static access to Context will be removed after the next release.")
-object ContextContainer {
-  /**
-   * Application's default [Context] instance.
-   */
-  @JvmStatic var defaultContext = Context()
-}
-
-/**
- * Finds an object provider in the context and invokes it to get an instance of the selected type.
- * @param context must have a provider of the selected type registered. Defaults to [ContextContainer.defaultContext].
- * @param Type must match the exact type used to bind the provider or singleton.
- * @return an instance of the selected type.
- */
-@Deprecated("Static access to Context will be removed after the next release.",
-    replaceWith = ReplaceWith("Context.inject", imports = "ktx.inject.Context"))
-inline fun <reified Type : Any> inject(context: Context = ContextContainer.defaultContext): Type = context.inject()
-
-/**
- * Finds a provider of the selected type in the context.
- * @param context must have a provider of the selected type registered. Defaults to [ContextContainer.defaultContext].
- * @param Type must match the exact type used to bind the provider or singleton.
- * @return an instance of the provider which spawns instances of the selected type.
- */
-@Deprecated("Static access to Context will be removed after the next release.",
-    replaceWith = ReplaceWith("Context.provider", imports = "ktx.inject.Context"))
-inline fun <reified Type : Any> provider(context: Context = ContextContainer.defaultContext): () -> Type =
-    context.provider()
-
-/**
- * A utility function that allows to bind providers in the selected context using Kotlin type-safe builders syntax.
- * @param context the passed lambda will be applied to this object. Defaults to  [ContextContainer.defaultContext].
- * @see Context.bind
- * @see Context.bindSingleton
- */
-@Deprecated("Static access to Context will be removed after the next release.",
-    replaceWith = ReplaceWith("Context.apply", imports = "ktx.inject.Context"))
-inline fun register(context: Context = ContextContainer.defaultContext, registration: Context.() -> Unit) =
-    context.registration()

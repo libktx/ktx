@@ -17,7 +17,7 @@ import org.junit.Test
 /**
  * Tests events and listeners utilities.
  */
-@Suppress("UNUSED_PARAMETER") // Unused lambda parameters showcase the listeners API.
+@Suppress("UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER") // Unused lambda parameters showcase the listeners API.
 class EventsTest {
   @Test
   fun `should attach ChangeListener`() {

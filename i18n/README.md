@@ -10,69 +10,43 @@ and in the end i18n reloading might be so complex to implement, that it requires
 
 ### Guide
 
-#### Setting the default bundle
+#### `BundleLine`
 
-To start using `ktx-i18n`, you have to load `I18NBundle` instance and set it as default one in `I18n` singleton container
-class. While a semi-global `I18NBundle` field might seem ugly (and it kind of *is*), it allows to access localized texts
-throughout the application without the usual boilerplate thanks to utility functions and the fact that you no longer have
-to worry how to pass `I18NBundle` into *X*. Setting the default bundle comes down to `I18n.defaultBundle = yourBundle`,
-although you can also let the `I18n` handle loading for you and use `I18n.load("path/to/bundle", Locale.ENGLISH)`.
-
-**Note: static `I18NBundle` instance was deprecated in `1.9.6-b2` and will be removed in the next release.**
-
-#### Basic usage
-
-There are two basic functions in the `ktx-i18n` module that you are likely to use throughout the application: `nls` with
-formatting args and one without. Once the default bundle is set, getting a localized text is as easy as `nls("line")`
-call. If you want to pass additional args, a similar syntax is used: `nls("line", someArgument, 1, "arg")`. Note that
-both methods consume a `I18NBundle` instance that defaults to `I18n.defaultBundle`. While you can use these methods like
-this: `nls("line", myBundle)`, this might obviously turn out to be more verbose than using your bundle directly.
-
-#### Code completion
-
-As you probably noticed, there is no code completion and compile-time validation of the bundle line IDs. Sadly, using
-simple string IDs might turn out to be not much better than using plain strings altogether. That is why `BundleLine`
-utility interface was created: it provides some default methods that allow you to *invoke* instances of the implementing
-class as you would invoke any method. `BundleLine` assumes that `toString()` implementation returns a valid bundle line
-ID and default bundle is set (although you *can* override it to use any `I18NBundle` instance if you really don't like
-global variables).
+Direct `I18NBundle` usage with strings as line IDs suffers from no code completion and compile-time validation. Sadly,
+using simple string IDs as bundle lines might turn out to be not much better than using plain strings altogether. This
+is why `BundleLine` interface was created: it allows you to turn enums into `I18NBundle` representations with minimal
+effort.
 
 For example, given this `nls.properties` file:
 
-```
+```properties
 key1=Value.
 key2=Value with {0} argument.
 ```
 
-...you would usually load it as the default bundle and create an enum similar to this:
+...you can create an enum similar to this:
 
 ```Kotlin
 package ktx.i18n.example
+
 import ktx.i18n.BundleLine
+
 enum class Nls : BundleLine {
   key1,
   key2
 }
 ```
 
-Listing all expected bundle lines (without making typos) is basically all you have to do to get an even less verbose
-syntax with code completion and compile-time validation. To use this bundle, now you just have to call `Nls.key1()` or
-`Nls.key2(someArgument, "text", 3)` if it has any args. You can use an import like `import your.package.Nls.*` to
-make it possible to omit the `Nls.` part completely and use this absurdly simple syntax: `key1()`, `key2(argument)`.
-IntelliJ allows to mark packages for automatic wildcard import at `Settings > Editor > Code Style > Kotlin > Imports`.
+Listing - or generating - all expected bundle lines (is basically all you have to do to enjoy less verbose and safer
+syntax with code completion and compile-time validation. See usage examples below to explore `BundleLine` API.
 
-#### Bundle reloading
-
-Usually if you decide to use the i18n module in the first place, you plan on supporting multiple languages in your
-application. You can attach a listener to the `I18n.defaultBundle` field - each time it is reassigned, all attached
-listeners are invoked with the new `I18NBundle` instance. Attaching a listener that reloads the GUI widgets (for example)
-is a good idea. The syntax is pretty simple: `I18n.addListener { myView.reload() }`. You can also remove any listener
-with `removeListener` or `clearListeners` methods.
+Note that `BundleLine` assumes that `toString()` implementation returns a valid bundle line ID. If you want to change
+the way `BundleLine` implementations extract lines from `I18NBundle`, override `toString()` method.
 
 #### Automatic `BundleLine` enum generation
 
-You can use the following Gradle script to generate a Kotlin enum implementing `BundleLine` according to an existing
-`.properties` bundle:
+You can use the following Gradle Groovy script to generate a Kotlin enum implementing `BundleLine` according to an
+existing `.properties` bundle:
 
 ```Groovy
 task nls << {
@@ -99,6 +73,7 @@ enum class ${name} : BundleLine {
       builder.append('    ').append(id).append(',').append(newLine)
     }
   }
+  // If you want a custom enum body, replace the following append:
   builder.append('    ;').append(newLine).append('}').append(newLine)
 
   source = source.replace('/', File.separator)
@@ -116,97 +91,88 @@ enum class ${name} : BundleLine {
 ```
 
 The first few lines contain task configuration, so make sure to pass the correct paths and names before running the task
-with `gradle nls` or `./gradlew nls`. Be careful: current task implementation **replaces** the enum class at the selected
-path. If you want to modify enum source, you should edit the task itself.
+with `gradle nls` or `./gradlew nls`. Feel free to modify generated enum source to your needs. Be careful: current task
+implementation **replaces** the enum class at the selected path.
 
-#### Standard `I18NBundle` usage utilities
+#### Direct `I18NBundle` usage utilities
 
-You can access any bundle line with `bundle["key"]` or `bundle["key", arguments]` syntax. These methods also accept
-`BundleLine` enum instances, so if you would prefer not to use static `I18NBundle` instance, you can still benefit from
-type-safe i18n with a pleasant syntax: `bundle[key]`.
+You can access any bundle line with `bundle["key"]` an `bundle["key", arguments]` syntax. These methods also accept
+`BundleLine` instances, so if you would prefer not to assign static `I18NBundle` instance in an enum, you can still
+benefit from type-safe i18n with a pleasant syntax: `bundle[key]`.
 
 It is recommended to use `import ktx.i18n.*` import when working directly with `I18NBundle` instances.
 
 ### Usage examples
 
-Setting global `I18NBundle` instance:
-```Kotlin
-import ktx.i18n.*
-
-I18n.defaultBundle = myBundle
-```
-
-Loading global `I18NBundle` instance (located at `assets/i18n/nls_en.properties`):
-```Kotlin
-import ktx.i18n.*
-
-I18n.load("i18n/nls", Locale.ENGLISH)
-```
-
 Examples below assume the following bundle `.properties` file content:
-```
+
+```properties
 key=Value.
-example=Accepts {0} arguments. {1}!
+keyWithArguments=Accepts {0} arguments. {1}!
 ```
 
-Extracting lines from the global `I18NBundle` instance:
+Using `I18NBundle` with strings as IDs:
+
 ```Kotlin
 import ktx.i18n.*
-
-val noArgLine = nls("key") // "Value."
-val lineWithArgs = nls("example", "any", 10) // "Accepts any arguments. 10!"
-```
-
-Extracting lines from a local `I18NBundle` instance:
-```Kotlin
 import com.badlogic.gdx.utils.I18NBundle
-import ktx.i18n.*
 
-val bundle: I18NBundle = getMyBundle()
-bundle["key"] // "Value."
-bundle["example", "any", 10] // "Accepts any arguments. 10!"
+val bundle = I18NBundle.createBundle(file)
+bundle["key"] // Value.
+bundle["keyWithArguments", 2, "Hello"] // Accepts 2 arguments. Hello!
 ```
 
-Implementing a `BundleLine` enum:
+Using `I18NBundle` with `BundleLine` enum instances as IDs:
+
 ```Kotlin
-package ktx.i18n.example
-import ktx.i18n.BundleLine
+package example
+
+import example.Nls.*
+import ktx.i18n.*
+import com.badlogic.gdx.utils.I18NBundle
+
 enum class Nls : BundleLine {
   key,
-  example
+  keyWithArguments
 }
+
+// Usage:
+val bundle = I18NBundle.createBundle(file)
+bundle[key] // Value.
+bundle[keyWithArguments, 2, "Hello"] // Accepts 2 arguments. Hello!
 ```
 
-Extracting lines from the global `I18NBundle` instance with a `BundleLine` enum:
-```Kotlin
-import ktx.i18n.example.Nls.* // Your custom enum.
-import ktx.i18n.* // Optional if not using "nls" method.
+Using `BundleLine` enum with assigned `I18NBundle` instance:
 
-key() // "Value."
-nls(key) // "Value."
-example("any", 10) // "Accepts any arguments. 10!"
-nls(example, "any", 10) // "Accepts any arguments. 10!"
-```
-
-Extracting lines from a local `I18NBundle` instance with a `BundleLine` enum:
 ```Kotlin
+package example
+
+import example.Nls.*
+import ktx.i18n.*
 import com.badlogic.gdx.utils.I18NBundle
-import ktx.i18n.example.Nls.* // Your custom enum.
-import ktx.i18n.*
 
-val bundle: I18NBundle = getMyBundle()
-bundle[key] // "Value."
-bundle[example, "any", 10] // "Accepts any arguments. 10!"
-```
+enum class Nls : BundleLine {
+  key,
+  keyWithArguments;
 
-Adding a global `I18NBundle` reloading listener, triggered each time the `I18n.defaultBundle` is changed:
-```Kotlin
-import ktx.i18n.*
+  override val bundle: I18NBundle
+    get() = i18nBundle
 
-I18n.addListener { bundle ->
-  println("Current bundle is ${bundle}.")
-  reloadGui()
+  companion object {
+    lateinit var i18nBundle: I18NBundle
+  }
 }
+
+// Assigning I18NBundle instance:
+Nls.i18nBundle = I18NBundle.createBundle(FileHandle(File("i18n/gradle")))
+
+// Reading lines from the bundle:
+key.nls // Value.
+keyWithArguments.nls(2, "Hello") // Accepts 2 arguments. Hello!
+
+// More concise, but somewhat less obvious syntax:
+key() // Value.
+keyWithArguments(2, "Hello") // Accepts 2 arguments. Hello!
 ```
 
 ### Alternatives
@@ -218,4 +184,3 @@ views with HTML-like syntax rather than with Java (or Kotlin) code.
 #### Additional documentation
 
 - [`I18NBundle` article.](https://github.com/libgdx/libgdx/wiki/Internationalization-and-Localization)
-
