@@ -21,6 +21,10 @@ time step duration and max time step with its constructor parameters. This is a 
 implementation if you like working from scratch.
 - `KtxApplicationAdapter` is an `ApplicationListener` extension. Provides no-op implementations of all methods, without
 being an abstract class like `com.badlogic.gdx.ApplicationAdapter`.
+- `KtxGame` is a bit more opinionated `Game` equivalent that not only delegates all game events to the current `Screen`
+instance, but also ensures non-nullability of screens, manages screen clearing and fixed rendering step, and maintains
+screens collection, which allows to switch screens knowing only their concrete class. `KtxScreen` is an interface
+extending `Screen` that provides no-op method implementations, making all methods optional to override.
 
 #### `InputProcessor` implementations
 
@@ -40,6 +44,7 @@ different screen sizes.
 overriding with optional, named parameters.
 - `use` inlined extension methods added to `Batch` and `ShaderProgram`. They allow to omit the `begin()` and `end()`
 calls before using batches and shader programs.
+- `emptyScreen` provides no-op implementations of `Screen`.
 
 ### Usage examples
 
@@ -91,6 +96,52 @@ class MyApplicationListener : KtxApplicationAdapter {
   }
   override fun render() {
     // ...and render your game.
+  }
+}
+```
+
+Implementing `KtxGame` with one screen that displays text:
+
+```Kotlin
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import ktx.app.KtxGame
+import ktx.app.KtxScreen
+import ktx.app.use
+
+class ExampleScreen : KtxScreen {
+  // Notice no `lateinit var` - ExampleScreen has no create()
+  // method and is constructed after LibGDX is fully initiated
+  // in ExampleGame.create method.
+  val font = BitmapFont()
+  val batch = SpriteBatch().apply {
+    color = Color.WHITE
+  }
+
+  override fun render(delta: Float) {
+    batch.use {
+      font.draw(it, "Hello Kotlin!", 100f, 100f)
+    }
+  }
+
+  override fun dispose() {
+    // Will be automatically disposed of by the game instance.
+    font.dispose()
+    batch.dispose()
+  }
+}
+
+/** ApplicationListener implementation. */
+class ExampleGame : KtxGame<Screen>() {
+  override fun create() {
+    // Registering ExampleScreen in the game object: it will be
+    // accessible through ExampleScreen class:
+    addScreen(ExampleScreen())
+    // Changing current screen to the registered instance of the
+    // ExampleScreen class:
+    setScreen<ExampleScreen>()
   }
 }
 ```

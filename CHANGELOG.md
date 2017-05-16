@@ -1,5 +1,8 @@
 #### 1.9.6-SNAPSHOT
 
+- **[FEATURE]** (`ktx-app`) Added `KtxGame`: **KTX** equivalent of LibGDX `Game`.
+- **[FEATURE]** (`ktx-app`) Added `KtxScreen`: adapter of the LibGDX `Screen` interface making all methods optional to implement.
+- **[FEATURE]** (`ktx-app`) Added `emptyScreen` utility method returning a no-op implementation of `Screen`.
 - **[FEATURE]** (`ktx-inject`) `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
 - **[FEATURE]** (`ktx-inject`) Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
 - **[FEATURE]** (`ktx-inject`) `getProvider`, `setProvider` and `clear` methods of `Context` are now open and can be overridden.

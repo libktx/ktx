@@ -1,9 +1,7 @@
 package ktx.app
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.graphics.GL20
-import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.After
@@ -24,56 +22,59 @@ class KotlinApplicationTest {
   @Test
   fun `should not render if delta time is lower than fixed time step`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1 / 120f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 30f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 30f)
 
-    assertFalse(app.rendered)
-    app.render()
-    assertFalse(app.rendered)
+    application.render()
+
+    assertFalse(application.rendered)
   }
 
   @Test
   fun `should render if delta time is equal to fixed time step`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1 / 30f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 30f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 30f)
 
-    app.render()
+    application.render()
 
-    assertTrue(app.rendered)
-    assertEquals(1, app.renderedTimes)
+    assertTrue(application.rendered)
+    assertEquals(1, application.renderedTimes)
   }
 
   @Test
   fun `should render if delta time is higher than fixed time step`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1 / 30f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 60f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 60f)
 
-    app.render()
+    application.render()
 
-    assertTrue(app.rendered)
-    assertEquals(2, app.renderedTimes)
+    assertTrue(application.rendered)
+    assertEquals(2, application.renderedTimes)
   }
 
   @Test
   fun `should render if delta times are collectively equal to or higher than fixed time step`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1 / 50f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 30f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 30f)
 
-    app.render() // 0.02 - 0.0
-    assertEquals(0, app.renderedTimes)
-    app.render() // 0.04 - 0.0(3)
-    assertEquals(1, app.renderedTimes)
-    app.render() // 0.06 - 0.0(3)
-    assertEquals(1, app.renderedTimes)
-    app.render() // 0.08 - 0.0(6)
-    assertEquals(2, app.renderedTimes)
+    application.render() // 0.02 - 0.0
+    assertEquals(0, application.renderedTimes)
+
+    application.render() // 0.04 - 0.0(3)
+    assertEquals(1, application.renderedTimes)
+
+    application.render() // 0.06 - 0.0(3)
+    assertEquals(1, application.renderedTimes)
+
+    application.render() // 0.08 - 0.0(6)
+    assertEquals(2, application.renderedTimes)
   }
 
   @Test
   fun `should clear screen on render`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1 / 30f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 30f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 30f)
 
-    app.render()
+    application.render()
 
     verify(Gdx.gl).glClearColor(0f, 0f, 0f, 1f)
     verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -82,21 +83,11 @@ class KotlinApplicationTest {
   @Test
   fun `should not render more times than max delta time limit allows`() {
     Gdx.graphics = mockGraphicsWithDeltaTime(1f)
-    val app = MockKotlinApplication(fixedTimeStep = 1 / 60f, maxDeltaTime = 5f / 60f)
+    val application = MockKotlinApplication(fixedTimeStep = 1 / 60f, maxDeltaTime = 5f / 60f)
 
-    app.render()
+    application.render()
 
-    assertEquals(5, app.renderedTimes)
-  }
-
-  @Suppress("unused")
-  class `should implement KtxApplicationAdapter with no methods overridden` : KtxApplicationAdapter {
-    // Guarantees all KtxApplicationAdapter methods are optional to implement.
-  }
-
-  @Suppress("unused")
-  class `should implement KtxInputAdapter with no methods overridden` : KtxInputAdapter {
-    // Guarantees all KtxInputAdapter methods are optional to implement.
+    assertEquals(5, application.renderedTimes)
   }
 
   @After
@@ -106,15 +97,8 @@ class KotlinApplicationTest {
     Gdx.gl20 = null
   }
 
-  private fun mockGraphicsWithDeltaTime(delta: Float) =
-      mock<Graphics> {
-        on(it.deltaTime) doReturn delta
-        on(it.rawDeltaTime) doReturn delta
-      }
-
   /**
-   * Example implementation of [KotlinApplication]. Reports rendering data for tests.
-   * @author MJ
+   * Test implementation of [KotlinApplication]. Reports rendering data for tests.
    */
   class MockKotlinApplication(fixedTimeStep: Float = 1f / 60f, maxDeltaTime: Float = 1f) :
       KotlinApplication(fixedTimeStep, maxDeltaTime) {
@@ -131,4 +115,14 @@ class KotlinApplicationTest {
       renderedTimes++
     }
   }
+}
+
+@Suppress("unused")
+class `should implement KtxApplicationAdapter with no methods overridden` : KtxApplicationAdapter {
+  // Guarantees all KtxApplicationAdapter methods are optional to implement.
+}
+
+@Suppress("unused")
+class `should implement KtxInputAdapter with no methods overridden` : KtxInputAdapter {
+  // Guarantees all KtxInputAdapter methods are optional to implement.
 }
