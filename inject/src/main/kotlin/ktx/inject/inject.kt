@@ -134,11 +134,11 @@ open class Context : Disposable {
 
   /**
    * Allows to bind a singleton to the chosen class.
-   * @param singleton will be converted to a provider that always returns the same instance. If no type argument is passed,
-   *    it will be bind to its own class.
+   * @param singleton will be converted to a provider that always returns the same instance. If no type argument is
+   *    passed, it will be bind to its own class.
    * @throws InjectionException if provider for the selected type is already defined.
    */
-  inline fun <reified Type : Any> bindSingleton(singleton: Type) = bind<Type>(SingletonProvider(singleton))
+  inline fun <reified Type : Any> bindSingleton(singleton: Type) = bind(SingletonProvider(singleton))
 
   /**
    * Allows to bind a provider to multiple classes in hierarchy of the provided instances class.

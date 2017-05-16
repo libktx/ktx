@@ -1,8 +1,8 @@
 #### 1.9.6-SNAPSHOT
 
-- **[FEATURE]** `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
-- **[FEATURE]** Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
-- **[FEATURE]** `getProvider`, `setProvider` and `clear` methods of `Context` are now open and can be overridden.
+- **[FEATURE]** (`ktx-inject`) `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
+- **[FEATURE]** (`ktx-inject`) Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
+- **[FEATURE]** (`ktx-inject`) `getProvider`, `setProvider` and `clear` methods of `Context` are now open and can be overridden.
 
 #### 1.9.6-b3
 

@@ -231,7 +231,8 @@ class DependencyInjectionTest {
     context.clear()
   }
 
-  interface DisposableProvider<Type> : Disposable, () -> Type
+  /** Implements both [Disposable] and provider interfaces. */
+  interface DisposableProvider<out Type> : Disposable, () -> Type
 }
 
 /**
