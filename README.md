@@ -57,7 +57,7 @@ compile "io.github.libktx:ktx-$module:$ktxVersion"
 
 Replace `$module` with the name of required **KTX** library. `$ktxVersion` usually matches LibGDX version it was
 compiled against - although it might end with `-b1` (if it is a beta release) or `-SNAPSHOT` (if you are using
-the snapshots). For example, the first official beta release with the recent group ID was compiled against LibGDX
+the snapshots). For example, the first official beta release with the current group ID was compiled against LibGDX
 `1.9.6` and its version was `1.9.6-b2`. You can browse through our releases
 [here](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22).
 

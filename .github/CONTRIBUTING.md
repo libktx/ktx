@@ -34,17 +34,17 @@ git checkout develop
 
 ### Build tool
 
-The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is not included, so you might want to
-install it locally. Scripts should be compatible with Gradle `3.+`. If you consider working from sources, these are
+The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
+Gradle installation - scripts should be compatible with Gradle `3.+`. If you consider working from sources, these are
 some useful Gradle tasks that you can look into:
 
-- `gradle build install` - builds the libraries archives and pushes them to Maven Local.
-- `gradle check` - runs all tests in all projects.
-- `gradle clean` - removes `build` directories.
-- `gradle distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
-- `gradle uploadArchives` - pushes the archives to Maven Central. Requires proper `gradle.properties` with signing and
-logging data.
-- `gradle closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
+- `build install` - builds the libraries archives and pushes them to Maven Local.
+- `check` - runs all tests in all projects.
+- `clean` - removes `build` directories.
+- `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
+- `uploadArchives` - pushes the archives to Maven Central. Requires proper `gradle.properties` with archive signing and
+Sonatype logging data.
+- `closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
 case of a non-snapshot upload to Maven Central.
 
 ### Versioning and uploading
