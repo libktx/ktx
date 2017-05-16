@@ -1,10 +1,10 @@
 package ktx.inject
 
+import com.badlogic.gdx.Application
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockito_kotlin.doThrow
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Test
@@ -222,6 +222,25 @@ class DependencyInjectionTest {
     assertFalse(context.contains<Any>())
     assertFalse(context.contains<Disposable>())
     verify(singleton).dispose()
+    assertFalse(context.contains<Random>())
+    verify(provider).dispose()
+  }
+
+  @Test
+  fun `should dispose of Disposable components with error handling`() {
+    Gdx.app = mock<Application>()
+    val singleton = mock<Disposable> {
+      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+    }
+    context.bindSingleton(singleton)
+    val provider = mock<DisposableProvider<Random>>()
+    context.bind(provider)
+
+    context.dispose()
+
+    assertFalse(context.contains<Disposable>())
+    verify(singleton).dispose()
+    verify(Gdx.app).error(eq("KTX"), any(), argThat { this is GdxRuntimeException }) // Ensures exception was logged.
     assertFalse(context.contains<Random>())
     verify(provider).dispose()
   }
