@@ -1,6 +1,12 @@
 #### 1.9.6-SNAPSHOT
 
-- **[UPDATE]** Updated to Kotlin 1.1.2.
+- **[FEATURE]** `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
+- **[FEATURE]** Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
+- **[FEATURE]** `getProvider`, `setProvider` and `clear` methods of `Context` are now open and can be overridden.
+
+#### 1.9.6-b3
+
+- **[UPDATE]** Updated to Kotlin 1.1.2-3.
 - **[UPDATE]** Updated to Kotlin Coroutines to 0.15.
 - **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
 depending on the global `AssetManager` were removed.

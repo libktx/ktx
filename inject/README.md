@@ -36,6 +36,13 @@ invoked. It should be used for all non-singleton components of the `Context` tha
 Instead of passing `Context` around, inject appropriate providers to your components to avoid excessive dependency on
 `ktx-inject` in your project.
 
+`remove<Type>()` allows you to remove components from the `Context` that are no longer needed.
+
+`clear()` and `dispose()` methods can be used after you no longer need the `Context`. `clear()` removes references to
+all registered singletons and providers. `dispose()`, additionally to clearing the context, attempts to dispose all
+singletons and providers that implement the `Disposable` interface and logs all errors on the LibGDX error logging
+level. Use `clear()` instead of `dispose()` if you want to fully control assets lifecycle.
+
 ### Usage examples
 
 Creating a new `Context`:
@@ -92,6 +99,22 @@ class ClassWithLazyInjectedValue(context: Context) {
   val lazyInjection by lazy { context.inject<Random>() }
   // Will provide Random instance on first lazyInjection call.
 }
+```
+
+Removing a registered provider:
+```Kotlin
+context.remove<Random>()
+// Note that this method work for both singletons and providers.
+```
+
+Removing all components from the `Context`:
+```Kotlin
+context.clear()
+```
+
+Removing all components from the `Context` and disposing of all `Disposable` singletons and providers:
+```Kotlin
+context.dispose()
 ```
 
 ### Implementation notes
