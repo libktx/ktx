@@ -356,7 +356,6 @@ inline operator fun <Value> ObjectIntMap.Entry<Value>.component1() = key!!
  */
 inline operator fun <Value> ObjectIntMap.Entry<Value>.component2() = value
 
-
 /**
  * Returns a [GdxMap] containing the results of applying the given [transform] function
  * to each entry in the original [GdxMap].
@@ -368,7 +367,6 @@ inline fun <Key, Value, R> GdxMap<Key, Value>.map(transform: (Entry<Key, Value>)
   }
   return destination
 }
-
 
 /**
  * Returns a [GdxMap] containing only entries matching the given [predicate].
@@ -383,7 +381,6 @@ inline fun <Key, Value> GdxMap<Key, Value>.filter(predicate: (Entry<Key, Value>)
   return destination
 }
 
-
 /**
  * Returns a single [GdxArray] of all elements from all collections in the given [GdxMap].
  */
@@ -394,7 +391,6 @@ inline fun <Key, Type, Value: Iterable<Type>> GdxMap<Key, out Value>.flatten(): 
   }
   return destination
 }
-
 
 /**
  * Returns a single [GdxArray] of all elements yielded from results of transform function being invoked
