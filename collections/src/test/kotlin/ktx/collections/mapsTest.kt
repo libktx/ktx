@@ -410,15 +410,15 @@ class MapsTest {
 
     assertTrue(result is GdxArray)
     assertEquals(3, result.size)
-    assertTrue(result.contains(1))
-    assertTrue(result.contains(2))
-    assertTrue(result.contains(3))
+    assertTrue(1 in result)
+    assertTrue(2 in result)
+    assertTrue(3 in result)
   }
 
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
-    val result = map.flatMap { MutableList(it.value) { "" }  }
+    val result = map.flatMap { List(it.value) { "" }  }
 
     assertTrue(result is GdxArray)
     assertEquals(6, result.size)

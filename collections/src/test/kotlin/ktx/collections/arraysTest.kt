@@ -391,7 +391,7 @@ class ArraysTest {
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val array = GdxArray.with(1, 2, 3)
-    val result = array.flatMap { MutableList(it) { "" }  }
+    val result = array.flatMap { List(it) { "" }  }
 
     assertTrue(result is GdxArray)
     assertEquals(6, result.size)
