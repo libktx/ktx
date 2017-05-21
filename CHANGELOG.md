@@ -1,5 +1,6 @@
 #### 1.9.6-SNAPSHOT
 
+- **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` that return LibGDX collections.
 - **[FEATURE]** (`ktx-app`) Added `KtxGame`: **KTX** equivalent of LibGDX `Game`.
 - **[FEATURE]** (`ktx-app`) Added `KtxScreen`: adapter of the LibGDX `Screen` interface making all methods optional to implement.
 - **[FEATURE]** (`ktx-app`) Added `emptyScreen` utility method returning a no-op implementation of `Screen`.
