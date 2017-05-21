@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "LoopToCallChain")
 
 package ktx.collections
 
@@ -226,6 +226,55 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortBy(crossinline selec
 inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossinline selector: (Type) -> R?): Unit {
   if (size > 1) this.sort(compareByDescending(selector))
 }
+
+
+/**
+ * Returns a [GdxArray] containing the results of applying the given [transform] function
+ * to each element in the original [GdxArray].
+ */
+inline fun <Type, R> GdxArray<Type>.map(transform: (Type) -> R): GdxArray<R> {
+  val destination = GdxArray<R>(this.size)
+  for(item in this) {
+    destination.add(transform(item))
+  }
+  return destination
+}
+
+
+/**
+ * Returns a [GdxArray] containing only elements matching the given [predicate].
+ */
+inline fun <Type> GdxArray<Type>.filter(predicate: (Type) -> Boolean): GdxArray<Type> {
+  val destination = GdxArray<Type>()
+  for(item in this) {
+    if(predicate(item)) {
+      destination.add(item)
+    }
+  }
+  return destination
+}
+
+
+/**
+ * Returns a single [GdxArray] of all elements from all collections in the given [GdxArray].
+ */
+inline fun <Type, C: Iterable<Type>> GdxArray<out C>.flatten(): GdxArray<Type> {
+  val destination = GdxArray<Type>()
+  for(item in this) {
+      destination.addAll(item)
+  }
+  return destination
+}
+
+
+/**
+ * Returns a single [GdxArray] of all elements yielded from results of transform function being invoked
+ * on each entry of original [GdxArray].
+ */
+inline fun <Type, R> GdxArray<Type>.flatMap(transform: (Type) -> Iterable<R>): GdxArray<R> {
+  return this.map(transform).flatten()
+}
+
 
 /**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary. Defaults to array size.
