@@ -394,7 +394,7 @@ inline fun <Key, Type, Value: Iterable<Type>> GdxMap<Key, out Value>.flatten(): 
 
 /**
  * Returns a single [GdxArray] of all elements yielded from results of transform function being invoked
- * on each entry of original [GdxArray].
+ * on each entry of original [GdxMap].
  */
 inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Value>) -> Iterable<R>): GdxArray<R> {
   return this.map(transform).flatten()
