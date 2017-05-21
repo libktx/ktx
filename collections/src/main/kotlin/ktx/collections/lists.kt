@@ -1,3 +1,5 @@
+@file:Suppress("LoopToCallChain", "NOTHING_TO_INLINE")
+
 package ktx.collections
 
 import com.badlogic.gdx.utils.Pool
@@ -220,6 +222,41 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
     size = 0
   }
 
+
+  /**
+   * Returns a [GdxList] containing the results of applying the given [transform] function
+   * to each element in the original [GdxList].
+   */
+  inline fun <R> map(transform: (T) -> R): GdxList<R> {
+    val destination = gdxListOf<R>()
+    for(item in this) {
+      destination.add(transform(item))
+    }
+    return destination
+  }
+
+  /**
+   * Returns a [GdxList] containing only elements matching the given [predicate].
+   */
+  inline fun filter(predicate: (T) -> Boolean): GdxList<T> {
+    val destination = gdxListOf<T>()
+    for(item in this) {
+      if(predicate(item)) {
+        destination.add(item)
+      }
+    }
+    return destination
+  }
+
+  /**
+   * Returns a single [GdxList] of all elements yielded from results of transform function being invoked
+   * on each entry of original [GdxList].
+   */
+  inline fun <R> flatMap(transform: (T) -> Iterable<R>): GdxList<R> {
+    return this.map(transform).flatten()
+  }
+
+
   override fun toString(): String {
     return buildString {
       append("[")
@@ -318,6 +355,17 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
     size--
     return element!!
   }
+}
+
+/**
+ * Returns a single [GdxList] of all elements from all collections in the given [GdxList].
+ */
+inline fun <Type, C: Iterable<Type>> GdxList<out C>.flatten(): GdxList<Type> {
+  val destination = gdxListOf<Type>()
+  for(item in this) {
+    destination.addAll(item)
+  }
+  return destination
 }
 
 /**
