@@ -1,7 +1,9 @@
 package ktx.collections
 
+import com.badlogic.gdx.Gdx
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.*
 
 /**
  * Tests utilities for LibGDX custom ArrayList equivalent - Array.
@@ -349,6 +351,42 @@ class ArraysTest {
     assertEquals("Twenty-one", array[0])
     assertEquals("Eleven", array[1])
     assertEquals("One", array[2])
+  }
+
+  @Test
+  fun `should map elements into a new GdxArray`() {
+    val array = GdxArray.with(1, 2, 3)
+    val result = array.map { it * 2 }
+
+    assertTrue(result is GdxArray)
+    assertEquals(GdxArray.with(2, 4, 6), result)
+  }
+
+  @Test
+  fun `should filter elements into a new GdxArray`() {
+    val array = GdxArray.with(1, 2, 3, 4, 5)
+    val result = array.filter { it % 2 == 1 }
+
+    assertTrue(result is GdxArray)
+    assertEquals(GdxArray.with(1, 3, 5), result)
+  }
+
+  @Test
+  fun `should flatten elements into a new GdxArray`() {
+    val array = GdxArray.with(GdxArray.with(1), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
+    val result = array.flatten()
+
+    assertTrue(result is GdxArray)
+    assertEquals(GdxArray.with(1, 2, 3), result)
+  }
+
+  @Test
+  fun `should map elements to lists and flatten them into a new GdxArray`() {
+    val array = GdxArray.with(1, 2, 3)
+    val result = array.flatMap { counter -> List(counter) { counter } }
+
+    assertTrue(result is GdxArray)
+    assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
 
   @Test

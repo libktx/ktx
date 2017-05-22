@@ -2,7 +2,7 @@ package ktx.collections
 
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.NoSuchElementException
+import java.util.*
 
 /**
  * Tests general [PooledList] utilities.
@@ -222,6 +222,49 @@ class PooledListTest {
     assertEquals(0, list.size)
     assertTrue(list.isEmpty)
     assertEquals(0, NodePool.free) // Nodes should not be returned to the pool.
+  }
+
+  @Test
+  fun `should map elements into a new GdxList`() {
+    val list = gdxListOf(1, 2, 3)
+    val result = list.map { it * 2 }
+
+    assertTrue(result is GdxList)
+    assertEquals(3, result.size)
+    assertEquals(2, result.first)
+    assertEquals(6, result.last)
+  }
+
+  @Test
+  fun `should filter elements into a new GdxList`() {
+    val list = gdxListOf(1, 2, 3, 4, 5)
+    val result = list.filter { it % 2 == 1 }
+
+    assertTrue(result is GdxList)
+    assertEquals(3, result.size)
+    assertEquals(1, result.first)
+    assertEquals(5, result.last)
+  }
+
+  @Test
+  fun `should flatten elements into a new GdxList`() {
+    val list = gdxListOf(GdxArray.with(1), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
+    val result = list.flatten()
+
+    assertTrue(result is GdxList)
+    assertEquals(3, result.size)
+    assertEquals(3, result.size)
+    assertEquals(1, result.first)
+    assertEquals(3, result.last)
+  }
+
+  @Test
+  fun `should map elements to lists and flatten them into a new GdxList`() {
+    val list = gdxListOf(1, 2, 3)
+    val result = list.flatMap { List(it) { "" } }
+
+    assertTrue(result is GdxList)
+    assertEquals(6, result.size)
   }
 
   @Test(expected = NoSuchElementException::class)

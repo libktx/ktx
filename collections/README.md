@@ -32,6 +32,7 @@ chained.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows to iterate over collection's elements, while providing reference to `MutableInterator`. Can be
 used to easily remove collection elements during iteration.
+- `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxArray`.
 - Every iterable and array can be converted to `Array` using `toGdxArray` method.
 - `IntArray`, `BooleanArray` and `FloatArray` can be converted to corresponding LibGDX primitive collections using
 `toGdxArray` method.
@@ -57,6 +58,7 @@ chained.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows to iterate over collection's elements, while providing reference to `MutableIterator`. Can be
 used to easily remove collection elements during iteration.
+- `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxSet`.
 - Every iterable and array can be converted to `ObjectSet` using `toGdxSet` method.
 - `IntArray` can be converted to `IntSet` using `toGdxSet` method.
 - Type alias added for consistency with other collections: `GdxSet` - `com.badlogic.gdx.utils.ObjectSet`.
@@ -75,6 +77,7 @@ if the variable is a possible null.
 `map.put(key, value)`.
 - `iterate` method allows to iterate over map elements with a reference to `MutableIterator`. Can be used to easily
 remove elements from the map.
+- `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxMap` and `GdxArray`.
 - Keys stored in the map can be quickly converted to an `ObjectSet` using `toGdxSet` method.
 - Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
 has to be provided - since the method is inlined, no new lambda object will be created at runtime.

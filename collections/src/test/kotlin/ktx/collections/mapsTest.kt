@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.Array
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -378,4 +379,43 @@ class MapsTest {
     assertEquals("Key", key)
     assertEquals(10, value)
   }
+
+  @Test
+  fun `should map elements into a new GdxMap`() {
+    val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
+    val result = map.map { it.value * 2 }
+
+    assertTrue(result is GdxMap)
+    assertEquals(gdxMapOf("One" to 2, "Two" to 4, "Three" to 6), result)
+  }
+
+  @Test
+  fun `should filter elements into a new GdxMap`() {
+    val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3, "Four" to 4, "Five" to 5)
+    val result = map.filter { it.value % 2 == 1 }
+
+    assertTrue(result is GdxMap)
+    assertEquals(gdxMapOf("One" to 1, "Three" to 3, "Five" to 5), result)
+  }
+
+  @Test
+  fun `should flatten elements into a new GdxArray`() {
+    val map = gdxMapOf(1 to GdxArray.with(1), 2 to listOf<Int>(), 3 to LinkedList(arrayListOf(2, 3)))
+    val result = map.flatten()
+
+    assertTrue(result is GdxArray)
+    assertEquals(3, result.size)
+    assertEquals(GdxArray.with(1, 2, 3), result)
+  }
+
+  @Test
+  fun `should map elements to lists and flatten them into a new GdxArray`() {
+    val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
+    val result = map.flatMap { e -> List(e.value) { e.value } }
+    result.sort()
+
+    assertTrue(result is GdxArray)
+    assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
+  }
+
 }
