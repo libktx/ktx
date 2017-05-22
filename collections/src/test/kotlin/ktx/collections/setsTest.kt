@@ -7,7 +7,6 @@ import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
- * @author MJ
  */
 class SetsTest {
   @Test

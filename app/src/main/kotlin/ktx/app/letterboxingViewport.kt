@@ -21,8 +21,6 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport
  * It is advised to pair this viewport with FitViewport - LetterboxingViewport can be used for the GUI, while
  * FitViewport is excellent for the actual (2D) game rendering.
 
- * @author MJ
- *
  * @param targetPpiX this is the targeted pixel per inch ratio on X axis, which allows to scale the viewport
  *            correctly on different devices. Usually about 96 for desktop and WebGL platforms, 160 for mobiles.
  *            Make sure to call [updateScale] after changing this variable.

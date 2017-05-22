@@ -8,7 +8,6 @@ import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
- * @author MJ
  */
 class MapsTest {
   @Test

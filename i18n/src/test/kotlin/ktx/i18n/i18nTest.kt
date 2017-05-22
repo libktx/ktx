@@ -13,7 +13,6 @@ import java.io.File
 
 /**
  * Tests internationalization-related classes and functions stored in *i18n.kt*.
- * @author MJ
  */
 class I18nTest {
   val bundleContent = """

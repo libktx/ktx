@@ -1,13 +1,11 @@
 package ktx.collections
 
-import com.badlogic.gdx.Gdx
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.*
+import java.util.LinkedList
 
 /**
  * Tests utilities for LibGDX custom ArrayList equivalent - Array.
- * @author MJ
  */
 class ArraysTest {
   @Test

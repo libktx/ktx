@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Common interface applied to so-called "parental" widgets.
- * @author MJ
  */
 @Scene2dDsl
 interface KWidget<out Storage> {
@@ -34,7 +33,6 @@ interface KWidget<out Storage> {
 
 /**
  * Common interface applied to widgets that extend the original [Table] and keep their children in [Cell] instances.
- * @author MJ
  */
 @Scene2dDsl
 interface KTable : KWidget<Cell<*>> {
@@ -180,7 +178,6 @@ interface KTable : KWidget<Cell<*>> {
 /**
  * Common interface applied to widgets that extend [WidgetGroup] or [Group] and keep their children in an internal
  * collection.
- * @author MJ
  */
 @Scene2dDsl
 interface KGroup : KWidget<Actor> {
@@ -210,10 +207,7 @@ interface KGroup : KWidget<Actor> {
   }
 }
 
-/**
- * Common interface applied to widgets that keep their children in [Tree] [Node] instances.
- * @author MJ
- */
+/** Common interface applied to widgets that keep their children in [Tree] [Node] instances. */
 @Scene2dDsl
 interface KTree : KWidget<KNode> {
   /**
@@ -266,15 +260,13 @@ interface KTree : KWidget<KNode> {
           "Was it properly added to the tree? Was its user object cleared?")
 }
 
-/** Extends [Button] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Button] API with type-safe widget builders. */
 @Scene2dDsl
 class KButton(skin: Skin, style: String) : Button(skin, style), KTable
 
 /**
  * Extends [Table] API with type-safe widget builders. All [Button] instances added to this table will be automatically
  * included in an internal [ButtonGroup].
- * @author MJ
  * @see ButtonGroup
  * @param minCheckCount minimum amount of checked buttons.
  * @param maxCheckCount maximum amount of checked buttons.
@@ -294,13 +286,11 @@ class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(s
   }
 }
 
-/** Extends [CheckBox] API with type-safe widget builders.
- * @author MJ */
+/** Extends [CheckBox] API with type-safe widget builders. */
 @Scene2dDsl
 class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, style), KTable
 
-/** Extends [Container] API with type-safe widget builders. Note that this widget may store only a single child.
- * @author MJ */
+/** Extends [Container] API with type-safe widget builders. Note that this widget may store only a single child. */
 @Scene2dDsl
 class KContainer<T : Actor> : Container<T>(), KGroup {
   @Suppress("UNCHECKED_CAST")
@@ -310,28 +300,23 @@ class KContainer<T : Actor> : Container<T>(), KGroup {
   }
 }
 
-/** Extends [Dialog] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Dialog] API with type-safe widget builders. */
 @Scene2dDsl
 class KDialog(title: String, skin: Skin, style: String) : Dialog(title, skin, style), KTable
 
-/** Extends [HorizontalGroup] API with type-safe widget builders.
- * @author MJ */
+/** Extends [HorizontalGroup] API with type-safe widget builders. */
 @Scene2dDsl
 class KHorizontalGroup : HorizontalGroup(), KGroup
 
-/** Extends [ImageButton] API with type-safe widget builders.
- * @author MJ */
+/** Extends [ImageButton] API with type-safe widget builders. */
 @Scene2dDsl
 class KImageButton(skin: Skin, style: String) : ImageButton(skin, style), KTable
 
-/** Extends [ImageTextButton] API with type-safe widget builders.
- * @author MJ */
+/** Extends [ImageTextButton] API with type-safe widget builders. */
 @Scene2dDsl
 class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButton(text, skin, style), KTable
 
-/** Extends LibGDX List widget with items building method.
- * @author MJ */
+/** Extends LibGDX List widget with items building method. */
 @Scene2dDsl
 class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2d.ui.List<T>(skin, style) {
   /**
@@ -351,8 +336,7 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
   }
 }
 
-/** Extends [Tree] [Node] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Tree] [Node] API with type-safe widget builders. */
 @Scene2dDsl
 class KNode(actor: Actor) : Node(actor), KTree {
   override fun add(actor: Actor): KNode {
@@ -372,8 +356,7 @@ class KNode(actor: Actor) : Node(actor), KTree {
   }
 }
 
-/** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
- * @author MJ */
+/** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child. */
 @Scene2dDsl
 class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
@@ -382,8 +365,7 @@ class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KG
   }
 }
 
-/** Extends [SelectBox] with items building method.
- * @author MJ */
+/** Extends [SelectBox] with items building method. */
 @Scene2dDsl
 class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   /**
@@ -405,8 +387,7 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
 
 /** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
- * with [setFirstWidget] or [setSecondWidget].
- * @author MJ */
+ * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
 class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
@@ -418,23 +399,19 @@ class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null,
   }
 }
 
-/** Extends [Stack] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Stack] API with type-safe widget builders. */
 @Scene2dDsl
 class KStack : Stack(), KGroup
 
-/** Extends [Table] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Table] API with type-safe widget builders. */
 @Scene2dDsl
 class KTableWidget(skin: Skin) : Table(skin), KTable
 
-/** Extends [TextButton] API with type-safe widget builders.
- * @author MJ */
+/** Extends [TextButton] API with type-safe widget builders. */
 @Scene2dDsl
 class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, skin, style), KTable
 
-/** Extends [Tree] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
 class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
   override fun add(actor: Actor): KNode {
@@ -444,12 +421,10 @@ class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
   }
 }
 
-/** Extends [VerticalGroup] API with type-safe widget builders.
- * @author MJ */
+/** Extends [VerticalGroup] API with type-safe widget builders. */
 @Scene2dDsl
 class KVerticalGroup : VerticalGroup(), KGroup
 
-/** Extends [Window] API with type-safe widget builders.
- * @author MJ */
+/** Extends [Window] API with type-safe widget builders. */
 @Scene2dDsl
 class KWindow(title: String, skin: Skin, style: String) : Window(title, skin, style), KTable
