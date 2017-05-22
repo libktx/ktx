@@ -261,7 +261,7 @@ class PooledListTest {
   @Test
   fun `should map elements to lists and flatten them into a new GdxList`() {
     val list = gdxListOf(1, 2, 3)
-    val result = list.flatMap { List(it) { "" }  }
+    val result = list.flatMap { List(it) { "" } }
 
     assertTrue(result is GdxList)
     assertEquals(6, result.size)

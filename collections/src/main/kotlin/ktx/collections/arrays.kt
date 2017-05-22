@@ -233,7 +233,7 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
  */
 inline fun <Type, R> GdxArray<Type>.map(transform: (Type) -> R): GdxArray<R> {
   val destination = GdxArray<R>(this.size)
-  for(item in this) {
+  for (item in this) {
     destination.add(transform(item))
   }
   return destination
@@ -244,8 +244,8 @@ inline fun <Type, R> GdxArray<Type>.map(transform: (Type) -> R): GdxArray<R> {
  */
 inline fun <Type> GdxArray<Type>.filter(predicate: (Type) -> Boolean): GdxArray<Type> {
   val destination = GdxArray<Type>()
-  for(item in this) {
-    if(predicate(item)) {
+  for (item in this) {
+    if (predicate(item)) {
       destination.add(item)
     }
   }
@@ -255,10 +255,10 @@ inline fun <Type> GdxArray<Type>.filter(predicate: (Type) -> Boolean): GdxArray<
 /**
  * Returns a single [GdxArray] of all elements from all collections in the given [GdxArray].
  */
-inline fun <Type, C: Iterable<Type>> GdxArray<out C>.flatten(): GdxArray<Type> {
+inline fun <Type, C : Iterable<Type>> GdxArray<out C>.flatten(): GdxArray<Type> {
   val destination = GdxArray<Type>()
-  for(item in this) {
-      destination.addAll(item)
+  for (item in this) {
+    destination.addAll(item)
   }
   return destination
 }

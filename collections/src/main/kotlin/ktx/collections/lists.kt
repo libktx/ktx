@@ -229,7 +229,7 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
    */
   inline fun <R> map(transform: (T) -> R): GdxList<R> {
     val destination = gdxListOf<R>()
-    for(item in this) {
+    for (item in this) {
       destination.add(transform(item))
     }
     return destination
@@ -240,8 +240,8 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
    */
   inline fun filter(predicate: (T) -> Boolean): GdxList<T> {
     val destination = gdxListOf<T>()
-    for(item in this) {
-      if(predicate(item)) {
+    for (item in this) {
+      if (predicate(item)) {
         destination.add(item)
       }
     }
@@ -360,9 +360,9 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
 /**
  * Returns a single [GdxList] of all elements from all collections in the given [GdxList].
  */
-inline fun <Type, C: Iterable<Type>> GdxList<out C>.flatten(): GdxList<Type> {
+inline fun <Type, C : Iterable<Type>> GdxList<out C>.flatten(): GdxList<Type> {
   val destination = gdxListOf<Type>()
-  for(item in this) {
+  for (item in this) {
     destination.addAll(item)
   }
   return destination

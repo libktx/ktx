@@ -151,7 +151,7 @@ inline fun <Type> GdxSet<Type>.iterate(action: (Type, MutableIterator<Type>) -> 
  */
 inline fun <Type, R> GdxSet<Type>.map(transform: (Type) -> R): GdxSet<R> {
   val destination = GdxSet<R>(this.size)
-  for(item in this) {
+  for (item in this) {
     destination.add(transform(item))
   }
   return destination
@@ -162,8 +162,8 @@ inline fun <Type, R> GdxSet<Type>.map(transform: (Type) -> R): GdxSet<R> {
  */
 inline fun <Type> GdxSet<Type>.filter(predicate: (Type) -> Boolean): GdxSet<Type> {
   val destination = GdxSet<Type>()
-  for(item in this) {
-    if(predicate(item)) {
+  for (item in this) {
+    if (predicate(item)) {
       destination.add(item)
     }
   }
@@ -173,9 +173,9 @@ inline fun <Type> GdxSet<Type>.filter(predicate: (Type) -> Boolean): GdxSet<Type
 /**
  * Returns a single [GdxSet] of all elements from all collections in the given [GdxSet].
  */
-inline fun <Type, C: Iterable<Type>> GdxSet<out C>.flatten(): GdxSet<Type> {
+inline fun <Type, C : Iterable<Type>> GdxSet<out C>.flatten(): GdxSet<Type> {
   val destination = GdxSet<Type>()
-  for(item in this) {
+  for (item in this) {
     destination.addAll(item)
   }
   return destination

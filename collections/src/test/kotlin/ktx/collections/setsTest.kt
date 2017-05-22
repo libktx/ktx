@@ -260,7 +260,7 @@ class SetsTest {
   @Test
   fun `should map elements to lists and flatten them into a new GdxSet`() {
     val set = GdxSet.with(1, 2, 3)
-    val result = set.flatMap { count -> List(count) { it }  }
+    val result = set.flatMap { count -> List(count) { it } }
 
     assertTrue(result is GdxSet)
     assertEquals(3, result.size)

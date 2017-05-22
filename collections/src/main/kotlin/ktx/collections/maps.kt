@@ -362,7 +362,7 @@ inline operator fun <Value> ObjectIntMap.Entry<Value>.component2() = value
  */
 inline fun <Key, Value, R> GdxMap<Key, Value>.map(transform: (Entry<Key, Value>) -> R): GdxMap<Key, R> {
   val destination = GdxMap<Key, R>(this.size)
-  for(item in this) {
+  for (item in this) {
     destination[item.key] = transform(item)
   }
   return destination
@@ -373,8 +373,8 @@ inline fun <Key, Value, R> GdxMap<Key, Value>.map(transform: (Entry<Key, Value>)
  */
 inline fun <Key, Value> GdxMap<Key, Value>.filter(predicate: (Entry<Key, Value>) -> Boolean): GdxMap<Key, Value> {
   val destination = GdxMap<Key, Value>()
-  for(item in this) {
-    if(predicate(item)) {
+  for (item in this) {
+    if (predicate(item)) {
       destination[item.key] = item.value
     }
   }
@@ -384,9 +384,9 @@ inline fun <Key, Value> GdxMap<Key, Value>.filter(predicate: (Entry<Key, Value>)
 /**
  * Returns a single [GdxArray] of all elements from all collections in the given [GdxMap].
  */
-inline fun <Key, Type, Value: Iterable<Type>> GdxMap<Key, out Value>.flatten(): GdxArray<Type> {
+inline fun <Key, Type, Value : Iterable<Type>> GdxMap<Key, out Value>.flatten(): GdxArray<Type> {
   val destination = GdxArray<Type>()
-  for(item in this) {
+  for (item in this) {
     destination.addAll(item.value)
   }
   return destination
