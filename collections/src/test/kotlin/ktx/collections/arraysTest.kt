@@ -359,9 +359,7 @@ class ArraysTest {
     val result = array.map { it * 2 }
 
     assertTrue(result is GdxArray)
-    assertEquals(2, result[0])
-    assertEquals(4, result[1])
-    assertEquals(6, result[2])
+    assertEquals(GdxArray.with(2, 4, 6), result)
   }
 
   @Test
@@ -370,10 +368,7 @@ class ArraysTest {
     val result = array.filter { it % 2 == 1 }
 
     assertTrue(result is GdxArray)
-    assertEquals(3, result.size)
-    assertEquals(1, result[0])
-    assertEquals(3, result[1])
-    assertEquals(5, result[2])
+    assertEquals(GdxArray.with(1, 3, 5), result)
   }
 
   @Test
@@ -382,19 +377,16 @@ class ArraysTest {
     val result = array.flatten()
 
     assertTrue(result is GdxArray)
-    assertEquals(3, result.size)
-    assertEquals(1, result[0])
-    assertEquals(2, result[1])
-    assertEquals(3, result[2])
+    assertEquals(GdxArray.with(1, 2, 3), result)
   }
 
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val array = GdxArray.with(1, 2, 3)
-    val result = array.flatMap { List(it) { "" }  }
+    val result = array.flatMap { counter -> List(counter) { counter }  }
 
     assertTrue(result is GdxArray)
-    assertEquals(6, result.size)
+    assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
 
   @Test

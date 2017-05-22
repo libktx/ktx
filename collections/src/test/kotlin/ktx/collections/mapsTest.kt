@@ -386,9 +386,7 @@ class MapsTest {
     val result = map.map { it.value * 2 }
 
     assertTrue(result is GdxMap)
-    assertEquals(2, result["One"])
-    assertEquals(4, result["Two"])
-    assertEquals(6, result["Three"])
+    assertEquals(gdxMapOf("One" to 2, "Two" to 4, "Three" to 6), result)
   }
 
   @Test
@@ -397,10 +395,7 @@ class MapsTest {
     val result = map.filter { it.value % 2 == 1 }
 
     assertTrue(result is GdxMap)
-    assertEquals(3, result.size)
-    assertEquals(1, result["One"])
-    assertEquals(3, result["Three"])
-    assertEquals(5, result["Five"])
+    assertEquals(gdxMapOf("One" to 1, "Three" to 3, "Five" to 5), result)
   }
 
   @Test
@@ -410,18 +405,17 @@ class MapsTest {
 
     assertTrue(result is GdxArray)
     assertEquals(3, result.size)
-    assertTrue(1 in result)
-    assertTrue(2 in result)
-    assertTrue(3 in result)
+    assertEquals(GdxArray.with(1, 2, 3), result)
   }
 
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
-    val result = map.flatMap { List(it.value) { "" }  }
+    val result = map.flatMap { e -> List(e.value) { e.value }  }
+    result.sort()
 
     assertTrue(result is GdxArray)
-    assertEquals(6, result.size)
+    assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
 
 }
