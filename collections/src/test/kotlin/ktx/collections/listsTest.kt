@@ -2,11 +2,11 @@ package ktx.collections
 
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.*
+import java.util.LinkedList
+import java.util.NoSuchElementException
 
 /**
  * Tests general [PooledList] utilities.
- * @author MJ
  */
 class ListsTest {
   @Test
@@ -49,13 +49,12 @@ class ListsTest {
 
   @Test
   fun `should provide alias for compatibility with other LibGDX collections`() {
-    assertTrue(GdxList<Any>(NodePool) is PooledList<Any>)
+    assertTrue(GdxList(NodePool) is PooledList<Any>)
   }
 }
 
 /**
  * Tests [PooledList] implementation - a KTX LinkedList equivalent.
- * @author MJ
  */
 class PooledListTest {
   @Test
@@ -430,5 +429,28 @@ class PooledListTest {
     assertEquals("[]", gdxListOf<String>().toString())
     assertEquals("[single]", gdxListOf("single").toString())
     assertEquals("[one, two, three]", gdxListOf("one", "two", "three").toString())
+  }
+
+  @Test
+  fun `should calculate distinct hash code for lists with same elements`() {
+    val list = gdxListOf("a", "b", "c")
+    val same = gdxListOf("a", "b", "c")
+    val different = gdxListOf("b", "c", "a")
+
+    assertEquals(same.hashCode(), list.hashCode())
+    assertNotEquals(different.hashCode(), list.hashCode())
+  }
+
+  @Test
+  fun `should properly implement equals`() {
+    val list = gdxListOf("a", "b", "c")
+
+    assertNotEquals(list, null)
+    assertNotEquals(list, "[a, b, c]")
+    assertNotEquals(list, gdxListOf<String>())
+    assertNotEquals(list, GdxArray.with("a", "b", "c")) // No common interface.
+    assertNotEquals(list, gdxListOf("a", "b"))
+    assertNotEquals(list, gdxListOf("a", "b", "c", "d"))
+    assertEquals(list, gdxListOf("a", "b", "c"))
   }
 }

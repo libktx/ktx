@@ -24,7 +24,6 @@ typealias GdxList<Element> = PooledList<Element>
  * This collection is excellent for queues or storage of objects that often have to be removed during iteration for
  * little cost. By design, it provides no random access to elements - it should be used when iteration is very often.
  *
- * @author MJ
  * @param nodePool provides and manages [Node] instances.
  */
 class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
@@ -222,9 +221,9 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
     size = 0
   }
 
-
   /**
-   * Returns a [GdxList] containing the results of applying the given [transform] function
+   * @param transform will be invoked on each element.
+   * @return a [GdxList] containing the results of applying the given [transform] function
    * to each element in the original [GdxList].
    */
   inline fun <R> map(transform: (T) -> R): GdxList<R> {
@@ -236,7 +235,8 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
   }
 
   /**
-   * Returns a [GdxList] containing only elements matching the given [predicate].
+   * @param predicate will be checked against each element.
+   * @return a [GdxList] containing only elements matching the given [predicate].
    */
   inline fun filter(predicate: (T) -> Boolean): GdxList<T> {
     val destination = gdxListOf<T>()
@@ -249,28 +249,44 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
   }
 
   /**
-   * Returns a single [GdxList] of all elements yielded from results of transform function being invoked
+   * @param transform will be invoked on each element.
+   * @return a single [GdxList] of all elements yielded from results of transform function being invoked
    * on each entry of original [GdxList].
    */
-  inline fun <R> flatMap(transform: (T) -> Iterable<R>): GdxList<R> {
-    return this.map(transform).flatten()
-  }
+  inline fun <R> flatMap(transform: (T) -> Iterable<R>): GdxList<R> = this.map(transform).flatten()
 
-
-  override fun toString(): String {
-    return buildString {
-      append("[")
-      this@PooledList.forEachIndexed { id, it ->
-        append(it)
-        if (id < size - 1) append(", ")
-      }
-      append("]")
+  override fun hashCode(): Int {
+    var hashCode = 1
+    for (element in this) {
+      hashCode = 31 * hashCode + (element?.hashCode() ?: 0)
     }
+    return hashCode
   }
+
+  override fun equals(other: Any?): Boolean = when {
+    other === this -> true
+    other !is PooledList<*> -> false
+    other.size != this.size -> false
+    else -> compareElements(other)
+  }
+
+  private fun compareElements(other: PooledList<*>): Boolean {
+    val iterator = iterator()
+    val otherIterator = other.iterator()
+    while (iterator.hasNext()) {
+      if (!otherIterator.hasNext() || !iterator.next().isEqualElementTo(otherIterator.next())) {
+        return false
+      }
+    }
+    return true
+  }
+
+  private fun Any?.isEqualElementTo(element: Any?): Boolean = this === element || (this != null && this == element)
+
+  override fun toString(): String = joinToString(prefix = "[", separator = ", ", postfix = "]")
 
   /**
    * Storage class for list elements.
-   * @author MJ
    */
   class Node<T> {
     var element: T? = null
@@ -286,7 +302,6 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
 
   /**
    * Allows to iterate over [PooledList] elements in both regular and reversed order.
-   * @author MJ
    * @see remove
    * @see insertBefore
    * @see insertAfter
@@ -371,7 +386,6 @@ inline fun <Type, C : Iterable<Type>> GdxList<out C>.flatten(): GdxList<Type> {
 /**
  * Default and main [PooledList] [Node] pool. Provides and manages node instances. Has no max value - will store nearly
  * unlimited freed [Node] instances and should be cleared manually if necessary.
- * @author MJ
  * @see clear
  */
 object NodePool : Pool<Node<Any>>() {
