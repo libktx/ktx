@@ -54,7 +54,8 @@ Releasing a new KTX version:
 - Change `libVersion` settings in `version.txt`. KTX uses the same versioning schema as LibGDX (mimicking the
 LibGDX version that it was compiled against) with optional `-b#` or `-SNAPSHOT` suffixes depending on version status.
 - Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both _Maven Local_ and
-_Maven Central_.
+_Maven Central_. Note that Maven plugin has its issues and you might need to run `gradle promoteRepository` after the
+previous task sequence (if it fails on the `closeAndPromoteRepository` task).
 - Run `gradle distZip` to prepare archive with KTX sources, compiled binary and documentation.
 - Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. Tag should match released version.
 Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
