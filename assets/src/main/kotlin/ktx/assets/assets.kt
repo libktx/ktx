@@ -10,7 +10,6 @@ import kotlin.reflect.KProperty
 
 /**
  * Common interface for asset wrappers. Provides access to an asset instance which might or might not be loaded.
- * @author MJ
  * @see ManagedAsset
  * @see DelayedAsset
  */
@@ -60,7 +59,6 @@ inline operator fun <Type> Asset<Type>.getValue(receiver: Any?, property: KPrope
 /**
  * Default implementation of [Asset]. Keeps asset data in an [AssetDescriptor] and delegates asset loading to an
  * [AssetManager]. Assumes the asset was already scheduled for loading.
- * @author MJ
  */
 class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type
@@ -80,7 +78,6 @@ class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
  * Note that eager asset loading might cause other assets to be loaded synchronously rather than asynchronously,
  * so it is advised to load eager assets with another [AssetManager] instance or use them after all regular assets are
  * already loaded.
- * @author MJ
  */
 class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type

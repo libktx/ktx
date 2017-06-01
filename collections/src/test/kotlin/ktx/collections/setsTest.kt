@@ -3,10 +3,10 @@ package ktx.collections
 import com.badlogic.gdx.utils.ObjectSet
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
- * @author MJ
  */
 class SetsTest {
   @Test
@@ -219,6 +219,53 @@ class SetsTest {
     set.iterate { value, iterator -> if (value == "2") iterator.remove() }
     assertEquals(2, set.size)
     assertFalse("2" in set)
+  }
+
+  @Test
+  fun `should map elements into a new GdxSet`() {
+    val set = GdxSet.with(1, 2, 3)
+    val result = set.map { it * 2 }
+
+    assertTrue(result is GdxSet)
+    assertTrue(2 in result)
+    assertTrue(4 in result)
+    assertTrue(6 in result)
+  }
+
+  @Test
+  fun `should filter elements into a new GdxSet`() {
+    val set = GdxSet.with(1, 2, 3, 4, 5)
+    val result = set.filter { it % 2 == 1 }
+
+    assertTrue(result is GdxSet)
+    assertEquals(3, result.size)
+    assertTrue(1 in result)
+    assertTrue(3 in result)
+    assertTrue(5 in result)
+  }
+
+  @Test
+  fun `should flatten elements into a new GdxSet`() {
+    val set = GdxSet.with(GdxArray.with(1, 2), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
+    val result = set.flatten()
+
+    assertTrue(result is GdxSet)
+    assertEquals(3, result.size)
+    assertTrue(1 in result)
+    assertTrue(2 in result)
+    assertTrue(3 in result)
+  }
+
+  @Test
+  fun `should map elements to lists and flatten them into a new GdxSet`() {
+    val set = GdxSet.with(1, 2, 3)
+    val result = set.flatMap { count -> List(count) { it } }
+
+    assertTrue(result is GdxSet)
+    assertEquals(3, result.size)
+    assertTrue(0 in result)
+    assertTrue(1 in result)
+    assertTrue(2 in result)
   }
 
   @Test

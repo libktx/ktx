@@ -1,8 +1,9 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "LoopToCallChain")
 
 package ktx.collections
 
 import com.badlogic.gdx.utils.IntSet
+import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 
 /** Alias for [com.badlogic.gdx.utils.ObjectSet]. Added for consistency with other collections and factory methods. */
@@ -142,6 +143,50 @@ operator fun <Type> GdxSet<Type>.minus(elements: Array<out Type>): GdxSet<Type> 
 inline fun <Type> GdxSet<Type>.iterate(action: (Type, MutableIterator<Type>) -> Unit) {
   val iterator = iterator()
   while (iterator.hasNext) action(iterator.next(), iterator)
+}
+
+/**
+ * Returns a [GdxSet] containing the results of applying the given [transform] function
+ * to each entry in the original [GdxSet].
+ */
+inline fun <Type, R> GdxSet<Type>.map(transform: (Type) -> R): GdxSet<R> {
+  val destination = GdxSet<R>(this.size)
+  for (item in this) {
+    destination.add(transform(item))
+  }
+  return destination
+}
+
+/**
+ * Returns a [GdxSet] containing only elements matching the given [predicate].
+ */
+inline fun <Type> GdxSet<Type>.filter(predicate: (Type) -> Boolean): GdxSet<Type> {
+  val destination = GdxSet<Type>()
+  for (item in this) {
+    if (predicate(item)) {
+      destination.add(item)
+    }
+  }
+  return destination
+}
+
+/**
+ * Returns a single [GdxSet] of all elements from all collections in the given [GdxSet].
+ */
+inline fun <Type, C : Iterable<Type>> GdxSet<out C>.flatten(): GdxSet<Type> {
+  val destination = GdxSet<Type>()
+  for (item in this) {
+    destination.addAll(item)
+  }
+  return destination
+}
+
+/**
+ * Returns a single [GdxSet] of all elements yielded from results of transform function being invoked
+ * on each element of original [GdxSet].
+ */
+inline fun <Type, R> GdxSet<Type>.flatMap(transform: (Type) -> Iterable<R>): GdxSet<R> {
+  return this.map(transform).flatten()
 }
 
 /**

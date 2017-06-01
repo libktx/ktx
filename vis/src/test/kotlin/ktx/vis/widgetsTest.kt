@@ -269,7 +269,6 @@ class KTabbedPaneTest : NeedsLibGDX() {
 
 /**
  * Tests [KVisTree] interface: base for all parental actors operating on tree nodes.
- * @author MJ
  */
 class KTreeTest : NeedsLibGDX() {
   @Test

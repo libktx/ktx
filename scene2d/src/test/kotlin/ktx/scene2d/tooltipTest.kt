@@ -11,7 +11,6 @@ import org.junit.Test
 
 /**
  * Tests extension methods that allow to add [Tooltip] instances to all actors.
- * @author MJ
  */
 class TooltipFactoriesTest : NeedsLibGDX() {
   @Test

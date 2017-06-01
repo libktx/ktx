@@ -1,5 +1,8 @@
 package ktx.inject
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.utils.Disposable
+
 /**
  * Handles dependency injection mechanism. Allows to bind selected classes with their providers.
  *
@@ -7,7 +10,7 @@ package ktx.inject
  * built context from within multiple threads, you should override [createProvidersMap] method and return a thread-safe
  * [MutableMap] implementation to avoid concurrency bugs.
  */
-open class Context {
+open class Context : Disposable {
   @Suppress("LeakingThis")
   private val providers = createProvidersMap()
 
@@ -24,7 +27,7 @@ open class Context {
   protected open fun createProvidersMap(): MutableMap<Class<*>, () -> Any> = mutableMapOf()
 
   /**
-   * Utility mirror function, allowing to call context as a function.
+   * Provides instance of the selected type. Utility method allowing to call context as a function.
    * @return instance of the class with the selected type if a provider is present in the context.
    * @see inject
    */
@@ -33,6 +36,7 @@ open class Context {
   }
 
   /**
+   * Provides instance of the selected type.
    * @return instance of the class with the selected type if a provider is present in the context.
    * @throws InjectionException if no provider is registered for the selected type.
    */
@@ -41,6 +45,7 @@ open class Context {
   }
 
   /**
+   * Extracts provider of instances of the selected type.
    * @return instance of a provider of objects with the selected type.
    * @throws InjectionException if no provider is registered for the selected type.
    */
@@ -49,6 +54,7 @@ open class Context {
   }
 
   /**
+   * Extracts provider of instances of the selected type. This method is internally used by inlined injection methods.
    * @param forClass type of objects provided by the selected provider.
    * @return provider instance bind to the selected class.
    * @throws InjectionException if no provider is registered for the selected type.
@@ -56,23 +62,46 @@ open class Context {
    * @see inject
    */
   @Suppress("UNCHECKED_CAST")
-  fun <Type> getProvider(forClass: Class<Type>): () -> Type {
+  open fun <Type> getProvider(forClass: Class<Type>): () -> Type {
     val provider = providers[forClass]
-    return if (provider == null)
-      throw InjectionException("No provider registered for class: $forClass") else provider as () -> Type
+    return if (provider == null) {
+      throw InjectionException("No provider registered for class: $forClass")
+    } else {
+      provider as () -> Type
+    }
   }
 
   /**
+   * Adds the selected provider to the [Context]. This method is internally used by inlined binding methods.
    * @param forClass type of objects provided by the registered provider.
    * @param provider will be bind to the selected class.
    * @throws InjectionException if provider is already defined.
    * @see bind
    * @see bindSingleton
    */
-  fun setProvider(forClass: Class<*>, provider: () -> Any) {
-    if (forClass in providers) throw InjectionException("Already defined provider for class: $forClass")
+  open fun setProvider(forClass: Class<*>, provider: () -> Any) {
+    forClass !in providers || throw InjectionException("Provider already defined for class: $forClass")
     providers[forClass] = provider
   }
+
+  /**
+   * Removes provider of instances of the selected type. This method is internally used by inlined removal methods.
+   * @param ofClass type of objects provided by the selected provider.
+   * @return removed provider instance bind to the selected class if any was registered or null.
+   * @see remove
+   */
+  @Suppress("UNCHECKED_CAST")
+  open fun <Type> removeProvider(ofClass: Class<Type>): (() -> Type)? {
+    return providers.remove(ofClass) as (() -> Type)?
+  }
+
+  /**
+   * Removes singleton or provider of instances of the selected type registered in the [Context].
+   * @return removed provider instance bind to the selected class if any was registered or null.
+   * @see bind
+   * @see bindSingleton
+   */
+  inline fun <reified Type : Any> remove(): (() -> Type)? = removeProvider(Type::class.java)
 
   /**
    * @param type class of the provided components.
@@ -80,9 +109,7 @@ open class Context {
    */
   operator fun contains(type: Class<*>): Boolean = type in providers
 
-  /**
-   * @return true if there is a provider registered for the selected type.
-   */
+  /** @return true if there is a provider registered for the selected type. */
   inline fun <reified Type : Any> contains(): Boolean = Type::class.java in this
 
   /**
@@ -98,6 +125,7 @@ open class Context {
   }
 
   /**
+   * Allows to bind a provider producing instances of the selected type.
    * @param provider will be bind with the selected type. If no type argument is passed, it will be bind to the same
    *    exact class as the object it provides.
    * @throws InjectionException if provider for the selected type is already defined.
@@ -105,13 +133,15 @@ open class Context {
   inline fun <reified Type : Any> bind(noinline provider: () -> Type) = setProvider(Type::class.java, provider)
 
   /**
-   * @param singleton will be converted to a provider that always returns the same instance. If no type argument is passed,
-   *    it will be bind to its own class.
+   * Allows to bind a singleton to the chosen class.
+   * @param singleton will be converted to a provider that always returns the same instance. If no type argument is
+   *    passed, it will be bind to its own class.
    * @throws InjectionException if provider for the selected type is already defined.
    */
-  inline fun <reified Type : Any> bindSingleton(singleton: Type) = setProvider(Type::class.java, { singleton })
+  inline fun <reified Type : Any> bindSingleton(singleton: Type) = bind(SingletonProvider(singleton))
 
   /**
+   * Allows to bind a provider to multiple classes in hierarchy of the provided instances class.
    * @param to list of interfaces and classes in the class hierarchy of the objects provided by the provider. Any time
    *    any of the passed classes will be requested for injection, the selected provider will be invoked.
    * @param provider provides instances of classes compatible with the passed types.
@@ -120,20 +150,61 @@ open class Context {
   fun <Type : Any> bind(vararg to: Class<out Type>, provider: () -> Type) = to.forEach { setProvider(it, provider) }
 
   /**
+   * Allows to bind a singleton instance to multiple classes in its hierarchy.
    * @param singleton instance of class compatible with the passed types.
    * @param to list of interfaces and classes in the class hierarchy of the singleton. Any time any of the passed classes
    *    will be requested for injection, the selected singleton will be returned.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bindSingleton(singleton: Type, vararg to: Class<out Type>) = bind(*to) { singleton }
+  fun <Type : Any> bindSingleton(singleton: Type, vararg to: Class<out Type>)
+      = bind(*to, provider = SingletonProvider(singleton))
 
   /**
    * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and
    * injectable with [provider] and [inject].
    */
-  fun clear() {
+  open fun clear() {
     providers.clear()
     bindSingleton(this)
+  }
+
+  /**
+   * Disposes of all [Disposable] singletons and providers registered in the context and removes them. Note that if
+   * registered provider _provides_ [Disposable] instances, but it does not track the resources and does not implement
+   * [Disposable] itself, the provided assets will not be disposed by this method. [Context] does not track all injected
+   * assets: only directly registered objects are disposed. [clear] is called after all assets are disposed. Errors are
+   * caught and logged.
+   *
+   *     bindSingleton(SpriteBatch()) // SpriteBatch would be disposed.
+   *     bind { BitmapFont() }        // Each provided BitmapFont would have to be disposed manually.
+   *
+   * @see clear
+   */
+  override fun dispose() {
+    providers.remove(Context::class.java)
+    providers.values.filterIsInstance<Disposable>().forEach { provider ->
+      try {
+        provider.dispose()
+      } catch (error: Exception) {
+        Gdx.app.error("KTX", "Unable to dispose of component: $provider.", error)
+      }
+    }
+    clear()
+  }
+}
+
+/**
+ * Wraps singletons registered in a [Context], allowing to dispose them.
+ * @param singleton will be always provided by this provider.
+ * @see Disposable
+ */
+data class SingletonProvider<out Type : Any>(val singleton: Type) : Disposable, () -> Type {
+  /** @return [singleton]. */
+  override operator fun invoke(): Type = singleton
+
+  /** Disposes of the [singleton] if it implements [Disposable] interface. */
+  override fun dispose() {
+    (singleton as? Disposable)?.dispose()
   }
 }
 
