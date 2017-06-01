@@ -1,3 +1,5 @@
+#### 1.9.6-SNAPSHOT
+
 #### 1.9.6-b4
 
 - **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return LibGDX collections.
