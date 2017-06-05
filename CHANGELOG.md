@@ -1,4 +1,5 @@
 #### 1.9.6-SNAPSHOT
+- **[FEATURE]** (`ktx-ashley`) new **KTX** module with Ashley entity component system utilities: `ktx-ashley`.
 
 #### 1.9.6-b4
 
