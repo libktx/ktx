@@ -8,6 +8,7 @@ buildscript {
     classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusPluginVersion"
     classpath "com.netflix.nebula:gradle-extra-configurations-plugin:$configurationsPluginVersion"
     classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
+    classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
   }
 }
 
