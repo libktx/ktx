@@ -1,4 +1,12 @@
 #### 1.9.6-SNAPSHOT
+- **[FEATURE]** (`ktx-actors`) `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and `onKeyboardFocus`
+factory methods for `EventListener` instances were added. Contrary to existing factory methods, these use minimal set
+of parameters to make listeners creation as concise as possible.
+- **[CHANGE]** (`ktx-actors`) Existing `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and
+`onKeyboardFocus` factory methods where renamed to `onChangeEvent`, `onClickEvent`, `onKeyEvent`, `onKeyDownEvent`,
+`onKeyUpEvent`, `onScrollFocusEvent` and `onKeyboardFocusEvent` respectively. Their excessive amount of parameters,
+useful only on rare occasions, led to unnecessary boilerplate during listeners creation. See `ktx-actors` file
+documentation for migration guide.
 - **[FEATURE]** (`ktx-ashley`) new **KTX** module with Ashley entity component system utilities: `ktx-ashley`.
   - `PooledEngine.add` and `PooledEngine.entity` extension methods.
   - `PooledEntity` wrapping `Entity` and providing access to `PooledEngine` API.
