@@ -6,7 +6,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 
-object EntitiesSpec: Spek({
+object EntitiesSpec : Spek({
   describe("utilities for entities") {
     val transform by memoized {
       Transform()
@@ -36,8 +36,16 @@ object EntitiesSpec: Spek({
 
     describe("remove component function") {
       it("should remove a component by reified type") {
-        entity.remove<Transform>()
+        val component = entity.remove<Transform>()
+
         assertThat(entity.getComponent(Transform::class.java)).isNull()
+        assertThat(component).isEqualTo(transform)
+      }
+      it("should fail to remove an absent component by reified type") {
+        val component = entity.remove<Texture>()
+
+        assertThat(entity.getComponent(Texture::class.java)).isNull()
+        assertThat(component).isNull()
       }
     }
 

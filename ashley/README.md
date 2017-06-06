@@ -3,27 +3,32 @@
 Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashley) entity component system.
 
 ### Why?
-We can make using [Ashley](https://github.com/libgdx/ashley) with Kotlin more pleasant by providing helper methods using 
-reified types where Java `Classes` are required for method calls. Additionally, creating `Entities` and 
-their respective `Components` can result in a lot of declarative-style code which is suited nicely to a readable type-safe 
+
+Since [Ashley](https://github.com/libgdx/ashley) contains many generic methods consuming `Class` instances, Kotlin can
+provide a pleasant DSL via inlined methods reified generic types. Additionally, creating `Entities` and  their respective
+`Components` can result in a lot of declarative-style code which is greatly improved by an easily readable type-safe
 builder DSL. 
  
 ### Guide
 
-`ktx-ashley` provides extensions and utilities for using [Ashley](https://github.com/libgdx/ashley) with Kotlin:
+`ktx-ashley` provides the following extensions and utilities:
 
-- `PooledEngine.add` and `PooledEngine.entity` extension methods provide type-safe building DSL for creating pooled `Entities`
-- `mapperFor` factory method for create `ComponentMapper` instance.
-- `ktx.ashley.entities.*` accessors for `Entity` objects
-- `ktx.ashley.families.*` for constructing `Family` builders with `KClasses`
+- `PooledEngine.add` and `PooledEngine.entity` extension methods provide type-safe building DSL for creating pooled `Entities`.
+- `PooledEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `PooledEngine` via
+`with` methods.
+- `mapperFor` factory method allows to create `ComponentMapper` instances.
+- Accessors for `Entity` objects using `ComponentMappers`: `get`, `has`, `hasNot`, `remove`.
+- Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
+`allOf`, `exclude`.
 
 ### Usage examples
 
 Creating a new pooled `Entity`:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.entity
+import ktx.ashley.*
 
 val engine = PooledEngine()
 
@@ -40,6 +45,7 @@ val entity = engine.entity {
 ```
 
 Creating multiple new entities:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
@@ -66,6 +72,7 @@ fun setupEngine() = engine.add {
 ```
 
 Creating a `ComponentMapper`:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import ktx.ashley.mapperFor
@@ -76,47 +83,45 @@ val transformMapper = mapperFor<Transform>()
 ```
 
 Getting a `Component` from an `Entity`:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.entity
-import ktx.ashley.get
-import ktx.ashley.mapperFor
+import ktx.ashley.*
 
 class Transform: Component
 
 val engine = PooledEngine()
-val transformMapper = mapperFor<Transform>()
+val transform = mapperFor<Transform>()
 val entity = engine.entity {
   with<Transform>()
 }
-val component = entity[transformMapper]
+val component: Transform = entity[transform]
 ```
 
-Check a `Component` on an `Entity``:
+Checking if an `Entity` has a `Component`:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.entity
-import ktx.ashley.has
-import ktx.ashley.mapperFor
+import ktx.ashley.*
 
 class Transform: Component
 
 val engine = PooledEngine()
-val transformMapper = mapperFor<Transform>()
+val transform = mapperFor<Transform>()
 val entity = engine.entity {
   with<Transform>()
 }
-val component = entity.has(transformMapper)
+val canBeTransformed: Boolean = entity.has(transform)
 ```
 
-Remove a `Component` from an `Entity`:
+Removing a `Component` from an `Entity`:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.entity
-import ktx.ashley.remove
+import ktx.ashley.*
 
 class Transform: Component
 
@@ -130,11 +135,11 @@ fun removeTransform() {
 }
 ```
 
-Create component `Family` to match all `Components` with an exclusion:
+Creating a component `Family` that matches all entities with the selected `Component` types with an exclusion:
+
 ```Kotlin
 import com.badlogic.ashley.core.Component
-import ktx.ashley.allOf
-import ktx.ashley.exclude
+import ktx.ashley.*
 
 class Texture: Component
 class Transform: Component
@@ -145,4 +150,5 @@ var family = allOf(Texture::class, Transform::class).exclude(RigidBody::class)
 
 #### Additional documentation
 
-- [Ashley](https://github.com/libgdx/ashley)
+- [Ashley repository.](https://github.com/libgdx/ashley)
+- [A classic article on Entity Component Systems.](http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part-1/)

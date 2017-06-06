@@ -1,5 +1,10 @@
 #### 1.9.6-SNAPSHOT
 - **[FEATURE]** (`ktx-ashley`) new **KTX** module with Ashley entity component system utilities: `ktx-ashley`.
+  - `PooledEngine.add` and `PooledEngine.entity` extension methods.
+  - `PooledEntity` wrapping `Entity` and providing access to `PooledEngine` API.
+  - `mapperFor` factory method that allows to create `ComponentMapper` instances.
+  - Accessors for `Entity` objects using `ComponentMappers`: `get`, `has`, `hasNot`, `remove`.
+  - DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`, `allOf`, `exclude`.
 
 #### 1.9.6-b4
 
