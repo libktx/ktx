@@ -9,7 +9,7 @@ import com.badlogic.ashley.core.ComponentMapper
  * Provides `O(1)` retrieval of [Component]s for an [com.badlogic.ashley.core.Entity].
  *
  * @param T the [Component] type to create a [ComponentMapper] for.
- * @return a  [ComponentMapper]
+ * @return a [ComponentMapper] matching the selected component type.
  * @see ComponentMapper
  * @see Component
  */
