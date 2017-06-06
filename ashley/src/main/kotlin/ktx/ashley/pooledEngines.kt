@@ -1,9 +1,8 @@
-package ktx.ashley.engine.pool
+package ktx.ashley
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.AshleyDsl
 
 /**
  * Get or create a [Component] from the [PooledEngine].

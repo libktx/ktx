@@ -12,10 +12,7 @@ builder DSL.
 
 `ktx-ashley` provides extensions and utilities for using [Ashley](https://github.com/libgdx/ashley) with Kotlin:
 
-- `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating non-pooled `Entities`
 - `PooledEngine.add` and `PooledEngine.entity` extension methods provide type-safe building DSL for creating pooled `Entities`
-    - Note: ensure that extensions are imported from the correct package `ktx.ashley.engine.pool.*`, otherwise
-    the `Engine` extensions will be imported entities and components will not be pooled
 - `mapperFor` factory method for create `ComponentMapper` instance.
 - `ktx.ashley.entities.*` accessors for `Entity` objects
 - `ktx.ashley.families.*` for constructing `Family` builders with `KClasses`
@@ -26,7 +23,7 @@ Creating a new pooled `Entity`:
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.engine.pool.entity
+import ktx.ashley.entity
 
 val engine = PooledEngine()
 
@@ -46,7 +43,7 @@ Creating multiple new entities:
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.engine.pool.*
+import ktx.ashley.*
 
 val engine = PooledEngine()
 
@@ -68,26 +65,6 @@ fun setupEngine() = engine.add {
 }
 ```
 
-Create new non-pooled `Entity`:
-```Kotlin
-import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.Engine
-import ktx.ashley.engine.*
-
-val engine = Engine()
-
-class Texture: Component
-class Transform(var x:Float = 0f, var y:Float = 0f): Component
-
-val entity = engine.entity {
-  add(Texture())
-  add(Transform(
-    x = 1f,
-    y = 1f
-  ))
-}
-```
-
 Creating a `ComponentMapper`:
 ```Kotlin
 import com.badlogic.ashley.core.Component
@@ -102,7 +79,7 @@ Getting a `Component` from an `Entity`:
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.engine.pool.entity
+import ktx.ashley.entity
 import ktx.ashley.get
 import ktx.ashley.mapperFor
 
@@ -120,8 +97,8 @@ Check a `Component` on an `Entity``:
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.engine.pool.entity
-import ktx.ashley.get
+import ktx.ashley.entity
+import ktx.ashley.has
 import ktx.ashley.mapperFor
 
 class Transform: Component
@@ -138,7 +115,7 @@ Remove a `Component` from an `Entity`:
 ```Kotlin
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.engine.pool.entity
+import ktx.ashley.entity
 import ktx.ashley.remove
 
 class Transform: Component
@@ -156,7 +133,7 @@ fun removeTransform() {
 Create component `Family` to match all `Components` with an exclusion:
 ```Kotlin
 import com.badlogic.ashley.core.Component
-import ktx.ashley.all
+import ktx.ashley.allOf
 import ktx.ashley.exclude
 
 class Texture: Component

@@ -1,10 +1,6 @@
-package ktx.ashley.engine.pool
+package ktx.ashley
 
 import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.Texture
-import ktx.ashley.Transform
-import ktx.ashley.allOf
-import ktx.ashley.oneOf
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
