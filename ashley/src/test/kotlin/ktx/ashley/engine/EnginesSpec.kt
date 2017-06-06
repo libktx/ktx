@@ -3,8 +3,8 @@ package ktx.ashley.engine
 import com.badlogic.ashley.core.Engine
 import ktx.ashley.Texture
 import ktx.ashley.Transform
-import ktx.ashley.all
-import ktx.ashley.one
+import ktx.ashley.allOf
+import ktx.ashley.oneOf
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -40,31 +40,31 @@ object EnginesSpec : Spek({
       }
       it("should add an entity with a component with default configuration") {
         engine.entity {
-          with<Transform>()
+          add(Transform())
         }
-        val transformEntities = engine.getEntitiesFor(one(Transform::class).get())
+        val transformEntities = engine.getEntitiesFor(oneOf(Transform::class).get())
         val component = transformEntities.single().getComponent(Transform::class.java)
         assertThat(component.x).isEqualTo(0f)
         assertThat(component.y).isEqualTo(0f)
       }
       it("should add an entity with a component with configuration") {
         engine.entity {
-          with<Transform> {
-            x = 1f
+          add(Transform(
+            x = 1f,
             y = 2f
-          }
+          ))
         }
-        val transformEntities = engine.getEntitiesFor(one(Transform::class).get())
+        val transformEntities = engine.getEntitiesFor(oneOf(Transform::class).get())
         val component = transformEntities.single().getComponent(Transform::class.java)
         assertThat(component.x).isEqualTo(1f)
         assertThat(component.y).isEqualTo(2f)
       }
       it("should add multiple different components") {
         engine.entity {
-          with<Transform>()
-          with<Texture>()
+          add(Transform())
+          add(Texture())
         }
-        val transformEntities = engine.getEntitiesFor(all(Transform::class, Texture::class).get())
+        val transformEntities = engine.getEntitiesFor(allOf(Transform::class, Texture::class).get())
         assertThat(transformEntities.size()).isEqualTo(1)
 
         val entity = transformEntities.single()

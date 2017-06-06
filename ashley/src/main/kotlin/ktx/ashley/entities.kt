@@ -15,9 +15,7 @@ import com.badlogic.ashley.core.Entity
  * @param T the [Component] type to search for
  * @return the specified [Component]. Otherwise `null` if the [Entity] does not have it.
  */
-inline fun <reified T: Component> Entity.get(): T? {
-  return getComponent(T::class.java)
-}
+inline fun <reified T: Component> Entity.get(): T? = getComponent(T::class.java)
 
 /**
  * Gets the specified [Component] from the [Entity] with a [ComponentMapper].
@@ -28,9 +26,7 @@ inline fun <reified T: Component> Entity.get(): T? {
  * @param mapper the [ComponentMapper] to retrieve the [Component] with
  * @return the specified [Component]. Otherwise `null` if the [Entity] does not have it.
  */
-operator fun <T : Component> Entity.get(mapper: ComponentMapper<T>): T? {
-  return mapper.get(this)
-}
+operator fun <T : Component> Entity.get(mapper: ComponentMapper<T>): T? = mapper.get(this)
 
 /**
  * Whether the [Entity] has the specified [Component].
@@ -40,9 +36,7 @@ operator fun <T : Component> Entity.get(mapper: ComponentMapper<T>): T? {
  * @param mapper the [ComponentMapper] to check the [Component] with
  * @return `true` if the [Entity] has the specified component, and `false` otherwise
  */
-fun <T: Component> Entity.has(mapper: ComponentMapper<T>): Boolean {
-  return mapper.has(this)
-}
+fun <T: Component> Entity.has(mapper: ComponentMapper<T>): Boolean = mapper.has(this)
 
 /**
  * Whether the [Entity] does not have the specified [Component].
@@ -52,9 +46,7 @@ fun <T: Component> Entity.has(mapper: ComponentMapper<T>): Boolean {
  * @param mapper the [ComponentMapper] to check the [Component] with
  * @return `true` if the [Entity] does not have the specified component, and `false` otherwise
  */
-fun <T: Component> Entity.hasNot(mapper: ComponentMapper<T>): Boolean {
-  return !has(mapper)
-}
+fun <T: Component> Entity.hasNot(mapper: ComponentMapper<T>): Boolean = !has(mapper)
 
 /**
  * Removes the specified [Component] from the [Entity].

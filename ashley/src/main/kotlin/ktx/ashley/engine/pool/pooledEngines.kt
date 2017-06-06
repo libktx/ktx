@@ -13,9 +13,7 @@ import ktx.ashley.AshleyDsl
  * @return the pooled [Component]
  * @see PooledEngine.createComponent
  */
-inline fun <reified T: Component> PooledEngine.create(configure: T.() -> Unit): T {
-  return create<T>().also(configure)
-}
+inline fun <reified T: Component> PooledEngine.create(configure: T.() -> Unit): T = create<T>().also(configure)
 
 /**
  * Get or create a [Component] from the [PooledEngine].
@@ -46,9 +44,7 @@ class PooledEntity(val engine: PooledEngine, val entity: Entity) {
    * @return the pooled [Component]
    * @see [create]
    */
-  inline fun <reified T: Component> with(configure: (@AshleyDsl T).() -> Unit): T {
-    return with<T>().also(configure)
-  }
+  inline fun <reified T: Component> with(configure: (@AshleyDsl T).() -> Unit): T = with<T>().also(configure)
 
   /**
    * Get or creates a pooled instance of the component [T] and adds it to this [entity][PooledEntity].

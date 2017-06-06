@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
  * @param components matches [entities][com.badlogic.ashley.core.Entity] with at least one of the specified components.
  * @return a new [Builder] for a [Family]
  */
-fun one(vararg components: KClass<out Component>): Builder {
+fun oneOf(vararg components: KClass<out Component>): Builder {
   return Family.one(*toJavaClassArray(components) )
 }
 
@@ -17,7 +17,7 @@ fun one(vararg components: KClass<out Component>): Builder {
  * @param components matches [entities][com.badlogic.ashley.core.Entity] with all of the specified components.
  * @return a new [Builder] for a [Family]
  */
-fun all(vararg components: KClass<out Component>): Builder {
+fun allOf(vararg components: KClass<out Component>): Builder {
   return Family.all(*toJavaClassArray(components) )
 }
 
@@ -34,7 +34,7 @@ fun exclude(vararg components: KClass<out Component>): Builder {
  * @param components matches [entities][com.badlogic.ashley.core.Entity] with at least one of the specified components.
  * @return the received [Builder] for the [Family]
  */
-fun Builder.one(vararg components: KClass<out Component>): Builder {
+fun Builder.oneOf(vararg components: KClass<out Component>): Builder {
   return one(*toJavaClassArray(components) )
 }
 
@@ -43,7 +43,7 @@ fun Builder.one(vararg components: KClass<out Component>): Builder {
  * @param components matches [entities][com.badlogic.ashley.core.Entity] with all of the specified components.
  * @return the received [Builder] for the [Family]
  */
-fun Builder.all(vararg components: KClass<out Component>): Builder {
+fun Builder.allOf(vararg components: KClass<out Component>): Builder {
   return all(*toJavaClassArray(components) )
 }
 

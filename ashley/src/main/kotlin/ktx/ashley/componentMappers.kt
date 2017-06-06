@@ -12,6 +12,4 @@ import com.badlogic.ashley.core.ComponentMapper
  * @return the [ComponentMapper]
  * @see ComponentMapper
  */
-inline fun <reified T: Component> mapperFor(): ComponentMapper<T> {
-  return ComponentMapper.getFor(T::class.java)
-}
+inline fun <reified T: Component> mapperFor(): ComponentMapper<T> = ComponentMapper.getFor(T::class.java)
