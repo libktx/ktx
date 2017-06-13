@@ -26,8 +26,7 @@ a `Group` with `actor in group` syntax.
 #### Event listeners
 
 - Lambda-compatible `Actor.onChange` method was added. Allows to listen to `ChangeEvents`.
-- Lambda-compatible `Actor.onClick` methods were added. (More verbose version has access to local coordinates of the click
-events.) Attaches `ClickListeners`.
+- Lambda-compatible `Actor.onClick` method was added. Attaches `ClickListeners`.
 - Lambda-compatible `Actor.onKey` method was added. Allows to listen to `InputEvents` with `keyTyped` type.
 - Lambda-compatible `Actor.onKeyDown` and `Actor.onKeyUp` methods were added. They allow to listen to `InputEvents`
 with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see LibGDX `Keys` class).
@@ -35,6 +34,11 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
 - `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
 improvements (nullability data).
+- `onChangeEvent`, `onClickEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent` and
+`onKeyboardFocusEvent` `Actor` extension methods were added. They consume the relevant `Event` instances as lambda
+parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
+and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
+be enough for most use cases.
 
 #### Actions
 
@@ -90,25 +94,79 @@ textField.setKeyboardFocus(true)
 scrollPane.setScrollFocus(false)
 ```
 
-Adding event listeners:
+Adding a `ChangeListener` to an `Actor`:
+
 ```Kotlin
 import ktx.actors.*
 
-button.onChange { changeEvent, button ->
-  println("$button changed!") }
-  
-label.onClick { inputEvent, label ->
-  println("$label clicked!") }
-table.onClick { inputEvent, table, x, y ->
-  println("$table clicked at (${x}, ${y})!") }
-  
-textField.onKey { inputEvent, textField, key ->
-  println("Typed $key char in ${textField}!") }
+button.onChange {
+  println("Button changed!")
+}
 
-scrollPane.onScrollFocus { focusEvent, scrollPane ->
-  println("$scrollPane focus: ${event.isFocused}!") }
-textField.onKeyboardFocus { focusEvent, textField ->
-  println("$textField focus: ${event.isFocused}!") }
+button.onChangeEvent { changeEvent, actor ->
+  // If you need access to the original ChangeEvent, use this expanded method variant.
+  println("$actor changed by $changeEvent!")
+}
+```
+
+Adding a `ClickListener` to an Actor:
+
+```Kotlin
+import ktx.actors.*
+
+label.onClick { 
+  println("Label clicked!")
+}
+
+label.onClickEvent { inputEvent, actor ->
+  // If you need access to the original InputEvent, use this expanded method variant.
+  println("$actor clicked by $inputEvent!")
+}
+label.onClickEvent { inputEvent, actor, x, y ->
+  // If you need access to the local actor click coordinates, use this expanded method variant.
+  println("$actor clicked by $inputEvent at ($x, $y)!")
+}
+```
+
+Adding an `EventListener` which consumes typed characters:
+
+```Kotlin
+import ktx.actors.*
+
+textField.onKey { key ->
+  println("Typed $key char to text field!")
+}
+
+textField.onKeyEvent { inputEvent, actor, key ->
+  // If you need access to the original InputEvent, use this expanded method variant.
+  println("Typed $key char to $actor by $inputEvent!")
+}
+```
+
+Adding `EventListeners` which listen to `FocusEvents`:
+
+```Kotlin
+import ktx.actors.*
+
+// FocusEvent with scroll type:
+scrollPane.onScrollFocus { focused ->
+  println("Scroll pane is focused: $focused!")
+}
+
+scrollPane.onScrollFocusEvent { focusEvent, actor ->
+  // If you need access to the original FocusEvent, use this expanded method variant.
+  println("$actor is focused: ${focusEvent.isFocused}!")
+}
+
+// FocusEvent with keyboard type:
+textField.onKeyboardFocus { focused ->
+  println("Text field is focused: $focused!")
+}
+
+textField.onKeyboardFocusEvent { focusEvent, actor ->
+  // If you need access to the original FocusEvent, use this expanded method variant.
+  println("$actor is focused: ${focusEvent.isFocused}!")
+}
 ```
 
 Chaining actions (`SequenceAction` utility):
@@ -158,6 +216,16 @@ class MyInputListener : KtxInputListener() {
   }
 }
 ```
+
+#### Migration guide
+
+In **KTX** up to `1.9.6-b4`, extension methods `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus`
+and `onKeyboardFocus` consumed `Event` and `Actor` instances. This lead to common usage of `_, _ ->`, which was against
+the goal of boilerplate-less listeners. That is why the existing listener factory methods where renamed with `Event`
+suffix, and a new set of extension methods with the same names were added - this time consuming a minimal amount of
+parameters. Add `Event` suffix to each of your listener methods or refactor them to the new API with less parameters.
+For example, if you used `Actor.onChange` extension method, use `Actor.onChangeEvent` instead or remove the `event, actor`
+parameters if you do not really need them at all.
 
 ### Alternatives
 

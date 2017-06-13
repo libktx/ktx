@@ -1,5 +1,6 @@
 include 'actors',
         'app',
+        'ashley',
         'assets',
         'async',
         'box2d',

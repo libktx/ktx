@@ -1,0 +1,20 @@
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+dependencies {
+  provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  provided "com.badlogicgames.ashley:ashley:$ashleyVersion"
+
+  testCompile "org.jetbrains.spek:spek-api:$spekVersion"
+  testCompile "org.assertj:assertj-core:$assertjVersion"
+
+  testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+  testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}
+
+junitPlatform {
+  filters {
+    engines {
+      include 'spek'
+    }
+  }
+}

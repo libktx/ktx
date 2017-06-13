@@ -1,3 +1,22 @@
+#### 1.9.6-b5
+
+- **[UPDATE]** Updated to Kotlin 1.1.2-5.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.16.
+- **[FEATURE]** (`ktx-actors`) `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and `onKeyboardFocus`
+factory methods for `EventListener` instances were added. Contrary to existing factory methods, these use minimal set
+of parameters to make listeners creation as concise as possible.
+- **[CHANGE]** (`ktx-actors`) Existing `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and
+`onKeyboardFocus` factory methods where renamed to `onChangeEvent`, `onClickEvent`, `onKeyEvent`, `onKeyDownEvent`,
+`onKeyUpEvent`, `onScrollFocusEvent` and `onKeyboardFocusEvent` respectively. Their excessive amount of parameters,
+useful only on rare occasions, led to unnecessary boilerplate during listeners creation. See `ktx-actors` file
+documentation for migration guide.
+- **[FEATURE]** (`ktx-ashley`) new **KTX** module with Ashley entity component system utilities: `ktx-ashley`.
+  - `PooledEngine.add` and `PooledEngine.entity` extension methods.
+  - `PooledEntity` wrapping `Entity` and providing access to `PooledEngine` API.
+  - `mapperFor` factory method that allows to create `ComponentMapper` instances.
+  - Accessors for `Entity` objects using `ComponentMappers`: `get`, `has`, `hasNot`, `remove`.
+  - DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`, `allOf`, `exclude`.
+
 #### 1.9.6-b4
 
 - **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return LibGDX collections.
@@ -12,7 +31,7 @@
 #### 1.9.6-b3
 
 - **[UPDATE]** Updated to Kotlin 1.1.2-3.
-- **[UPDATE]** Updated to Kotlin Coroutines to 0.15.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.15.
 - **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
 depending on the global `AssetManager` were removed.
 - **[FEATURE]** (`ktx-assets`) Added `FileType.getResolver` extension method creating `FileHandleResolver` instances.

@@ -24,7 +24,21 @@ class EventsTest {
     val actor = Actor()
     var changed = false
 
-    val listener = actor.onChange { event, actor -> changed = true }
+    val listener = actor.onChange { changed = true }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    assertTrue(listener is ChangeListener)
+    actor.fire(ChangeEvent())
+    assertTrue(changed)
+  }
+
+  @Test
+  fun `should attach ChangeListener consuming ChangeEvent`() {
+    val actor = Actor()
+    var changed = false
+
+    val listener = actor.onChangeEvent { event, widget -> changed = true }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -37,7 +51,7 @@ class EventsTest {
   fun `should attach ClickListener`() {
     val actor = Actor()
 
-    val listener = actor.onClick { event, actor -> }
+    val listener = actor.onClick { }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -45,10 +59,21 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener with local coordinates`() {
+  fun `should attach ClickListener consuming InputEvent`() {
     val actor = Actor()
 
-    val listener = actor.onClick { event, actor, x, y -> }
+    val listener = actor.onClickEvent { event, widget -> }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    assertTrue(listener is ClickListener)
+  }
+
+  @Test
+  fun `should attach ClickListener consuming InputEvent with local coordinates`() {
+    val actor = Actor()
+
+    val listener = actor.onClickEvent { event, widget, x, y -> }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -60,7 +85,24 @@ class EventsTest {
     val actor = Actor()
     var typed: Char? = null
 
-    val listener = actor.onKey { event, actor, key -> typed = key }
+    val listener = actor.onKey { key -> typed = key }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    assertNull(typed)
+    val event = InputEvent()
+    event.character = 'a'
+    event.type = keyTyped
+    actor.fire(event)
+    assertEquals('a', typed)
+  }
+
+  @Test
+  fun `should attach key listener consuming InputEvent`() {
+    val actor = Actor()
+    var typed: Char? = null
+
+    val listener = actor.onKeyEvent { event, widget, key -> typed = key }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -77,7 +119,24 @@ class EventsTest {
     val actor = Actor()
     var pressed: Int? = null
 
-    val listener = actor.onKeyDown { event, actor, keyCode -> pressed = keyCode }
+    val listener = actor.onKeyDown { keyCode -> pressed = keyCode }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    assertNull(pressed)
+    val event = InputEvent()
+    event.keyCode = Keys.A
+    event.type = keyDown
+    actor.fire(event)
+    assertEquals(Keys.A, pressed)
+  }
+
+  @Test
+  fun `should attach key down listener consuming InputEvent`() {
+    val actor = Actor()
+    var pressed: Int? = null
+
+    val listener = actor.onKeyDownEvent { event, widget, keyCode -> pressed = keyCode }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -94,7 +153,7 @@ class EventsTest {
     val actor = Actor()
     var released: Int? = null
 
-    val listener = actor.onKeyUp { event, actor, keyCode -> released = keyCode }
+    val listener = actor.onKeyUp { keyCode -> released = keyCode }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -108,11 +167,29 @@ class EventsTest {
   }
 
   @Test
-  fun `should scroll focus listener`() {
+  fun `should attach key up listener consuming InputEvent`() {
+    val actor = Actor()
+    var released: Int? = null
+
+    val listener = actor.onKeyUpEvent { event, widget, keyCode -> released = keyCode }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+
+    assertNull(released)
+    val event = InputEvent()
+    event.keyCode = Keys.A
+    event.type = keyUp
+    actor.fire(event)
+    assertEquals(Keys.A, released)
+  }
+
+  @Test
+  fun `should attach scroll focus listener`() {
     val actor = Actor()
     var focused = false
 
-    val listener = actor.onScrollFocus { event, actor -> focused = event.isFocused }
+    val listener = actor.onScrollFocus { focused = it }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -124,11 +201,43 @@ class EventsTest {
   }
 
   @Test
-  fun `should keyboard focus listener`() {
+  fun `should attach scroll focus listener consuming FocusEvent`() {
     val actor = Actor()
     var focused = false
 
-    val listener = actor.onKeyboardFocus { event, actor -> focused = event.isFocused }
+    val listener = actor.onScrollFocusEvent { event, widget -> focused = event.isFocused }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    val event = FocusEvent()
+    event.type = scroll
+    event.isFocused = true
+    actor.fire(event)
+    assertTrue(focused)
+  }
+
+  @Test
+  fun `should attach keyboard focus listener`() {
+    val actor = Actor()
+    var focused = false
+
+    val listener = actor.onKeyboardFocus { focused = it }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+    val event = FocusEvent()
+    event.type = keyboard
+    event.isFocused = true
+    actor.fire(event)
+    assertTrue(focused)
+  }
+
+  @Test
+  fun `should attach keyboard focus listener consuming FocusEvent`() {
+    val actor = Actor()
+    var focused = false
+
+    val listener = actor.onKeyboardFocusEvent { event, widget -> focused = event.isFocused }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
