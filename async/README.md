@@ -1,3 +1,5 @@
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.16-orange.svg)](http://kotlinlang.org/)
+
 # KTX: coroutines support and threading utilities
 
 [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) support and general asynchronous operations
@@ -11,6 +13,26 @@ are tedious to call with vanilla Kotlin. This module aims to hide asynchronous c
 as improve existing asynchronous APIs to feel more like Kotlin.
 
 ### Guide
+
+#### Setup
+
+Before using `ktx-async`, make sure to include the Kotlin coroutines library in your Gradle script:
+
+```Groovy
+compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: coroutinesVersion
+```
+
+The `coroutinesVersion` _must_ match the coroutines version that the `ktx-async` library was compiled against -
+otherwise it might cause runtime errors. Since coroutines are currently an experimental feature, you should enable them
+first:
+
+```Groovy
+kotlin {
+  experimental {
+    coroutines 'enable'
+  }
+}
+```
 
 #### Coroutines
 
