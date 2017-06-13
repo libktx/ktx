@@ -1,4 +1,5 @@
 #### 1.9.6-SNAPSHOT
+- **[UPDATE]** (`ktx-async`) Updated `kotlinx-coroutines-core` to `0.16`.
 - **[FEATURE]** (`ktx-actors`) `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and `onKeyboardFocus`
 factory methods for `EventListener` instances were added. Contrary to existing factory methods, these use minimal set
 of parameters to make listeners creation as concise as possible.
