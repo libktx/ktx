@@ -1,3 +1,5 @@
+#### 1.9.6-SNAPSHOT
+
 #### 1.9.6-b5
 
 - **[UPDATE]** Updated to Kotlin 1.1.2-5.
