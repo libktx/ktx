@@ -410,7 +410,7 @@ class MapsTest {
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
-    val result = map.flatMap { e -> List(e.value) { e.value } }
+    val result = map.flatMap { (_, value) -> List(value!!) { value } }
     result.sort()
 
     assertTrue(result is GdxArray)

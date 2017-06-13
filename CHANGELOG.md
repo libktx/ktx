@@ -1,5 +1,7 @@
 #### 1.9.6-SNAPSHOT
-- **[UPDATE]** (`ktx-async`) Updated `kotlinx-coroutines-core` to `0.16`.
+
+- **[UPDATE]** Updated to Kotlin 1.1.2-5.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.16.
 - **[FEATURE]** (`ktx-actors`) `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus` and `onKeyboardFocus`
 factory methods for `EventListener` instances were added. Contrary to existing factory methods, these use minimal set
 of parameters to make listeners creation as concise as possible.
@@ -29,7 +31,7 @@ documentation for migration guide.
 #### 1.9.6-b3
 
 - **[UPDATE]** Updated to Kotlin 1.1.2-3.
-- **[UPDATE]** Updated to Kotlin Coroutines to 0.15.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.15.
 - **[CHANGE]** (`ktx-assets`) Static `AssetManager` instance container - `Assets` - was removed. All top level functions
 depending on the global `AssetManager` were removed.
 - **[FEATURE]** (`ktx-assets`) Added `FileType.getResolver` extension method creating `FileHandleResolver` instances.
