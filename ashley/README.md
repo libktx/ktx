@@ -13,7 +13,7 @@ builder DSL.
 
 `ktx-ashley` provides the following extensions and utilities:
 
-- `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating pooled `Entities`.
+- `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating `Entities`.
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
 `with` methods.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
