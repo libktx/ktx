@@ -1,27 +1,9 @@
 package ktx.ashley
 
 import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.PooledEngine
-
-/**
- * Get or create a [Component] from the [PooledEngine].
- *
- * @param T the type of [Component] to get or create.
- * @param configure inlined function with [T] as the receiver to allow further configuration.
- * @return a pooled [Component] instance of the selected type.
- * @see PooledEngine.createComponent
- */
-inline fun <reified T : Component> PooledEngine.create(configure: T.() -> Unit): T = create<T>().also(configure)
-
-/**
- * Get or create a [Component] from the [PooledEngine].
- *
- * @param T the type of [Component] to get or create.
- * @return a pooled [Component] instance of the selected type.
- * @see PooledEngine.createComponent
- */
-inline fun <reified T : Component> PooledEngine.create(): T = createComponent(T::class.java)
 
 /**
  * An [Entity] created by a [PooledEngine].
