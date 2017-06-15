@@ -1,5 +1,10 @@
 #### 1.9.6-SNAPSHOT
 
+- **[UPDATE]** Updated to Ashley 1.7.3.
+- **[CHANGE]** (`ktx-ashley`) Extensions updated to support `Engine` base class as well as `PooledEngine`.
+  - `Engine.add` and `Engine.entity` extension methods to replace `PooledEngine` equivalents.
+  - Changed `PooledEntity` to `EngineEntity`, wrapping `Entity` and providing access to `Engine` API.
+  
 #### 1.9.6-b5
 
 - **[UPDATE]** Updated to Kotlin 1.1.2-5.
