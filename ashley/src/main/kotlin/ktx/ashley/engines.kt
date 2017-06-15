@@ -21,7 +21,6 @@ inline fun <reified T : Component> Engine.create(configure: T.() -> Unit): T = c
  */
 inline fun <reified T : Component> Engine.create(): T = createComponent(T::class.java)
 
-
 /**
  * An [Entity] created by the provided [Engine].
  *
