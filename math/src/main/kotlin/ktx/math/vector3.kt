@@ -47,7 +47,6 @@ operator fun Vector3.plus(vector2: Vector2): Vector3 {
  */
 operator fun Vector3.minus(vector3: Vector3): Vector3 = this.sub(vector3)
 
-
 /**
  * Modifies x and y components of this vector.
  * @param vector2 values from this vector will be subtracted from this vector.

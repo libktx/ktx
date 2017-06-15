@@ -111,14 +111,12 @@ operator fun <Type> GdxArray<Type>.get(index: Int, alternative: Type): Type {
 fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) =
     elements.forEach { this.add(it) }
 
-
 /**
  * @param elements will be iterated over and removed from the array.
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean = false) =
     elements.forEach { this.removeValue(it, identity) }
-
 
 /**
  * @param elements will be iterated over and removed from the array.

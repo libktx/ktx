@@ -67,7 +67,6 @@ inline fun stack(init: KStack.() -> Unit): Stack = actor(KStack(), init)
  */
 inline fun tree(style: String = DEFAULT_STYLE, init: KVisTree.() -> Unit) = actor(KVisTree(style), init)
 
-
 inline fun <T : Actor> actor(actor: T, init: (@VisDsl T).() -> Unit): T {
   actor.init()
   return actor

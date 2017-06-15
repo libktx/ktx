@@ -19,7 +19,7 @@ abstract class KotlinApplication(protected val fixedTimeStep: Float = 1f / 60f,
    * since the last [render] call in case of subsequent [render] calls on devices unable to run the application at the
    * chosen time step rate.*/
   protected var timeSinceLastRender = 0f
-                private set
+    private set
 
   override fun resize(width: Int, height: Int) {
   }

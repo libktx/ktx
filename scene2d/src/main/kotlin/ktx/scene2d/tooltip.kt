@@ -33,7 +33,7 @@ fun Actor.addTextTooltip(text: String,
  * @return a new [TextTooltip] instance added to the actor.
  */
 inline fun Actor.addTextTooltip(text: String,
-                                style:String = defaultStyle,
+                                style: String = defaultStyle,
                                 skin: Skin = Scene2DSkin.defaultSkin,
                                 tooltipManager: TooltipManager = TooltipManager.getInstance(),
                                 init: (@Scene2dDsl Label).(TextTooltip) -> Unit): TextTooltip {
