@@ -5,6 +5,8 @@
 - **[CHANGE]** (`ktx-ashley`) Extensions updated to support `Engine` base class additionaly to the `PooledEngine`.
   - `Engine.add` and `Engine.entity` extension methods to replace `PooledEngine` equivalents.
   - Changed `PooledEntity` to `EngineEntity`, wrapping `Entity` and providing access to `Engine` API.
+- **[CHANGE]** (`ktx-async`) `TextAssetLoader` now extends `AsynchronousAssetLoader` instead of `SynchronousAssetLoader`.
+- **[FIX]** (`ktx-async`) `AssetStorage` now correctly handles `SynchronousAssetLoader` instances on the main rendering thread.
 
 #### 1.9.6-b5
 

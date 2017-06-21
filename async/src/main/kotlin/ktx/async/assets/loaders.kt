@@ -89,7 +89,9 @@ internal class AssetLoaderStorage {
 }
 
 /**
- * Allows to read text files with an [AssetManager] or an [AssetStorage].
+ * Allows to read text files with an [AssetManager] or an [AssetStorage]. Note that [loadAsync] _must_ be called before
+ * [loadSync], as usual in case of [AsynchronousAssetLoader] implementations. The loader is not considered thread-safe
+ * and assumes that a single file is loaded at a time.
  * @param fileResolver not used, required by the superclass.
  * @param charset name of the charset used to read text. Can be overridden with [TextAssetLoaderParameters]. Should
  *    match text files encoding. Defaults to UTF-8.
@@ -97,12 +99,26 @@ internal class AssetLoaderStorage {
 class TextAssetLoader(
     fileResolver: FileHandleResolver,
     private val charset: String = "UTF-8"
-) : SynchronousAssetLoader<String, TextAssetLoaderParameters>(fileResolver) {
-  override fun load(
+) : AsynchronousAssetLoader<String, TextAssetLoaderParameters>(fileResolver) {
+  @Volatile var fileContent: String? = null
+
+  override fun loadAsync(
       assetManager: AssetManager?,
       fileName: String?,
       file: FileHandle,
-      parameter: TextAssetLoaderParameters?): String = file.readString(parameter?.charset ?: charset)
+      parameter: TextAssetLoaderParameters?) {
+    fileContent = file.readString(parameter?.charset ?: charset)
+  }
+
+  override fun loadSync(
+      assetManager: AssetManager?,
+      fileName: String?,
+      file: FileHandle,
+      parameter: TextAssetLoaderParameters?): String = try {
+    fileContent ?: throw AssetStorageException("File $fileName was not loaded asynchronously. Call #loadAsync first.")
+  } finally {
+    fileContent = null
+  }
 
   override fun getDependencies(fileName: String?, file: FileHandle?, parameter: TextAssetLoaderParameters?):
       GdxArray<AssetDescriptor<Any>>? = null
