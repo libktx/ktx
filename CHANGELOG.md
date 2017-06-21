@@ -1,8 +1,8 @@
-#### 1.9.6-SNAPSHOT
+#### 1.9.6-b6
 
 - **[UPDATE]** Updated to Gradle 4.0.
 - **[UPDATE]** Updated to Ashley 1.7.3.
-- **[CHANGE]** (`ktx-ashley`) Extensions updated to support `Engine` base class additionaly to the `PooledEngine`.
+- **[CHANGE]** (`ktx-ashley`) Extensions updated to support `Engine` base class additionally to the `PooledEngine`.
   - `Engine.add` and `Engine.entity` extension methods to replace `PooledEngine` equivalents.
   - Changed `PooledEntity` to `EngineEntity`, wrapping `Entity` and providing access to `Engine` API.
 - **[CHANGE]** (`ktx-async`) `TextAssetLoader` now extends `AsynchronousAssetLoader` instead of `SynchronousAssetLoader`.
