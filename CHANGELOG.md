@@ -1,3 +1,5 @@
+#### 1.9.6-SNAPSHOT
+
 #### 1.9.6-b6
 
 - **[UPDATE]** Updated to Gradle 4.0.
