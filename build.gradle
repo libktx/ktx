@@ -66,7 +66,7 @@ subprojects {
   }
 
   javadocJar.dependsOn('dokkaJavadoc')
-  
+
   task dokkaZip(type: Zip) {
     from "$buildDir/dokka"
   }
@@ -112,7 +112,7 @@ subprojects {
               url 'https://creativecommons.org/publicdomain/zero/1.0/'
             }
           }
-          
+
           scm {
             connection 'scm:git:git@github.com:libktx/ktx.git'
             developerConnection 'scm:git:git@github.com:libktx/ktx.git'
@@ -159,4 +159,3 @@ distributions {
     }
   }
 }
-

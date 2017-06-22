@@ -169,13 +169,9 @@ class AssetStorage(
     return file
   }
 
-  private suspend fun <Asset : Any> loadWithSynchronousLoader(
+  private fun <Asset : Any> loadWithSynchronousLoader(
       synchronousLoader: SynchronousLoader<Asset>,
-      descriptor: AssetDescriptor<Asset>): Asset =
-      KtxAsync.asynchronous(executor) {
-        // Yes, LibGDX AssetManager handles SynchronousAssetLoader loading on a separate thread. Go figure.
-        synchronousLoader.load(asAssetManager, descriptor)
-      }
+      descriptor: AssetDescriptor<Asset>): Asset = synchronousLoader.load(asAssetManager, descriptor)
 
   private suspend fun <Asset : Any> loadWithAsynchronousLoader(
       asynchronousLoader: AsynchronousLoader<Asset>,

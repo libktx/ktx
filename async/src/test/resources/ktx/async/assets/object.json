@@ -1,1 +1,4 @@
-{"testInt":10,"testString":"Content."}
+{
+  "testInt": 10,
+  "testString": "Content."
+}

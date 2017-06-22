@@ -122,7 +122,6 @@ class KNode(actor: Actor) : Node(actor), TreeWidgetFactory {
   }
 }
 
-
 /** @see [BasicColorPicker] */
 @VisDsl
 class KBasicColorPicker(styleName: String) : BasicColorPicker(styleName, null), TableWidgetFactory {

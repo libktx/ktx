@@ -10,6 +10,7 @@ import com.badlogic.gdx.files.FileHandle
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
+import io.kotlintest.matchers.shouldThrow
 import ktx.async.assets.TextAssetLoader.TextAssetLoaderParameters
 import org.junit.Assert.*
 import org.junit.Test
@@ -143,7 +144,8 @@ class TextAssetLoaderTest {
       on(it.readString("UTF-8")) doReturn "Content."
     }
 
-    val result = loader.load(mock(), "test.txt", file, null)
+    loader.loadAsync(mock(), "test.txt", file, null)
+    val result = loader.loadSync(mock(), "test.txt", file, null)
 
     assertEquals("Content.", result)
     verify(file).readString("UTF-8")
@@ -156,10 +158,20 @@ class TextAssetLoaderTest {
       on(it.readString("UTF-16")) doReturn "Content."
     }
 
-    val result = loader.load(mock(), "test.txt", file, TextAssetLoaderParameters(charset = "UTF-16"))
+    loader.loadAsync(mock(), "test.txt", file, TextAssetLoaderParameters(charset = "UTF-16"))
+    val result = loader.loadSync(mock(), "test.txt", file, TextAssetLoaderParameters(charset = "UTF-16"))
 
     assertEquals("Content.", result)
     verify(file).readString("UTF-16")
+  }
+
+  @Test
+  fun `should throw exception when trying to read file without loading it asynchronously`() {
+    val loader = TextAssetLoader(ClasspathFileHandleResolver(), charset = "UTF-8")
+
+    shouldThrow<AssetStorageException> {
+      loader.loadSync(mock(), "test.txt", mock(), null)
+    }
   }
 }
 
