@@ -1,5 +1,7 @@
 #### 1.9.6-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.1.3.
+
 #### 1.9.6-b6
 
 - **[UPDATE]** Updated to Gradle 4.0.
