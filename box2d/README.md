@@ -36,6 +36,7 @@ with the following shapes:
   - `prismaticJointWith`: `PrismaticJoint`.
   - `jointWith`: any `Joint` type supported by the custom `JointDef` passed as the method argument.
 - `earthGravity` is a constant that roughly matches Earth's gravity.
+- `rayCast` extension methods to allow creating ray-cast callbacks with Kotlin lambda shorthand.
 
 ### Usage examples
 
@@ -267,6 +268,19 @@ val body = world.body {
       // that at invocation time the Box2D body of this fixture might
       // not be fully constructed yet.
     }
+  }
+}
+```
+
+Creating ray-casts:
+
+```Kotlin
+import ktx.box2d.*
+
+fun createRayCast() {
+  world.rayCast(0f, 0f, 1f, 1f) { fixture, point, normal, fraction ->
+    // will be called when this ray hits a fixture
+    1f
   }
 }
 ```

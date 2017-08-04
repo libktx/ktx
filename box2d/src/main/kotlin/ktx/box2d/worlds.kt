@@ -3,6 +3,7 @@ package ktx.box2d
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.World
 
 /**
@@ -60,3 +61,69 @@ fun World.create(bodyDefinition: BodyDefinition): Body {
  * @see createWorld
  */
 val earthGravity = Vector2(0f, -9.8f)
+
+/**
+ * Callback lambda for ray-casts. This lambda is called when a ray-cast hits a fixture.
+ *
+ * The lambda accepts these parameters:
+ * - `[Fixture]`, the fixture hit by the ray
+ * - `[Vector2]`, the point of initial intersection
+ * - `[Vector2]`, the normal vector at the point of intersection
+ * - `[Float]`, the fraction of the distance from `start` to `end` that the intersection point is at
+ *
+ * The lambda should return:
+ * - `-1f`, ignore this fixture and continue
+ * - `0f`, terminate the ray cast
+ * - a fraction, clip the length of the ray to this point
+ * - `1f`, don't clip the ray and continue
+ *
+ * Can be used in place of [com.badlogic.gdx.physics.box2d.RayCastCallback] via Kotlin SAM conversion.
+ */
+typealias RayCastCallback = (Fixture, Vector2, Vector2, Float) -> Float
+
+/**
+ * Return value for [RayCastCallback].
+ *
+ * Indicates to ignore the hit fixture and continue.
+ */
+const val IGNORE_FIXTURE = -1f
+/**
+ * Return value for [RayCastCallback].
+ *
+ * Indicates to terminate the ray cast
+ */
+const val TERMINATE_RAY_CAST = 0f
+/**
+ * Return value for [RayCastCallback].
+ *
+ * Indicates to not clip the ray and continue
+ */
+const val CONTINUE_RAY_CAST = 1f
+
+/**
+ * Ray-cast the world for all fixtures in the path of the ray.
+ *
+ * The ray-cast ignores shapes that contain the starting point.
+ *
+ * @param start the ray starting point
+ * @param end the ray ending point
+ * @param callback a user implemented callback. This is called for every fixture hit.
+ */
+fun World.rayCast(start: Vector2, end: Vector2, callback: RayCastCallback) {
+  rayCast(callback, start, end)
+}
+
+/**
+ * Ray-cast the world for all fixtures in the path of the ray.
+ *
+ * The ray-cast ignores shapes that contain the starting point.
+ *
+ * @param startX the ray starting point X
+ * @param startY the ray starting point Y
+ * @param endX the ray ending point X
+ * @param endY the ray ending point Y
+ * @param callback a user implemented callback. This is called for every fixture hit.
+ */
+fun World.rayCast(startX: Float, startY: Float, endX: Float, endY: Float, callback: RayCastCallback) {
+  rayCast(callback, startX, startY, endX, endY)
+}

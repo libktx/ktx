@@ -171,4 +171,44 @@ class WorldsTest : Box2DTest() {
     assertSame(body.fixtureList[0], callbackParameter)
     world.dispose()
   }
+
+  @Test
+  fun `should ray-cast between two vectors`() {
+    val world = createWorld()
+
+    val expectedEdge = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
+
+    var called = false
+    world.rayCast(Vector2(-1f, 1f), Vector2(1f, 1f)) { fixture, point, normal, fraction ->
+      called = true
+      assertSame(expectedEdge, fixture)
+      assertEquals(Vector2(0f, 1f), point)
+      assertEquals(Vector2(-1f, 0f), normal)
+      assertEquals(0.5f, fraction)
+      TERMINATE_RAY_CAST
+    }
+    assertTrue(called)
+
+    world.dispose()
+  }
+
+  @Test
+  fun `should ray-cast between two coordinates`() {
+    val world = createWorld()
+
+    val expectedEdge = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
+
+    var called = false
+    world.rayCast(-1f, 1f, 1f, 1f) { fixture, point, normal, fraction ->
+      called = true
+      assertSame(expectedEdge, fixture)
+      assertEquals(Vector2(0f, 1f), point)
+      assertEquals(Vector2(-1f, 0f), normal)
+      assertEquals(0.5f, fraction)
+      TERMINATE_RAY_CAST
+    }
+    assertTrue(called)
+
+    world.dispose()
+  }
 }
