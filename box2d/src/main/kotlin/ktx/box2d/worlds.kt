@@ -63,7 +63,12 @@ fun World.create(bodyDefinition: BodyDefinition): Body {
 val earthGravity = Vector2(0f, -9.8f)
 
 /**
- * Callback lambda for ray-casts. This lambda is called when a ray-cast hits a fixture.
+ * Callback lambda for ray-casts.
+ *
+ * This lambda is called for each fixture the ray-cast hits.
+ *
+ * There is no guarantee on the order of the callback is called, e.g. the first call to the lambda
+ * is not necessarily the nearest to the start point of the ray.
  *
  * The lambda accepts these parameters:
  * - `[Fixture]`, the fixture hit by the ray
