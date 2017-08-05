@@ -185,7 +185,7 @@ class WorldsTest : Box2DTest() {
       assertEquals(Vector2(0f, 1f), point)
       assertEquals(Vector2(-1f, 0f), normal)
       assertEquals(0.5f, fraction)
-      TERMINATE_RAY_CAST
+      RayCastCallbackResult.TERMINATE
     }
     assertTrue(called)
 
@@ -205,7 +205,7 @@ class WorldsTest : Box2DTest() {
       assertEquals(Vector2(0f, 1f), point)
       assertEquals(Vector2(-1f, 0f), normal)
       assertEquals(0.5f, fraction)
-      TERMINATE_RAY_CAST
+      RayCastCallbackResult.TERMINATE
     }
     assertTrue(called)
 
