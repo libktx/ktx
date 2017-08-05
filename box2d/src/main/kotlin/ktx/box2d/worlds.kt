@@ -79,22 +79,22 @@ val earthGravity = Vector2(0f, -9.8f)
  *
  * Can be used in place of [com.badlogic.gdx.physics.box2d.RayCastCallback] via Kotlin SAM conversion.
  */
-typealias RayCastCallback = (Fixture, Vector2, Vector2, Float) -> Float
+typealias KtxRayCastCallback = (Fixture, Vector2, Vector2, Float) -> Float
 
 /**
- * Return value for [RayCastCallback].
+ * Return value for [KtxRayCastCallback].
  *
  * Indicates to ignore the hit fixture and continue.
  */
 const val IGNORE_FIXTURE = -1f
 /**
- * Return value for [RayCastCallback].
+ * Return value for [KtxRayCastCallback].
  *
  * Indicates to terminate the ray cast
  */
 const val TERMINATE_RAY_CAST = 0f
 /**
- * Return value for [RayCastCallback].
+ * Return value for [KtxRayCastCallback].
  *
  * Indicates to not clip the ray and continue
  */
@@ -109,7 +109,7 @@ const val CONTINUE_RAY_CAST = 1f
  * @param end the ray ending point
  * @param callback a user implemented callback. This is called for every fixture hit.
  */
-fun World.rayCast(start: Vector2, end: Vector2, callback: RayCastCallback) {
+fun World.rayCast(start: Vector2, end: Vector2, callback: KtxRayCastCallback) {
   rayCast(callback, start, end)
 }
 
@@ -124,6 +124,6 @@ fun World.rayCast(start: Vector2, end: Vector2, callback: RayCastCallback) {
  * @param endY the ray ending point Y
  * @param callback a user implemented callback. This is called for every fixture hit.
  */
-fun World.rayCast(startX: Float, startY: Float, endX: Float, endY: Float, callback: RayCastCallback) {
+fun World.rayCast(startX: Float, startY: Float, endX: Float, endY: Float, callback: KtxRayCastCallback) {
   rayCast(callback, startX, startY, endX, endY)
 }
