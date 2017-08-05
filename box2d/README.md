@@ -278,7 +278,7 @@ Creating ray-casts:
 import ktx.box2d.*
 
 fun createRayCast() {
-  world.rayCast(0f, 0f, 1f, 1f) { fixture, point, normal, fraction ->
+  world.rayCast(startX = 0f, startY = 0f, endX = 1f, endY = 1f) { fixture, point, normal, fraction ->
     // will be called when this ray hits a fixture
     1f
   }

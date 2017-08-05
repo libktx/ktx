@@ -199,7 +199,7 @@ class WorldsTest : Box2DTest() {
     val expectedEdge = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
 
     var called = false
-    world.rayCast(-1f, 1f, 1f, 1f) { fixture, point, normal, fraction ->
+    world.rayCast(startX = -1f, startY = 1f, endX = 1f, endY = 1f) { fixture, point, normal, fraction ->
       called = true
       assertSame(expectedEdge, fixture)
       assertEquals(Vector2(0f, 1f), point)
