@@ -23,72 +23,6 @@ class KtxGameTest {
   }
 
   @Test
-  fun `should not render if delta time is lower than fixed time step`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(1 / 120f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 30f, firstScreen = screen)
-
-    game.render()
-
-    assertFalse(screen.rendered)
-  }
-
-  @Test
-  fun `should render if delta time is equal to fixed time step`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(1 / 30f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 30f, firstScreen = screen)
-
-    game.render()
-
-    assertTrue(screen.rendered)
-    assertEquals(1, screen.renderedTimes)
-  }
-
-  @Test
-  fun `should render if delta time is higher than fixed time step`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(2 / 30f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 30f, firstScreen = screen)
-
-    game.render()
-
-    assertTrue(screen.rendered)
-    assertEquals(2, screen.renderedTimes)
-  }
-
-  @Test
-  fun `should render if delta times are collectively equal to or higher than fixed time step`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(1 / 50f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 30f, firstScreen = screen)
-
-    game.render() // 0.02 - 0.0
-    assertEquals(0, screen.renderedTimes)
-
-    game.render() // 0.04 - 0.0(3)
-    assertEquals(1, screen.renderedTimes)
-
-    game.render() // 0.06 - 0.0(3)
-    assertEquals(1, screen.renderedTimes)
-
-    game.render() // 0.08 - 0.0(6)
-    assertEquals(2, screen.renderedTimes)
-  }
-
-  @Test
-  fun `should clear screen on render`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(1 / 30f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 30f, firstScreen = screen)
-
-    game.render()
-
-    verify(Gdx.gl).glClearColor(0f, 0f, 0f, 1f)
-    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
-  }
-
-  @Test
   fun `should display firstScreen without registration`() {
     val screen = mock<Screen>()
     val game = KtxGame(firstScreen = screen)
@@ -107,14 +41,25 @@ class KtxGameTest {
   }
 
   @Test
-  fun `should not render more times than max delta time limit allows`() {
-    Gdx.graphics = mockGraphicsWithDeltaTime(1f)
-    val screen = MockScreen()
-    val game = KtxGame(fixedTimeStep = 1 / 60f, maxDeltaTime = 5f / 60f, firstScreen = screen)
+  fun `should clear screen on render`() {
+    val game = KtxGame(firstScreen = MockScreen())
+    Gdx.graphics = mock()
 
     game.render()
 
-    assertEquals(5, screen.renderedTimes)
+    verify(Gdx.gl).glClearColor(0f, 0f, 0f, 1f)
+    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
+  }
+
+  @Test
+  fun `should not clear screen on render if screen clearing is turned off`() {
+    val game = KtxGame(clearScreen = false, firstScreen = MockScreen())
+    Gdx.graphics = mock()
+
+    game.render()
+
+    verify(Gdx.gl, never()).glClearColor(any(), any(), any(), any())
+    verify(Gdx.gl, never()).glClear(any())
   }
 
   @Test

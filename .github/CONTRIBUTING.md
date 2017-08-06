@@ -61,6 +61,22 @@ previous task sequence (if it fails on the `closeAndPromoteRepository` task).
 Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
 description. Note that a release is not necessary for snapshot versions.
 
+### Updating dependencies
+
+Dependencies versions are stored in the [gradle.properties](../gradle.properties) file. Snapshot releases should keep
+all of the dependencies (outside of testing scope) up-to-date. Major dependencies updating:
+
+- **LibGDX**: update `gdxVersion` in the properties file and LibGDX version in the tag on the top of the 
+[README.md](../README.md) file.
+- **Kotlin**: update the `kotlinVersion` property and the Kotlin tag in the [README.md](../README.md).
+- **Kotlin Coroutines**: update `kotlinCoroutinesVersion` property and the tag in the
+`ktx-async` [README.md](../async/README.md).
+- **Gradle**: run `gradle wrapper` in the root project folder. Make sure that the
+[Gradle wrapper properties file](../gradle/wrapper/gradle-wrapper.properties) points the `all` Gradle release under
+`distributionUrl` rather than just the binaries (`bin`).
+
+All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
+
 ### Adding a new KTX module
 
 Adding a new library to KTX:
