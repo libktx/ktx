@@ -14,17 +14,12 @@ by `ktx-app`.
 
 #### `ApplicationListener` implementations
 
-- `KotlinApplication` is an `ApplicationAdapter` equivalent. Additionally to providing empty implementations for all
-optional `ApplicationListener` methods, it also automatically clears the screen and implements
-[fixed rendering time steps](http://www.badlogicgames.com/forum/viewtopic.php?p=96803#p96803), allowing you to customize
-time step duration and max time step with its constructor parameters. This is a solid base for your `ApplicationListener`
-implementation if you like working from scratch.
 - `KtxApplicationAdapter` is an `ApplicationListener` extension. Provides no-op implementations of all methods, without
 being an abstract class like `com.badlogic.gdx.ApplicationAdapter`.
 - `KtxGame` is a bit more opinionated `Game` equivalent that not only delegates all game events to the current `Screen`
-instance, but also ensures non-nullability of screens, manages screen clearing and fixed rendering step, and maintains
-screens collection, which allows to switch screens knowing only their concrete class. `KtxScreen` is an interface
-extending `Screen` that provides no-op method implementations, making all methods optional to override.
+instance, but also ensures non-nullability of screens, manages screen clearing, and maintains screens collection, which
+allows switching screens while knowing only their concrete class. `KtxScreen` is an interface extending `Screen` that
+provides no-op method implementations, making all methods optional to override.
 
 #### `InputProcessor` implementations
 
@@ -47,41 +42,6 @@ calls before using batches and shader programs.
 - `emptyScreen` provides no-op implementations of `Screen`.
 
 ### Usage examples
-
-Creating a simple `ApplicationListener` based on `KotlinApplication`:
-
-```Kotlin
-import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import ktx.app.KotlinApplication
-
-class MyApplication : KotlinApplication() {
-  lateinit var batch: Batch
-  lateinit var font: BitmapFont
-
-  override fun create() {
-    batch = SpriteBatch()
-    font = BitmapFont()
-  }
-
-  override fun render(delta: Float) {
-    batch.begin()
-    font.draw(batch, "Hello world!", 100f, 100f)
-    batch.end()
-  }
-}
-```
-
-Customizing fixed time steps of `KotlinApplication`:
-
-```Kotlin
-import ktx.app.KotlinApplication
-
-class MyApplication : KotlinApplication(fixedTimeStep = 1f / 60f, maxDeltaTime = 1f / 15f) {
-  // ...
-}
-```
 
 Implementing `KtxApplicationAdapter`:
 
@@ -154,7 +114,7 @@ import ktx.app.KtxInputAdapter
 class MyInputListener : KtxInputAdapter {
   // Implementation of all ApplicationListener methods is optional. Handle the events you plan on supporting.
 
-  override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) {
+  override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
     // Handle mouse click...
     return true
   }
@@ -184,10 +144,13 @@ val font = BitmapFont()
 batch.use {
   font.draw(it, "KTX!", 100f, 100f)
 }
-// The snippet above is an equivalent to:
-// batch.begin()
-// font.draw(batch, "KTX!", 100f, 100f)
-// batch.end()
+
+/* The snippet above is an equivalent to:
+
+  batch.begin()
+  font.draw(batch, "KTX!", 100f, 100f)
+  batch.end()
+*/
 ```
 
 Creating `Color` instances:

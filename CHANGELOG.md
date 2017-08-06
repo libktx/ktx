@@ -3,6 +3,9 @@
 - **[UPDATE]** Updated to Kotlin 1.1.3-2.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.17.
 - **[UPDATE]** Updated to Gradle 4.0.2.
+- **[CHANGE]** (`ktx-app`) `KotlinApplication` was removed. Use `KtxApplicationAdapter` instead.
+- **[CHANGE]** (`ktx-app`) `KtxGame` no longer supports fixed rendering time steps.
+- **[FEATURE]** (`ktx-app`) Clearing screen on rendering is now optional when using `KtxGame`. Change `clearScreen` parameter to `false` to turn off screen clearing.
 - **[FEATURE]** (`ktx-box2d`) `World.rayCast` extension methods that allow creating ray-cast callbacks with the Kotlin
 lambda syntax. `KtxRayCastCallback` alias added to ease implementation of this utility.
 - **[FEATURE]** (`ktx-box2d`) Added `RayCast` object with constants that can be returned by the custom `RayCastCallback` implementations.

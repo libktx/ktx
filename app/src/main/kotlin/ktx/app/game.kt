@@ -12,23 +12,18 @@ import com.badlogic.gdx.utils.ObjectMap
  * manually. [ScreenType] generic type allows to users to use an extended specific base class (or interface) for all
  * screens, without locking into [Screen].
  *
- * Since this is a [KotlinApplication] extension, it also handles screen clearing and fixed rendering time step. See
- * [KotlinApplication] for more info.
- *
  * @param firstScreen will be immediately used by the application. Note that it cannot use any resources initiated by
  * the LibGDX (like the OpenGL context) in the constructor, as the screen will be created before the application is
  * launched. Defaults to an empty, mock-up screen implementation that should be replaced with the first [setScreen]
  * method call in [create]. Note: `firstScreen` still has to be explicitly registered with [addScreen] if you want it to
  * be accessible with [getScreen].
- * @param fixedTimeStep see [KotlinApplication.fixedTimeStep].
- * @param maxDeltaTime see [KotlinApplication.maxDeltaTime].
+ * @param clearScreen if true (the default), [clearScreen] will be called before screen rendering.
  * @param ScreenType common base interface or class of all screens. Allows to use custom extended [Screen] API.
  * @see KtxScreen
  */
 open class KtxGame<ScreenType : Screen>(
     firstScreen: ScreenType? = null,
-    fixedTimeStep: Float = 1f / 60f,
-    maxDeltaTime: Float = 1f) : KotlinApplication(fixedTimeStep, maxDeltaTime) {
+    private val clearScreen: Boolean = true) : KtxApplicationAdapter {
   /** Holds references to all screens registered with [addScreen]. Allows to get a reference of the screen instance
    * knowing only its type. */
   protected val screens: ObjectMap<Class<out ScreenType>, ScreenType> = ObjectMap()
@@ -51,8 +46,11 @@ open class KtxGame<ScreenType : Screen>(
     currentScreen.show()
   }
 
-  override fun render(delta: Float) {
-    currentScreen.render(delta)
+  override fun render() {
+    if (clearScreen) {
+      clearScreen(0f, 0f, 0f, 1f)
+    }
+    currentScreen.render(Gdx.graphics.deltaTime)
   }
 
   override fun resize(width: Int, height: Int) {
