@@ -1,7 +1,9 @@
 #### 1.9.6-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.1.3-2.
-- **[FEATURE]** (`ktx-box2d`) Extension functions for `rayCast` so that ray-cast callbacks can be created with the Kotlin lambda shorthand. 
+- **[FEATURE]** (`ktx-box2d`) `World.rayCast` extension methods that allow creating ray-cast callbacks with the Kotlin
+lambda syntax. `KtxRayCastCallback` alias added to ease implementation of this utility.
+- **[FEATURE]** (`ktx-box2d`) Added `RayCast` object with constants that can be returned by the custom `RayCastCallback` implementations.
 
 #### 1.9.6-b6
 

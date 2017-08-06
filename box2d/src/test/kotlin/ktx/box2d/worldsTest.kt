@@ -175,40 +175,47 @@ class WorldsTest : Box2DTest() {
   @Test
   fun `should ray-cast between two vectors`() {
     val world = createWorld()
-
     val expectedEdge = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
-
     var called = false
+
     world.rayCast(Vector2(-1f, 1f), Vector2(1f, 1f)) { fixture, point, normal, fraction ->
       called = true
       assertSame(expectedEdge, fixture)
       assertEquals(Vector2(0f, 1f), point)
       assertEquals(Vector2(-1f, 0f), normal)
       assertEquals(0.5f, fraction)
-      RayCastCallbackResult.TERMINATE
+      RayCast.TERMINATE
     }
-    assertTrue(called)
 
+    assertTrue(called)
     world.dispose()
   }
 
   @Test
   fun `should ray-cast between two coordinates`() {
     val world = createWorld()
-
     val expectedEdge = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
-
     var called = false
+
     world.rayCast(startX = -1f, startY = 1f, endX = 1f, endY = 1f) { fixture, point, normal, fraction ->
       called = true
       assertSame(expectedEdge, fixture)
       assertEquals(Vector2(0f, 1f), point)
       assertEquals(Vector2(-1f, 0f), normal)
       assertEquals(0.5f, fraction)
-      RayCastCallbackResult.TERMINATE
+      RayCast.TERMINATE
     }
-    assertTrue(called)
 
+    assertTrue(called)
     world.dispose()
+  }
+
+  @Test
+  fun `should provide constants for ray-cast behavior`() {
+    val tolerance = 0f
+
+    assertEquals(1f, RayCast.CONTINUE, tolerance)
+    assertEquals(0f, RayCast.TERMINATE, tolerance)
+    assertEquals(-1f, RayCast.IGNORE, tolerance)
   }
 }

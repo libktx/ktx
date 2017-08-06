@@ -71,36 +71,46 @@ val earthGravity = Vector2(0f, -9.8f)
  * is not necessarily the nearest to the start point of the ray.
  *
  * The lambda accepts these parameters:
- * - [Fixture], the fixture hit by the ray
- * - [Vector2], the point of initial intersection
- * - [Vector2], the normal vector at the point of intersection
- * - [Float], the fraction of the distance from `start` to `end` that the intersection point is at
+ * - [Fixture], the fixture hit by the ray.
+ * - [Vector2], the point of initial intersection.
+ * - [Vector2], the normal vector at the point of intersection.
+ * - [Float], the fraction of the distance from `start` to `end` that the intersection point is at.
  *
  * The lambda returns the new length of the ray as a fraction of the distance between the start and
  * end or the ray. Common values are:
- * - `-1f`, ignore this fixture and continue
- * - `0f`, terminate the ray cast
- * - a fraction, clip the length of the ray to this point
- * - `1f`, don't clip the ray and continue
+ * - `-1f`, ignore this fixture and continue.
+ * - `0f`, terminate the ray cast.
+ * - A fraction, clip the length of the ray to this point.
+ * - `1f`, don't clip the ray and continue.
  *
  * Can be used in place of [com.badlogic.gdx.physics.box2d.RayCastCallback] via Kotlin SAM conversion.
+ *
+ * @see RayCast
+ * @see rayCast
  */
-typealias KtxRayCastCallback = (Fixture, Vector2, Vector2, Float) -> Float
+typealias KtxRayCastCallback = (fixture: Fixture,
+                                point: Vector2,
+                                normal: Vector2,
+                                fraction: Float) -> Float
 
 /**
- * Constants returned by [KtxRayCastCallback].
+ * Stores constants that can be returned by [KtxRayCastCallback] to control its behavior.
+ * @see rayCast
  */
-object RayCastCallbackResult {
+object RayCast {
   /**
    * Indicates to ignore the hit fixture and continue.
+   * @see KtxRayCastCallback
    */
   const val IGNORE = -1f
   /**
-   * Indicates to terminate the ray cast
+   * Indicates to terminate the ray cast.
+   * @see KtxRayCastCallback
    */
   const val TERMINATE = 0f
   /**
-   * Indicates to not clip the ray and continue
+   * Indicates to not clip the ray and continue.
+   * @see KtxRayCastCallback
    */
   const val CONTINUE = 1f
 }
@@ -110,9 +120,10 @@ object RayCastCallbackResult {
  *
  * The ray-cast ignores shapes that contain the starting point.
  *
- * @param start the ray starting point
- * @param end the ray ending point
- * @param callback a user implemented callback. This is called for every fixture hit.
+ * @param start the ray starting point.
+ * @param end the ray ending point.
+ * @param callback a user implemented callback called on every fixture hit.
+ * @see RayCast
  */
 fun World.rayCast(start: Vector2, end: Vector2, callback: KtxRayCastCallback) {
   rayCast(callback, start, end)
@@ -123,11 +134,12 @@ fun World.rayCast(start: Vector2, end: Vector2, callback: KtxRayCastCallback) {
  *
  * The ray-cast ignores shapes that contain the starting point.
  *
- * @param startX the ray starting point X
- * @param startY the ray starting point Y
- * @param endX the ray ending point X
- * @param endY the ray ending point Y
- * @param callback a user implemented callback. This is called for every fixture hit.
+ * @param startX the ray starting point X.
+ * @param startY the ray starting point Y.
+ * @param endX the ray ending point X.
+ * @param endY the ray ending point Y.
+ * @param callback a user implemented callback called on every fixture hit.
+ * @see RayCast
  */
 fun World.rayCast(startX: Float, startY: Float, endX: Float, endY: Float, callback: KtxRayCastCallback) {
   rayCast(callback, startX, startY, endX, endY)
