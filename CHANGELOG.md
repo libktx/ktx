@@ -1,6 +1,6 @@
 #### 1.9.6-SNAPSHOT
 
-- **[UPDATE]** Updated to Kotlin 1.1.3.
+- **[UPDATE]** Updated to Kotlin 1.1.3-2.
 - **[FEATURE]** (`ktx-box2d`) Extension functions for `rayCast` so that ray-cast callbacks can be created with the Kotlin lambda shorthand. 
 
 #### 1.9.6-b6
