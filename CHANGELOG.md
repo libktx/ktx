@@ -2,6 +2,7 @@
 
 - **[UPDATE]** Updated to Kotlin 1.1.4-3.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.18.
+- **[UPDATE]** Updated to Gradle 4.1.
 
 #### 1.9.6-b7
 
