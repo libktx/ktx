@@ -23,6 +23,7 @@ Current **KTX** modules:
 
 - [actors](actors): general `Scene2D` utilities for stages, actors, actions and event listeners.
 - [app](app): `ApplicationListener` abstract implementations and other general LibGDX application utilities.
+- [ashley](ashley): `Ashley` entity-component-system utilities.
 - [assets](assets): resources management utilities.
 - [async](async): [coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 - [box2d](box2d): `Box2D` physics engine utilities.
