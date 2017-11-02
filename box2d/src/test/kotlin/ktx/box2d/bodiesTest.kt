@@ -108,7 +108,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct FixtureDef with a ChainShape`() {
     val bodyDefinition = BodyDefinition()
 
-    val fixtureDef = bodyDefinition.chain(vertices = floatArrayOf(1f, 1f, 2f, 2f, 1f, 2f, 2f, 1f)) {
+    val fixtureDef = bodyDefinition.chain(vertices = floatArrayOf(1f, 1f, 2f, 2f, 1f, 2f)) {
       density = 0.5f
     }
 
