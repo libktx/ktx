@@ -1,8 +1,11 @@
-#### 1.9.6-SNAPSHOT
+#### 1.9.7-SNAPSHOT
 
+- **[UPDATE]** Updated LibGDX to 1.9.7.
 - **[UPDATE]** Updated to Kotlin 1.1.4-3.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.18.
-- **[UPDATE]** Updated to Gradle 4.1.
+- **[UPDATE]** Updated to Gradle 4.3.
+- **[BUG]** (`ktx-box2d`) `ChainShape` does not work correctly in LibGDX 1.9.7, and hence is not supported in KTX.
+This might break existing applications.
 
 #### 1.9.6-b7
 
