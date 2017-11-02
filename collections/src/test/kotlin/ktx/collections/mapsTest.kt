@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.Array
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.*
+import java.util.LinkedList
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -13,30 +13,31 @@ class MapsTest {
   @Test
   fun shouldCreateMaps() {
     val map = gdxMapOf<Any, Any>()
+
     assertNotNull(map)
-    assertTrue(map is ObjectMap)
     assertEquals(0, map.size)
   }
 
   @Test
   fun shouldCreateMapsWithCustomInitialCapacity() {
     val map = gdxMapOf<Any, Any>(initialCapacity = 32)
+
     assertNotNull(map)
-    assertTrue(map is ObjectMap)
     assertEquals(0, map.size)
   }
 
   @Test
   fun shouldCreateMapsWithCustomLoadFactor() {
     val map = gdxMapOf<Any, Any>(loadFactor = 0.4f)
+
     assertNotNull(map)
-    assertTrue(map is ObjectMap)
     assertEquals(0, map.size)
   }
 
   @Test
   fun shouldCreateMapsFromKeyToValuePairs() {
     val map = gdxMapOf("key" to "value", "other" to "another")
+
     assertEquals(2, map.size)
     assertTrue("key" in map)
     assertTrue("other" in map)
@@ -197,8 +198,8 @@ class MapsTest {
   @Test
   fun shouldCreateIdentityMaps() {
     val map = gdxIdentityMapOf<Any, Any>()
+
     assertNotNull(map)
-    assertTrue(map is IdentityMap)
     assertEquals(0, map.size)
   }
 
@@ -251,8 +252,8 @@ class MapsTest {
   @Test
   fun shouldSupportOptimizedPrimitiveIntIntMap() {
     val map = gdxIntIntMap()
+
     assertNotNull(map)
-    assertTrue(map is IntIntMap)
     assertEquals(0, map.size)
     map[1] = 2 // Tests array bracket operator.
     assertEquals(2, map[1])
@@ -266,8 +267,8 @@ class MapsTest {
   @Test
   fun shouldSupportOptimizedPrimitiveIntFloatMap() {
     val map = gdxIntFloatMap()
+
     assertNotNull(map)
-    assertTrue(map is IntFloatMap)
     assertEquals(0, map.size)
     map[1] = 2f // Tests array bracket operator.
     assertEquals(2f, map[1], 0.00001f)
@@ -280,8 +281,8 @@ class MapsTest {
   @Test
   fun shouldSupportOptimizedIntMapWithPrimitiveIntKeys() {
     val map = gdxIntMap<String>()
+
     assertNotNull(map)
-    assertTrue(map is IntMap)
     assertEquals(0, map.size)
     map[1] = "2" // Tests array bracket operator.
     assertEquals("2", map[1])
@@ -292,6 +293,7 @@ class MapsTest {
 
   @Test
   fun `should provide alias for compatibility with other LibGDX collections`() {
+    @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxMap<Any, Any>() is ObjectMap<Any, Any>)
   }
 
@@ -384,7 +386,6 @@ class MapsTest {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
     val result = map.map { it.value * 2 }
 
-    assertTrue(result is GdxMap)
     assertEquals(gdxMapOf("One" to 2, "Two" to 4, "Three" to 6), result)
   }
 
@@ -393,7 +394,6 @@ class MapsTest {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3, "Four" to 4, "Five" to 5)
     val result = map.filter { it.value % 2 == 1 }
 
-    assertTrue(result is GdxMap)
     assertEquals(gdxMapOf("One" to 1, "Three" to 3, "Five" to 5), result)
   }
 
@@ -402,7 +402,6 @@ class MapsTest {
     val map = gdxMapOf(1 to GdxArray.with(1), 2 to listOf<Int>(), 3 to LinkedList(arrayListOf(2, 3)))
     val result = map.flatten()
 
-    assertTrue(result is GdxArray)
     assertEquals(3, result.size)
     assertEquals(GdxArray.with(1, 2, 3), result)
   }
@@ -413,7 +412,6 @@ class MapsTest {
     val result = map.flatMap { (_, value) -> List(value!!) { value } }
     result.sort()
 
-    assertTrue(result is GdxArray)
     assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
 

@@ -3,8 +3,6 @@ package ktx.scene2d
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import org.junit.Assert.*
 import org.junit.Test
@@ -29,10 +27,6 @@ class TooltipFactoriesTest : NeedsLibGDX() {
     val actor = Actor()
 
     val tooltip = actor.addTextTooltip("Test.") {
-      // TextTooltip should be available as lambda parameter:
-      assertTrue(it is TextTooltip)
-      // Lambda should be invoked directly on the TextTooltip child:
-      assertTrue(this is Label)
       // Changing Label color:
       color = Color.BLUE
     }
@@ -48,10 +42,6 @@ class TooltipFactoriesTest : NeedsLibGDX() {
     val actor = Actor()
 
     val tooltip = actor.addTooltip {
-      // Tooltip should be available as lambda parameter:
-      assertTrue(it is Tooltip)
-      // Lambda should be invoked directly on the Tooltip child:
-      assertTrue(this is Table)
       // Changing Table color:
       color = Color.BLUE
       // Adding child to Table content:

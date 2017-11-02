@@ -339,7 +339,7 @@ class KScrollPaneTest : NeedsLibGDX() {
 
     scrollPane.addActor(actor)
 
-    assertEquals(actor, scrollPane.widget)
+    assertEquals(actor, scrollPane.actor)
     assertTrue(actor in scrollPane.children)
   }
 

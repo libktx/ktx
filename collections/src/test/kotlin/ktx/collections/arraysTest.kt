@@ -13,7 +13,6 @@ class ArraysTest {
     val array = gdxArrayOf<Any>()
 
     assertNotNull(array)
-    assertTrue(array is GdxArray)
     assertEquals(0, array.size)
   }
 
@@ -393,7 +392,6 @@ class ArraysTest {
 
     val result = array.map { it * 2 }
 
-    assertTrue(result is GdxArray)
     assertEquals(GdxArray.with(2, 4, 6), result)
   }
 
@@ -403,7 +401,6 @@ class ArraysTest {
 
     val result = array.filter { it % 2 == 1 }
 
-    assertTrue(result is GdxArray)
     assertEquals(GdxArray.with(1, 3, 5), result)
   }
 
@@ -413,7 +410,6 @@ class ArraysTest {
 
     val result = array.flatten()
 
-    assertTrue(result is GdxArray)
     assertEquals(GdxArray.with(1, 2, 3), result)
   }
 
@@ -423,7 +419,6 @@ class ArraysTest {
 
     val result = array.flatMap { counter -> List(counter) { counter } }
 
-    assertTrue(result is GdxArray)
     assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
 
@@ -502,6 +497,7 @@ class ArraysTest {
   }
 
   @Test
+  @Suppress("USELESS_IS_CHECK") // Description of the API.
   fun `should provide aliases for collections with conflicting names`() {
     assertTrue(GdxArray<Any>() is com.badlogic.gdx.utils.Array<Any>)
     assertTrue(GdxIntArray() is com.badlogic.gdx.utils.IntArray)

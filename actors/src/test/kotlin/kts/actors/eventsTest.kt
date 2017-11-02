@@ -4,9 +4,7 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.*
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.keyboard
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scroll
@@ -28,7 +26,6 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    assertTrue(listener is ChangeListener)
     actor.fire(ChangeEvent())
     assertTrue(changed)
   }
@@ -42,7 +39,6 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    assertTrue(listener is ChangeListener)
     actor.fire(ChangeEvent())
     assertTrue(changed)
   }
@@ -55,7 +51,6 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    assertTrue(listener is ClickListener)
   }
 
   @Test
@@ -66,7 +61,6 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    assertTrue(listener is ClickListener)
   }
 
   @Test
@@ -77,7 +71,6 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
-    assertTrue(listener is ClickListener)
   }
 
   @Test
@@ -248,7 +241,7 @@ class EventsTest {
     assertTrue(focused)
   }
 
-  @Suppress("unused")
+  @Suppress("unused", "ClassName")
   class `should extend KtxInputListener with no methods overridden` : KtxInputListener() {
     // Guarantees all KtxInputListener methods are optional to implement.
   }
