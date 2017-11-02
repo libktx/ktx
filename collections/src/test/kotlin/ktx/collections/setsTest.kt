@@ -3,7 +3,7 @@ package ktx.collections
 import com.badlogic.gdx.utils.ObjectSet
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.*
+import java.util.LinkedList
 
 /**
  * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
@@ -12,24 +12,24 @@ class SetsTest {
   @Test
   fun shouldCreateSet() {
     val set = gdxSetOf<Any>()
+
     assertNotNull(set)
-    assertTrue(set is ObjectSet)
     assertEquals(0, set.size)
   }
 
   @Test
   fun shouldCreateSetsWithCustomInitialCapacity() {
     val set = gdxSetOf<Any>(initialCapacity = 32)
+
     assertNotNull(set)
-    assertTrue(set is ObjectSet)
     assertEquals(0, set.size)
   }
 
   @Test
   fun shouldCreateSetsWithCustomLoadFactor() {
     val set = gdxSetOf<Any>(loadFactor = 0.4f)
+
     assertNotNull(set)
-    assertTrue(set is ObjectSet)
     assertEquals(0, set.size)
   }
 
@@ -226,7 +226,6 @@ class SetsTest {
     val set = GdxSet.with(1, 2, 3)
     val result = set.map { it * 2 }
 
-    assertTrue(result is GdxSet)
     assertTrue(2 in result)
     assertTrue(4 in result)
     assertTrue(6 in result)
@@ -237,7 +236,6 @@ class SetsTest {
     val set = GdxSet.with(1, 2, 3, 4, 5)
     val result = set.filter { it % 2 == 1 }
 
-    assertTrue(result is GdxSet)
     assertEquals(3, result.size)
     assertTrue(1 in result)
     assertTrue(3 in result)
@@ -249,7 +247,6 @@ class SetsTest {
     val set = GdxSet.with(GdxArray.with(1, 2), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
     val result = set.flatten()
 
-    assertTrue(result is GdxSet)
     assertEquals(3, result.size)
     assertTrue(1 in result)
     assertTrue(2 in result)
@@ -261,7 +258,6 @@ class SetsTest {
     val set = GdxSet.with(1, 2, 3)
     val result = set.flatMap { count -> List(count) { it } }
 
-    assertTrue(result is GdxSet)
     assertEquals(3, result.size)
     assertTrue(0 in result)
     assertTrue(1 in result)
@@ -306,6 +302,7 @@ class SetsTest {
 
   @Test
   fun `should provide alias for compatibility with other LibGDX collections`() {
+    @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxSet<Any>() is ObjectSet<Any>)
   }
 }

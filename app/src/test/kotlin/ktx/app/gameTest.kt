@@ -1,8 +1,6 @@
 package ktx.app
 
-import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.utils.GdxRuntimeException
@@ -18,7 +16,7 @@ import org.junit.Test
 class KtxGameTest {
   @Before
   fun `set up OpenGL`() {
-    Gdx.gl20 = mock<GL20>()
+    Gdx.gl20 = mock()
     Gdx.gl = Gdx.gl20
   }
 
@@ -26,7 +24,7 @@ class KtxGameTest {
   fun `should display firstScreen without registration`() {
     val screen = mock<Screen>()
     val game = KtxGame(firstScreen = screen)
-    Gdx.graphics = mock<Graphics> {
+    Gdx.graphics = mock {
       on(it.width) doReturn 800
       on(it.height) doReturn 600
     }
@@ -162,7 +160,7 @@ class KtxGameTest {
     val secondScreen = mock<KtxScreen>()
     val game = KtxGame(firstScreen)
     game.addScreen(secondScreen)
-    Gdx.graphics = mock<Graphics> {
+    Gdx.graphics = mock {
       on(it.width) doReturn 800
       on(it.height) doReturn 600
     }
@@ -198,7 +196,7 @@ class KtxGameTest {
 
   @Test
   fun `should dispose of all registered Screen instances with error handling`() {
-    Gdx.app = mock<Application>()
+    Gdx.app = mock()
     val screen = mock<Screen>()
     val ktxScreen = mock<KtxScreen> {
       on(it.dispose()) doThrow GdxRuntimeException("Expected.")
@@ -229,13 +227,11 @@ class KtxGameTest {
 
   /** [Screen] implementation that tracks how many times it was rendered. */
   open class MockScreen : KtxScreen {
-    var lastDelta = -1f
-    var rendered = false
-    var renderedTimes = 0
+    private var rendered = false
+    private var renderedTimes = 0
 
     override fun render(delta: Float) {
       rendered = true
-      lastDelta = delta
       renderedTimes++
     }
   }
@@ -249,10 +245,10 @@ class KtxScreenTest {
   fun `should provide mock-up screen instance`() {
     val screen = emptyScreen()
 
-    assertTrue(screen is Screen)
+    assertTrue(Screen::class.isInstance(screen))
   }
 
-  @Suppress("unused")
+  @Suppress("unused", "ClassName")
   class `should implement KtxScreen with no methods overridden` : KtxScreen {
     // Guarantees all KtxScreen methods are optional to implement.
   }

@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.17-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.19.3-orange.svg)](http://kotlinlang.org/)
 
 # KTX: coroutines support and threading utilities
 
@@ -116,7 +116,7 @@ class Application: ApplicationAdapter() {
 }
 ```
 
-**KTX** `AssetStorage`:
+The same use case rewritten with **KTX** `AssetStorage`:
 
 ```Kotlin
 class Application: ApplicationAdapter() {
@@ -145,7 +145,7 @@ class Application: ApplicationAdapter() {
 
 Feature | `AssetStorage` | `AssetManager`
 --- | --- | ---
-*Asynchronous loading* | **Supported.** Asset loading is performed on a separate thread, while the main rendering thread is suspended (_not blocked_) and resumed once the asset is fully loaded | **Supported.** All assets are loaded on a separate thread and are available after the loading is finished.
+*Asynchronous loading* | **Supported.** Asset loading is performed on a separate thread, while the action on main rendering thread is suspended (_not blocked_) and resumed once the asset is fully loaded. | **Supported.** All assets are loaded on a separate thread and are available after the loading is finished.
 *Synchronous loading* | **Limited.** A blocking coroutine can be launched to load assets eagerly, but it cannot block the rendering thread. | **Limited.** `finishLoading(String fileName)` method can be used to block the thread until the asset is loaded, but since it has no effect on loading order, all _other_ assets can be loaded before the requested one.
 *Error handling* | **Build-in language syntax.** Use a regular try-catch block within coroutine body to handle loading errors. Provides a clean way to separately handle exceptions thrown by different assets. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown.
 *Loading order* | **Controlled by the user.** `AssetStorage` starts loading assets as soon as the `load` method is called, giving the user full control over the order of asset loading. | **Unpredictable.** If multiple assets are scheduled at once it is difficult to reason about loading order. `finishLoading` has no effect on loading order.

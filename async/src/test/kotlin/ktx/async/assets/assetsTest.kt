@@ -42,6 +42,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
 /**
  * Tests [AssetStorage]: coroutines-based asset manager.
  */
+@Suppress("USELESS_IS_CHECK") // Explicitly checking loaded asset types.
 class AssetStorageTest {
   @Test
   fun `should load text assets`() = `coroutine test`(concurrencyLevel = 1) { ktxAsync ->

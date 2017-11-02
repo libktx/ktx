@@ -12,6 +12,7 @@ class ListsTest {
   @Test
   fun shouldCreateNewLists() {
     val list = gdxListOf<String>()
+
     assertNotNull(list)
     assertEquals(0, list.size)
     assertTrue(list.isEmpty)
@@ -20,6 +21,7 @@ class ListsTest {
   @Test
   fun shouldCreateNewListsWithElements() {
     val list = gdxListOf("1", "2", "3")
+
     assertNotNull(list)
     assertEquals(3, list.size)
     assertTrue(list.isNotEmpty)
@@ -30,6 +32,7 @@ class ListsTest {
   @Test
   fun shouldCreateNewListsFromArrays() {
     val list = arrayOf("1", "2", "3").toGdxList()
+
     assertNotNull(list)
     assertEquals(3, list.size)
     assertTrue(list.isNotEmpty)
@@ -40,6 +43,7 @@ class ListsTest {
   @Test
   fun shouldCreateNewListsFromIterables() {
     val list = sortedSetOf("1", "2", "3").toGdxList()
+
     assertNotNull(list)
     assertEquals(3, list.size)
     assertTrue(list.isNotEmpty)
@@ -49,6 +53,7 @@ class ListsTest {
 
   @Test
   fun `should provide alias for compatibility with other LibGDX collections`() {
+    @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxList(NodePool) is PooledList<Any>)
   }
 }
@@ -228,7 +233,6 @@ class PooledListTest {
     val list = gdxListOf(1, 2, 3)
     val result = list.map { it * 2 }
 
-    assertTrue(result is GdxList)
     assertEquals(3, result.size)
     assertEquals(2, result.first)
     assertEquals(6, result.last)
@@ -239,7 +243,6 @@ class PooledListTest {
     val list = gdxListOf(1, 2, 3, 4, 5)
     val result = list.filter { it % 2 == 1 }
 
-    assertTrue(result is GdxList)
     assertEquals(3, result.size)
     assertEquals(1, result.first)
     assertEquals(5, result.last)
@@ -250,7 +253,6 @@ class PooledListTest {
     val list = gdxListOf(GdxArray.with(1), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
     val result = list.flatten()
 
-    assertTrue(result is GdxList)
     assertEquals(3, result.size)
     assertEquals(3, result.size)
     assertEquals(1, result.first)
@@ -262,7 +264,6 @@ class PooledListTest {
     val list = gdxListOf(1, 2, 3)
     val result = list.flatMap { List(it) { "" } }
 
-    assertTrue(result is GdxList)
     assertEquals(6, result.size)
   }
 

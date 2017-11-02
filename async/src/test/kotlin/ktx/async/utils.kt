@@ -50,6 +50,8 @@ fun `with timer`(
       scheduler.schedule(task, (delay * 1000f).toLong(), MILLISECONDS)
     },
     test: (Timer) -> Unit) {
+  // Tries to replace the default Timer instance used by LibGDX by our mock-up implementation. LibGDX is a pain to mock.
+  val timerClass = Timer::class.java
   val timer = mock<Timer> {
     on(it.scheduleTask(any(), any())) doAnswer {
       it.getArgument<Task>(0).apply {
@@ -57,17 +59,23 @@ fun `with timer`(
       }
     }
   }
-  Timer::class.java.getDeclaredField("instance").let {
-    it.isAccessible = true
-    it.set(null, timer)
+  timerClass.getDeclaredMethod("thread").apply {
+    isAccessible = true
+    invoke(null)
   }
+  val threadField = timerClass.getDeclaredField("thread").apply {
+    isAccessible = true
+  }
+  val thread = threadField.get(null)
+  val threadClass = thread.javaClass
+  val timerField = threadClass.getDeclaredField("instance").apply {
+    isAccessible = true
+  }
+  timerField.set(thread, timer)
   try {
     test(timer)
   } finally {
-    Timer::class.java.getDeclaredField("instance").let {
-      it.isAccessible = true
-      it.set(null, null)
-    }
+    timerField.set(thread, null)
   }
 }
 
@@ -104,7 +112,7 @@ fun `coroutine test`(
       try {
         KtxAsync.coroutine(it)
         testStatuses[coroutine] = TestStatus.FINISHED
-      } catch(exception: Throwable) {
+      } catch (exception: Throwable) {
         error.set(exception)
         testStatuses[coroutine] = TestStatus.FAILED
       }
@@ -165,9 +173,9 @@ fun `cancelled coroutine test`(
       try {
         KtxAsync.coroutine(it)
         testStatus.set(TestStatus.FINISHED)
-      } catch(exception: CancellationException) {
+      } catch (exception: CancellationException) {
         cancellationExceptionThrown = true
-      } catch(exception: Throwable) {
+      } catch (exception: Throwable) {
         error.set(exception)
         testStatus.set(TestStatus.FAILED)
       }

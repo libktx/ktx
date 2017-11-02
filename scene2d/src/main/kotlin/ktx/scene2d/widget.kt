@@ -360,8 +360,8 @@ class KNode(actor: Actor) : Node(actor), KTree {
 @Scene2dDsl
 class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
-    if (this.widget != null) throw IllegalStateException("ScrollPane may store only a single child.")
-    this.widget = actor
+    this.actor == null || throw IllegalStateException("ScrollPane may store only a single child.")
+    this.actor = actor
   }
 }
 

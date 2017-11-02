@@ -21,6 +21,7 @@ import org.junit.Test
 /**
  * Tests asset-related utilities and [AssetManager] extensions.
  */
+@Suppress("USELESS_IS_CHECK") // Explicitly checking loaded asset types.
 class AssetsTest {
   val assetManager: AssetManager = managerWithMockAssetLoader()
 

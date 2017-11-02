@@ -162,7 +162,6 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       // In table-based groups, children blocks point to the new actor as 'this' and its cell as 'it'.
       label("Cell") {
         // Actors stored in cells:
-        assertTrue(it is Cell<*>)
         assertTrue(it.actor is Label)
       }
     }
@@ -170,11 +169,9 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       // In trees, children blocks point to the new actor as 'this' and to its node as 'it'.
       label("Node") {
         // Actors stored in tree nodes:
-        assertTrue(it is Node)
         assertTrue(it.actor is Label)
         it {
           label("NestedNode") {
-            assertTrue(it is Node)
             assertTrue(it.actor is Label)
             assertEquals("NestedNode", (it.actor as Label).text.toString())
           }
@@ -273,7 +270,6 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create List`() = test(widget = {
     listWidget<String, Cell<*>> {
       color = Color.BLUE
-      assertTrue(it is Cell<*>)
       // Adding list items:
       -"one"
       -"two"
@@ -305,7 +301,6 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create SelectBox`() = test(widget = {
     selectBox<String, Cell<*>> {
       color = Color.BLUE
-      assertTrue(it is Cell<*>)
       // Adding select box items:
       -"one"
       -"two"
