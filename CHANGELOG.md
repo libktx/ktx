@@ -1,5 +1,7 @@
 #### 1.9.7-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.2.0.
+
 #### 1.9.7-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.7.
