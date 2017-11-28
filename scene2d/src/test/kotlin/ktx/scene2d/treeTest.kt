@@ -9,10 +9,18 @@ import org.junit.Test
  */
 class TreeFactoryTest : NeedsLibGDX() {
   @Test
-  fun `should create Trees`() {
+  fun `should create Tree`() {
+    val widget = tree()
+
+    assertNotNull(widget)
+  }
+
+  @Test
+  fun `should create Tree with init block`() {
     val widget = tree {
       height = 100f
     }
+
     assertNotNull(widget)
     assertEquals(100f, widget.height, TOLERANCE)
   }

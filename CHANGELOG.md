@@ -1,15 +1,22 @@
 #### 1.9.7-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.2.0.
+- **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
+lambda parameters in inlined functions (added in Kotlin 1.2). Due to the limitation in inlined methods, there used to be
+two inlined methods for each actor to support syntax both with braces (init block) and without. Now there is just one
+factory method supporting both syntaxes per widget. This should not affect most application, but might require
+Kotlin 1.2 usage.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
-parameters in inlined functions (added in Kotlin 1.2).
+parameters in inlined functions.
 
 ```kotlin
-// Before - would not compile without additional braces:
-body.circle(radius = 2f) {}
-
-// Now - braces (initialization lambdas) are optional:
-body.circle(radius = 2f)
+fun createCircle(body: Body) {
+    // Before - would not compile without additional braces:
+    body.circle(radius = 2f) {}
+    
+    // Now - braces are optional (lambda parameter defaults to no-op):
+    body.circle(radius = 2f)
+}
 ```
 
 #### 1.9.7-b1

@@ -9,25 +9,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Stack] instance.
  */
-inline fun stack(init: KStack.() -> Unit) = actor(KStack(), init)
+inline fun stack(
+    init: KStack.() -> Unit = {}) = actor(KStack(), init)
 
 /**
  * @param init will be invoked on the widget. Inlined.
  * @return a new [HorizontalGroup] instance.
  */
-inline fun horizontalGroup(init: KHorizontalGroup.() -> Unit) = actor(KHorizontalGroup(), init)
+inline fun horizontalGroup(
+    init: KHorizontalGroup.() -> Unit = {}) = actor(KHorizontalGroup(), init)
 
 /**
  * @param init will be invoked on the widget. Inlined.
  * @return a new [VerticalGroup] instance.
  */
-inline fun verticalGroup(init: KVerticalGroup.() -> Unit) = actor(KVerticalGroup(), init)
+inline fun verticalGroup(
+    init: KVerticalGroup.() -> Unit = {}) = actor(KVerticalGroup(), init)
 
 /**
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Container] instance.
  */
-inline fun container(init: KContainer<Actor>.() -> Unit) = actor(KContainer<Actor>(), init)
+inline fun container(
+    init: KContainer<Actor>.() -> Unit = {}) = actor(KContainer<Actor>(), init)
 
 /**
  * @param vertical true to make the widget vertical, false to make it horizontal. Defaults to false (horizontal).
@@ -37,10 +41,11 @@ inline fun container(init: KContainer<Actor>.() -> Unit) = actor(KContainer<Acto
  * @param init will be invoked on the widget. Inlined.
  * @return a new [SplitPane] instance.
  */
-inline fun splitPane(vertical: Boolean = false,
-                     style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-                     skin: Skin = Scene2DSkin.defaultSkin,
-                     init: KSplitPane.() -> Unit) = actor(KSplitPane(vertical, skin, style), init)
+inline fun splitPane(
+    vertical: Boolean = false,
+    style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+    skin: Skin = Scene2DSkin.defaultSkin,
+    init: KSplitPane.() -> Unit = {}) = actor(KSplitPane(vertical, skin, style), init)
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -48,6 +53,7 @@ inline fun splitPane(vertical: Boolean = false,
  * @param init will be invoked on the widget. Inlined.
  * @return a new [ScrollPane] instance.
  */
-inline fun scrollPane(style: String = defaultStyle,
-                      skin: Skin = Scene2DSkin.defaultSkin,
-                      init: KScrollPane.() -> Unit) = actor(KScrollPane(skin, style), init)
+inline fun scrollPane(
+    style: String = defaultStyle,
+    skin: Skin = Scene2DSkin.defaultSkin,
+    init: KScrollPane.() -> Unit = {}) = actor(KScrollPane(skin, style), init)

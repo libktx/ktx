@@ -23,7 +23,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun `should add TextTooltip with building block`() {
+  fun `should add TextTooltip with init block`() {
     val actor = Actor()
 
     val tooltip = actor.addTextTooltip("Test.") {
@@ -38,7 +38,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   }
 
   @Test
-  fun `should add Tooltip with building block`() {
+  fun `should add Tooltip with init block`() {
     val actor = Actor()
 
     val tooltip = actor.addTooltip {
