@@ -12,11 +12,10 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Extends [AssetManager], delegating all of its asset-related method calls to [AssetStorage]. Allows to use classic
- * [AssetLoader] implementations with [AssetStorage].
+ * [AssetLoader] implementations with [AssetStorage]. Internal API.
  * @param assetStorage all [AssetManager] API calls will be delegated to this storage.
  */
 internal class AssetManagerWrapper(val assetStorage: AssetStorage) : AssetManager(assetStorage.fileResolver, false) {
-  // Implementation note:
   var initiated = false
 
   init {

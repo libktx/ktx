@@ -1,0 +1,108 @@
+# KTX: FreeType font utilities
+
+A tiny modules that makes it easier to use [`gdx-freetype`](https://github.com/libgdx/libgdx/wiki/Gdx-freetype) library.
+
+### Why?
+
+`gdx-freetype` requires quite a bit of setup before it can be fully integrated with LibGDX `AssetManager`. This module
+aims to limit the boilerplate necessary to load FreeType fonts in LibGDX applications.
+
+### Guide
+
+This module consists of the following functions:
+
+* Extension method `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders required to load FreeType
+font assets. It should be called right after constructing a `AssetManager` instance and before loading any assets.
+* Extension method `AssetManager.loadFreeTypeFont` allows to easily configure loaded `BitmapFont` instances with Kotlin
+DSL.
+* `freeTypeFontParameters` function is a Kotlin DSL for customizing font loading parameters.
+
+### Usage examples
+
+Creating `AssetManager` with registered FreeType font loaders:
+
+```kotlin
+import com.badlogic.gdx.assets.AssetManager
+import ktx.freetype.*
+
+fun initiateAssetManager(): AssetManager {
+  val assetManager = AssetManager()
+  assetManager.registerFreeTypeFontLoaders()
+  return assetManager
+}
+```
+
+Registering `BitmapFont` loaders for custom file extensions:
+
+```kotlin
+import ktx.freetype.*
+
+assetManager.registerFreeTypeFontLoaders(fileExtensions = arrayOf(".custom"))
+```
+
+Replacing default `BitmapFont` loader with FreeType font loader:
+
+```kotlin
+import ktx.freetype.*
+
+assetManager.registerFreeTypeFontLoaders(replaceDefaultBitmapFontLoader = true)
+```
+
+Loading a FreeType font using `AssetManager`:
+
+```kotlin
+import ktx.freetype.*
+
+assetManager.loadFreeTypeFont("font.ttf")
+```
+
+Loading a FreeType font with custom parameters using `AssetManager`:
+
+```kotlin
+import ktx.freetype.*
+
+assetManager.loadFreeTypeFont("font.ttf") {
+  size = 14
+  borderWidth = 1.5f
+  color = Color.ORANGE
+  borderColor = Color.BLUE
+}
+```
+
+Accessing fully loaded font (note: `AssetManager` must finish loading the asset first):
+
+```kotlin
+val font = assetManager.get<BitmapFont>("font.ttf")
+```
+
+Loading `FreeTypeFontGenerator` with [`ktx-assets`](../assets):
+
+```kotlin
+import ktx.assets.load
+
+assetManager.load<FreeTypeFontGenerator>("font.tff")
+```
+
+Creating a `FreeTypeFontLoaderParameter` with customized font parameters:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter
+import ktx.freetype.*
+
+fun getFontParameters(): FreeTypeFontLoaderParameter = freeTypeFontParameters("font.ttf") {
+  size = 14
+  borderWidth = 1.5f
+  color = Color.ORANGE
+  borderColor = Color.BLUE
+}
+```
+
+### Alternatives
+
+FreeType font loaders can be registered manually. See
+[this article](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler).
+
+#### Additional documentation
+
+- [`gdx-freetype` article.](https://github.com/libgdx/libgdx/wiki/Gdx-freetype)
+- [`AssetManager` article.](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler)

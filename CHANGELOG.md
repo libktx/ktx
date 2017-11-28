@@ -18,6 +18,10 @@ fun createCircle(body: Body) {
     body.circle(radius = 2f)
 }
 ```
+- **[FEATURE]** (`ktx-freetype`) Implemented `ktx-freetype` module.
+  - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
+  - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading FreeType fonts.
+  - `freeTypeFontParameters` function provides Kotlin DSL for building FreeType font loading parameters.
 
 #### 1.9.7-b1
 

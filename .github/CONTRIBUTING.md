@@ -80,12 +80,12 @@ All of the major dependencies updates should be added to the [changelog](../CHAN
 ### Adding a new KTX module
 
 Adding a new library to KTX:
-- Create folder matching module name in root of the repository. We generally name the modules with a single word,
-separated with a dash when necessary.
-- Add folder name to `settings.gradle` file. This will be the project identifier that you use to run individual Gradle
-tasks, like `gradle actors:test` for example.
-- Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automaticall marked
-as source thanks to Gradle. You can also create package structure matching `ktx/your/module` in each source folder.
+- Create folder matching module name in root of the repository. Modules should generally be named with a single word;
+if using multiple words, use dash (`-`) as separator.
+- Add folder name to `settings.gradle` file. This will also server as the project identifier that you use in
+`build.gradle` scripts and to run individual Gradle tasks (like `gradle actors:test`).
+- Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automatically marked
+as source thanks to Gradle. You should also create package structure matching `ktx/your/module` in each source folder.
 - Add `gradle.properties` file with the following properties:
 
 ```properties
@@ -96,6 +96,7 @@ projectDesc=Description of your module as it will appear in Maven Central.
 - Add `build.gradle` file. It should contain dependencies specific to your module. If there are none, you can leave it
 empty.
 - Add `README.md` file describing your module. Refer to other `README.md` files for guidelines.
+- Add short description of the module to root `README.md`.
 - Your final module structure should roughly match this schema:
 
 ```
@@ -109,4 +110,3 @@ empty.
   > gradle.properties
   > README.md
 ```
-

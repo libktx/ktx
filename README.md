@@ -28,6 +28,7 @@ Current **KTX** modules:
 - [async](async): [coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 - [box2d](box2d): `Box2D` physics engine utilities.
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
+- [freetype](freetype): FreeType font loading utilities.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
