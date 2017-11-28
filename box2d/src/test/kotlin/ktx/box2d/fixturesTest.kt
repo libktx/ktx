@@ -49,7 +49,7 @@ class FixturesTest : Box2DTest() {
   @Test
   fun `should replace creation callback`() {
     val fixtureDefinition = FixtureDefinition()
-    val callback = { _: Fixture -> }
+    val callback: (Fixture) -> Unit = {}
 
     fixtureDefinition.onCreate(callback)
 

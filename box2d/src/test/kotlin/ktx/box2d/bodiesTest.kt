@@ -90,7 +90,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct FixtureDef with a PolygonShape with Vector2 Points`() {
     val bodyDefinition = BodyDefinition()
 
-    val fixtureDef = bodyDefinition.polygon(vertices = *arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f))) {
+    val fixtureDef = bodyDefinition.polygon(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)) {
       density = 0.5f
     }
 
@@ -126,7 +126,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct FixtureDef with a ChainShape with Vector2 Points`() {
     val bodyDefinition = BodyDefinition()
 
-    val fixtureDef = bodyDefinition.chain(vertices = *arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f))) {
+    val fixtureDef = bodyDefinition.chain(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)) {
       density = 0.5f
     }
 
@@ -163,7 +163,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct FixtureDef with a looped ChainShape with Vector2 Points`() {
     val bodyDefinition = BodyDefinition()
 
-    val fixtureDef = bodyDefinition.loop(vertices = *arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f))) {
+    val fixtureDef = bodyDefinition.loop(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)) {
       density = 0.5f
     }
 
@@ -212,7 +212,7 @@ class BodiesTest : Box2DTest() {
   @Test
   fun `should replace creation callback`() {
     val bodyDefinition = BodyDefinition()
-    val callback = { _: Body -> }
+    val callback: (Body) -> Unit = {}
 
     bodyDefinition.onCreate(callback)
 
@@ -337,7 +337,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct Fixture with a ChainShape with Vector2 Points`() {
     val body = createBody()
 
-    val fixture = body.chain(vertices = *arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f))) {
+    val fixture = body.chain(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)) {
       density = 0.5f
     }
 
@@ -375,7 +375,7 @@ class BodiesTest : Box2DTest() {
   fun `should construct Fixture with a looped ChainShape with Vector2 Points`() {
     val body = createBody()
 
-    val fixture = body.loop(vertices = *arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f))) {
+    val fixture = body.loop(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)) {
       density = 0.5f
     }
 

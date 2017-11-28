@@ -1,6 +1,16 @@
 #### 1.9.7-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.2.0.
+- **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
+parameters in inlined functions (added in Kotlin 1.2).
+
+```kotlin
+// Before - would not compile without additional braces:
+body.circle(radius = 2f) {}
+
+// Now - braces (initialization lambdas) are optional:
+body.circle(radius = 2f)
+```
 
 #### 1.9.7-b1
 
