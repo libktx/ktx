@@ -5,23 +5,6 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 
 /**
- * Get or create a [Component] by calling [Engine.createComponent].
- *
- * @param T the type of [Component] to get or create.
- * @param configure inlined function with [T] as the receiver to allow further configuration.
- * @return an [Component] instance of the selected type.
- */
-inline fun <reified T : Component> Engine.create(configure: T.() -> Unit): T = create<T>().also(configure)
-
-/**
- * Get or create a [Component] by calling [Engine.createComponent].
- *
- * @param T the type of [Component] to get or create.
- * @return an [Component] instance of the selected type.
- */
-inline fun <reified T : Component> Engine.create(): T = createComponent(T::class.java)
-
-/**
  * An [Entity] created by the provided [Engine].
  *
  * Provides methods for adding [Component]s to the [Engine] and the [Entity].
@@ -31,8 +14,8 @@ inline fun <reified T : Component> Engine.create(): T = createComponent(T::class
  */
 @AshleyDsl
 class EngineEntity(
-    val engine: Engine,
-    val entity: Entity) {
+        val engine: Engine,
+        val entity: Entity) {
   /**
    * Get or creates an instance of the component [T] and adds it to this [entity][EngineEntity].
    *
@@ -41,21 +24,19 @@ class EngineEntity(
    * @return the created ƒ[Component].
    * @see [create]
    */
-  inline fun <reified T : Component> with(configure: (@AshleyDsl T).() -> Unit): T = with<T>().also(configure)
-
-  /**
-   * Get or creates an instance of the component [T] and adds it to this [entity][EngineEntity].
-   *
-   * @param T the [Component] type to get or create.
-   * @return the created [Component].
-   * @see [create]
-   */
-  inline fun <reified T : Component> with(): T {
-    val component = engine.create<T>()
-    entity.add(component)
-    return component
+  inline fun <reified T : Component> with(configure: (@AshleyDsl T).() -> Unit = {}): T {
+    return engine.create<T>().also(configure).also { entity.add(it) }
   }
 }
+/**
+ * Get or create a [Component] by calling [Engine.createComponent].
+ *
+ * @param T the type of [Component] to get or create.
+ * @param configure inlined function with [T] as the receiver to allow further configuration.
+ * @return an [Component] instance of the selected type.
+ */
+inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T = createComponent(T::class.java).also(configure)
+
 
 /**
  * Builder function for [Engine].
@@ -73,7 +54,7 @@ inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) {
  *  the [Entity]. The [Entity] holds the [Entity] created and the [Engine] that created it.
  * @return the created [Entity].
  */
-inline fun Engine.entity(configure: EngineEntity.() -> Unit): Entity {
+inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   val entity = createEntity()
   configure(EngineEntity(this, entity))
   addEntity(entity)

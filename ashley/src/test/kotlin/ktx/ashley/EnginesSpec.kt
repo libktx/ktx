@@ -47,7 +47,7 @@ object EnginesSpec : Spek({
 
     describe("single entity creation DSL") {
       it("should add an entity and return it") {
-        val entity = engine.entity {}
+        val entity = engine.entity()
         assertThat(engine.entities.size()).isEqualTo(1)
         assertThat(engine.entities[0]).isEqualTo(entity)
       }
