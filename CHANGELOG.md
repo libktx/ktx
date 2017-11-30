@@ -4,8 +4,10 @@
 - **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
 lambda parameters in inlined functions (added in Kotlin 1.2). Due to the limitation in inlined methods, there used to be
 two inlined methods for each actor to support syntax both with braces (init block) and without. Now there is just one
-factory method supporting both syntaxes per widget. This should not affect most application, but might require
+factory method supporting both syntax variants per widget. This should not affect most application, but might require
 Kotlin 1.2 usage.
+- **[CHANGE]** (`ktx-ashley`) Default functional parameters were added to `create`, `entity` and `with`, simplifying
+the implementation and making configuration blocks optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
 parameters in inlined functions.
 
