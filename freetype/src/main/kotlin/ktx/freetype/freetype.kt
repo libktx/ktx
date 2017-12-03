@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter
+import ktx.assets.Asset
+import ktx.assets.load
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator] instances from TTF and OTF files.
@@ -36,12 +38,12 @@ fun AssetManager.registerFreeTypeFontLoaders(
  * Allows to customize parameters of a loaded FreeType font.
  * @param file path to the FreeType font file.
  * @param setup should specify font parameters. Will be invoked on a new instance of [FreeTypeFontParameter]. Inlined.
+ * @return [Asset] wrapper which allows to access the font once it is loaded.
  */
 inline fun AssetManager.loadFreeTypeFont(
     file: String,
-    setup: FreeTypeFontParameter.() -> Unit = {}) {
-  load(file, BitmapFont::class.java, freeTypeFontParameters(file, setup))
-}
+    setup: FreeTypeFontParameter.() -> Unit = {}): Asset<BitmapFont>
+    = load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
 
 /**
  * Syntax sugar for [FreeTypeFontLoaderParameter] initialization. Used internally by [loadFreeTypeFont].

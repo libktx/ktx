@@ -75,6 +75,17 @@ Accessing fully loaded font (note: `AssetManager` must finish loading the asset 
 val font = assetManager.get<BitmapFont>("font.ttf")
 ```
 
+Using delegation to schedule loading of a FreeType font:
+
+```kotlin
+import ktx.assets.getValue
+import ktx.freetype.loadFreeTypeFont
+
+val font: BitmapFont by assetManager.loadFreeTypeFont("font.ttf")
+
+// `font` variable can be accessed once the asset is fully loaded. See ktx-assets README.
+```
+
 Loading `FreeTypeFontGenerator` with [`ktx-assets`](../assets):
 
 ```kotlin
