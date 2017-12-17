@@ -1,5 +1,6 @@
-#### 1.9.7-SNAPSHOT
+#### 1.9.8-SNAPSHOT
 
+- **[UPDATE]** Updated to LibGDX 1.9.8.
 - **[UPDATE]** Updated to Kotlin 1.2.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.20.
 - **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
