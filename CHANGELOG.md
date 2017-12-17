@@ -26,6 +26,8 @@ fun createCircle(body: Body) {
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading FreeType fonts.
   - `freeTypeFontParameters` function provides Kotlin DSL for building FreeType font loading parameters.
+- **[FIX]** (`ktx-box2d`) As LibGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
+once again.
 
 #### 1.9.7-b1
 

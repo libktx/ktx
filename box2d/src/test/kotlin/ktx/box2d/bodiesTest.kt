@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.*
-import org.junit.Ignore
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -176,7 +175,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a ChainShape`() {
     val bodyDefinition = BodyDefinition()
 
@@ -190,7 +188,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a ChainShape with init block`() {
     val bodyDefinition = BodyDefinition()
 
@@ -207,7 +204,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a ChainShape with Vector2 points`() {
     val bodyDefinition = BodyDefinition()
 
@@ -221,7 +217,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a ChainShape with Vector2 points and init block`() {
     val bodyDefinition = BodyDefinition()
 
@@ -238,7 +233,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a looped ChainShape`() {
     val bodyDefinition = BodyDefinition()
 
@@ -253,7 +247,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a looped ChainShape with init block`() {
     val bodyDefinition = BodyDefinition()
 
@@ -275,7 +268,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a looped ChainShape with Vector2 points`() {
     val bodyDefinition = BodyDefinition()
 
@@ -294,7 +286,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct FixtureDef with a looped ChainShape with Vector2 points and init block`() {
     val bodyDefinition = BodyDefinition()
 
@@ -550,7 +541,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a ChainShape`() {
     val body = createBody()
 
@@ -565,7 +555,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a ChainShape with init block`() {
     val body = createBody()
 
@@ -583,7 +572,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a ChainShape with Vector2 Points`() {
     val body = createBody()
 
@@ -598,7 +586,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a ChainShape with Vector2 points and init block`() {
     val body = createBody()
 
@@ -616,7 +603,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a looped ChainShape`() {
     val body = createBody()
 
@@ -631,7 +617,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a looped ChainShape with init block`() {
     val body = createBody()
 
@@ -649,7 +634,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a looped ChainShape with Vector2 points`() {
     val body = createBody()
 
@@ -664,7 +648,6 @@ class BodiesTest : Box2DTest() {
   }
 
   @Test
-  @Ignore("ChainShape is broken in LibGDX 1.9.7.")
   fun `should construct Fixture with a looped ChainShape with Vector2 points and init block`() {
     val body = createBody()
 
