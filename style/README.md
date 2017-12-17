@@ -216,7 +216,7 @@ package your.company
 enum class Drawables {
   buttonUp,
   buttonDown,
-  buttonChecked; // TODO Add all drawables from TextureAtlas.
+  buttonChecked; // Add all drawables from TextureAtlas.
 
   operator fun invoke() = toString()
 }
@@ -230,7 +230,7 @@ name to provide validation when invoking actor constructors:
 package your.company
 
 enum class Buttons {
-  toggle; // TODO Add all non-default ButtonStyle names.
+  toggle; // Add all non-default ButtonStyle names.
 
   operator fun invoke() = toString()
 }
@@ -248,9 +248,9 @@ skin(myAtlas) {
     up = it[buttonUp()]
     down = it[buttonDown()]
   }
+  }
   button(Buttons.toggle(), extend = defaultStyle) {
     checked = it[buttonChecked()]
-  }
 }
 ```
 
@@ -258,6 +258,8 @@ What's best about it, enums do not actually make your code _longer_, as they req
 to write with static imports - while having the advantage of powerful code completion of your IDE of choice and validation
 at compile time. As long as you don't need to create assets at runtime with custom unpredictable IDs, we encourage you
 to store your drawables, fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
+The advantage of using an `enum` over `object` with `String` properties is that you can easily extract a list of all
+values from an enum, while getting all fields from an object is not trivial.
 
 #### Migration guide
 
@@ -296,11 +298,11 @@ skin(atlas) {
 }
 
 // Idiomatic GUI style building - no nested declarations:
-skin(atlas) {
+skin(atlas) { skin ->
   color("black", 0f, 0f, 0f)
   label {
-    font = it["arial"]
-    fontColor = it["black"]
+    font = skin["arial"]
+    fontColor = skin["black"]
   }
 }
 ```
