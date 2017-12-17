@@ -1,6 +1,7 @@
 #### 1.9.7-SNAPSHOT
 
-- **[UPDATE]** Updated to Kotlin 1.2.0.
+- **[UPDATE]** Updated to Kotlin 1.2.10.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.20.
 - **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
 lambda parameters in inlined functions (added in Kotlin 1.2). Due to the limitation in inlined methods, there used to be
 two inlined methods for each actor to support syntax both with braces (init block) and without. Now there is just one
