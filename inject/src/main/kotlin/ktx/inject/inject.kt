@@ -151,12 +151,12 @@ open class Context : Disposable {
 
   /**
    * Allows to bind a singleton instance to multiple classes in its hierarchy.
-   * @param singleton instance of class compatible with the passed types.
    * @param to list of interfaces and classes in the class hierarchy of the singleton. Any time any of the passed classes
    *    will be requested for injection, the selected singleton will be returned.
+   * @param singleton instance of class compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bindSingleton(singleton: Type, vararg to: Class<out Type>)
+  fun <Type : Any> bindSingleton(vararg to: Class<out Type>, singleton: Type)
       = bind(*to, provider = SingletonProvider(singleton))
 
   /**

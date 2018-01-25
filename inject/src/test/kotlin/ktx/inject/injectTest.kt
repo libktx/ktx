@@ -56,7 +56,7 @@ class DependencyInjectionTest {
   fun `should bind singletons to multiple types`() {
     val singleton = java.lang.String("Singleton")
 
-    context.bindSingleton(singleton, String::class.java, CharSequence::class.java)
+    context.bindSingleton(String::class.java, CharSequence::class.java) { singleton }
 
     assertTrue(context.contains<String>())
     assertTrue(context.contains<CharSequence>())
@@ -145,7 +145,7 @@ class DependencyInjectionTest {
 
   @Test(expected = InjectionException::class)
   fun `should throw exception when trying to register singleton for same types`() {
-    context.bindSingleton("Should throw.", String::class.java, String::class.java)
+    context.bindSingleton(String::class.java, String::class.java) { "Should throw." }
   }
 
   @Test
