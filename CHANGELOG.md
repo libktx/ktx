@@ -16,6 +16,8 @@ the implementation and making configuration blocks optional.
 - **[FEATURE]** (`ktx-vis-style`) Initiation blocks of VisUI actor styles are now optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
 parameters in inlined functions.
+- **[FEATURE]** (`ktx-inject`) Add higher-order function parameters for `bindSingleton` to allow the use of lambda
+expressions.
 
 ```kotlin
 fun createCircle(body: Body) {

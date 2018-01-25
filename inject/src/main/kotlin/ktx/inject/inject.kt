@@ -141,6 +141,13 @@ open class Context : Disposable {
   inline fun <reified Type : Any> bindSingleton(singleton: Type) = bind(SingletonProvider(singleton))
 
   /**
+   * Allows to bind a singleton to the chosen class.
+   * @param provider will be invoked and the return value converted to a provider that always returns the same instance.
+   * @throws InjectionException if provider for the selected type is already defined.
+   */
+  inline fun <reified Type : Any> bindSingleton(provider: () -> Type) = bind(SingletonProvider(provider()))
+
+  /**
    * Allows to bind a provider to multiple classes in hierarchy of the provided instances class.
    * @param to list of interfaces and classes in the class hierarchy of the objects provided by the provider. Any time
    *    any of the passed classes will be requested for injection, the selected provider will be invoked.
@@ -158,6 +165,16 @@ open class Context : Disposable {
    */
   fun <Type : Any> bindSingleton(vararg to: Class<out Type>, singleton: Type)
       = bind(*to, provider = SingletonProvider(singleton))
+
+  /**
+   * Allows to bind the result of the provider to multiple classes in its hierarchy.
+   * @param to list of interfaces and classes in the class hierarchy of the provider. Any time any of the passed classes
+   *    will be requested for injection, the selected provider will be returned.
+   * @param provider provides instances of classes compatible with the passed types.
+   * @throws InjectionException if provider for any of the selected types is already defined.
+   */
+  inline fun <Type : Any> bindSingleton(vararg to: Class<out Type>, provider: () -> Type)
+      = bind(*to, provider = SingletonProvider(provider()))
 
   /**
    * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and

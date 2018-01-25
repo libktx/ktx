@@ -66,6 +66,38 @@ class DependencyInjectionTest {
   }
 
   @Test
+  fun `should bind singletons using provider's result`() {
+    val singleton = java.lang.String("Singleton")
+
+    context.bindSingleton { singleton }
+
+    assertTrue(context.contains<String>())
+    val provided = context.inject<String>()
+    assertSame(singleton, provided)
+    assertSame(context.inject<String>(), context.inject<String>())
+
+    val provider = context.provider<String>()
+    assertSame(singleton, provider())
+    assertSame(provider(), provider())
+  }
+
+  @Test
+  fun `should bind singleton using provider's result with given type parameter`() {
+    val singleton = java.lang.String("Singleton")
+
+    context.bindSingleton(CharSequence::class.java) { singleton }
+
+    assertTrue(context.contains<CharSequence>())
+    val provided = context.inject<CharSequence>()
+    assertSame(singleton, provided)
+    assertSame(context.inject<CharSequence>(), context.inject<CharSequence>())
+
+    val provider = context.provider<CharSequence>()
+    assertSame(singleton, provider())
+    assertSame(provider(), provider())
+  }
+
+  @Test
   fun `should remove singletons`() {
     val singleton = Random()
     context.bindSingleton(singleton)
