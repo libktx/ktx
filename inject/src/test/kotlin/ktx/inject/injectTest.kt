@@ -21,6 +21,7 @@ class DependencyInjectionTest {
     context.bind { listOf<Any>() }
 
     assertTrue(List::class.java in context)
+    assertTrue(List::class in context)
   }
 
   @Test
@@ -30,6 +31,7 @@ class DependencyInjectionTest {
     val list = context.inject<MutableList<String>>()
 
     assertTrue(MutableList::class.java in context)
+    assertTrue(MutableList::class in context)
     assertNotNull(list)
     list.add("Test")
     assertEquals(1, list.size)
@@ -53,10 +55,27 @@ class DependencyInjectionTest {
   }
 
   @Test
+  fun `should bind singletons to custom type`() {
+    val singleton = java.lang.String("Singleton")
+
+    context.bindSingleton<CharSequence>(singleton)
+
+    assertFalse(context.contains<String>())
+    assertTrue(context.contains<CharSequence>())
+    val provided = context.inject<CharSequence>()
+    assertSame(singleton, provided)
+    assertSame(context.inject<CharSequence>(), context.inject<CharSequence>())
+
+    val provider = context.provider<CharSequence>()
+    assertSame(singleton, provider())
+    assertSame(provider(), provider())
+  }
+
+  @Test
   fun `should bind singletons to multiple types`() {
     val singleton = java.lang.String("Singleton")
 
-    context.bindSingleton(String::class.java, CharSequence::class.java) { singleton }
+    context.bindSingleton(String::class, CharSequence::class) { singleton }
 
     assertTrue(context.contains<String>())
     assertTrue(context.contains<CharSequence>())
@@ -82,10 +101,27 @@ class DependencyInjectionTest {
   }
 
   @Test
-  fun `should bind singleton using provider's result with given type parameter`() {
+  fun `should bind singletons using provider's result to custom type`() {
     val singleton = java.lang.String("Singleton")
 
-    context.bindSingleton(CharSequence::class.java) { singleton }
+    context.bindSingleton<CharSequence> { singleton }
+
+    assertFalse(context.contains<String>())
+    assertTrue(context.contains<CharSequence>())
+    val provided = context.inject<CharSequence>()
+    assertSame(singleton, provided)
+    assertSame(context.inject<CharSequence>(), context.inject<CharSequence>())
+
+    val provider = context.provider<CharSequence>()
+    assertSame(singleton, provider())
+    assertSame(provider(), provider())
+  }
+
+  @Test
+  fun `should bind singleton using provider's result to given class`() {
+    val singleton = java.lang.String("Singleton")
+
+    context.bindSingleton(CharSequence::class) { singleton }
 
     assertTrue(context.contains<CharSequence>())
     val provided = context.inject<CharSequence>()
@@ -145,7 +181,7 @@ class DependencyInjectionTest {
 
   @Test
   fun `should bind providers to multiple types`() {
-    context.bind(String::class.java, CharSequence::class.java) { java.lang.String("New") }
+    context.bind(String::class, CharSequence::class) { java.lang.String("New") }
 
     assertTrue(context.contains<String>())
     assertTrue(context.contains<CharSequence>())
@@ -172,12 +208,17 @@ class DependencyInjectionTest {
 
   @Test(expected = InjectionException::class)
   fun `should throw exception when trying to register provider for same types`() {
-    context.bind(String::class.java, String::class.java) { "Should throw." }
+    context.bind(String::class, String::class) { "Should throw." }
   }
 
   @Test(expected = InjectionException::class)
   fun `should throw exception when trying to register singleton for same types`() {
-    context.bindSingleton(String::class.java, String::class.java) { "Should throw." }
+    context.bindSingleton(String::class, String::class, singleton = "Should throw.")
+  }
+
+  @Test(expected = InjectionException::class)
+  fun `should throw exception when trying to register singleton via provider for same types`() {
+    context.bindSingleton(String::class, String::class) { "Should throw." }
   }
 
   @Test

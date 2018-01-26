@@ -11,7 +11,10 @@ factory method supporting both syntax variants per widget. This should not affec
 Kotlin 1.2 usage.
 - **[CHANGE]** (`ktx-ashley`) Default functional parameters were added to `create`, `entity` and `with`, simplifying
 the implementation and making configuration blocks optional.
-- **[CHANGE]** (`ktx-inject`) Parameters of `bindSingleton` have been swapped to be more congruent with `bind` functions.
+- **[CHANGE]** (`ktx-inject`) Parameters of `bindSingleton` consuming multiple classes have been swapped to be more
+compatible with the `bind` functions.
+- **[CHANGE]** (`ktx-inject`) `bind` and `bindSingleton` methods consuming multiple classes now take `KClass` as
+parameters instead of `Class`, so now you can use `YourType::class` instead of more verbose `YourType::class.java`.
 - **[FEATURE]** (`ktx-style`) Initiation blocks of `Skin` and Scene2D actor styles are now optional.
 - **[FEATURE]** (`ktx-vis-style`) Initiation blocks of VisUI actor styles are now optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
