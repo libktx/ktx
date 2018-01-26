@@ -69,9 +69,11 @@ assetManager.loadFreeTypeFont("font.ttf") {
 }
 ```
 
-Accessing fully loaded font (note: `AssetManager` must finish loading the asset first):
+Accessing a fully loaded font (note: `AssetManager` must finish loading the asset first):
 
 ```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+
 val font = assetManager.get<BitmapFont>("font.ttf")
 ```
 
@@ -89,6 +91,7 @@ val font: BitmapFont by assetManager.loadFreeTypeFont("font.ttf")
 Loading `FreeTypeFontGenerator` with [`ktx-assets`](../assets):
 
 ```kotlin
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import ktx.assets.load
 
 assetManager.load<FreeTypeFontGenerator>("font.tff")

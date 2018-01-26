@@ -20,8 +20,8 @@ import org.junit.Test
  * font details.
  */
 class FreeTypeTest {
-  val ttfFile = "ktx/freetype/hack.ttf"
-  val otfFile = "ktx/freetype/hack.otf"
+  private val ttfFile = "ktx/freetype/hack.ttf"
+  private val otfFile = "ktx/freetype/hack.otf"
 
   @Test
   fun `should initiate font loading parameters`() {

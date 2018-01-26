@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader.FreeTypeFontGeneratorParameters
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter
 import ktx.assets.Asset
 import ktx.assets.load
+import ktx.assets.setLoader
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator] instances from TTF and OTF files.
@@ -22,14 +24,14 @@ fun AssetManager.registerFreeTypeFontLoaders(
     fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
     replaceDefaultBitmapFontLoader: Boolean = false) {
   val fontGeneratorLoader = FreeTypeFontGeneratorLoader(fileHandleResolver)
-  setLoader(FreeTypeFontGenerator::class.java, fontGeneratorLoader)
+  setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorParameters>(fontGeneratorLoader)
 
   val fontLoader = FreetypeFontLoader(fileHandleResolver)
   if (replaceDefaultBitmapFontLoader) {
-    setLoader(BitmapFont::class.java, fontLoader)
+    setLoader<BitmapFont, FreeTypeFontLoaderParameter>(fontLoader)
   } else {
     fileExtensions.forEach { extension ->
-      setLoader(BitmapFont::class.java, extension, fontLoader)
+      setLoader<BitmapFont, FreeTypeFontLoaderParameter>(fontLoader, suffix = extension)
     }
   }
 }
