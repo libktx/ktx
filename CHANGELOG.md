@@ -1,8 +1,8 @@
 #### 1.9.8-SNAPSHOT
 
 - **[UPDATE]** Updated to LibGDX 1.9.8.
-- **[UPDATE]** Updated to Kotlin 1.2.10.
-- **[UPDATE]** Updated to Kotlin Coroutines 0.20.
+- **[UPDATE]** Updated to Kotlin 1.2.21.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.22.
 - **[UPDATE]** Updated to Gradle 4.4.
 - **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
 lambda parameters in inlined functions (added in Kotlin 1.2). Due to the limitation in inlined methods, there used to be
