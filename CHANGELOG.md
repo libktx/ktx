@@ -11,10 +11,13 @@ factory method supporting both syntax variants per widget. This should not affec
 Kotlin 1.2 usage.
 - **[CHANGE]** (`ktx-ashley`) Default functional parameters were added to `create`, `entity` and `with`, simplifying
 the implementation and making configuration blocks optional.
+- **[CHANGE]** (`ktx-inject`) Parameters of `bindSingleton` have been swapped to be more congruent with `bind` functions.
 - **[FEATURE]** (`ktx-style`) Initiation blocks of `Skin` and Scene2D actor styles are now optional.
 - **[FEATURE]** (`ktx-vis-style`) Initiation blocks of VisUI actor styles are now optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
 parameters in inlined functions.
+- **[FEATURE]** (`ktx-inject`) Add higher-order function parameters for `bindSingleton` to allow the use of lambda
+expressions.
 
 ```kotlin
 fun createCircle(body: Body) {
