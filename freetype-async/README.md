@@ -20,9 +20,11 @@ font assets. It should be called right after constructing a `AssetStorage` insta
 * Extension method `AssetStorage.loadFreeTypeFont` allows to easily configure loaded `BitmapFont` instances with Kotlin
 DSL.
 
-Since it depends on the [`ktx-freetype`](../freetype) module, it also comes with the following function:
+Since it depends on the [`ktx-freetype`](../freetype) module, it also comes with the following functions:
 
-* `ktx.freetype.freeTypeFontParameters` is a Kotlin DSL for customizing font loading parameters.
+* `ktx.freetype.freeTypeFontParameters` function is a Kotlin DSL for customizing font loading parameters.
+* `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` instances using a
+`FreeTypeFontGenerator` with Kotlin DSL.
 
 ### Usage examples
 
@@ -34,10 +36,12 @@ import ktx.async.enableKtxCoroutines
 import ktx.freetype.async.*
 
 fun initiateAssetStorage(): AssetStorage {
-  // Coroutines have to be enabled. AssetStorage uses an asynchronous executor, so concurrency level has to be above 0.
+  // Coroutines have to be enabled. AssetStorage uses an asynchronous executor,
+  // so concurrency level has to be above 0. See ktx-async documentation.
   enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = 1)
   
   val assetStorage = AssetStorage()
+  // Calling registerFreeTypeFontLoaders is necessary in order to load TTF/OTF files.
   assetStorage.registerFreeTypeFontLoaders()
   return assetStorage
 }
@@ -111,6 +115,21 @@ fun getFontParameters(): FreeTypeFontLoaderParameter = freeTypeFontParameters("f
   borderWidth = 1.5f
   color = Color.ORANGE
   borderColor = Color.BLUE
+}
+```
+
+Generating a new `BitmapFont` using LibGDX `FreeTypeFontGenerator`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import ktx.freetype.*
+
+val generator: FreeTypeFontGenerator = getGenerator()
+// Default parameters:
+val fontA = generator.generateFont()
+// Customized:
+val fontB = generator.generateFont {
+  size = 42
 }
 ```
 

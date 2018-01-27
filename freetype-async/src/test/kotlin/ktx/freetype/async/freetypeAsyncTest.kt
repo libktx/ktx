@@ -1,6 +1,7 @@
 package ktx.freetype.async
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -22,12 +23,12 @@ import org.junit.Test
  * font details.
  */
 class FreeTypeAsyncTest {
-  private val ttfFile = "ktx/freetype/hack.ttf"
-  private val otfFile = "ktx/freetype/hack.otf"
+  private val ttfFile = "ktx/freetype/async/hack.ttf"
+  private val otfFile = "ktx/freetype/async/hack.otf"
 
   @Test
   fun `should register FreeType font loaders`() = `coroutine test`(concurrencyLevel = 1) {
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
 
     assetStorage.registerFreeTypeFontLoaders()
 
@@ -38,7 +39,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should register FreeType font loaders with custom extensions`() = `coroutine test`(concurrencyLevel = 1) {
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
 
     assetStorage.registerFreeTypeFontLoaders(fileExtensions = arrayOf(".custom"))
 
@@ -51,7 +52,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should register FreeType font loaders with default loader override`() = `coroutine test`(concurrencyLevel = 1) {
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
 
     assetStorage.registerFreeTypeFontLoaders(replaceDefaultBitmapFontLoader = true)
 
@@ -61,7 +62,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load OTF file into BitmapFont`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -75,7 +76,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load OTF file into BitmapFont with custom params`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -92,7 +93,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load TTF file into BitmapFont`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -106,7 +107,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load TTF file into BitmapFont with custom params`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -124,7 +125,7 @@ class FreeTypeAsyncTest {
   @Test
   fun `should use FreeType loader to load OTF file into BitmapFont`() = `coroutine test`(concurrencyLevel = 1) { async ->
     // Note that this method uses "raw" AssetStorage API without font loading utilities.
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -139,7 +140,7 @@ class FreeTypeAsyncTest {
   @Test
   fun `should use FreeType loader to load TTF file into BitmapFont`() = `coroutine test`(concurrencyLevel = 1) { async ->
     // Note that this method uses "raw" AssetStorage API without font loading utilities.
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -153,7 +154,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load OTF file into FreeTypeFontGenerator`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -166,7 +167,7 @@ class FreeTypeAsyncTest {
 
   @Test
   fun `should load TTF file into FreeTypeFontGenerator`() = `coroutine test`(concurrencyLevel = 1) { async ->
-    val assetStorage = AssetStorage()
+    val assetStorage = assetStorage()
     assetStorage.registerFreeTypeFontLoaders()
 
     async {
@@ -194,4 +195,6 @@ class FreeTypeAsyncTest {
     Gdx.graphics = null
     `destroy coroutines context`()
   }
+
+  private fun assetStorage() = AssetStorage(fileResolver = ClasspathFileHandleResolver())
 }

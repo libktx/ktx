@@ -185,6 +185,46 @@ class FreeTypeTest {
     assertTrue(fontGenerator is FreeTypeFontGenerator)
   }
 
+  @Test
+  fun `should generate font from TTF file`() {
+    val generator = FreeTypeFontGenerator(Gdx.files.classpath(ttfFile))
+
+    val font = generator.generateFont()
+
+    assertNotNull(font)
+  }
+
+  @Test
+  fun `should generate font from TTF file with custom parameters `() {
+    val generator = FreeTypeFontGenerator(Gdx.files.classpath(ttfFile))
+
+    val font = generator.generateFont {
+      size = 40
+    }
+
+    assertNotNull(font)
+  }
+
+  @Test
+  fun `should generate font from OTF file`() {
+    val generator = FreeTypeFontGenerator(Gdx.files.classpath(otfFile))
+
+    val font = generator.generateFont()
+
+    assertNotNull(font)
+  }
+
+  @Test
+  fun `should generate font from OTF file with custom parameters `() {
+    val generator = FreeTypeFontGenerator(Gdx.files.classpath(otfFile))
+
+    val font = generator.generateFont {
+      size = 40
+    }
+
+    assertNotNull(font)
+  }
+
   @Before
   fun `setup LibGDX`() {
     LwjglNativesLoader.load()

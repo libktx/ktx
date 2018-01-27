@@ -44,8 +44,8 @@ fun AssetManager.registerFreeTypeFontLoaders(
  */
 inline fun AssetManager.loadFreeTypeFont(
     file: String,
-    setup: FreeTypeFontParameter.() -> Unit = {}): Asset<BitmapFont>
-    = load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
+    setup: FreeTypeFontParameter.() -> Unit = {}): Asset<BitmapFont> =
+    load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
 
 /**
  * Syntax sugar for [FreeTypeFontLoaderParameter] initialization. Used internally by [loadFreeTypeFont].
@@ -58,3 +58,11 @@ inline fun freeTypeFontParameters(
   fontFileName = file
   fontParameters.apply(setup)
 }
+
+/**
+ * Syntax sugar for [FreeTypeFontGenerator.generateFont]. Allows to use Kotlin DSL to initiate font parameters.
+ * @param setup will be applied to newly constructed [FreeTypeFontParameter]. Inlined. If not given, will create a font
+ * with default parameters.
+ */
+inline fun FreeTypeFontGenerator.generateFont(setup: FreeTypeFontParameter.() -> Unit = {}): BitmapFont =
+    generateFont(FreeTypeFontParameter().apply(setup))

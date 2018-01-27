@@ -35,12 +35,13 @@ fun createCircle(body: Body) {
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading of FreeType fonts.
   - `freeTypeFontParameters` function provides Kotlin DSL for building FreeType font loading parameters.
+  - `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` with Kotlin DSL.
 - **[FEATURE]** (`ktx-freetype-async`) Implemented `ktx-freetype-async` module.
   - `AssetStorage.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetStorage.loadFreeTypeFont` provides Kotlin DSL for asynchronous loading of FreeType fonts.
 - **[FIX]** (`ktx-box2d`) As LibGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
 once again.
-
+1
 #### 1.9.7-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.7.
