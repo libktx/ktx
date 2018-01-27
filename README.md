@@ -29,6 +29,7 @@ Current **KTX** modules:
 - [box2d](box2d): `Box2D` physics engine utilities.
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [freetype](freetype): FreeType font loading utilities.
+- [freetype-async](freetype-async): FreeType font loading utilities for the [async](async) module.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
@@ -68,8 +69,9 @@ the extensive tests.
 
 ### Documentation
 
-Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through the
-directories in root folder to find out more about each library.
+Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through
+the directories in root folder to find out more about each library. GitHub releases also contain archives with generated
+Dokka documentation for each module.
 
 ### [Contribution and working from sources](.github/CONTRIBUTING.md)
 
