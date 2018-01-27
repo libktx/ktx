@@ -1,4 +1,4 @@
-#### 1.9.8-SNAPSHOT
+#### 1.9.8-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.8.
 - **[UPDATE]** Updated to Kotlin 1.2.21.
@@ -42,7 +42,7 @@ fun createCircle(body: Body) {
   - `AssetStorage.loadFreeTypeFont` provides Kotlin DSL for asynchronous loading of FreeType fonts.
 - **[FIX]** (`ktx-box2d`) As LibGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
 once again.
-1
+
 #### 1.9.7-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.7.
