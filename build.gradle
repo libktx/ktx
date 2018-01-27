@@ -48,6 +48,7 @@ subprojects {
     testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
     testCompile "com.nhaarman:mockito-kotlin-kt1.1:$kotlinMockitoVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   }
 
   jar {

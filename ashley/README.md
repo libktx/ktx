@@ -5,7 +5,7 @@ Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashl
 ### Why?
 
 Since [Ashley](https://github.com/libgdx/ashley) contains many generic methods consuming `Class` instances, Kotlin can
-provide a pleasant DSL via inlined methods reified generic types. Additionally, creating `Entities` and  their respective
+provide a pleasant DSL via inlined methods reified generic types. Additionally, creating `Entities` and their respective
 `Components` can result in a lot of declarative-style code which is greatly improved by an easily readable type-safe
 builder DSL. 
  

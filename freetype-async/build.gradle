@@ -1,0 +1,17 @@
+kotlin {
+  experimental {
+    coroutines 'enable'
+  }
+}
+
+dependencies {
+  compile project(':async')
+  compile project(':freetype')
+  provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  provided "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+  testCompile project(':async').sourceSets.test.output
+  testCompile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+  testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+  testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}

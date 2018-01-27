@@ -125,7 +125,10 @@ object RayCast {
  * @param callback a user implemented callback called on every fixture hit.
  * @see RayCast
  */
-fun World.rayCast(start: Vector2, end: Vector2, callback: KtxRayCastCallback) {
+fun World.rayCast(
+    start: Vector2,
+    end: Vector2,
+    callback: KtxRayCastCallback) {
   rayCast(callback, start, end)
 }
 
@@ -141,6 +144,11 @@ fun World.rayCast(start: Vector2, end: Vector2, callback: KtxRayCastCallback) {
  * @param callback a user implemented callback called on every fixture hit.
  * @see RayCast
  */
-fun World.rayCast(startX: Float, startY: Float, endX: Float, endY: Float, callback: KtxRayCastCallback) {
+fun World.rayCast(
+    startX: Float,
+    startY: Float,
+    endX: Float,
+    endY: Float,
+    callback: KtxRayCastCallback) {
   rayCast(callback, startX, startY, endX, endY)
 }

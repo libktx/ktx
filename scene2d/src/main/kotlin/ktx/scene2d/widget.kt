@@ -93,39 +93,40 @@ interface KTable : KWidget<Cell<*>> {
    * @return this actor.
    * @see inCell
    */
-  fun <T : Actor> T.cell(grow: Boolean = false,
-                         growX: Boolean = false,
-                         growY: Boolean = false,
-                         expand: Boolean? = null,
-                         expandX: Boolean? = null,
-                         expandY: Boolean? = null,
-                         fill: Boolean? = null,
-                         fillX: Boolean? = null,
-                         fillY: Boolean? = null,
-                         uniform: Boolean? = null,
-                         uniformX: Boolean? = null,
-                         uniformY: Boolean? = null,
-                         align: Int? = null,
-                         colspan: Int? = null,
-                         width: Float? = null,
-                         minWidth: Float? = null,
-                         preferredWidth: Float? = null,
-                         maxWidth: Float? = null,
-                         height: Float? = null,
-                         minHeight: Float? = null,
-                         preferredHeight: Float? = null,
-                         maxHeight: Float? = null,
-                         pad: Float? = null,
-                         padTop: Float? = null,
-                         padLeft: Float? = null,
-                         padRight: Float? = null,
-                         padBottom: Float? = null,
-                         space: Float? = null,
-                         spaceTop: Float? = null,
-                         spaceLeft: Float? = null,
-                         spaceRight: Float? = null,
-                         spaceBottom: Float? = null,
-                         row: Boolean = false): T {
+  fun <T : Actor> T.cell(
+      grow: Boolean = false,
+      growX: Boolean = false,
+      growY: Boolean = false,
+      expand: Boolean? = null,
+      expandX: Boolean? = null,
+      expandY: Boolean? = null,
+      fill: Boolean? = null,
+      fillX: Boolean? = null,
+      fillY: Boolean? = null,
+      uniform: Boolean? = null,
+      uniformX: Boolean? = null,
+      uniformY: Boolean? = null,
+      align: Int? = null,
+      colspan: Int? = null,
+      width: Float? = null,
+      minWidth: Float? = null,
+      preferredWidth: Float? = null,
+      maxWidth: Float? = null,
+      height: Float? = null,
+      minHeight: Float? = null,
+      preferredHeight: Float? = null,
+      maxHeight: Float? = null,
+      pad: Float? = null,
+      padTop: Float? = null,
+      padLeft: Float? = null,
+      padRight: Float? = null,
+      padBottom: Float? = null,
+      space: Float? = null,
+      spaceTop: Float? = null,
+      spaceLeft: Float? = null,
+      spaceRight: Float? = null,
+      spaceBottom: Float? = null,
+      row: Boolean = false): T {
     val cell = this.inCell
     if (grow) cell.grow()
     if (growX) cell.growX()
@@ -170,9 +171,10 @@ interface KTable : KWidget<Cell<*>> {
    * @see cell
    */
   @Suppress("UNCHECKED_CAST")
-  val <T : Actor> T.inCell: Cell<T> get() = userObject as? Cell<T> ?:
-      throw IllegalStateException("This actor has no declared Cell. " +
-          "Was it properly added to the table? Was its user object cleared?")
+  val <T : Actor> T.inCell: Cell<T>
+    get() = userObject as? Cell<T> ?:
+        throw IllegalStateException("This actor has no declared Cell. " +
+            "Was it properly added to the table? Was its user object cleared?")
 }
 
 /**
@@ -237,10 +239,11 @@ interface KTree : KWidget<KNode> {
    * @return this actor.
    * @see inNode
    */
-  fun <T : Actor> T.node(icon: Drawable? = null,
-                         expanded: Boolean? = null,
-                         selectable: Boolean? = null,
-                         userObject: Any? = null): T {
+  fun <T : Actor> T.node(
+      icon: Drawable? = null,
+      expanded: Boolean? = null,
+      selectable: Boolean? = null,
+      userObject: Any? = null): T {
     val node = inNode
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
@@ -255,9 +258,10 @@ interface KTree : KWidget<KNode> {
    *    assigned as user object.
    * @see node
    */
-  val <T : Actor> T.inNode: KNode get() = userObject as? KNode ?:
-      throw IllegalStateException("This actor has no declared Node. " +
-          "Was it properly added to the tree? Was its user object cleared?")
+  val <T : Actor> T.inNode: KNode
+    get() = userObject as? KNode ?:
+        throw IllegalStateException("This actor has no declared Node. " +
+            "Was it properly added to the tree? Was its user object cleared?")
 }
 
 /** Extends [Button] API with type-safe widget builders. */
@@ -295,7 +299,7 @@ class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, 
 class KContainer<T : Actor> : Container<T>(), KGroup {
   @Suppress("UNCHECKED_CAST")
   override fun addActor(actor: Actor?) {
-    if (this.actor != null) throw IllegalStateException("Container may store only a single child.")
+    this.actor == null || throw IllegalStateException("Container may store only a single child.")
     this.actor = actor as T
   }
 }
@@ -389,7 +393,8 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
-class KSplitPane(vertical: Boolean, skin: Skin, style: String) : SplitPane(null, null, vertical, skin, style), KGroup {
+class KSplitPane(vertical: Boolean, skin: Skin, style: String) :
+    SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
       0 -> setFirstWidget(actor)

@@ -11,10 +11,10 @@ sure to checkout `develop` branch before starting your work and set `develop` as
 a pull request.
 - Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
 - Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
-JUnit and [KotlinTest](https://github.com/kotlintest/kotlintest) can be used to write tests. Use
+JUnit and [Spek](http://spekframework.org/) can be used to write tests. Use
 [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
 - If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue or create
-an issue with your proposal first. API changes or new modules have to be discussed with the maintainers first.
+an issue with your proposal first. Major API changes or new modules have to be discussed with the maintainers first.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
   - **[CHANGE]** - breaking API change.
@@ -35,17 +35,17 @@ git checkout develop
 ### Build tool
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
-Gradle installation - scripts should be compatible with Gradle `3.+`. If you consider working from sources, these are
+Gradle installation - scripts should be compatible with Gradle `4.+`. If you consider working from sources, these are
 some useful Gradle tasks that you can look into:
 
-- `build install` - builds the libraries archives and pushes them to Maven Local.
+- `build install` - builds the libraries archives and pushes them to _Maven Local_.
 - `check` - runs all tests in all projects.
 - `clean` - removes `build` directories.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
-- `uploadArchives` - pushes the archives to Maven Central. Requires proper `gradle.properties` with archive signing and
+- `uploadArchives` - pushes the archives to _Maven Central_. Requires proper `gradle.properties` with archive signing and
 Sonatype logging data.
 - `closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
-case of a non-snapshot upload to Maven Central.
+case of a non-snapshot upload to _Maven Central_.
 
 ### Versioning and uploading
 
@@ -80,12 +80,12 @@ All of the major dependencies updates should be added to the [changelog](../CHAN
 ### Adding a new KTX module
 
 Adding a new library to KTX:
-- Create folder matching module name in root of the repository. We generally name the modules with a single word,
-separated with a dash when necessary.
-- Add folder name to `settings.gradle` file. This will be the project identifier that you use to run individual Gradle
-tasks, like `gradle actors:test` for example.
-- Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automaticall marked
-as source thanks to Gradle. You can also create package structure matching `ktx/your/module` in each source folder.
+- Create folder matching module name in root of the repository. Modules should generally be named with a single word;
+if using multiple words, use dash (`-`) as separator.
+- Add folder name to `settings.gradle` file. This will also server as the project identifier that you use in
+`build.gradle` scripts and to run individual Gradle tasks (like `gradle actors:test`).
+- Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automatically marked
+as source thanks to Gradle. You should also create package structure matching `ktx/your/module` in each source folder.
 - Add `gradle.properties` file with the following properties:
 
 ```properties
@@ -96,6 +96,7 @@ projectDesc=Description of your module as it will appear in Maven Central.
 - Add `build.gradle` file. It should contain dependencies specific to your module. If there are none, you can leave it
 empty.
 - Add `README.md` file describing your module. Refer to other `README.md` files for guidelines.
+- Add short description of the module to root `README.md`.
 - Your final module structure should roughly match this schema:
 
 ```
@@ -109,4 +110,3 @@ empty.
   > gradle.properties
   > README.md
 ```
-

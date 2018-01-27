@@ -24,7 +24,8 @@ object Scene2DSkin {
   private val listeners = com.badlogic.gdx.utils.Array<(Skin) -> Unit>(4)
 
   /**
-   * Used by the factory methods by default if no custom skin is passed.
+   * Used by the factory methods by default if no custom skin is passed. Changing this value immediately invokes all
+   * registered listeneres.
    */
   var defaultSkin = Skin()
     set(value) {

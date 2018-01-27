@@ -34,7 +34,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun <ShapeType : Shape> fixture(
       shape: ShapeType,
-      init: FixtureDefinition.(ShapeType) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(ShapeType) -> Unit = {}): FixtureDefinition {
     val fixtureDefinition = FixtureDefinition()
     fixtureDefinition.shape = shape
     fixtureDefinition.init(shape)
@@ -52,7 +52,7 @@ class BodyDefinition : BodyDef() {
   inline fun circle(
       radius: Float = 1f,
       position: Vector2 = Vector2.Zero,
-      init: FixtureDefinition.(CircleShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(CircleShape) -> Unit = {}): FixtureDefinition {
     val shape = CircleShape()
     shape.radius = radius
     shape.position = position
@@ -75,7 +75,7 @@ class BodyDefinition : BodyDef() {
       height: Float = 1f,
       position: Vector2 = Vector2.Zero,
       angle: Float = 0f,
-      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     shape.setAsBox(width / 2f, height / 2f, position, angle)
     return fixture(shape, init)
@@ -93,7 +93,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun polygon(
       vertices: FloatArray? = null,
-      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     if (vertices != null) shape.set(vertices)
     return fixture(shape, init)
@@ -108,7 +108,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun polygon(
       vararg vertices: Vector2,
-      init: FixtureDefinition.(PolygonShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     shape.set(vertices)
     return fixture(shape, init)
@@ -123,7 +123,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun chain(
       vararg vertices: Vector2,
-      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
     return fixture(shape, init)
@@ -140,7 +140,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun chain(
       vertices: FloatArray,
-      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
     return fixture(shape, init)
@@ -155,7 +155,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun loop(
       vararg vertices: Vector2,
-      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
     return fixture(shape, init)
@@ -173,7 +173,7 @@ class BodyDefinition : BodyDef() {
    */
   inline fun loop(
       vertices: FloatArray,
-      init: FixtureDefinition.(ChainShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
     return fixture(shape, init)
@@ -190,7 +190,7 @@ class BodyDefinition : BodyDef() {
   inline fun edge(
       from: Vector2,
       to: Vector2,
-      init: FixtureDefinition.(EdgeShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(EdgeShape) -> Unit = {}): FixtureDefinition {
     val shape = EdgeShape()
     shape.set(from, to)
     return fixture(shape, init)
@@ -213,7 +213,7 @@ class BodyDefinition : BodyDef() {
       fromY: Float,
       toX: Float,
       toY: Float,
-      init: FixtureDefinition.(EdgeShape) -> Unit): FixtureDefinition {
+      init: FixtureDefinition.(EdgeShape) -> Unit = {}): FixtureDefinition {
     val shape = EdgeShape()
     shape.set(fromX, fromY, toX, toY)
     return fixture(shape, init)
@@ -241,7 +241,7 @@ class BodyDefinition : BodyDef() {
  */
 inline fun <ShapeType : Shape> Body.fixture(
     shape: ShapeType,
-    init: FixtureDefinition.(ShapeType) -> Unit): Fixture {
+    init: FixtureDefinition.(ShapeType) -> Unit = {}): Fixture {
   val fixtureDefinition = FixtureDefinition()
   fixtureDefinition.shape = shape
   fixtureDefinition.init(shape)
@@ -261,7 +261,7 @@ inline fun <ShapeType : Shape> Body.fixture(
 inline fun Body.circle(
     radius: Float = 1f,
     position: Vector2 = Vector2.Zero,
-    init: FixtureDefinition.(CircleShape) -> Unit): Fixture {
+    init: FixtureDefinition.(CircleShape) -> Unit = {}): Fixture {
   val shape = CircleShape()
   shape.radius = radius
   shape.position = position
@@ -284,7 +284,7 @@ inline fun Body.box(
     height: Float = 1f,
     position: Vector2 = Vector2.Zero,
     angle: Float = 0f,
-    init: FixtureDefinition.(PolygonShape) -> Unit): Fixture {
+    init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   shape.setAsBox(width / 2f, height / 2f, position, angle)
   return fixture(shape, init)
@@ -302,7 +302,7 @@ inline fun Body.box(
  */
 inline fun Body.polygon(
     vertices: FloatArray? = null,
-    init: FixtureDefinition.(PolygonShape) -> Unit): Fixture {
+    init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   if (vertices != null) shape.set(vertices)
   return fixture(shape, init)
@@ -317,7 +317,7 @@ inline fun Body.polygon(
  */
 inline fun Body.polygon(
     vararg vertices: Vector2,
-    init: FixtureDefinition.(PolygonShape) -> Unit): Fixture {
+    init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   shape.set(vertices)
   return fixture(shape, init)
@@ -333,7 +333,7 @@ inline fun Body.polygon(
  */
 inline fun Body.chain(
     vararg vertices: Vector2,
-    init: FixtureDefinition.(ChainShape) -> Unit): Fixture {
+    init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createChain(vertices)
   return fixture(shape, init)
@@ -350,7 +350,7 @@ inline fun Body.chain(
  */
 inline fun Body.chain(
     vertices: FloatArray,
-    init: FixtureDefinition.(ChainShape) -> Unit): Fixture {
+    init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createChain(vertices)
   return fixture(shape, init)
@@ -365,7 +365,7 @@ inline fun Body.chain(
  */
 inline fun Body.loop(
     vararg vertices: Vector2,
-    init: FixtureDefinition.(ChainShape) -> Unit): Fixture {
+    init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createLoop(vertices)
   return fixture(shape, init)
@@ -383,7 +383,7 @@ inline fun Body.loop(
  */
 inline fun Body.loop(
     vertices: FloatArray,
-    init: FixtureDefinition.(ChainShape) -> Unit): Fixture {
+    init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createLoop(vertices)
   return fixture(shape, init)
@@ -400,7 +400,7 @@ inline fun Body.loop(
 inline fun Body.edge(
     from: Vector2,
     to: Vector2,
-    init: FixtureDefinition.(EdgeShape) -> Unit): Fixture {
+    init: FixtureDefinition.(EdgeShape) -> Unit = {}): Fixture {
   val shape = EdgeShape()
   shape.set(from, to)
   return fixture(shape, init)
@@ -423,7 +423,7 @@ inline fun Body.edge(
     fromY: Float,
     toX: Float,
     toY: Float,
-    init: FixtureDefinition.(EdgeShape) -> Unit): Fixture {
+    init: FixtureDefinition.(EdgeShape) -> Unit = {}): Fixture {
   val shape = EdgeShape()
   shape.set(fromX, fromY, toX, toY)
   return fixture(shape, init)

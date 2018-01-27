@@ -124,7 +124,7 @@ to `Scene2DSkin.defaultSkin` and `"default"` respectively. To globally set the `
 default to create your widgets, modify `defaultSkin` field of `Scene2DSkin` container:
 
 ```Kotlin
-val mySkin: Skin = /* TODO Create your Skin */
+val mySkin: Skin = TODO("Create your skin.")
 Scene2DSkin.defaultSkin = mySkin
 ```
 
@@ -351,7 +351,7 @@ issues in your GUI code, the migration should be absolutely painless.
 #### Synergy
 
 Pair this library with [`ktx-style`](../style) for type-safe styles building and [`ktx-actors`](../actors) for useful
-extension methods for `Scene2D` API.
+extension methods for `Scene2D` API. [`ktx-assets`](../assets) might help with `Skin` management.
 
 ### Alternatives
 

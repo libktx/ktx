@@ -6,6 +6,8 @@ include(
     'async',
     'box2d',
     'collections',
+    'freetype',
+    'freetype-async',
     'i18n',
     'inject',
     'log',

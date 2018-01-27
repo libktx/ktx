@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Tree] instance.
  */
-inline fun tree(style: String = defaultStyle,
-                skin: Skin = Scene2DSkin.defaultSkin,
-                init: KTreeWidget.() -> Unit) = actor(KTreeWidget(skin, style), init)
+inline fun tree(
+    style: String = defaultStyle,
+    skin: Skin = Scene2DSkin.defaultSkin,
+    init: KTreeWidget.() -> Unit = {}) = actor(KTreeWidget(skin, style), init)

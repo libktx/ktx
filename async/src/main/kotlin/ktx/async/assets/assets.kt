@@ -395,7 +395,7 @@ class AssetStorage(
       = setLoader(Asset::class.java, loader, suffix)
 
   /**
-   * Internal API exposed for inlined method. See [setLoader] with generics.
+   * Internal API exposed for inlined method. See inlined [setLoader] with reified generics.
    * @param type type of loaded assets.
    * @param loader will handle loading of instances of the selected asset type.
    * @param suffix optional suffix (extension) of files that will be handled by the passed loader. If null or empty,

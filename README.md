@@ -1,7 +1,7 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.1.51-orange.svg)](http://kotlinlang.org/)
-[![LibGDX](https://img.shields.io/badge/libgdx-1.9.7-red.svg)](https://libgdx.badlogicgames.com/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.2.21-orange.svg)](http://kotlinlang.org/)
+[![LibGDX](https://img.shields.io/badge/libgdx-1.9.8-red.svg)](https://libgdx.badlogicgames.com/)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
 
@@ -28,6 +28,8 @@ Current **KTX** modules:
 - [async](async): [coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 - [box2d](box2d): `Box2D` physics engine utilities.
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
+- [freetype](freetype): FreeType font loading utilities.
+- [freetype-async](freetype-async): FreeType font loading utilities for the [async](async) module.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
@@ -67,8 +69,9 @@ the extensive tests.
 
 ### Documentation
 
-Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through the
-directories in root folder to find out more about each library.
+Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through
+the directories in root folder to find out more about each library. GitHub releases also contain archives with generated
+Dokka documentation for each module.
 
 ### [Contribution and working from sources](.github/CONTRIBUTING.md)
 
