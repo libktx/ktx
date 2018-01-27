@@ -1,3 +1,5 @@
+#### 1.9.8-SNAPSHOT
+
 #### 1.9.8-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.8.
