@@ -14,7 +14,8 @@ are necessary to make it work like that.
 #### `Vector2`
 
 - `vec2` is a global factory function that can create `Vector2` instances with named parameters for extra readability.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide current values according to the second vector.
+- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second vector.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector, resulting in a new vector.
 - Unary `-` operator (a single minus before the vector) allows to negate both vector values.
 - `*` and `/` can be used with floats and ints to multiply or divide both vector values.
 - `++` and `--` operators can be used to increment and decrement both x and y values of the vector. Note that since
@@ -37,7 +38,8 @@ call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or do
 #### `Vector3`
 
 - `vec3` is a global factory function that can create `Vector3` instances with named parameters for extra readability.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide current values according to the second vector.
+- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second vector.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector, resulting in a new vector.
 - Unary `-` operator (a single minus before the vector) allows to negate all vector values.
 - `*` and `/` can be used with floats and ints to multiply or divide all vector values.
 - `++` and `--` operators can be used to increment and decrement x, y and z values of the vector. Note that since
@@ -57,7 +59,7 @@ to `component1()`, `component2()` and `component3` operator methods.
 - `+` and `-` can be used to add and subtract values from other matrices.
 - `*` operator can be used to right-multiply the matrix with another matrix using `mul(Matrix3)` method.
 - `*` operator can be used to scale the X and Y components of the matrix with a float of a vector using `scl` methods.
-- `Vector3` and `Vector2` instances can be multiplied with a `Matrix3` using `*` operator.
+- `Vector2` instances can be multiplied with a `Matrix3` using `*` operator.
 - `Matrix3` instances can be destructed into nine float variables (each representing one of its cells) thanks to the
 `component1()` - `component9()` operator functions.
 
