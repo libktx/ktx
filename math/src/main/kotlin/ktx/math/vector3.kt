@@ -15,6 +15,24 @@ import com.badlogic.gdx.math.Vector3
 fun vec3(x: Float = 0f, y: Float = 0f, z: Float = 0f): Vector3 = Vector3(x, y, z)
 
 /**
+ * Constructs a new [Vector3] instance. Basically a "copy" of [Vector3] constructor that supports Kotlin syntax features:
+ * named parameters with default values.
+ * @param vector2 the X and Y components. Defaults to vec2(0f, 0f).
+ * @param z the Z component. Defaults to 0f.
+ * @return a new [Vector3] instance storing the passed values.
+ */
+fun vec3(vector2: Vector2 = vec2(), z: Float = 0f): Vector3 = Vector3(vector2, z)
+
+/**
+ * Constructs a new [Vector3] instance. Basically a "copy" of [Vector3] constructor that supports Kotlin syntax features:
+ * named parameters with default values.
+ * @param x the X component. Defaults to 0f.
+ * @param vector2 the Y and Z components. Defaults to vec2(0f, 0f).
+ * @return a new [Vector3] instance storing the passed values.
+ */
+fun vec3(x: Float = 0f, vector2: Vector2 = vec2()): Vector3 = Vector3(x, vector2.x, vector2.y)
+
+/**
  * Swizzled coordinate property, like in GLSL.
  * Equals to x.
  */
