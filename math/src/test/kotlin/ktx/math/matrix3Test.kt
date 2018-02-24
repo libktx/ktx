@@ -175,20 +175,6 @@ class Matrix3Test {
   }
 
   @Test
-  fun `should multiplyAssign Vector3 with matrices`() {
-    val vector = vec3(1f, 2f, 3f)
-
-    vector *= mat3(
-            1f, 2f, 3f,
-            4f, 5f, 6f,
-            7f, 8f, 9f)
-
-    assertEquals(1f * 1f + 2f * 2f + 3f * 3f, vector.x, floatTolerance)
-    assertEquals(1f * 4f + 2f * 5f + 3f * 6f, vector.y, floatTolerance)
-    assertEquals(1f * 7f + 2f * 8f + 3f * 9f, vector.z, floatTolerance)
-  }
-
-  @Test
   fun `should add matrices`() {
     val matrix = mat3(
         1f, 2f, 3f,
@@ -266,61 +252,16 @@ class Matrix3Test {
   }
 
   @Test
-  fun `should multiply matrices with Vector2 scale`() {
+  fun `should multiply matrices with Vector2`() {
     val matrix = mat3(
         1f, 2f, 3f,
         4f, 5f, 6f,
         7f, 8f, 9f)
 
-    val result = matrix * vec2(3f, 2f / 5f)
+    val result = matrix * vec2(3f, 2f)
 
-    assertMatrixEquals(result,
-        3f, 2f, 3f,
-        4f, 2f, 6f,
-        7f, 8f, 9f)
-  }
-
-  @Test
-  fun `should multiply matrices with Vector3 scale`() {
-    val matrix = mat3(
-        3f, 2f, 3f,
-        4f, 2f, 6f,
-        7f, 8f, 9f)
-
-    val result = matrix * vec3(3f, 2f, 0f) // Last value is ignored.
-
-    assertMatrixEquals(result,
-        9f, 2f, 3f,
-        4f, 4f, 6f,
-        7f, 8f, 9f)
-
-  }
-
-  @Test
-  fun `should multiply Vector2 with matrices`() {
-    val vector = vec2(1f, 2f)
-
-    val result = vector * mat3(
-        1f, 2f, 3f,
-        4f, 5f, 6f,
-        7f, 8f, 9f)
-
-    assertEquals(1f * 1f + 2f * 2f + 1f * 3f, result.x, floatTolerance)
-    assertEquals(1f * 4f + 2f * 5f + 1f * 6f, result.y, floatTolerance)
-  }
-
-  @Test
-  fun `should multiply Vector3 with matrices`() {
-    val vector = vec3(1f, 2f, 3f)
-
-    val result = vector * mat3(
-        1f, 2f, 3f,
-        4f, 5f, 6f,
-        7f, 8f, 9f)
-
-    assertEquals(1f * 1f + 2f * 2f + 3f * 3f, result.x, floatTolerance)
-    assertEquals(1f * 4f + 2f * 5f + 3f * 6f, result.y, floatTolerance)
-    assertEquals(1f * 7f + 2f * 8f + 3f * 9f, result.z, floatTolerance)
+    assertEquals(3f * 1f + 2f * 2f + 1f * 3f, result.x, floatTolerance)
+    assertEquals(3f * 4f + 2f * 5f + 1f * 6f, result.y, floatTolerance)
   }
 
   @Test

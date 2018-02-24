@@ -21,7 +21,7 @@ fun vec3(x: Float = 0f, y: Float = 0f, z: Float = 0f): Vector3 = Vector3(x, y, z
  * @param z the Z component. Defaults to 0f.
  * @return a new [Vector3] instance storing the passed values.
  */
-fun vec3(vector2: Vector2 = vec2(), z: Float = 0f): Vector3 = Vector3(vector2, z)
+fun vec3(vector2: Vector2, z: Float): Vector3 = Vector3(vector2, z)
 
 /**
  * Constructs a new [Vector3] instance. Basically a "copy" of [Vector3] constructor that supports Kotlin syntax features:
@@ -30,7 +30,7 @@ fun vec3(vector2: Vector2 = vec2(), z: Float = 0f): Vector3 = Vector3(vector2, z
  * @param vector2 the Y and Z components. Defaults to vec2(0f, 0f).
  * @return a new [Vector3] instance storing the passed values.
  */
-fun vec3(x: Float = 0f, vector2: Vector2 = vec2()): Vector3 = Vector3(x, vector2.x, vector2.y)
+fun vec3(x: Float, vector2: Vector2): Vector3 = Vector3(x, vector2.x, vector2.y)
 
 /**
  * Swizzled coordinate property, like in GLSL.

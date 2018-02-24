@@ -90,11 +90,6 @@ operator fun Matrix3.timesAssign(scale: Vector2) { this.scl(scale) }
 operator fun Matrix3.timesAssign(scale: Vector3) { this.scl(scale) }
 
 /**
- * @param matrix3 this vector will be left-multiplied by this matrix.
- */
-operator fun Vector3.timesAssign(matrix3: Matrix3) { this.mul(matrix3) }
-
-/**
  * @param matrix3 this vector will be left-multiplied by this matrix assuming the last component is 1f.
  */
 operator fun Vector2.timesAssign(matrix3: Matrix3) { this.mul(matrix3) }
@@ -137,28 +132,10 @@ operator fun Matrix3.times(matrix3: Matrix3): Matrix3 = Matrix3(this).mul(matrix
 operator fun Matrix3.times(scalar: Float): Matrix3 = Matrix3(this).scl(scalar)
 
 /**
- * @param scale scales the matrix in the both the x and y components.
+ * @param vector2 this vector will be left-multiplied by this matrix, assuming the third component is 1f.
  * @return this matrix for chaining.
  */
-operator fun Matrix3.times(scale: Vector2): Matrix3 = Matrix3(this).scl(scale)
-
-/**
- * @param scale scales the matrix in the both the x and y components.
- * @return this matrix for chaining.
- */
-operator fun Matrix3.times(scale: Vector3): Matrix3 = Matrix3(this).scl(scale)
-
-/**
- * @param matrix3 this vector will be left-multiplied by this matrix.
- * @return this [Vector3] storing the result.
- */
-operator fun Vector3.times(matrix3: Matrix3): Vector3 = Vector3(this).mul(matrix3)
-
-/**
- * @param matrix3 this vector will be left-multiplied by this matrix assuming the last component is 1f.
- * @return this [Vector2] storing the result.
- */
-operator fun Vector2.times(matrix3: Matrix3): Vector2 = Vector2(this).mul(matrix3)
+operator fun Matrix3.times(vector2: Vector2): Vector2 = Vector2(vector2).mul(this)
 
 /**
  * Operator function that allows to deconstruct this matrix.
