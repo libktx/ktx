@@ -30,68 +30,6 @@ class Vector3Test {
   }
 
   @Test
-  fun `vector s,t,b should equal to vector x,y,z`() {
-    val vector = vec3(x = 10f, y = -10f, z = 5f)
-
-    assertEquals(vector.x, vector.s, floatTolerance)
-    assertEquals(vector.y, vector.t, floatTolerance)
-    assertEquals(vector.z, vector.b, floatTolerance)
-  }
-
-  @Test
-  fun `vector r,g,b should equal to vector x,y,z`() {
-    val vector = vec3(x = 10f, y = -10f, z = 5f)
-
-    assertEquals(vector.x, vector.r, floatTolerance)
-    assertEquals(vector.y, vector.g, floatTolerance)
-    assertEquals(vector.z, vector.b, floatTolerance)
-  }
-
-  @Test
-  fun `vector stb should equal to vector xyz`() {
-    val vector = vec3(x = 10f, y = -10f, z = 5f)
-
-    val st = vector.st
-    assertEquals(vector.x, st.x, floatTolerance)
-    assertEquals(vector.y, st.y, floatTolerance)
-
-    val sb = vector.sb
-    assertEquals(vector.x, sb.x, floatTolerance)
-    assertEquals(vector.z, sb.y, floatTolerance)
-
-    val tb = vector.tb
-    assertEquals(vector.y, tb.x, floatTolerance)
-    assertEquals(vector.z, tb.y, floatTolerance)
-
-    val stb = vector.stb
-    assertEquals(vector.x, stb.x, floatTolerance)
-    assertEquals(vector.y, stb.y, floatTolerance)
-    assertEquals(vector.z, stb.z, floatTolerance)
-  }
-
-  @Test
-  fun `vector rgb should equal to vector xyz`() {
-    val vector = vec3(x = 10f, y = -10f, z = 5f)
-
-    val rg = vector.rg
-    assertEquals(vector.x, rg.x, floatTolerance)
-    assertEquals(vector.y, rg.y, floatTolerance)
-
-    val rb = vector.rb
-    assertEquals(vector.x, rb.x, floatTolerance)
-    assertEquals(vector.z, rb.y, floatTolerance)
-
-    val gb = vector.gb
-    assertEquals(vector.y, gb.x, floatTolerance)
-    assertEquals(vector.z, gb.y, floatTolerance)
-
-    val rgb = vector.rgb
-    assertEquals(vector.x, rgb.x, floatTolerance)
-    assertEquals(vector.y, rgb.y, floatTolerance)
-    assertEquals(vector.z, rgb.z, floatTolerance)
-  }
-
-  @Test
   fun `should invert values with unary - operator`() {
     val vector = Vector3(10f, 10f, -10f)
 

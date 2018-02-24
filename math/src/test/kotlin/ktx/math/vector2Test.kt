@@ -27,63 +27,6 @@ class Vector2Test {
   }
 
   @Test
-  fun `vector s and t should equal to vector x and y`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    assertEquals(vector.x, vector.s, floatTolerance)
-    assertEquals(vector.y, vector.t, floatTolerance)
-  }
-
-  @Test
-  fun `vector r and g should equal to vector x and y`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    assertEquals(vector.x, vector.r, floatTolerance)
-    assertEquals(vector.y, vector.g, floatTolerance)
-  }
-
-  @Test
-  fun `vector u and v should equal to vector x and y`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    assertEquals(vector.x, vector.u, floatTolerance)
-    assertEquals(vector.y, vector.v, floatTolerance)
-  }
-
-  @Test
-  fun `vector st should equal to vector xy`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    val xy = vector.xy
-    val st = vector.st
-
-    assertEquals(xy.x, st.x, floatTolerance)
-    assertEquals(xy.y, st.y, floatTolerance)
-  }
-
-  @Test
-  fun `vector rg should equal to vector xy`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    val xy = vector.xy
-    val rg = vector.rg
-
-    assertEquals(xy.x, rg.x, floatTolerance)
-    assertEquals(xy.y, rg.y, floatTolerance)
-  }
-
-  @Test
-  fun `vector uv should equal to vector xy`() {
-    val vector = vec2(x = 10f, y = -10f)
-
-    val xy = vector.xy
-    val uv = vector.uv
-
-    assertEquals(xy.x, uv.x, floatTolerance)
-    assertEquals(xy.y, uv.y, floatTolerance)
-  }
-
-  @Test
   fun `should invert values with unary - operator`() {
     val vector = Vector2(10f, 10f)
 
