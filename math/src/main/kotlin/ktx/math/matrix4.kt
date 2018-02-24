@@ -1,6 +1,5 @@
 package ktx.math
 
-import com.badlogic.gdx.math.Matrix3
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -90,28 +89,37 @@ operator fun Matrix4.minusAssign(matrix4: Matrix4) {
  * @param matrix4 values from this matrix will right-multiply this matrix. A*B results in AB.
  * @see Matrix4.mulLeft
  */
-operator fun Matrix4.timesAssign(matrix4: Matrix4) { this.mul(matrix4) }
+operator fun Matrix4.timesAssign(matrix4: Matrix4) {
+  this.mul(matrix4)
+}
 
 /**
  * @param scalar scales the matrix in the x, y and z components.
  */
-operator fun Matrix4.timesAssign(scalar: Float) { this.scl(scalar) }
+operator fun Matrix4.timesAssign(scalar: Float) {
+  this.scl(scalar)
+}
 
 /**
  * @param scale scales the matrix in the both the x and y components.
  */
-operator fun Matrix4.timesAssign(scale: Vector2) { this.scl(vec3(scale, 1f)) }
+operator fun Matrix4.timesAssign(scale: Vector2) {
+  this.scl(vec3(scale, 1f))
+}
 
 /**
  * @param scale scales the matrix in the x, y and z components.
  */
-operator fun Matrix4.timesAssign(scale: Vector3) { this.scl(scale) }
+operator fun Matrix4.timesAssign(scale: Vector3) {
+  this.scl(scale)
+}
 
 /**
  * @param matrix4 this vector will be left-multiplied by this matrix, assuming the forth component is 1f.
  */
-operator fun Vector3.timesAssign(matrix4: Matrix4) { this.mul(matrix4) }
-
+operator fun Vector3.timesAssign(matrix4: Matrix4) {
+  this.mul(matrix4)
+}
 
 /**
  * @param matrix4 values from this matrix will be added to this matrix.

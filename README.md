@@ -42,13 +42,13 @@ Current **KTX** modules:
 Note that most guides and examples assume that the reader is at least a bit familiar with the LibGDX API.
 
 Afraid to use some third-party code? Browse through the sources, run the test suites. While certainly not perfect, we try to keep to
-keep the public API clean and *every* features fully unit tested. *Reported code coverage may not be so impressive though, as the
-coverage tools are currently unable to calculate coverage of inlined methods. And there are plenty of these in some modules.*
+keep the public API clean and *every* feature fully unit tested. *Note: coverage tools still have problems with Kotlin
+inlined methods, so the reported code coverage might be much lower than the actual.*
 
 ### Dependencies
 
-**KTX** libraries are currently almost out of beta. While tested and stable enough, we want to give them a little bit more time
-and get some user feedback before a stable release. All versions are available through Maven Central and
+**KTX** libraries are currently almost out of beta. While tested and stable enough, we want to give them a little bit
+more time and get some user feedback before a stable release. All versions are available through Maven Central and
 [here](https://github.com/libktx/ktx/releases). You can also use the preview snapshot releases from
 `https://oss.sonatype.org/content/repositories/snapshots/` repository.
 

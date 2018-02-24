@@ -19,3 +19,5 @@ Project contributors listed chronologically.
   * Suggested the [`FreeType` extension](../freetype).
 * [@TomGrill](https://github.com/TomGrill)
   * Contributed improvements to the [dependency injection module](../inject).
+* [@mrdlink](https://github.com/mrdlink)
+  * Contributed significant improvements to the [math module](../math).

@@ -30,6 +30,24 @@ class Vector3Test {
   }
 
   @Test
+  fun `should create Vector3 with Vector2 instance`() {
+    val vector = vec3(Vector2(10f, 5f))
+
+    assertEquals(10f, vector.x, floatTolerance)
+    assertEquals(5f, vector.y, floatTolerance)
+    assertEquals(0f, vector.z, floatTolerance)
+  }
+
+  @Test
+  fun `should create Vector3 with Vector2 instance and Z component`() {
+    val vector = vec3(Vector2(10f, 5f), z = -15f)
+
+    assertEquals(10f, vector.x, floatTolerance)
+    assertEquals(5f, vector.y, floatTolerance)
+    assertEquals(-15f, vector.z, floatTolerance)
+  }
+
+  @Test
   fun `should invert values with unary - operator`() {
     val vector = Vector3(10f, 10f, -10f)
 
