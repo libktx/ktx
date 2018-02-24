@@ -1,5 +1,10 @@
 #### 1.9.8-SNAPSHOT
 
+- **[CHANGE]** (`ktx-math`) Binary operators of `Vector2`, `Vector3`, `Matrix3` and `Matrix4` no longer modify the passed parameters. Use the assign operators instead.
+- **[CHANGE]** (`ktx-math`) Assign operators (`+=`, `-=`, `*=`, `/=`) were added to `Vector2`, `Vector3`, `Matrix3` and `Matrix4`.
+- **[CHANGE]** (`ktx-math`) Parameters of matrix vector multiplication operators are switched. `vector * matrix` doesn't exist anymore and now equals to `matrix * vector`.
+- **[CHANGE]** (`ktx-math`) Operators of `Matrix3` to left-multiply a `Vector3` were removed.
+
 #### 1.9.8-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.8.
