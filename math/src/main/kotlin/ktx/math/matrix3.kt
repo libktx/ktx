@@ -54,13 +54,68 @@ operator fun Matrix3.not(): Matrix3 = this.inv()
 
 /**
  * @param matrix3 values from this matrix will be added to this matrix.
- * @return this matrix for chaining.
  */
-operator fun Matrix3.plus(matrix3: Matrix3): Matrix3 {
+operator fun Matrix3.plusAssign(matrix3: Matrix3) {
   for (index in 0..8) {
     this.`val`[index] += matrix3.`val`[index]
   }
-  return this
+}
+
+/**
+ * @param matrix3 values from this matrix will be subtracted from this matrix.
+ */
+operator fun Matrix3.minusAssign(matrix3: Matrix3) {
+  for (index in 0..8) {
+    this.`val`[index] -= matrix3.`val`[index]
+  }
+}
+
+/**
+ * @param matrix3 values from this matrix will right-multiply this matrix. A*B results in AB.
+ * @see Matrix3.mulLeft
+ */
+operator fun Matrix3.timesAssign(matrix3: Matrix3) {
+  this.mul(matrix3)
+}
+
+/**
+ * @param scalar scales the matrix in the both the x and y components.
+ */
+operator fun Matrix3.timesAssign(scalar: Float) {
+  this.scl(scalar)
+}
+
+/**
+ * @param scale scales the matrix in the both the x and y components.
+ */
+operator fun Matrix3.timesAssign(scale: Vector2) {
+  this.scl(scale)
+}
+
+/**
+ * @param scale scales the matrix in the both the x and y components.
+ */
+operator fun Matrix3.timesAssign(scale: Vector3) {
+  this.scl(scale)
+}
+
+/**
+ * @param matrix3 this vector will be left-multiplied by this matrix assuming the last component is 1f.
+ */
+operator fun Vector2.timesAssign(matrix3: Matrix3) {
+  this.mul(matrix3)
+}
+
+/**
+ * @param matrix3 values from this matrix will be added to this matrix.
+ * @return this matrix for chaining.
+ */
+operator fun Matrix3.plus(matrix3: Matrix3): Matrix3 {
+  val result = Matrix3(this)
+  for (index in 0..8) {
+    result.`val`[index] += matrix3.`val`[index]
+  }
+  return result
 }
 
 /**
@@ -68,10 +123,11 @@ operator fun Matrix3.plus(matrix3: Matrix3): Matrix3 {
  * @return this matrix for chaining.
  */
 operator fun Matrix3.minus(matrix3: Matrix3): Matrix3 {
+  val result = Matrix3(this)
   for (index in 0..8) {
-    this.`val`[index] -= matrix3.`val`[index]
+    result.`val`[index] -= matrix3.`val`[index]
   }
-  return this
+  return result
 }
 
 /**
@@ -79,37 +135,19 @@ operator fun Matrix3.minus(matrix3: Matrix3): Matrix3 {
  * @return this matrix for chaining.
  * @see Matrix3.mulLeft
  */
-operator fun Matrix3.times(matrix3: Matrix3): Matrix3 = this.mul(matrix3)
+operator fun Matrix3.times(matrix3: Matrix3): Matrix3 = Matrix3(this).mul(matrix3)
 
 /**
  * @param scalar scales the matrix in the both the x and y components.
  * @return this matrix for chaining.
  */
-operator fun Matrix3.times(scalar: Float): Matrix3 = this.scl(scalar)
+operator fun Matrix3.times(scalar: Float): Matrix3 = Matrix3(this).scl(scalar)
 
 /**
- * @param scale scales the matrix in the both the x and y components.
+ * @param vector2 this vector will be left-multiplied by this matrix, assuming the third component is 1f.
  * @return this matrix for chaining.
  */
-operator fun Matrix3.times(scale: Vector2): Matrix3 = this.scl(scale)
-
-/**
- * @param scale scales the matrix in the both the x and y components.
- * @return this matrix for chaining.
- */
-operator fun Matrix3.times(scale: Vector3): Matrix3 = this.scl(scale)
-
-/**
- * @param matrix3 this vector will be left-multiplied by this matrix.
- * @return this [Vector3] storing the result.
- */
-operator fun Vector3.times(matrix3: Matrix3): Vector3 = this.mul(matrix3)
-
-/**
- * @param matrix3 this vector will be left-multiplied by this matrix assuming the last component is 1f.
- * @return this [Vector2] storing the result.
- */
-operator fun Vector2.times(matrix3: Matrix3): Vector2 = this.mul(matrix3)
+operator fun Matrix3.times(vector2: Vector2): Vector2 = Vector2(vector2).mul(this)
 
 /**
  * Operator function that allows to deconstruct this matrix.

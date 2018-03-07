@@ -1,3 +1,23 @@
+#### 1.9.8-b2
+
+- **[UPDATE]** Updated to Kotlin 1.2.30.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.22.5.
+- **[UPDATE]** Updated to Dokka 0.9.16.
+- **[UPDATE]** Updated to Gradle 4.6.
+- **[FEATURE]** (`ktx-math`) `dot` and `x` infix functions added to `Vector2` and `Vector3` allow to calculate dot
+products and cross products of two vectors respectively.
+- **[FEATURE]** (`ktx-box2d`) Initiation blocks of `Body` in `World.body` extension method is now optional thanks to
+default lambda parameters in inlined functions.
+- **[FEATURE]** (`ktx-box2d`)  `World.query` extension method allowing to execute AABB query with idiomatic Kotlin.
+- **[CHANGE]** (`ktx-math`) Binary operators of `Vector2`, `Vector3`, `Matrix3` and `Matrix4` (`+`, `-`, `*`, `/`) no
+longer modify the first vector or matrix. Instead, they create new instances of vectors or matrices that store the
+operation result. Use the assign operators (`+=`, `-=`, `*=`, `/=`) instead to avoid creating new instances.
+- **[CHANGE]** (`ktx-math`) New mutating assign operators (`+=`, `-=`, `*=`, `/=`) were added to `Vector2`, `Vector3`,
+`Matrix3` and `Matrix4`.
+- **[CHANGE]** (`ktx-math`) Parameters of matrix vector multiplication operators are switched. `vector * matrix` does
+not exist anymore and now is available as `matrix * vector`.
+- **[CHANGE]** (`ktx-math`) Operators of `Matrix3` to left-multiply a `Vector3` were removed.
+
 #### 1.9.8-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.8.

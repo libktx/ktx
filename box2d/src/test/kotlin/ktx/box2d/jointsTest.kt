@@ -111,8 +111,8 @@ class JointsTest {
   @Test
   fun `should create GearJoint`() {
     val (bodyA, bodyB) = getBodies()
-    val jointA = bodyB.revoluteJointWith(bodyA) {}
-    val jointB = bodyA.revoluteJointWith(bodyB) {}
+    val jointA = bodyB.revoluteJointWith(bodyA)
+    val jointB = bodyA.revoluteJointWith(bodyB)
 
     val joint = bodyA.gearJointWith(bodyB) {
       joint1 = jointA
@@ -212,11 +212,11 @@ class JointsTest {
     val world = createWorld()
     val bodyA = world.body {
       position.set(-1f, 0f)
-      box(1f, 1f) {}
+      box(1f, 1f)
     }
     val bodyB = world.body {
       position.set(1f, 0f)
-      box(1f, 1f) {}
+      box(1f, 1f)
     }
     return bodyA to bodyB
   }

@@ -1,6 +1,6 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.2.21-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.2.30-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.8-red.svg)](https://libgdx.badlogicgames.com/)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -10,7 +10,11 @@ _**K**o**t**lin utilities for LibGD**X** applications._
 ### About the project
 
 **KTX** aims to make [LibGDX](http://libgdx.badlogicgames.com/) as [Kotlin](http://kotlinlang.org/)-friendly as possible
-without turning the API upside down. This is **not** a new framework by any means - but Kotlin sure makes LibGDX feel like one.
+without turning the API upside down. It provides modular utilities for certain parts of LibGDX with poor Kotlin support.
+This is **not** a new framework by any means - but Kotlin certainly makes LibGDX feel like one.
+
+Do not confuse **KTX** with [`android-ktx`](https://github.com/android/android-ktx): an official Google project with
+Android utilities. "**KTX**" name was chosen long before the Android project was announced.
 
 ### Modules
 
@@ -35,20 +39,20 @@ Current **KTX** modules:
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
 - [scene2d](scene2d): type-safe Kotlin builders for `Scene2D` GUI.
-- [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles. Replace your JSON skin file today!
+- [style](style): enhances `Skin` API with type-safe builders of official Scene2D widget styles. Replace your JSON skin file with type-safe DSL.
 - [vis](vis): type-safe Kotlin builders for `VisUI`. An _alternative_ to the [scene2d](scene2d) module.
 - [vis-style](vis-style): enhances `Skin` API with type-safe builders of `VisUI` widget styles. An _extension_ of [style](style) module.
 
 Note that most guides and examples assume that the reader is at least a bit familiar with the LibGDX API.
 
 Afraid to use some third-party code? Browse through the sources, run the test suites. While certainly not perfect, we try to keep to
-keep the public API clean and *every* features fully unit tested. *Reported code coverage may not be so impressive though, as the
-coverage tools are currently unable to calculate coverage of inlined methods. And there are plenty of these in some modules.*
+keep the public API clean and *every* feature fully unit tested. *Note: coverage tools still have problems with Kotlin
+inlined methods, so the reported code coverage might be much lower than the actual.*
 
 ### Dependencies
 
-**KTX** libraries are currently almost out of beta. While tested and stable enough, we want to give them a little bit more time
-and get some user feedback before a stable release. All versions are available through Maven Central and
+**KTX** libraries are currently in late beta. While tested and stable enough, we want to give them a little bit
+more time and get some user feedback before a stable release. All versions are available through Maven Central and
 [here](https://github.com/libktx/ktx/releases). You can also use the preview snapshot releases from
 `https://oss.sonatype.org/content/repositories/snapshots/` repository.
 
