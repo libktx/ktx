@@ -108,7 +108,7 @@ class VisStyleTest {
     val drawable = mock<Drawable>()
     val skin = skin {
       colorPicker("base") {
-        pickerStyle = it.colorPickerWidget {}
+        pickerStyle = it.colorPickerWidget()
         titleFontColor = Color.RED
       }
       colorPicker("new", extend = "base") {
@@ -291,7 +291,7 @@ class VisStyleTest {
       menuBar("base") {
         background = drawable
       }
-      menuBar("new", extend = "base") {}
+      menuBar("new", extend = "base")
     }
 
     val style = skin.get<MenuBarStyle>("new")
@@ -728,8 +728,7 @@ class VisStyleTest {
       visTooltip("base") {
         background = drawable
       }
-      visTooltip("new", extend = "base") {
-      }
+      visTooltip("new", extend = "base")
     }
 
     val style = skin.get<TooltipStyle>("new")

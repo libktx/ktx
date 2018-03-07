@@ -16,6 +16,8 @@ font assets. It should be called right after constructing a `AssetManager` insta
 * Extension method `AssetManager.loadFreeTypeFont` allows to easily configure loaded `BitmapFont` instances with Kotlin
 DSL.
 * `freeTypeFontParameters` function is a Kotlin DSL for customizing font loading parameters.
+* `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` instances using a
+`FreeTypeFontGenerator` with Kotlin DSL.
 
 ### Usage examples
 
@@ -27,6 +29,7 @@ import ktx.freetype.*
 
 fun initiateAssetManager(): AssetManager {
   val assetManager = AssetManager()
+  // Calling registerFreeTypeFontLoaders is necessary in order to load TTF/OTF files.
   assetManager.registerFreeTypeFontLoaders()
   return assetManager
 }
@@ -69,15 +72,29 @@ assetManager.loadFreeTypeFont("font.ttf") {
 }
 ```
 
-Accessing fully loaded font (note: `AssetManager` must finish loading the asset first):
+Accessing a fully loaded font (note: `AssetManager` must finish loading the asset first):
 
 ```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+
 val font = assetManager.get<BitmapFont>("font.ttf")
+```
+
+Using delegation to schedule loading of a FreeType font:
+
+```kotlin
+import ktx.assets.getValue
+import ktx.freetype.loadFreeTypeFont
+
+val font: BitmapFont by assetManager.loadFreeTypeFont("font.ttf")
+
+// `font` variable can be accessed once the asset is fully loaded. See ktx-assets README.
 ```
 
 Loading `FreeTypeFontGenerator` with [`ktx-assets`](../assets):
 
 ```kotlin
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import ktx.assets.load
 
 assetManager.load<FreeTypeFontGenerator>("font.tff")
@@ -96,6 +113,22 @@ fun getFontParameters(): FreeTypeFontLoaderParameter = freeTypeFontParameters("f
   borderColor = Color.BLUE
 }
 ```
+
+Generating a new `BitmapFont` using LibGDX `FreeTypeFontGenerator`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import ktx.freetype.*
+
+val generator: FreeTypeFontGenerator = getGenerator()
+// Default parameters:
+val fontA = generator.generateFont()
+// Customized:
+val fontB = generator.generateFont {
+  size = 42
+}
+```
+
 
 ### Alternatives
 

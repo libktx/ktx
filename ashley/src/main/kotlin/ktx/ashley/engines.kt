@@ -14,8 +14,9 @@ import com.badlogic.ashley.core.Entity
  */
 @AshleyDsl
 class EngineEntity(
-        val engine: Engine,
-        val entity: Entity) {
+    val engine: Engine,
+    val entity: Entity) {
+
   /**
    * Get or creates an instance of the component [T] and adds it to this [entity][EngineEntity].
    *
@@ -25,9 +26,13 @@ class EngineEntity(
    * @see [create]
    */
   inline fun <reified T : Component> with(configure: (@AshleyDsl T).() -> Unit = {}): T {
-    return engine.create<T>().also(configure).also { entity.add(it) }
+    val component = engine.create<T>()
+    component.configure()
+    entity.add(component)
+    return component
   }
 }
+
 /**
  * Get or create a [Component] by calling [Engine.createComponent].
  *
@@ -35,17 +40,15 @@ class EngineEntity(
  * @param configure inlined function with [T] as the receiver to allow further configuration.
  * @return an [Component] instance of the selected type.
  */
-inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T = createComponent(T::class.java).also(configure)
-
+inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T
+    = createComponent(T::class.java).apply(configure)
 
 /**
  * Builder function for [Engine].
  *
  * @param configure inlined function with *this* [Engine] as the receiver to allow further configuration.
  */
-inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) {
-  configure(this)
-}
+inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) = configure()
 
 /**
  * Create and add an [Entity] to the [Engine].
@@ -56,7 +59,7 @@ inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) {
  */
 inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   val entity = createEntity()
-  configure(EngineEntity(this, entity))
+  EngineEntity(this, entity).configure()
   addEntity(entity)
   return entity
 }

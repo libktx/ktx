@@ -15,3 +15,9 @@ Project contributors listed chronologically.
   * Author of the [`Ashley` module](../ashley).
   * Author of the [gdx-box2d-kotlin](https://github.com/Jkly/gdx-box2d-kotlin) library, which inspired the `Box2D` **KTX** module.
   * Provided insightful review of the [`Box2D`](../box2d) module. Contributed ray casting utilities.
+* [@keturn](https://github.com/keturn)
+  * Suggested the [`FreeType` extension](../freetype).
+* [@TomGrill](https://github.com/TomGrill)
+  * Contributed improvements to the [dependency injection module](../inject).
+* [@mrdlink](https://github.com/mrdlink)
+  * Contributed significant improvements to the [math module](../math).

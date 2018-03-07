@@ -33,7 +33,7 @@ import org.junit.Test
  */
 class StyleTest {
   @Test
-  fun `should use valid default style`() {
+  fun `should use valid default style name`() {
     val skin = Skin()
     skin.add(defaultStyle, "Mock resource.")
 
@@ -46,14 +46,27 @@ class StyleTest {
   }
 
   @Test
+  fun `should create new skin`() {
+    val skin = skin()
+
+    skin shouldNotBe null
+  }
+
+  @Test
   fun `should create new skin with init block`() {
     val skin = skin {
       add("mock", "Test.")
     }
 
     skin shouldNotBe null
-
     skin.get("mock", String::class.java) shouldNotBe null
+  }
+
+  @Test
+  fun `should create new skin with TextureAtlas`() {
+    val skin = skin(TextureAtlas())
+
+    skin shouldNotBe null
   }
 
   @Test
@@ -63,27 +76,37 @@ class StyleTest {
     }
 
     skin shouldNotBe null
-
     skin.get("mock", String::class.java) shouldNotBe null
   }
 
   @Test
-  fun `should extract resource with reified type`() {
+  fun `should extract resource with explicit reified type`() {
     val skin = Skin()
     skin.add("mock", "Test.")
 
     val resource = skin.get<String>("mock")
-    resource shouldBe "Test."
 
-    @Suppress("ReplaceGetOrSet")
-    val reified: String = skin.get("mock")
+    resource shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract resource with implicit reified type`() {
+    val skin = Skin()
+    skin.add("mock", "Test.")
+
+    val reified: String = skin["mock"]
+
     reified shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract resource with implicit reified type with infix method`() {
+    val skin = Skin()
+    skin.add("mock", "Test.")
 
     val infix: String = skin get "mock"
-    infix shouldBe "Test."
 
-    val operator: String = skin["mock"]
-    operator shouldBe "Test."
+    infix shouldBe "Test."
   }
 
   @Test
@@ -97,6 +120,17 @@ class StyleTest {
 
   @Test
   fun `should add existing style to skin`() {
+    val skin = Skin()
+    val existing = LabelStyle()
+
+    skin.addStyle("mock", existing)
+
+    val style = skin.get<LabelStyle>("mock")
+    assertSame(existing, style)
+  }
+
+  @Test
+  fun `should add existing style to skin with init block`() {
     val skin = Skin()
     val existing = LabelStyle()
 
@@ -259,7 +293,7 @@ class StyleTest {
   fun `should add ListStyle`() {
     val skin = skin {
       list {
-        this.fontColorSelected = Color.BLACK
+        fontColorSelected = Color.BLACK
       }
     }
 
@@ -318,7 +352,7 @@ class StyleTest {
     val drawable = mock<Drawable>()
     val skin = skin {
       scrollPane {
-        this.background = drawable
+        background = drawable
       }
     }
 
@@ -358,8 +392,8 @@ class StyleTest {
   @Test
   fun `should extend SelectBoxStyle`() {
     val skin = skin {
-      list {} // Necessary for copy constructor.
-      scrollPane {}
+      list() // Necessary for copy constructor.
+      scrollPane()
       selectBox("base") {
         listStyle = it[defaultStyle]
         scrollStyle = it[defaultStyle]
@@ -425,8 +459,7 @@ class StyleTest {
       splitPane("base") {
         handle = drawable
       }
-      splitPane("new", extend = "base") {
-      }
+      splitPane("new", extend = "base")
     }
 
     val style = skin.get<SplitPaneStyle>("new")
@@ -507,7 +540,7 @@ class StyleTest {
     val drawable = mock<Drawable>()
     val skin = skin {
       textTooltip("base") {
-        label = it.label {} // Necessary for copy constructor.
+        label = it.label() // Necessary for copy constructor.
         background = drawable
       }
       textTooltip("new", extend = "base") {

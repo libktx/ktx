@@ -3,8 +3,6 @@ package ktx.scene2d
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 
-// TODO Inlining these functions seems to cause compilation errors in 1.2.0.
-
 /**
  * Adds a new [TextTooltip] to this actor.
  * @param text will be displayed on the tooltip.
@@ -16,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
  *    [TextTooltip] as its parameter, so it can be modified with the *it* reference as well. See usage examples.
  * @return a new [TextTooltip] instance added to the actor.
  */
-fun Actor.addTextTooltip(
+inline fun Actor.addTextTooltip(
     text: String,
     style: String = defaultStyle,
     skin: Skin = Scene2DSkin.defaultSkin,
@@ -39,7 +37,7 @@ fun Actor.addTextTooltip(
  *    [Tooltip] as its parameter, so it can be modified with the *it* reference. See usage examples.
  * @return a new [Tooltip] instance added to this actor.
  */
-fun Actor.addTooltip(
+inline fun Actor.addTooltip(
     background: String? = null,
     skin: Skin = Scene2DSkin.defaultSkin,
     tooltipManager: TooltipManager = TooltipManager.getInstance(),

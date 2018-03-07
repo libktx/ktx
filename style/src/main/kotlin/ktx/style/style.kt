@@ -37,7 +37,7 @@ const val defaultStyle = "default"
  * @param init will be applied to the [Skin] instance. Inlined.
  * @return a new instance of [Skin].
  */
-inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit): Skin {
+inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
   val skin = Skin()
   skin.init(skin)
   return skin
@@ -48,7 +48,7 @@ inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit): Skin {
  * @param init will be applied to the [Skin] instance. Inlined.
  * @return a new instance of [Skin].
  */
-inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit): Skin {
+inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
   val skin = Skin(atlas)
   skin.init(skin)
   return skin
@@ -77,7 +77,7 @@ inline operator fun <reified Resource : Any> Skin.set(name: String, resource: Re
  * @param init will be applied to the style instance. Inlined.
  * @return passed style instance (for chaining).
  */
-inline fun <Style> Skin.addStyle(name: String, style: Style, init: Style.() -> Unit): Style {
+inline fun <Style> Skin.addStyle(name: String, style: Style, init: Style.() -> Unit = {}): Style {
   style.init()
   this.add(name, style)
   return style
@@ -111,7 +111,7 @@ fun Skin.color(name: String,
  */
 inline fun Skin.button(name: String = defaultStyle,
                        extend: String? = null,
-                       init: (@SkinDsl ButtonStyle).() -> Unit) =
+                       init: (@SkinDsl ButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ButtonStyle() else ButtonStyle(get(extend)), init)
 
 /**
@@ -123,7 +123,7 @@ inline fun Skin.button(name: String = defaultStyle,
  */
 inline fun Skin.checkBox(name: String = defaultStyle,
                          extend: String? = null,
-                         init: (@SkinDsl CheckBoxStyle).() -> Unit) =
+                         init: (@SkinDsl CheckBoxStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) CheckBoxStyle() else CheckBoxStyle(get(extend)), init)
 
 /**
@@ -135,7 +135,7 @@ inline fun Skin.checkBox(name: String = defaultStyle,
  */
 inline fun Skin.imageButton(name: String = defaultStyle,
                             extend: String? = null,
-                            init: (@SkinDsl ImageButtonStyle).() -> Unit) =
+                            init: (@SkinDsl ImageButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ImageButtonStyle() else ImageButtonStyle(get(extend)), init)
 
 /**
@@ -147,7 +147,7 @@ inline fun Skin.imageButton(name: String = defaultStyle,
  */
 inline fun Skin.imageTextButton(name: String = defaultStyle,
                                 extend: String? = null,
-                                init: (@SkinDsl ImageTextButtonStyle).() -> Unit) =
+                                init: (@SkinDsl ImageTextButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ImageTextButtonStyle() else ImageTextButtonStyle(get(extend)), init)
 
 /**
@@ -159,7 +159,7 @@ inline fun Skin.imageTextButton(name: String = defaultStyle,
  */
 inline fun Skin.label(name: String = defaultStyle,
                       extend: String? = null,
-                      init: (@SkinDsl LabelStyle).() -> Unit) =
+                      init: (@SkinDsl LabelStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) LabelStyle() else LabelStyle(get(extend)), init)
 
 /**
@@ -171,7 +171,7 @@ inline fun Skin.label(name: String = defaultStyle,
  */
 inline fun Skin.list(name: String = defaultStyle,
                      extend: String? = null,
-                     init: (@SkinDsl ListStyle).() -> Unit) =
+                     init: (@SkinDsl ListStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ListStyle() else ListStyle(get(extend)), init)
 
 /**
@@ -183,7 +183,7 @@ inline fun Skin.list(name: String = defaultStyle,
  */
 inline fun Skin.progressBar(name: String = defaultStyle,
                             extend: String? = null,
-                            init: (@SkinDsl ProgressBarStyle).() -> Unit) =
+                            init: (@SkinDsl ProgressBarStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ProgressBarStyle() else ProgressBarStyle(get(extend)), init)
 
 /**
@@ -195,7 +195,7 @@ inline fun Skin.progressBar(name: String = defaultStyle,
  */
 inline fun Skin.scrollPane(name: String = defaultStyle,
                            extend: String? = null,
-                           init: (@SkinDsl ScrollPaneStyle).() -> Unit) =
+                           init: (@SkinDsl ScrollPaneStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ScrollPaneStyle() else ScrollPaneStyle(get(extend)), init)
 
 /**
@@ -207,7 +207,7 @@ inline fun Skin.scrollPane(name: String = defaultStyle,
  */
 inline fun Skin.selectBox(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl SelectBoxStyle).() -> Unit) =
+                          init: (@SkinDsl SelectBoxStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SelectBoxStyle() else SelectBoxStyle(get(extend)), init)
 
 /**
@@ -219,7 +219,7 @@ inline fun Skin.selectBox(name: String = defaultStyle,
  */
 inline fun Skin.slider(name: String = defaultStyle,
                        extend: String? = null,
-                       init: (@SkinDsl SliderStyle).() -> Unit) =
+                       init: (@SkinDsl SliderStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SliderStyle() else SliderStyle(get(extend)), init)
 
 /**
@@ -231,7 +231,7 @@ inline fun Skin.slider(name: String = defaultStyle,
  */
 inline fun Skin.splitPane(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl SplitPaneStyle).() -> Unit) =
+                          init: (@SkinDsl SplitPaneStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SplitPaneStyle() else SplitPaneStyle(get<SplitPaneStyle>(extend)), init)
 
 /**
@@ -243,7 +243,7 @@ inline fun Skin.splitPane(name: String = defaultStyle,
  */
 inline fun Skin.textButton(name: String = defaultStyle,
                            extend: String? = null,
-                           init: (@SkinDsl TextButtonStyle).() -> Unit) =
+                           init: (@SkinDsl TextButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TextButtonStyle() else TextButtonStyle(get(extend)), init)
 
 /**
@@ -255,7 +255,7 @@ inline fun Skin.textButton(name: String = defaultStyle,
  */
 inline fun Skin.textField(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl TextFieldStyle).() -> Unit) =
+                          init: (@SkinDsl TextFieldStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TextFieldStyle() else TextFieldStyle(get(extend)), init)
 
 /**
@@ -267,7 +267,7 @@ inline fun Skin.textField(name: String = defaultStyle,
  */
 inline fun Skin.textTooltip(name: String = defaultStyle,
                             extend: String? = null,
-                            init: (@SkinDsl TextTooltipStyle).() -> Unit) =
+                            init: (@SkinDsl TextTooltipStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TextTooltipStyle() else TextTooltipStyle(get(extend)), init)
 
 /**
@@ -279,7 +279,7 @@ inline fun Skin.textTooltip(name: String = defaultStyle,
  */
 inline fun Skin.touchpad(name: String = defaultStyle,
                          extend: String? = null,
-                         init: (@SkinDsl TouchpadStyle).() -> Unit) =
+                         init: (@SkinDsl TouchpadStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TouchpadStyle() else TouchpadStyle(get(extend)), init)
 
 /**
@@ -291,7 +291,7 @@ inline fun Skin.touchpad(name: String = defaultStyle,
  */
 inline fun Skin.tree(name: String = defaultStyle,
                      extend: String? = null,
-                     init: TreeStyle.() -> Unit) =
+                     init: TreeStyle.() -> Unit = {}) =
     addStyle(name, if (extend == null) TreeStyle() else TreeStyle(get(extend)), init)
 
 /**
@@ -303,5 +303,5 @@ inline fun Skin.tree(name: String = defaultStyle,
  */
 inline fun Skin.window(name: String = defaultStyle,
                        extend: String? = null,
-                       init: (@SkinDsl WindowStyle).() -> Unit) =
+                       init: (@SkinDsl WindowStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) WindowStyle() else WindowStyle(get(extend)), init)

@@ -35,7 +35,7 @@ import com.kotcrab.vis.ui.widget.toast.Toast.ToastStyle
  */
 inline fun Skin.sizes(name: String = defaultStyle,
                       extend: String? = null,
-                      init: (@SkinDsl Sizes).() -> Unit) =
+                      init: (@SkinDsl Sizes).() -> Unit = {}) =
     addStyle(name, if (extend == null) Sizes() else Sizes(get(extend)), init)
 
 /**
@@ -47,7 +47,7 @@ inline fun Skin.sizes(name: String = defaultStyle,
  */
 inline fun Skin.busyBar(name: String = defaultStyle,
                         extend: String? = null,
-                        init: (@SkinDsl BusyBarStyle).() -> Unit) =
+                        init: (@SkinDsl BusyBarStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) BusyBarStyle() else BusyBarStyle(get(extend)), init)
 
 /**
@@ -59,7 +59,7 @@ inline fun Skin.busyBar(name: String = defaultStyle,
  */
 inline fun Skin.colorPicker(name: String = defaultStyle,
                             extend: String? = null,
-                            init: (@SkinDsl ColorPickerStyle).() -> Unit) =
+                            init: (@SkinDsl ColorPickerStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ColorPickerStyle() else ColorPickerStyle(get(extend)), init)
 
 /**
@@ -71,7 +71,7 @@ inline fun Skin.colorPicker(name: String = defaultStyle,
  */
 inline fun Skin.colorPickerWidget(name: String = defaultStyle,
                                   extend: String? = null,
-                                  init: (@SkinDsl ColorPickerWidgetStyle).() -> Unit) =
+                                  init: (@SkinDsl ColorPickerWidgetStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ColorPickerWidgetStyle() else ColorPickerWidgetStyle(get(extend)), init)
 
 /**
@@ -83,7 +83,7 @@ inline fun Skin.colorPickerWidget(name: String = defaultStyle,
  */
 inline fun Skin.formValidator(name: String = defaultStyle,
                               extend: String? = null,
-                              init: (@SkinDsl FormValidatorStyle).() -> Unit) =
+                              init: (@SkinDsl FormValidatorStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) FormValidatorStyle() else FormValidatorStyle(get(extend)), init)
 
 /**
@@ -95,7 +95,7 @@ inline fun Skin.formValidator(name: String = defaultStyle,
  */
 inline fun Skin.linkLabel(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl LinkLabelStyle).() -> Unit) =
+                          init: (@SkinDsl LinkLabelStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) LinkLabelStyle() else LinkLabelStyle(get(extend)), init)
 
 /**
@@ -107,7 +107,7 @@ inline fun Skin.linkLabel(name: String = defaultStyle,
  */
 inline fun Skin.listView(name: String = defaultStyle,
                          extend: String? = null,
-                         init: (@SkinDsl ListViewStyle).() -> Unit) =
+                         init: (@SkinDsl ListViewStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ListViewStyle() else ListViewStyle(get(extend)), init)
 
 /**
@@ -119,7 +119,7 @@ inline fun Skin.listView(name: String = defaultStyle,
  */
 inline fun Skin.menu(name: String = defaultStyle,
                      extend: String? = null,
-                     init: (@SkinDsl MenuStyle).() -> Unit) =
+                     init: (@SkinDsl MenuStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) MenuStyle() else MenuStyle(get(extend)), init)
 
 /**
@@ -131,7 +131,7 @@ inline fun Skin.menu(name: String = defaultStyle,
  */
 inline fun Skin.menuBar(name: String = defaultStyle,
                         extend: String? = null,
-                        init: (@SkinDsl MenuBarStyle).() -> Unit) =
+                        init: (@SkinDsl MenuBarStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) MenuBarStyle() else MenuBarStyle(get<MenuBarStyle>(extend)), init)
 
 /**
@@ -143,7 +143,7 @@ inline fun Skin.menuBar(name: String = defaultStyle,
  */
 inline fun Skin.menuItem(name: String = defaultStyle,
                          extend: String? = null,
-                         init: (@SkinDsl MenuItemStyle).() -> Unit) =
+                         init: (@SkinDsl MenuItemStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) MenuItemStyle() else MenuItemStyle(get<MenuItemStyle>(extend)), init)
 
 /**
@@ -155,7 +155,7 @@ inline fun Skin.menuItem(name: String = defaultStyle,
  */
 inline fun Skin.multiSplitPane(name: String = defaultStyle,
                                extend: String? = null,
-                               init: (@SkinDsl MultiSplitPaneStyle).() -> Unit) =
+                               init: (@SkinDsl MultiSplitPaneStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) MultiSplitPaneStyle() else MultiSplitPaneStyle(get<MultiSplitPaneStyle>(extend)), init)
 
 /**
@@ -167,7 +167,7 @@ inline fun Skin.multiSplitPane(name: String = defaultStyle,
  */
 inline fun Skin.popupMenu(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl PopupMenuStyle).() -> Unit) =
+                          init: (@SkinDsl PopupMenuStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) PopupMenuStyle() else PopupMenuStyle(get(extend)), init)
 
 /**
@@ -179,7 +179,7 @@ inline fun Skin.popupMenu(name: String = defaultStyle,
  */
 inline fun Skin.separator(name: String = defaultStyle,
                           extend: String? = null,
-                          init: (@SkinDsl SeparatorStyle).() -> Unit) =
+                          init: (@SkinDsl SeparatorStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SeparatorStyle() else SeparatorStyle(get(extend)), init)
 
 /**
@@ -191,7 +191,7 @@ inline fun Skin.separator(name: String = defaultStyle,
  */
 inline fun Skin.simpleListAdapter(name: String = defaultStyle,
                                   extend: String? = null,
-                                  init: (@SkinDsl SimpleListAdapterStyle).() -> Unit) =
+                                  init: (@SkinDsl SimpleListAdapterStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SimpleListAdapterStyle() else SimpleListAdapterStyle(get(extend)), init)
 
 /**
@@ -203,7 +203,7 @@ inline fun Skin.simpleListAdapter(name: String = defaultStyle,
  */
 inline fun Skin.spinner(name: String = defaultStyle,
                         extend: String? = null,
-                        init: (@SkinDsl SpinnerStyle).() -> Unit) =
+                        init: (@SkinDsl SpinnerStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) SpinnerStyle() else SpinnerStyle(get(extend)), init)
 
 /**
@@ -215,7 +215,7 @@ inline fun Skin.spinner(name: String = defaultStyle,
  */
 inline fun Skin.tabbedPane(name: String = defaultStyle,
                            extend: String? = null,
-                           init: (@SkinDsl TabbedPaneStyle).() -> Unit) =
+                           init: (@SkinDsl TabbedPaneStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TabbedPaneStyle() else TabbedPaneStyle(get(extend)), init)
 
 /**
@@ -227,7 +227,7 @@ inline fun Skin.tabbedPane(name: String = defaultStyle,
  */
 inline fun Skin.toast(name: String = defaultStyle,
                       extend: String? = null,
-                      init: (@SkinDsl ToastStyle).() -> Unit) =
+                      init: (@SkinDsl ToastStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) ToastStyle() else ToastStyle(get(extend)), init)
 
 /**
@@ -239,7 +239,7 @@ inline fun Skin.toast(name: String = defaultStyle,
  */
 inline fun Skin.visCheckBox(name: String = defaultStyle,
                             extend: String? = null,
-                            init: (@SkinDsl VisCheckBoxStyle).() -> Unit) =
+                            init: (@SkinDsl VisCheckBoxStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisCheckBoxStyle() else VisCheckBoxStyle(get(extend)), init)
 
 /**
@@ -251,7 +251,7 @@ inline fun Skin.visCheckBox(name: String = defaultStyle,
  */
 inline fun Skin.visImageButton(name: String = defaultStyle,
                                extend: String? = null,
-                               init: (@SkinDsl VisImageButtonStyle).() -> Unit) =
+                               init: (@SkinDsl VisImageButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisImageButtonStyle() else VisImageButtonStyle(get(extend)), init)
 
 /**
@@ -263,7 +263,7 @@ inline fun Skin.visImageButton(name: String = defaultStyle,
  */
 inline fun Skin.visImageTextButton(name: String = defaultStyle,
                                    extend: String? = null,
-                                   init: (@SkinDsl VisImageTextButtonStyle).() -> Unit) =
+                                   init: (@SkinDsl VisImageTextButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisImageTextButtonStyle() else VisImageTextButtonStyle(get(extend)), init)
 
 /**
@@ -275,7 +275,7 @@ inline fun Skin.visImageTextButton(name: String = defaultStyle,
  */
 inline fun Skin.visSplitPane(name: String = defaultStyle,
                              extend: String? = null,
-                             init: (@SkinDsl VisSplitPaneStyle).() -> Unit) =
+                             init: (@SkinDsl VisSplitPaneStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisSplitPaneStyle() else VisSplitPaneStyle(get(extend)), init)
 
 /**
@@ -287,7 +287,7 @@ inline fun Skin.visSplitPane(name: String = defaultStyle,
  */
 inline fun Skin.visTextButton(name: String = defaultStyle,
                               extend: String? = null,
-                              init: (@SkinDsl VisTextButtonStyle).() -> Unit) =
+                              init: (@SkinDsl VisTextButtonStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisTextButtonStyle() else VisTextButtonStyle(get(extend)), init)
 
 /**
@@ -299,7 +299,7 @@ inline fun Skin.visTextButton(name: String = defaultStyle,
  */
 inline fun Skin.visTextField(name: String = defaultStyle,
                              extend: String? = null,
-                             init: (@SkinDsl VisTextFieldStyle).() -> Unit) =
+                             init: (@SkinDsl VisTextFieldStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) VisTextFieldStyle() else VisTextFieldStyle(get(extend)), init)
 
 /**
@@ -311,5 +311,5 @@ inline fun Skin.visTextField(name: String = defaultStyle,
  */
 inline fun Skin.visTooltip(name: String = defaultStyle,
                            extend: String? = null,
-                           init: (@SkinDsl TooltipStyle).() -> Unit) =
+                           init: (@SkinDsl TooltipStyle).() -> Unit = {}) =
     addStyle(name, if (extend == null) TooltipStyle() else TooltipStyle(get<TooltipStyle>(extend)), init)

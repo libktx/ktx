@@ -5,8 +5,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader.FreeTypeFontGeneratorParameters
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter
+import ktx.assets.Asset
+import ktx.assets.load
+import ktx.assets.setLoader
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator] instances from TTF and OTF files.
@@ -20,14 +24,14 @@ fun AssetManager.registerFreeTypeFontLoaders(
     fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
     replaceDefaultBitmapFontLoader: Boolean = false) {
   val fontGeneratorLoader = FreeTypeFontGeneratorLoader(fileHandleResolver)
-  setLoader(FreeTypeFontGenerator::class.java, fontGeneratorLoader)
+  setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorParameters>(fontGeneratorLoader)
 
   val fontLoader = FreetypeFontLoader(fileHandleResolver)
   if (replaceDefaultBitmapFontLoader) {
-    setLoader(BitmapFont::class.java, fontLoader)
+    setLoader<BitmapFont, FreeTypeFontLoaderParameter>(fontLoader)
   } else {
     fileExtensions.forEach { extension ->
-      setLoader(BitmapFont::class.java, extension, fontLoader)
+      setLoader<BitmapFont, FreeTypeFontLoaderParameter>(fontLoader, suffix = extension)
     }
   }
 }
@@ -36,12 +40,12 @@ fun AssetManager.registerFreeTypeFontLoaders(
  * Allows to customize parameters of a loaded FreeType font.
  * @param file path to the FreeType font file.
  * @param setup should specify font parameters. Will be invoked on a new instance of [FreeTypeFontParameter]. Inlined.
+ * @return [Asset] wrapper which allows to access the font once it is loaded.
  */
 inline fun AssetManager.loadFreeTypeFont(
     file: String,
-    setup: FreeTypeFontParameter.() -> Unit = {}) {
-  load(file, BitmapFont::class.java, freeTypeFontParameters(file, setup))
-}
+    setup: FreeTypeFontParameter.() -> Unit = {}): Asset<BitmapFont> =
+    load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
 
 /**
  * Syntax sugar for [FreeTypeFontLoaderParameter] initialization. Used internally by [loadFreeTypeFont].
@@ -54,3 +58,11 @@ inline fun freeTypeFontParameters(
   fontFileName = file
   fontParameters.apply(setup)
 }
+
+/**
+ * Syntax sugar for [FreeTypeFontGenerator.generateFont]. Allows to use Kotlin DSL to initiate font parameters.
+ * @param setup will be applied to newly constructed [FreeTypeFontParameter]. Inlined. If not given, will create a font
+ * with default parameters.
+ */
+inline fun FreeTypeFontGenerator.generateFont(setup: FreeTypeFontParameter.() -> Unit = {}): BitmapFont =
+    generateFont(FreeTypeFontParameter().apply(setup))

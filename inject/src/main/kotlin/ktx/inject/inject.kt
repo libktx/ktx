@@ -2,6 +2,7 @@ package ktx.inject
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
+import kotlin.reflect.KClass
 
 /**
  * Handles dependency injection mechanism. Allows to bind selected classes with their providers.
@@ -31,27 +32,21 @@ open class Context : Disposable {
    * @return instance of the class with the selected type if a provider is present in the context.
    * @see inject
    */
-  inline operator fun <reified Type : Any> invoke(): Type {
-    return getProvider(Type::class.java)()
-  }
+  inline operator fun <reified Type : Any> invoke(): Type = getProvider(Type::class.java)()
 
   /**
    * Provides instance of the selected type.
    * @return instance of the class with the selected type if a provider is present in the context.
    * @throws InjectionException if no provider is registered for the selected type.
    */
-  inline fun <reified Type : Any> inject(): Type {
-    return getProvider(Type::class.java)()
-  }
+  inline fun <reified Type : Any> inject(): Type = getProvider(Type::class.java)()
 
   /**
    * Extracts provider of instances of the selected type.
    * @return instance of a provider of objects with the selected type.
    * @throws InjectionException if no provider is registered for the selected type.
    */
-  inline fun <reified Type : Any> provider(): () -> Type {
-    return getProvider(Type::class.java)
-  }
+  inline fun <reified Type : Any> provider(): () -> Type = getProvider(Type::class.java)
 
   /**
    * Extracts provider of instances of the selected type. This method is internally used by inlined injection methods.
@@ -91,9 +86,7 @@ open class Context : Disposable {
    * @see remove
    */
   @Suppress("UNCHECKED_CAST")
-  open fun <Type> removeProvider(ofClass: Class<Type>): (() -> Type)? {
-    return providers.remove(ofClass) as (() -> Type)?
-  }
+  open fun <Type> removeProvider(ofClass: Class<Type>): (() -> Type)? = providers.remove(ofClass) as (() -> Type)?
 
   /**
    * Removes singleton or provider of instances of the selected type registered in the [Context].
@@ -108,6 +101,12 @@ open class Context : Disposable {
    * @return true if there is a provider registered for the selected type.
    */
   operator fun contains(type: Class<*>): Boolean = type in providers
+
+  /**
+   * @param type Kotlin class of the provided components.
+   * @return true if there is a provider registered for the selected type.
+   */
+  operator fun contains(type: KClass<*>): Boolean = type.java in providers
 
   /** @return true if there is a provider registered for the selected type. */
   inline fun <reified Type : Any> contains(): Boolean = Type::class.java in this
@@ -141,23 +140,42 @@ open class Context : Disposable {
   inline fun <reified Type : Any> bindSingleton(singleton: Type) = bind(SingletonProvider(singleton))
 
   /**
+   * Allows to bind a singleton to the chosen class.
+   * @param provider inlined. Immediately invoked a single time. Its result will be registered as a singleton.
+   * @throws InjectionException if provider for the selected type is already defined.
+   */
+  inline fun <reified Type : Any> bindSingleton(provider: () -> Type) = bind(SingletonProvider(provider()))
+
+  /**
    * Allows to bind a provider to multiple classes in hierarchy of the provided instances class.
    * @param to list of interfaces and classes in the class hierarchy of the objects provided by the provider. Any time
    *    any of the passed classes will be requested for injection, the selected provider will be invoked.
    * @param provider provides instances of classes compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bind(vararg to: Class<out Type>, provider: () -> Type) = to.forEach { setProvider(it, provider) }
+  fun <Type : Any> bind(vararg to: KClass<out Type>, provider: () -> Type) = to.forEach {
+    setProvider(it.java, provider)
+  }
 
   /**
    * Allows to bind a singleton instance to multiple classes in its hierarchy.
-   * @param singleton instance of class compatible with the passed types.
    * @param to list of interfaces and classes in the class hierarchy of the singleton. Any time any of the passed classes
    *    will be requested for injection, the selected singleton will be returned.
+   * @param singleton instance of class compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bindSingleton(singleton: Type, vararg to: Class<out Type>)
+  fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, singleton: Type)
       = bind(*to, provider = SingletonProvider(singleton))
+
+  /**
+   * Allows to bind the result of the provider to multiple classes in its hierarchy.
+   * @param to list of interfaces and classes in the class hierarchy of the provider. Any time any of the passed classes
+   *    will be requested for injection, the selected provider will be returned.
+   * @param provider inlined. Immediately invoked a single time. Its result will be registered as a singleton.
+   * @throws InjectionException if provider for any of the selected types is already defined.
+   */
+  inline fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, provider: () -> Type)
+      = bind(*to, provider = SingletonProvider(provider()))
 
   /**
    * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and
@@ -202,7 +220,7 @@ data class SingletonProvider<out Type : Any>(val singleton: Type) : Disposable, 
   /** @return [singleton]. */
   override operator fun invoke(): Type = singleton
 
-  /** Disposes of the [singleton] if it implements [Disposable] interface. */
+  /** Disposes of the [singleton] if it implements the [Disposable] interface. */
   override fun dispose() {
     (singleton as? Disposable)?.dispose()
   }

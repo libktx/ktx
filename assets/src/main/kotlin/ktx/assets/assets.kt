@@ -102,7 +102,9 @@ class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
  * @param parameters optional asset loading parameters which might affect how the assets are loaded. Can be null.
  * @return [Asset] wrapper which allows to access the asset once it is loaded.
  */
-inline fun <reified Type : Any> AssetManager.load(path: String, parameters: AssetLoaderParameters<Type>? = null): Asset<Type> {
+inline fun <reified Type : Any> AssetManager.load(
+    path: String,
+    parameters: AssetLoaderParameters<Type>? = null): Asset<Type> {
   val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
   this.load(assetDescriptor)
   return ManagedAsset(this, assetDescriptor)

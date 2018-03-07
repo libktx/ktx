@@ -1,13 +1,40 @@
-#### 1.9.7-SNAPSHOT
+#### 1.9.8-SNAPSHOT
 
-- **[UPDATE]** Updated to Kotlin 1.2.0.
+- **[FEATURE]** (`ktx-math`) `dot` and `x` infix functions added to `Vector2` and `Vector3` allow to calculate dot
+products and cross products of two vectors respectively.
+- **[CHANGE]** (`ktx-math`) Binary operators of `Vector2`, `Vector3`, `Matrix3` and `Matrix4` (`+`, `-`, `*`, `/`) no
+longer modify the first vector or matrix. Instead, they create new instances of vectors or matrices that store the
+operation result. Use the assign operators (`+=`, `-=`, `*=`, `/=`) instead to avoid creating new instances.
+- **[CHANGE]** (`ktx-math`) New mutating assign operators (`+=`, `-=`, `*=`, `/=`) were added to `Vector2`, `Vector3`,
+`Matrix3` and `Matrix4`.
+- **[CHANGE]** (`ktx-math`) Parameters of matrix vector multiplication operators are switched. `vector * matrix` does
+not exist anymore and now is available as `matrix * vector`.
+- **[CHANGE]** (`ktx-math`) Operators of `Matrix3` to left-multiply a `Vector3` were removed.
+
+#### 1.9.8-b1
+
+- **[UPDATE]** Updated to LibGDX 1.9.8.
+- **[UPDATE]** Updated to Kotlin 1.2.21.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.22.
+- **[UPDATE]** Updated to Gradle 4.4.
+- **[UPDATE]** Updated to VisUI 1.4.0.
 - **[CHANGE]** (`ktx-scene2d`) Duplicate functions in Scene2D building DSL were removed thanks to optional default
 lambda parameters in inlined functions (added in Kotlin 1.2). Due to the limitation in inlined methods, there used to be
 two inlined methods for each actor to support syntax both with braces (init block) and without. Now there is just one
-factory method supporting both syntaxes per widget. This should not affect most application, but might require
+factory method supporting both syntax variants per widget. This should not affect most application, but might require
 Kotlin 1.2 usage.
+- **[CHANGE]** (`ktx-ashley`) Default functional parameters were added to `create`, `entity` and `with`, simplifying
+the implementation and making configuration blocks optional.
+- **[CHANGE]** (`ktx-inject`) Parameters of `bindSingleton` consuming multiple classes have been swapped to be more
+compatible with the `bind` functions.
+- **[CHANGE]** (`ktx-inject`) `bind` and `bindSingleton` methods consuming multiple classes now take `KClass` as
+parameters instead of `Class`, so now you can use `YourType::class` instead of more verbose `YourType::class.java`.
+- **[FEATURE]** (`ktx-style`) Initiation blocks of `Skin` and Scene2D actor styles are now optional.
+- **[FEATURE]** (`ktx-vis-style`) Initiation blocks of VisUI actor styles are now optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
 parameters in inlined functions.
+- **[FEATURE]** (`ktx-inject`) Add higher-order function parameters for `bindSingleton` to allow the use of lambda
+expressions.
 
 ```kotlin
 fun createCircle(body: Body) {
@@ -21,8 +48,14 @@ fun createCircle(body: Body) {
 - **[FEATURE]** (`ktx-box2d`)  Added extension method for querying the world for fixtures overlapping an AABB in a Kotlin idiomatic way.
 - **[FEATURE]** (`ktx-freetype`) Implemented `ktx-freetype` module.
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
-  - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading FreeType fonts.
+  - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading of FreeType fonts.
   - `freeTypeFontParameters` function provides Kotlin DSL for building FreeType font loading parameters.
+  - `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` with Kotlin DSL.
+- **[FEATURE]** (`ktx-freetype-async`) Implemented `ktx-freetype-async` module.
+  - `AssetStorage.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
+  - `AssetStorage.loadFreeTypeFont` provides Kotlin DSL for asynchronous loading of FreeType fonts.
+- **[FIX]** (`ktx-box2d`) As LibGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
+once again.
 
 #### 1.9.7-b1
 

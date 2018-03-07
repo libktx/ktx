@@ -73,6 +73,22 @@ context.register {
 }
 ```
 
+Registering a singleton via an init block:
+```Kotlin
+import ktx.inject.*
+
+context.register {
+  // The same Component instance will be injected on each request:
+  bindSingleton {
+    if (isAndroid()) {
+      AndroidComponent()
+    } else {
+      DesktopComponent()
+    }
+  }
+}
+```
+
 Injecting an instance:
 ```Kotlin
 import java.util.Random

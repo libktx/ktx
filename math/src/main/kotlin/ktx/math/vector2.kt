@@ -23,63 +23,110 @@ operator fun Vector2.unaryMinus(): Vector2 {
 
 /**
  * @param vector2 values from this vector will be added to this vector.
+ */
+operator fun Vector2.plusAssign(vector2: Vector2) {
+  this.add(vector2)
+}
+
+/**
+ * @param vector2 values from this vector will be subtracted from this vector.
+ */
+operator fun Vector2.minusAssign(vector2: Vector2) {
+  this.sub(vector2)
+}
+
+/**
+ * @param vector2 values from this vector will multiply this vector.
+ */
+operator fun Vector2.timesAssign(vector2: Vector2) {
+  this.scl(vector2)
+}
+
+/**
+ * @param vector2 values from this vector will divide this vector.
+ */
+operator fun Vector2.divAssign(vector2: Vector2) {
+  this.x /= vector2.x
+  this.y /= vector2.y
+}
+
+/**
+ * @param scalar will be used to multiply both vector values.
+ */
+operator fun Vector2.timesAssign(scalar: Float) {
+  this.scl(scalar)
+}
+
+/**
+ * @param scalar will be used to divide both vector values.
+ */
+operator fun Vector2.divAssign(scalar: Float) {
+  this.x /= scalar
+  this.y /= scalar
+}
+
+/**
+ * @param scalar will be used to multiply both vector values.
+ */
+operator fun Vector2.timesAssign(scalar: Int) {
+  this.scl(scalar.toFloat())
+}
+
+/**
+ * @param scalar will be used to divide both vector values.
+ */
+operator fun Vector2.divAssign(scalar: Int) {
+  this.x /= scalar
+  this.y /= scalar
+}
+
+/**
+ * @param vector2 values from this vector will be added to this vector.
  * @return this vector for chaining.
  */
-operator fun Vector2.plus(vector2: Vector2): Vector2 = this.add(vector2)
+operator fun Vector2.plus(vector2: Vector2): Vector2 = Vector2(this.x + vector2.x, this.y + vector2.y)
 
 /**
  * @param vector2 values from this vector will be subtracted from this vector.
  * @return this vector for chaining.
  */
-operator fun Vector2.minus(vector2: Vector2): Vector2 = this.sub(vector2)
+operator fun Vector2.minus(vector2: Vector2): Vector2 = Vector2(this.x - vector2.x, this.y - vector2.y)
 
 /**
  * @param vector2 values from this vector will multiply this vector.
  * @return this vector for chaining.
  */
-operator fun Vector2.times(vector2: Vector2): Vector2 = this.scl(vector2)
+operator fun Vector2.times(vector2: Vector2): Vector2 = Vector2(this.x * vector2.x, this.y * vector2.y)
 
 /**
  * @param vector2 values from this vector will divide this vector.
  * @return this vector for chaining.
  */
-operator fun Vector2.div(vector2: Vector2): Vector2 {
-  this.x /= vector2.x
-  this.y /= vector2.y
-  return this
-}
+operator fun Vector2.div(vector2: Vector2): Vector2 = Vector2(this.x / vector2.x, this.y / vector2.y)
 
 /**
  * @param scalar will be used to multiply both vector values.
  * @return this vector for chaining.
  */
-operator fun Vector2.times(scalar: Float): Vector2 = this.scl(scalar)
+operator fun Vector2.times(scalar: Float): Vector2 = Vector2(this.x * scalar, this.y * scalar)
 
 /**
  * @param scalar will be used to divide both vector values.
  * @return this vector for chaining.
  */
-operator fun Vector2.div(scalar: Float): Vector2 {
-  this.x /= scalar
-  this.y /= scalar
-  return this
-}
+operator fun Vector2.div(scalar: Float): Vector2 = Vector2(this.x / scalar, this.y / scalar)
 
 /**
  * @param scalar will be used to multiply both vector values.
  * @return this vector for chaining.
  */
-operator fun Vector2.times(scalar: Int): Vector2 = this.scl(scalar.toFloat())
+operator fun Vector2.times(scalar: Int): Vector2 = Vector2(this.x * scalar, this.y * scalar)
 
 /**
  * @param scalar will be used to divide both vector values.
  * @return this vector for chaining.
  */
-operator fun Vector2.div(scalar: Int): Vector2 {
-  this.x /= scalar
-  this.y /= scalar
-  return this
-}
+operator fun Vector2.div(scalar: Int): Vector2 = Vector2(this.x / scalar, this.y / scalar)
 
 /**
  * Increments both vector values - adds 1 to x and y. Note that since [Vector2] is mutable and its instances are usually
@@ -115,3 +162,17 @@ operator fun Vector2.component2(): Float = this.y
  * @return 1 if this vector has greater length. 0 if vectors are equal. -1 if the other vector is greater.
  */
 operator fun Vector2.compareTo(vector2: Vector2): Int = this.len2().compareTo(vector2.len2())
+
+/**
+ * Custom operator to apply dot multiplication.
+ * @param vector2 will be used to calculate the dot product of this vector.
+ * @return the dot product.
+ */
+infix fun Vector2.dot(vector2: Vector2): Float = this.dot(vector2)
+
+/**
+ * Custom operator to apply cross multiplication.
+ * @param vector2 will be used to calculate the cross product of this vector.
+ * @return the cross product.
+ */
+infix fun Vector2.x(vector2: Vector2): Float = this.crs(vector2)
