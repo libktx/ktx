@@ -18,6 +18,7 @@ fun createCircle(body: Body) {
     body.circle(radius = 2f)
 }
 ```
+- **[FEATURE]** (`ktx-box2d`)  Added extension method for querying the world for fixtures overlapping an AABB in a Kotlin idiomatic way.
 - **[FEATURE]** (`ktx-freetype`) Implemented `ktx-freetype` module.
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading FreeType fonts.

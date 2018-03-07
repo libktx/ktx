@@ -218,4 +218,39 @@ class WorldsTest : Box2DTest() {
     assertEquals(0f, RayCast.TERMINATE, tolerance)
     assertEquals(-1f, RayCast.IGNORE, tolerance)
   }
+
+  @Test
+  fun `should query for overlapping fixtures with AABB and stop`() {
+    val world = createWorld()
+    val matchingEdge1 = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
+    val matchingEdge2 = world.body {}.edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f)) {}
+    val matchedFixtures = mutableSetOf<Fixture>()
+
+    world.query(-1f, 1f, 1f, 1f) { fixture ->
+      matchedFixtures += fixture
+      Query.STOP
+    }
+
+    assertEquals(1, matchedFixtures.size)
+    assertTrue(matchedFixtures.contains(matchingEdge1) || matchedFixtures.contains(matchingEdge2))
+    world.dispose()
+  }
+
+  @Test
+  fun `should query for overlapping fixtures with AABB and continue`() {
+    val world = createWorld()
+    val matchingEdge1 = world.body {}.edge(from = Vector2.Zero, to = Vector2(0f, 2f)) {}
+    val matchingEdge2 = world.body {}.edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f)) {}
+    val matchedFixtures = mutableSetOf<Fixture>()
+
+    world.query(-1f, 1f, 1f, 1f) { fixture ->
+      matchedFixtures += fixture
+      Query.CONTINUE
+    }
+
+    assertEquals(2, matchedFixtures.size)
+    assertTrue(matchedFixtures.contains(matchingEdge1))
+    assertTrue(matchedFixtures.contains(matchingEdge2))
+    world.dispose()
+  }
 }

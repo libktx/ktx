@@ -37,6 +37,7 @@ with the following shapes:
   - `jointWith`: any `Joint` type supported by the custom `JointDef` passed as the method argument.
 - `earthGravity` is a constant that roughly matches Earth's gravity.
 - `World.rayCast` extension methods allow creating ray-cast callbacks with Kotlin lambda syntax.
+- `World.query` extension method allow creating AABB querying callbacks with Kotlin lambda syntax.
 
 ### Usage examples
 
@@ -281,6 +282,19 @@ fun createRayCast() {
   world.rayCast(startX = 0f, startY = 0f, endX = 1f, endY = 1f) { fixture, point, normal, fraction ->
     // Will be called when this ray hits a fixture.
     RayCast.CONTINUE
+  }
+}
+```
+
+Querying the world for fixtures overlapping an AABB:
+
+```Kotlin
+import ktx.box2d.*
+
+fun createQuery() {
+  world.query(lowerX = 0f, lowerY = 0f, upperX = 1f, upperY = 1f) { fixture ->
+    // Will be called when this query overlaps a fixture.
+    Query.CONTINUE
   }
 }
 ```
