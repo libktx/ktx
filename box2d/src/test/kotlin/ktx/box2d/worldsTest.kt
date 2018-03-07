@@ -248,9 +248,7 @@ class WorldsTest : Box2DTest() {
       Query.CONTINUE
     }
 
-    assertEquals(2, matchedFixtures.size)
-    assertTrue(matchedFixtures.contains(matchingEdge1))
-    assertTrue(matchedFixtures.contains(matchingEdge2))
+    assertEquals(setOf(matchingEdge1, matchingEdge2), matchedFixtures)
     world.dispose()
   }
 }
