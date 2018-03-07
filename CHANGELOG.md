@@ -3,6 +3,7 @@
 - **[UPDATE]** Updated to Kotlin 1.2.30.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.22.5.
 - **[UPDATE]** Updated to Dokka 0.9.16.
+- **[UPDATE]** Updated to Gradle 4.6.
 - **[FEATURE]** (`ktx-math`) `dot` and `x` infix functions added to `Vector2` and `Vector3` allow to calculate dot
 products and cross products of two vectors respectively.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of `Body` in `World.body` extension method is now optional thanks to
