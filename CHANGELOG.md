@@ -1,7 +1,11 @@
 #### 1.9.8-SNAPSHOT
 
+- **[UPDATE]** Updated to Dokka 0.9.16.
 - **[FEATURE]** (`ktx-math`) `dot` and `x` infix functions added to `Vector2` and `Vector3` allow to calculate dot
 products and cross products of two vectors respectively.
+- **[FEATURE]** (`ktx-box2d`) Initiation blocks of `Body` in `World.body` extension method is now optional thanks to
+default lambda parameters in inlined functions.
+- **[FEATURE]** (`ktx-box2d`)  `World.query` extension method allowing to execute AABB query with idiomatic Kotlin.
 - **[CHANGE]** (`ktx-math`) Binary operators of `Vector2`, `Vector3`, `Matrix3` and `Matrix4` (`+`, `-`, `*`, `/`) no
 longer modify the first vector or matrix. Instead, they create new instances of vectors or matrices that store the
 operation result. Use the assign operators (`+=`, `-=`, `*=`, `/=`) instead to avoid creating new instances.
@@ -45,7 +49,6 @@ fun createCircle(body: Body) {
     body.circle(radius = 2f)
 }
 ```
-- **[FEATURE]** (`ktx-box2d`)  Added extension method for querying the world for fixtures overlapping an AABB in a Kotlin idiomatic way.
 - **[FEATURE]** (`ktx-freetype`) Implemented `ktx-freetype` module.
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading of FreeType fonts.

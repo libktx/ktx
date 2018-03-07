@@ -18,12 +18,12 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
  * Type-safe [Body] building DSL.
  * @param type [BodyType] of the constructed [Body]. Matches LibGDX default of [BodyType.StaticBody].
  * @param init inlined. Invoked on a [BodyDefinition] instance, which provides access to [Body] properties, as well as
- *    fixture building DSL.
+ *    fixture building DSL. Defaults to no-op.
  * @return a fully constructed [Body] instance with all defined fixtures.
  * @see BodyDefinition
  * @see FixtureDefinition
  */
-inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit): Body {
+inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit = {}): Body {
   val bodyDefinition = BodyDefinition()
   bodyDefinition.type = type
   bodyDefinition.init()
