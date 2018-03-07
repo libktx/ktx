@@ -226,7 +226,7 @@ class WorldsTest : Box2DTest() {
     val matchingEdge2 = world.body {}.edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f)) {}
     val matchedFixtures = mutableSetOf<Fixture>()
 
-    world.query(-1f, 1f, 1f, 1f) { fixture ->
+    world.query(lowerX = -1f, lowerY = 1f, upperX = 1f, upperY = 1f) { fixture ->
       matchedFixtures += fixture
       Query.STOP
     }
@@ -243,7 +243,7 @@ class WorldsTest : Box2DTest() {
     val matchingEdge2 = world.body {}.edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f)) {}
     val matchedFixtures = mutableSetOf<Fixture>()
 
-    world.query(-1f, 1f, 1f, 1f) { fixture ->
+    world.query(lowerX= -1f, lowerY = 1f, upperX = 1f, upperY = 1f) { fixture ->
       matchedFixtures += fixture
       Query.CONTINUE
     }
