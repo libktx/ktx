@@ -89,9 +89,14 @@ val earthGravity = Vector2(0f, -9.8f)
  * @see rayCast
  */
 typealias KtxRayCastCallback = (fixture: Fixture,
-                                point: Vector2,
-                                normal: Vector2,
-                                fraction: Float) -> Float
+                                point: PointOfIntersection,
+                                normal: Normal,
+                                fraction: IntersectionFraction) -> NewRayLength
+
+typealias PointOfIntersection = Vector2
+typealias Normal = Vector2
+typealias IntersectionFraction = Float
+typealias NewRayLength = Float
 
 /**
  * Stores constants that can be returned by [KtxRayCastCallback] to control its behavior.
@@ -102,17 +107,17 @@ object RayCast {
    * Indicates to ignore the hit fixture and continue.
    * @see KtxRayCastCallback
    */
-  const val IGNORE = -1f
+  const val IGNORE: NewRayLength = -1f
   /**
    * Indicates to terminate the ray cast.
    * @see KtxRayCastCallback
    */
-  const val TERMINATE = 0f
+  const val TERMINATE: NewRayLength = 0f
   /**
    * Indicates to not clip the ray and continue.
    * @see KtxRayCastCallback
    */
-  const val CONTINUE = 1f
+  const val CONTINUE: NewRayLength = 1f
 }
 
 /**
