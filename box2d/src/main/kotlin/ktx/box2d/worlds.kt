@@ -163,25 +163,44 @@ fun World.rayCast(
  * @param callback a user implemented callback that is called for every fixture overlapping the AABB.
  * @see Query
  */
-fun World.query(lowerX: Float, lowerY: Float, upperX: Float, upperY: Float, callback: KtyQueryCallback) {
+fun World.query(
+    lowerX: Float,
+    lowerY: Float,
+    upperX: Float,
+    upperY: Float,
+    callback: KtxQueryCallback) {
   QueryAABB(callback, lowerX, lowerY, upperX, upperY)
 }
 
 /**
- * Stores constants that can be returned by [KtyQueryCallback] to control its behavior.
+ * Stores constants that can be returned by [KtxQueryCallback] to control its behavior.
  * @see query
  */
 object Query {
   /**
    * Stop querying the world.
-   * @see KtyQueryCallback
+   * @see KtxQueryCallback
    */
   const val STOP = false
   /**
    * Continue querying for the next match.
-   * @see KtyQueryCallback
+   * @see KtxQueryCallback
    */
   const val CONTINUE = true
 }
 
-typealias KtyQueryCallback = (Fixture) -> Boolean
+/**
+ * Callback lambda for querying with an AABB.
+ *
+ * This lambda is called for each fixture the AABB overlaps.
+ *
+ * There is no guarantee on the order of the callback is called.
+ *
+ * The lambda returns whether to terminate the query.
+ *
+ * Can be used in place of [com.badlogic.gdx.physics.box2d.QueryCallback] via Kotlin SAM conversion.
+ *
+ * @see Query
+ * @see query
+ */
+typealias KtxQueryCallback = (fixture: Fixture) -> Boolean
