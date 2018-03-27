@@ -1,5 +1,6 @@
 #### 1.9.8-SNAPSHOT
 
+- **[FEATURE]** (`tx-graphics`) Add new graphics module which add graphics utilities extention methods.
 #### 1.9.8-b2
 
 - **[UPDATE]** Updated to Kotlin 1.2.30.
