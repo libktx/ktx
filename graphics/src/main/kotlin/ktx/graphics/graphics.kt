@@ -1,93 +1,45 @@
 package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 
-/** Draws a cube using {@link ShapeType#Line} or {@link ShapeType#Filled}. The pos specify the bottom, left, front corner
- * of the rectangle. */
-fun ShapeRenderer.box(pos: Vector3, width: Float, height: Float, depth: Float) {
-  this.box(pos.x, pos.y, pos.z, width, height, depth)
+/**
+ * Factory methods for LibGDX [Color] class. Allows to use named parameters.
+ * @param red red color value.
+ * @param green green color value.
+ * @param blue blue color value.
+ * @param alpha color alpha value. Optional, defaults to 1f (non-transparent).
+ * @return a new [Color] instance.
+ */
+fun color(red: Float, green: Float, blue: Float, alpha: Float = 1f) = Color(red, green, blue, alpha)
+
+/**
+ * Allows to copy this [Color] instance, optionally changing chosen properties.
+ * @param red red color value. If null, will be copied from [Color.r]. Defaults to null.
+ * @param green green color value. If null, will be copied from [Color.g]. Defaults to null.
+ * @param blue blue color value. If null, will be copied from [Color.b]. Defaults to null.
+ * @param alpha color alpha value. If null, will be copied from [Color.a]. Defaults to null.
+ * @return a new [Color] instance with values copied from this color and optionally overridden by the parameters. */
+fun Color.copy(red: Float? = null, green: Float? = null, blue: Float? = null, alpha: Float? = null) =
+    Color(red ?: r, green ?: g, blue ?: b, alpha ?: a)
+
+/**
+ * Automatically calls [Batch.begin] and [Batch.end].
+ * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
+ */
+inline fun <B : Batch> B.use(action: (B) -> Unit) {
+  begin()
+  action(this)
+  end()
 }
 
-/** Calls {@link #circle(float, float, int)} by estimating the number of segments needed for a smooth circle. */
-fun ShapeRenderer.circle(pos: Vector2, radius: Float) {
-  this.circle(pos.x, pos.y, radius)
-}
-
-/** Draws a circle using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.circle(pos: Vector2, radius: Float, segment: Int) {
-  this.circle(pos.x, pos.y, radius, segment)
-}
-
-/** Draws a rectangle at the pos plane using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.rect(pos: Vector2, width: Float, height: Float) {
-  this.rect(pos.x, pos.y, width, height)
-}
-
-/** Draws a rectangle at the pos plane using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.rect(pos: Vector2, size: Vector2) {
-  this.rect(pos.x, pos.y, size.x, size.y)
-}
-
-/** Draws a line using a rotated rectangle, where with one edge is centered at a and the opposite edge centered at b. */
-fun ShapeRenderer.rectLine(a: Vector2, b: Vector2, width: Float, colorA: Color, colorB: Color) {
-  this.rectLine(a.x, a.y, b.x, b.y, width, colorA, colorB)
-}
-
-/** Draws a cone using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.cone(pos: Vector3, radius: Float, height: Float, segment: Int) {
-  this.cone(pos.x, pos.y, pos.z, radius, height, segment)
-}
-
-/** Calls {@link #cone(float, float, float, float, float, int)} by estimating the number of segments needed for a smooth
- * circular base. */
-fun ShapeRenderer.cone(pos: Vector3, radius: Float, height: Float) {
-  this.cone(pos.x, pos.y, pos.z, radius, height)
-}
-
-/** Calls {@link #arc(float, float, float, float, float, int)} by estimating the number of segments needed for a smooth arc. */
-fun ShapeRenderer.arc(pos: Vector2, radius: Float, start: Float, degrees: Float) {
-  this.arc(pos.x, pos.y, radius, start, degrees)
-}
-
-/** Draws an arc using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.arc(pos: Vector2, radius: Float, start: Float, degrees: Float, segments: Int) {
-  this.arc(pos.x, pos.y, radius, start, degrees, segments)
-}
-
-/** Draws an ellipse using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.ellipse(pos: Vector2, width: Float, height: Float, rotation: Float, segments: Int) {
-  this.ellipse(pos.x, pos.y, width, height, rotation, segments)
-}
-
-/** Calls {@link #ellipse(float, float, float, float, float, int)} by estimating the number of segments needed for a smooth ellipse. */
-fun ShapeRenderer.ellipse(pos: Vector2, width: Float, height: Float, rotation: Float) {
-  this.ellipse(pos.x, pos.y, width, height, rotation)
-}
-
-/** Draws a triangle at 'a' plane using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.triange(a: Vector2, b: Vector2, c: Vector2) {
-  this.triangle(a.x, a.y, b.x, b.y, c.x, c.y)
-}
-
-/** Draws a triangle in 'a' plane with colored corners using {@link ShapeType#Line} or {@link ShapeType#Filled}. */
-fun ShapeRenderer.triange(a: Vector2, b: Vector2, c: Vector2, colorA: Color, colorB: Color, colorC: Color) {
-  this.triangle(a.x, a.y, b.x, b.y, c.x, c.y, colorA, colorB, colorC)
-}
-
-/** Multiplies the current transformation matrix by a translation matrix. */
-fun ShapeRenderer.translate(mul: Vector3) {
-  this.translate(mul.x, mul.y, mul.z)
-}
-
-/** Multiplies the current transformation matrix by a scale matrix, with z not scaled. */
-fun ShapeRenderer.scale(scale: Vector2) {
-  this.scale(scale.x, scale.y, 1f)
-}
-
-/** Multiplies the current transformation matrix by a scale matrix. */
-fun ShapeRenderer.scale(scale: Vector3) {
-  this.scale(scale.x, scale.y, scale.z)
+/**
+ * Automatically calls [ShaderProgram.begin] and [ShaderProgram.end].
+ * @param action inlined. Executed after [ShaderProgram.begin] and before [ShaderProgram.end].
+ */
+inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {
+  begin()
+  action(this)
+  end()
 }

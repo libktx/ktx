@@ -21,3 +21,5 @@ Project contributors listed chronologically.
   * Contributed improvements to the [dependency injection module](../inject).
 * [@mrdlink](https://github.com/mrdlink)
   * Contributed significant improvements to the [math module](../math).
+* [@dwursteisen](https://github.com/dwursteisen)
+  * Started the [graphics module](../graphics).

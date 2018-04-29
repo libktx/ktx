@@ -2,7 +2,23 @@
 
 - **[UPDATE]** Updated to Kotlin 1.2.41.
 - **[UPDATE]** Updated to Gradle 4.7.
-- **[FEATURE]** (`ktx-graphics`) Added new graphics module.
+- **[FEATURE]** (`ktx-graphics`) Added new graphics module with the following `ShapeRenderer` extension methods:
+  - `arc`
+  - `box`
+  - `circle`
+  - `cone`
+  - `ellipse`
+  - `rect`
+  - `rectLine`
+  - `rotate`
+  - `scale`
+  - `translate`
+  - `triange`
+- **[CHANGE]** (`ktx-app`, `ktx-graphics`) Utility functions moved from `ktx-app` to the new `ktx-graphics`:
+  - `color`
+  - `Color.copy`
+  - `Batch.use`
+  - `ShaderProgram.use`
 - **[MISC]** Removed migration guides from very old versions. If you are in a process of migrating an existing
 application to the latest KTX and facing any errors, see `README` files in `1.9.8-b2` tag.
 
