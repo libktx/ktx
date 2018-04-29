@@ -1,5 +1,7 @@
 #### 1.9.8-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.2.41.
+
 #### 1.9.8-b2
 
 - **[UPDATE]** Updated to Kotlin 1.2.30.
