@@ -33,11 +33,13 @@ Consider using [ktx-actors](../actors) module to improve event handling with lam
 `onChange` and `onClick`.
 
 #### Note about `KWidgets`
+
 In `ktx-vis` there are many utility widget classes starting with `K` followed by their original names. Those widgets
 purpose is to provide syntax sugar for type-safe builders, and there is usually no need use them directly. In fact, all
 factory methods for root actors already return the extended widgets where necessary to help you with GUI building.
 
 #### Tooltips
+
 `ktx-vis` provides extension methods for creating VisUI tooltips:
 ```Kotlin
 import ktx.vis.*
@@ -55,6 +57,7 @@ These methods include:
 #### Menus
 
 `Menu` and `PopupMenu` instances are created in very similar way to UI layouts.
+
 ```Kotlin
 import ktx.vis.*
 
@@ -287,54 +290,6 @@ tree {
 }
 ```
 
-### Migration guide
-
-Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
-full access to all parent methods. For example, this code would compile prior to `1.9.6-b2`:
-
-```Kotlin
-table {
-  label("") {
-    label("") { // Error in 1.9.6-b2+: outside of table block.
-      pad(4f) // Error in 1.9.6-b2+: cannot access table methods implicitly.
-    }
-  }
-}
-```
-
-As weird as it might seem, the snippet above would have been an equivalent to:
-
-```Kotlin
-table {
-  label("")
-  label("")
-  pad(4f) // Pad is actually applied to the Table instance.
-}
-```
-
-Since `1.9.6-b2` version and usage of `@DslMarker` API, this is no longer possible. Implicit usage of parents' API
-outside of their building block no longer compiles. All implicit method calls to parental actors must be either explicit
-or moved to the correct building block in order to migrate from `1.9.6-b1` and earlier versions.
-
-Prior to `1.9.6-b2+` builders called from Table widgets were returning `Cell<Actor>`, this is no longer the case. All builders
-are now returning `Actor` instance. `Cell` properties can be modified using new `.cell` syntax. `Cell` is also available
-as lambda parameter
-```kotlin
-table {
-  button { cell ->
-    cell.fillX().row()
-  }
-  textButton(text = "Click me!").cell(grow = true)
-}
-```
-Comparison of old and new methods
-```kotlin
-table {
-  val oldButton: Button = button().grow().right().actor // Old way of modifying cell
-  val newButton: Button = button().cell(grow = true, align = Align.right) // New way using .cell method
-  val newButton2: Button = button { cell -> cell.grow().right() } // New way using Cell passed as lambda parameter
-}
-```
 
 ### Alternatives
 

@@ -105,7 +105,7 @@ table {
 }
 ```
 
-This was a design choice - instead of basically duplicating the whole `Scene2D` widgets API in method parameters, we
+This was a design choice - instead of duplicating the whole `Scene2D` widgets API in method parameters, we
 decided to simply expose the widgets themselves instance during building.
 
 You basically have full access to the `Scene2D` widgets API - type-safe Kotlin builders is just syntax sugar. Some
@@ -317,36 +317,6 @@ table {
 }
 ```
 ![List](img/04.png)
-
-### Migration guide
-
-Because of how the scopes worked before introduction of `@DslMarker` API from Kotlin 1.1, children building blocks had
-full access to all parent methods. For example, this code would compile prior to `1.9.6-b2`:
-
-```Kotlin
-table {
-  label("") {
-    label("") { // Error in 1.9.6-b2+: outside of table block.
-      pad(4f) // Error in 1.9.6-b2+: cannot access table methods implicitly.
-    }
-  }
-}
-```
-
-As weird as it might seem, the snippet above would have been an equivalent to:
-
-```Kotlin
-table {
-  label("")
-  label("")
-  pad(4f) // Pad is actually applied to the Table instance.
-}
-```
-
-Since `1.9.6-b2` version and usage of `@DslMarker` API, this is no longer possible. Implicit usage of parents' API
-outside of their building block no longer compiles. All implicit method calls to parental actors must be either explicit
-or moved to the correct building block in order to migrate from `1.9.6-b1` and earlier versions. If you had no scoping
-issues in your GUI code, the migration should be absolutely painless.
 
 #### Synergy
 

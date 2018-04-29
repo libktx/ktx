@@ -2,6 +2,8 @@
 
 - **[UPDATE]** Updated to Kotlin 1.2.41.
 - **[UPDATE]** Updated to Gradle 4.7.
+- **[MISC]** Removed migration guides from very old versions. If you are in a process of migrating an existing
+application to the latest KTX and facing any errors, see `README` files in `1.9.8-b2` tag.
 
 #### 1.9.8-b2
 
