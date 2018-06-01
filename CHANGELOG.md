@@ -1,4 +1,4 @@
-#### 1.9.8-SNAPSHOT
+#### 1.9.8-b3
 
 - **[UPDATE]** Updated to Kotlin 1.2.41.
 - **[UPDATE]** Updated to Gradle 4.7.
