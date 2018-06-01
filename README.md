@@ -34,6 +34,7 @@ Current **KTX** modules:
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [freetype](freetype): FreeType font loading utilities.
 - [freetype-async](freetype-async): FreeType font loading utilities for the [async](async) module.
+- [graphics](graphics): utilities related to rendering tools and graphics.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
