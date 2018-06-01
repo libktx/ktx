@@ -95,6 +95,7 @@ new instances of matrices.
 - [Kotlin Statistics](https://github.com/thomasnield/kotlin-statistics) contains idiomatic Kotlin wrappers over
 [Apache Commons Math](http://commons.apache.org/proper/commons-math/userguide/stat.html). Its extension functions might
 prove useful during game development.
+- [Jvm Glm](https://github.com/kotlin-graphics/glm) is the kotlin port of the famous [glm](https://github.com/g-truc/glm) lib by g-truc.
 
 Sadly, it does not seem that there are any public math-related Kotlin libraries that would make LibGDX math API usage more
 natural. You can try browsing through existing general purpose LibGDX extensions - some of them contain static methods

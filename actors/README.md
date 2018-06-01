@@ -217,16 +217,6 @@ class MyInputListener : KtxInputListener() {
 }
 ```
 
-#### Migration guide
-
-In **KTX** up to `1.9.6-b4`, extension methods `onChange`, `onClick`, `onKey`, `onKeyDown`, `onKeyUp`, `onScrollFocus`
-and `onKeyboardFocus` consumed `Event` and `Actor` instances. This lead to common usage of `_, _ ->`, which was against
-the goal of boilerplate-less listeners. That is why the existing listener factory methods where renamed with `Event`
-suffix, and a new set of extension methods with the same names were added - this time consuming a minimal amount of
-parameters. Add `Event` suffix to each of your listener methods or refactor them to the new API with less parameters.
-For example, if you used `Actor.onChange` extension method, use `Actor.onChangeEvent` instead or remove the `event, actor`
-parameters if you do not really need them at all.
-
 ### Alternatives
 
 - [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) includes some `Scene2D` utilities, as well as some extended

@@ -34,11 +34,6 @@ color.
 applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
 similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
 different screen sizes.
-- `color` factory methods allows to use idiomatic named parameters to construct LibGDX `Color` instances.
-- `copy` extension method added to `Color`. It allows to create a new `Color` with copied color values. Supports values
-overriding with optional, named parameters.
-- `use` inlined extension methods added to `Batch` and `ShaderProgram`. They allow to omit the `begin()` and `end()`
-calls before using batches and shader programs.
 - `emptyScreen` provides no-op implementations of `Screen`.
 
 ### Usage examples
@@ -60,7 +55,7 @@ class MyApplicationListener : KtxApplicationAdapter {
 }
 ```
 
-Implementing `KtxGame` with one screen that displays text:
+Implementing `KtxGame` with one screen that displays text with `Batch` utilities from `ktx-graphics`: 
 
 ```Kotlin
 import com.badlogic.gdx.Screen
@@ -69,7 +64,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
-import ktx.app.use
+import ktx.graphics.use
 
 class ExampleScreen : KtxScreen {
   // Notice no `lateinit var` - ExampleScreen has no create()
@@ -129,49 +124,6 @@ import ktx.app.LetterboxingViewport
 val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
 // Updating viewport on resize:
 viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
-```
-
-Using a `Batch`:
-
-```Kotlin
-import ktx.app.*
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-
-val batch = SpriteBatch()
-val font = BitmapFont()
-// Drawing the font with batch:
-batch.use {
-  font.draw(it, "KTX!", 100f, 100f)
-}
-
-/* The snippet above is an equivalent to:
-
-  batch.begin()
-  font.draw(batch, "KTX!", 100f, 100f)
-  batch.end()
-*/
-```
-
-Creating `Color` instances:
-```Kotlin
-import ktx.app.*
-
-val color = color(red = 1f, green = 0.5f, blue = 0.75f, alpha = 0.25f)
-// Fourth parameter - alpha - is optional and defaults to 1f:
-val nonTransparentGray = color(0.8f, 0.8f, 0.8f)
-```
-
-Copying `Color` instances:
-```Kotlin
-import ktx.app.*
-import com.badlogic.gdx.graphics.Color
-
-val blue = Color.BLUE.copy()
-// `blue` has same values as `Color.BLUE`, but it's not the same instance.
-
-// You can optionally override chosen copied values:
-val violet = blue.copy(red = 1f)
 ```
 
 ### Alternatives

@@ -24,6 +24,7 @@ can "guess" the type of variable, this can be shortened even further into `skin[
 used for all kinds of resources that can be stored in a `Skin`.
 
 `get` and `set` operator functions were added. `Skin` assets can now be accessed with brace operators:
+
 ```Kotlin
 val skin = Skin()
 skin["name"] = BitmapFont()
@@ -260,55 +261,6 @@ at compile time. As long as you don't need to create assets at runtime with cust
 to store your drawables, fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
 The advantage of using an `enum` over `object` with `String` properties is that you can easily extract a list of all
 values from an enum, while getting all fields from an object is not trivial.
-
-#### Migration guide
-
-Prior to introduction of Kotlin 1.1 features, style declarations could be nested:
-
-```Kotlin
-skin {
-  label {
-    label {
-      // This would not compile with the latest version.
-    }
-  }
-}
-```
-
-Kotlin `@DslMarker` API allowed us to improve scoping issues and now implicit access to `Skin` in style building blocks
-is no longer possible. If you used `ktx-style` prior to `1.9.6-b2`, you need to explicitly access `Skin` resources and
-methods. The `Skin` instance is now also available as the lambda parameter of `skin` block (under `it`, unless renamed)
-to ease its access.
-
-```Kotlin
-// Before 1.9.6-b2:
-skin(atlas) {
-  label {
-    font = getFont("arial")
-    fontColor = color("black", 0f, 0f, 0f)
-  }
-}
-
-// After @DslMarker introduction:
-skin(atlas) {
-  label {
-    font = it["arial"]
-    fontColor = it.color("black", 0f, 0f, 0f)
-  }
-}
-
-// Idiomatic GUI style building - no nested declarations:
-skin(atlas) { skin ->
-  color("black", 0f, 0f, 0f)
-  label {
-    font = skin["arial"]
-    fontColor = skin["black"]
-  }
-}
-```
-
-It might look scary at first, but it actually improves the GUI style building safety (fixing scoping issues),
-discourages nested styles declarations and shortens access to most common resources with `it["assetName"]` syntax.
 
 ### Alternatives
 
