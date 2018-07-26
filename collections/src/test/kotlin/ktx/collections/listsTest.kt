@@ -10,7 +10,7 @@ import java.util.NoSuchElementException
  */
 class ListsTest {
   @Test
-  fun shouldCreateNewLists() {
+  fun `should create new empty lists`() {
     val list = gdxListOf<String>()
 
     assertNotNull(list)
@@ -19,7 +19,7 @@ class ListsTest {
   }
 
   @Test
-  fun shouldCreateNewListsWithElements() {
+  fun `should create new lists with elements`() {
     val list = gdxListOf("1", "2", "3")
 
     assertNotNull(list)
@@ -30,25 +30,17 @@ class ListsTest {
   }
 
   @Test
-  fun shouldCreateNewListsFromArrays() {
+  fun `should create new lists from arrays`() {
     val list = arrayOf("1", "2", "3").toGdxList()
 
-    assertNotNull(list)
-    assertEquals(3, list.size)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldCreateNewListsFromIterables() {
+  fun `should create new lists from iterables`() {
     val list = sortedSetOf("1", "2", "3").toGdxList()
 
-    assertNotNull(list)
-    assertEquals(3, list.size)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
@@ -63,18 +55,20 @@ class ListsTest {
  */
 class PooledListTest {
   @Test
-  fun shouldCreateEmptyLists() {
+  fun `should create new empty lists`() {
     val list = PooledList(NodePool) // Note that gdxListOf is the preferred way of creating PooledList.
+
     assertEquals(0, list.size)
     assertTrue(list.isEmpty)
     assertFalse(list.isNotEmpty)
   }
 
   @Test
-  fun shouldAddElements() {
+  fun `should add elements to empty lists`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list.add("1")
+
     assertEquals(1, list.size)
     assertFalse(list.isEmpty)
     assertTrue(list.isNotEmpty)
@@ -83,17 +77,13 @@ class PooledListTest {
   }
 
   @Test
-  fun shouldAddMultipleElements() {
+  fun `should add multiple elements`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list.add("1")
-    assertEquals(1, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("1", list.last)
     list.add("2")
     list.add("3")
+
     assertEquals(3, list.size)
     assertFalse(list.isEmpty)
     assertTrue(list.isNotEmpty)
@@ -102,331 +92,301 @@ class PooledListTest {
   }
 
   @Test
-  fun shouldRemoveElements() {
+  fun `should remove elements`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list.add("1")
     list.add("2")
     list.add("3")
-    assertEquals(3, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
     list.removeLast()
-    assertEquals(2, list.size)
-    assertEquals("1", list.first)
-    assertEquals("2", list.last)
+
+    assertEquals(list, gdxListOf("1", "2"))
+
     list.removeFirst()
-    assertEquals(1, list.size)
-    assertEquals("2", list.first)
-    assertEquals("2", list.last)
+
+    assertEquals(list, gdxListOf("2"))
+
     list.removeLast()
-    assertTrue(list.isEmpty)
-    assertEquals(0, list.size)
+
+    assertEquals(list, gdxListOf<String>())
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldThrowExceptionIfRemovingFirstElementFromEmptyList() {
+  fun `should throw exception if removing first element from empty list`() {
     PooledList(NodePool).removeFirst()
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldThrowExceptionIfRemovingLastElementFromEmptyList() {
+  fun `should throw exception if removing last element from empty list`() {
     PooledList(NodePool).removeLast()
   }
 
   @Test
-  fun shouldAddAllElementsFromArrays() {
+  fun `should add all elements from Arrays`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list.addAll(arrayOf("1", "2", "3"))
-    assertEquals(3, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldAddAllElementsFromIterables() {
+  fun `should add all elements from Iterables`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list.addAll(sortedSetOf("1", "2", "3"))
-    assertEquals(3, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldAddElementsWithPlusOperator() {
+  fun `should add elements with + operator`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
+
     list + "1" + "2"
-    assertEquals(2, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("2", list.last)
+
+    assertEquals(list, gdxListOf("1", "2"))
   }
 
   @Test
-  fun shouldAddAllElementsFromArraysWithPlusOperator() {
+  fun `should add all elements from Arrays with + operator`() {
     val list = PooledList<String>(NodePool.pool())
-    assertTrue(list.isEmpty)
+
     list + arrayOf("1", "2", "3")
-    assertEquals(3, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldAddAllElementsFromIterablesWithPlusOperator() {
+  fun `should add all elements from Iterables with + operator`() {
     val list = PooledList<String>(NodePool.pool())
-    assertTrue(list.isEmpty)
+
     list + sortedSetOf("1", "2", "3")
-    assertEquals(3, list.size)
-    assertFalse(list.isEmpty)
-    assertTrue(list.isNotEmpty)
-    assertEquals("1", list.first)
-    assertEquals("3", list.last)
+
+    assertEquals(list, gdxListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldClearList() {
+  fun `should clear list return objects to the pool`() {
     val list = PooledList(NodePool)
     NodePool.clear()
-    assertEquals(0, NodePool.free)
-    assertTrue(list.isEmpty)
+
     list.add("1")
     list.add("2")
     list.add("3")
+
     assertEquals(3, list.size)
+    assertEquals(0, NodePool.free)
+
     list.clear()
+
     assertEquals(0, list.size)
     assertTrue(list.isEmpty)
-    assertEquals(3, NodePool.free) // Nodes should be returned to the pool.
+    assertEquals(3, NodePool.free)
   }
 
   @Test
-  fun shouldPurgeList() {
+  fun `should purge list not return objects to the pool`() {
     val list = PooledList(NodePool)
     NodePool.clear()
-    assertEquals(0, NodePool.free)
-    assertTrue(list.isEmpty)
+
     list.add("1")
     list.add("2")
     list.add("3")
+
     assertEquals(3, list.size)
+    assertEquals(0, NodePool.free)
+
     list.purge()
+
     assertEquals(0, list.size)
     assertTrue(list.isEmpty)
-    assertEquals(0, NodePool.free) // Nodes should not be returned to the pool.
+    assertEquals(0, NodePool.free)
   }
 
   @Test
   fun `should map elements into a new GdxList`() {
     val list = gdxListOf(1, 2, 3)
+
     val result = list.map { it * 2 }
 
-    assertEquals(3, result.size)
-    assertEquals(2, result.first)
-    assertEquals(6, result.last)
+    assertEquals(result, gdxListOf(2, 4, 6))
   }
 
   @Test
   fun `should filter elements into a new GdxList`() {
     val list = gdxListOf(1, 2, 3, 4, 5)
+
     val result = list.filter { it % 2 == 1 }
 
-    assertEquals(3, result.size)
-    assertEquals(1, result.first)
-    assertEquals(5, result.last)
+    assertEquals(result, gdxListOf(1, 3, 5))
   }
 
   @Test
   fun `should flatten elements into a new GdxList`() {
     val list = gdxListOf(GdxArray.with(1), listOf<Int>(), LinkedList(arrayListOf(2, 3)))
+
     val result = list.flatten()
 
-    assertEquals(3, result.size)
-    assertEquals(3, result.size)
-    assertEquals(1, result.first)
-    assertEquals(3, result.last)
+    assertEquals(result, gdxListOf(1, 2, 3))
   }
 
   @Test
   fun `should map elements to lists and flatten them into a new GdxList`() {
     val list = gdxListOf(1, 2, 3)
+
     val result = list.flatMap { List(it) { "" } }
 
     assertEquals(6, result.size)
   }
 
   @Test(expected = NoSuchElementException::class)
-  fun shouldThrowExceptionIfFirstElementIsRequestedButListIsEmpty() {
+  fun `should throw exception if first element is requested from empty list`() {
     PooledList(NodePool).first
   }
 
   @Test(expected = NoSuchElementException::class)
-  fun shouldThrowExceptionIfLastElementIsRequestedButListIsEmpty() {
+  fun `should throw exception if last element is requested from empty list`() {
     PooledList(NodePool).last
   }
 
   @Test
-  fun shouldAddFirstElement() {
+  fun `should add first element lengthen the list`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
 
     list.first = "1"
-    assertEquals(1, list.size)
-    assertEquals("1", list.first)
+
+    assertEquals(list, gdxListOf("1"))
 
     list.first = "2"
-    assertEquals(2, list.size)
-    assertEquals("2", list.first)
-    assertEquals("1", list.last)
+
+    assertEquals(list, gdxListOf("2", "1"))
   }
 
   @Test
-  fun shouldAddLastElement() {
+  fun `should add last element lengthen the list`() {
     val list = PooledList(NodePool)
-    assertTrue(list.isEmpty)
 
     list.last = "1"
-    assertEquals(1, list.size)
-    assertEquals("1", list.last)
+
+    assertEquals(list, gdxListOf("1"))
 
     list.last = "2"
-    assertEquals(2, list.size)
-    assertEquals("1", list.first)
-    assertEquals("2", list.last)
+
+    assertEquals(list, gdxListOf("1", "2"))
   }
 
   @Test
-  fun shouldCheckIfElementIsInTheListWithInOperator() {
+  fun `should check if element is in the list with in operator`() {
     val list = PooledList(NodePool)
+
     assertFalse("1" in list) // Tests contains operator method.
     assertFalse("2" in list)
+
     list + "1"
+
     assertTrue("1" in list)
     assertFalse("2" in list)
+
     list + "2"
+
     assertTrue("1" in list)
     assertTrue("2" in list)
+
     list.removeFirst()
+
     assertFalse("1" in list)
     assertTrue("2" in list)
   }
 
   @Test
-  fun shouldIterateOverList() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should iterate over the list`() {
+    val list = gdxListOf("1", "2", "3")
     val arrayList = arrayListOf<String>()
+
     list.forEach { arrayList.add(it) }
-    assertEquals("1", arrayList[0])
-    assertEquals("2", arrayList[1])
-    assertEquals("3", arrayList[2])
+
+    assertEquals(arrayList, arrayListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldIterateOverListBackwards() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should iterate over the list backwards`() {
+    val list = gdxListOf("1", "2", "3")
     val arrayList = arrayListOf<String>()
+
     list.forEachReversed { arrayList.add(it) }
-    assertEquals("3", arrayList[0])
-    assertEquals("2", arrayList[1])
-    assertEquals("1", arrayList[2])
+
+    assertEquals(arrayList, arrayListOf("3", "2", "1"))
   }
 
   @Test
-  fun shouldIterateOverListWithNonCachedIterator() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should iterate over the list with non cached iterator`() {
+    val list = gdxListOf("1", "2", "3")
     val arrayList = arrayListOf<String>()
+
     list.newIterator().forEach { arrayList.add(it) }
-    assertEquals("1", arrayList[0])
-    assertEquals("2", arrayList[1])
-    assertEquals("3", arrayList[2])
+
+    assertEquals(arrayList, arrayListOf("1", "2", "3"))
   }
 
   @Test
-  fun shouldIterateOverListWithIteratorAccess() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should iterate over the list with iterator access`() {
+    val list = gdxListOf("1", "2", "3")
     val arrayList = arrayListOf<String>()
+
     list.iterate { element, iterator ->
       arrayList.add(element)
       if (element == "2") iterator.remove()
     }
-    assertEquals("1", arrayList[0])
-    assertEquals("2", arrayList[1])
-    assertEquals("3", arrayList[2])
-    assertTrue("1" in list)
-    assertFalse("2" in list) // Removed by iterator.
-    assertTrue("3" in list)
+
+    assertEquals(arrayList, arrayListOf("1", "2", "3"))
+    assertEquals(list, gdxListOf("1", "3"))
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldThrowExceptionIfRemovingElementsWithoutIteratingOverTheList() {
+  fun `should throw exception if removing elements without iterating over the list`() {
     PooledList(NodePool).remove()
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldThrowExceptionIfInsertingElementsBeforeCurrentValueWithoutIteratingOverTheList() {
+  fun `should throw exception if inserting elements before current value without iterating over the list`() {
     PooledList(NodePool).insertBefore("Test.")
   }
 
   @Test(expected = IllegalStateException::class)
-  fun shouldThrowExceptionIfInsertingElementsAfterCurrentValueWithoutIteratingOverTheList() {
+  fun `should throw exception if inserting elements after current value without iterating over the list`() {
     PooledList(NodePool).insertAfter("Test.")
   }
 
   @Test
-  fun shouldRemoveElementsDuringIteration() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should remove element during iteration`() {
+    val list = gdxListOf("1", "2", "3")
+
     list.forEach { if (it == "2") list.remove() }
-    assertTrue("1" in list)
-    assertFalse("2" in list)
-    assertTrue("3" in list)
-    assertEquals(2, list.size)
+
+    assertEquals(list, gdxListOf("1", "3"))
   }
 
   @Test
-  fun shouldInsertElementsBeforeCurrentValueDuringIteration() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should insert element before current value during iteration`() {
+    val list = gdxListOf("1", "2", "3")
+
     list.forEach { if (it == "1") list.insertBefore("0") }
-    assertTrue("0" in list)
-    assertTrue("1" in list)
-    assertTrue("2" in list)
-    assertTrue("3" in list)
-    assertEquals(4, list.size)
-    assertEquals("0", list.first)
+
+    assertEquals(list, gdxListOf("0", "1", "2", "3"))
   }
 
   @Test
-  fun shouldInsertElementsAfterCurrentValueDuringIteration() {
-    val list = PooledList<String>(NodePool.pool())
-    list + arrayOf("1", "2", "3")
+  fun `should insert element after current value during iteration`() {
+    val list = gdxListOf("1", "2", "3")
+
     list.forEach { if (it == "3") list.insertAfter("4") }
-    assertTrue("1" in list)
-    assertTrue("2" in list)
-    assertTrue("3" in list)
-    assertTrue("4" in list)
-    assertEquals(4, list.size)
-    assertEquals("4", list.last)
+
+    assertEquals(list, gdxListOf("1", "2", "3", "4"))
   }
 
   @Test
-  fun shouldConvertToString() {
+  fun `should convert to string`() {
     assertEquals("[]", gdxListOf<String>().toString())
     assertEquals("[single]", gdxListOf("single").toString())
     assertEquals("[one, two, three]", gdxListOf("one", "two", "three").toString())
