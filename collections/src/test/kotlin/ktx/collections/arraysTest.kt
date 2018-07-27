@@ -185,12 +185,14 @@ class ArraysTest {
   @Test
   fun `should return last valid index of empty BooleanArray`() {
     val emptyArray = GdxBooleanArray()
+
     assertEquals(-1, emptyArray.lastIndex)
   }
 
   @Test
   fun `should return negative last index for null BooleanArray`() {
     val nullArray: GdxBooleanArray? = null
+
     assertEquals(-1, nullArray.lastIndex)
   }
 
@@ -247,17 +249,11 @@ class ArraysTest {
 
     array + "1"
 
-    assertEquals(1, array.size)
-    assertTrue("1" in array)
-    assertEquals("1", array[0])
+    assertEquals(gdxArrayOf("1"), array)
 
     array + "2" + "3"
 
-    assertEquals(3, array.size)
-    assertTrue("2" in array)
-    assertTrue("3" in array)
-    assertEquals("2", array[1])
-    assertEquals("3", array[2])
+    assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
@@ -266,13 +262,7 @@ class ArraysTest {
 
     array + listOf("1", "2", "3")
 
-    assertEquals(3, array.size)
-    assertTrue("1" in array)
-    assertTrue("2" in array)
-    assertTrue("3" in array)
-    assertEquals("1", array[0])
-    assertEquals("2", array[1])
-    assertEquals("3", array[2])
+    assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
@@ -281,13 +271,7 @@ class ArraysTest {
 
     array + arrayOf("1", "2", "3")
 
-    assertEquals(3, array.size)
-    assertTrue("1" in array)
-    assertTrue("2" in array)
-    assertTrue("3" in array)
-    assertEquals("1", array[0])
-    assertEquals("2", array[1])
-    assertEquals("3", array[2])
+    assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
@@ -359,9 +343,7 @@ class ArraysTest {
 
     array.sortDescending()
 
-    assertEquals(3, array[0])
-    assertEquals(2, array[1])
-    assertEquals(1, array[2])
+    assertEquals(GdxArray.with(3, 2, 1), array)
   }
 
   @Test
@@ -370,9 +352,7 @@ class ArraysTest {
 
     array.sortBy { it.length }
 
-    assertEquals("One", array[0])
-    assertEquals("Eleven", array[1])
-    assertEquals("Twenty-one", array[2])
+    assertEquals(GdxArray.with("One", "Eleven", "Twenty-one"), array)
   }
 
   @Test
@@ -381,9 +361,7 @@ class ArraysTest {
 
     array.sortByDescending { it.length }
 
-    assertEquals("Twenty-one", array[0])
-    assertEquals("Eleven", array[1])
-    assertEquals("One", array[2])
+    assertEquals(GdxArray.with("Twenty-one", "Eleven", "One"), array)
   }
 
   @Test
@@ -428,49 +406,28 @@ class ArraysTest {
 
     val set = array.toGdxSet()
 
-    assertEquals(3, set.size)
-    assertTrue("1" in set)
-    assertTrue("2" in set)
-    assertTrue("3" in set)
+    assertEquals(gdxSetOf("1", "2", "3"), set)
   }
 
   @Test
   fun `should convert Iterables to Arrays`() {
     val listAsArray = listOf("1", "2", "3").toGdxArray()
 
-    assertEquals(3, listAsArray.size)
-    assertTrue("1" in listAsArray)
-    assertTrue("2" in listAsArray)
-    assertTrue("3" in listAsArray)
-    assertEquals("1", listAsArray[0])
-    assertEquals("2", listAsArray[1])
-    assertEquals("3", listAsArray[2])
+    assertEquals(gdxArrayOf("1", "2", "3"), listAsArray)
   }
 
   @Test
   fun `should convert native Arrays to GdxArrays`() {
     val array = arrayOf("1", "2", "3").toGdxArray()
 
-    assertEquals(3, array.size)
-    assertTrue("1" in array)
-    assertTrue("2" in array)
-    assertTrue("3" in array)
-    assertEquals("1", array[0])
-    assertEquals("2", array[1])
-    assertEquals("3", array[2])
+    assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
   fun `should convert native IntArrays to GdxIntArrays`() {
     val intArray = intArrayOf(1, 2, 3).toGdxArray()
 
-    assertEquals(3, intArray.size)
-    assertTrue(1 in intArray)
-    assertTrue(2 in intArray)
-    assertTrue(3 in intArray)
-    assertEquals(1, intArray[0])
-    assertEquals(2, intArray[1])
-    assertEquals(3, intArray[2])
+    assertEquals(GdxIntArray.with(1, 2, 3), intArray)
   }
 
   @Test
