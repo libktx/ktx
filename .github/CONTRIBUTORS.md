@@ -23,3 +23,5 @@ Project contributors listed chronologically.
   * Contributed significant improvements to the [math module](../math).
 * [@dwursteisen](https://github.com/dwursteisen)
   * Started the [graphics module](../graphics).
+* [@nukesz](https://github.com/nukesz)
+  * Refactored legacy tests of the [collections module](../collections).
