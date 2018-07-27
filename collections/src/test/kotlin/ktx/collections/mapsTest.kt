@@ -64,44 +64,16 @@ class MapsTest {
 
   @Test
   fun `should report empty status`() {
-    val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
-
-    assertFalse(map.isEmpty())
-  }
-
-  @Test
-  fun `should report empty status on empty Map`() {
-    val emptyMap = ObjectMap<Any, Any>()
-
-    assertTrue(emptyMap.isEmpty())
-  }
-
-  @Test
-  fun `should report empty status on null Map`() {
-    val nullMap: ObjectMap<Any, Any>? = null
-
-    assertTrue(nullMap.isEmpty())
+    assertFalse(gdxMapOf(1 to "1", 2 to "2", 3 to "3").isEmpty())
+    assertTrue(ObjectMap<Any, Any>().isEmpty())
+    assertTrue((null as ObjectMap<Any, Any>?).isEmpty())
   }
 
   @Test
   fun `should report non empty status`() {
-    val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
-
-    assertTrue(map.isNotEmpty())
-  }
-
-  @Test
-  fun `should report non empty status on empty Map`() {
-    val emptyMap = ObjectMap<Any, Any>()
-
-    assertFalse(emptyMap.isNotEmpty())
-  }
-
-  @Test
-  fun `should report non empty status on null Map`() {
-    val nullMap: ObjectMap<Any, Any>? = null
-
-    assertFalse(nullMap.isNotEmpty())
+    assertTrue(gdxMapOf(1 to "1", 2 to "2", 3 to "3").isNotEmpty())
+    assertFalse(ObjectMap<Any, Any>().isNotEmpty())
+    assertFalse((null as ObjectMap<Any, Any>?).isNotEmpty())
   }
 
   @Test
