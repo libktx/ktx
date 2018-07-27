@@ -89,9 +89,9 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
    * @param executor will execute the asynchronous action. Defaults to [asyncExecutor].
    * @param action inlined. Any thrown exceptions are caught and rethrown on the rendering thread.
    */
-  suspend fun <Result> asynchronous(
+  suspend inline fun <Result> asynchronous(
       executor: AsyncExecutor = asyncExecutor,
-      action: () -> Result): Result = suspendCancellableCoroutine { continuation ->
+      crossinline action: () -> Result): Result = suspendCancellableCoroutine { continuation ->
     executor.submit {
       if (continuation.isActive) {
         try {
