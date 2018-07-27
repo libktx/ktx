@@ -32,8 +32,7 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
   lateinit var asyncExecutor: AsyncExecutor
     internal set
 
-  override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T>
-      = KtxContinuation(continuation)
+  override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T> = KtxContinuation(continuation)
 
   /** Call this method _once_ on the main rendering thread of the application.
    * @see enableKtxCoroutines */
@@ -142,8 +141,8 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
     }
     val listener = KtxHttpResponseListener(httpRequest, continuation, onCancel)
     Gdx.net.sendHttpRequest(httpRequest, listener)
-    continuation.invokeOnCompletion {
-      if (continuation.isCancelled && !listener.completed) {
+    continuation.invokeOnCancellation {
+      if (!listener.completed) {
         Gdx.net.cancelHttpRequest(httpRequest)
       }
     }
