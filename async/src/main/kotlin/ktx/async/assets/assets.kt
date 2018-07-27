@@ -77,7 +77,7 @@ class AssetStorage(
    * @throws AssetStorageException if unable to load the asset.
    * @see loadJson
    */
-  inline suspend fun <reified Asset : Any> load(path: String, parameters: AssetLoaderParameters<Asset>? = null): Asset
+  suspend inline fun <reified Asset : Any> load(path: String, parameters: AssetLoaderParameters<Asset>? = null): Asset
       = load(getAssetDescriptor(path, parameters))
 
   /**
@@ -191,7 +191,7 @@ class AssetStorage(
    * @see loadJsonCollection
    * @see jsonLoader
    */
-  inline suspend fun <reified Asset : Any> loadJson(path: String): Asset = loadJson(path, Asset::class.java)
+  suspend inline fun <reified Asset : Any> loadJson(path: String): Asset = loadJson(path, Asset::class.java)
 
   /**
    * A dedicated method for asynchronous loading of JSON assets. Since loaders are tied to a specific type, JSON loader
@@ -205,7 +205,7 @@ class AssetStorage(
    * @see loadJson
    * @see jsonLoader
    */
-  inline suspend fun <reified Asset : Any, reified Element : Any> loadJsonCollection(path: String): Asset =
+  suspend inline fun <reified Asset : Any, reified Element : Any> loadJsonCollection(path: String): Asset =
       loadJson(path, Asset::class.java, Element::class.java)
 
   /**

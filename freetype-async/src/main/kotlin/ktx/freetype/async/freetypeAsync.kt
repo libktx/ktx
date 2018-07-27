@@ -39,7 +39,7 @@ fun AssetStorage.registerFreeTypeFontLoaders(
  * @return fully loaded BitmapFont. Note that this method will suspend the current coroutine to perform asynchronous
  * font loading.
  */
-inline suspend fun AssetStorage.loadFreeTypeFont(
+suspend inline fun AssetStorage.loadFreeTypeFont(
     file: String,
     setup: FreeTypeFontParameter.() -> Unit = {}): BitmapFont =
     load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
