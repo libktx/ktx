@@ -2,6 +2,8 @@
 
 - **[UPDATE]** Updated to Kotlin 1.2.51.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.24.0.
+- **[UPDATE]** Updated to Dokka 0.9.17.
+- **[UPDATE]** Updated to Gradle 4.9.
 - **[CHANGE]** (`ktx-async`) `KtxAsync.asynchronous` is now inlined. The action lambda is cross-inlined to avoid excessive object creation.
 
 #### 1.9.8-b3
