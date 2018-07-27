@@ -11,7 +11,7 @@ import java.util.LinkedList
  */
 class MapsTest {
   @Test
-  fun shouldCreateMaps() {
+  fun `should create GdxMap`() {
     val map = gdxMapOf<Any, Any>()
 
     assertNotNull(map)
@@ -19,7 +19,7 @@ class MapsTest {
   }
 
   @Test
-  fun shouldCreateMapsWithCustomInitialCapacity() {
+  fun `should create GdxMap with custom initial capacity`() {
     val map = gdxMapOf<Any, Any>(initialCapacity = 32)
 
     assertNotNull(map)
@@ -27,7 +27,7 @@ class MapsTest {
   }
 
   @Test
-  fun shouldCreateMapsWithCustomLoadFactor() {
+  fun `should create GdxMap with custom load factor`() {
     val map = gdxMapOf<Any, Any>(loadFactor = 0.4f)
 
     assertNotNull(map)
@@ -35,7 +35,7 @@ class MapsTest {
   }
 
   @Test
-  fun shouldCreateMapsFromKeyToValuePairs() {
+  fun `should create GdxMap from key to value pairs`() {
     val map = gdxMapOf("key" to "value", "other" to "another")
 
     assertEquals(2, map.size)
@@ -48,65 +48,97 @@ class MapsTest {
   }
 
   @Test
-  fun shouldReportSize() {
+  fun `should report size`() {
     val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
+
     assertEquals(3, map.size())
     assertEquals(map.size, map.size())
+  }
+
+  @Test
+  fun `should report size on null Map`() {
     val nullMap: ObjectMap<Any, Any>? = null
+
     assertEquals(0, nullMap.size())
   }
 
   @Test
-  fun shouldReportEmptyStatus() {
+  fun `should report empty status`() {
     val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
+
     assertFalse(map.isEmpty())
+  }
+
+  @Test
+  fun `should report empty status on empty Map`() {
     val emptyMap = ObjectMap<Any, Any>()
+
     assertTrue(emptyMap.isEmpty())
+  }
+
+  @Test
+  fun `should report empty status on null Map`() {
     val nullMap: ObjectMap<Any, Any>? = null
+
     assertTrue(nullMap.isEmpty())
   }
 
   @Test
-  fun shouldReportNonEmptyStatus() {
+  fun `should report non empty status`() {
     val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
+
     assertTrue(map.isNotEmpty())
+  }
+
+  @Test
+  fun `should report non empty status on empty Map`() {
     val emptyMap = ObjectMap<Any, Any>()
+
     assertFalse(emptyMap.isNotEmpty())
+  }
+
+  @Test
+  fun `should report non empty status on null Map`() {
     val nullMap: ObjectMap<Any, Any>? = null
+
     assertFalse(nullMap.isNotEmpty())
   }
 
   @Test
-  fun shouldPutValuesInMapWithSquareBrackets() {
+  fun `should put values in Map with square brackets`() {
     val map = ObjectMap<String, String>()
-    assertFalse("key" in map)
-    assertFalse(map.containsValue("value", false))
+
     map["key"] = "value"
+
     assertTrue("key" in map)
     assertTrue(map.containsValue("value", false))
   }
 
   @Test
-  fun shouldAllowToIterateWithIteratorReference() {
+  fun `should allow to iterate with iterator reference`() {
     val map = gdxMapOf(1 to "1", 2 to "2", 3 to "3")
-    assertEquals(3, map.size)
+
     map.iterate { _, value, iterator -> if (value == "1") iterator.remove() }
+
     assertEquals(2, map.size)
     assertFalse(1 in map)
     assertFalse(map.containsValue("1", false))
   }
 
   @Test
-  fun shouldCheckIfMapContainsKeyWithInOperator() {
+  fun `should check if Map contains key with in operator`() {
     val map = ObjectMap<String, String>()
+
     map.put("key", "value")
+
     assertTrue("key" in map)
     assertTrue("absent" !in map)
   }
 
   @Test
-  fun shouldConvertMapKeysToSet() {
+  fun `should convert GdxMap keys to Set`() {
     val set = gdxMapOf(1 to "1", 2 to "2", 3 to "3").toGdxSet() // .keys().toGdxSet() and .values().toGdxSet() also work.
+
     assertNotNull(set)
     assertEquals(3, set.size)
     assertTrue(1 in set)
@@ -115,88 +147,48 @@ class MapsTest {
   }
 
   @Test
-  fun shouldConvertSetToMap() {
+  fun `should convert Set to GdxMap`() {
     val setAsMap = ObjectSet.with("1", "2", "3").toGdxMap { it.toInt() }
-    assertEquals(3, setAsMap.size)
-    assertTrue(setAsMap.containsValue("1", false))
-    assertTrue(setAsMap.containsValue("2", false))
-    assertTrue(setAsMap.containsValue("3", false))
-    assertTrue(setAsMap.containsKey(1))
-    assertTrue(setAsMap.containsKey(2))
-    assertTrue(setAsMap.containsKey(3))
-    assertEquals("1", setAsMap[1])
-    assertEquals("2", setAsMap[2])
-    assertEquals("3", setAsMap[3])
+
+    assertEquals(setAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
   }
 
   @Test
-  fun shouldConvertGdxArrayToMap() {
+  fun `should convert GdxArray to GdxMap`() {
     val arrayAsMap = Array.with("1", "2", "3").toGdxMap { it.toInt() }
-    assertEquals(3, arrayAsMap.size)
-    assertTrue(arrayAsMap.containsValue("1", false))
-    assertTrue(arrayAsMap.containsValue("2", false))
-    assertTrue(arrayAsMap.containsValue("3", false))
-    assertTrue(arrayAsMap.containsKey(1))
-    assertTrue(arrayAsMap.containsKey(2))
-    assertTrue(arrayAsMap.containsKey(3))
-    assertEquals("1", arrayAsMap[1])
-    assertEquals("2", arrayAsMap[2])
-    assertEquals("3", arrayAsMap[3])
+
+    assertEquals(arrayAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
   }
 
   @Test
-  fun shouldConvertArrayToMap() {
+  fun `should convert Array to GdxMap`() {
     val arrayAsMap = arrayOf("1", "2", "3").toGdxMap { it.toInt() }
-    assertEquals(3, arrayAsMap.size)
-    assertTrue(arrayAsMap.containsValue("1", false))
-    assertTrue(arrayAsMap.containsValue("2", false))
-    assertTrue(arrayAsMap.containsValue("3", false))
-    assertTrue(arrayAsMap.containsKey(1))
-    assertTrue(arrayAsMap.containsKey(2))
-    assertTrue(arrayAsMap.containsKey(3))
-    assertEquals("1", arrayAsMap[1])
-    assertEquals("2", arrayAsMap[2])
-    assertEquals("3", arrayAsMap[3])
+
+    assertEquals(arrayAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
   }
 
   @Test
-  fun shouldConvertIterablesToMap() {
+  fun `should convert Iterables to GdxMap`() {
     val map = listOf("1", "2", "3").toGdxMap(
         keyProvider = { it.toInt() },
         valueProvider = { it + it }
     )
-    assertEquals(3, map.size)
-    assertTrue(map.containsValue("11", false))
-    assertTrue(map.containsValue("22", false))
-    assertTrue(map.containsValue("33", false))
-    assertTrue(map.containsKey(1))
-    assertTrue(map.containsKey(2))
-    assertTrue(map.containsKey(3))
-    assertEquals("11", map[1])
-    assertEquals("22", map[2])
-    assertEquals("33", map[3])
+
+    assertEquals(map, gdxMapOf(1 to "11", 2 to "22", 3 to "33"))
   }
 
   @Test
-  fun shouldConvertCustomizedArraysToMap() {
+  fun `should convert customized Arrays to GdxMap`() {
     val map = arrayOf("1", "2", "3").toGdxMap(
         keyProvider = { it.toInt() },
         valueProvider = { it + it }
     )
-    assertEquals(3, map.size)
-    assertTrue(map.containsValue("11", false))
-    assertTrue(map.containsValue("22", false))
-    assertTrue(map.containsValue("33", false))
-    assertTrue(map.containsKey(1))
-    assertTrue(map.containsKey(2))
-    assertTrue(map.containsKey(3))
-    assertEquals("11", map[1])
-    assertEquals("22", map[2])
-    assertEquals("33", map[3])
+
+    assertEquals(map, gdxMapOf(1 to "11", 2 to "22", 3 to "33"))
   }
 
   @Test
-  fun shouldCreateIdentityMaps() {
+  fun `should create IdentityMaps`() {
     val map = gdxIdentityMapOf<Any, Any>()
 
     assertNotNull(map)
@@ -204,10 +196,11 @@ class MapsTest {
   }
 
   @Test
-  fun shouldCreateIdentityMapsFromKeyToValuePairs() {
+  fun `should create IdentityMaps from key to value pairs`() {
     val key = "key"
     val otherKey = "other"
-    val map = gdxMapOf(key to "value", otherKey to "another")
+    val map = gdxIdentityMapOf(key to "value", otherKey to "another")
+
     assertEquals(2, map.size)
     assertTrue(key in map)
     assertTrue(otherKey in map)
@@ -218,44 +211,45 @@ class MapsTest {
   }
 
   @Test
-  fun shouldCheckIfIdentityMapContainsKeyWithInOperator() {
+  fun `should check if IdentityMap contains key with in operator`() {
     val map = IdentityMap<String, String>()
     val key = "key"
-    assertFalse(key in map)
+
     map.put(key, "value")
+
     assertTrue(key in map)
     assertTrue("absent" !in map)
   }
 
   @Test
-  fun shouldPutValuesInIdentityMapWithSquareBrackets() {
+  fun `should put values in IdentityMap with square brackets`() {
     val map = IdentityMap<String, String>()
     val key = "key"
-    assertFalse(key in map)
-    assertFalse(map.containsValue("value", false))
+
     map[key] = "value"
+
     assertTrue(key in map)
     assertTrue(map.containsValue("value", false))
   }
 
   @Test
-  fun shouldAllowToIterateIdentityMapWithIteratorReference() {
+  fun `should allow to iterate IdentityMap with iterator reference`() {
     val keyToRemove = 1
     val map = gdxIdentityMapOf(keyToRemove to "1", 2 to "2", 3 to "3")
-    assertEquals(3, map.size)
+
     map.iterate { _, value, iterator -> if (value == "1") iterator.remove() }
+
     assertEquals(2, map.size)
     assertFalse(keyToRemove in map)
     assertFalse(map.containsValue("1", false))
   }
 
   @Test
-  fun shouldSupportOptimizedPrimitiveIntIntMap() {
+  fun `should support optimized primitive IntIntMap`() {
     val map = gdxIntIntMap()
 
-    assertNotNull(map)
-    assertEquals(0, map.size)
     map[1] = 2 // Tests array bracket operator.
+
     assertEquals(2, map[1])
     assertEquals(2, map[1, -1]) // Second parameter is the default value returned if key is missing: -1.
     assertEquals(1, map.size)
@@ -265,12 +259,11 @@ class MapsTest {
   }
 
   @Test
-  fun shouldSupportOptimizedPrimitiveIntFloatMap() {
+  fun `should support optimized primitive IntFloatMap`() {
     val map = gdxIntFloatMap()
 
-    assertNotNull(map)
-    assertEquals(0, map.size)
     map[1] = 2f // Tests array bracket operator.
+
     assertEquals(2f, map[1], 0.00001f)
     assertEquals(2f, map[1, -1f], 0.00001f) // Second parameter is the default value returned if key is missing: -1f.
     assertEquals(1, map.size)
@@ -279,12 +272,11 @@ class MapsTest {
   }
 
   @Test
-  fun shouldSupportOptimizedIntMapWithPrimitiveIntKeys() {
+  fun `should support optimized IntMap with primitive int keys`() {
     val map = gdxIntMap<String>()
 
-    assertNotNull(map)
-    assertEquals(0, map.size)
     map[1] = "2" // Tests array bracket operator.
+
     assertEquals("2", map[1])
     assertEquals(1, map.size)
     assertTrue(1 in map) // Tests contains extension (in operator).
@@ -384,6 +376,7 @@ class MapsTest {
   @Test
   fun `should map elements into a new GdxMap`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
+
     val result = map.map { it.value * 2 }
 
     assertEquals(gdxMapOf("One" to 2, "Two" to 4, "Three" to 6), result)
@@ -392,6 +385,7 @@ class MapsTest {
   @Test
   fun `should filter elements into a new GdxMap`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3, "Four" to 4, "Five" to 5)
+
     val result = map.filter { it.value % 2 == 1 }
 
     assertEquals(gdxMapOf("One" to 1, "Three" to 3, "Five" to 5), result)
@@ -400,6 +394,7 @@ class MapsTest {
   @Test
   fun `should flatten elements into a new GdxArray`() {
     val map = gdxMapOf(1 to GdxArray.with(1), 2 to listOf<Int>(), 3 to LinkedList(arrayListOf(2, 3)))
+
     val result = map.flatten()
 
     assertEquals(3, result.size)
@@ -409,6 +404,7 @@ class MapsTest {
   @Test
   fun `should map elements to lists and flatten them into a new GdxArray`() {
     val map = gdxMapOf("One" to 1, "Two" to 2, "Three" to 3)
+
     val result = map.flatMap { (_, value) -> List(value!!) { value } }
     result.sort()
 
