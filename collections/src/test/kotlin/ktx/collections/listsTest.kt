@@ -33,14 +33,14 @@ class ListsTest {
   fun `should create new lists from arrays`() {
     val list = arrayOf("1", "2", "3").toGdxList()
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
   fun `should create new lists from iterables`() {
     val list = sortedSetOf("1", "2", "3").toGdxList()
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
@@ -100,15 +100,15 @@ class PooledListTest {
     list.add("3")
     list.removeLast()
 
-    assertEquals(list, gdxListOf("1", "2"))
+    assertEquals(gdxListOf("1", "2"), list)
 
     list.removeFirst()
 
-    assertEquals(list, gdxListOf("2"))
+    assertEquals(gdxListOf("2"), list)
 
     list.removeLast()
 
-    assertEquals(list, gdxListOf<String>())
+    assertEquals(gdxListOf<String>(), list)
   }
 
   @Test(expected = IllegalStateException::class)
@@ -127,7 +127,7 @@ class PooledListTest {
 
     list.addAll(arrayOf("1", "2", "3"))
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
@@ -136,7 +136,7 @@ class PooledListTest {
 
     list.addAll(sortedSetOf("1", "2", "3"))
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
@@ -145,7 +145,7 @@ class PooledListTest {
 
     list + "1" + "2"
 
-    assertEquals(list, gdxListOf("1", "2"))
+    assertEquals(gdxListOf("1", "2"), list)
   }
 
   @Test
@@ -154,7 +154,7 @@ class PooledListTest {
 
     list + arrayOf("1", "2", "3")
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
@@ -163,7 +163,7 @@ class PooledListTest {
 
     list + sortedSetOf("1", "2", "3")
 
-    assertEquals(list, gdxListOf("1", "2", "3"))
+    assertEquals(gdxListOf("1", "2", "3"), list)
   }
 
   @Test
@@ -210,7 +210,7 @@ class PooledListTest {
 
     val result = list.map { it * 2 }
 
-    assertEquals(result, gdxListOf(2, 4, 6))
+    assertEquals(gdxListOf(2, 4, 6), result)
   }
 
   @Test
@@ -219,7 +219,7 @@ class PooledListTest {
 
     val result = list.filter { it % 2 == 1 }
 
-    assertEquals(result, gdxListOf(1, 3, 5))
+    assertEquals(gdxListOf(1, 3, 5), result)
   }
 
   @Test
@@ -228,7 +228,7 @@ class PooledListTest {
 
     val result = list.flatten()
 
-    assertEquals(result, gdxListOf(1, 2, 3))
+    assertEquals(gdxListOf(1, 2, 3), result)
   }
 
   @Test
@@ -256,11 +256,11 @@ class PooledListTest {
 
     list.first = "1"
 
-    assertEquals(list, gdxListOf("1"))
+    assertEquals(gdxListOf("1"), list)
 
     list.first = "2"
 
-    assertEquals(list, gdxListOf("2", "1"))
+    assertEquals(gdxListOf("2", "1"), list)
   }
 
   @Test
@@ -269,11 +269,11 @@ class PooledListTest {
 
     list.last = "1"
 
-    assertEquals(list, gdxListOf("1"))
+    assertEquals(gdxListOf("1"), list)
 
     list.last = "2"
 
-    assertEquals(list, gdxListOf("1", "2"))
+    assertEquals(gdxListOf("1", "2"), list)
   }
 
   @Test
@@ -306,7 +306,7 @@ class PooledListTest {
 
     list.forEach { arrayList.add(it) }
 
-    assertEquals(arrayList, arrayListOf("1", "2", "3"))
+    assertEquals(arrayListOf("1", "2", "3"), arrayList)
   }
 
   @Test
@@ -316,7 +316,7 @@ class PooledListTest {
 
     list.forEachReversed { arrayList.add(it) }
 
-    assertEquals(arrayList, arrayListOf("3", "2", "1"))
+    assertEquals(arrayListOf("3", "2", "1"), arrayList)
   }
 
   @Test
@@ -326,7 +326,7 @@ class PooledListTest {
 
     list.newIterator().forEach { arrayList.add(it) }
 
-    assertEquals(arrayList, arrayListOf("1", "2", "3"))
+    assertEquals(arrayListOf("1", "2", "3"), arrayList)
   }
 
   @Test
@@ -339,8 +339,8 @@ class PooledListTest {
       if (element == "2") iterator.remove()
     }
 
-    assertEquals(arrayList, arrayListOf("1", "2", "3"))
-    assertEquals(list, gdxListOf("1", "3"))
+    assertEquals(arrayListOf("1", "2", "3"), arrayList)
+    assertEquals(gdxListOf("1", "3"), list)
   }
 
   @Test(expected = IllegalStateException::class)
@@ -364,7 +364,7 @@ class PooledListTest {
 
     list.forEach { if (it == "2") list.remove() }
 
-    assertEquals(list, gdxListOf("1", "3"))
+    assertEquals(gdxListOf("1", "3"), list)
   }
 
   @Test
@@ -373,7 +373,7 @@ class PooledListTest {
 
     list.forEach { if (it == "1") list.insertBefore("0") }
 
-    assertEquals(list, gdxListOf("0", "1", "2", "3"))
+    assertEquals(gdxListOf("0", "1", "2", "3"), list)
   }
 
   @Test
@@ -382,7 +382,7 @@ class PooledListTest {
 
     list.forEach { if (it == "3") list.insertAfter("4") }
 
-    assertEquals(list, gdxListOf("1", "2", "3", "4"))
+    assertEquals(gdxListOf("1", "2", "3", "4"), list)
   }
 
   @Test
@@ -406,12 +406,12 @@ class PooledListTest {
   fun `should properly implement equals`() {
     val list = gdxListOf("a", "b", "c")
 
-    assertNotEquals(list, null)
-    assertNotEquals(list, "[a, b, c]")
-    assertNotEquals(list, gdxListOf<String>())
-    assertNotEquals(list, GdxArray.with("a", "b", "c")) // No common interface.
-    assertNotEquals(list, gdxListOf("a", "b"))
-    assertNotEquals(list, gdxListOf("a", "b", "c", "d"))
-    assertEquals(list, gdxListOf("a", "b", "c"))
+    assertNotEquals(null, list)
+    assertNotEquals("[a, b, c]", list)
+    assertNotEquals(gdxListOf<String>(), list)
+    assertNotEquals(GdxArray.with("a", "b", "c"), list) // No common interface.
+    assertNotEquals(gdxListOf("a", "b"), list)
+    assertNotEquals(gdxListOf("a", "b", "c", "d"), list)
+    assertEquals(gdxListOf("a", "b", "c"), list)
   }
 }

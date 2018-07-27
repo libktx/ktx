@@ -122,21 +122,21 @@ class MapsTest {
   fun `should convert Set to GdxMap`() {
     val setAsMap = ObjectSet.with("1", "2", "3").toGdxMap { it.toInt() }
 
-    assertEquals(setAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
+    assertEquals(gdxMapOf(1 to "1", 2 to "2", 3 to "3"), setAsMap)
   }
 
   @Test
   fun `should convert GdxArray to GdxMap`() {
     val arrayAsMap = Array.with("1", "2", "3").toGdxMap { it.toInt() }
 
-    assertEquals(arrayAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
+    assertEquals(gdxMapOf(1 to "1", 2 to "2", 3 to "3"), arrayAsMap)
   }
 
   @Test
   fun `should convert Array to GdxMap`() {
     val arrayAsMap = arrayOf("1", "2", "3").toGdxMap { it.toInt() }
 
-    assertEquals(arrayAsMap, gdxMapOf(1 to "1", 2 to "2", 3 to "3"))
+    assertEquals(gdxMapOf(1 to "1", 2 to "2", 3 to "3"), arrayAsMap)
   }
 
   @Test
@@ -146,7 +146,7 @@ class MapsTest {
         valueProvider = { it + it }
     )
 
-    assertEquals(map, gdxMapOf(1 to "11", 2 to "22", 3 to "33"))
+    assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
   }
 
   @Test
@@ -156,7 +156,7 @@ class MapsTest {
         valueProvider = { it + it }
     )
 
-    assertEquals(map, gdxMapOf(1 to "11", 2 to "22", 3 to "33"))
+    assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
   }
 
   @Test
