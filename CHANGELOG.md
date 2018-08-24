@@ -1,5 +1,8 @@
 #### 1.9.8-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.2.61.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.25.0.
+
 #### 1.9.8-b4
 
 - **[UPDATE]** Updated to Kotlin 1.2.51.
