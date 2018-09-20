@@ -3,6 +3,7 @@ package ktx.ashley
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import kotlin.reflect.KClass
 
 /**
  * An [Entity] created by the provided [Engine].
@@ -23,6 +24,7 @@ class EngineEntity(
    * @param T the [Component] type to get or create.
    * @param configure inlined function with [T] as the receiver to allow additional configuration of the [Component].
    * @return the created ƒ[Component].
+   * @throws [CreateComponentException] if the engine was unable to create the component
    * @see [create]
    */
   inline fun <reified T : Component> with(configure: (@AshleyDsl T).() -> Unit = {}): T {
@@ -36,12 +38,20 @@ class EngineEntity(
 /**
  * Get or create a [Component] by calling [Engine.createComponent].
  *
+ * The [Component] must have a visible no-arg constructor.
+ *
  * @param T the type of [Component] to get or create.
  * @param configure inlined function with [T] as the receiver to allow further configuration.
  * @return an [Component] instance of the selected type.
+ * @throws [CreateComponentException] if the engine was unable to create the component
  */
-inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T
-    = createComponent(T::class.java).apply(configure)
+inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T {
+  return try {
+    createComponent(T::class.java)
+  } catch (e: Exception) {
+    throw CreateComponentException(T::class, e)
+  }?.apply(configure)?:throw CreateComponentException(T::class)
+}
 
 /**
  * Builder function for [Engine].
@@ -63,3 +73,5 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   addEntity(entity)
   return entity
 }
+
+class CreateComponentException(type: KClass<*>, cause: Throwable? = null): RuntimeException("Could not instantiate component ${type::java.name} - the component must have a visible no-arg constructor", cause)
