@@ -3,6 +3,7 @@ package ktx.ashley
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import kotlin.reflect.KClass
 
 /**
  * An [Entity] created by the provided [Engine].
@@ -48,8 +49,8 @@ inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): 
   return try {
     createComponent(T::class.java)
   } catch (e: Exception) {
-    throw CreateComponentException(T::class.java, e)
-  }?.apply(configure)?:throw CreateComponentException(T::class.java)
+    throw CreateComponentException(T::class, e)
+  }?.apply(configure)?:throw CreateComponentException(T::class)
 }
 
 /**
@@ -73,4 +74,4 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   return entity
 }
 
-class CreateComponentException(type: Class<*>, cause: Throwable? = null): RuntimeException("Could not instantiate component ${type.name} - the component must have a visible no-arg constructor", cause)
+class CreateComponentException(type: KClass<*>, cause: Throwable? = null): RuntimeException("Could not instantiate component ${type::java.name} - the component must have a visible no-arg constructor", cause)
