@@ -25,3 +25,5 @@ Project contributors listed chronologically.
   * Started the [graphics module](../graphics).
 * [@nukesz](https://github.com/nukesz)
   * Refactored legacy tests of the [collections module](../collections).
+* [@DavidPartouche](https://github.com/DavidPartouche)
+  * Added KTX project template to the alternative [gdx-setup](https://github.com/czyzby/gdx-setup) application.

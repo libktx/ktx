@@ -47,10 +47,10 @@ class EngineEntity(
  */
 inline fun <reified T : Component> Engine.create(configure: T.() -> Unit = {}): T {
   return try {
-    createComponent(T::class.java)
-  } catch (e: Exception) {
-    throw CreateComponentException(T::class, e)
-  }?.apply(configure)?:throw CreateComponentException(T::class)
+    createComponent(T::class.java) ?: throw NullPointerException("The component of ${T::class.java} type is null.")
+  } catch (exception: Throwable) {
+    throw CreateComponentException(T::class, exception)
+  }.apply(configure)
 }
 
 /**
@@ -74,4 +74,8 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   return entity
 }
 
-class CreateComponentException(type: KClass<*>, cause: Throwable? = null): RuntimeException("Could not instantiate component ${type::java.name} - the component must have a visible no-arg constructor", cause)
+/**
+ * Thrown when unable to create a component of given type.
+ */
+class CreateComponentException(type: KClass<*>, cause: Throwable? = null): RuntimeException(
+    "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?", cause)
