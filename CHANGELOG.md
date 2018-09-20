@@ -2,6 +2,8 @@
 
 - **[UPDATE]** Updated to Kotlin 1.2.61.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.25.0.
+- **[FIX]** (`ktx-ashley`) Component classes without a default no-arg constructors could not have been initiated
+by the Ashley engine. This is still the case, but now an exception with a meaningful message is thrown.
 
 #### 1.9.8-b4
 
