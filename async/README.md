@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.24.0-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.26.1-orange.svg)](http://kotlinlang.org/)
 
 # KTX: coroutines support and threading utilities
 

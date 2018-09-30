@@ -1,7 +1,10 @@
 package ktx.ashley
 
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.PooledEngine
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -16,6 +19,42 @@ object EnginesSpec : Spek({
       it("should create a pooled component with reified type") {
         assertThat(component.x).isEqualTo(0f)
         assertThat(component.y).isEqualTo(0f)
+      }
+    }
+    describe("creating a component without a no-arg constructor") {
+      @Suppress("UNUSED_PARAMETER")
+      class MissingNoArgConstructorComponent(body: String): Component
+
+      it("should throw an exception if the non-pooled engine was unable to create the component") {
+        val nonPooledEngine = Engine()
+        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
+          nonPooledEngine.create<MissingNoArgConstructorComponent>()
+        }
+      }
+
+      it("should throw an exception if the pooled engine was unable to create the component") {
+        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
+          engine.create<MissingNoArgConstructorComponent>()
+        }
+      }
+    }
+    describe("creating a corrupted component that throws an exception") {
+      class CorruptedComponent : Component {
+        init {
+          throw IllegalStateException()
+        }
+      }
+      it("should throw an exception if the non-pooled engine was unable to create the corrupted component") {
+        val nonPooledEngine = Engine()
+        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
+          nonPooledEngine.create<CorruptedComponent>()
+        }.withRootCauseInstanceOf(IllegalStateException::class.java)
+      }
+
+      it("should throw an exception if the pooled engine was unable to create the corrupted component") {
+        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
+          engine.create<CorruptedComponent>()
+        }.withRootCauseInstanceOf(IllegalStateException::class.java)
       }
     }
     describe("creating a component with configuration") {
