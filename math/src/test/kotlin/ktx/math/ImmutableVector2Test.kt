@@ -390,11 +390,13 @@ class ImmutableVector2Test {
             var previousVector = initialVector
             var currentVector = previousVector.rotateRad(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
+            assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
 
             repeat(4) {
                 previousVector = currentVector
                 currentVector = previousVector.rotateRad(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
+                assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
             }
 
             // rotate from positive x-axis to negative y-axis (typically clockwise)
@@ -402,11 +404,13 @@ class ImmutableVector2Test {
             previousVector = initialVector
             currentVector = previousVector.rotateRad(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
+            assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
 
             repeat(4) {
                 previousVector = currentVector
                 currentVector = previousVector.rotateRad(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
+                assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
             }
         }
     }

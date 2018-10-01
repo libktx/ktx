@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package ktx.math
 
 import com.badlogic.gdx.math.Interpolation
@@ -59,10 +61,10 @@ interface ImmutableVector<T : ImmutableVector<T>> {
 /**
  * @return The euclidean length
  */
-val ImmutableVector<*>.len: Float get() = sqrt(len2)
+inline val ImmutableVector<*>.len: Float get() = sqrt(len2)
 
 /**
- * @return the unit vector of same direction or [this] if it is zero.
+ * @return the unit vector of same direction or this vector if it is zero.
  */
 val <T : ImmutableVector<T>> T.nor: T
     get() {
@@ -74,19 +76,19 @@ val <T : ImmutableVector<T>> T.nor: T
     }
 
 /** @return Whether this vector is a unit length vector within the given margin. (no margin by default) */
-fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
+inline fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
 
-fun <T : ImmutableVector<T>> T.dst(v: T): Float = sqrt(dst2(v))
-fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
+inline fun <T : ImmutableVector<T>> T.dst(v: T): Float = sqrt(dst2(v))
+inline fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
 
-/** @return [this] is the [len2] is <= [limit2] and A vector with the same direction and length [limit2] otherwise */
-fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
+/** @return this vector if the [ImmutableVector.len2] is <= [limit2] and A vector with the same direction and length [limit2] otherwise */
+inline fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
         if (len2 <= limit2) this else withLength2(limit2)
 
-fun <T : ImmutableVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
+inline fun <T : ImmutableVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
 
 /** @return Clamps this vector's length to given [min] and [max] values*/
-fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
+inline fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
     val l2 = len2
     return when {
         l2 < min2 -> withLength2(min2)
@@ -95,25 +97,25 @@ fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
     }
 }
 
-fun <T : ImmutableVector<T>> T.withLength(len: Float): T = withLength2(len * len)
+inline fun <T : ImmutableVector<T>> T.withLength(len: Float): T = withLength2(len * len)
 
 /** @return The opposite vector of same length */
-operator fun <T : ImmutableVector<T>> T.unaryMinus(): T = times(-1f)
+inline operator fun <T : ImmutableVector<T>> T.unaryMinus(): T = times(-1f)
 
-fun <T : ImmutableVector<T>> T.interpolate(target: T, alpha: Float, interpolator: Interpolation): T =
-        lerp(target, interpolator.apply(alpha))
+inline fun <T : ImmutableVector<T>> T.interpolate(target: T, alpha: Float, interpolation: Interpolation): T =
+        lerp(target, interpolation.apply(alpha))
 
-fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
-        isOnLine(other, epsilon) && dot(other) > 0f
+inline fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+        isOnLine(other, epsilon) && hasSameDirection(other)
 
-fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
-        isOnLine(other, epsilon) && dot(other) < 0f
+inline fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+        isOnLine(other, epsilon) && hasOppositeDirection(other)
 
-fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+inline fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         MathUtils.isZero(dot(other), epsilon)
 
-fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
+inline fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
         dot(other) > 0f
 
-fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
+inline fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f

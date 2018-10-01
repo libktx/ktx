@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package ktx.math
 
 import com.badlogic.gdx.math.MathUtils
@@ -138,7 +140,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 }
 
 /** @return an instance of [ImmutableVector2] with the same x and y values */
-fun ImmutableVector2.toVector2(): Vector2 = Vector2(x, y)
+inline fun ImmutableVector2.toVector2(): Vector2 = Vector2(x, y)
 
 /** @return an instance of [Vector2] with the same x and y values */
-fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, y)
+inline fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, y)
