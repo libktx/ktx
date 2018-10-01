@@ -26,7 +26,12 @@ class ImmutableVector2Test {
             ImmutableVector2(3f, 4f),
             ImmutableVector2(3f, -4f),
             ImmutableVector2(-3f, 4f),
-            ImmutableVector2(-3f, -4f)
+            ImmutableVector2(-3f, -4f),
+
+            // small vectors
+            ImmutableVector2(0.001f, 0f),
+            ImmutableVector2(0f, 0.001f),
+            ImmutableVector2(0f, -0.001f)
     )
 
     /** List scalar values to use in tests */
