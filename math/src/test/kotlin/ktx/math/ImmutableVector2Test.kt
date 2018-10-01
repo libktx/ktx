@@ -8,25 +8,25 @@ import org.junit.Assert.*
 import org.junit.Ignore
 import org.junit.Test
 
-class KVector2Test {
+class ImmutableVector2Test {
 
     /** List of vector to use in tests */
     private val vectors = sequenceOf(
 
             // vector zero
-            KVector2.ZERO,
+            ImmutableVector2.ZERO,
 
             // axis
-            KVector2.X,
-            -KVector2.X,
-            KVector2.Y,
-            -KVector2.Y,
+            ImmutableVector2.X,
+            -ImmutableVector2.X,
+            ImmutableVector2.Y,
+            -ImmutableVector2.Y,
 
             // quadrants
-            KVector2(3f, 4f),
-            KVector2(3f, -4f),
-            KVector2(-3f, 4f),
-            KVector2(-3f, -4f)
+            ImmutableVector2(3f, 4f),
+            ImmutableVector2(3f, -4f),
+            ImmutableVector2(-3f, 4f),
+            ImmutableVector2(-3f, -4f)
     )
 
     /** List scalar values to use in tests */
@@ -43,20 +43,20 @@ class KVector2Test {
     }
 
     @Test
-    fun `toKVector should return equivalent the KVector2`() {
+    fun `toImmutableVector should return an equivalent of the Vector2`() {
         vectors.forEach {
-            val kvector2 = Vector2(it.x, it.y).toKVector2()
-            assertEquals(it.x, kvector2.x)
-            assertEquals(it.y, kvector2.y)
-            assertEquals(it, kvector2)
+            val vector2 = Vector2(it.x, it.y).toImmutableVector2()
+            assertEquals(it.x, vector2.x)
+            assertEquals(it.y, vector2.y)
+            assertEquals(it, vector2)
         }
     }
 
     @Test
     fun `fromString should parse result toString`() {
         vectors.forEach {
-            assertEquals(it, KVector2.fromString(it.toString()))
-            assertEquals(it, KVector2.fromString(it.toVector2().toString()))
+            assertEquals(it, ImmutableVector2.fromString(it.toString()))
+            assertEquals(it, ImmutableVector2.fromString(it.toVector2().toString()))
         }
     }
 
@@ -79,16 +79,16 @@ class KVector2Test {
 
     @Test
     fun `isZero should return true for vector zero`() {
-        assertTrue(KVector2.ZERO.isZero())
+        assertTrue(ImmutableVector2.ZERO.isZero())
     }
 
     @Test
     fun `isZero should return false for non-zero vectors`() {
-        assertFalse(KVector2.X.isZero())
-        assertFalse((-KVector2.X).isZero())
-        assertFalse(KVector2.Y.isZero())
-        assertFalse((-KVector2.Y).isZero())
-        assertFalse(KVector2(3f, 4f).isZero())
+        assertFalse(ImmutableVector2.X.isZero())
+        assertFalse((-ImmutableVector2.X).isZero())
+        assertFalse(ImmutableVector2.Y.isZero())
+        assertFalse((-ImmutableVector2.Y).isZero())
+        assertFalse(ImmutableVector2(3f, 4f).isZero())
     }
 
     @Test
@@ -103,28 +103,28 @@ class KVector2Test {
 
     @Test
     fun `isUnit should return true for axis`() {
-        assertTrue(KVector2.X.isUnit())
-        assertTrue((-KVector2.X).isUnit())
-        assertTrue(KVector2.Y.isUnit())
-        assertTrue((-KVector2.Y).isUnit())
+        assertTrue(ImmutableVector2.X.isUnit())
+        assertTrue((-ImmutableVector2.X).isUnit())
+        assertTrue(ImmutableVector2.Y.isUnit())
+        assertTrue((-ImmutableVector2.Y).isUnit())
     }
 
     @Test
     fun `isUnit should return false for zero`() {
-        assertFalse(KVector2.ZERO.isUnit())
+        assertFalse(ImmutableVector2.ZERO.isUnit())
     }
 
     @Test
     fun `nor should return same result than Vector2`() {
         vectors.forEach {
-            assertEquals(it.toVector2().nor().toKVector2(), it.nor)
+            assertEquals(it.toVector2().nor().toImmutableVector2(), it.nor)
         }
     }
 
     @Test
     fun `unaryMinus should return same result than Vector2 scaled by -1`() {
         vectors.forEach {
-            assertEquals(it.toVector2().scl(-1f).toKVector2(), -it)
+            assertEquals(it.toVector2().scl(-1f).toImmutableVector2(), -it)
         }
     }
 
@@ -132,7 +132,7 @@ class KVector2Test {
     fun `minus should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().minus(v2.toVector2()).toKVector2(), v1 - v2)
+                assertEquals(v1.toVector2().minus(v2.toVector2()).toImmutableVector2(), v1 - v2)
             }
         }
     }
@@ -141,7 +141,7 @@ class KVector2Test {
     fun `plus should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().plus(v2.toVector2()).toKVector2(), v1 + v2)
+                assertEquals(v1.toVector2().plus(v2.toVector2()).toImmutableVector2(), v1 + v2)
             }
         }
     }
@@ -150,7 +150,7 @@ class KVector2Test {
     fun `times should return same result than Vector2 scale`() {
         scalars.forEach { factor ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().scl(factor).toKVector2(), vector * factor)
+                assertEquals(vector.toVector2().scl(factor).toImmutableVector2(), vector * factor)
             }
         }
     }
@@ -159,8 +159,8 @@ class KVector2Test {
     fun `scl should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().scl(v2.toVector2()).toKVector2(), v1 * v2)
-                assertEquals(v1.toVector2().scl(v2.x, v2.y).toKVector2(), v1.times(v2.x, v2.y))
+                assertEquals(v1.toVector2().scl(v2.toVector2()).toImmutableVector2(), v1 * v2)
+                assertEquals(v1.toVector2().scl(v2.x, v2.y).toImmutableVector2(), v1.times(v2.x, v2.y))
             }
         }
     }
@@ -199,7 +199,7 @@ class KVector2Test {
     fun `limit should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toVector2().limit(l).toKVector2(), v.limit(l))
+                assertEquals(v.toVector2().limit(l).toImmutableVector2(), v.limit(l))
             }
         }
     }
@@ -208,7 +208,7 @@ class KVector2Test {
     fun `limit2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toVector2().limit2(l).toKVector2(), v.limit2(l))
+                assertEquals(v.toVector2().limit2(l).toImmutableVector2(), v.limit2(l))
             }
         }
     }
@@ -217,7 +217,7 @@ class KVector2Test {
     fun `withLength should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toVector2().setLength(l).toKVector2(), v.withLength(l))
+                assertEquals(v.toVector2().setLength(l).toImmutableVector2(), v.withLength(l))
             }
         }
     }
@@ -226,7 +226,7 @@ class KVector2Test {
     fun `withLength2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toVector2().setLength2(l).toKVector2(), v.withLength2(l))
+                assertEquals(v.toVector2().setLength2(l).toImmutableVector2(), v.withLength2(l))
             }
         }
     }
@@ -236,7 +236,7 @@ class KVector2Test {
         scalars.forEach { min ->
             scalars.filter { it >= min }.forEach { max ->
                 vectors.forEach { v ->
-                    assertEquals(v.toVector2().clamp(min, max).toKVector2(), v.clamp(min, max))
+                    assertEquals(v.toVector2().clamp(min, max).toImmutableVector2(), v.clamp(min, max))
                 }
             }
         }
@@ -251,7 +251,7 @@ class KVector2Test {
 
         matrices.forEach { matrix ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().mul(matrix).toKVector2(), vector * matrix)
+                assertEquals(vector.toVector2().mul(matrix).toImmutableVector2(), vector * matrix)
             }
         }
     }
@@ -290,18 +290,18 @@ class KVector2Test {
 
     @Test
     fun `angle should return correct angles between axises`() {
-        assertEquals(90f, (KVector2.Y).angle(KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (-KVector2.X).angle(KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (-KVector2.Y).angle(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (KVector2.X).angle(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (ImmutableVector2.Y).angle(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (-ImmutableVector2.X).angle(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (-ImmutableVector2.Y).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (ImmutableVector2.X).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
-        assertEquals(-90f, (KVector2.Y).angle(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (-KVector2.X).angle(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (-KVector2.Y).angle(KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (KVector2.X).angle(KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (ImmutableVector2.Y).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (-ImmutableVector2.X).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (-ImmutableVector2.Y).angle(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (ImmutableVector2.X).angle(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
-        assertEquals(180f, (KVector2.X).angle(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(180f, (KVector2.Y).angle(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(180f, (ImmutableVector2.X).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(180f, (ImmutableVector2.Y).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
     }
 
     @Test
@@ -353,18 +353,18 @@ class KVector2Test {
 
     @Test
     fun `angleRad should return correct angles between axises`() {
-        assertEquals(MathUtils.PI / 2f, (KVector2.Y).angleRad(KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(MathUtils.PI / 2f, (-KVector2.X).angleRad(KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(MathUtils.PI / 2f, (-KVector2.Y).angleRad(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(MathUtils.PI / 2f, (KVector2.X).angleRad(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI / 2f, (ImmutableVector2.Y).angleRad(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI / 2f, (-ImmutableVector2.X).angleRad(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI / 2f, (-ImmutableVector2.Y).angleRad(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI / 2f, (ImmutableVector2.X).angleRad(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
 
-        assertEquals(-MathUtils.PI / 2f, (KVector2.Y).angleRad(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(-MathUtils.PI / 2f, (-KVector2.X).angleRad(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(-MathUtils.PI / 2f, (-KVector2.Y).angleRad(KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(-MathUtils.PI / 2f, (KVector2.X).angleRad(KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(-MathUtils.PI / 2f, (ImmutableVector2.Y).angleRad(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(-MathUtils.PI / 2f, (-ImmutableVector2.X).angleRad(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(-MathUtils.PI / 2f, (-ImmutableVector2.Y).angleRad(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(-MathUtils.PI / 2f, (ImmutableVector2.X).angleRad(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
 
-        assertEquals(MathUtils.PI, (KVector2.X).angleRad(-KVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
-        assertEquals(MathUtils.PI, (KVector2.Y).angleRad(-KVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI, (ImmutableVector2.X).angleRad(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI, (ImmutableVector2.Y).angleRad(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR)
     }
 
     @Test
@@ -417,7 +417,7 @@ class KVector2Test {
     fun `withAngle should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().setAngle(angle).toKVector2(), vector.withAngle(angle))
+                assertEquals(vector.toVector2().setAngle(angle).toImmutableVector2(), vector.withAngle(angle))
             }
         }
     }
@@ -426,7 +426,7 @@ class KVector2Test {
     fun `withAngleRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().setAngleRad(angle).toKVector2(), vector.withAngleRad(angle))
+                assertEquals(vector.toVector2().setAngleRad(angle).toImmutableVector2(), vector.withAngleRad(angle))
             }
         }
     }
@@ -435,7 +435,7 @@ class KVector2Test {
     fun `rotate with x axis should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().rotate(angle).toKVector2(), vector.rotate(angle))
+                assertEquals(vector.toVector2().rotate(angle).toImmutableVector2(), vector.rotate(angle))
             }
         }
     }
@@ -444,7 +444,7 @@ class KVector2Test {
     fun `rotateRad with x axis should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().rotateRad(angle).toKVector2(), vector.rotateRad(angle))
+                assertEquals(vector.toVector2().rotateRad(angle).toImmutableVector2(), vector.rotateRad(angle))
             }
         }
     }
@@ -452,8 +452,8 @@ class KVector2Test {
     @Test
     fun `rotate90 with x axis should return same result than Vector2`() {
         vectors.forEach { vector ->
-            assertEquals(vector.toVector2().rotate90(-1).toKVector2(), vector.rotate90(-1))
-            assertEquals(vector.toVector2().rotate90(1).toKVector2(), vector.rotate90(1))
+            assertEquals(vector.toVector2().rotate90(-1).toImmutableVector2(), vector.rotate90(-1))
+            assertEquals(vector.toVector2().rotate90(1).toImmutableVector2(), vector.rotate90(1))
         }
     }
 
@@ -462,7 +462,7 @@ class KVector2Test {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { ratio ->
-                    assertEquals(v1.toVector2().lerp(v2.toVector2(), ratio).toKVector2(), v1.lerp(v2, ratio))
+                    assertEquals(v1.toVector2().lerp(v2.toVector2(), ratio).toImmutableVector2(), v1.lerp(v2, ratio))
                 }
             }
         }
@@ -489,7 +489,7 @@ class KVector2Test {
                 scalars.forEach { alpha ->
                     interpolations.forEach { interpolation ->
                         assertEquals(
-                                v1.toVector2().interpolate(v2.toVector2(), alpha, interpolation).toKVector2(),
+                                v1.toVector2().interpolate(v2.toVector2(), alpha, interpolation).toImmutableVector2(),
                                 v1.interpolate(v2, alpha, interpolation)
                         )
                     }
@@ -507,9 +507,9 @@ class KVector2Test {
 
     @Test
     fun `randomDirection should return a variety of random vectors`() {
-        val vectors = HashSet<KVector2>()
+        val vectors = HashSet<ImmutableVector2>()
         repeat(1000) {
-            vectors += KVector2.X.withRandomDirection()
+            vectors += ImmutableVector2.X.withRandomDirection()
         }
         assertTrue(vectors.size > 900)
         forAtLeastOne(vectors) { it.x > 0 && it.y > 0 }

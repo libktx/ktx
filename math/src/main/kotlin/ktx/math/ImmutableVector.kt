@@ -9,7 +9,7 @@ import kotlin.math.sqrt
 /**
  * Represent an immutable vector
  */
-interface KVector<T : KVector<T>> {
+interface ImmutableVector<T : ImmutableVector<T>> {
 
     /**
      * This method is faster than [Vector.len] because it avoids calculating a square root. It is useful for comparisons,
@@ -59,12 +59,12 @@ interface KVector<T : KVector<T>> {
 /**
  * @return The euclidean length
  */
-val KVector<*>.len: Float get() = sqrt(len2)
+val ImmutableVector<*>.len: Float get() = sqrt(len2)
 
 /**
  * @return the unit vector of same direction or [this] if it is zero.
  */
-val <T : KVector<T>> T.nor: T
+val <T : ImmutableVector<T>> T.nor: T
     get() {
         val l2 = len2
 
@@ -74,19 +74,19 @@ val <T : KVector<T>> T.nor: T
     }
 
 /** @return Whether this vector is a unit length vector within the given margin. (no margin by default) */
-fun <T : KVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
+fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
 
-fun <T : KVector<T>> T.dst(v: T): Float = sqrt(dst2(v))
-fun <T : KVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
+fun <T : ImmutableVector<T>> T.dst(v: T): Float = sqrt(dst2(v))
+fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
 
 /** @return [this] is the [len2] is <= [limit2] and A vector with the same direction and length [limit2] otherwise */
-fun <T : KVector<T>> T.limit2(limit2: Float): T =
+fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
         if (len2 <= limit2) this else withLength2(limit2)
 
-fun <T : KVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
+fun <T : ImmutableVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
 
 /** @return Clamps this vector's length to given [min] and [max] values*/
-fun <T : KVector<T>> T.clamp2(min2: Float, max2: Float): T {
+fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
     val l2 = len2
     return when {
         l2 < min2 -> withLength2(min2)
@@ -95,25 +95,25 @@ fun <T : KVector<T>> T.clamp2(min2: Float, max2: Float): T {
     }
 }
 
-fun <T : KVector<T>> T.withLength(len: Float): T = withLength2(len * len)
+fun <T : ImmutableVector<T>> T.withLength(len: Float): T = withLength2(len * len)
 
 /** @return The opposite vector of same length */
-operator fun <T : KVector<T>> T.unaryMinus(): T = times(-1f)
+operator fun <T : ImmutableVector<T>> T.unaryMinus(): T = times(-1f)
 
-fun <T : KVector<T>> T.interpolate(target: T, alpha: Float, interpolator: Interpolation): T =
+fun <T : ImmutableVector<T>> T.interpolate(target: T, alpha: Float, interpolator: Interpolation): T =
         lerp(target, interpolator.apply(alpha))
 
-fun <T : KVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && dot(other) > 0f
 
-fun <T : KVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && dot(other) < 0f
 
-fun <T : KVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         MathUtils.isZero(dot(other), epsilon)
 
-fun <T : KVector<T>> T.hasSameDirection(other: T): Boolean =
+fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
         dot(other) > 0f
 
-fun <T : KVector<T>> T.hasOppositeDirection(other: T): Boolean =
+fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f
