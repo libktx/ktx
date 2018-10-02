@@ -1,10 +1,10 @@
-#### 1.9.8-b6
+#### 1.9.8-SNAPSHOT
 - **[FEATURE]** Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
 
 #### 1.9.8-b5
 
 - **[UPDATE]** Updated to Kotlin 1.2.70.
-- **[UPDATE]** Updated to Kotlin Coroutines 0.25.0.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.26.1.
 - **[UPDATE]** Updated to Gradle 4.10.2.
 - **[FIX]** (`ktx-ashley`) Component classes without a default no-arg constructors could not have been initiated
 by the Ashley engine. This is still the case, but now an exception with a meaningful message is thrown.
