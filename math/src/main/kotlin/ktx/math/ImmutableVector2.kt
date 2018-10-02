@@ -29,6 +29,9 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     /** Returns the result of adding the given vector from this vector */
     fun plus(deltaX: Float = 0f, deltaY: Float = 0f): ImmutableVector2 = ImmutableVector2(x + deltaX, y + deltaY)
 
+    override fun inc(): ImmutableVector2 = copy(x = x + 1, y = y + 1)
+    override fun dec(): ImmutableVector2 = copy(x = x - 1, y = y - 1)
+
     override operator fun times(scalar: Float): ImmutableVector2 = times(scalar, scalar)
     override operator fun times(vector: ImmutableVector2): ImmutableVector2 = times(vector.x, vector.y)
 
@@ -65,9 +68,6 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             x = x * matrix.`val`[0] + y * matrix.`val`[3] + matrix.`val`[6],
             y = x * matrix.`val`[1] + y * matrix.`val`[4] + matrix.`val`[7]
     )
-
-    /** Calculates the 2D cross product between this and the [other] vector */
-    fun crs(other: ImmutableVector2): Float = crs(other.x, other.y)
 
     /** Calculates the 2D cross product between this and the given vector */
     fun crs(x: Float, y: Float): Float = this.x * y - this.y * x
@@ -189,3 +189,9 @@ inline fun ImmutableVector2.rotate90(dir: Int): ImmutableVector2 = rotate90(dir 
 /** Returns a vector of same length rotated by 90 degree in the given direction */
 inline fun ImmutableVector2.rotate90(towardAxisY: Boolean): ImmutableVector2 =
         if (towardAxisY) ImmutableVector2(x = -y, y = x) else ImmutableVector2(x = y, y = -x)
+
+/** Calculates the 2D cross product between this and the [other] vector */
+inline infix fun ImmutableVector2.x(other: ImmutableVector2): Float = crs(other.x, other.y)
+
+/** Calculates the 2D cross product between this and the [other] vector */
+inline fun ImmutableVector2.crs(other: ImmutableVector2): Float = crs(other.x, other.y)

@@ -174,7 +174,7 @@ class ImmutableVector2Test {
     fun `dot should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().dot(v2.toVector2()), v1.dot(v2))
+                assertEquals(v1.toVector2().dot(v2.toVector2()), v1 dot v2)
                 assertEquals(v1.toVector2().dot(v2.x, v2.y), v1.dot(v2.x, v2.y))
             }
         }
@@ -265,6 +265,7 @@ class ImmutableVector2Test {
     fun `crs should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
+                assertEquals(v1.toVector2().crs(v2.toVector2()), v1 x v2)
                 assertEquals(v1.toVector2().crs(v2.toVector2()), v1.crs(v2))
                 assertEquals(v1.toVector2().crs(v2.x, v2.y), v1.crs(v2.x, v2.y))
             }
@@ -603,5 +604,49 @@ class ImmutableVector2Test {
                 assertEquals(v1.toVector2().hasOppositeDirection(v2.toVector2()), v1.hasOppositeDirection(v2))
             }
         }
+    }
+
+    @Test
+    fun `should compare vectors by length`() {
+        var previousLength = -1f
+        var previousLength2 = -1f
+
+        vectors.toList().shuffled().sorted().forEach { vector ->
+            assertTrue(vector.len >= previousLength)
+            assertTrue(vector.len2 >= previousLength2)
+            previousLength = vector.len
+            previousLength2 = vector.len2
+        }
+    }
+
+
+    @Test
+    fun `should increment vector values with ++ operator`() {
+        var vector = ImmutableVector2(10f, 10f)
+
+        vector++
+
+        assertEquals(11f, vector.x, MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(11f, vector.y, MathUtils.FLOAT_ROUNDING_ERROR)
+    }
+
+    @Test
+    fun `should decrement vector values with -- operator`() {
+        var vector = ImmutableVector2(10f, 10f)
+
+        vector--
+
+        assertEquals(9f, vector.x, MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(9f, vector.y, MathUtils.FLOAT_ROUNDING_ERROR)
+    }
+
+    @Test
+    fun `should divide vectors by float scalars with div operator`() {
+        val vector = Vector2(10f, 10f)
+
+        val result = vector / 2.5f
+
+        assertEquals(4f, result.x, MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(4f, result.y, MathUtils.FLOAT_ROUNDING_ERROR)
     }
 }

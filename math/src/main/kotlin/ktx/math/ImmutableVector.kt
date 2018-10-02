@@ -11,7 +11,7 @@ import kotlin.math.sqrt
 /**
  * Represent an immutable vector.
  */
-interface ImmutableVector<T : ImmutableVector<T>> {
+interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
 
     /**
      * Returns the squared euclidean length
@@ -33,6 +33,12 @@ interface ImmutableVector<T : ImmutableVector<T>> {
     /** Returns the result of adding the [other] vector to this vector */
     operator fun plus(other: T): T
 
+    /** Returns the same vector with all members incremented by 1 */
+    operator fun inc(): T
+
+    /** Returns the same vector with all members decremented by 1 */
+    operator fun dec(): T
+
     /** Returns this vector scaled by the given [scalar] */
     operator fun times(scalar: Float): T
 
@@ -40,7 +46,7 @@ interface ImmutableVector<T : ImmutableVector<T>> {
     operator fun times(vector: T): T
 
     /** Returns he dot product of this vector by the given [vector] */
-    fun dot(vector: T): Float
+    infix fun dot(vector: T): Float
 
     /**
      * Returns the squared distance between this and the other vector
@@ -48,7 +54,7 @@ interface ImmutableVector<T : ImmutableVector<T>> {
      * This method is faster than [dst] because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact distance, as the return value is the square of the actual distance.
      */
-    fun dst2(vector: T): Float
+    infix fun dst2(vector: T): Float
 
     /** Linearly interpolates between this vector and the target vector by alpha which is in the range [0,1] */
     fun lerp(target: T, alpha: Float): T
@@ -61,6 +67,8 @@ interface ImmutableVector<T : ImmutableVector<T>> {
 
     /** Compares this vector with the other vector, using the supplied epsilon for fuzzy equality testing */
     fun epsilonEquals(other: T, epsilon: Float): Boolean
+
+    override fun compareTo(other: T): Int = len2.compareTo(other.len2)
 }
 
 /**
@@ -84,7 +92,10 @@ val <T : ImmutableVector<T>> T.nor: T
 inline fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
 
 /** Returns the distance between this and the [other] vector */
-inline fun <T : ImmutableVector<T>> T.dst(other: T): Float = sqrt(dst2(other))
+inline infix fun <T : ImmutableVector<T>> T.dst(other: T): Float = sqrt(dst2(other))
+
+/** Returns this vector scaled by (1 / [scalar]) */
+inline operator fun <T : ImmutableVector<T>> T.div(scalar: Float): T = times(1 / scalar)
 
 /** Returns this vector if the [ImmutableVector.len] is <= [limit] or a vector with the same direction and length [limit] otherwise */
 inline fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
