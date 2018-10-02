@@ -326,24 +326,24 @@ class ImmutableVector2Test {
             // rotate from positive x-axis to positive y-axis (typically counter-clockwise)
             var deltaAngle = 60f
             var previousVector = initialVector
-            var currentVector = previousVector.rotate(deltaAngle)
+            var currentVector = previousVector.rotateDeg(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotate(deltaAngle)
+                currentVector = previousVector.rotateDeg(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
 
             // rotate from positive x-axis to negative y-axis (typically clockwise)
             deltaAngle = -60f
             previousVector = initialVector
-            currentVector = previousVector.rotate(deltaAngle)
+            currentVector = previousVector.rotateDeg(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotate(deltaAngle)
+                currentVector = previousVector.rotateDeg(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
         }
@@ -426,7 +426,7 @@ class ImmutableVector2Test {
     fun `withAngle should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().setAngle(angle).toImmutableVector2(), vector.withAngle(angle))
+                assertEquals(vector.toVector2().setAngle(angle).toImmutableVector2(), vector.withAngleDeg(angle))
             }
         }
     }
@@ -444,7 +444,7 @@ class ImmutableVector2Test {
     fun `rotate with x axis should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toVector2().rotate(angle).toImmutableVector2(), vector.rotate(angle))
+                assertEquals(vector.toVector2().rotate(angle).toImmutableVector2(), vector.rotateDeg(angle))
             }
         }
     }
@@ -461,8 +461,8 @@ class ImmutableVector2Test {
     @Test
     fun `rotate90 with x axis should return same result than Vector2`() {
         vectors.forEach { vector ->
-            assertEquals(vector.toVector2().rotate90(-1).toImmutableVector2(), vector.rotate90(-1))
-            assertEquals(vector.toVector2().rotate90(1).toImmutableVector2(), vector.rotate90(1))
+            assertEquals(vector.toVector2().rotate90(-1).toImmutableVector2(), vector.rotate90(false))
+            assertEquals(vector.toVector2().rotate90(1).toImmutableVector2(), vector.rotate90(true))
         }
     }
 
