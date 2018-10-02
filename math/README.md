@@ -39,6 +39,23 @@ Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be u
 (like `Rectangle`, `Ellipse` or `Circle`). For example, given `vec: Vector2` and `rect: Rectangle` variables, you can
 call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or doesn't) the point stored by the vector.
 
+#### `ImmutableVector2`
+- `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionaries of `Vector2`, but
+mutation methods return a new vector instead of mutate the reference.
+  - Note that one may want to create typealiases to makes the usage more concise: `typealias Vect2 = ImmutableVector2`
+- `Vector2.toImmutableVector2()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
+- `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
+- Notable difference with `Vector2`
+  - `withLength()` and `withLength2()` replace `setLength()` and `setLength2()` and return a new vector of same direction
+  with the specified length
+  - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation
+  - `withAngleDeg()` and `withAngleRad` replace `setAngle` and `setAngleRad` and return a new vector of same length and
+  the given angle to x-axis
+  - `cpy` is not provided and is not necessary. Immutable vectors can be safely shared.
+  - `set(x, y)` and `setZero()` are not provided.   
+  - Functions dealing with angles in degree are suffixed with `Deg` and all returns values between `-180` and `+180`.
+  - All angle functions return the angle toward positive y-axis.
+
 #### `Vector3`
 
 - `vec3` is a global factory function that can create `Vector3` instances with named parameters for extra readability.

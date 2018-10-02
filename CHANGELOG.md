@@ -1,3 +1,6 @@
+#### 1.9.8-b6
+- **[FEATURE]** Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
+
 #### 1.9.8-b5
 
 - **[UPDATE]** Updated to Kotlin 1.2.70.
