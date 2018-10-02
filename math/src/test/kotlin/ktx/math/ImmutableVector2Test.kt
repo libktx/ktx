@@ -276,8 +276,8 @@ class ImmutableVector2Test {
     fun `angle should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angle(v2))
-                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angle(v2.x, v2.y))
+                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angleDeg(v2))
+                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angleDeg(v2.x, v2.y))
             }
         }
     }
@@ -287,34 +287,34 @@ class ImmutableVector2Test {
     fun `angleRad should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
-                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angle(v2))
-                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angle(v2.x, v2.y))
+                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angleDeg(v2))
+                assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angleDeg(v2.x, v2.y))
             }
         }
     }
 
     @Test
     fun `angle should return correct angles between axises`() {
-        assertEquals(90f, (ImmutableVector2.Y).angle(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (-ImmutableVector2.X).angle(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (-ImmutableVector2.Y).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(90f, (ImmutableVector2.X).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (ImmutableVector2.Y).angleDeg(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (-ImmutableVector2.X).angleDeg(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (-ImmutableVector2.Y).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(90f, (ImmutableVector2.X).angleDeg(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
-        assertEquals(-90f, (ImmutableVector2.Y).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (-ImmutableVector2.X).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (-ImmutableVector2.Y).angle(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(-90f, (ImmutableVector2.X).angle(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (ImmutableVector2.Y).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (-ImmutableVector2.X).angleDeg(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (-ImmutableVector2.Y).angleDeg(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-90f, (ImmutableVector2.X).angleDeg(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
-        assertEquals(180f, (ImmutableVector2.X).angle(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
-        assertEquals(180f, (ImmutableVector2.Y).angle(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(180f, (ImmutableVector2.X).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(180f, (ImmutableVector2.Y).angleDeg(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
     }
 
     @Test
     fun `angle should return value between -180 and 180`() {
         vectors.forEach { v1 ->
-            assertTrue(v1.angle() in (-180f)..(180f))
+            assertTrue(v1.angleDeg() in (-180f)..(180f))
             vectors.forEach { v2 ->
-                assertTrue(v1.angle(v2) in (-180f)..(180f))
+                assertTrue(v1.angleDeg(v2) in (-180f)..(180f))
             }
         }
     }
@@ -327,24 +327,24 @@ class ImmutableVector2Test {
             var deltaAngle = 60f
             var previousVector = initialVector
             var currentVector = previousVector.rotate(deltaAngle)
-            assertEquals(deltaAngle, currentVector.angle(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+            assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
                 currentVector = previousVector.rotate(deltaAngle)
-                assertEquals(deltaAngle, currentVector.angle(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+                assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
 
             // rotate from positive x-axis to negative y-axis (typically clockwise)
             deltaAngle = -60f
             previousVector = initialVector
             currentVector = previousVector.rotate(deltaAngle)
-            assertEquals(deltaAngle, currentVector.angle(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+            assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
                 currentVector = previousVector.rotate(deltaAngle)
-                assertEquals(deltaAngle, currentVector.angle(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+                assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
         }
     }

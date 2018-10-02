@@ -90,9 +90,6 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
         )
     }
 
-    fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angle(reference.x, reference.y)
-    fun angle(x: Float, y: Float): Float = angleRad(x, y) * MathUtils.radiansToDegrees
-
     fun rotate(degrees: Float): ImmutableVector2 = rotateRad(degrees * MathUtils.degreesToRadians)
     fun withAngle(degrees: Float): ImmutableVector2 = withAngleRad(degrees * MathUtils.degreesToRadians)
 
@@ -144,3 +141,21 @@ inline fun ImmutableVector2.toVector2(): Vector2 = Vector2(x, y)
 
 /** @return an instance of [Vector2] with the same x and y values */
 inline fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, y)
+
+@Deprecated(
+        message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
+        replaceWith = ReplaceWith("angleDeg(reference)")
+)
+inline fun ImmutableVector2.angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
+
+@Deprecated(
+        message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
+        replaceWith = ReplaceWith("angleDeg(x, y)")
+)
+inline fun ImmutableVector2.angle(x: Float, y: Float): Float = angleDeg(x, y)
+
+/** Returns the angle in degrees of this vector (point) relative to the [reference]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+inline fun ImmutableVector2.angleDeg(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference.x, reference.y)
+
+/** Returns the angle in degrees of this vector (point) relative to the reference vector described by [x] and [y]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+inline fun ImmutableVector2.angleDeg(x: Float, y: Float): Float = angleRad(x, y) * MathUtils.radiansToDegrees
