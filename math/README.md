@@ -40,15 +40,15 @@ Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be u
 call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or doesn't) the point stored by the vector.
 
 #### `ImmutableVector2`
-- `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionaries of `Vector2`, but
-mutation methods return a new vector instead of mutate the reference.
+- `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionality of `Vector2`, but
+mutation methods return new vectors instead of mutate the reference.
 - Note that one may want to create type aliases to makes the usage more concise: `typealias Vect2 = ImmutableVector2`
 - `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length
 - instances can be destructed: `val (x, y) = vector2`
 - `Vector2.toImmutableVector2()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
 - `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
 - Notable difference with `Vector2`
-  - `+`, `-`, `*`, `/` are available and replace `add`, `sub` and `scl`
+  - `+`, `-`, `*`, `/` are available and replace `add`, `sub` and `scl`.
   - `withLength()` and `withLength2()` replace `setLength()` and `setLength2()` and return a new vector of same direction
   with the specified length
   - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation
