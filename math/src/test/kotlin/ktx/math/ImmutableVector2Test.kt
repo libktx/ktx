@@ -38,6 +38,45 @@ class ImmutableVector2Test {
     private val scalars = sequenceOf(0f, Float.MIN_VALUE, 0.42f, 1f, 42f)
 
     @Test
+    fun `equals should return true for equivalent vectors`() {
+        assertEquals(ImmutableVector2.X, ImmutableVector2.X)
+        assertEquals(ImmutableVector2.Y, ImmutableVector2.Y)
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO)
+        assertEquals(ImmutableVector2(-3f, 42f), ImmutableVector2(-3f, 42f))
+
+        vectors.forEach {
+            assertEquals(it, it)
+        }
+    }
+
+    @Test
+    fun `hashCode should return same hashCode for equivalent vectors`() {
+        assertEquals(ImmutableVector2.X.hashCode(), ImmutableVector2.X.hashCode())
+        assertEquals(ImmutableVector2.Y.hashCode(), ImmutableVector2.Y.hashCode())
+        assertEquals(ImmutableVector2.ZERO.hashCode(), ImmutableVector2.ZERO.hashCode())
+        assertEquals(ImmutableVector2(-3f, 42f).hashCode(), ImmutableVector2(-3f, 42f).hashCode())
+
+        vectors.forEach {
+            assertEquals(it.hashCode(), it.hashCode())
+        }
+    }
+
+    @Test
+    fun `equals should return true for equivalent vector`() {
+        assertNotEquals(ImmutableVector2.X, ImmutableVector2.Y)
+        assertNotEquals(ImmutableVector2.Y, ImmutableVector2.X)
+        assertNotEquals(ImmutableVector2.ZERO, ImmutableVector2.X)
+        assertNotEquals(ImmutableVector2.ZERO, ImmutableVector2.Y)
+        assertNotEquals(ImmutableVector2(42f, -3f), ImmutableVector2(-3f, 42f))
+
+        vectors.forEach { v1 ->
+            vectors.filterNot { v1 === it }.forEach { v2 ->
+                assertNotEquals(v1, v2)
+            }
+        }
+    }
+
+    @Test
     fun `toVector2 should return the equivalent Vector2`() {
         vectors.forEach {
             val vector2 = it.toVector2()
