@@ -1,5 +1,5 @@
 #### 1.9.8-SNAPSHOT
-- **[FEATURE]** Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
+- **[FEATURE]** (`ktx-math`) Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
 
 #### 1.9.8-b5
 
