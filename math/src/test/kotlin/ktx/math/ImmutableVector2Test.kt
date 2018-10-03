@@ -646,6 +646,16 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `should destruct vector into two floats`() {
+        vectors.forEach { vector ->
+            val (x, y) = vector
+
+            assertEquals(vector.x, x)
+            assertEquals(vector.y, y)
+        }
+    }
+
+    @Test
     fun `should compare vectors by length`() {
         var previousLength = -1f
         var previousLength2 = -1f
