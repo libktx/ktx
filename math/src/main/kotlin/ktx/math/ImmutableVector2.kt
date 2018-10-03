@@ -56,14 +56,6 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     /** @return the distance between this and the other vector */
     fun dst(ox: Float, oy: Float): Float = Vector2.dst(x, y, ox, oy)
 
-    override fun withLength2(length2: Float): ImmutableVector2 {
-        val oldLen2 = this.len2
-
-        if (oldLen2 == 0f || oldLen2 == length2) return this
-
-        return times(sqrt(length2 / oldLen2))
-    }
-
     operator fun times(matrix: Matrix3): ImmutableVector2 = ImmutableVector2(
             x = x * matrix.`val`[0] + y * matrix.`val`[3] + matrix.`val`[6],
             y = x * matrix.`val`[1] + y * matrix.`val`[4] + matrix.`val`[7]

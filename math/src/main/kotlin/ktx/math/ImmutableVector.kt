@@ -24,9 +24,6 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     /** Returns whether the length of this vector is smaller than the given [margin] */
     fun isZero(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean
 
-    /** Returns a vector of the same direction and a squared length of [length2] */
-    fun withLength2(length2: Float): T
-
     /** Returns the result of subtracting the [other] vector from this vector */
     operator fun minus(other: T): T
 
@@ -87,6 +84,15 @@ val <T : ImmutableVector<T>> T.nor: T
 
         return withLength2(1f)
     }
+
+/** Returns a vector of the same direction and a squared length of [length2] */
+fun <T : ImmutableVector<T>> T.withLength2(length2: Float): T {
+    val oldLen2 = this.len2
+
+    if (oldLen2 == 0f || oldLen2 == length2) return this
+
+    return times(sqrt(length2 / oldLen2))
+}
 
 /** Returns whether this vector is a unit length vector within the given [margin]. (no margin by default) */
 inline fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
