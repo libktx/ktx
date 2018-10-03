@@ -56,7 +56,7 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
      */
     infix fun dst2(vector: T): Float
 
-    /** Linearly interpolates between this vector and the target vector by alpha which is in the range [0,1] */
+    /** Linearly interpolates between this vector and the target vector by alpha */
     fun lerp(target: T, alpha: Float): T
 
     /** Returns a vector of same length and a random direction */
@@ -101,14 +101,14 @@ inline operator fun <T : ImmutableVector<T>> T.div(scalar: Float): T = times(1 /
 inline fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
 
 /** Returns this vector if the [ImmutableVector.len2] is <= [limit2] or a vector with the same direction and length [limit2] otherwise */
-inline fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
+fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
         if (len2 <= limit2) this else withLength2(limit2)
 
 /** Clamps this vector's length to given [min] and [max] values*/
 inline fun <T : ImmutableVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
 
 /** Clamps this vector's squared length to given [min2] and [max2] values*/
-inline fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
+fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
     val l2 = len2
     return when {
         l2 < min2 -> withLength2(min2)

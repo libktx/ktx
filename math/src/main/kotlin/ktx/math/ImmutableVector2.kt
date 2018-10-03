@@ -72,12 +72,12 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     /** Calculates the 2D cross product between this and the given vector */
     fun crs(x: Float, y: Float): Float = this.x * y - this.y * x
 
-    /** Returns the angle in radians of this vector (point) relative to the [reference]. Angles are towards the positive y-axis. (typically counter-clockwise) */
+    /** Returns the angle in radians of this vector relative to the [reference]. Angles are towards the positive y-axis. (typically counter-clockwise) */
     fun angleRad(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleRad(reference.x, reference.y)
 
-    /** Returns the angle in radians of this vector (point) relative to the reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
-    fun angleRad(x: Float, y: Float): Float {
-        val result = atan2(this.y, this.x) - atan2(y, x)
+    /** Returns the angle in radians of this vector relative to the reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
+    fun angleRad(ox: Float, oy: Float): Float {
+        val result = atan2(y, x) - atan2(oy, ox)
         return when {
             result > MathUtils.PI -> result - MathUtils.PI2
             result < -MathUtils.PI -> result + MathUtils.PI2
@@ -90,8 +90,8 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     /** Returns a vector of same length rotated by the given [angle] in radians */
     fun rotateRad(angle: Float): ImmutableVector2 {
-        val cos = cos(angle.toDouble()).toFloat()
-        val sin = sin(angle.toDouble()).toFloat()
+        val cos = cos(angle)
+        val sin = sin(angle)
 
         return ImmutableVector2(
                 x = this.x * cos - this.y * sin,
@@ -101,6 +101,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     override fun lerp(target: ImmutableVector2, alpha: Float): ImmutableVector2 {
         val invAlpha = 1.0f - alpha
+
         return ImmutableVector2(
                 x = x * invAlpha + target.x * alpha,
                 y = y * invAlpha + target.y * alpha
@@ -120,6 +121,18 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             MathUtils.isZero(x * other.y - y * other.x, epsilon)
 
     override fun toString(): String = "($x,$y)"
+
+    @Deprecated(
+            message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
+            replaceWith = ReplaceWith("angleDeg(reference)")
+    )
+    inline fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
+
+    @Deprecated(
+            message = "use rotateDeg instead. (this function is not provided to be consistent with angleDeg)",
+            replaceWith = ReplaceWith("rotateDeg(angle)")
+    )
+    inline fun rotate(angle: Float): ImmutableVector2 = rotateDeg(angle)
 
     companion object {
 
@@ -146,29 +159,11 @@ inline fun ImmutableVector2.toVector2(): Vector2 = Vector2(x, y)
 /** @return an instance of [Vector2] with the same x and y values */
 inline fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, y)
 
-@Deprecated(
-        message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
-        replaceWith = ReplaceWith("angleDeg(reference)")
-)
-inline fun ImmutableVector2.angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
-
-@Deprecated(
-        message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
-        replaceWith = ReplaceWith("angleDeg(x, y)")
-)
-inline fun ImmutableVector2.angle(x: Float, y: Float): Float = angleDeg(x, y)
-
-@Deprecated(
-        message = "use rotateDeg instead. (this function is not provided to be consistent with angleDeg)",
-        replaceWith = ReplaceWith("rotateDeg(angle)")
-)
-inline fun ImmutableVector2.rotate(angle: Float): ImmutableVector2 = rotateDeg(angle)
-
-/** Returns the angle in degrees of this vector (point) relative to the [reference]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+/** Returns the angle in degrees of this vector relative to the [reference]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
 inline fun ImmutableVector2.angleDeg(reference: ImmutableVector2 = ImmutableVector2.X): Float =
         angleDeg(reference.x, reference.y)
 
-/** Returns the angle in degrees of this vector (point) relative to the reference vector described by [x] and [y]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+/** Returns the angle in degrees of this vector relative to the reference vector described by [x] and [y]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
 inline fun ImmutableVector2.angleDeg(x: Float, y: Float): Float =
         angleRad(x, y) * MathUtils.radiansToDegrees
 
@@ -176,22 +171,20 @@ inline fun ImmutableVector2.angleDeg(x: Float, y: Float): Float =
 inline fun ImmutableVector2.rotateDeg(angle: Float): ImmutableVector2 =
         rotateRad(angle * MathUtils.degreesToRadians)
 
+/**
+ * Returns a vector of same length rotated by 90 degrees in the given [dir]
+ *
+ * @param dir positive value means toward positive y-axis (typically counter-clockwise). Negative value means toward negative y-axis (typically clockwise).
+ */
+inline fun ImmutableVector2.rotate90(dir: Int): ImmutableVector2 =
+        if (dir >= 0) copy(x = -y, y = x) else copy(x = y, y = -x)
+
 /** Returns a vector of same length with the given [angle] in degree */
 inline fun ImmutableVector2.withAngleDeg(angle: Float): ImmutableVector2 =
         withAngleRad(angle * MathUtils.degreesToRadians)
-
-@Deprecated(
-        message = "Direction is not self-explicit. Use the overload taking 'towardAxisY' boolean",
-        replaceWith = ReplaceWith("rotate90(dir > 0)")
-)
-inline fun ImmutableVector2.rotate90(dir: Int): ImmutableVector2 = rotate90(dir > 0)
-
-/** Returns a vector of same length rotated by 90 degree in the given direction */
-inline fun ImmutableVector2.rotate90(towardAxisY: Boolean): ImmutableVector2 =
-        if (towardAxisY) ImmutableVector2(x = -y, y = x) else ImmutableVector2(x = y, y = -x)
 
 /** Calculates the 2D cross product between this and the [other] vector */
 inline infix fun ImmutableVector2.x(other: ImmutableVector2): Float = crs(other.x, other.y)
 
 /** Calculates the 2D cross product between this and the [other] vector */
-inline fun ImmutableVector2.crs(other: ImmutableVector2): Float = crs(other.x, other.y)
+inline infix fun ImmutableVector2.crs(other: ImmutableVector2): Float = crs(other.x, other.y)

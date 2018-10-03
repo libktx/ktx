@@ -274,7 +274,7 @@ class ImmutableVector2Test {
 
     @Test
     @Ignore("Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
-    fun `angle should return same result than Vector2`() {
+    fun `angleDeg should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toVector2().angle(v2.toVector2()), v1.angleDeg(v2))
@@ -295,7 +295,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `angle should return correct angles between axises`() {
+    fun `angleDeg should return correct angles between axises`() {
         assertEquals(90f, (ImmutableVector2.Y).angleDeg(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
         assertEquals(90f, (-ImmutableVector2.X).angleDeg(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
         assertEquals(90f, (-ImmutableVector2.Y).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
@@ -311,7 +311,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `angle should return value between -180 and 180`() {
+    fun `angleDeg should return value between -180 and 180`() {
         vectors.forEach { v1 ->
             assertTrue(v1.angleDeg() in (-180f)..(180f))
             vectors.forEach { v2 ->
@@ -321,7 +321,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `angle should return angle of applied rotation`() {
+    fun `angleDeg should return angle of applied rotation`() {
         vectors.filter { it.len2.isFinite() && it.len2 > 0.5 }.forEach { initialVector ->
 
             // rotate from positive x-axis to positive y-axis (typically counter-clockwise)
@@ -442,7 +442,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotate with x axis should return same result than Vector2`() {
+    fun `rotateDeg should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toVector2().rotate(angle).toImmutableVector2(), vector.rotateDeg(angle))
@@ -451,7 +451,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotateRad with x axis should return same result than Vector2`() {
+    fun `rotateRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toVector2().rotateRad(angle).toImmutableVector2(), vector.rotateRad(angle))
@@ -460,10 +460,10 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotate90 with x axis should return same result than Vector2`() {
+    fun `rotate90 should return same result than Vector2`() {
         vectors.forEach { vector ->
-            assertEquals(vector.toVector2().rotate90(-1).toImmutableVector2(), vector.rotate90(false))
-            assertEquals(vector.toVector2().rotate90(1).toImmutableVector2(), vector.rotate90(true))
+            assertEquals(vector.toVector2().rotate90(-1).toImmutableVector2(), vector.rotate90(-1))
+            assertEquals(vector.toVector2().rotate90(1).toImmutableVector2(), vector.rotate90(1))
         }
     }
 
