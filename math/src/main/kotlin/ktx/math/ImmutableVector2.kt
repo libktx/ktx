@@ -17,7 +17,11 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     override val len2: Float = Vector2.len2(x, y)
 
+    override val nor: ImmutableVector2 get() = withLength2(1f)
+
     override fun isZero(margin: Float): Boolean = (x == 0f && y == 0f) || len2 < margin
+
+    override fun unaryMinus(): ImmutableVector2 = ImmutableVector2(-x, -y)
 
     override operator fun minus(other: ImmutableVector2): ImmutableVector2 = minus(other.x, other.y)
 
@@ -35,13 +39,19 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     override operator fun times(scalar: Float): ImmutableVector2 = times(scalar, scalar)
     override operator fun times(vector: ImmutableVector2): ImmutableVector2 = times(vector.x, vector.y)
 
-    /** Returns this vector scaled by the given [xf] and [yf] factors */
-    fun times(xf: Float, yf: Float): ImmutableVector2 = ImmutableVector2(x * xf, y * yf)
+    /** Returns this vector scaled by the given [factorX] and [factorY] factors */
+    fun times(factorX: Float, factorY: Float): ImmutableVector2 = ImmutableVector2(x * factorX, y * factorY)
+
+    override fun withLength2(length2: Float): ImmutableVector2 {
+        val oldLen2 = len2
+
+        return if (oldLen2 == 0f || oldLen2 == length2) this else times(sqrt(length2 / oldLen2))
+    }
 
     override fun dot(vector: ImmutableVector2): Float = dot(vector.x, vector.y)
 
     /** Returns the dot product of this vector by the given vector */
-    fun dot(ox: Float, oy: Float): Float = Vector2.dot(x, y, ox, oy)
+    fun dot(otherX: Float, otherY: Float): Float = Vector2.dot(x, y, otherX, otherY)
 
     override fun dst2(vector: ImmutableVector2): Float = dst2(vector.x, vector.y)
 
@@ -51,25 +61,26 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
      * This method is faster than [dst] because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact distance, as the return value is the square of the actual distance.
      */
-    fun dst2(ox: Float, oy: Float): Float = Vector2.dst2(x, y, ox, oy)
+    fun dst2(otherX: Float, otherY: Float): Float = Vector2.dst2(x, y, otherX, otherY)
 
     /** @return the distance between this and the other vector */
-    fun dst(ox: Float, oy: Float): Float = Vector2.dst(x, y, ox, oy)
+    fun dst(otherX: Float, otherY: Float): Float = Vector2.dst(x, y, otherX, otherY)
 
+    /** Returns the result of multiplying this vector by the given matrix */
     operator fun times(matrix: Matrix3): ImmutableVector2 = ImmutableVector2(
             x = x * matrix.`val`[0] + y * matrix.`val`[3] + matrix.`val`[6],
             y = x * matrix.`val`[1] + y * matrix.`val`[4] + matrix.`val`[7]
     )
 
     /** Calculates the 2D cross product between this and the given vector */
-    fun crs(x: Float, y: Float): Float = this.x * y - this.y * x
+    fun crs(otherX: Float, otherY: Float): Float = x * otherY - y * otherX
 
     /** Returns the angle in radians of this vector relative to the [reference]. Angles are towards the positive y-axis. (typically counter-clockwise) */
     fun angleRad(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleRad(reference.x, reference.y)
 
     /** Returns the angle in radians of this vector relative to the reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
-    fun angleRad(ox: Float, oy: Float): Float {
-        val result = atan2(y, x) - atan2(oy, ox)
+    fun angleRad(otherX: Float, otherY: Float): Float {
+        val result = atan2(y, x) - atan2(otherY, otherX)
         return when {
             result > MathUtils.PI -> result - MathUtils.PI2
             result < -MathUtils.PI -> result + MathUtils.PI2
@@ -79,6 +90,14 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     /** Returns a vector of same length with the given angle in radians */
     fun withAngleRad(radians: Float): ImmutableVector2 = ImmutableVector2(len, 0f).rotateRad(radians)
+
+    /**
+     * Returns a vector of same length rotated by 90 degrees in the given [direction]
+     *
+     * @param direction positive value means toward positive y-axis (typically counter-clockwise). Negative value means toward negative y-axis (typically clockwise).
+     */
+    fun rotate90(direction: Int): ImmutableVector2 =
+            if (direction >= 0) copy(x = -y, y = x) else copy(x = y, y = -x)
 
     /** Returns a vector of same length rotated by the given [angle] in radians */
     fun rotateRad(angle: Float): ImmutableVector2 {
@@ -106,8 +125,8 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             epsilonEquals(other.x, other.y, epsilon)
 
     /** Compares this vector with the other vector, using the supplied epsilon for fuzzy equality testing */
-    fun epsilonEquals(x: Float, y: Float, epsilon: Float = Float.MIN_VALUE): Boolean =
-            abs(x - this.x) <= epsilon && abs(y - this.y) <= epsilon
+    fun epsilonEquals(otherX: Float, otherY: Float, epsilon: Float = Float.MIN_VALUE): Boolean =
+            abs(otherX - this.x) <= epsilon && abs(otherY - this.y) <= epsilon
 
     override fun isOnLine(other: ImmutableVector2, epsilon: Float): Boolean =
             MathUtils.isZero(x * other.y - y * other.x, epsilon)
@@ -121,7 +140,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     inline fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
 
     @Deprecated(
-            message = "use rotateDeg instead. (this function is not provided to be consistent with angleDeg)",
+            message = "use rotateDeg instead. (this function is not guaranteed to be consistent with angleDeg)",
             replaceWith = ReplaceWith("rotateDeg(angle)")
     )
     inline fun rotate(angle: Float): ImmutableVector2 = rotateDeg(angle)
@@ -155,21 +174,13 @@ inline fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, 
 inline fun ImmutableVector2.angleDeg(reference: ImmutableVector2 = ImmutableVector2.X): Float =
         angleDeg(reference.x, reference.y)
 
-/** Returns the angle in degrees of this vector relative to the reference vector described by [x] and [y]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
-inline fun ImmutableVector2.angleDeg(x: Float, y: Float): Float =
-        angleRad(x, y) * MathUtils.radiansToDegrees
+/** Returns the angle in degrees of this vector relative to the reference vector described by [referenceX] and [referenceY]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+inline fun ImmutableVector2.angleDeg(referenceX: Float, referenceY: Float): Float =
+        angleRad(referenceX, referenceY) * MathUtils.radiansToDegrees
 
 /** Returns a vector of same length rotated by the given [angle] in degree */
 inline fun ImmutableVector2.rotateDeg(angle: Float): ImmutableVector2 =
         rotateRad(angle * MathUtils.degreesToRadians)
-
-/**
- * Returns a vector of same length rotated by 90 degrees in the given [dir]
- *
- * @param dir positive value means toward positive y-axis (typically counter-clockwise). Negative value means toward negative y-axis (typically clockwise).
- */
-inline fun ImmutableVector2.rotate90(dir: Int): ImmutableVector2 =
-        if (dir >= 0) copy(x = -y, y = x) else copy(x = y, y = -x)
 
 /** Returns a vector of same length with the given [angle] in degree */
 inline fun ImmutableVector2.withAngleDeg(angle: Float): ImmutableVector2 =

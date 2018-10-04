@@ -21,8 +21,22 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
      */
     val len2: Float
 
+    /** Returns the euclidean length */
+    val len: Float get() = sqrt(len2)
+
+    /**
+     * Returns the unit vector of same direction or this vector if it is zero.
+     */
+    val nor: T
+
     /** Returns whether the length of this vector is smaller than the given [margin] */
     fun isZero(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean
+
+    /** Returns whether this vector is a unit length vector within the given [margin]. (no margin by default) */
+    fun isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
+
+    /** Returns the opposite vector of same length */
+    operator fun unaryMinus(): T
 
     /** Returns the result of subtracting the [other] vector from this vector */
     operator fun minus(other: T): T
@@ -41,6 +55,9 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
 
     /** Returns his vector scaled by the given [vector] */
     operator fun times(vector: T): T
+
+    /** Returns a vector of the same direction and a squared length of [length2] */
+    fun withLength2(length2: Float): T
 
     /** Returns he dot product of this vector by the given [vector] */
     infix fun dot(vector: T): Float
@@ -68,34 +85,8 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     override fun compareTo(other: T): Int = len2.compareTo(other.len2)
 }
 
-/**
- * Returns the euclidean length
- */
-inline val ImmutableVector<*>.len: Float get() = sqrt(len2)
-
-/**
- * Returns the unit vector of same direction or this vector if it is zero.
- */
-val <T : ImmutableVector<T>> T.nor: T
-    get() {
-        val l2 = len2
-
-        if (l2 == 1f || l2 == 0f) return this
-
-        return withLength2(1f)
-    }
-
-/** Returns a vector of the same direction and a squared length of [length2] */
-fun <T : ImmutableVector<T>> T.withLength2(length2: Float): T {
-    val oldLen2 = this.len2
-
-    if (oldLen2 == 0f || oldLen2 == length2) return this
-
-    return times(sqrt(length2 / oldLen2))
-}
-
-/** Returns whether this vector is a unit length vector within the given [margin]. (no margin by default) */
-inline fun <T : ImmutableVector<T>> T.isUnit(margin: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean = abs(1f - len2) < margin
+/** Returns a vector of same direction and the given [length] */
+inline fun <T : ImmutableVector<T>> T.withLength(length: Float): T = withLength2(length * length)
 
 /** Returns the distance between this and the [other] vector */
 inline infix fun <T : ImmutableVector<T>> T.dst(other: T): Float = sqrt(dst2(other))
@@ -123,32 +114,26 @@ fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
     }
 }
 
-/** Returns a vector of same direction and the given [length] */
-inline fun <T : ImmutableVector<T>> T.withLength(length: Float): T = withLength2(length * length)
-
-/** Returns the opposite vector of same length */
-inline operator fun <T : ImmutableVector<T>> T.unaryMinus(): T = times(-1f)
-
 /** Interpolates between this vector and the given [target] vector by [alpha] (within range [0,1]) using the given [interpolation] method. */
 inline fun <T : ImmutableVector<T>> T.interpolate(target: T, alpha: Float, interpolation: Interpolation): T =
         lerp(target, interpolation.apply(alpha))
 
 /** Returns true if this vector is collinear with the [other] vector */
-inline fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && hasSameDirection(other)
 
 /** Returns true if this vector is opposite collinear with the [other] vector */
-inline fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && hasOppositeDirection(other)
 
 /** Returns true if this vector is opposite perpendicular with the [other] vector */
-inline fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
+fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         MathUtils.isZero(dot(other), epsilon)
 
 /** Returns whether this vector has similar direction compared to the other vector. */
-inline fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
+fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
         dot(other) > 0f
 
 /** Returns whether this vector has opposite direction compared to the other vector. */
-inline fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
+fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f
