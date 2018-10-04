@@ -62,7 +62,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `equals should return true for equivalent vector`() {
+    fun `equals should return false for different vectors`() {
         assertNotEquals(ImmutableVector2.X, ImmutableVector2.Y)
         assertNotEquals(ImmutableVector2.Y, ImmutableVector2.X)
         assertNotEquals(ImmutableVector2.ZERO, ImmutableVector2.X)
@@ -691,7 +691,7 @@ class ImmutableVector2Test {
 
     @Test
     fun `should divide vectors by float scalars with div operator`() {
-        val vector = Vector2(10f, 10f)
+        val vector = ImmutableVector2(10f, 10f)
 
         val result = vector / 2.5f
 
