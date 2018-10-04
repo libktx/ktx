@@ -47,6 +47,8 @@ mutation methods return new vectors instead of mutate the reference.
 - instances can be destructed: `val (x, y) = vector2`
 - `Vector2.toImmutableVector2()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
 - `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
+- Most of the functions of `Vector2` which mutate the vector are provided but deprecated. This allow smooth migration from
+`Vector2`. 
 - Notable difference with `Vector2`
   - `+`, `-`, `*`, `/` are available and replace `add`, `sub` and `scl`.
   - `withLength()` and `withLength2()` replace `setLength()` and `setLength2()` and return a new vector of same direction
@@ -54,7 +56,8 @@ mutation methods return new vectors instead of mutate the reference.
   - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation
   - `withAngleDeg()` and `withAngleRad` replace `setAngle` and `setAngleRad` and return a new vector of same length and
   the given angle to x-axis
-  - `cpy` is not provided and is not necessary. Immutable vectors can be safely shared.
+  - `cpy` is deprecated and is not necessary. Immutable vectors can be safely shared. However since `ImmutableVector` is
+  a `data class`, there is a `copy(x, y)` method available allowing to easily create new vectors based on existing ones. 
   - `set(x, y)` and `setZero()` are not provided.   
   - Functions dealing with angles in degree are suffixed with `Deg` and all returns values between `-180` and `+180`.
   - All angle functions return the angle toward positive y-axis.

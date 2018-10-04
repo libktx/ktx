@@ -646,6 +646,17 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `copy should return vector with same properties`() {
+        vectors.forEach { vector ->
+            assertEquals(vector.x, vector.copy(y = 42f).x)
+            assertEquals(42f, vector.copy(y = 42f).y)
+            assertEquals(42f, vector.copy(x = 42f).x)
+            assertEquals(vector.y, vector.copy(x = 42f).y)
+            assertEquals(ImmutableVector2(1f, 2f), vector.copy(x = 1f, y = 2f))
+        }
+    }
+
+    @Test
     fun `should destruct vector into two floats`() {
         vectors.forEach { vector ->
             val (x, y) = vector
