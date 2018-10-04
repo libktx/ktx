@@ -160,15 +160,15 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
          * Returns the [ImmutableVector2] represented by the specified string according to the format of [ImmutableVector2::toString]
          */
         fun fromString(string: String): ImmutableVector2 =
-                Vector2().fromString(string).toImmutableVector2()
+                Vector2().fromString(string).toImmutable()
     }
 }
 
 /** @return an instance of [ImmutableVector2] with the same x and y values */
-inline fun ImmutableVector2.toVector2(): Vector2 = Vector2(x, y)
+inline fun ImmutableVector2.toMutable(): Vector2 = Vector2(x, y)
 
 /** @return an instance of [Vector2] with the same x and y values */
-inline fun Vector2.toImmutableVector2(): ImmutableVector2 = ImmutableVector2(x, y)
+inline fun Vector2.toImmutable(): ImmutableVector2 = ImmutableVector2(x, y)
 
 /** Returns the angle in degrees of this vector relative to the [reference]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
 inline fun ImmutableVector2.angleDeg(reference: ImmutableVector2 = ImmutableVector2.X): Float =
