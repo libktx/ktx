@@ -152,10 +152,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     )
     inline fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
 
-    @Deprecated(
-            message = "use withRotationDeg instead. (this function is not guaranteed to be consistent with angleDeg)",
-            replaceWith = ReplaceWith("withRotationDeg(angle)")
-    )
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withRotationDeg(angle)"), DeprecationLevel.ERROR)
     inline fun rotate(angle: Float): ImmutableVector2 = withRotationDeg(angle)
 
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"), DeprecationLevel.ERROR)
