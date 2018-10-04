@@ -158,7 +158,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"), DeprecationLevel.ERROR)
     fun setZero(): ImmutableVector2 = ImmutableVector2.ZERO
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this"), DeprecationLevel.ERROR)
+    @Deprecated("Immutable instances don't need to be copied", ReplaceWith("this"))
     fun cpy(): ImmutableVector2 = this
 
     companion object {
