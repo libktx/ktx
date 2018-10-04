@@ -103,52 +103,52 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
 
     override fun compareTo(other: T): Int = len2.compareTo(other.len2)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLerp(target, alpha)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLerp(target, alpha)"), DeprecationLevel.ERROR)
     fun lerp(target: T, alpha: Float): T = withLerp(target, alpha)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength2(len2)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength2(len2)"), DeprecationLevel.ERROR)
     fun setLength2(len2: Float): T = withLength2(len2)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * scalar"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * scalar"), DeprecationLevel.ERROR)
     fun scl(scalar: Float): T = this * scalar
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * v"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * v"), DeprecationLevel.ERROR)
     fun scl(v: T): T = this * v
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + v"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + v"), DeprecationLevel.ERROR)
     fun add(v: T): T = this + v
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withRandomDirection()"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withRandomDirection()"), DeprecationLevel.ERROR)
     fun setToRandomDirection(): T = withRandomDirection()
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * scalar)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * scalar)"), DeprecationLevel.ERROR)
     fun mulAdd(v: T, scalar: Float): T = this + (v * scalar)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * mulVec)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * mulVec)"), DeprecationLevel.ERROR)
     fun mulAdd(v: T, mulVec: T): T = this + (v * mulVec)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit(limit)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit(limit)"), DeprecationLevel.ERROR)
     fun limit(limit: Float): T = withLimit(limit)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withClamp(min, max)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withClamp(min, max)"), DeprecationLevel.ERROR)
     fun clamp(min: Float, max: Float): T = withClamp(min, max)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("v"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("v"), DeprecationLevel.ERROR)
     fun set(v: T): T = v
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withInterpolation(target, alpha, interpolator)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withInterpolation(target, alpha, interpolator)"), DeprecationLevel.ERROR)
     fun interpolate(target: T, alpha: Float, interpolator: Interpolation): T = withInterpolation(target, alpha, interpolator)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength(len)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength(len)"), DeprecationLevel.ERROR)
     fun setLength(len: Float): T = withLength(len)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit2(limit2)"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit2(limit2)"), DeprecationLevel.ERROR)
     fun limit2(limit2: Float): T = withLimit2(limit2)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this - v"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this - v"), DeprecationLevel.ERROR)
     fun sub(v: T): T = this - v
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("nor"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("nor"), DeprecationLevel.ERROR)
     fun nor(): T = nor
 }
 

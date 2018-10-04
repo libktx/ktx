@@ -158,10 +158,10 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     )
     inline fun rotate(angle: Float): ImmutableVector2 = withRotationDeg(angle)
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"), DeprecationLevel.ERROR)
     fun setZero(): ImmutableVector2 = ImmutableVector2.ZERO
 
-    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this"))
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this"), DeprecationLevel.ERROR)
     fun cpy(): ImmutableVector2 = this
 
     companion object {
