@@ -77,7 +77,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `toVector2 should return the equivalent Vector2`() {
+    fun `toMutable should return the equivalent Vector2`() {
         vectors.forEach {
             val vector2 = it.toMutable()
             assertEquals(it.x, vector2.x)
@@ -87,7 +87,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `toImmutableVector should return an equivalent of the Vector2`() {
+    fun `toImmtable should return an equivalent of the Vector2`() {
         vectors.forEach {
             val vector2 = Vector2(it.x, it.y).toImmutable()
             assertEquals(it.x, vector2.x)
@@ -200,7 +200,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `scl should return same result than Vector2`() {
+    fun `times should return same result than scl does for Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().scl(v2.toMutable()).toImmutable(), v1 * v2)
@@ -240,7 +240,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `limit should return same result than Vector2`() {
+    fun `withLimit should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().limit(l).toImmutable(), v.withLimit(l))
@@ -249,7 +249,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `limit2 should return same result than Vector2`() {
+    fun `withLimit2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().limit2(l).toImmutable(), v.withLimit2(l))
@@ -276,7 +276,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `clamp should return same result than Vector2`() {
+    fun `withClamp should return same result than Vector2`() {
         scalars.forEach { min ->
             scalars.filter { it >= min }.forEach { max ->
                 vectors.forEach { v ->
@@ -481,7 +481,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotateDeg should return same result than Vector2`() {
+    fun `withRotationDeg should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().rotate(angle).toImmutable(), vector.withRotationDeg(angle))
@@ -490,7 +490,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotateRad should return same result than Vector2`() {
+    fun `withRotationRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().rotateRad(angle).toImmutable(), vector.withRotationRad(angle))
@@ -499,7 +499,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `rotate90 should return same result than Vector2`() {
+    fun `withRotation90 should return same result than Vector2`() {
         vectors.forEach { vector ->
             assertEquals(vector.toMutable().rotate90(-1).toImmutable(), vector.withRotation90(-1))
             assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.withRotation90(1))
@@ -507,7 +507,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `lerp should return same result than Vector2`() {
+    fun `withLerp should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { ratio ->
@@ -518,7 +518,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `interpolate should return same result than Vector2`() {
+    fun `withInterpolation should return same result than Vector2`() {
         val interpolations = sequenceOf(
                 Interpolation.bounce,
                 Interpolation.bounceIn,
@@ -548,14 +548,14 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `randomDirection should return a vector of same length`() {
+    fun `withRandomDirection should return a vector of same length`() {
         vectors.forEach { vector ->
             assertEquals(vector.withRandomDirection().len, vector.len, MathUtils.FLOAT_ROUNDING_ERROR)
         }
     }
 
     @Test
-    fun `randomDirection should return a variety of random vectors`() {
+    fun `withRandomDirection should return a variety of random vectors`() {
         val vectors = HashSet<ImmutableVector2>()
         repeat(1000) {
             vectors += ImmutableVector2.X.withRandomDirection()
