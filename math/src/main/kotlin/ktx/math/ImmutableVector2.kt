@@ -42,6 +42,19 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     /** Returns this vector scaled by the given [factorX] and [factorY] factors */
     fun times(factorX: Float, factorY: Float): ImmutableVector2 = ImmutableVector2(x * factorX, y * factorY)
 
+    override fun withLimit2(limit2: Float): ImmutableVector2 =
+            if (len2 <= limit2) this else withLength2(limit2)
+
+    override fun withClamp2(min2: Float, max2: Float): ImmutableVector2 {
+        val l2 = len2
+
+        return when {
+            l2 < min2 -> withLength2(min2)
+            l2 > max2 -> withLength2(max2)
+            else -> this
+        }
+    }
+
     override fun withLength2(length2: Float): ImmutableVector2 {
         val oldLen2 = len2
 
@@ -89,18 +102,18 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     }
 
     /** Returns a vector of same length with the given angle in radians */
-    fun withAngleRad(radians: Float): ImmutableVector2 = ImmutableVector2(len, 0f).rotateRad(radians)
+    fun withAngleRad(radians: Float): ImmutableVector2 = ImmutableVector2(len, 0f).withRotationRad(radians)
 
     /**
      * Returns a vector of same length rotated by 90 degrees in the given [direction]
      *
      * @param direction positive value means toward positive y-axis (typically counter-clockwise). Negative value means toward negative y-axis (typically clockwise).
      */
-    fun rotate90(direction: Int): ImmutableVector2 =
+    fun withRotation90(direction: Int): ImmutableVector2 =
             if (direction >= 0) copy(x = -y, y = x) else copy(x = y, y = -x)
 
     /** Returns a vector of same length rotated by the given [angle] in radians */
-    fun rotateRad(angle: Float): ImmutableVector2 {
+    fun withRotationRad(angle: Float): ImmutableVector2 {
         val cos = cos(angle)
         val sin = sin(angle)
 
@@ -110,7 +123,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
         )
     }
 
-    override fun lerp(target: ImmutableVector2, alpha: Float): ImmutableVector2 {
+    override fun withLerp(target: ImmutableVector2, alpha: Float): ImmutableVector2 {
         val invAlpha = 1.0f - alpha
 
         return ImmutableVector2(
@@ -140,10 +153,16 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     inline fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
 
     @Deprecated(
-            message = "use rotateDeg instead. (this function is not guaranteed to be consistent with angleDeg)",
-            replaceWith = ReplaceWith("rotateDeg(angle)")
+            message = "use withRotationDeg instead. (this function is not guaranteed to be consistent with angleDeg)",
+            replaceWith = ReplaceWith("withRotationDeg(angle)")
     )
-    inline fun rotate(angle: Float): ImmutableVector2 = rotateDeg(angle)
+    inline fun rotate(angle: Float): ImmutableVector2 = withRotationDeg(angle)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"))
+    fun setZero(): ImmutableVector2 = ImmutableVector2.ZERO
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this"))
+    fun cpy(): ImmutableVector2 = this
 
     companion object {
 
@@ -179,8 +198,8 @@ inline fun ImmutableVector2.angleDeg(referenceX: Float, referenceY: Float): Floa
         angleRad(referenceX, referenceY) * MathUtils.radiansToDegrees
 
 /** Returns a vector of same length rotated by the given [angle] in degree */
-inline fun ImmutableVector2.rotateDeg(angle: Float): ImmutableVector2 =
-        rotateRad(angle * MathUtils.degreesToRadians)
+inline fun ImmutableVector2.withRotationDeg(angle: Float): ImmutableVector2 =
+        withRotationRad(angle * MathUtils.degreesToRadians)
 
 /** Returns a vector of same length with the given [angle] in degree */
 inline fun ImmutableVector2.withAngleDeg(angle: Float): ImmutableVector2 =

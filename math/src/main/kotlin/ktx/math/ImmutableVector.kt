@@ -71,10 +71,29 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     infix fun dst2(vector: T): Float
 
     /** Linearly interpolates between this vector and the target vector by alpha */
-    fun lerp(target: T, alpha: Float): T
+    fun withLerp(target: T, alpha: Float): T
 
     /** Returns a vector of same length and a random direction */
     fun withRandomDirection(): T
+
+    /** Returns a vector of same direction and the given [length] */
+    fun withLength(length: Float): T = withLength2(length * length)
+
+    /** Returns this vector if the [ImmutableVector.len] is <= [limit] or a vector with the same direction and length [limit] otherwise */
+    fun withLimit(limit: Float): T = withLimit2(limit * limit)
+
+    /** Returns this vector if the [ImmutableVector.len2] is <= [limit2] or a vector with the same direction and length [limit2] otherwise */
+    fun withLimit2(limit2: Float): T
+
+    /** Clamps this vector's length to given [min] and [max] values*/
+    fun withClamp(min: Float, max: Float): T = withClamp2(min * min, max * max)
+
+    /** Clamps this vector's squared length to given [min2] and [max2] values*/
+    fun withClamp2(min2: Float, max2: Float): T
+
+    /** Interpolates between this vector and the given [target] vector by [alpha] (within range [0,1]) using the given [interpolation] method. */
+    fun withInterpolation(target: T, alpha: Float, interpolation: Interpolation): T =
+            withLerp(target, interpolation.apply(alpha))
 
     /** Returns true if this vector is in line with the other vector (either in the same or the opposite direction) */
     fun isOnLine(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean
@@ -83,40 +102,61 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     fun epsilonEquals(other: T, epsilon: Float): Boolean
 
     override fun compareTo(other: T): Int = len2.compareTo(other.len2)
-}
 
-/** Returns a vector of same direction and the given [length] */
-inline fun <T : ImmutableVector<T>> T.withLength(length: Float): T = withLength2(length * length)
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLerp(target, alpha)"))
+    fun lerp(target: T, alpha: Float): T = withLerp(target, alpha)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength2(len2)"))
+    fun setLength2(len2: Float): T = withLength2(len2)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * scalar"))
+    fun scl(scalar: Float): T = this * scalar
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * v"))
+    fun scl(v: T): T = this * v
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + v"))
+    fun add(v: T): T = this + v
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withRandomDirection()"))
+    fun setToRandomDirection(): T = withRandomDirection()
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * scalar)"))
+    fun mulAdd(v: T, scalar: Float): T = this + (v * scalar)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this + (v * mulVec)"))
+    fun mulAdd(v: T, mulVec: T): T = this + (v * mulVec)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit(limit)"))
+    fun limit(limit: Float): T = withLimit(limit)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withClamp(min, max)"))
+    fun clamp(min: Float, max: Float): T = withClamp(min, max)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("v"))
+    fun set(v: T): T = v
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withInterpolation(target, alpha, interpolator)"))
+    fun interpolate(target: T, alpha: Float, interpolator: Interpolation): T = withInterpolation(target, alpha, interpolator)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLength(len)"))
+    fun setLength(len: Float): T = withLength(len)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withLimit2(limit2)"))
+    fun limit2(limit2: Float): T = withLimit2(limit2)
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this - v"))
+    fun sub(v: T): T = this - v
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("nor"))
+    fun nor(): T = nor
+}
 
 /** Returns the distance between this and the [other] vector */
 inline infix fun <T : ImmutableVector<T>> T.dst(other: T): Float = sqrt(dst2(other))
 
 /** Returns this vector scaled by (1 / [scalar]) */
 inline operator fun <T : ImmutableVector<T>> T.div(scalar: Float): T = times(1 / scalar)
-
-/** Returns this vector if the [ImmutableVector.len] is <= [limit] or a vector with the same direction and length [limit] otherwise */
-inline fun <T : ImmutableVector<T>> T.limit(limit: Float): T = limit2(limit * limit)
-
-/** Returns this vector if the [ImmutableVector.len2] is <= [limit2] or a vector with the same direction and length [limit2] otherwise */
-fun <T : ImmutableVector<T>> T.limit2(limit2: Float): T =
-        if (len2 <= limit2) this else withLength2(limit2)
-
-/** Clamps this vector's length to given [min] and [max] values*/
-inline fun <T : ImmutableVector<T>> T.clamp(min: Float, max: Float): T = clamp2(min * min, max * max)
-
-/** Clamps this vector's squared length to given [min2] and [max2] values*/
-fun <T : ImmutableVector<T>> T.clamp2(min2: Float, max2: Float): T {
-    val l2 = len2
-    return when {
-        l2 < min2 -> withLength2(min2)
-        l2 > max2 -> withLength2(max2)
-        else -> this
-    }
-}
-
-/** Interpolates between this vector and the given [target] vector by [alpha] (within range [0,1]) using the given [interpolation] method. */
-inline fun <T : ImmutableVector<T>> T.interpolate(target: T, alpha: Float, interpolation: Interpolation): T =
-        lerp(target, interpolation.apply(alpha))
 
 /** Returns true if this vector is collinear with the [other] vector */
 fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
@@ -137,3 +177,5 @@ fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
 /** Returns whether this vector has opposite direction compared to the other vector. */
 fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f
+
+internal const val MUTABLE_METHOD_DEPRECATION_MESSAGE = "Unlike its equivalent in LibGDX, this function doesn't mutate the vector"

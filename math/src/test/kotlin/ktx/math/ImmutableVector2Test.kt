@@ -243,7 +243,7 @@ class ImmutableVector2Test {
     fun `limit should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toMutable().limit(l).toImmutable(), v.limit(l))
+                assertEquals(v.toMutable().limit(l).toImmutable(), v.withLimit(l))
             }
         }
     }
@@ -252,7 +252,7 @@ class ImmutableVector2Test {
     fun `limit2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
-                assertEquals(v.toMutable().limit2(l).toImmutable(), v.limit2(l))
+                assertEquals(v.toMutable().limit2(l).toImmutable(), v.withLimit2(l))
             }
         }
     }
@@ -280,7 +280,7 @@ class ImmutableVector2Test {
         scalars.forEach { min ->
             scalars.filter { it >= min }.forEach { max ->
                 vectors.forEach { v ->
-                    assertEquals(v.toMutable().clamp(min, max).toImmutable(), v.clamp(min, max))
+                    assertEquals(v.toMutable().clamp(min, max).toImmutable(), v.withClamp(min, max))
                 }
             }
         }
@@ -366,24 +366,24 @@ class ImmutableVector2Test {
             // rotate from positive x-axis to positive y-axis (typically counter-clockwise)
             var deltaAngle = 60f
             var previousVector = initialVector
-            var currentVector = previousVector.rotateDeg(deltaAngle)
+            var currentVector = previousVector.withRotationDeg(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotateDeg(deltaAngle)
+                currentVector = previousVector.withRotationDeg(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
 
             // rotate from positive x-axis to negative y-axis (typically clockwise)
             deltaAngle = -60f
             previousVector = initialVector
-            currentVector = previousVector.rotateDeg(deltaAngle)
+            currentVector = previousVector.withRotationDeg(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotateDeg(deltaAngle)
+                currentVector = previousVector.withRotationDeg(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleDeg(previousVector), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
             }
         }
@@ -428,13 +428,13 @@ class ImmutableVector2Test {
             // rotate from positive x-axis to positive y-axis (typically counter-clockwise)
             var deltaAngle = MathUtils.PI / 3
             var previousVector = initialVector
-            var currentVector = previousVector.rotateRad(deltaAngle)
+            var currentVector = previousVector.withRotationRad(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotateRad(deltaAngle)
+                currentVector = previousVector.withRotationRad(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
             }
@@ -442,13 +442,13 @@ class ImmutableVector2Test {
             // rotate from positive x-axis to negative y-axis (typically clockwise)
             deltaAngle = -MathUtils.PI / 3
             previousVector = initialVector
-            currentVector = previousVector.rotateRad(deltaAngle)
+            currentVector = previousVector.withRotationRad(deltaAngle)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
             assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
 
             repeat(4) {
                 previousVector = currentVector
-                currentVector = previousVector.rotateRad(deltaAngle)
+                currentVector = previousVector.withRotationRad(deltaAngle)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector), MathUtils.FLOAT_ROUNDING_ERROR)
                 assertEquals(deltaAngle, currentVector.angleRad(previousVector.x, previousVector.y), MathUtils.FLOAT_ROUNDING_ERROR)
             }
@@ -484,7 +484,7 @@ class ImmutableVector2Test {
     fun `rotateDeg should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toMutable().rotate(angle).toImmutable(), vector.rotateDeg(angle))
+                assertEquals(vector.toMutable().rotate(angle).toImmutable(), vector.withRotationDeg(angle))
             }
         }
     }
@@ -493,7 +493,7 @@ class ImmutableVector2Test {
     fun `rotateRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toMutable().rotateRad(angle).toImmutable(), vector.rotateRad(angle))
+                assertEquals(vector.toMutable().rotateRad(angle).toImmutable(), vector.withRotationRad(angle))
             }
         }
     }
@@ -501,8 +501,8 @@ class ImmutableVector2Test {
     @Test
     fun `rotate90 should return same result than Vector2`() {
         vectors.forEach { vector ->
-            assertEquals(vector.toMutable().rotate90(-1).toImmutable(), vector.rotate90(-1))
-            assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.rotate90(1))
+            assertEquals(vector.toMutable().rotate90(-1).toImmutable(), vector.withRotation90(-1))
+            assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.withRotation90(1))
         }
     }
 
@@ -511,7 +511,7 @@ class ImmutableVector2Test {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { ratio ->
-                    assertEquals(v1.toMutable().lerp(v2.toMutable(), ratio).toImmutable(), v1.lerp(v2, ratio))
+                    assertEquals(v1.toMutable().lerp(v2.toMutable(), ratio).toImmutable(), v1.withLerp(v2, ratio))
                 }
             }
         }
@@ -539,7 +539,7 @@ class ImmutableVector2Test {
                     interpolations.forEach { interpolation ->
                         assertEquals(
                                 v1.toMutable().interpolate(v2.toMutable(), alpha, interpolation).toImmutable(),
-                                v1.interpolate(v2, alpha, interpolation)
+                                v1.withInterpolation(v2, alpha, interpolation)
                         )
                     }
                 }
