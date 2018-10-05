@@ -1,5 +1,7 @@
 #### 1.9.8-SNAPSHOT
 
+- **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow omission of `begin()` and `end()` calls.
+
 #### 1.9.8-b5
 
 - **[UPDATE]** Updated to Kotlin 1.2.70.
