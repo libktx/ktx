@@ -17,6 +17,7 @@ Project contributors listed chronologically.
   * Provided insightful review of the [`Box2D`](../box2d) module. Contributed ray casting and AABB query utilities.
 * [@keturn](https://github.com/keturn)
   * Suggested the [`FreeType` extension](../freetype).
+  * Contributed [graphics](../graphics) utilities.
 * [@TomGrill](https://github.com/TomGrill)
   * Contributed improvements to the [dependency injection module](../inject).
 * [@mrdlink](https://github.com/mrdlink)

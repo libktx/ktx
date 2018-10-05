@@ -1,6 +1,6 @@
 #### 1.9.8-SNAPSHOT
 
-- **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow omission of `begin()` and `end()` calls.
+- **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
 
 #### 1.9.8-b5
 

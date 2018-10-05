@@ -188,6 +188,5 @@ class ShapeRendererTest {
       verify(shapeRenderer, never()).end()
     }
     verify(shapeRenderer).end()
-
   }
 }

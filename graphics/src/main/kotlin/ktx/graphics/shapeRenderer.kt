@@ -156,6 +156,8 @@ fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2,
 
 /**
  * Automatically calls [ShapeRenderer.begin] and [ShapeRenderer.end].
+ * @param type specified shape type used to draw the shapes in the [action] block. Can be changed during the rendering
+ * with [ShapeRenderer.set].
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
 inline fun <SR: ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
