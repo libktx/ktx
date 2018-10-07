@@ -81,10 +81,10 @@ import ktx.math.*
 
 val mutable1 = Vector2()
 val immutable = mutable.toImmutable()
-val mutable2 = mutable.toMutable()
+val mutable2 = immutable.toMutable()
 ```
 
-Work with immutable vector
+Working with immutable vector
 ```kotlin
 var vector1 = ImmutableVector2.X
 
