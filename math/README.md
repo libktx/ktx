@@ -63,6 +63,47 @@ mutation methods return new vectors instead of mutate the reference.
   - All angle functions return the angle toward positive y-axis.
   - `dot` is an infix function
   - `x` and `crs` infix functions replace `crs` (cross product)
+  
+##### Usage examples
+Creating new `ImmutableVector2`
+```kotlin
+import ktx.math.*
+
+val v0 = ImmutableVector2.ZERO // pre-defined vector
+val v1 = ImmutableVector2(1f, 2f) // arbitrary vector
+val v2 = ImmutableVector2.X.withRotationDeg(30f) // unit vector of given angle
+val v3 = -ImmutableVector2.X // inverse of a vector
+```
+
+Converting from LibGDX `Vector2` to `ImmutableVector2` (and vice versa)
+```kotlin
+import ktx.math.*
+
+val mutable1 = Vector2()
+val immutable = mutable.toImmutable()
+val mutable2 = mutable.toMutable()
+```
+
+Work with immutable vector
+```kotlin
+var vector1 = ImmutableVector2.X
+
+// this is only allowed with variables (declared with `var`).
+vector1 += ImmutableVector2.Y
+vector1 *= 3f
+
+val vector2 = vector.withClamp(0f, 1f) * 5f // vector1 is not modified
+``` 
+
+Creating typealias
+```kotlin
+import ktx.math.*
+
+typealias Vec2 = ImmutableVector2
+
+var v1 = (Vec2.X + Vect2.Y).nor
+var v2 = Vec2(1f, 2f).withLength(3f)
+```
 
 #### `Vector3`
 
