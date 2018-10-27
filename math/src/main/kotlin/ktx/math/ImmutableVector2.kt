@@ -42,7 +42,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     override operator fun times(scalar: Float): ImmutableVector2 = times(scalar, scalar)
     override operator fun times(vector: ImmutableVector2): ImmutableVector2 = times(vector.x, vector.y)
 
-    /** Returns this vector scaled by the given [factorX] and [factorY] factors */
+    /** Returns a new vector instance scaled by the given [factorX] and [factorY] factors */
     fun times(factorX: Float, factorY: Float): ImmutableVector2 = ImmutableVector2(x * factorX, y * factorY)
 
     override fun withLimit2(limit2: Float): ImmutableVector2 =
@@ -140,8 +140,12 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     override fun epsilonEquals(other: ImmutableVector2, epsilon: Float): Boolean =
             epsilonEquals(other.x, other.y, epsilon)
 
-    /** Compares this vector with the other vector, using the supplied epsilon for fuzzy equality testing */
-    fun epsilonEquals(otherX: Float, otherY: Float, epsilon: Float = Float.MIN_VALUE): Boolean =
+    /**
+     * Compares this vector with the other vector, using the supplied [epsilon] for fuzzy equality testing
+     *
+     * @param epsilon Acceptable difference for members. A small value makes equality it stricter, while a big value makes equality fuzzier.
+     */
+    fun epsilonEquals(otherX: Float, otherY: Float, epsilon: Float): Boolean =
             abs(otherX - this.x) <= epsilon && abs(otherY - this.y) <= epsilon
 
     override fun isOnLine(other: ImmutableVector2, epsilon: Float): Boolean =
