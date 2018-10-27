@@ -7,6 +7,7 @@ import io.kotlintest.forAtLeastOne
 import org.junit.Assert.*
 import org.junit.Ignore
 import org.junit.Test
+import kotlin.math.sqrt
 
 class ImmutableVector2Test {
 
@@ -87,7 +88,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `toImmtable should return an equivalent of the Vector2`() {
+    fun `toImmutable should return an equivalent of the Vector2`() {
         vectors.forEach {
             val vector2 = Vector2(it.x, it.y).toImmutable()
             assertEquals(it.x, vector2.x)
@@ -105,10 +106,33 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `len2 should returns same result than Vector2`() {
+    fun `len should return same result than Vector2`() {
+        vectors.forEach {
+            assertEquals(it.toMutable().len(), it.len)
+        }
+    }
+
+    @Test
+    fun `len should return length`() {
+        assertEquals(1.0f, ImmutableVector2.X.len)
+        assertEquals(1.0f, ImmutableVector2.Y.len)
+        assertEquals(0.0f, ImmutableVector2.ZERO.len)
+        assertEquals(5.0f, ImmutableVector2(-3.0f, 4.0f).len)
+    }
+
+    @Test
+    fun `len2 should return same result than Vector2`() {
         vectors.forEach {
             assertEquals(it.toMutable().len2(), it.len2)
         }
+    }
+
+    @Test
+    fun `len2 should return squared length`() {
+        assertEquals(1.0f, ImmutableVector2.X.len2)
+        assertEquals(1.0f, ImmutableVector2.Y.len2)
+        assertEquals(0.0f, ImmutableVector2.ZERO.len2)
+        assertEquals(25.0f, ImmutableVector2(-3.0f, 4.0f).len2)
     }
 
     @Test
@@ -154,14 +178,31 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `isUnit should return false for zero`() {
+    fun `isUnit should return false for non-unit vectors`() {
         assertFalse(ImmutableVector2.ZERO.isUnit())
+        assertFalse(ImmutableVector2(-3.0f, 4.0f).isUnit())
+        assertFalse(ImmutableVector2(0.5f, 0.5f).isUnit())
     }
 
     @Test
     fun `nor should return same result than Vector2`() {
         vectors.forEach {
             assertEquals(it.toMutable().nor().toImmutable(), it.nor)
+        }
+    }
+
+    @Test
+    fun `nor should return normalized vectors`() {
+        assertEquals(ImmutableVector2.X, ImmutableVector2(0.4f, 0f).nor)
+        assertEquals(ImmutableVector2.X, ImmutableVector2(3f, 0f).nor)
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.nor)
+        assertEquals(ImmutableVector2(3f / 5f, -4f / 5f), ImmutableVector2(3f, -4f).nor)
+    }
+
+    @Test
+    fun `nor should return unit vectors`() {
+        vectors.forEach {
+            assertTrue(it.isZero() || it.nor.isUnit())
         }
     }
 
@@ -182,6 +223,14 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `minus should return difference between the two vectors`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.X - ImmutableVector2.X)
+        assertEquals(ImmutableVector2(-2f, -0f), -ImmutableVector2.X - ImmutableVector2.X)
+        assertEquals(ImmutableVector2(-1f, 1f), ImmutableVector2.Y - ImmutableVector2.X)
+        assertEquals(ImmutableVector2(1f, -1f), ImmutableVector2(3f, 4f) - ImmutableVector2(2f, 5f))
+    }
+
+    @Test
     fun `plus should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -191,12 +240,35 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `plus should return sum of the two vectors`() {
+        assertEquals(ImmutableVector2(2f, 0f), ImmutableVector2.X + ImmutableVector2.X)
+        assertEquals(ImmutableVector2(2f, 0f), ImmutableVector2.X.plus(1f, 0f))
+
+        assertEquals(ImmutableVector2.ZERO, (-ImmutableVector2.X) + ImmutableVector2.X)
+        assertEquals(ImmutableVector2.ZERO, (-ImmutableVector2.X).plus(1f, 0f))
+
+        assertEquals(ImmutableVector2(1f, 1f), ImmutableVector2.Y + ImmutableVector2.X)
+        assertEquals(ImmutableVector2(1f, 1f), ImmutableVector2.Y.plus(1f, 0f))
+
+        assertEquals(ImmutableVector2(5f, 9f), ImmutableVector2(3f, 4f) + ImmutableVector2(2f, 5f))
+        assertEquals(ImmutableVector2(5f, 9f), ImmutableVector2(3f, 4f).plus(2f, 5f))
+    }
+
+    @Test
     fun `times should return same result than Vector2 scale`() {
         scalars.forEach { factor ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().scl(factor).toImmutable(), vector * factor)
             }
         }
+    }
+
+    @Test
+    fun `times should return scaled vector`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO * 42f)
+        assertEquals(ImmutableVector2(0f, 2f), ImmutableVector2.Y * 2f)
+        assertEquals(ImmutableVector2(15f, -6f), ImmutableVector2(5f, -2f) * 3f)
+        assertEquals(ImmutableVector2(2.5f, -1f), ImmutableVector2(5f, -2f) * 0.5f)
     }
 
     @Test
@@ -210,6 +282,21 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `times should return scaled vector on both axis`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.X * ImmutableVector2.ZERO)
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.X.times(0f, 0f))
+
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.X * ImmutableVector2.Y)
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.X.times(0f, 1f))
+
+        assertEquals(ImmutableVector2(4f, -15f), ImmutableVector2(-2f, 3f) * ImmutableVector2(-2f, -5f))
+        assertEquals(ImmutableVector2(4f, -15f), ImmutableVector2(-2f, 3f).times(-2f, -5f))
+
+        assertEquals(ImmutableVector2(4f, 15f), ImmutableVector2(2f, 3f) * ImmutableVector2(2f, 5f))
+        assertEquals(ImmutableVector2(4f, 15f), ImmutableVector2(2f, 3f).times(2f, 5f))
+    }
+
+    @Test
     fun `dot should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -217,6 +304,27 @@ class ImmutableVector2Test {
                 assertEquals(v1.toMutable().dot(v2.x, v2.y), v1.dot(v2.x, v2.y))
             }
         }
+    }
+
+    @Test
+    fun `dot should return dot product`() {
+        assertEquals(1f, ImmutableVector2.X dot ImmutableVector2.X)
+        assertEquals(1f, ImmutableVector2.X dot ImmutableVector2.X)
+
+        assertEquals(1f, ImmutableVector2.Y.dot(0f, 1f))
+        assertEquals(1f, ImmutableVector2.Y.dot(0f, 1f))
+
+        assertEquals(0f, ImmutableVector2.X.dot(0f, 1f))
+        assertEquals(0f, ImmutableVector2.X.dot(0f, 1f))
+
+        assertEquals(0f, ImmutableVector2.X.dot(0f, 0f))
+        assertEquals(0f, ImmutableVector2.X.dot(0f, 0f))
+
+        assertEquals(2f, ImmutableVector2(1f, 1f).dot(1f, 1f))
+        assertEquals(2f, ImmutableVector2(1f, 1f).dot(1f, 1f))
+
+        assertEquals(7f, ImmutableVector2(-2f, 3f).dot(4f, 5f))
+        assertEquals(7f, ImmutableVector2(-2f, 3f).dot(4f, 5f))
     }
 
     @Test
@@ -230,6 +338,21 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `dst2 should return squared distance`() {
+        assertEquals(1f, ImmutableVector2.ZERO dst2 ImmutableVector2.X)
+        assertEquals(1f, ImmutableVector2.ZERO.dst2(1f, 0f))
+
+        assertEquals(2f, ImmutableVector2.X dst2 ImmutableVector2.Y)
+        assertEquals(2f, ImmutableVector2.X.dst2(0f, 1f))
+
+        assertEquals(25f, ImmutableVector2.ZERO dst2 ImmutableVector2(3f, 4f))
+        assertEquals(25f, ImmutableVector2.ZERO.dst2(3f, 4f))
+
+        assertEquals(50f, ImmutableVector2(2f, -3f) dst2 ImmutableVector2(3f, 4f))
+        assertEquals(50f, ImmutableVector2(2f, -3f).dst2(3f, 4f))
+    }
+
+    @Test
     fun `dst should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -237,6 +360,21 @@ class ImmutableVector2Test {
                 assertEquals(v1.toMutable().dst(v2.x, v2.y), v1.dst(v2.x, v2.y))
             }
         }
+    }
+
+    @Test
+    fun `dst should return squared distance`() {
+        assertEquals(1f, ImmutableVector2.ZERO dst ImmutableVector2.X)
+        assertEquals(1f, ImmutableVector2.ZERO.dst(1f, 0f))
+
+        assertEquals(sqrt(2f), ImmutableVector2.X dst ImmutableVector2.Y)
+        assertEquals(sqrt(2f), ImmutableVector2.X.dst(0f, 1f))
+
+        assertEquals(5f, ImmutableVector2.ZERO dst ImmutableVector2(3f, 4f))
+        assertEquals(5f, ImmutableVector2.ZERO.dst(3f, 4f))
+
+        assertEquals(sqrt(50f), ImmutableVector2(2f, -3f) dst ImmutableVector2(3f, 4f))
+        assertEquals(sqrt(50f), ImmutableVector2(2f, -3f).dst(3f, 4f))
     }
 
     @Test
@@ -249,12 +387,30 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withLimit should return a vector within the limit`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withLimit(42f))
+        assertEquals(ImmutableVector2.X, ImmutableVector2(42f, 0f).withLimit(1f))
+        assertEquals(ImmutableVector2(0.5f, 0f), ImmutableVector2(0.5f, 0f).withLimit(1f))
+        assertEquals(ImmutableVector2(3f, -4f), ImmutableVector2(6f, -8f).withLimit(5f))
+        assertEquals(ImmutableVector2(2f, -3f), ImmutableVector2(2f, -3f).withLimit(5f))
+    }
+
+    @Test
     fun `withLimit2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().limit2(l).toImmutable(), v.withLimit2(l))
             }
         }
+    }
+
+    @Test
+    fun `withLimit2 should return a vector within the limit`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withLimit2(42f))
+        assertEquals(ImmutableVector2.X, ImmutableVector2(42f, 0f).withLimit2(1f))
+        assertEquals(ImmutableVector2(0.5f, 0f), ImmutableVector2(0.5f, 0f).withLimit2(1f))
+        assertEquals(ImmutableVector2(3f, -4f), ImmutableVector2(6f, -8f).withLimit2(25f))
+        assertEquals(ImmutableVector2(2f, -3f), ImmutableVector2(2f, -3f).withLimit2(25f))
     }
 
     @Test
@@ -267,12 +423,30 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withLength should return a vector of given length`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withLength(5f))
+        assertEquals(ImmutableVector2(3f, 0f), ImmutableVector2.X.withLength(3f))
+        assertEquals(ImmutableVector2(0f, 0.5f), ImmutableVector2.Y.withLength(0.5f))
+        assertEquals(ImmutableVector2(6f, -8f), ImmutableVector2(3f, -4f).withLength(10f))
+        assertEquals(ImmutableVector2(-1.5f, 2f), ImmutableVector2(-3f, 4f).withLength(2.5f))
+    }
+
+    @Test
     fun `withLength2 should return same result than Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().setLength2(l).toImmutable(), v.withLength2(l))
             }
         }
+    }
+
+    @Test
+    fun `withLength2 should return a vector of given squared length`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withLength2(25f))
+        assertEquals(ImmutableVector2(3f, 0f), ImmutableVector2.X.withLength2(9f))
+        assertEquals(ImmutableVector2(0f, 0.5f), ImmutableVector2.Y.withLength2(0.25f))
+        assertEquals(ImmutableVector2(6f, -8f), ImmutableVector2(3f, -4f).withLength2(100f))
+        assertEquals(ImmutableVector2(-1.5f, 2f), ImmutableVector2(-3f, 4f).withLength2(6.25f))
     }
 
     @Test
