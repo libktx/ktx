@@ -461,6 +461,30 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withClamp should return a vector of length between min and max`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withClamp(1f, 2f))
+        assertEquals(ImmutableVector2(2f, 0f), ImmutableVector2.X.withClamp(2f, 3f))
+        assertEquals(ImmutableVector2(0.8f, 0f), ImmutableVector2.X.withClamp(0.5f, 0.8f))
+        assertEquals(ImmutableVector2.X, ImmutableVector2.X.withClamp(0.5f, 2f))
+
+        assertEquals(ImmutableVector2(3f, -4f), ImmutableVector2(3f, -4f).withClamp(4f, 6f))
+        assertEquals(ImmutableVector2(1.5f, -2f), ImmutableVector2(3f, -4f).withClamp(1f, 2.5f))
+        assertEquals(ImmutableVector2(6f, -8f), ImmutableVector2(3f, -4f).withClamp(10f, 12f))
+    }
+
+    @Test
+    fun `withClamp2 should return a vector of length between min2 and max2`() {
+        assertEquals(ImmutableVector2.ZERO, ImmutableVector2.ZERO.withClamp2(1f, 4f))
+        assertEquals(ImmutableVector2(2f, 0f), ImmutableVector2.X.withClamp2(4f, 9f))
+        assertEquals(ImmutableVector2(0.8f, 0f), ImmutableVector2.X.withClamp2(0.5f, 0.64f))
+        assertEquals(ImmutableVector2.X, ImmutableVector2.X.withClamp2(0.5f, 2f))
+
+        assertEquals(ImmutableVector2(3f, -4f), ImmutableVector2(3f, -4f).withClamp2(16f, 36f))
+        assertEquals(ImmutableVector2(1.5f, -2f), ImmutableVector2(3f, -4f).withClamp2(1f, 6.25f))
+        assertEquals(ImmutableVector2(6f, -8f), ImmutableVector2(3f, -4f).withClamp2(100f, 110f))
+    }
+
+    @Test
     fun `times should return same result than Vector2 mul`() {
         val matrices = listOf(
                 mat3(),
