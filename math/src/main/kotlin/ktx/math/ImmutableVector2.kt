@@ -8,7 +8,10 @@ import com.badlogic.gdx.math.Vector2
 import kotlin.math.*
 
 /**
- * Represent an **immutable** vector
+ * Represent an immutable vector 2D
+ *
+ * You may use [ImmutableVector2.toMutable] to crate a (mutable) [Vector2] from a an [ImmutableVector2].
+ * And an [ImmutableVector2] can be created from a [Vector2] with [Vector2.toImmutable].
  *
  * @property x the x-component of this vector
  * @property y the y-component of this vector
@@ -30,11 +33,11 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     override operator fun plus(other: ImmutableVector2): ImmutableVector2 = plus(other.x, other.y)
 
-    /** Returns the result of adding the given vector from this vector */
+    /** Returns the result of adding the given vector to this vector */
     fun plus(deltaX: Float = 0f, deltaY: Float = 0f): ImmutableVector2 = ImmutableVector2(x + deltaX, y + deltaY)
 
-    override fun inc(): ImmutableVector2 = copy(x = x + 1, y = y + 1)
-    override fun dec(): ImmutableVector2 = copy(x = x - 1, y = y - 1)
+    override fun inc(): ImmutableVector2 = ImmutableVector2(x + 1, y + 1)
+    override fun dec(): ImmutableVector2 = ImmutableVector2(x - 1, y - 1)
 
     override operator fun times(scalar: Float): ImmutableVector2 = times(scalar, scalar)
     override operator fun times(vector: ImmutableVector2): ImmutableVector2 = times(vector.x, vector.y)
@@ -110,7 +113,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
      * @param direction positive value means toward positive y-axis (typically counter-clockwise). Negative value means toward negative y-axis (typically clockwise).
      */
     fun withRotation90(direction: Int): ImmutableVector2 =
-            if (direction >= 0) copy(x = -y, y = x) else copy(x = y, y = -x)
+            if (direction >= 0) ImmutableVector2(-y, x) else ImmutableVector2(y, -x)
 
     /** Returns a vector of same length rotated by the given [angle] in radians */
     fun withRotationRad(angle: Float): ImmutableVector2 {

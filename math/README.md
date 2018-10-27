@@ -45,7 +45,7 @@ mutation methods return new vectors instead of mutate the reference.
 - Note that one may want to create type aliases to makes the usage more concise: `typealias Vect2 = ImmutableVector2`
 - `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length
 - instances can be destructed: `val (x, y) = vector2`
-- `Vector2.toImmutableVector2()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
+- `Vector2.toImmutable()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
 - `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
 - Most of the functions of `Vector2` which mutate the vector are provided but deprecated. This allow smooth migration from
 `Vector2`. 
@@ -65,7 +65,7 @@ mutation methods return new vectors instead of mutate the reference.
   - `x` and `crs` infix functions replace `crs` (cross product)
   
 ##### Usage examples
-Creating new `ImmutableVector2`
+Obtaining `ImmutableVector2` instances
 ```kotlin
 import ktx.math.*
 
@@ -78,30 +78,34 @@ val v3 = -ImmutableVector2.X // inverse of a vector
 Converting from LibGDX `Vector2` to `ImmutableVector2` (and vice versa)
 ```kotlin
 import ktx.math.*
+import com.badlogic.gdx.math.Vector2
 
-val mutable1 = Vector2()
-val immutable = mutable.toImmutable()
-val mutable2 = immutable.toMutable()
+val mutable1: Vector2 = Vector2()
+val immutable: ImmutableVector2 = mutable1.toImmutable()
+val mutable2: Vector2 = immutable.toMutable()
 ```
 
 Working with immutable vector
 ```kotlin
+import ktx.math.*
+
 var vector1 = ImmutableVector2.X
 
-// this is only allowed with variables (declared with `var`).
+// Reassignment of variables is only possible with `var`; note that the original vector instance is not modified
 vector1 += ImmutableVector2.Y
 vector1 *= 3f
 
-val vector2 = vector.withClamp(0f, 1f) * 5f // vector1 is not modified
+val vector2 = vector1.withClamp(0f, 1f) * 5f // vector1 is not modified
 ``` 
 
 Creating typealias
 ```kotlin
 import ktx.math.*
 
+// If you don't want to use the rather verbose ImmutableVector2, you can declare a more convenient type alias
 typealias Vec2 = ImmutableVector2
 
-var v1 = (Vec2.X + Vect2.Y).nor
+var v1 = (Vec2.X + Vec2.Y).nor
 var v2 = Vec2(1f, 2f).withLength(3f)
 ```
 

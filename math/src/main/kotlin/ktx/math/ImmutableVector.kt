@@ -10,6 +10,8 @@ import kotlin.math.sqrt
 
 /**
  * Represent an immutable vector.
+ *
+ * This is the root interface of immutable alternatives to the default mutable vectors provided by LibDGX
  */
 interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
 
@@ -178,4 +180,4 @@ fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
 fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f
 
-internal const val MUTABLE_METHOD_DEPRECATION_MESSAGE = "Unlike its equivalent in LibGDX, this function doesn't mutate the vector"
+internal const val MUTABLE_METHOD_DEPRECATION_MESSAGE = "Unlike its equivalent in LibGDX, this function does not change the internal state of the vector and returns a new instance instead. This might break existing code designed with mutable vectors in mind."
