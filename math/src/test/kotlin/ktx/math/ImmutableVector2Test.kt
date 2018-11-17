@@ -499,6 +499,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `times matrix should return expected result`() {
+        val matrix = mat3(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f)
+        val vector = ImmutableVector2(3.5f, 2.3f)
+
+        assertEquals(ImmutableVector2(11.1f, 31.5f), vector * matrix)
+        assertEquals(ImmutableVector2.ZERO, vector * mat3())
+    }
+
+    @Test
     fun `crs should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -507,6 +516,14 @@ class ImmutableVector2Test {
                 assertEquals(v1.toMutable().crs(v2.x, v2.y), v1.crs(v2.x, v2.y))
             }
         }
+    }
+
+    @Test
+    fun `crs should return cross product`() {
+        assertEquals(-2f, ImmutableVector2(2f, 3f) x ImmutableVector2(4f, 5f))
+        assertEquals(2f, ImmutableVector2(4f, 5f) x ImmutableVector2(2f, 3f))
+        assertEquals(0f, ImmutableVector2(2f, 3f) x ImmutableVector2.ZERO)
+        assertEquals(0f, ImmutableVector2.ZERO x ImmutableVector2(4f, 5f))
     }
 
     @Test
@@ -545,6 +562,13 @@ class ImmutableVector2Test {
 
         assertEquals(180f, (ImmutableVector2.X).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
         assertEquals(180f, (ImmutableVector2.Y).angleDeg(-ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+    }
+
+    @Test
+    fun `angleDeg should return expected angles`() {
+        assertEquals(45f, ImmutableVector2(1f, 1f).angleDeg(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(45f, ImmutableVector2.Y.angleDeg(ImmutableVector2(1f, 1f)), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
+        assertEquals(-45f, ImmutableVector2.X.angleDeg(ImmutableVector2(1f, 1f)), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
     }
 
     @Test
@@ -611,6 +635,13 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `angleRad should return expected angles`() {
+        assertEquals(MathUtils.PI / 4f, ImmutableVector2(1f, 1f).angleRad(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(MathUtils.PI / 4f, ImmutableVector2.Y.angleRad(ImmutableVector2(1f, 1f)), MathUtils.FLOAT_ROUNDING_ERROR)
+        assertEquals(-MathUtils.PI / 4f, ImmutableVector2.X.angleRad(ImmutableVector2(1f, 1f)), MathUtils.FLOAT_ROUNDING_ERROR)
+    }
+
+    @Test
     fun `angleRad should returns value between -PI and PI`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -670,12 +701,28 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withAngleDeg should return rotated vector`() {
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    }
+
+    @Test
     fun `withAngleRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().setAngleRad(angle).toImmutable(), vector.withAngleRad(angle))
             }
         }
+    }
+
+    @Test
+    fun `withAngleRad should return rotated vector`() {
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
     }
 
     @Test
@@ -688,6 +735,18 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withRotationDeg should return rotated vector`() {
+        assertTrue(ImmutableVector2.X.withRotationDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withRotationDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2.X.withRotationDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withRotationDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(45f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(-45f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+    }
+
+    @Test
     fun `withRotationRad should return same result than Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
@@ -697,11 +756,36 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withRotationRad should return rotated vector`() {
+        assertTrue(ImmutableVector2.X.withRotationRad(MathUtils.PI / 2f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withRotationRad(-MathUtils.PI / 2f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2.X.withRotationRad(MathUtils.PI / 4f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withRotationRad(-MathUtils.PI / 4f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationRad(MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationRad(-MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+    }
+
+    @Test
     fun `withRotation90 should return same result than Vector2`() {
         vectors.forEach { vector ->
             assertEquals(vector.toMutable().rotate90(-1).toImmutable(), vector.withRotation90(-1))
             assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.withRotation90(1))
         }
+    }
+
+
+    @Test
+    fun `withRotation90 should return rotated vector`() {
+        assertTrue(ImmutableVector2.X.withRotation90(1).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withRotation90(-1).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2.Y.withRotation90(1).epsilonEquals(-ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.Y.withRotation90(-1).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotation90(1).epsilonEquals(ImmutableVector2(-sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotation90(-1).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
     }
 
     @Test
