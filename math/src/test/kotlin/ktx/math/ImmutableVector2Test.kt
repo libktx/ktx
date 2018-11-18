@@ -38,6 +38,20 @@ class ImmutableVector2Test {
     /** List scalar values to use in tests */
     private val scalars = sequenceOf(0f, Float.MIN_VALUE, 0.42f, 1f, 42f)
 
+    private val interpolations = sequenceOf(
+            Interpolation.bounce,
+            Interpolation.bounceIn,
+            Interpolation.bounceOut,
+            Interpolation.circle,
+            Interpolation.circleIn,
+            Interpolation.circleOut,
+            Interpolation.pow2,
+            Interpolation.pow2In,
+            Interpolation.pow2Out,
+            Interpolation.smooth,
+            Interpolation.smooth2
+    )
+
     @Test
     fun `equals should return true for equivalent vectors`() {
         assertEquals(ImmutableVector2.X, ImmutableVector2.X)
@@ -863,21 +877,25 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withInterpolation should return same result than Vector2`() {
-        val interpolations = sequenceOf(
-                Interpolation.bounce,
-                Interpolation.bounceIn,
-                Interpolation.bounceOut,
-                Interpolation.circle,
-                Interpolation.circleIn,
-                Interpolation.circleOut,
-                Interpolation.pow2,
-                Interpolation.pow2In,
-                Interpolation.pow2Out,
-                Interpolation.smooth,
-                Interpolation.smooth2
-        )
+    fun `withLerp with a factor of 0 should return the origin vector`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertTrue(v1.withLerp(v2, 0f).epsilonEquals(v1, MathUtils.FLOAT_ROUNDING_ERROR))
+            }
+        }
+    }
 
+    @Test
+    fun `withLerp with a factor of 1 should return the target vector`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertTrue(v1.withLerp(v2, 1f).epsilonEquals(v2, MathUtils.FLOAT_ROUNDING_ERROR))
+            }
+        }
+    }
+
+    @Test
+    fun `withInterpolation should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { alpha ->
@@ -887,6 +905,28 @@ class ImmutableVector2Test {
                                 v1.withInterpolation(v2, alpha, interpolation)
                         )
                     }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `withInterpolation with a factor of 0 should return the origin vector`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                interpolations.forEach { interpolation ->
+                    assertTrue(v1.withInterpolation(v2, 0f, interpolation).epsilonEquals(v1, MathUtils.FLOAT_ROUNDING_ERROR))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `withInterpolation with a factor of 1 should return the target vector`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                interpolations.forEach { interpolation ->
+                    assertTrue(v1.withInterpolation(v2, 1f, interpolation).epsilonEquals(v2, MathUtils.FLOAT_ROUNDING_ERROR))
                 }
             }
         }
