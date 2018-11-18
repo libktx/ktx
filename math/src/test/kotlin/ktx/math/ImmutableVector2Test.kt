@@ -78,6 +78,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `equals should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1 == v2, v2 == v1)
+            }
+        }
+    }
+
+    @Test
     fun `toMutable should return the equivalent Vector2`() {
         vectors.forEach {
             val vector2 = it.toMutable()
@@ -255,6 +264,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `plus should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1 + v2, v2 + v1)
+            }
+        }
+    }
+
+    @Test
     fun `times should return same result than Vector2 scale`() {
         scalars.forEach { factor ->
             vectors.forEach { vector ->
@@ -328,6 +346,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `dot should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1 dot v2, v2 dot v1)
+            }
+        }
+    }
+
+    @Test
     fun `dst2 should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -353,6 +380,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `dst2 should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1 dst2 v2, v2 dst2 v1)
+            }
+        }
+    }
+
+    @Test
     fun `dst should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -375,6 +411,15 @@ class ImmutableVector2Test {
 
         assertEquals(sqrt(50f), ImmutableVector2(2f, -3f) dst ImmutableVector2(3f, 4f))
         assertEquals(sqrt(50f), ImmutableVector2(2f, -3f).dst(3f, 4f))
+    }
+
+    @Test
+    fun `dst should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1 dst v2, v2 dst v1)
+            }
+        }
     }
 
     @Test
@@ -910,6 +955,17 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `epsilonEquals should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                scalars.forEach { s ->
+                    assertEquals(v1.epsilonEquals(v2, s), v2.epsilonEquals(v1, s))
+                }
+            }
+        }
+    }
+
+    @Test
     fun `isOnLine should return same than Vector2`() {
 
         // LibGDX returns false (incorrect) when compared with vector zero.
@@ -952,6 +1008,15 @@ class ImmutableVector2Test {
         assertFalse(ImmutableVector2.X.isOnLine(ImmutableVector2.Y))
         assertFalse(ImmutableVector2.Y.isOnLine(ImmutableVector2.X))
         assertFalse(ImmutableVector2(2f, 3f).isOnLine(ImmutableVector2(3f, 2f)))
+    }
+
+    @Test
+    fun `isOnline should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.isOnLine(v2), v2.isOnLine(v1))
+            }
+        }
     }
 
     @Test
@@ -1007,6 +1072,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `isCollinear should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.isCollinear(v2), v2.isCollinear(v1))
+            }
+        }
+    }
+
+    @Test
     fun `isCollinearOpposite should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -1058,6 +1132,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `isCollinearOpposite should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.isCollinearOpposite(v2), v2.isCollinearOpposite(v1))
+            }
+        }
+    }
+
+    @Test
     fun `isPerpendicular should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -1079,8 +1162,8 @@ class ImmutableVector2Test {
     @Test
     fun `isPerpendicular should return false for opposite vector`() {
         vectors.filterNot { it.isZero(0f) }.forEach { v ->
-            assertFalse( v.isPerpendicular(-v))
-            assertFalse( v.isPerpendicular(v * -2f))
+            assertFalse(v.isPerpendicular(-v))
+            assertFalse(v.isPerpendicular(v * -2f))
         }
     }
 
@@ -1104,6 +1187,15 @@ class ImmutableVector2Test {
     fun `isPerpendicular should return false for non-perpendicular vectors`() {
         assertFalse(ImmutableVector2.X.isPerpendicular(ImmutableVector2(1f, 2f)))
         assertFalse(ImmutableVector2.Y.isPerpendicular(ImmutableVector2(-3f, 2f)))
+    }
+
+    @Test
+    fun `isPerpendicular should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.isPerpendicular(v2), v2.isPerpendicular(v1))
+            }
+        }
     }
 
     @Test
@@ -1164,6 +1256,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `hasSameDirection should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.hasSameDirection(v2), v2.hasSameDirection(v1))
+            }
+        }
+    }
+
+    @Test
     fun `hasOppositeDirection should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -1217,6 +1318,15 @@ class ImmutableVector2Test {
         vectors.filterNot { it.isZero(0f) }.forEach { v ->
             assertTrue(v.hasOppositeDirection(v.withRotationDeg(100f)))
             assertTrue(v.hasOppositeDirection(v.withRotationDeg(-100f)))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should be commutative`() {
+        vectors.forEach { v1 ->
+            vectors.forEach { v2 ->
+                assertEquals(v1.hasOppositeDirection(v2), v2.hasOppositeDirection(v1))
+            }
         }
     }
 
