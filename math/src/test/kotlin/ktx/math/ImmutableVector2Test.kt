@@ -527,7 +527,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    @Ignore("Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
+    @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
     fun `angleDeg should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -538,7 +538,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    @Ignore("Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
+    @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
     fun `angleRad should return same result than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -546,6 +546,12 @@ class ImmutableVector2Test {
                 assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2.x, v2.y))
             }
         }
+    }
+
+    @Test
+    fun `zero vector should have undefined direction`() {
+        assertEquals(Float.NaN, ImmutableVector2.ZERO.angleDeg())
+        assertEquals(Float.NaN, ImmutableVector2.ZERO.angleRad())
     }
 
     @Test
@@ -573,9 +579,9 @@ class ImmutableVector2Test {
 
     @Test
     fun `angleDeg should return value between -180 and 180`() {
-        vectors.forEach { v1 ->
+        vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
             assertTrue(v1.angleDeg() in (-180f)..(180f))
-            vectors.forEach { v2 ->
+            vectors.filterNot { it.isZero(0f) }.forEach { v2 ->
                 assertTrue(v1.angleDeg(v2) in (-180f)..(180f))
             }
         }
@@ -613,7 +619,8 @@ class ImmutableVector2Test {
 
     @Test
     fun `angleRad to x-axis should return same result than Vector2`() {
-        vectors.forEach { v1 ->
+        // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
+        vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
             assertEquals("$v1", v1.toMutable().angleRad(), v1.angleRad())
         }
     }
@@ -643,8 +650,8 @@ class ImmutableVector2Test {
 
     @Test
     fun `angleRad should returns value between -PI and PI`() {
-        vectors.forEach { v1 ->
-            vectors.forEach { v2 ->
+        vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
+            vectors.filterNot { it.isZero(0f) }.forEach { v2 ->
                 assertTrue(v1.angleRad(v2) in (-MathUtils.PI)..(MathUtils.PI))
             }
         }
@@ -686,7 +693,9 @@ class ImmutableVector2Test {
 
     @Test
     fun `angleRad with x axis should return same result than Vector2`() {
-        vectors.forEach {
+
+        // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
+        vectors.filterNot { it.isZero(0f) }.forEach {
             assertEquals(it.toMutable().angleRad(), it.angleRad())
         }
     }
@@ -800,6 +809,15 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `withLerp should return interpolated vector`() {
+        assertTrue(ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.5f).epsilonEquals(ImmutableVector2(0.5f, 0.5f), MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.3f).epsilonEquals(ImmutableVector2(0.7f, 0.3f), MathUtils.FLOAT_ROUNDING_ERROR))
+
+        assertTrue(ImmutableVector2.X.withLerp(-ImmutableVector2.X, 0.5f).epsilonEquals(ImmutableVector2.ZERO, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(ImmutableVector2.X.withLerp(-ImmutableVector2.X, 0.3f).epsilonEquals(ImmutableVector2(0.4f, 0f), MathUtils.FLOAT_ROUNDING_ERROR))
+    }
+
+    @Test
     fun `withInterpolation should return same result than Vector2`() {
         val interpolations = sequenceOf(
                 Interpolation.bounce,
@@ -862,15 +880,78 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `isOnLine should return same than Vector2`() {
+    fun `epsilonEquals should return true for equals vectors`() {
+        vectors.forEach { v ->
+            assertTrue(v.epsilonEquals(v, 0f))
+        }
+    }
+
+    @Test
+    fun `epsilonEquals should consider epsilon argument`() {
         vectors.forEach { v1 ->
+            assertTrue(v1.copy(x = v1.x + Float.MIN_VALUE, y = v1.y + Float.MIN_VALUE).epsilonEquals(v1, MathUtils.FLOAT_ROUNDING_ERROR))
+            assertTrue(v1.copy(x = v1.x - Float.MIN_VALUE, y = v1.y - Float.MIN_VALUE).epsilonEquals(v1, MathUtils.FLOAT_ROUNDING_ERROR))
+
             vectors.forEach { v2 ->
+                assertTrue(v1.epsilonEquals(v2, 10f))
+            }
+        }
+
+        assertTrue(ImmutableVector2.X.epsilonEquals(ImmutableVector2.Y, 1f))
+    }
+
+    @Test
+    fun `epsilonEquals should return false for different vectors`() {
+        assertFalse(ImmutableVector2.ZERO.epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertFalse(ImmutableVector2.ZERO.epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertFalse(ImmutableVector2.X.epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertFalse(ImmutableVector2.X.epsilonEquals(ImmutableVector2.Y, 0.8f))
+        assertFalse(ImmutableVector2(2f, 3f).epsilonEquals(ImmutableVector2(2.1f, 3f), 0.09f))
+    }
+
+    @Test
+    fun `isOnLine should return same than Vector2`() {
+
+        // LibGDX returns false (incorrect) when compared with vector zero.
+        vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
+            vectors.filterNot { it.isZero(0f) }.forEach { v2 ->
                 assertEquals(v1.toMutable().isOnLine(v2.toMutable()), v1.isOnLine(v2))
                 scalars.forEach { e ->
                     assertEquals(v1.toMutable().isOnLine(v2.toMutable(), e), v1.isOnLine(v2, e))
                 }
             }
         }
+    }
+
+    @Test
+    fun `isOnLine should return false when compared with vector zero`() {
+        vectors.forEach { v ->
+            assertFalse(v.isOnLine(ImmutableVector2.ZERO))
+            assertFalse(ImmutableVector2.ZERO.isOnLine(v))
+        }
+    }
+
+    @Test
+    fun `isOnLine should return true for same non-zero vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.isOnLine(v))
+        }
+    }
+
+    @Test
+    fun `isOnLine should return true for opposite vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.isOnLine(-v))
+            assertTrue(v.isOnLine(v * -2f))
+            assertTrue(v.isOnLine(v * -0.5f))
+        }
+    }
+
+    @Test
+    fun `isOnLine should return false for on-line vector which are not on line`() {
+        assertFalse(ImmutableVector2.X.isOnLine(ImmutableVector2.Y))
+        assertFalse(ImmutableVector2.Y.isOnLine(ImmutableVector2.X))
+        assertFalse(ImmutableVector2(2f, 3f).isOnLine(ImmutableVector2(3f, 2f)))
     }
 
     @Test
@@ -886,6 +967,46 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `isCollinear should return false when compared with vector zero`() {
+        vectors.forEach { v ->
+            assertFalse(v.isCollinear(ImmutableVector2.ZERO))
+            assertFalse(ImmutableVector2.ZERO.isCollinear(v))
+        }
+    }
+
+    @Test
+    fun `isCollinear should return true for same vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.isCollinear(v))
+        }
+    }
+
+    @Test
+    fun `isCollinear should return true for same scaled vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.isCollinear(v * 2f))
+            assertTrue(v.isCollinear(v * 0.5f))
+        }
+    }
+
+    @Test
+    fun `isCollinear should return false for opposite vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertFalse(v.isCollinear(-v))
+            assertFalse(v.isCollinear(v * -2f))
+            assertFalse(v.isCollinear(v * -0.5f))
+        }
+    }
+
+    @Test
+    fun `isCollinear should return false for non collinear vectors`() {
+        assertFalse(ImmutableVector2.X.isCollinear(-ImmutableVector2.X))
+        assertFalse(ImmutableVector2.X.isCollinear(ImmutableVector2.Y))
+        assertFalse(ImmutableVector2(2f, 3f).isCollinear(ImmutableVector2(3f, 2f)))
+        assertFalse(ImmutableVector2(2f, 3f).isCollinear(ImmutableVector2(-2f, -3f)))
+    }
+
+    @Test
     fun `isCollinearOpposite should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -895,6 +1016,45 @@ class ImmutableVector2Test {
                 }
             }
         }
+    }
+
+    @Test
+    fun `isCollinearOpposite should return false when compared with vector zero`() {
+        vectors.forEach { v ->
+            assertFalse(v.isCollinearOpposite(ImmutableVector2.ZERO))
+            assertFalse(ImmutableVector2.ZERO.isCollinearOpposite(v))
+        }
+    }
+
+    @Test
+    fun `isCollinearOpposite should return false for same vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertFalse(v.isCollinearOpposite(v))
+        }
+    }
+
+    @Test
+    fun `isCollinearOpposite should return false for same scaled vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertFalse(v.isCollinearOpposite(v * 2f))
+            assertFalse(v.isCollinearOpposite(v * 0.5f))
+        }
+    }
+
+    @Test
+    fun `isCollinearOpposite should return true for opposite vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.isCollinearOpposite(-v))
+            assertTrue(v.isCollinearOpposite(v * -2f))
+            assertTrue(v.isCollinearOpposite(v * -0.5f))
+        }
+    }
+
+    @Test
+    fun `isCollinearOpposite should return false for non collinear vectors`() {
+        assertFalse(ImmutableVector2.X.isCollinearOpposite(ImmutableVector2.Y))
+        assertFalse(ImmutableVector2(2f, 3f).isCollinearOpposite(ImmutableVector2(3f, 2f)))
+        assertFalse(ImmutableVector2(2f, 3f).isCollinearOpposite(ImmutableVector2(-3f, -3f)))
     }
 
     @Test
@@ -910,6 +1070,43 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `isPerpendicular should return false for same vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse(v.isPerpendicular(v))
+        }
+    }
+
+    @Test
+    fun `isPerpendicular should return false for opposite vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse( v.isPerpendicular(-v))
+            assertFalse( v.isPerpendicular(v * -2f))
+        }
+    }
+
+    @Test
+    fun `isPerpendicular should return true for axises`() {
+        assertTrue(ImmutableVector2.X.isPerpendicular(ImmutableVector2.Y))
+        assertTrue(ImmutableVector2.X.isPerpendicular(-ImmutableVector2.Y))
+        assertTrue(ImmutableVector2.Y.isPerpendicular(ImmutableVector2.X))
+        assertTrue(ImmutableVector2.Y.isPerpendicular(-ImmutableVector2.X))
+    }
+
+    @Test
+    fun `isPerpendicular should return true for result of 90 degrees rotation`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { vector ->
+            assertTrue(vector.isPerpendicular(vector.withRotation90(1)))
+            assertTrue(vector.isPerpendicular(vector.withRotation90(-1)))
+        }
+    }
+
+    @Test
+    fun `isPerpendicular should return false for non-perpendicular vectors`() {
+        assertFalse(ImmutableVector2.X.isPerpendicular(ImmutableVector2(1f, 2f)))
+        assertFalse(ImmutableVector2.Y.isPerpendicular(ImmutableVector2(-3f, 2f)))
+    }
+
+    @Test
     fun `hasSameDirection should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
@@ -919,11 +1116,107 @@ class ImmutableVector2Test {
     }
 
     @Test
+    fun `hasSameDirection should return false when compared with zero`() {
+        vectors.forEach { v ->
+            assertFalse(v.hasSameDirection(ImmutableVector2.ZERO))
+            assertFalse(ImmutableVector2.ZERO.hasSameDirection(v))
+        }
+    }
+
+    @Test
+    fun `hasSameDirection should return true for same vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertTrue(v.hasSameDirection(v))
+        }
+    }
+
+    @Test
+    fun `hasSameDirection should return true for same scaled vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertTrue(v.hasSameDirection(v * 2f))
+            assertTrue(v.hasSameDirection(v * 0.5f))
+        }
+    }
+
+    @Test
+    fun `hasSameDirection should return true for same vector rotated by less than 90 degrees`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertTrue(v.hasSameDirection(v.withRotationDeg(80f)))
+            assertTrue(v.hasSameDirection(v.withRotationDeg(-80f)))
+        }
+    }
+
+    @Test
+    fun `hasSameDirection should return false for opposite vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse(v.hasSameDirection(-v))
+            assertFalse(v.hasSameDirection(v * -2f))
+            assertFalse(v.hasSameDirection(v * -0.5f))
+        }
+    }
+
+    @Test
+    fun `hasSameDirection should return false for same vector rotated by more than 90 degrees`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse(v.hasSameDirection(v.withRotationDeg(100f)))
+            assertFalse(v.hasSameDirection(v.withRotationDeg(-100f)))
+        }
+    }
+
+    @Test
     fun `hasOppositeDirection should return same than Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().hasOppositeDirection(v2.toMutable()), v1.hasOppositeDirection(v2))
             }
+        }
+    }
+
+    @Test
+    fun `hasOppositeSameDirection should return false when compared with zero`() {
+        vectors.forEach { v ->
+            assertFalse(v.hasOppositeDirection(ImmutableVector2.ZERO))
+            assertFalse(ImmutableVector2.ZERO.hasOppositeDirection(v))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should return false for same vector`() {
+        vectors.filterNot { it.isZero() }.forEach { v ->
+            assertFalse(v.hasOppositeDirection(v))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should return false for same scaled vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse(v.hasOppositeDirection(v * 2f))
+            assertFalse(v.hasOppositeDirection(v * 0.5f))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should return false for same vector rotated by less than 90 degrees`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertFalse(v.hasOppositeDirection(v.withRotationDeg(80f)))
+            assertFalse(v.hasOppositeDirection(v.withRotationDeg(-80f)))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should return true for opposite vector`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertTrue(v.hasOppositeDirection(-v))
+            assertTrue(v.hasOppositeDirection(v * -2f))
+            assertTrue(v.hasOppositeDirection(v * -0.5f))
+        }
+    }
+
+    @Test
+    fun `hasOppositeDirection should return true for same vector rotated by more than 90 degrees`() {
+        vectors.filterNot { it.isZero(0f) }.forEach { v ->
+            assertTrue(v.hasOppositeDirection(v.withRotationDeg(100f)))
+            assertTrue(v.hasOppositeDirection(v.withRotationDeg(-100f)))
         }
     }
 
@@ -960,7 +1253,6 @@ class ImmutableVector2Test {
             previousLength2 = vector.len2
         }
     }
-
 
     @Test
     fun `should increment vector values with ++ operator`() {

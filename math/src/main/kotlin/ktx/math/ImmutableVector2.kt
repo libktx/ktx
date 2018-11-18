@@ -96,6 +96,8 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     /** Returns the angle in radians of this vector relative to the reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
     fun angleRad(otherX: Float, otherY: Float): Float {
+        if ((x == 0f && y == 0f) || (otherX == 0f && otherY == 0f)) return Float.NaN
+
         val result = atan2(y, x) - atan2(otherY, otherX)
         return when {
             result > MathUtils.PI -> result - MathUtils.PI2
@@ -149,7 +151,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             abs(otherX - this.x) <= epsilon && abs(otherY - this.y) <= epsilon
 
     override fun isOnLine(other: ImmutableVector2, epsilon: Float): Boolean =
-            MathUtils.isZero(x * other.y - y * other.x, epsilon)
+            MathUtils.isZero(x * other.y - y * other.x, epsilon) && !isZero(0f) && !other.isZero(0f)
 
     override fun toString(): String = "($x,$y)"
 
