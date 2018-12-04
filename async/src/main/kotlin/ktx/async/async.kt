@@ -153,29 +153,11 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
 private class KtxContinuation<in T>(val continuation: Continuation<T>) : Continuation<T> by continuation {
 
   override fun resumeWith(result: Result<T>) {
-    if(result.isSuccess){
-      resume(result.getOrNull()!!)
-    }else{
-      resumeWithException(result.exceptionOrNull()!!)
-    }
-  }
-
-  private fun resume(value: T) {
     if (KtxAsync.isOnRenderingThread()) {
-      continuation.resume(value)
+      continuation.resumeWith(result)
     } else {
       Gdx.app.postRunnable {
-        continuation.resume(value)
-      }
-    }
-  }
-
-  private fun resumeWithException(exception: Throwable) {
-    if (KtxAsync.isOnRenderingThread()) {
-      continuation.resumeWithException(exception)
-    } else {
-      Gdx.app.postRunnable {
-        continuation.resumeWithException(exception)
+        continuation.resumeWith(result)
       }
     }
   }
