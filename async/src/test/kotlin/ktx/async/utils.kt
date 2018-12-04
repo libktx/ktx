@@ -8,8 +8,9 @@ import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doAnswer
 import com.nhaarman.mockito_kotlin.mock
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import org.junit.Assert.assertTrue
 import java.util.concurrent.*
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -106,9 +107,9 @@ fun `coroutine test`(
   Gdx.app = application
   enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = concurrencyLevel)
 
-  test({ coroutine ->
+  test { coroutine ->
     testStatuses[coroutine] = TestStatus.STARTED
-    ktxAsync {
+    GlobalScope.ktxAsync {
       try {
         KtxAsync.coroutine(it)
         testStatuses[coroutine] = TestStatus.FINISHED
@@ -117,7 +118,7 @@ fun `coroutine test`(
         testStatuses[coroutine] = TestStatus.FAILED
       }
     }
-  })
+  }
 
   val startTime = System.currentTimeMillis()
   while (true) {
@@ -169,7 +170,7 @@ fun `cancelled coroutine test`(
   enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = concurrencyLevel)
 
   test({ coroutine ->
-    job.set(ktxAsync {
+    job.set(GlobalScope.ktxAsync {
       try {
         KtxAsync.coroutine(it)
         testStatus.set(TestStatus.FINISHED)
