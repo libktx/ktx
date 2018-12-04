@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-0.26.1-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.0.1-orange.svg)](http://kotlinlang.org/)
 
 # KTX: coroutines support and threading utilities
 
@@ -23,8 +23,9 @@ compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version
 ```
 
 The `coroutinesVersion` _must_ match the coroutines version that the `ktx-async` library was compiled against -
-otherwise it might cause runtime errors. Since coroutines are currently an experimental feature, you should enable them
-first:
+otherwise it might cause runtime or compilation errors.
+
+Before Kotlin 1.3, coroutines were an experimental feature and required the following Gradle configuration:
 
 ```Groovy
 kotlin {
@@ -33,6 +34,8 @@ kotlin {
   }
 }
 ```
+
+If you are using a recent version of Kotlin and `ktx-async`, this declaration is no longer required.
 
 #### Coroutines
 
