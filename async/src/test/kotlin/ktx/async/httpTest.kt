@@ -10,12 +10,14 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldThrow
-import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.CancellableContinuation
 import me.alexpanov.net.FreePortFinder
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Tests [HttpRequest] API utilities.

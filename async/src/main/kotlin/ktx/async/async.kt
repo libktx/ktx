@@ -5,15 +5,13 @@ import com.badlogic.gdx.Net.HttpRequest
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import ktx.async.KtxAsync.isOnRenderingThread
 import java.io.InputStream
-import kotlin.coroutines.experimental.AbstractCoroutineContextElement
-import kotlin.coroutines.experimental.Continuation
-import kotlin.coroutines.experimental.ContinuationInterceptor
+import kotlin.coroutines.*
 
 /**
  * Uses LibGDX threading model to support Kotlin coroutines. All basic operations are executed on the main rendering
@@ -153,7 +151,16 @@ object KtxAsync : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
  * Executes operations on the main rendering thread of the application.
  */
 private class KtxContinuation<in T>(val continuation: Continuation<T>) : Continuation<T> by continuation {
-  override fun resume(value: T) {
+
+  override fun resumeWith(result: Result<T>) {
+    if(result.isSuccess){
+      resume(result.getOrNull()!!)
+    }else{
+      resumeWithException(result.exceptionOrNull()!!)
+    }
+  }
+
+  private fun resume(value: T) {
     if (KtxAsync.isOnRenderingThread()) {
       continuation.resume(value)
     } else {
@@ -163,7 +170,7 @@ private class KtxContinuation<in T>(val continuation: Continuation<T>) : Continu
     }
   }
 
-  override fun resumeWithException(exception: Throwable) {
+  private fun resumeWithException(exception: Throwable) {
     if (KtxAsync.isOnRenderingThread()) {
       continuation.resumeWithException(exception)
     } else {
@@ -205,7 +212,7 @@ fun enableKtxCoroutines(
  *    asynchronous operations provided by [KtxAsync] API.
  * @return [Job] instance, which can be used to cancel, check on or wait for the coroutine execution.
  */
-fun ktxAsync(action: suspend KtxAsync.(scope: CoroutineScope) -> Unit): Job =
-    launch(KtxAsync) {
+fun CoroutineScope.ktxAsync(action: suspend KtxAsync.(scope: CoroutineScope) -> Unit): Job =
+    this.launch(KtxAsync) {
       KtxAsync.action(this)
     }
