@@ -2,6 +2,7 @@
 
 - **[UPDATE]** Updated to Kotlin 1.3.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.0.1.
+- **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
 - **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
 
 #### 1.9.8-b5
