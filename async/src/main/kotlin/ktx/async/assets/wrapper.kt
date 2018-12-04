@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.utils.GdxRuntimeException
+import kotlinx.coroutines.GlobalScope
 import ktx.async.ktxAsync
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -75,7 +76,7 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage) : AssetManage
   }
 
   override fun load(descriptor: AssetDescriptor<*>) {
-    ktxAsync {
+    GlobalScope.ktxAsync {
       assetStorage.load(descriptor)
     }
   }

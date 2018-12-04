@@ -1,9 +1,11 @@
 package ktx.async
 
 import com.badlogic.gdx.Net.*
-import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.CancellableContinuation
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Stores result of a [HttpRequest]. A safer alternative to [HttpResponse].
@@ -66,9 +68,9 @@ fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResu
  * @param onCancel optional operation executed if the coroutine is cancelled during the HTTP request.
  */
 internal class KtxHttpResponseListener(
-    val httpRequest: HttpRequest,
-    val continuation: CancellableContinuation<HttpRequestResult>,
-    val onCancel: ((HttpRequest) -> Unit)?
+        val httpRequest: HttpRequest,
+        val continuation: CancellableContinuation<HttpRequestResult>,
+        val onCancel: ((HttpRequest) -> Unit)?
 ) : HttpResponseListener {
   @Volatile var completed = false
     private set

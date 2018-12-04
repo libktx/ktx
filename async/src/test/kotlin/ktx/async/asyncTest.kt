@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldThrow
+import kotlinx.coroutines.GlobalScope
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -22,7 +23,7 @@ class AsyncTest {
     shouldThrow<UninitializedPropertyAccessException> { KtxAsync.mainThread }
     shouldThrow<UninitializedPropertyAccessException> { KtxAsync.asyncExecutor }
     shouldThrow<UninitializedPropertyAccessException> {
-      ktxAsync {
+      GlobalScope.ktxAsync {
         fail("Should prohibit executing coroutines without context.")
       }
     }
@@ -100,7 +101,7 @@ class AsyncTest {
   fun `should pass delay tasks to main LibGDX Timer`() = `with timer`(onSchedule = `no delay execution`()) { timer ->
     enableKtxCoroutines()
 
-    ktxAsync {
+    GlobalScope.ktxAsync {
       delay(1.5f)
     }
 
