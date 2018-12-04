@@ -262,7 +262,7 @@ class AsynchronousHttpRequestsTest {
 
     listener.failed(GdxRuntimeException("Expected."))
 
-    verify(coroutine, never()).resumeWithException(any())
+    verify(coroutine, never()).resumeWithException(Exception("Exception"))
   }
 
   @Test
