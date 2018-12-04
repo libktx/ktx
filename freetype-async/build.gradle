@@ -1,9 +1,3 @@
-kotlin {
-  experimental {
-    coroutines 'enable'
-  }
-}
-
 dependencies {
   compile project(':async')
   compile project(':freetype')
