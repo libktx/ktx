@@ -1,9 +1,11 @@
 package ktx.async
 
 import com.badlogic.gdx.Net.*
-import kotlinx.coroutines.experimental.CancellableContinuation
+import kotlinx.coroutines.CancellableContinuation
 import java.io.ByteArrayInputStream
 import java.nio.charset.Charset
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Stores result of a [HttpRequest]. A safer alternative to [HttpResponse].

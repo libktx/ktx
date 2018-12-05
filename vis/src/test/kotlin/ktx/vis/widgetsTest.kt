@@ -11,6 +11,7 @@ import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 
 /** @author Kotcrab */
@@ -131,6 +132,8 @@ class ValidatorTest : NeedsLibGDX() {
   }
 }
 
+@Suppress("DEPRECATION")
+@Ignore("Tabbed pane is broken in VisUI 1.4.1 used against LibGDX 1.9.9.") // TODO Update VisUI.
 class KTabbedPaneTest : NeedsLibGDX() {
   @Test
   fun shouldCreateTab() {

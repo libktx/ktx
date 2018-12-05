@@ -36,6 +36,9 @@ original `ShapeRenderer` methods and perform the same actions. The methods inclu
 - `translate`
 - `triange`
 
+A `use` inlined extension method is also available for `ShapeRenderer`, ensuring you won't have unbalanced `begin()`
+and `end()` calls.
+
 ### Usage examples
 
 Using a `Batch`:
@@ -98,6 +101,26 @@ val blue = Color.BLUE.copy()
 
 // You can optionally override chosen copied values:
 val violet = blue.copy(red = 1f)
+```
+
+Using a `ShapeRenderer`:
+
+```kotlin
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import ktx.graphics.*
+
+val shapeRenderer = ShapeRenderer()
+
+shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
+  // Operate on shapeRenderer instance
+}
+
+/* The snippet above is an equivalent to:
+
+  shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
+  // Operate on shapeRenderer instance
+  shapeRenderer.end()
+*/
 ```
 
 Using `ShapeRenderer` with vectors: 

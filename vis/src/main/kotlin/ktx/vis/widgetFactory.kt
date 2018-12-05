@@ -233,6 +233,7 @@ interface WidgetFactory<S> {
   }
 
   /** @see [TabbedPane] */
+  @Deprecated("Tabbed pane is broken in VisUI 1.4.1 used against LibGDX 1.9.9.") // TODO Update VisUI.
   fun tabbedPane(styleName: String = DEFAULT_STYLE, init: KTabbedPane.(S) -> Unit = {}): TabbedPane {
     val pane = KTabbedPane(styleName)
     var storage: S? = null
