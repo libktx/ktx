@@ -3,7 +3,7 @@
 - **[UPDATE]** Updated LibGDX to 1.9.9.
 - **[UPDATE]** Updated to Kotlin 1.3.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.0.1.
-- **[UPDATE]** Updated VisUI to 1.4.1.
+- **[UPDATE]** Updated VisUI to 1.4.2.
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
 with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
 
@@ -31,9 +31,6 @@ actor += action
 
 - **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
 - **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
-
-Known issues:
-- **[BUG]** (`ktx-vis`) Tooltips and tabbed panes in VisUI 1.4.1 are broken when used against LibGDX 1.9.9.
 
 #### 1.9.8-b5
 

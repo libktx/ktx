@@ -163,8 +163,6 @@ abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibGDX() 
   fun shouldCreateHorizontalCollapsible() = testFactoryMethod({ it.horizontalCollapsible(table { }) })
 
   @Test
-  @Suppress("DEPRECATION")
-  @Ignore("Tabbed pane is broken in VisUI 1.4.1 used against LibGDX 1.9.9.") // TODO Update VisUI.
   fun shouldCreateTabbedPane() = testFactoryMethod({ it.tabbedPane { }.table })
 
   @Test
