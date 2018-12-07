@@ -1,7 +1,7 @@
 #### 1.9.9-SNAPSHOT
 
 - **[UPDATE]** Updated LibGDX to 1.9.9.
-- **[UPDATE]** Updated to Kotlin 1.3.10.
+- **[UPDATE]** Updated to Kotlin 1.3.11.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.0.1.
 - **[UPDATE]** Updated VisUI to 1.4.2.
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
