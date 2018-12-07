@@ -85,11 +85,11 @@ class ActorsTest {
   }
 
   @Test
-  fun `should add actors to group with +`() {
+  fun `should add actors to group with +=`() {
     val actor = Actor()
     val group = Group()
 
-    group + actor
+    group += actor
 
     assertNotNull(actor.parent)
     assertTrue(actor in group)
@@ -97,12 +97,12 @@ class ActorsTest {
   }
 
   @Test
-  fun `should remove actors from group with -`() {
+  fun `should remove actors from group with -=`() {
     val actor = Actor()
     val group = Group()
     group.addActor(actor)
 
-    group - actor
+    group -= actor
 
     assertNull(actor.parent)
     assertFalse(actor in group)
@@ -122,11 +122,11 @@ class ActorsTest {
   }
 
   @Test
-  fun `should add actors to stage with +`() {
+  fun `should add actors to stage with +=`() {
     val actor = Actor()
     val stage = getMockStage()
 
-    stage + actor
+    stage += actor
 
     assertNotNull(actor.parent)
     assertTrue(actor in stage)
@@ -136,12 +136,12 @@ class ActorsTest {
   }
 
   @Test
-  fun `should remove actors from stage with -`() {
+  fun `should remove actors from stage with -=`() {
     val actor = Actor()
     val stage = getMockStage()
     stage.addActor(actor)
 
-    stage - actor
+    stage -= actor
 
     assertNull(actor.parent)
     assertFalse(actor in stage)

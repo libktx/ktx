@@ -9,44 +9,28 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 
 /**
- * Alias for [Stage.addAction] method. Allows to add global actions to the stage with + operator.
+ * Alias for [Stage.addAction] method. Allows to add global actions to the stage with += operator.
  * @param action will be added to the stage root actor.
- * @return this (for chaining).
  */
-operator fun Stage.plus(action: Action): Stage {
-  this.addAction(action)
-  return this
-}
+operator fun Stage.plusAssign(action: Action) = addAction(action)
 
 /**
- * Alias for [Stage.root].removeAction method. Removes global stage actions with - operator.
+ * Alias for [Stage.root].removeAction method. Removes global stage actions with -= operator.
  * @param action will be removed from the stage root actor.
- * @return this (for chaining).
  */
-operator fun Stage.minus(action: Action): Stage {
-  this.root.removeAction(action)
-  return this
-}
+operator fun Stage.minusAssign(action: Action) = root.removeAction(action)
 
 /**
- * Alias for [Actor.addAction] method. Allows to add actions to the actor with + operator.
+ * Alias for [Actor.addAction] method. Allows to add actions to the actor with += operator.
  * @param action will be added to this actor.
- * @return this (for chaining).
  */
-operator fun Actor.plus(action: Action): Actor {
-  this.addAction(action)
-  return this
-}
+operator fun Actor.plusAssign(action: Action) = addAction(action)
 
 /**
- * Alias for [Actor.removeAction] method. Allows to remove actions from the actor with - operator.
+ * Alias for [Actor.removeAction] method. Allows to remove actions from the actor with -= operator.
  * @param action will be removed from this actor.
- * @return this (for chaining).
  */
-operator fun Actor.minus(action: Action): Actor {
-  this.removeAction(action)
-  return this
-}
+operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
  * Action chaining utility. Wraps this action and the passed action with a [SequenceAction].

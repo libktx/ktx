@@ -17,7 +17,7 @@ it comes to chaining.
 - `Actor.centerPosition` extension method was added to allow quick actor centering, hiding the necessary math.
 - `Group.contains(Actor)` method was added to support `in` operator. You can check if an `Actor` is a direct child of
 a `Group` with `actor in group` syntax.
-- `Group` and `Stage` support actor adding and removal through `+` and `-` operators.
+- `Group` and `Stage` support actor adding and removal through `+=` and `-=` operators.
 - `Stage.contains(Actor)` method was added to support `in` operator. This will report `true` if the `Actor` is on the
 `Stage` (it does not have to be a direct child of `Stage` root group).
 - `Actor.alpha` and `Stage.alpha` inlined extension properties were added to support easy modification of `Color.a` value.
@@ -42,7 +42,8 @@ be enough for most use cases.
 
 #### Actions
 
-- Global actions can be added and removed from `Stage` with `+` and `-` operators.
+- Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
+- Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
 - `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
 
 #### Widgets
@@ -65,9 +66,9 @@ Adding and removing actors with operators:
 ```Kotlin
 import ktx.actors.*
 
-table + button
-table - label
-stage + table
+table += button
+table -= label
+stage += table
 ```
 
 Checking if actor is on a stage or in a group:
@@ -182,9 +183,12 @@ Adding and removing actions to stages and actors with operators:
 ```Kotlin
 import ktx.actors.*
 
-button + action - otherAction
-stage + someAction // Adds action to stage root actor,
-                   // affecting all actors on the stage.
+button += action
+button -= otherAction
+
+// Adding global Stage action:
+stage += someAction 
+// Since the action is added to Stage's root actor, it affects all widgets on the Stage.
 ```
 
 Accessing and changing text of `Label` and `TextButton` widgets:

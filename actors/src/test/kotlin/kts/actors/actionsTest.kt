@@ -12,46 +12,46 @@ import org.junit.Test
  */
 class ActionsTest {
   @Test
-  fun `should attach global actions to stage with +`() {
+  fun `should attach global actions to stage with +=`() {
     val stage = getMockStage()
     val action = MockAction()
 
-    stage + action
+    stage += action
 
     assertTrue(action in stage.root.actions)
     assertSame(stage.root, action.actor)
   }
 
   @Test
-  fun `should remove global actions from stage with -`() {
+  fun `should remove global actions from stage with -=`() {
     val stage = getMockStage()
     val action = MockAction()
     stage.addAction(action)
 
-    stage - action
+    stage -= action
 
     assertFalse(action in stage.root.actions)
     assertNotEquals(stage.root, action.actor)
   }
 
   @Test
-  fun `should attach actions to actors with +`() {
+  fun `should attach actions to actors with +=`() {
     val actor = Actor()
     val action = MockAction()
 
-    actor + action
+    actor += action
 
     assertTrue(action in actor.actions)
     assertEquals(actor, action.actor)
   }
 
   @Test
-  fun `should remove actions from actors with -`() {
+  fun `should remove actions from actors with -=`() {
     val actor = Actor()
     val action = MockAction()
     actor.addAction(action)
 
-    actor - action
+    actor -= action
 
     assertFalse(action in actor.actions)
     assertNotEquals(actor, action.actor)

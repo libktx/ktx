@@ -4,6 +4,31 @@
 - **[UPDATE]** Updated to Kotlin 1.3.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.0.1.
 - **[UPDATE]** Updated VisUI to 1.4.1.
+- **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
+with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
+
+```kotlin
+// Adding an actor to a Stage/Group - before:
+stage + actor
+group + actor
+
+// Now:
+stage += actor
+group += actor
+```
+- **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Actor` extension operator methods `plus` and `minus` 
+with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
+
+```kotlin
+// Adding an action to a Stage/Actor - before:
+stage + action
+actor + action
+
+// Now:
+stage += action
+actor += action
+```
+
 - **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
 - **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
 
