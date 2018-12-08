@@ -40,7 +40,7 @@ operator fun Actor.minusAssign(action: Action) = removeAction(action)
 infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, action)
 
 /**
- * Wraps the actions in this [SequenceAction] with the passed action with a new [SequenceAction]
+ * Wraps the actions in this [SequenceAction] with the passed action in a new [SequenceAction]
  *
  * The underling actions present in this [SequenceAction] will be unwrapped.
  *
@@ -62,7 +62,7 @@ infix fun SequenceAction.then(action: Action): SequenceAction {
 operator fun Action.plus(action: Action): SequenceAction = then(action)
 
 /**
- * Wraps the actions in this [SequenceAction] with the passed action with a new [SequenceAction]
+ * Wraps the actions in this [SequenceAction] with the passed action in a new [SequenceAction]
  *
  * The underling actions present in this [SequenceAction] will be unwrapped.
  *
