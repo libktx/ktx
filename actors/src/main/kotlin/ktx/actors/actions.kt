@@ -33,21 +33,48 @@ operator fun Actor.plusAssign(action: Action) = addAction(action)
 operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
- * Action chaining utility. Wraps this action and the passed action with a [SequenceAction].
+ * Wraps this action and the passed action with a [SequenceAction].
  * @param action will be executed after this action.
  * @return [SequenceAction] storing both actions.
  */
 infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, action)
 
 /**
- * Action chaining utility. Adds another action to this sequence.
- * @param action will be executed after the last scheduled action.
- * @return this [SequenceAction] for further chaining.
+ * Wraps the actions in this [SequenceAction] with the passed action with a new [SequenceAction]
+ *
+ * The underling actions present in this [SequenceAction] will be unwrapped.
+ *
+ * @param action will be executed after this sequence of action.
+ * @return [SequenceAction] storing both actions.
  */
 infix fun SequenceAction.then(action: Action): SequenceAction {
-  this.addAction(action)
-  return this
+  val sequence = SequenceAction()
+  actions.forEach { sequence += it }
+  sequence += action
+  return sequence
 }
+
+/**
+ * Wraps this action and the passed action with a [SequenceAction].
+ * @param action will be executed after this action.
+ * @return [SequenceAction] storing both actions.
+ */
+operator fun Action.plus(action: Action): SequenceAction = then(action)
+
+/**
+ * Wraps the actions in this [SequenceAction] with the passed action with a new [SequenceAction]
+ *
+ * The underling actions present in this [SequenceAction] will be unwrapped.
+ *
+ * @param action will be executed after this sequence of action.
+ * @return [SequenceAction] storing both actions.
+ */
+operator fun SequenceAction.plus(action: Action): SequenceAction = then(action)
+
+/**
+ * Adds another action to this sequence
+ */
+operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
 
 /**
  * Actions utility. Wraps this action and the passed action with a [ParallelAction], executing them both at the same time.

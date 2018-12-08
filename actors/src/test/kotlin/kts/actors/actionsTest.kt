@@ -62,7 +62,7 @@ class ActionsTest {
     val firstAction = MockAction()
     val secondAction = MockAction()
 
-    val sequence = firstAction.then(secondAction) // === firstAction then secondAction
+    val sequence = firstAction then secondAction
 
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
@@ -75,13 +75,68 @@ class ActionsTest {
     val secondAction = MockAction()
     val thirdAction = MockAction()
 
-    // / Note that the second "then" is a different extension function - it prevents from creating multiple sequences.
+    // / Note that the second "then" is a different extension function
     val sequence = firstAction then secondAction then thirdAction
 
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
     assertEquals(thirdAction, sequence.actions[2])
     assertEquals(3, sequence.actions.size)
+  }
+
+  @Test
+  fun `should not mutate multiple actions with then`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    val firstSequence = firstAction then secondAction
+    firstSequence then thirdAction // <-- should not mutate firstSequence
+
+    assertEquals(2, firstSequence.actions.size)
+    assertEquals(firstAction, firstSequence.actions[0])
+    assertEquals(secondAction, firstSequence.actions[1])
+  }
+
+  @Test
+  fun `should add actions into sequences`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+
+    val sequence = firstAction + secondAction
+
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(2, sequence.actions.size)
+  }
+
+  @Test
+  fun `should add multiple actions into sequences`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    // / Note that the second "then" is a different extension function
+    val sequence = firstAction + secondAction + thirdAction
+
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(thirdAction, sequence.actions[2])
+    assertEquals(3, sequence.actions.size)
+  }
+
+  @Test
+  fun `should not mutate multiple actions with +`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    val firstSequence = firstAction + secondAction
+    firstSequence + thirdAction // <-- should not mutate firstSequence
+
+    assertEquals(2, firstSequence.actions.size)
+    assertEquals(firstAction, firstSequence.actions[0])
+    assertEquals(secondAction, firstSequence.actions[1])
   }
 
   @Test
