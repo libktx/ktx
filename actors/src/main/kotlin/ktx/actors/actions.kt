@@ -34,24 +34,25 @@ operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
  * Wraps this action and the passed action with a [SequenceAction].
+ *
+ * Eventual underling actions will be unwrapped.
+ *
  * @param action will be executed after this action.
  * @return [SequenceAction] storing both actions.
  */
-infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, action)
+infix fun Action.then(action: Action): SequenceAction {
+  val result = SequenceAction()
+  result.addUnwrapped(this)
+  result.addUnwrapped(action)
+  return  result
+}
 
-/**
- * Wraps the actions in this [SequenceAction] with the passed action in a new [SequenceAction]
- *
- * The underling actions present in this [SequenceAction] will be unwrapped.
- *
- * @param action will be executed after this sequence of action.
- * @return [SequenceAction] storing both actions.
- */
-infix fun SequenceAction.then(action: Action): SequenceAction {
-  val sequence = SequenceAction()
-  actions.forEach { sequence += it }
-  sequence += action
-  return sequence
+private fun SequenceAction.addUnwrapped(action: Action) {
+  if (action is SequenceAction) {
+    action.actions.forEach(this::addAction)
+  } else {
+    addAction(action)
+  }
 }
 
 /**
