@@ -45,7 +45,7 @@ be enough for most use cases.
 - Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
 - `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
-- `Action.parallel` *infix* extension function allows to easily create parallel actions with pleasant syntax.
+- `Action.parallelTo` *infix* extension function allows to easily create parallel actions with pleasant syntax.
 - `+` operator to create action sequence (alternative syntax to `then`) 
 - `+=` operator to add an action to an existing sequence 
 
