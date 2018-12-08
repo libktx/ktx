@@ -33,21 +33,39 @@ operator fun Actor.plusAssign(action: Action) = addAction(action)
 operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
- * Action chaining utility. Wraps this action and the passed action with a [SequenceAction].
+ * Wraps this action and the passed action with a [SequenceAction].
+ *
+ * Eventual underling actions will be unwrapped.
+ *
  * @param action will be executed after this action.
  * @return [SequenceAction] storing both actions.
  */
-infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, action)
+infix fun Action.then(action: Action): SequenceAction {
+  val result = SequenceAction()
+  result.addUnwrapped(this)
+  result.addUnwrapped(action)
+  return  result
+}
+
+private fun SequenceAction.addUnwrapped(action: Action) {
+  if (action is SequenceAction) {
+    action.actions.forEach(::addAction)
+  } else {
+    addAction(action)
+  }
+}
 
 /**
- * Action chaining utility. Adds another action to this sequence.
- * @param action will be executed after the last scheduled action.
- * @return this [SequenceAction] for further chaining.
+ * Wraps this action and the passed action with a [SequenceAction].
+ * @param action will be executed after this action.
+ * @return [SequenceAction] storing both actions.
  */
-infix fun SequenceAction.then(action: Action): SequenceAction {
-  this.addAction(action)
-  return this
-}
+operator fun Action.plus(action: Action): SequenceAction = then(action)
+
+/**
+ * Adds another action to this sequence
+ */
+operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
 
 /**
  * Actions utility. Wraps this action and the passed action with a [ParallelAction], executing them both at the same time.

@@ -2,6 +2,7 @@ package kts.actors
 
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import ktx.actors.*
 import org.junit.Assert.*
@@ -58,11 +59,11 @@ class ActionsTest {
   }
 
   @Test
-  fun `should chain actions into sequences`() {
+  fun `should chain actions into sequence with action then action`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
 
-    val sequence = firstAction.then(secondAction) // === firstAction then secondAction
+    val sequence = firstAction then secondAction
 
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
@@ -70,13 +71,85 @@ class ActionsTest {
   }
 
   @Test
-  fun `should chain multiple actions into sequences`() {
+  fun `should chain underling actions into sequence with sequence then action`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
 
-    // / Note that the second "then" is a different extension function - it prevents from creating multiple sequences.
-    val sequence = firstAction then secondAction then thirdAction
+    val sequence = Actions.sequence(firstAction, secondAction) then thirdAction
+
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(thirdAction, sequence.actions[2])
+    assertEquals(3, sequence.actions.size)
+  }
+
+  @Test
+  fun `should chain underling actions into sequence with action then sequence`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    val sequence = firstAction then Actions.sequence(secondAction, thirdAction)
+
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(thirdAction, sequence.actions[2])
+    assertEquals(3, sequence.actions.size)
+  }
+
+  @Test
+  fun `should chain underling actions into sequence with sequence then sequence`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+    val fourthAction = MockAction()
+
+    val sequence = Actions.sequence(firstAction, secondAction) then Actions.sequence(thirdAction, fourthAction)
+
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(thirdAction, sequence.actions[2])
+    assertEquals(fourthAction, sequence.actions[3])
+    assertEquals(4, sequence.actions.size)
+  }
+
+  @Test
+  fun `should not mutate multiple actions with then`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    val sequence = firstAction then secondAction
+    sequence then thirdAction // <-- should not mutate firstSequence
+
+    assertEquals(2, sequence.actions.size)
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+  }
+
+  @Test
+  fun `should not mutate multiple actions with +`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+
+    val sequence = firstAction + secondAction
+    sequence + thirdAction // <-- should not mutate firstSequence
+
+    assertEquals(2, sequence.actions.size)
+    assertEquals(firstAction, sequence.actions[0])
+    assertEquals(secondAction, sequence.actions[1])
+  }
+
+  @Test
+  fun `should add action to sequence with +=`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+    val sequence = Actions.sequence(firstAction, secondAction)
+
+    sequence += thirdAction
 
     assertEquals(firstAction, sequence.actions[0])
     assertEquals(secondAction, sequence.actions[1])
