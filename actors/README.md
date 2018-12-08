@@ -46,8 +46,8 @@ be enough for most use cases.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
 - `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
 - `Action.parallelTo` *infix* extension function allows to easily create parallel actions with pleasant syntax.
-- `+` operator to create action sequence (alternative syntax to `then`) 
-- `+=` operator to add an action to an existing sequence 
+- `+` operator can be used to create action sequences (alternative syntax to `then`).
+- `+=` operator allows to add an action to an existing `SequenceAction`.
 
 #### Widgets
 
@@ -173,13 +173,24 @@ textField.onKeyboardFocusEvent { focusEvent, actor ->
 }
 ```
 
-Chaining actions (`SequenceAction` utility):
+Chaining actions with infix `then` function (`SequenceAction` utility):
+
 ```Kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
 val sequence = alpha(0f) then fadeIn(1f) then delay(1f) then fadeOut(1f)
-actor + sequence // Adding action to the actor.
+actor += sequence // Adding action to the actor.
+```
+
+Chaining actions with `+` operator (`SequenceAction` utility):
+
+```Kotlin
+import ktx.actors.*
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
+
+val sequence = alpha(0f) + fadeIn(1f) + delay(1f) + fadeOut(1f)
+actor += sequence // Adding action to the actor.
 ```
 
 Adding and removing actions to stages and actors with operators:
