@@ -63,16 +63,6 @@ private fun SequenceAction.addUnwrapped(action: Action) {
 operator fun Action.plus(action: Action): SequenceAction = then(action)
 
 /**
- * Wraps the actions in this [SequenceAction] with the passed action in a new [SequenceAction]
- *
- * The underling actions present in this [SequenceAction] will be unwrapped.
- *
- * @param action will be executed after this sequence of action.
- * @return [SequenceAction] storing both actions.
- */
-operator fun SequenceAction.plus(action: Action): SequenceAction = then(action)
-
-/**
  * Adds another action to this sequence
  */
 operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
