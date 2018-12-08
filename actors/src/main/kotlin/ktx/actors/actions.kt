@@ -49,7 +49,7 @@ infix fun Action.then(action: Action): SequenceAction {
 
 private fun SequenceAction.addUnwrapped(action: Action) {
   if (action is SequenceAction) {
-    action.actions.forEach(this::addAction)
+    action.actions.forEach(::addAction)
   } else {
     addAction(action)
   }

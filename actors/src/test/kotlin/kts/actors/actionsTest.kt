@@ -59,7 +59,7 @@ class ActionsTest {
   }
 
   @Test
-  fun `action then action should chain actions into sequences`() {
+  fun `should chain actions into sequence with action then action`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
 
@@ -71,7 +71,7 @@ class ActionsTest {
   }
 
   @Test
-  fun `sequence then action should chain underling actions into sequence`() {
+  fun `should chain underling actions into sequence with sequence then action`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
@@ -85,7 +85,7 @@ class ActionsTest {
   }
 
   @Test
-  fun `action then sequence should chain underling actions into sequence`() {
+  fun `should chain underling actions into sequence with action then sequence`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
@@ -99,7 +99,7 @@ class ActionsTest {
   }
 
   @Test
-  fun `sequence then sequence should chain underling actions into sequence`() {
+  fun `should chain underling actions into sequence with sequence then sequence`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
@@ -147,7 +147,6 @@ class ActionsTest {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
-
     val sequence = Actions.sequence(firstAction, secondAction)
 
     sequence += thirdAction
