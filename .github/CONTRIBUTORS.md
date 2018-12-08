@@ -32,5 +32,6 @@ Project contributors listed chronologically.
 * [@jcornaz](https://github.com/jcornaz)
   * Contributed immutable vector implementations to the [math module](../math).
   * Provided valuable suggestions to the [async module](../async).
+  * Added actions chaining utilities to the [actors module](../actors).
 * [@ProOrange](https://github.com/ProOrange)
   * Updated the project to Kotlin 1.3 and stable coroutines API.
