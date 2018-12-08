@@ -1,4 +1,4 @@
-package kts.actors
+package ktx.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
@@ -13,7 +13,6 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doAnswer
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import ktx.actors.stage
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame

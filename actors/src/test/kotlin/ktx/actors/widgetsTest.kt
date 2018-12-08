@@ -1,4 +1,4 @@
-package kts.actors
+package ktx.actors
 
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.nhaarman.mockito_kotlin.mock
-import ktx.actors.txt
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

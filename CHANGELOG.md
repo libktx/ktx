@@ -6,8 +6,6 @@
 - **[UPDATE]** Updated VisUI to 1.4.2.
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
 with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
-- **[CHANGE]** (`ktx-actors`) Make `SequenceAction.then(Action)` no longer mutating the sequence for better semantic and consistency with `Action.then(Action)`.
-- **[FEATURE]** (`ktx-actors`) Add `+` and `+=` operators to create sequence of actions (an alternative syntax to `then`) 
 
 ```kotlin
 // Adding an actor to a Stage/Group - before:
@@ -18,6 +16,7 @@ group + actor
 stage += actor
 group += actor
 ```
+
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Actor` extension operator methods `plus` and `minus` 
 with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
 
@@ -31,6 +30,12 @@ stage += action
 actor += action
 ```
 
+- **[CHANGE]** (`ktx-actors`) `SequenceAction.then` was removed. Using the method on a sequence no longer mutates
+it for consistency with `Action.then`. `then` now unwraps actors from passed `SequenceActions`.
+- **[CHANGE]** (`ktx-actors`) `ParallelAction.parallelTo` was removed. Using the method on a `ParallelAction` no longer
+mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps actors from passed `ParallelActions`.
+- **[FEATURE]** (`ktx-actors`) Added `+` operator to create sequence of actions (an alternative syntax to `then`).
+- **[FEATURE]** (`ktx-actors`) Added `+=` operators to `SequenceAction` and `ParallelAction` to ease adding new actions to these action groups.
 - **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
 - **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
 

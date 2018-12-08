@@ -1,9 +1,8 @@
-package kts.actors
+package ktx.actors
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
-import ktx.actors.*
 import org.junit.Assert.*
 import org.junit.Test
 
