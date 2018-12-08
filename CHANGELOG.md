@@ -6,6 +6,8 @@
 - **[UPDATE]** Updated VisUI to 1.4.2.
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
 with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
+- **[CHANGE]** (`ktx-actors`) Make `SequenceAction.then(Action)` no longer mutating the sequence for better semantic and consistency with `Action.then(Action)`.
+- **[FEATURE]** (`ktx-actors`) Add `+` and `+=` operators to create sequence of actions (an alternative syntax to `then`) 
 
 ```kotlin
 // Adding an actor to a Stage/Group - before:
