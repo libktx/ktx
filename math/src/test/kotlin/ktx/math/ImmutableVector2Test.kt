@@ -127,7 +127,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `len should return same result than Vector2`() {
+    fun `len should return same value as Vector2`() {
         vectors.forEach {
             assertEquals(it.toMutable().len(), it.len)
         }
@@ -142,7 +142,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `len2 should return same result than Vector2`() {
+    fun `len2 should return same value as Vector2`() {
         vectors.forEach {
             assertEquals(it.toMutable().len2(), it.len2)
         }
@@ -181,7 +181,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `isUnit with margin should return same result than Vector2`() {
+    fun `isUnit with margin should return same value as Vector2`() {
         vectors.forEach { vector ->
             assertEquals(vector.toMutable().isUnit, vector.isUnit())
             scalars.filter { it > 0f }.forEach { margin ->
@@ -206,7 +206,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `nor should return same result than Vector2`() {
+    fun `nor should return same value as Vector2`() {
         vectors.forEach {
             assertEquals(it.toMutable().nor().toImmutable(), it.nor)
         }
@@ -228,14 +228,14 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `unaryMinus should return same result than Vector2 scaled by -1`() {
+    fun `unaryMinus should return same value as Vector2 scaled by -1`() {
         vectors.forEach {
             assertEquals(it.toMutable().scl(-1f).toImmutable(), -it)
         }
     }
 
     @Test
-    fun `minus should return same result than Vector2`() {
+    fun `minus should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().minus(v2.toMutable()).toImmutable(), v1 - v2)
@@ -252,7 +252,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `plus should return same result than Vector2`() {
+    fun `plus should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().plus(v2.toMutable()).toImmutable(), v1 + v2)
@@ -285,7 +285,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `times should return same result than Vector2 scale`() {
+    fun `times should return same value as Vector2 scale`() {
         scalars.forEach { factor ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().scl(factor).toImmutable(), vector * factor)
@@ -302,7 +302,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `times should return same result than scl does for Vector2`() {
+    fun `times should return same value as scl does for Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().scl(v2.toMutable()).toImmutable(), v1 * v2)
@@ -327,7 +327,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `dot should return same result than Vector2`() {
+    fun `dot should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().dot(v2.toMutable()), v1 dot v2)
@@ -339,21 +339,21 @@ class ImmutableVector2Test {
     @Test
     fun `dot should return dot product`() {
         assertEquals(1f, ImmutableVector2.X dot ImmutableVector2.X)
-        assertEquals(1f, ImmutableVector2.X dot ImmutableVector2.X)
+        assertEquals(1f, ImmutableVector2.X.dot(1f, 0f))
 
+        assertEquals(1f, ImmutableVector2.Y dot ImmutableVector2(0f, 1f))
         assertEquals(1f, ImmutableVector2.Y.dot(0f, 1f))
-        assertEquals(1f, ImmutableVector2.Y.dot(0f, 1f))
 
+        assertEquals(0f, ImmutableVector2.X dot ImmutableVector2(0f, 1f))
         assertEquals(0f, ImmutableVector2.X.dot(0f, 1f))
-        assertEquals(0f, ImmutableVector2.X.dot(0f, 1f))
 
+        assertEquals(0f, ImmutableVector2.X dot ImmutableVector2(0f, 0f))
         assertEquals(0f, ImmutableVector2.X.dot(0f, 0f))
-        assertEquals(0f, ImmutableVector2.X.dot(0f, 0f))
 
-        assertEquals(2f, ImmutableVector2(1f, 1f).dot(1f, 1f))
+        assertEquals(2f, ImmutableVector2(1f, 1f) dot ImmutableVector2(1f, 1f))
         assertEquals(2f, ImmutableVector2(1f, 1f).dot(1f, 1f))
 
-        assertEquals(7f, ImmutableVector2(-2f, 3f).dot(4f, 5f))
+        assertEquals(7f, ImmutableVector2(-2f, 3f) dot ImmutableVector2(4f, 5f))
         assertEquals(7f, ImmutableVector2(-2f, 3f).dot(4f, 5f))
     }
 
@@ -367,7 +367,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `dst2 should return same result than Vector2`() {
+    fun `dst2 should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().dst2(v2.toMutable()), v1.dst2(v2))
@@ -401,7 +401,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `dst should return same result than Vector2`() {
+    fun `dst should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().dst(v2.toMutable()), v1.dst(v2))
@@ -435,7 +435,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withLimit should return same result than Vector2`() {
+    fun `withLimit should return same value as Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().limit(l).toImmutable(), v.withLimit(l))
@@ -453,7 +453,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withLimit2 should return same result than Vector2`() {
+    fun `withLimit2 should return same value as Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().limit2(l).toImmutable(), v.withLimit2(l))
@@ -471,7 +471,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withLength should return same result than Vector2`() {
+    fun `withLength should return same value as Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().setLength(l).toImmutable(), v.withLength(l))
@@ -489,7 +489,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withLength2 should return same result than Vector2`() {
+    fun `withLength2 should return same value as Vector2`() {
         scalars.forEach { l ->
             vectors.forEach { v ->
                 assertEquals(v.toMutable().setLength2(l).toImmutable(), v.withLength2(l))
@@ -507,7 +507,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withClamp should return same result than Vector2`() {
+    fun `withClamp should return same value as Vector2`() {
         scalars.forEach { min ->
             scalars.filter { it >= min }.forEach { max ->
                 vectors.forEach { v ->
@@ -542,7 +542,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `times should return same result than Vector2 mul`() {
+    fun `times should return same value as Vector2 mul`() {
         val transformations = listOf(
             Affine2(),
             Affine2().apply {
@@ -575,7 +575,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `crs should return same result than Vector2`() {
+    fun `crs should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().crs(v2.toMutable()), v1 x v2)
@@ -595,7 +595,7 @@ class ImmutableVector2Test {
 
     @Test
     @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
-    fun `angleDeg should return same result than Vector2`() {
+    fun `angleDeg should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2))
@@ -606,7 +606,7 @@ class ImmutableVector2Test {
 
     @Test
     @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
-    fun `angleRad should return same result than Vector2`() {
+    fun `angleRad should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2))
@@ -685,7 +685,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `angleRad to x-axis should return same result than Vector2`() {
+    fun `angleRad to x-axis should return same value as Vector2`() {
         // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
         vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
             assertEquals("$v1", v1.toMutable().angleRad(), v1.angleRad())
@@ -759,7 +759,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `angleRad with x axis should return same result than Vector2`() {
+    fun `angleRad with x axis should return same value as Vector2`() {
 
         // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
         vectors.filterNot { it.isZero(0f) }.forEach {
@@ -768,7 +768,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withAngle should return same result than Vector2`() {
+    fun `withAngle should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().setAngle(angle).toImmutable(), vector.withAngleDeg(angle))
@@ -785,7 +785,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withAngleRad should return same result than Vector2`() {
+    fun `withAngleRad should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().setAngleRad(angle).toImmutable(), vector.withAngleRad(angle))
@@ -802,7 +802,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withRotationDeg should return same result than Vector2`() {
+    fun `withRotationDeg should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().rotate(angle).toImmutable(), vector.withRotationDeg(angle))
@@ -823,7 +823,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withRotationRad should return same result than Vector2`() {
+    fun `withRotationRad should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
                 assertEquals(vector.toMutable().rotateRad(angle).toImmutable(), vector.withRotationRad(angle))
@@ -844,7 +844,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withRotation90 should return same result than Vector2`() {
+    fun `withRotation90 should return same value as Vector2`() {
         vectors.forEach { vector ->
             assertEquals(vector.toMutable().rotate90(-1).toImmutable(), vector.withRotation90(-1))
             assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.withRotation90(1))
@@ -865,7 +865,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withLerp should return same result than Vector2`() {
+    fun `withLerp should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { ratio ->
@@ -903,7 +903,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `withInterpolation should return same result than Vector2`() {
+    fun `withInterpolation should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 scalars.forEach { alpha ->
@@ -1068,7 +1068,7 @@ class ImmutableVector2Test {
     }
 
     @Test
-    fun `isCollinear should return same than Vector2`() {
+    fun `isCollinear should return same value as Vector2`() {
         vectors.forEach { v1 ->
             vectors.forEach { v2 ->
                 assertEquals(v1.toMutable().isCollinear(v2.toMutable()), v1.isCollinear(v2))

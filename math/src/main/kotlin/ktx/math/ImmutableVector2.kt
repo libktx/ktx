@@ -11,7 +11,7 @@ import kotlin.math.*
 /**
  * Represent an immutable vector 2D
  *
- * You may use [ImmutableVector2.toMutable] to crate a (mutable) [Vector2] from a an [ImmutableVector2].
+ * You may use [ImmutableVector2.toMutable] to create a (mutable) [Vector2] from a an [ImmutableVector2].
  * And an [ImmutableVector2] can be created from a [Vector2] with [Vector2.toImmutable].
  *
  * @property x the x-component of this vector
