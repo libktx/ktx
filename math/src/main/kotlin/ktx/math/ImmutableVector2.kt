@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Affine2
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Matrix3
 import com.badlogic.gdx.math.Vector2
+import java.util.*
 import kotlin.math.*
 
 /**
@@ -138,7 +139,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
         )
     }
 
-    override fun withRandomDirection(): ImmutableVector2 = withAngleRad(MathUtils.random(0f, MathUtils.PI2))
+    override fun withRandomDirection(rng: Random): ImmutableVector2 = withAngleRad(rng.nextFloat() * MathUtils.PI2)
 
     override fun epsilonEquals(other: ImmutableVector2, epsilon: Float): Boolean =
             epsilonEquals(other.x, other.y, epsilon)

@@ -5,6 +5,7 @@ package ktx.math
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -76,7 +77,7 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     fun withLerp(target: T, alpha: Float): T
 
     /** Returns a vector of same length and a random direction */
-    fun withRandomDirection(): T
+    fun withRandomDirection(rng: Random = MathUtils.random): T
 
     /** Returns a vector of same direction and the given [length] */
     fun withLength(length: Float): T = withLength2(length * length)

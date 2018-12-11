@@ -5,6 +5,7 @@ import io.kotlintest.forAtLeastOne
 import org.junit.Assert.*
 import org.junit.Ignore
 import org.junit.Test
+import java.util.*
 import kotlin.math.sqrt
 
 class ImmutableVector2Test {
@@ -942,17 +943,22 @@ class ImmutableVector2Test {
 
     @Test
     fun `withRandomDirection should return a vector of same length`() {
+        val rng = Random(42)
+
         vectors.forEach { vector ->
-            assertEquals(vector.withRandomDirection().len, vector.len, MathUtils.FLOAT_ROUNDING_ERROR)
+            assertEquals(vector.withRandomDirection(rng).len, vector.len, MathUtils.FLOAT_ROUNDING_ERROR)
         }
     }
 
     @Test
     fun `withRandomDirection should return a variety of random vectors`() {
+        val rng = Random(42)
+
         val vectors = HashSet<ImmutableVector2>()
         repeat(1000) {
-            vectors += ImmutableVector2.X.withRandomDirection()
+            vectors += ImmutableVector2.X.withRandomDirection(rng)
         }
+
         assertTrue(vectors.size > 900)
         forAtLeastOne(vectors) { it.x > 0 && it.y > 0 }
         forAtLeastOne(vectors) { it.x > 0 && it.y < 0 }
