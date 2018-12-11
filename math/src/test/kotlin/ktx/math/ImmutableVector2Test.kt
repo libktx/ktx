@@ -1,8 +1,6 @@
 package ktx.math
 
-import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.*
 import io.kotlintest.forAtLeastOne
 import org.junit.Assert.*
 import org.junit.Ignore
@@ -14,42 +12,42 @@ class ImmutableVector2Test {
     /** List of vector to use in tests */
     private val vectors = sequenceOf(
 
-            // vector zero
-            ImmutableVector2.ZERO,
+        // vector zero
+        ImmutableVector2.ZERO,
 
-            // axis
-            ImmutableVector2.X,
-            -ImmutableVector2.X,
-            ImmutableVector2.Y,
-            -ImmutableVector2.Y,
+        // axis
+        ImmutableVector2.X,
+        -ImmutableVector2.X,
+        ImmutableVector2.Y,
+        -ImmutableVector2.Y,
 
-            // quadrants
-            ImmutableVector2(3f, 4f),
-            ImmutableVector2(3f, -4f),
-            ImmutableVector2(-3f, 4f),
-            ImmutableVector2(-3f, -4f),
+        // quadrants
+        ImmutableVector2(3f, 4f),
+        ImmutableVector2(3f, -4f),
+        ImmutableVector2(-3f, 4f),
+        ImmutableVector2(-3f, -4f),
 
-            // small vectors
-            ImmutableVector2(0.001f, 0f),
-            ImmutableVector2(0f, 0.001f),
-            ImmutableVector2(0f, -0.001f)
+        // small vectors
+        ImmutableVector2(0.001f, 0f),
+        ImmutableVector2(0f, 0.001f),
+        ImmutableVector2(0f, -0.001f)
     )
 
     /** List scalar values to use in tests */
     private val scalars = sequenceOf(0f, Float.MIN_VALUE, 0.42f, 1f, 42f)
 
     private val interpolations = sequenceOf(
-            Interpolation.bounce,
-            Interpolation.bounceIn,
-            Interpolation.bounceOut,
-            Interpolation.circle,
-            Interpolation.circleIn,
-            Interpolation.circleOut,
-            Interpolation.pow2,
-            Interpolation.pow2In,
-            Interpolation.pow2Out,
-            Interpolation.smooth,
-            Interpolation.smooth2
+        Interpolation.bounce,
+        Interpolation.bounceIn,
+        Interpolation.bounceOut,
+        Interpolation.circle,
+        Interpolation.circleIn,
+        Interpolation.circleOut,
+        Interpolation.pow2,
+        Interpolation.pow2In,
+        Interpolation.pow2Out,
+        Interpolation.smooth,
+        Interpolation.smooth2
     )
 
     @Test
@@ -545,25 +543,35 @@ class ImmutableVector2Test {
 
     @Test
     fun `times should return same result than Vector2 mul`() {
-        val matrices = listOf(
-                mat3(),
-                mat3(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f)
+        val transformations = listOf(
+            Affine2(),
+            Affine2().apply {
+                preTranslate(-2f, 3f)
+                preRotate(18f)
+                preScale(1.5f, 2f)
+            }
         )
 
-        matrices.forEach { matrix ->
+        transformations.forEach { transformation ->
             vectors.forEach { vector ->
-                assertEquals(vector.toMutable().mul(matrix).toImmutable(), vector * matrix)
+                val matrix = Matrix3().set(transformation)
+                assertEquals(vector.toMutable().mul(matrix).toImmutable(), vector * transformation)
             }
         }
     }
 
     @Test
-    fun `times matrix should return expected result`() {
-        val matrix = mat3(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f)
-        val vector = ImmutableVector2(3.5f, 2.3f)
+    fun `applying affine transformation should be equivalent of doing the operations`() {
+        val vector = ImmutableVector2(3f, 4f)
 
-        assertEquals(ImmutableVector2(11.1f, 31.5f), vector * matrix)
-        assertEquals(ImmutableVector2.ZERO, vector * mat3())
+        val transformation = Affine2().apply {
+            preTranslate(-2f, 3f) // (1f, 7f)
+            preRotate(90f) // (-7f, 1f)
+            preScale(0.5f, 2f) // (-3.5f, 2f)
+        }
+
+        assertTrue(ImmutableVector2(-3.5f, 2f).epsilonEquals(vector * transformation, MathUtils.FLOAT_ROUNDING_ERROR))
+        assertTrue(vector.plus(-2f, 3f).withRotationDeg(90f).times(0.5f, 2f).epsilonEquals(vector * transformation, MathUtils.FLOAT_ROUNDING_ERROR))
     }
 
     @Test
@@ -901,8 +909,8 @@ class ImmutableVector2Test {
                 scalars.forEach { alpha ->
                     interpolations.forEach { interpolation ->
                         assertEquals(
-                                v1.toMutable().interpolate(v2.toMutable(), alpha, interpolation).toImmutable(),
-                                v1.withInterpolation(v2, alpha, interpolation)
+                            v1.toMutable().interpolate(v2.toMutable(), alpha, interpolation).toImmutable(),
+                            v1.withInterpolation(v2, alpha, interpolation)
                         )
                     }
                 }

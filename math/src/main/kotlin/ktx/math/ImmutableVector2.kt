@@ -2,6 +2,7 @@
 
 package ktx.math
 
+import com.badlogic.gdx.math.Affine2
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Matrix3
 import com.badlogic.gdx.math.Vector2
@@ -82,10 +83,10 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     /** @return the distance between this and the other vector */
     fun dst(otherX: Float, otherY: Float): Float = Vector2.dst(x, y, otherX, otherY)
 
-    /** Returns the result of multiplying this vector by the given matrix */
-    operator fun times(matrix: Matrix3): ImmutableVector2 = ImmutableVector2(
-            x = x * matrix.`val`[0] + y * matrix.`val`[3] + matrix.`val`[6],
-            y = x * matrix.`val`[1] + y * matrix.`val`[4] + matrix.`val`[7]
+    /** Apply the given affine [transformation] and return the resulting vector */
+    operator fun times(transformation: Affine2): ImmutableVector2 = ImmutableVector2(
+            x = x * transformation.m00 + y * transformation.m01 + transformation.m02,
+            y = x * transformation.m10 + y * transformation.m11 + transformation.m12
     )
 
     /** Calculates the 2D cross product between this and the given vector */
@@ -166,6 +167,9 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"), DeprecationLevel.ERROR)
     fun setZero(): ImmutableVector2 = ImmutableVector2.ZERO
+
+    @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * Affine2().set(matrix)", "com.badlogic.gdx.math.Affine2"), DeprecationLevel.ERROR)
+    fun mul(matrix: Matrix3): ImmutableVector2 = this * Affine2().set(matrix)
 
     @Deprecated("Immutable instances don't need to be copied", ReplaceWith("this"))
     fun cpy(): ImmutableVector2 = this
