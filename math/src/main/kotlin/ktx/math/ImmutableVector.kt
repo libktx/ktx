@@ -66,17 +66,21 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     infix fun dot(vector: T): Float
 
     /**
-     * Returns the squared distance between this and the other vector
+     * Returns the squared distance between this and the other [vector]
      *
      * This method is faster than [dst] because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact distance, as the return value is the square of the actual distance.
      */
     infix fun dst2(vector: T): Float
 
-    /** Linearly interpolates between this vector and the target vector by alpha */
+    /** Linearly interpolates between this vector and the [target] vector by [alpha] */
     fun withLerp(target: T, alpha: Float): T
 
-    /** Returns a vector of same length and a random direction */
+    /**
+     * Returns a vector of same length and a random direction.
+     *
+     * @param rng Random number generator to use ([MathUtils.random] by default)
+     */
     fun withRandomDirection(rng: Random = MathUtils.random): T
 
     /** Returns a vector of same direction and the given [length] */
@@ -98,7 +102,11 @@ interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
     fun withInterpolation(target: T, alpha: Float, interpolation: Interpolation): T =
             withLerp(target, interpolation.apply(alpha))
 
-    /** Returns true if this vector is in line with the other vector (either in the same or the opposite direction) */
+    /**
+     * Returns true if this vector is on-line with the [other] vector (either in the same or the opposite direction)
+     *
+     * @param epsilon Acceptable margin.
+     */
     fun isOnLine(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean
 
     /**
@@ -165,23 +173,35 @@ inline infix fun <T : ImmutableVector<T>> T.dst(other: T): Float = sqrt(dst2(oth
 /** Returns this vector scaled by (1 / [scalar]) */
 inline operator fun <T : ImmutableVector<T>> T.div(scalar: Float): T = times(1 / scalar)
 
-/** Returns true if this vector is collinear with the [other] vector */
+/**
+ * Returns true if this vector is collinear with the [other] vector
+ *
+ * @param epsilon Acceptable margin.
+ */
 fun <T : ImmutableVector<T>> T.isCollinear(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && hasSameDirection(other)
 
-/** Returns true if this vector is opposite collinear with the [other] vector */
+/**
+ * Returns true if this vector is opposite collinear with the [other] vector
+ *
+ * @param epsilon Acceptable margin.
+ */
 fun <T : ImmutableVector<T>> T.isCollinearOpposite(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         isOnLine(other, epsilon) && hasOppositeDirection(other)
 
-/** Returns true if this vector is opposite perpendicular with the [other] vector */
+/**
+ * Returns true if this vector is opposite perpendicular with the [other] vector
+ *
+ * @param epsilon Acceptable margin.
+ */
 fun <T : ImmutableVector<T>> T.isPerpendicular(other: T, epsilon: Float = MathUtils.FLOAT_ROUNDING_ERROR): Boolean =
         MathUtils.isZero(dot(other), epsilon)
 
-/** Returns whether this vector has similar direction compared to the other vector. */
+/** Returns whether this vector has similar direction compared to the [other] vector. */
 fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
         dot(other) > 0f
 
-/** Returns whether this vector has opposite direction compared to the other vector. */
+/** Returns whether this vector has opposite direction compared to the [other] vector. */
 fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
         dot(other) < 0f
 

@@ -30,12 +30,12 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     override operator fun minus(other: ImmutableVector2): ImmutableVector2 = minus(other.x, other.y)
 
-    /** Returns the result of subtracting the given vector from this vector */
+    /** Returns the result of subtracting the ([deltaX], [deltaY]) vector from this vector */
     fun minus(deltaX: Float = 0f, deltaY: Float = 0f): ImmutableVector2 = ImmutableVector2(x - deltaX, y - deltaY)
 
     override operator fun plus(other: ImmutableVector2): ImmutableVector2 = plus(other.x, other.y)
 
-    /** Returns the result of adding the given vector to this vector */
+    /** Returns the result of adding the given ([deltaX], [deltaY]) vector to this vector */
     fun plus(deltaX: Float = 0f, deltaY: Float = 0f): ImmutableVector2 = ImmutableVector2(x + deltaX, y + deltaY)
 
     override fun inc(): ImmutableVector2 = ImmutableVector2(x + 1, y + 1)
@@ -68,20 +68,20 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     override fun dot(vector: ImmutableVector2): Float = dot(vector.x, vector.y)
 
-    /** Returns the dot product of this vector by the given vector */
+    /** Returns the dot product of this vector by the given ([otherX], [otherY]) vector */
     fun dot(otherX: Float, otherY: Float): Float = Vector2.dot(x, y, otherX, otherY)
 
     override fun dst2(vector: ImmutableVector2): Float = dst2(vector.x, vector.y)
 
     /**
-     * Returns the squared distance between this and the other vector
+     * Returns the squared distance between this and the ([otherX], [otherY]) vector
      *
      * This method is faster than [dst] because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact distance, as the return value is the square of the actual distance.
      */
     fun dst2(otherX: Float, otherY: Float): Float = Vector2.dst2(x, y, otherX, otherY)
 
-    /** @return the distance between this and the other vector */
+    /** @return the distance between this and the ([otherX], [otherY]) vector */
     fun dst(otherX: Float, otherY: Float): Float = Vector2.dst(x, y, otherX, otherY)
 
     /** Apply the given affine [transformation] and return the resulting vector */
@@ -90,17 +90,17 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             y = x * transformation.m10 + y * transformation.m11 + transformation.m12
     )
 
-    /** Calculates the 2D cross product between this and the given vector */
+    /** Calculates the 2D cross product between this and the ([otherX], [otherY]) vector */
     fun crs(otherX: Float, otherY: Float): Float = x * otherY - y * otherX
 
     /** Returns the angle in radians of this vector relative to the [reference]. Angles are towards the positive y-axis. (typically counter-clockwise) */
     fun angleRad(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleRad(reference.x, reference.y)
 
-    /** Returns the angle in radians of this vector relative to the reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
-    fun angleRad(otherX: Float, otherY: Float): Float {
-        if ((x == 0f && y == 0f) || (otherX == 0f && otherY == 0f)) return Float.NaN
+    /** Returns the angle in radians of this vector relative to the ([referenceX], [referenceY]) reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
+    fun angleRad(referenceX: Float, referenceY: Float): Float {
+        if ((x == 0f && y == 0f) || (referenceX == 0f && referenceY == 0f)) return Float.NaN
 
-        val result = atan2(y, x) - atan2(otherY, otherX)
+        val result = atan2(y, x) - atan2(referenceY, referenceX)
         return when {
             result > MathUtils.PI -> result - MathUtils.PI2
             result < -MathUtils.PI -> result + MathUtils.PI2
@@ -108,8 +108,8 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
         }
     }
 
-    /** Returns a vector of same length with the given angle in radians */
-    fun withAngleRad(radians: Float): ImmutableVector2 = ImmutableVector2(len, 0f).withRotationRad(radians)
+    /** Returns a vector of same length with the given [angle] in radians */
+    fun withAngleRad(angle: Float): ImmutableVector2 = ImmutableVector2(len, 0f).withRotationRad(angle)
 
     /**
      * Returns a vector of same length rotated by 90 degrees in the given [direction]
@@ -145,7 +145,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             epsilonEquals(other.x, other.y, epsilon)
 
     /**
-     * Compares this vector with the other vector, using the supplied [epsilon] for fuzzy equality testing
+     * Compares this vector with the ([otherX], [otherY]) vector, using the supplied [epsilon] for fuzzy equality testing
      *
      * @param epsilon Acceptable difference for members. A small value makes equality it stricter, while a big value makes equality fuzzier.
      */
@@ -187,7 +187,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
         val Y = ImmutableVector2(0f, 1f)
 
         /**
-         * Returns the [ImmutableVector2] represented by the specified string according to the format of [ImmutableVector2::toString]
+         * Returns the [ImmutableVector2] represented by the specified [string] according to the format of [ImmutableVector2::toString]
          */
         fun fromString(string: String): ImmutableVector2 =
                 Vector2().fromString(string).toImmutable()
@@ -204,7 +204,11 @@ inline fun Vector2.toImmutable(): ImmutableVector2 = ImmutableVector2(x, y)
 inline fun ImmutableVector2.angleDeg(reference: ImmutableVector2 = ImmutableVector2.X): Float =
         angleDeg(reference.x, reference.y)
 
-/** Returns the angle in degrees of this vector relative to the reference vector described by [referenceX] and [referenceY]. Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180 */
+/**
+ * Returns the angle in degrees of this vector relative to the reference vector described by [referenceX] and [referenceY].
+ *
+ * Angles are towards the positive y-axis (typically counter-clockwise.) between -180 and +180
+ */
 inline fun ImmutableVector2.angleDeg(referenceX: Float, referenceY: Float): Float =
         angleRad(referenceX, referenceY) * MathUtils.radiansToDegrees
 
