@@ -1,5 +1,4 @@
 #### 1.9.9-SNAPSHOT
-
 - **[UPDATE]** Updated LibGDX to 1.9.9.
 - **[UPDATE]** Updated to Kotlin 1.3.11.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.0.1.
@@ -38,6 +37,7 @@ mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps ac
 - **[FEATURE]** (`ktx-actors`) Added `+=` operators to `SequenceAction` and `ParallelAction` to ease adding new actions to these action groups.
 - **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
 - **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
+- **[FEATURE]** (`ktx-math`) Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
 
 #### 1.9.8-b5
 
