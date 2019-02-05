@@ -83,6 +83,10 @@ subprojects {
     archives jar, javadocJar, sourcesJar
   }
 
+  tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
+  }
+
   signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask('uploadArchives') }
     sign configurations.archives
