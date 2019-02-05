@@ -35,3 +35,6 @@ Project contributors listed chronologically.
   * Added actions chaining utilities to the [actors module](../actors).
 * [@ProOrange](https://github.com/ProOrange)
   * Updated the project to Kotlin 1.3 and stable coroutines API.
+* [@jojomickymack](https://github.com/jojomickymack)
+  * Wrote [a KTX tutorial](https://jojomickymack.gitlab.io/reverie/post/libktx_platformer/).
+  * Prepared several KTX template projects.
