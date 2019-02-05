@@ -2,6 +2,7 @@ package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 
@@ -151,4 +152,16 @@ fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2) {
 fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2,
                            colorA: Color, colorB: Color, colorC: Color) {
   triangle(pointA.x, pointA.y, pointB.x, pointB.y, pointC.x, pointC.y, colorA, colorB, colorC)
+}
+
+/**
+ * Automatically calls [ShapeRenderer.begin] and [ShapeRenderer.end].
+ * @param type specified shape type used to draw the shapes in the [action] block. Can be changed during the rendering
+ * with [ShapeRenderer.set].
+ * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
+ */
+inline fun <SR: ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
+  begin(type)
+  action(this)
+  end()
 }

@@ -1,7 +1,65 @@
+#### 1.9.9-b1
+
+- **[UPDATE]** Updated LibGDX to 1.9.9.
+- **[UPDATE]** Updated to Kotlin 1.3.20.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.1.1.
+- **[UPDATE]** Updated VisUI to 1.4.2.
+- **[UPDATE]** Updated to Gradle 5.0.
+- **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
+with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
+
+```kotlin
+// Adding an actor to a Stage/Group - before:
+stage + actor
+group + actor
+
+// Now:
+stage += actor
+group += actor
+```
+
+- **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Actor` extension operator methods `plus` and `minus` 
+with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
+
+```kotlin
+// Adding an action to a Stage/Actor - before:
+stage + action
+actor + action
+
+// Now:
+stage += action
+actor += action
+```
+
+- **[CHANGE]** (`ktx-actors`) `SequenceAction.then` was removed. Using the method on a sequence no longer mutates
+it for consistency with `Action.then`. `then` now unwraps actors from passed `SequenceActions`.
+- **[CHANGE]** (`ktx-actors`) `ParallelAction.parallelTo` was removed. Using the method on a `ParallelAction` no longer
+mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps actors from passed `ParallelActions`.
+- **[CHANGE]** (`ktx-async`) Overhaul of the `ktx-async` module.
+    - `KtxAsync` is now the main coroutines scope that should be used instead of the `GlobalScope`.
+    - `Dispatchers.KTX` can be used to access a coroutines dispatchers that executes tasks on the main rendering thread.
+    - `AsyncExecutorDispatcher` can be used to wrap LibGDX `AsyncExecutor` to execute tasks asynchronously.
+    - `newSingleThreadAsyncContext` allows to create an `AsyncExecutorDispatcher` with a single thread.
+    - `newAsyncContext` allows to create an `AsyncExecutorDispatcher` with the given max amount of threads.
+    - `onRenderingThread` suspends the coroutine to execute a task on the main rendering thread and return its result.
+    - `isOnRenderingThread` allows to check whether the corouting is executed on the main rendering thread.
+    - `skipFrame` attempts to suspend the coroutine for at least one rendering frame.
+    - `httpRequest` allows to perform an asynchronous HTTP request.
+    - `schedule` and `interval` functions simplify LibGDX `Timer` API usage.
+    - `AssetStorage` and associated asset loading utilities were temporarily removed. They will be added to a separate module.
+    - Asynchronous tests were **significantly** simplified.
+    - Assume that other utilities were either removed or integrated with the listed utilities.
+- **[CHANGE]** (`ktx-freetype-async`) The module is temporarily disabled due to the removal of `AssetStorage`.
+- **[FEATURE]** (`ktx-actors`) Added `+` operator to create sequence of actions (an alternative syntax to `then`).
+- **[FEATURE]** (`ktx-actors`) Added `+=` operators to `SequenceAction` and `ParallelAction` to ease adding new actions to these action groups.
+- **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.
+- **[FEATURE]** (`ktx-graphics`) Added `ShapeRenderer.use` to allow safe omission of the `begin()` and `end()` calls.
+- **[FEATURE]** (`ktx-math`) Added `ImmutableVector2`, an immutable equivalent to `Vector2`.
+
 #### 1.9.8-b5
 
 - **[UPDATE]** Updated to Kotlin 1.2.70.
-- **[UPDATE]** Updated to Kotlin Coroutines 0.25.0.
+- **[UPDATE]** Updated to Kotlin Coroutines 0.26.1.
 - **[UPDATE]** Updated to Gradle 4.10.2.
 - **[FIX]** (`ktx-ashley`) Component classes without a default no-arg constructors could not have been initiated
 by the Ashley engine. This is still the case, but now an exception with a meaningful message is thrown.

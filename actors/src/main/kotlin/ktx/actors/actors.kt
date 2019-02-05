@@ -48,23 +48,17 @@ fun Actor.centerPosition(width: Float = this.stage.width, height: Float = this.s
 operator fun Group.contains(actor: Actor): Boolean = actor.parent === this
 
 /**
- * Alias for [Group.addActor] method. Allows to add actors to the group with + operator.
+ * Alias for [Group.addActor] method. Allows to add actors to the group with += operator.
  * @param actor will be added to the group.
- * @return this (for chaining).
  */
-operator fun Group.plus(actor: Actor): Group {
-  this.addActor(actor)
-  return this
-}
+operator fun Group.plusAssign(actor: Actor) = addActor(actor)
 
 /**
- * Alias for [Group.removeActor] method. Allows to remove actors from the group with - operator.
+ * Alias for [Group.removeActor] method. Allows to remove actors from the group with -= operator.
  * @param actor will be removed from the group.
- * @return this (for chaining).
  */
-operator fun Group.minus(actor: Actor): Group {
-  this.removeActor(actor)
-  return this
+operator fun Group.minusAssign(actor: Actor) {
+  removeActor(actor)
 }
 
 /**
@@ -74,23 +68,18 @@ operator fun Group.minus(actor: Actor): Group {
 operator fun Stage.contains(actor: Actor): Boolean = actor.stage === this
 
 /**
- * Alias for [Stage.addActor] method. Allows to add actors to the stage with + operator.
+ * Alias for [Stage.addActor] method. Allows to add actors to the stage with += operator.
  * @param actor will be added to stage.
- * @return this (for chaining).
  */
-operator fun Stage.plus(actor: Actor): Stage {
-  this.addActor(actor)
-  return this
-}
+operator fun Stage.plusAssign(actor: Actor) = addActor(actor)
 
 /**
- * Removes actors from root group of the stage. If actor is not added directly to the stage, this method might have no effect.
+ * Removes actors from root group of the stage. Allows to remove actors from the stage with -= operator.
+ * If actor is not added directly to the stage this method might have no effect.
  * @param actor will be removed if it is added directly to the stage.
- * @return this (for chaining).
  */
-operator fun Stage.minus(actor: Actor): Stage {
-  this.root - actor
-  return this
+operator fun Stage.minusAssign(actor: Actor) {
+  root.removeActor(actor)
 }
 
 /**

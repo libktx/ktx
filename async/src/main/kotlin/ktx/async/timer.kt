@@ -20,7 +20,8 @@ inline fun schedule(
  * Simplifies [Timer] API.
  * @param intervalSeconds time between each execution.
  * @param delaySeconds the execution will begin after this delay. Defaults to 0.
- * @param repeatCount additional task executions amount. Optional. If not set, task will be repeated indefinitely.
+ * @param repeatCount **additional** task executions amount. For example, repeat count of 2 causes the task to be
+ * executed 3 times. Optional. If not set, task will be repeated indefinitely.
  * @param task will be repeatedly executed on the rendering thread.
  * @return callback to the task.
  */

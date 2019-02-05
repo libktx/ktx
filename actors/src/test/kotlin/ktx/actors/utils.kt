@@ -1,8 +1,6 @@
-package kts.actors
+package ktx.actors
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
-import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.nhaarman.mockito_kotlin.doReturn
@@ -13,10 +11,10 @@ internal fun getMockStage(
     viewportWidth: Float = 800f,
     viewportHeight: Float = 600f
 ): Stage {
-  Gdx.graphics = mock<Graphics>() // Referenced by Stage constructor.
+  Gdx.graphics = mock() // Referenced by Stage constructor.
   val viewport = mock<Viewport> {
     on(it.worldWidth) doReturn viewportWidth
     on(it.worldHeight) doReturn viewportHeight
   }
-  return Stage(viewport, mock<Batch>())
+  return Stage(viewport, mock())
 }

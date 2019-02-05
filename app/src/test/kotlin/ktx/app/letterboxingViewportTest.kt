@@ -1,9 +1,7 @@
 package ktx.app
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.badlogic.gdx.graphics.GL20
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.assertEquals
@@ -14,17 +12,18 @@ import org.junit.Test
  * Tests [LetterboxingViewport] class, which merges ScreenViewport and FitViewport behavior.
  */
 class LetterboxingViewportTest {
-  val tolerance = 0.00001f
+  private val tolerance = 0.00001f
+
   @Before
-  fun mockGraphics() {
+  fun `mock graphics`() {
     LwjglNativesLoader.load()
-    Gdx.graphics = mock<Graphics> {
+    Gdx.graphics = mock {
       on(it.ppiX) doReturn 100f
       on(it.ppiY) doReturn 100f
       on(it.width) doReturn 800
       on(it.height) doReturn 600
     }
-    Gdx.gl20 = mock<GL20>()
+    Gdx.gl20 = mock()
     Gdx.gl = Gdx.gl20
   }
 

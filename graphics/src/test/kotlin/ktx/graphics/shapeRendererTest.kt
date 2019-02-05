@@ -2,10 +2,13 @@ package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import org.junit.Assert
 import org.junit.Test
 
 class ShapeRendererTest {
@@ -173,5 +176,17 @@ class ShapeRendererTest {
         colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK)
 
     verify(tested).triangle(1f, 2f, 3f, 4f, 5f, 6f, Color.WHITE, Color.GRAY, Color.BLACK)
+  }
+
+  @Test
+  fun `should begin and end ShapeRenderer`() {
+    val shapeRenderer = mock<ShapeRenderer>()
+
+    shapeRenderer.use(ShapeType.Filled) {
+      verify(shapeRenderer).begin(ShapeType.Filled)
+      Assert.assertSame(shapeRenderer, it)
+      verify(shapeRenderer, never()).end()
+    }
+    verify(shapeRenderer).end()
   }
 }

@@ -169,6 +169,44 @@ This is basically just an internal representation: we choose not to create entir
 (as opposed to simply extending existing `Scene2D` classes) as it would basically require to rewrite the entirety of
 `Scene2D` module.
 
+#### `Stage`
+
+`Stage` is a crucial part of the `Scene2D` API. It contains the root actor that is the parent of all of the displayed
+widgets. It handles input processing, rendering and resizing. If you are unfamiliar with `Stage` API, try reading one
+of the resources listed at the bottom of the page.
+
+Initiating `Stage` instances:
+
+```kotlin
+// Default settings:
+val stage = Stage()
+
+// Custom viewport:
+val stage = Stage(ExtendViewport(800, 600))
+
+// Custom viewport and batch:
+val stage = Stage(ExtendViewport(800, 600), SpriteBatch())
+```
+
+Using [`ktx-actors`](../actors):
+
+```kotlin
+import ktx.actors.stage
+
+val stage = stage(batch = SpriteBatch())
+```
+
+If you are already using a `SpriteBatch` to render your textures, reusing the same instance for `Stage` is recommended.
+
+Make sure to set the `Stage` as the input processor before it is rendered:
+
+```kotlin
+Gdx.input.inputProcessor = stage
+```
+
+Note that [`ktx-app` module](../app) makes it easier to work with input processors and multiple application screens,
+while [`ktx-actors` module](../actors) has general `Scene2D` utilities including `Stage` factory method.
+
 ### Usage examples
 
 Loading and setting of the default application's `Skin`:

@@ -1,3 +1,5 @@
+[![VisUI](https://img.shields.io/badge/vis--ui-1.4.2-blue.svg)](https://github.com/kotcrab/vis-ui)
+
 # KTX: VisUI type-safe builders
 
 Utilities for creating VisUI widgets using Kotlin type-safe builders.
