@@ -8,7 +8,7 @@ include(
     'collections',
     'graphics',
     'freetype',
-    'freetype-async',
+//    'freetype-async',
     'i18n',
     'inject',
     'log',

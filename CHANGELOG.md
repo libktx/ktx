@@ -1,8 +1,10 @@
 #### 1.9.9-SNAPSHOT
+
 - **[UPDATE]** Updated LibGDX to 1.9.9.
 - **[UPDATE]** Updated to Kotlin 1.3.20.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.1.1.
 - **[UPDATE]** Updated VisUI to 1.4.2.
+- **[UPDATE]** Updated to Gradle 5.0.
 - **[CHANGE]** (`ktx-actors`) Replaced `Stage` and `Group` extension operator methods `plus` and `minus` 
 with `plusAssign` and `minusAssign` to avoid mutating the objects with addition and subtraction operators.
 
@@ -33,6 +35,21 @@ actor += action
 it for consistency with `Action.then`. `then` now unwraps actors from passed `SequenceActions`.
 - **[CHANGE]** (`ktx-actors`) `ParallelAction.parallelTo` was removed. Using the method on a `ParallelAction` no longer
 mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps actors from passed `ParallelActions`.
+- **[CHANGE]** (`ktx-async`) Overhaul of the `ktx-async` module.
+    - `KtxAsync` is now the main coroutines scope that should be used instead of the `GlobalScope`.
+    - `Dispatchers.KTX` can be used to access a coroutines dispatchers that executes tasks on the main rendering thread.
+    - `AsyncExecutorDispatcher` can be used to wrap LibGDX `AsyncExecutor` to execute tasks asynchronously.
+    - `newSingleThreadAsyncContext` allows to create an `AsyncExecutorDispatcher` with a single thread.
+    - `newAsyncContext` allows to create an `AsyncExecutorDispatcher` with the given max amount of threads.
+    - `onRenderingThread` suspends the coroutine to execute a task on the main rendering thread and return its result.
+    - `isOnRenderingThread` allows to check whether the corouting is executed on the main rendering thread.
+    - `skipFrame` attempts to suspend the coroutine for at least one rendering frame.
+    - `httpRequest` allows to perform an asynchronous HTTP request.
+    - `schedule` and `interval` functions simplify LibGDX `Timer` API usage.
+    - `AssetStorage` and associated asset loading utilities were temporarily removed. They will be added to a separate module.
+    - Asynchronous tests were **significantly** simplified.
+    - Assume that other utilities were either removed or integrated with the listed utilities.
+- **[CHANGE]** (`ktx-freetype-async`) The module is temporarily disabled due to the removal of `AssetStorage`.
 - **[FEATURE]** (`ktx-actors`) Added `+` operator to create sequence of actions (an alternative syntax to `then`).
 - **[FEATURE]** (`ktx-actors`) Added `+=` operators to `SequenceAction` and `ParallelAction` to ease adding new actions to these action groups.
 - **[FEATURE]** (`ktx-actors`) Added `stage` factory method that uses named and default parameters to ease `Stage` creation.

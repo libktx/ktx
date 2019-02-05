@@ -1,223 +1,75 @@
 package ktx.async
 
 import com.badlogic.gdx.Application
+import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.utils.Timer
-import com.badlogic.gdx.utils.Timer.Task
+import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doAnswer
-import com.nhaarman.mockito_kotlin.mock
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import org.junit.Assert.assertTrue
-import java.util.concurrent.*
-import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.concurrent.atomic.AtomicReference
-
-/** Single-threaded executor for asynchronous timed tasks. */
-val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
+import org.junit.After
+import org.junit.Before
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit.SECONDS
 
 /**
- * Stores posted [Runnable] instances in a thread-safe queuer and allows to run them en masse. Coroutines context
- * testing utility.
- * @see `coroutine test`
+ * Base class for asynchronous API tests. Initiates a [HeadlessApplication] to handle the rendering loop and execution
+ * of scheduled tasks.
  */
-class TestApplication : Application by mock() {
-  var frameId = 0
-  val queue = ConcurrentLinkedQueue<Runnable>()
-
-  override fun postRunnable(runnable: Runnable?) {
-    runnable?.let { queue.offer(it) }
-  }
-
-  fun runAll() {
-    frameId++
-    while (queue.isNotEmpty()) {
-      queue.poll().run()
+abstract class AsyncTest {
+  @Before
+  open fun `setup LibGDX application`() {
+    Gdx.app = HeadlessApplication(object : ApplicationAdapter() {})
+    val initTask = CompletableFuture<Unit>()
+    Gdx.app.postRunnable {
+      // Saving reference to the rendering thread:
+      KtxAsync.initiate()
+      initTask.complete(Unit)
     }
+    initTask.join()
   }
-}
 
-/**
- * Mocks static LibGDX [Timer] instance. Abstracts the [Timer] implementation away from LibGDX applications, allowing
- * to test it without running a whole LibGDX app. Provides a way to choose how asynchronous tasks are executed with
- * [onSchedule] function. Default implementation executes tasks on a separate thread.
- * @see `no delay execution`
- */
-fun `with timer`(
-    onSchedule: (task: Task, delay: Float) -> Unit = { task, delay ->
-      scheduler.schedule(task, (delay * 1000f).toLong(), MILLISECONDS)
-    },
-    test: (Timer) -> Unit) {
-  // Tries to replace the default Timer instance used by LibGDX by our mock-up implementation. LibGDX is a pain to mock.
-  val timerClass = Timer::class.java
-  val timer = mock<Timer> {
-    on(it.scheduleTask(any(), any())) doAnswer {
-      it.getArgument<Task>(0).apply {
-        onSchedule(this, it.getArgument(1))
-      }
-    }
-  }
-  timerClass.getDeclaredMethod("thread").apply {
-    isAccessible = true
-    invoke(null)
-  }
-  val threadField = timerClass.getDeclaredField("thread").apply {
-    isAccessible = true
-  }
-  val thread = threadField.get(null)
-  val threadClass = thread.javaClass
-  val timerField = threadClass.getDeclaredField("instance").apply {
-    isAccessible = true
-  }
-  timerField.set(thread, timer)
-  try {
-    test(timer)
-  } finally {
-    timerField.set(thread, null)
-  }
-}
+  /**
+   * Finds the main rendering [Thread] used to execute runnables scheduled with [Application.postRunnable].
+   */
+  protected fun getMainRenderingThread(): Thread = getExecutionThread(Gdx.app::postRunnable)
 
-/**
- * Alternative implementation of [Timer] scheduling. Immediately executes the scheduled tasks, so KTX coroutines
- * context and resume the operations without having to way.
- * @see `with timer`
- */
-fun `no delay execution`() = { task: Task, _: Float -> task.run() }
-
-/**
- * Allows to test LibGDX coroutines context by running [Runnable] instances posted to the fake [Application] instance.
- * Simulates an actual application environment with constant [Runnable] handling in a loop, without resorting to
- * blocking operations. See asyncTest.kt for usage examples.
- * @param timeLimitMillis if a test execution takes longer than that, it fails. Avoids endless loops. Defaults to 2.5s.
- * @param concurrencyLevel decides whether asynchronous executor is created by the context.
- * @param test prepare control variables and mocks in the first lambda. Then open the second block by invoking first
- *    lambda parameter (ktxAsync) - this is the tested suspending coroutine body. Supports multiple coroutines.
- * @see AsyncTest
- */
-fun `coroutine test`(
-    timeLimitMillis: Long = 2500L,
-    concurrencyLevel: Int = 0,
-    test: (ktxAsync: (suspend KtxAsync.(CoroutineScope) -> Unit) -> Unit) -> Unit) {
-  val testStatuses = ConcurrentHashMap<Any, TestStatus>()
-  val error = AtomicReference<Throwable>()
-  val application = TestApplication()
-  Gdx.app = application
-  enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = concurrencyLevel)
-
-  test { coroutine ->
-    testStatuses[coroutine] = TestStatus.STARTED
-    GlobalScope.ktxAsync {
-      try {
-        KtxAsync.coroutine(it)
-        testStatuses[coroutine] = TestStatus.FINISHED
-      } catch (exception: Throwable) {
-        error.set(exception)
-        testStatuses[coroutine] = TestStatus.FAILED
-      }
+  /**
+   * Finds the [Thread] that [AsyncExecutor] executes tasks with. Note that if the executor uses more than a single
+   * thread, this method will return only the first one that happens to execute the extraction task. When relying on
+   * this method to find the executor thread, make sure the executor is single-threaded.
+   */
+  protected fun getExecutionThread(executor: AsyncExecutor): Thread {
+    return getExecutionThread { task ->
+      executor.submit { task.run() }
     }
   }
 
-  val startTime = System.currentTimeMillis()
-  while (true) {
-    var finishedCount = 0
-    testStatuses.values.forEach {
-      when (it) {
-        TestStatus.STARTED -> application.runAll()
-        TestStatus.FINISHED -> finishedCount++
-        TestStatus.FAILED -> throw error.get()
-      }
-    }
-    if (finishedCount == testStatuses.size) break
-    if (System.currentTimeMillis() - startTime > timeLimitMillis) {
-      throw AssertionError("Test execution time exceeded the limit of $timeLimitMillis milliseconds.")
-    }
-  }
-}
-
-/**
- * Allows to test LibGDX coroutines cancelling by running [Runnable] instances posted to the fake [Application]
- * instance. Simulates an actual application environment with constant [Runnable] handling in a loop, without resorting
- * to blocking operations. Allows to choose total test duration, after which the tested test should have finished even
- * if not properly cancelled (failing the test) and cancellation delay. Contrary to [coroutine test], this utility runs
- * for the whole given test duration to make sure that the coroutines are cancelled properply. See asyncTest.kt or
- * httpTest.kt for usage examples.
- * @param testDurationMillis total estimated time needed to execute the whole coroutine without cancellation.
- * @param cancelAfterMillis delay after which the coroutine is cancelled.
- * @param concurrencyLevel decides whether asynchronous executor is created by the context.
- * @param test prepare control variables and mocks in the first lambda. Then open the second block by invoking first
- *      lambda parameter (ktxAsync) - this is a suspending coroutine body. Optionally open third block by invoking
- *      second lambda parameter (assert) to perform additional checks after the coroutines are fully executed. Does NOT
- *      support couroutines.
- * @see AsyncTest
- * @see AsynchronousHttpRequestsTest
- */
-fun `cancelled coroutine test`(
-    testDurationMillis: Long = 100L,
-    cancelAfterMillis: Long = 10L,
-    concurrencyLevel: Int = 0,
-    test: (ktxAsync: (suspend KtxAsync.(CoroutineScope) -> Unit) -> Unit,
-           assert: ((() -> Unit)) -> Unit) -> Unit) {
-  val testStatus = AtomicReference<TestStatus>(TestStatus.STARTED)
-  val error = AtomicReference<Throwable>()
-  val job = AtomicReference<Job>()
-  val assert = AtomicReference<() -> Unit>()
-  val application = TestApplication()
-  var cancellationExceptionThrown = false
-  Gdx.app = application
-  enableKtxCoroutines(asynchronousExecutorConcurrencyLevel = concurrencyLevel)
-
-  test({ coroutine ->
-    job.set(GlobalScope.ktxAsync {
-      try {
-        KtxAsync.coroutine(it)
-        testStatus.set(TestStatus.FINISHED)
-      } catch (exception: CancellationException) {
-        cancellationExceptionThrown = true
-      } catch (exception: Throwable) {
-        error.set(exception)
-        testStatus.set(TestStatus.FAILED)
-      }
+  /**
+   * Finds the [Thread] that executes the passed [Runnable].
+   */
+  private fun getExecutionThread(executor: (Runnable) -> Unit): Thread {
+    val thread = CompletableFuture<Thread>()
+    executor(Runnable {
+      thread.complete(Thread.currentThread())
     })
-  }, { assertionTask -> assert.set(assertionTask) })
-
-  var cancelled = false
-  val startTime = System.currentTimeMillis()
-  loop@ while (true) {
-    val totalTime = System.currentTimeMillis() - startTime
-    if (!cancelled && totalTime >= cancelAfterMillis && job.get() != null) {
-      job.get().cancel()
-      cancelled = true
-    }
-    when (testStatus.get()) {
-      TestStatus.STARTED -> application.runAll()
-      TestStatus.FINISHED -> break@loop
-      TestStatus.FAILED -> throw error.get()
-      null -> throw IllegalStateException()
-    }
-    if (totalTime > testDurationMillis) {
-      break
-    }
+    return thread.get(5L, SECONDS)
   }
 
-  assertTrue("This test expects that the coroutine is cancelled.", cancellationExceptionThrown)
-  assert.get()?.invoke()
-}
+  /**
+   * Blocks the current thread for the given amount of [seconds].
+   */
+  protected fun delay(seconds: Float) {
+    delay((seconds * 1000).toLong())
+  }
 
-/** @see `coroutine test` */
-private enum class TestStatus {
-  STARTED,
-  FINISHED,
-  FAILED
-}
+  /**
+   * Blocks the current thread for the given amount of [millis].
+   */
+  protected fun delay(millis: Long) {
+    Thread.sleep(millis)
+  }
 
-/** Resets [KtxAsync] coroutines context with reflection. */
-fun `destroy coroutines context`() {
-  KtxAsync.javaClass.getDeclaredField("mainThread").set(KtxAsync, null)
-  KtxAsync.javaClass.getDeclaredField("asyncExecutor").apply {
-    (get(KtxAsync) as AsyncExecutor?)?.dispose()
-    set(KtxAsync, null)
+  @After
+  open fun `exit LibGDX application`() {
+    Gdx.app.exit()
   }
 }
