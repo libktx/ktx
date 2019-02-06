@@ -249,9 +249,9 @@ skin(myAtlas) {
     up = it[buttonUp()]
     down = it[buttonDown()]
   }
-  }
   button(Buttons.toggle(), extend = defaultStyle) {
     checked = it[buttonChecked()]
+  }
 }
 ```
 

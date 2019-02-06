@@ -146,7 +146,7 @@ methods and operator overloads.
 There are some general purpose LibGDX utility libraries out there, but most lack first-class Kotlin support.
 
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
-library with some utilities similar to `ktx-graphics`/
+library with some utilities similar to `ktx-graphics`.
 
 #### Additional documentation
 
