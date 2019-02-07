@@ -18,8 +18,9 @@ an issue with your proposal first. Major API changes or new modules have to be d
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
   - **[CHANGE]** - breaking API change.
-  - **[UPDATE]** - update of one of project dependencies.
+  - **[UPDATE]** - update of one of the dependencies.
   - **[FIX]** - bug fix.
+  - **[MISC]** - other changes (e.g. related to documentation or the project itself).
 - Some libraries (like `ktx-collections` or `ktx-math`) list _all_ features in the `README.md` files to ease their
 usage. When adding new feature to these projects, please add description of your change to the file. Also, add all
 necessary imports in KTX examples in `README.md` files to make it easier to try them out.
@@ -59,7 +60,12 @@ previous task sequence (if it fails on the `closeAndPromoteRepository` task).
 - Run `gradle distZip` to prepare archive with KTX sources, compiled binary and documentation.
 - Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. Tag should match released version.
 Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
-description. Note that a release is not necessary for snapshot versions.
+description. Note that a release is not necessary for snapshot versions. If there are any known issues with the previous
+or current versions, please attach additional _Known issues:_ section with the following labels:
+  - **[BUG]** - a known bug in the release that is or will be fixed in the following versions.
+  - **[INCOMPATIBILITY]** - incompatibility with one of the previously supported or currently released versions of one
+  of the major dependencies.
+  - **[REMOVAL]** - temporary or permanent removal of a major feature (e.g. disabling a module for a single release).
 
 ### Updating dependencies
 
