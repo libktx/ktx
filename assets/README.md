@@ -59,47 +59,8 @@ exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntim
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
 
-Note: if you can use coroutines in your project, [`ktx-async`](../async) module provides a lightweight coroutines-based
-alternative to `AssetManager` that can greatly simplify your asset loading code.
-
-##### Implementation tip: type-safe assets
-
-Create an enum with all assets of the selected type. Let's assume our application stores all images in `assets/images`
-folder in `PNG` format. Given `logo.png`, `player.png` and `enemy.png` images, we would create a similar enum:
-```Kotlin
-enum class Images {
-  logo,
-  player,
-  enemy;
-
-  val path = "images/${name}.png"
-  fun load() = manager.load<Texture>(path)
-  operator fun invoke() = manager.getAsset<Texture>(path)
-  companion object {
-    lateinit var manager: AssetManager
-  }
-}
-```
-Operator `invoke()` function brings asset accessing boilerplate to mininum: `enumName()`. Thanks to wildcard imports, we
-can access `logo`, `player` and `enemy` enum instances directly:
-```Kotlin
-import com.example.Images.*
-
-// Setting AssetManager instance:
-Images.manager = myAssetManager
-
-// Scheduling logo loading:
-logo.load()
-
-// Getting Texture instance of loaded logo:
-val texture = logo()
-
-// Scheduling loading of all assets:
-Images.values().forEach { it.load() }
-
-// Accessing all textures:
-val textures = Images.values().map { it() }
-```
+Note: if you can use coroutines in your project, [`ktx-assets-async`](../assets-async) module provides a lightweight
+coroutines-based alternative to `AssetManager` that can greatly simplify your asset loading code.
 
 #### `Disposable`
 
@@ -141,6 +102,11 @@ file types.
 with `ResolutionFileResolver`.
 - `resolution` factory function was added to construct `ResolutionFileResolver.Resolution` instances with idiomatic
 Kotlin syntax.
+
+#### Loaders
+
+- `TextAssetLoader` allows to read text files asynchronously via the `AssetManager`. Very useful if you want to leverage
+`AssetManager` loading and management API for a notable number of text files.
 
 ### Usage examples
 
@@ -277,6 +243,77 @@ val resolver = FileType.Internal.getResolver().forResolutions(
 )
 ```
 
+A simple application that registers `TextAssetLoader`, reads a file asynchronously, prints it and terminates:
+
+```Kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetManager
+import ktx.assets.TextAssetLoader
+import ktx.assets.load
+import ktx.assets.setLoader
+
+class MyApp : ApplicationAdapter() {
+  private val manager = AssetManager()
+
+  override fun create() {
+    manager.setLoader(TextAssetLoader())
+    manager.load<String>("file.txt")
+  }
+
+  override fun render() {
+    if (!manager.update()) {
+      println("Loading...")
+    } else {
+      println(manager.get<String>("file.txt"))
+      Gdx.app.exit()
+    }
+  }
+}
+```
+
+#### Implementation tip: type-safe assets
+
+Create an enum with all assets of the selected type. Let's assume our application stores all images in `assets/images`
+folder in `PNG` format. Given `logo.png`, `player.png` and `enemy.png` images, we would create a similar enum:
+
+```Kotlin
+enum class Images {
+  logo,
+  player,
+  enemy;
+
+  val path = "images/${name}.png"
+  fun load() = manager.load<Texture>(path)
+  operator fun invoke() = manager.getAsset<Texture>(path)
+  companion object {
+    lateinit var manager: AssetManager
+  }
+}
+```
+
+Operator `invoke()` function brings asset accessing boilerplate to mininum: `enumName()`. Thanks to wildcard imports, we
+can access `logo`, `player` and `enemy` enum instances directly:
+
+```Kotlin
+import com.example.Images.*
+
+// Setting AssetManager instance:
+Images.manager = myAssetManager
+
+// Scheduling logo loading:
+logo.load()
+
+// Getting Texture instance of loaded logo:
+val texture = logo()
+
+// Scheduling loading of all assets:
+Images.values().forEach { it.load() }
+
+// Accessing all textures:
+val textures = Images.values().map { it() }
+```
+
 ### Alternatives
 
 - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/) feature an annotation-based asset manager implementation
@@ -287,8 +324,8 @@ injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
 Java applications though - **KTX** syntax should feel more natural when using Kotlin.
-- [`ktx-async`](../async) module provides `AssetStorage`: a lightweight coroutines-based alternative to `AssetManager`.
-It was extracted to `ktx-async` module due to the coroutines usage.
+- [`ktx-assets-async`](../assets-async) module extends this library and provides `AssetStorage`: a lightweight
+coroutines-based alternative to `AssetManager`.
 
 #### Additional documentation
 
