@@ -218,8 +218,6 @@ enum class Drawables {
   buttonUp,
   buttonDown,
   buttonChecked; // Add all drawables from TextureAtlas.
-
-  operator fun invoke() = toString()
 }
 ```
 
@@ -246,21 +244,23 @@ import your.company.Drawables.*
 
 skin(myAtlas) {
   button {
-    up = it[buttonUp()]
-    down = it[buttonDown()]
+    up = it[buttonUp]
+    down = it[buttonDown]
   }
   button(Buttons.toggle(), extend = defaultStyle) {
-    checked = it[buttonChecked()]
+    checked = it[buttonChecked]
   }
 }
 ```
 
-What's best about it, enums do not actually make your code _longer_, as they require the same exact amount of characters
-to write with static imports - while having the advantage of powerful code completion of your IDE of choice and validation
-at compile time. As long as you don't need to create assets at runtime with custom unpredictable IDs, we encourage you
-to store your drawables, fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
-The advantage of using an `enum` over `object` with `String` properties is that you can easily extract a list of all
-values from an enum, while getting all fields from an object is not trivial.
+What's best about it, enums do not necessarily make your code _longer_ or less readable - all while having the 
+advantage of powerful code completion of your IDE of choice and validation at compile time. As long as you 
+don't need to create assets at runtime with custom unpredictable IDs, we encourage you to store your drawables,
+fonts, colors and non-default styles names as enums to ensure complete safely at compile time.
+
+The advantage of using an `enum` over a "standard" singleton (`object`) with `String` properties or `String` 
+constants is that you can easily extract a list of all values from an `enum`, while getting all fields from
+an object or constants from a package is not trivial.
 
 ### Alternatives
 

@@ -24,7 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.mock.mock
-import ktx.style.StyleTest.MockEnum.mock
+import ktx.style.StyleTest.TestEnum.TEST
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
@@ -120,11 +120,30 @@ class StyleTest {
   }
 
   @Test
+  fun `should add resource with brace operator with enum name`() {
+    val skin = Skin()
+
+    skin[TEST] = "Test."
+
+    skin.get<String>("TEST") shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract resource with brace operator with enum name`() {
+    val skin = Skin()
+    skin["TEST"] = "Test."
+
+    val resource: String = skin[TEST]
+
+    resource shouldBe "Test."
+  }
+
+  @Test
   fun `should add and extract resource with brace operator with enum name`() {
     val skin = Skin()
-    skin[mock] = "Test."
 
-    val resource: String = skin[mock]
+    skin[TEST] = "Test."
+    val resource: String = skin[TEST]
 
     resource shouldBe "Test."
   }
@@ -655,7 +674,7 @@ class StyleTest {
   }
 
   /** For [StyleTest] tests. */
-  internal enum class MockEnum {
-    mock
+  internal enum class TestEnum {
+    TEST
   }
 }
