@@ -36,7 +36,7 @@ inline fun debug(cause: Throwable, tag: String = "[DEBUG]", message: () -> Strin
  * @see Application.LOG_INFO
  * @see Application.getLogLevel
  */
-inline fun info(tag: String = "[INFO] ", message: () -> String) {
+inline fun info(tag: String = "[INFO]", message: () -> String) {
   if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(tag, message())
 }
 
@@ -49,7 +49,7 @@ inline fun info(tag: String = "[INFO] ", message: () -> String) {
  * @see Application.LOG_INFO
  * @see Application.getLogLevel
  */
-inline fun info(cause: Throwable, tag: String = "[INFO] ", message: () -> String) {
+inline fun info(cause: Throwable, tag: String = "[INFO]", message: () -> String) {
   if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(tag, message(), cause)
 }
 
@@ -86,9 +86,9 @@ inline fun error(cause: Throwable, tag: String = "[ERROR]", message: () -> Strin
  */
 open class Logger(
     open val tag: String,
-    debugPrefix: String = "[DEBUG] ",
-    infoPrefix: String = "[INFO]  ",
-    errorPrefix: String = "[ERROR] ") {
+    debugPrefix: String = "[DEBUG]",
+    infoPrefix: String = "[INFO]",
+    errorPrefix: String = "[ERROR]") {
   // Implementation note: tags are not private as they are referenced by the inlined methods.
   /**
    * Will proceed all debug logs.
