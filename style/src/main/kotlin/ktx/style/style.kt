@@ -60,7 +60,8 @@ inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}):
  * @return resource of the specified type with the selected name.
  * @throws GdxRuntimeException if unable to find the resource.
  */
-inline infix operator fun <reified Resource : Any> Skin.get(name: String): Resource = this[name, Resource::class.java]
+inline operator fun <reified Resource : Any> Skin.get(name: String = defaultStyle): Resource =
+    this[name, Resource::class.java]
 
 /**
  * Utility function that makes it easier to access [Skin] assets.
