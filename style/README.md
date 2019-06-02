@@ -221,8 +221,9 @@ enum class Drawables {
 }
 ```
 
-`invoke` operator allows to, well, _invoke_ enum instances `likeAnyFunction()`. Along with a static import, this brings
-our type-safe boilerplate to a pleasant minimum. While we're at it, it makes sense to list all styles with non-default
+Along with a static import, this brings our type-safe boilerplate to a pleasant minimum.
+
+While we're at it, it makes sense to list all styles with non-default
 name to provide validation when invoking actor constructors:
 
 ```Kotlin
@@ -234,6 +235,9 @@ enum class Buttons {
   operator fun invoke() = toString()
 }
 ```
+
+`invoke` operator above allows to, well, _invoke_ enum instances like any function to obtain their name -
+for example: `Buttons.toggle()`. 
 
 Let's sum it up and refactor the `ButtonStyle` definitions:
 

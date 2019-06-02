@@ -3,6 +3,7 @@
 - **[UPDATE]** Updated to Kotlin 1.3.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.2.1.
 - **[FEATURE]** (`ktx-assets`) Added `TextAssetLoader` that can be registered in an `AssetManager` to load text files asynchronously.
+- **[FEATURE]** (`ktx-style`) Added `Skin.get` extension method that allows to pass enum instances as style names.
 - **[CHANGE]** (`ktx-style`) `Skin.get` extension method are no longer infix.
 - **[CHANGE]** (`ktx-style`) `Skin.get` now has accepts default parameter equal to the default style name.
 
