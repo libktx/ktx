@@ -56,7 +56,7 @@ inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}):
 
 /**
  * Utility function that makes it easier to access [Skin] assets.
- * @param name name of the requested resource.
+ * @param name name of the requested resource. Defaults to [defaultStyle].
  * @return resource of the specified type with the selected name.
  * @throws GdxRuntimeException if unable to find the resource.
  */
@@ -69,7 +69,7 @@ inline operator fun <reified Resource : Any> Skin.get(name: String = defaultStyl
  * @return resource of the specified type with the selected name.
  * @throws GdxRuntimeException if unable to find the resource.
  */
-inline infix operator fun <reified Resource : Any, E : Enum<E>>  Skin.get(name: E): Resource = this[name.toString()]
+inline operator fun <reified Resource : Any, E : Enum<E>>  Skin.get(name: E): Resource = this[name.toString()]
 
 /**
  * Utility function that makes it easier to add [Skin] assets.

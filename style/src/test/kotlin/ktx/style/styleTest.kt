@@ -101,13 +101,12 @@ class StyleTest {
   }
 
   @Test
-  fun `should extract resource with implicit reified type with infix method`() {
+  fun `should extract resource with default style name`() {
     val skin = Skin()
-    skin.add("mock", "Test.")
 
-    val infix: String = skin["mock"]
+    skin[defaultStyle] = "Asset."
 
-    infix shouldBe "Test."
+    skin.get<String>() shouldBe "Asset."
   }
 
   @Test
