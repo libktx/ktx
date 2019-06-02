@@ -1,3 +1,12 @@
+#### 1.9.9-b2
+
+- **[UPDATE]** Updated to Kotlin 1.3.31.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.2.1.
+- **[FEATURE]** (`ktx-assets`) Added `TextAssetLoader` that can be registered in an `AssetManager` to load text files asynchronously.
+- **[FEATURE]** (`ktx-style`) Added `Skin.get` extension method that allows to pass enum instances as style names.
+- **[CHANGE]** (`ktx-style`) `Skin.get` extension method are no longer infix.
+- **[CHANGE]** (`ktx-style`) `Skin.get` now has accepts default parameter equal to the default style name.
+
 #### 1.9.9-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.9.
@@ -37,7 +46,7 @@ it for consistency with `Action.then`. `then` now unwraps actors from passed `Se
 mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps actors from passed `ParallelActions`.
 - **[CHANGE]** (`ktx-async`) Overhaul of the `ktx-async` module.
     - `KtxAsync` is now the main coroutines scope that should be used instead of the `GlobalScope`.
-    - `Dispatchers.KTX` can be used to access a coroutines dispatchers that executes tasks on the main rendering thread.
+    - `Dispatchers.KTX` can be used to access a coroutines dispatcher that executes tasks on the main rendering thread.
     - `AsyncExecutorDispatcher` can be used to wrap LibGDX `AsyncExecutor` to execute tasks asynchronously.
     - `newSingleThreadAsyncContext` allows to create an `AsyncExecutorDispatcher` with a single thread.
     - `newAsyncContext` allows to create an `AsyncExecutorDispatcher` with the given max amount of threads.

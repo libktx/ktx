@@ -63,9 +63,11 @@ mutation methods return new vectors instead of mutate the reference.
   - All angle functions return the angle toward positive y-axis.
   - `dot` is an infix function
   - `x` and `crs` infix functions replace `crs` (cross product)
-  
+
 ##### Usage examples
-Obtaining `ImmutableVector2` instances
+
+Obtaining `ImmutableVector2` instances:
+
 ```kotlin
 import ktx.math.*
 
@@ -75,7 +77,8 @@ val v2 = ImmutableVector2.X.withRotationDeg(30f) // unit vector of given angle
 val v3 = -ImmutableVector2.X // inverse of a vector
 ```
 
-Converting from LibGDX `Vector2` to `ImmutableVector2` (and vice versa)
+Converting from LibGDX `Vector2` to `ImmutableVector2` (and vice versa):
+
 ```kotlin
 import ktx.math.*
 import com.badlogic.gdx.math.Vector2
@@ -85,24 +88,28 @@ val immutable: ImmutableVector2 = mutable1.toImmutable()
 val mutable2: Vector2 = immutable.toMutable()
 ```
 
-Working with immutable vector
+Working with immutable vectors:
+
 ```kotlin
 import ktx.math.*
 
 var vector1 = ImmutableVector2.X
 
-// Reassignment of variables is only possible with `var`; note that the original vector instance is not modified
+// Reassignment of variables is only possible with `var`.
+// Note that the original vector instance is not modified.
 vector1 += ImmutableVector2.Y
 vector1 *= 3f
 
-val vector2 = vector1.withClamp(0f, 1f) * 5f // vector1 is not modified
+val vector2 = vector1.withClamp(0f, 1f) * 5f // `vector1` is not modified.
 ``` 
 
-Creating typealias
+Creating convenience type alias to ease the use of immutable vectors:
+
 ```kotlin
 import ktx.math.*
 
-// If you don't want to use the rather verbose ImmutableVector2, you can declare a more convenient type alias
+// If you don't want to use the rather verbose ImmutableVector2,
+// you can declare a more convenient typealias.
 typealias Vec2 = ImmutableVector2
 
 var v1 = (Vec2.X + Vec2.Y).nor

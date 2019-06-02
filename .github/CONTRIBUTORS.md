@@ -37,4 +37,10 @@ Project contributors listed chronologically.
   * Updated the project to Kotlin 1.3 and stable coroutines API.
 * [@jojomickymack](https://github.com/jojomickymack)
   * Wrote [a KTX tutorial](https://jojomickymack.gitlab.io/reverie/post/libktx_platformer/).
-  * Prepared several KTX template projects.
+  * Prepared several KTX template projects and showcases.
+* [@Quillraven](https://github.com/Quillraven)
+  * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
+* [@FocusPo1nt](https://github.com/FocusPo1nt)
+  * Added utilities to [style module](../style)
+* [@maltaisn](https://github.com/maltaisn)
+  * Added utilities to [style module](../style)

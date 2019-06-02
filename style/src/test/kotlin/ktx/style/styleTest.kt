@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.mock.mock
+import ktx.style.StyleTest.TestEnum.TEST
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
@@ -100,13 +101,12 @@ class StyleTest {
   }
 
   @Test
-  fun `should extract resource with implicit reified type with infix method`() {
+  fun `should extract resource with default style name`() {
     val skin = Skin()
-    skin.add("mock", "Test.")
 
-    val infix: String = skin get "mock"
+    skin[defaultStyle] = "Asset."
 
-    infix shouldBe "Test."
+    skin.get<String>() shouldBe "Asset."
   }
 
   @Test
@@ -116,6 +116,35 @@ class StyleTest {
     skin["name"] = "Asset."
 
     skin.get<String>("name") shouldBe "Asset."
+  }
+
+  @Test
+  fun `should add resource with brace operator with enum name`() {
+    val skin = Skin()
+
+    skin[TEST] = "Test."
+
+    skin.get<String>("TEST") shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract resource with brace operator with enum name`() {
+    val skin = Skin()
+    skin["TEST"] = "Test."
+
+    val resource: String = skin[TEST]
+
+    resource shouldBe "Test."
+  }
+
+  @Test
+  fun `should add and extract resource with brace operator with enum name`() {
+    val skin = Skin()
+
+    skin[TEST] = "Test."
+    val resource: String = skin[TEST]
+
+    resource shouldBe "Test."
   }
 
   @Test
@@ -356,7 +385,7 @@ class StyleTest {
       }
     }
 
-    val style: ScrollPaneStyle = skin get defaultStyle
+    val style: ScrollPaneStyle = skin.get()
     assertEquals(drawable, style.background)
   }
 
@@ -641,5 +670,10 @@ class StyleTest {
     val style = skin.get<WindowStyle>("new")
     assertEquals(drawable, style.background)
     assertEquals(drawable, style.stageBackground)
+  }
+
+  /** For [StyleTest] tests. */
+  internal enum class TestEnum {
+    TEST
   }
 }

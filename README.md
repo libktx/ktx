@@ -1,6 +1,6 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.20-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.31-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.9-red.svg)](https://libgdx.badlogicgames.com/)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -33,7 +33,7 @@ Current **KTX** modules:
 - [box2d](box2d): `Box2D` physics engine utilities.
 - [collections](collections): extensions for LibGDX custom collections. Based on Kotlin standard library utilities.
 - [freetype](freetype): FreeType font loading utilities.
-- [freetype-async](freetype-async): FreeType font loading utilities for the [async](async) module.
+- [freetype-async](freetype-async): FreeType font loading utilities for the [assets-async](assets-async) module.
 - [graphics](graphics): utilities related to rendering tools and graphics.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.

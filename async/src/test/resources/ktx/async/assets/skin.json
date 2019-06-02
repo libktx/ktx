@@ -1,7 +1,0 @@
-{
-  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
-    "default": {
-      "up": "button"
-    }
-  }
-}
