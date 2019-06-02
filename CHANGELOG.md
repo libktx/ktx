@@ -1,3 +1,5 @@
+#### 1.9.9-SNAPSHOT
+
 #### 1.9.9-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.31.
