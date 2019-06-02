@@ -105,7 +105,7 @@ class StyleTest {
     val skin = Skin()
     skin.add("mock", "Test.")
 
-    val infix: String = skin get "mock"
+    val infix: String = skin["mock"]
 
     infix shouldBe "Test."
   }
@@ -386,7 +386,7 @@ class StyleTest {
       }
     }
 
-    val style: ScrollPaneStyle = skin get defaultStyle
+    val style: ScrollPaneStyle = skin.get()
     assertEquals(drawable, style.background)
   }
 

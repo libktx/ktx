@@ -1,6 +1,7 @@
 #### 1.9.9-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.3.21.
+- **[CHANGE]** (`ktx-style`) `Skin.get` is no longer infix to allow a default parameter.
 - **[FEATURE]** (`ktx-assets`) Added `TextAssetLoader` that can be registered in an `AssetManager` to load text files asynchronously.
 
 #### 1.9.9-b1
