@@ -1,6 +1,7 @@
 package ktx.json
 
 import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.JsonValue
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldEqual
@@ -69,6 +70,44 @@ class StyleTest {
     for (i in 0 until custom1.list.size) {
       custom2.list[i].int shouldEqual custom1.list[i].int
     }
+  }
+
+  @Test
+  fun `should read and write with custom serializer`() {
+    val json = Json()
+    json.setSerializer(object : Json.Serializer<Simple> {
+      override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): Simple {
+        val simple = Simple()
+        simple.int = jsonData.getInt("integer")
+        simple.str = jsonData.getString("string")
+        return simple
+      }
+
+      override fun write(json: Json, obj: Simple, knownType: Class<*>?) {
+        json.writeObjectStart()
+        json.writeValue("integer", obj.int)
+        json.writeValue("string", obj.str)
+        json.writeObjectEnd()
+      }
+    })
+
+    val simple = Simple()
+    simple.int = 12
+    simple.str = "b"
+
+    json.toJson(simple) shouldBe "{integer:12,string:b}"
+
+    val simple2: Simple = json.fromJson("{integer:31,string:c}")
+    simple2.int shouldBe 31
+    simple2.str shouldBe "c"
+  }
+
+  @Test
+  fun `should read unnamed values`() {
+    val json = Json()
+
+    json.readValue<String>(JsonReader().parse("str")) shouldBe "str"
+    json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldBe arrayListOf(1, 2, 3, 4, 5, 6)
   }
 
   private class Simple {
