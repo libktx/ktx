@@ -1,5 +1,13 @@
 #### 1.9.9-SNAPSHOT
 
+- **[FEATURE]** (`ktx-json`) Added a new KTX module with the goal of improving LibGDX `Json` API: `ktx-json`. The following extension methods were added to avoid passing Java class instances:
+    - `fromJson`
+    - `addClassTag`
+    - `getTag`
+    - `setElementType`
+    - `setSerializer`
+    - `readValue`
+
 #### 1.9.9-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.31.

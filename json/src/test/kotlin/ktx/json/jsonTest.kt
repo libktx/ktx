@@ -1,86 +1,138 @@
 package ktx.json
 
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.JsonValue
-import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldEqual
+import org.junit.Assert.assertNotSame
 import org.junit.Test
 
 /**
  * Tests [Json] extensions.
  */
 class StyleTest {
-
   @Test
   fun `should read simple object from string`() {
+    // Given:
     val json = Json()
-    val simple = json.fromJson<Simple>(
-        """{int:10,bool:true,str:"Hello world"}""")
 
-    simple.int shouldBe 10
-    simple.bool shouldBe true
-    simple.str shouldBe "Hello world"
+    // When:
+    val simple = json.fromJson<Simple>("""{
+      "int": 10,
+      "bool": true,
+      "str": "Hello world"
+    }""")
+
+    // Then:
+    simple shouldEqual Simple(
+        int = 10,
+        bool = true,
+        str = "Hello world"
+    )
   }
 
   @Test
   fun `should read complex object from string`() {
+    // Given:
     val json = Json()
-    val complex = json.fromJson<Complex>(
-        """{bool:true,simple:{int:31,bool:true,str:"a"},list:[1,1,2,3,5,8,13]}""")
 
-    complex.bool shouldBe true
-    complex.simple.int shouldBe 31
-    complex.simple.bool shouldBe true
-    complex.simple.str shouldBe "a"
-    complex.list shouldBe listOf(1, 1, 2, 3, 5, 8, 13)
+    // When:
+    val complex = json.fromJson<Complex>("""{
+      "bool": true,
+      "simple": {
+        "int": 31,
+        "bool": true,
+        "str": "a"
+      },
+      "list": [1, 1, 2, 3, 5, 8, 13]
+    }""")
+
+    // Then:
+    complex shouldEqual Complex(
+        bool = true,
+        simple = Simple(
+            int = 31,
+            bool = true,
+            str = "a"
+        ),
+        list = listOf(1, 1, 2, 3, 5, 8, 13)
+    )
   }
 
   @Test
-  fun `should set and return tags`() {
+  fun `should read object from file`() {
+    // Given:
     val json = Json()
-    json.addClassTag<Simple>("simple")
-    json.addClassTag<Complex>("complex")
+    val fileHandle = LwjglFiles().classpath("ktx/json/file.json")
 
-    json.getTag<Simple>() shouldBe "simple"
-    json.getTag<Complex>() shouldBe "complex"
+    // When:
+    val simple = json.fromJson<Simple>(fileHandle)
+
+    // Then:
+    simple shouldEqual Simple(
+        int = 10,
+        bool = true,
+        str = "test"
+    )
+  }
+
+  @Test
+  fun `should set tags`() {
+    // Given:
+    val json = Json()
+
+    // When:
+    json.addClassTag<Simple>("simple")
+
+    // Then:
+    json.getTag<Simple>() shouldEqual "simple"
   }
 
   @Test
   fun `should return null tag if unset`() {
+    // Given:
     val json = Json()
-    json.getTag<Simple>() shouldBe null
-    json.getTag<Complex>() shouldBe null
+
+    // When:
+    val tag = json.getTag<Simple>()
+
+    // Then:
+    tag shouldEqual null
   }
 
   @Test
-  fun `should recreate same object`() {
-    val custom1 = Custom().apply {
+  fun `should recreate object with equal properties`() {
+    // Given:
+    val json = Json()
+    val serialized = Custom().apply {
       float = 100f
       simple = Simple().apply { int = 1 }
       list = List(3) { Simple().apply { int = it } }
     }
 
-    val json = Json()
-    val custom2 = json.fromJson<Custom>(json.toJson(custom1))
+    // When:
+    val deserialized = json.fromJson<Custom>(json.toJson(serialized))
 
-    custom2.float shouldEqual custom1.float
-    custom2.simple.int shouldEqual custom1.simple.int
-    custom2.list.size shouldEqual custom1.list.size
-    for (i in 0 until custom1.list.size) {
-      custom2.list[i].int shouldEqual custom1.list[i].int
-    }
+    // Then:
+    serialized shouldEqual deserialized
+    assertNotSame(serialized, deserialized)
+    assertNotSame(serialized.simple, deserialized.simple)
   }
 
   @Test
   fun `should read and write with custom serializer`() {
+    // Given:
     val json = Json()
+    val simple = Simple(int = 12, str = "b")
+
+    // When:
     json.setSerializer(object : Json.Serializer<Simple> {
       override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): Simple {
-        val simple = Simple()
-        simple.int = jsonData.getInt("integer")
-        simple.str = jsonData.getString("string")
-        return simple
+        val deserialized = Simple()
+        deserialized.int = jsonData.getInt("integer")
+        deserialized.str = jsonData.getString("string")
+        return deserialized
       }
 
       override fun write(json: Json, obj: Simple, knownType: Class<*>?) {
@@ -91,41 +143,81 @@ class StyleTest {
       }
     })
 
-    val simple = Simple()
-    simple.int = 12
-    simple.str = "b"
-
-    json.toJson(simple) shouldBe "{integer:12,string:b}"
-
-    val simple2: Simple = json.fromJson("{integer:31,string:c}")
-    simple2.int shouldBe 31
-    simple2.str shouldBe "c"
+    // Then:
+    json.toJson(simple) shouldEqual "{integer:12,string:b}"
+    json.fromJson<Simple>("""{"integer":31,"string":"c"}""") shouldEqual Simple(int = 31, str = "c")
   }
 
   @Test
-  fun `should read unnamed values`() {
+  fun `should read non-object values`() {
+    // Given:
     val json = Json()
 
-    json.readValue<String>(JsonReader().parse("str")) shouldBe "str"
-    json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldBe arrayListOf(1, 2, 3, 4, 5, 6)
+    // Expect:
+    json.readValue<String>(JsonReader().parse("str")) shouldEqual "str"
+    json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldEqual arrayListOf(
+        1, 2, 3, 4, 5, 6
+    )
   }
 
-  private class Simple {
-    var int = 0
-    var bool = false
-    var str = ""
+  @Test
+  fun `should set element type of nested collection`() {
+    // Given:
+    val json = Json()
+    json.setElementType<ListContainer, Simple>("list")
+
+    // When:
+    val container = json.fromJson<ListContainer>("""{
+      "list": [
+        {
+          "bool": true,
+          "int": 42
+        },
+        {
+          "str": "yes"
+        }
+      ]
+    }""")
+
+    // Then:
+    container shouldEqual ListContainer(listOf(
+        Simple(bool = true, int = 42),
+        Simple(str = "yes")
+    ))
   }
 
-  private class Complex {
-    var bool = false
-    lateinit var simple: Simple
-    lateinit var list: List<Int>
-  }
+  /**
+   * Serializable class included for tests.
+   */
+  private data class Simple(
+      var int: Int = 0,
+      var bool: Boolean = false,
+      var str: String = ""
+  )
 
-  private class Custom : Json.Serializable {
-    var float = 0f
-    lateinit var simple: Simple
-    lateinit var list: List<Simple>
+  /**
+   * Serializable class included for tests.
+   */
+  private data class Complex(
+      var bool: Boolean = false,
+      var simple: Simple = Simple(),
+      var list: List<Int> = emptyList()
+  )
+
+  /**
+   * Serializable class with a list of [Simple] objects.
+   */
+  private data class ListContainer(
+      var list: List<Simple> = emptyList()
+  )
+
+  /**
+   * Class included for tests of custom serialization.
+   */
+  private data class Custom(
+      var float: Float = 0f,
+      var simple: Simple = Simple(),
+      var list: List<Simple> = emptyList()) : Json.Serializable {
 
     override fun read(json: Json, jsonData: JsonValue) {
       float = json.readValue("float", jsonData)
@@ -139,5 +231,4 @@ class StyleTest {
       json.writeValue("list", list)
     }
   }
-
 }

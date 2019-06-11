@@ -41,6 +41,7 @@ Project contributors listed chronologically.
 * [@Quillraven](https://github.com/Quillraven)
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
-  * Added utilities to [style module](../style)
+  * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
-  * Added utilities to [style module](../style)
+  * Added utilities to [style module](../style).
+  * Contributed [JSON serialization](../json) utilities.

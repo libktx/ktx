@@ -11,70 +11,106 @@ with reified generics to avoid using `::class.java` in your code and to allow ty
 in some cases better type safety.
 
 ### Guide
-A JSON instance can be used the same as usual, but using the extension method whenever there's
-a class parameter in the original method.
 
-##### Usage examples
+KTX brings the following extension methods to LibGDX `Json` API:
+- `fromJson`
+- `addClassTag`
+- `getTag`
+- `setElementType`
+- `setSerializer`
+- `readValue`
 
-Creating a new JSON instance with custom parameters:
+All of these extension methods are consistent with the official `Json` API, but provide inlined reified typing
+to avoid passing `Class` instances. This improves code readability.
+
+A comparison of the APIs when used from Kotlin:
+
+```kotlin
+import com.badlogic.gdx.utils.Json
+import ktx.json.fromJson
+
+val json = Json()
+
+// Using LibGDX API designed for Java:
+json.fromJson(MyClass::class.java, file)
+
+// Using KTX Kotlin extensions:
+json.fromJson<MyClass>(file)
+```
+
+#### Usage examples
+
+Creating a new `Json` serializer instance with custom parameters:
+
 ```kotlin
 import ktx.json.*
 
 val json = Json()
 
-// Add shorthands for two classes
+// Add shorthands for two classes:
 json.addClassTag<Vector2>("vec2")
 json.addClassTag<Color>("color")
 
-// Set the type of elements in the "cards" collection of Player objects
+// Set the type of elements in the "cards" collection of Player objects:
 json.setElementType<Player, Card>("cards")
 
-// Add a custom serializer for Vector2
+// Add a custom serializer for Vector2:
 json.setSerializer(object : Json.Serializer<Vector2>() { /* ... */ })
 ```
 
 A class with a custom serializer:
+
 ```kotlin
+import com.badlogic.gdx.math.Vector2
 import ktx.json.*
 
-class Player : Json.Serializable {
-  lateinit var pos: Vector2
-  lateinit var cards: List<Simple>
+class Player(
+    var position: Vector2 = Vector2(),
+    var cards: List<Card> = emptyList()
+  ) : Json.Serializable {
 
   override fun read(json: Json, jsonData: JsonValue) {
-    pos = json.readValue("pos", jsonData)  // Type inference
-    cards = json.readArrayValue("cards", jsonData)  // Type inference, better type safety
+    pos = json.readValue("position", jsonData)  // Type inference.
+    cards = json.readArrayValue("cards", jsonData)  // Type inference, better type safety.
   }
 
   override fun write(json: Json) {
-    json.writeValue("pos", pos)
+    json.writeValue("position", position)
     json.writeValue("cards", cards)
   }
 }
 ```
 
 Parsing a JSON object:
+
 ```kotlin
 import ktx.json.*
 
 val json = Json()
-val player: Player = json.fromJson("{pos:{x:10,y:10},cards:[1,2,3,5,8,13]}")
+val player: Player = json.fromJson("""{
+  "pos": {"x": 10, "y": 10},
+  "cards": [1, 2, 3, 5, 8, 13]
+  }""")
+
 ```
 
 ### Alternatives
 
 LibGDX JSON is quite limited and verbose compared to other JSON serialization libraries.
-It's a mostly untested alternative to all the other libraries around. But if your project
-is simple and you want to avoid including two JSON serialization libraries in your game
-(since it's already used for Skin parsing), LibGDX can be enough. In most cases however,
-you should probably look into other popular serialization libraries:
+It's a mostly untested alternative to all the other libraries around. It also accepts and
+produces corrupted JSON files by default, which might be problematic when integrating with
+external services.
+
+But if your project is simple enough and you want to avoid including additional JSON 
+serialization library in your game (since it's already used internally throughout LibGDX),
+official LibGDX `Json` can be enough. In most cases however, you should probably look into
+other popular serialization libraries:
 
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) provides
 reflection-free serialization to JSON, CBOR and protobuf. Serialization code is produced
 at compile time for classes marked with an annotation.
-- Many JSON libraries are already available for Java: Gson, Moshi, Jackson, org.json to name a few.
-
+- Many popular JSON serialization libraries for Java: Gson, Jackson, Moshi, org.json to name a few.
 
 #### Additional documentation
 
-- [Reading and writing JSON article.](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON)
+- [Official `Json` usage article.](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON)
