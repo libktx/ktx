@@ -6,6 +6,7 @@ include(
     'async',
     'box2d',
     'collections',
+    'json',
     'graphics',
     'freetype',
 //    'freetype-async',
