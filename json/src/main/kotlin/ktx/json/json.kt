@@ -40,23 +40,15 @@ inline fun <reified T, reified E> Json.setElementType(fieldName: String) =
 inline fun <reified T> Json.setSerializer(serializer: Json.Serializer<T>) = setSerializer(T::class.java, serializer)
 
 /**
- * Read a value of type [T] from a [jsonData] value.
- */
-inline fun <reified T> Json.readValue(jsonData: JsonValue): T = readValue(T::class.java, jsonData)
-
-/**
  * Read a value of type [T] from a [jsonData] attribute with a [name].
+ * If [name] is `null`, this will directly read [jsonData] as an object of type [T].
  */
-inline fun <reified T> Json.readValue(name: String, jsonData: JsonValue): T = readValue(name, T::class.java, jsonData)
-
-/**
- * Read an iterable value of type [T] with elements of type [E] from a [jsonData] value.
- */
-inline fun <reified T : Iterable<E>, reified E> Json.readArrayValue(jsonData: JsonValue): T =
-    readValue(T::class.java, E::class.java, jsonData)
+inline fun <reified T> Json.readValue(jsonData: JsonValue, name: String? = null): T =
+    readValue(T::class.java, if (name == null) jsonData else jsonData.get(name))
 
 /**
  * Read an iterable value of type [T] with elements of type [E] from a [jsonData] attribute with a [name].
+ * If [name] is `null`, this will directly read [jsonData] as an iterable of type [T].
  */
-inline fun <reified T : Iterable<E>, reified E> Json.readArrayValue(name: String, jsonData: JsonValue): T =
-    readValue(name, T::class.java, E::class.java, jsonData)
+inline fun <reified T : Iterable<E>, reified E> Json.readArrayValue(jsonData: JsonValue, name: String? = null): T =
+    readValue(T::class.java, E::class.java, if (name == null) jsonData else jsonData.get(name))
