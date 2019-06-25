@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * Tests [Json] extensions.
  */
-class StyleTest {
+class JsonTest {
   @Test
   fun `should read simple object from string`() {
     // Given:
@@ -220,9 +220,9 @@ class StyleTest {
       var list: List<Simple> = emptyList()) : Json.Serializable {
 
     override fun read(json: Json, jsonData: JsonValue) {
-      float = json.readValue("float", jsonData)
-      simple = json.readValue("simple", jsonData)
-      list = json.readArrayValue("list", jsonData)
+      float = json.readValue(jsonData, "float")
+      simple = json.readValue(jsonData, "simple")
+      list = json.readArrayValue(jsonData, "list")
     }
 
     override fun write(json: Json) {
