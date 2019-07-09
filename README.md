@@ -46,7 +46,7 @@ Current **KTX** modules:
 
 Note that most guides and examples assume that the reader is at least a bit familiar with the LibGDX API.
 
-Afraid to use some third-party code? Browse through the sources, run the test suites. While certainly not perfect, we try to keep to
+Afraid to use some third-party code? Browse through the sources, run the test suites. While certainly not perfect, we try to
 keep the public API clean and *every* feature fully unit tested. *Note: coverage tools still have problems with Kotlin
 inlined methods, so the reported code coverage might be much lower than the actual.*
 
