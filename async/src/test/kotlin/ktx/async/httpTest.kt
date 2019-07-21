@@ -2,6 +2,7 @@ package ktx.async
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Net.*
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglNet
 import com.badlogic.gdx.net.HttpStatus
 import com.badlogic.gdx.utils.GdxRuntimeException
@@ -9,7 +10,7 @@ import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.async
