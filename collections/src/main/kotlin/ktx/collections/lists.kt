@@ -422,7 +422,7 @@ fun <Type> gdxListOf(vararg elements: Type, pool: Pool<Node<Type>> = NodePool.po
  * @param pool provides and manages [Node] instances.
  * @return a new instance of [PooledList] storing the elements from the iterable.
  */
-fun <Type> Iterable<Type>.toGdxList(pool: Pool<Node<Type>> = NodePool.pool<Type>()): PooledList<Type> {
+fun <Type> Iterable<Type>.toGdxList(pool: Pool<Node<Type>> = NodePool.pool()): PooledList<Type> {
   val list = PooledList(pool)
   list.addAll(this)
   return list
@@ -433,7 +433,7 @@ fun <Type> Iterable<Type>.toGdxList(pool: Pool<Node<Type>> = NodePool.pool<Type>
  * @param pool provides and manages [Node] instances.
  * @return a new instance of [PooledList] storing the elements from the array.
  */
-fun <Type> Array<out Type>.toGdxList(pool: Pool<Node<Type>> = NodePool.pool<Type>()): PooledList<Type> {
+fun <Type> Array<out Type>.toGdxList(pool: Pool<Node<Type>> = NodePool.pool()): PooledList<Type> {
   val list = PooledList(pool)
   list.addAll(this)
   return list

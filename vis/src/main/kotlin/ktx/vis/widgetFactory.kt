@@ -206,7 +206,7 @@ interface WidgetFactory<S> {
       = actor(MultiSplitPane(vertical, styleName), init)
 
   /** @see [Container] */
-  fun <T : Actor> container(actor: T? = null, init: (@VisDsl Container<T>).(S) -> Unit = {}): Container<T> = actor(Container(actor), init)
+  fun <T : Actor> container(actor: T? = null, init: (@VisDsl Container<T>).(S) -> Unit = {}): Container<T> = actor(Container<T>(actor), init)
 
   /** @see [CollapsibleWidget] */
   fun collapsible(table: Table, init: (@VisDsl CollapsibleWidget).(S) -> Unit = {}): CollapsibleWidget = actor(CollapsibleWidget(table), init)

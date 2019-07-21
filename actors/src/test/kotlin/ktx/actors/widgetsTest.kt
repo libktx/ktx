@@ -24,9 +24,9 @@ class WidgetsTest {
     // constructors. Label will not successfully construct an instance without a BitmapFont.
     LwjglNativesLoader.load()
 
-    Gdx.graphics = mock<Graphics>()
-    Gdx.app = mock<Application>()
-    Gdx.gl20 = mock<GL20>()
+    Gdx.graphics = mock()
+    Gdx.app = mock()
+    Gdx.gl20 = mock()
     Gdx.files = LwjglFiles()
     Gdx.gl = Gdx.gl20
   }

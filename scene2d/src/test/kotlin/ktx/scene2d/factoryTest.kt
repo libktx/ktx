@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
 import org.junit.Assert.*
 import org.junit.Test
-import com.badlogic.gdx.scenes.scene2d.ui.List as ListWidget
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
