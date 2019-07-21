@@ -155,7 +155,9 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should perform asynchronous HTTP request`() {
     // Given:
-    Gdx.net = LwjglNet()
+    Gdx.net = LwjglNet(LwjglApplicationConfiguration().apply {
+      maxNetThreads = 1
+    })
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")
@@ -200,7 +202,9 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should cancel HTTP request`() {
     // Given:
-    Gdx.net = spy(LwjglNet())
+    Gdx.net = spy(LwjglNet(LwjglApplicationConfiguration().apply {
+      maxNetThreads = 1
+    }))
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")

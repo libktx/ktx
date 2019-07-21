@@ -416,7 +416,7 @@ interface TreeWidgetFactory : WidgetFactory<KNode> {
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
     selectable?.let { node.isSelectable = selectable }
-    node.`object` = userObject
+    node.value = userObject
     return this
   }
 
