@@ -31,7 +31,7 @@ inline fun verticalGroup(
  * @return a new [Container] instance.
  */
 inline fun container(
-    init: KContainer<Actor>.() -> Unit = {}) = actor(KContainer<Actor>(), init)
+    init: KContainer<Actor>.() -> Unit = {}) = actor(KContainer(), init)
 
 /**
  * @param vertical true to make the widget vertical, false to make it horizontal. Defaults to false (horizontal).

@@ -403,7 +403,7 @@ object NodePool : Pool<Node<Any>>() {
  * @return a new [PooledList] instance, which caches its nodes and iterator, and is an equivalent to java.util.LinkedList.
  * @see NodePool
  */
-fun <Type> gdxListOf(pool: Pool<Node<Type>> = NodePool.pool<Type>()): PooledList<Type> = PooledList(pool)
+fun <Type> gdxListOf(pool: Pool<Node<Type>> = NodePool.pool()): PooledList<Type> = PooledList(pool)
 
 /**
  * @param elements will be added to the list.
@@ -411,7 +411,7 @@ fun <Type> gdxListOf(pool: Pool<Node<Type>> = NodePool.pool<Type>()): PooledList
  * @return a new [PooledList] instance, which caches its nodes and iterator, and is an equivalent to java.util.LinkedList.
  * @see NodePool
  */
-fun <Type> gdxListOf(vararg elements: Type, pool: Pool<Node<Type>> = NodePool.pool<Type>()): PooledList<Type> {
+fun <Type> gdxListOf(vararg elements: Type, pool: Pool<Node<Type>> = NodePool.pool()): PooledList<Type> {
   val list = PooledList(pool)
   list.addAll(elements)
   return list

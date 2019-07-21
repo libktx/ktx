@@ -37,7 +37,7 @@ suspend fun httpRequest(
     includeCredentials: Boolean = false,
     onCancel: ((HttpRequest) -> Unit)? = null
 ): HttpRequestResult = coroutineScope {
-  suspendCancellableCoroutine<HttpRequestResult> { continuation ->
+  suspendCancellableCoroutine { continuation ->
     val httpRequest = HttpRequest(method).apply {
       this.url = url
       timeOut = timeout

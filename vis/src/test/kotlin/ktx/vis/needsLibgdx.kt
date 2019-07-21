@@ -3,7 +3,6 @@ package ktx.vis
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.badlogic.gdx.graphics.GL20
 import com.kotcrab.vis.ui.VisUI
 import com.nhaarman.mockito_kotlin.mock
 
@@ -18,7 +17,7 @@ abstract class NeedsLibGDX {
 
       Gdx.graphics = mock()
       Gdx.app = mock()
-      Gdx.gl = mock<GL20>()
+      Gdx.gl = mock()
       Gdx.files = LwjglFiles()
       Gdx.gl20 = Gdx.gl
 

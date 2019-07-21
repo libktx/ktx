@@ -301,7 +301,7 @@ class DependencyInjectionTest {
 
   @Test
   fun `should dispose of Disposable components with error handling`() {
-    Gdx.app = mock<Application>()
+    Gdx.app = mock()
     val singleton = mock<Disposable> {
       on(it.dispose()) doThrow GdxRuntimeException("Expected.")
     }
