@@ -144,10 +144,7 @@ class HttpTest {
   ) = HttpRequestResult(url, method, status, content, headers)
 }
 
-/**
- * Tests [httpRequest] API.
- */
-class AsynchronousHttpRequestsTest : AsyncTest() {
+abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration): AsyncTest() {
   private val port = FreePortFinder.findFreeLocalPort()
   @get:Rule
   val wireMock = WireMockRule(port)
@@ -155,9 +152,7 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should perform asynchronous HTTP request`() {
     // Given:
-    Gdx.net = LwjglNet(LwjglApplicationConfiguration().apply {
-      maxNetThreads = 1
-    })
+    Gdx.net = LwjglNet(configuration)
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")
@@ -202,9 +197,7 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should cancel HTTP request`() {
     // Given:
-    Gdx.net = spy(LwjglNet(LwjglApplicationConfiguration().apply {
-      maxNetThreads = 1
-    }))
+    Gdx.net = spy(LwjglNet(configuration))
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")
@@ -226,6 +219,19 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
     verify(Gdx.net).cancelHttpRequest(any())
   }
 }
+
+
+/**
+ * Tests [httpRequest] API with a single-threaded [LwjglNet].
+ */
+class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(LwjglApplicationConfiguration().apply {
+  maxNetThreads = 1
+})
+
+/**
+ * Tests [httpRequest] API with a multithreaded [LwjglNet].
+ */
+class MultiThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(LwjglApplicationConfiguration())
 
 class KtxHttpResponseListenerTest {
   @Test
