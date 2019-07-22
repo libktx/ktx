@@ -1,7 +1,7 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.31-orange.svg)](http://kotlinlang.org/)
-[![LibGDX](https://img.shields.io/badge/libgdx-1.9.9-red.svg)](https://libgdx.badlogicgames.com/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.41-orange.svg)](http://kotlinlang.org/)
+[![LibGDX](https://img.shields.io/badge/libgdx-1.9.10-red.svg)](https://libgdx.badlogicgames.com/)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
 
@@ -37,6 +37,7 @@ Current **KTX** modules:
 - [graphics](graphics): utilities related to rendering tools and graphics.
 - [i18n](i18n): some simple extensions that make LibGDX internationalization API less verbose, safer and easier to use.
 - [inject](inject): unsettlingly simple dependency injection with nearly zero runtime overhead and no reflection trickery.
+- [json](json): utilities for LibGDX JSON serialization class.
 - [log](log): minimal runtime overhead cross-platform logging using inlined blocks.
 - [math](math): operator overloads for LibGDX math API and general math utilities.
 - [scene2d](scene2d): type-safe Kotlin builders for `Scene2D` GUI.
@@ -76,7 +77,7 @@ the extensive tests.
 
 Each module contains a `README.md` file with a list of all features or a guide with a few code snippets. Browse through
 the directories in root folder to find out more about each library. GitHub releases also contain archives with generated
-Dokka documentation for each module.
+Dokka documentation for each module. [KTX wiki](https://github.com/libktx/ktx/wiki) lists some useful resources as well.
 
 ### [Contribution and working from sources](.github/CONTRIBUTING.md)
 

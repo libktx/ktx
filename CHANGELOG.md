@@ -1,5 +1,10 @@
-#### 1.9.9-SNAPSHOT
+#### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated LibGDX to 1.9.10.
+- **[UPDATE]** Updated to Kotlin 1.3.41.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.0-RC.
+- **[UPDATE]** Updated VisUI to 1.4.3.
+- **[UPDATE]** Updated to Gradle 5.5.1.
 - **[FEATURE]** (`ktx-json`) Added a new KTX module with the goal of improving LibGDX `Json` API: `ktx-json`. The following extension methods were added to avoid passing Java class instances:
     - `fromJson`
     - `addClassTag`

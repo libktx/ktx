@@ -73,13 +73,16 @@ Dependencies versions are stored in the [gradle.properties](../gradle.properties
 all of the dependencies (outside of testing scope) up-to-date. Major dependencies updating:
 
 - **LibGDX**: update `gdxVersion` in the properties file and LibGDX version in the tag on the top of the 
-[README.md](../README.md) file.
+[README.md](../README.md) file. Note that updating LibGDX also affects the KTX version, so make sure to update
+[version.txt](../version.txt) as well.
 - **Kotlin**: update the `kotlinVersion` property and the Kotlin tag in the [README.md](../README.md).
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` property and the tag in the
 `ktx-async` [README.md](../async/README.md).
 - **Gradle**: run `gradle wrapper` in the root project folder. Make sure that the
 [Gradle wrapper properties file](../gradle/wrapper/gradle-wrapper.properties) points the `all` Gradle release under
 `distributionUrl` rather than just the binaries (`bin`).
+- **VisUI**: update `visUiVersion` in the properties file and VisUI version in the tag on the top of the 
+[vis/README.md](../vis/README.md) file.
 
 All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 
