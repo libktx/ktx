@@ -2,6 +2,7 @@ package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
@@ -81,5 +82,17 @@ class GraphicsTest {
       verify(shaderProgram, never()).end()
     }
     verify(shaderProgram).end()
+  }
+
+  @Test
+  fun `should begin and end FrameBuffer`() {
+    val frameBuffer = mock<FrameBuffer>()
+
+    frameBuffer.use {
+      verify(frameBuffer).begin()
+      assertSame(frameBuffer, it)
+      verify(frameBuffer, never()).end()
+    }
+    verify(frameBuffer).end()
   }
 }

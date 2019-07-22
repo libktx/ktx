@@ -12,6 +12,7 @@
     - `setElementType`
     - `setSerializer`
     - `readValue`
+- **[FEATURE]** (`ktx-graphics`) Added `GLFrameBuffer.use` to allow safe omission of the `begin()` and `end()` calls.
 
 #### 1.9.9-b2
 
