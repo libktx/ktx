@@ -2,10 +2,7 @@ package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockito_kotlin.doThrow
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
@@ -68,7 +65,7 @@ class DisposablesTest {
 
   @Test
   fun `should dispose iterables of assets`() {
-    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+    val disposables = GdxArray.with(mock<Disposable>(), mock(), mock())
 
     disposables.dispose()
 
@@ -77,7 +74,7 @@ class DisposablesTest {
 
   @Test
   fun `should ignore nulls during iterables disposing`() {
-    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), null)
+    val disposables = GdxArray.with(mock<Disposable>(), mock(), null)
 
     disposables.dispose()
 
@@ -86,7 +83,7 @@ class DisposablesTest {
 
   @Test
   fun shouldSafelyDisposeIterablesOfAssets() {
-    val disposables = GdxArray.with(mock<Disposable>(), null, mock<Disposable> {
+    val disposables = GdxArray.with(mock<Disposable>(), null, mock {
       on(it.dispose()) doThrow GdxRuntimeException("Expected.")
     })
 
@@ -97,7 +94,7 @@ class DisposablesTest {
 
   @Test
   fun `should dispose iterables of assets with catch block`() {
-    val disposables = GdxArray.with(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+    val disposables = GdxArray.with(mock<Disposable>(), mock(), mock())
 
     disposables.dispose { fail(it.message) } // Fails on unexpected exception.
 
@@ -107,7 +104,7 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of iterables of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = GdxArray.with(mock<Disposable>(), null, mock<Disposable> {
+    val disposables = GdxArray.with(mock<Disposable>(), null, mock {
       on(it.dispose()) doThrow exception
     })
 
@@ -118,7 +115,7 @@ class DisposablesTest {
 
   @Test
   fun `should dispose arrays of assets`() {
-    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+    val disposables = arrayOf(mock<Disposable>(), mock(), mock())
 
     disposables.dispose()
 
@@ -127,7 +124,7 @@ class DisposablesTest {
 
   @Test
   fun `should safely dispose arrays of assets`() {
-    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable> {
+    val disposables = arrayOf(mock<Disposable>(), mock(), mock {
       on(it.dispose()) doThrow GdxRuntimeException("Expected.")
     })
 
@@ -138,7 +135,7 @@ class DisposablesTest {
 
   @Test
   fun `should dispose arrays of assets with catch block`() {
-    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable>())
+    val disposables = arrayOf(mock<Disposable>(), mock(), mock())
 
     disposables.dispose { fail(it.message) } // Fails on unexpected exception.
 
@@ -148,7 +145,7 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of arrays of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = arrayOf(mock<Disposable>(), mock<Disposable>(), mock<Disposable> {
+    val disposables = arrayOf(mock<Disposable>(), mock(), mock {
       on(it.dispose()) doThrow exception
     })
 

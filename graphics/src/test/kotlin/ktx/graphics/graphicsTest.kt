@@ -3,9 +3,7 @@ package ktx.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Test
 

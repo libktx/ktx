@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Scaling.stretch
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doAnswer
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame

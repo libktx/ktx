@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert
 import org.junit.Test
 

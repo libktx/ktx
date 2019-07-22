@@ -275,7 +275,7 @@ class KTreeTest : NeedsLibGDX() {
   fun `should add widget to group and return its cell`() {
     val group = KVisTree("default")
     val actor = Actor()
-    val result: Node = group.addActorToTree(actor)
+    val result: Node<*, *, *> = group.addActorToTree(actor)
     assertTrue(actor in group.children)
     assertSame(actor, result.actor)
   }
@@ -305,7 +305,7 @@ class KTreeTest : NeedsLibGDX() {
       assertSame(icon, node.icon)
       assertFalse(node.isSelectable)
       assertTrue(node.isExpanded)
-      assertEquals("Test", node.`object`)
+      assertEquals("Test", node.value)
     }
   }
 }

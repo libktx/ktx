@@ -274,18 +274,6 @@ class MapsTest {
   }
 
   @Test
-  fun `should destruct IdentityMap#Entry into key and value`() {
-    val entry = IdentityMap.Entry<String, String>()
-    entry.key = "Key"
-    entry.value = "Value"
-
-    val (key, value) = entry
-
-    assertEquals("Key", key)
-    assertEquals("Value", value)
-  }
-
-  @Test
   fun `should destruct IntMap#Entry into key and value`() {
     val entry = IntMap.Entry<String>()
     entry.key = 10

@@ -68,7 +68,7 @@ class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
   override fun load() = manager.load(assetDescriptor)
   override fun unload() = manager.unload(assetDescriptor.fileName)
   override fun finishLoading() {
-    if (!isLoaded()) manager.finishLoadingAsset(assetDescriptor.fileName)
+    if (!isLoaded()) manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
   }
 }
 
@@ -92,7 +92,7 @@ class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
   override fun finishLoading() {
     if (!isLoaded()) {
       manager.load(assetDescriptor)
-      manager.finishLoadingAsset(assetDescriptor.fileName)
+      manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
     }
   }
 }

@@ -3,10 +3,9 @@ package ktx.box2d
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests Box2D bodies utilities and [BodyDefinition] - KTX extension of Box2D BodyDef with [FixtureDefinition] factory

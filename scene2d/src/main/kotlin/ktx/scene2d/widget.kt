@@ -248,7 +248,7 @@ interface KTree : KWidget<KNode> {
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
     selectable?.let { node.isSelectable = selectable }
-    node.`object` = userObject
+    node.value = userObject
     return this
   }
 
@@ -342,7 +342,7 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
 
 /** Extends [Tree] [Node] API with type-safe widget builders. */
 @Scene2dDsl
-class KNode(actor: Actor) : Node(actor), KTree {
+class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), KTree {
   override fun add(actor: Actor): KNode {
     val node = KNode(actor)
     add(node)
@@ -418,7 +418,7 @@ class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, sk
 
 /** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
-class KTreeWidget(skin: Skin, style: String) : Tree(skin, style), KTree {
+class KTreeWidget(skin: Skin, style: String) : Tree<Node<*, *, *>, Any?>(skin, style), KTree {
   override fun add(actor: Actor): KNode {
     val node = KNode(actor)
     add(node)

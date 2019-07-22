@@ -207,21 +207,21 @@ inline fun <Type> GdxArray<Type>.iterate(action: (Type, MutableIterator<Type>) -
 /**
  * Sorts elements in the array in-place descending according to their natural sort order.
  */
-fun <Type : Comparable<Type>> GdxArray<out Type>.sortDescending(): Unit {
+fun <Type : Comparable<Type>> GdxArray<out Type>.sortDescending() {
   this.sort(reverseOrder())
 }
 
 /**
  * Sorts elements in the array in-place according to natural sort order of the value returned by specified [selector] function.
  */
-inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortBy(crossinline selector: (Type) -> R?): Unit {
+inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortBy(crossinline selector: (Type) -> R?) {
   if (size > 1) this.sort(compareBy(selector))
 }
 
 /**
  * Sorts elements in the array in-place descending according to natural sort order of the value returned by specified [selector] function.
  */
-inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossinline selector: (Type) -> R?): Unit {
+inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossinline selector: (Type) -> R?) {
   if (size > 1) this.sort(compareByDescending(selector))
 }
 

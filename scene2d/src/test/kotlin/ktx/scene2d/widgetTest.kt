@@ -169,7 +169,7 @@ class KTreeTest : NeedsLibGDX() {
     val group = TestTree()
     val actor = Actor()
 
-    val result: Node = group.storeActor(actor)
+    val result: Node<*, *, *> = group.storeActor(actor)
 
     assertTrue(actor in group.children)
     assertSame(actor, result.actor)
@@ -203,11 +203,11 @@ class KTreeTest : NeedsLibGDX() {
       assertSame(icon, node.icon)
       assertFalse(node.isSelectable)
       assertTrue(node.isExpanded)
-      assertEquals("Test", node.`object`)
+      assertEquals("Test", node.value)
     }
   }
 
-  class TestTree : Tree(VisUI.getSkin()), KTree {
+  class TestTree : Tree<Node<*, *, *>, Any?>(VisUI.getSkin()), KTree {
     override fun add(actor: Actor): KNode {
       val node = KNode(actor)
       add(node)
