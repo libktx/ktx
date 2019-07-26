@@ -13,6 +13,7 @@
     - `setSerializer`
     - `readValue`
 - **[FEATURE]** (`ktx-graphics`) Added `GLFrameBuffer.use` to allow safe omission of the `begin()` and `end()` calls.
+- **[CHANGE]** (`ktx-app`) `clearScreen` clears depth buffer for supporting screens with 3d graphics.
 
 #### 1.9.9-b2
 

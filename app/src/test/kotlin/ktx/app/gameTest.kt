@@ -46,7 +46,7 @@ class KtxGameTest {
     game.render()
 
     verify(Gdx.gl).glClearColor(0f, 0f, 0f, 1f)
-    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
+    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
   }
 
   @Test
