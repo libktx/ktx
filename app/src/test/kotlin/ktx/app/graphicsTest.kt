@@ -17,7 +17,7 @@ class GraphicsTest {
     clearScreen(0.25f, 0.5f, 0.75f, 0.6f)
 
     verify(Gdx.gl).glClearColor(0.25f, 0.5f, 0.75f, 0.6f)
-    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
+    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
   }
 
   @Test
@@ -27,6 +27,6 @@ class GraphicsTest {
     clearScreen(0.25f, 0.5f, 0.75f)
 
     verify(Gdx.gl).glClearColor(0.25f, 0.5f, 0.75f, 1f)
-    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
+    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
   }
 }
