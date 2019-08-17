@@ -1,6 +1,6 @@
 # Warning
 
-`ktx-freetype-async` is currently disabled in the `1.9.9-b1` version, since `AssetStorage` was removed
+As of the `1.9.9-b1` version, the `ktx-freetype-async` module is **disabled**, since `AssetStorage` was removed
 from `ktx-async`. `AssetStorage` will eventually be refactored to use the new coroutines API and `ktx-freetype-async`
 will be enabled. However, until then please use [`ktx-freetype`](../freetype) or a previous **KTX** version instead.
 
