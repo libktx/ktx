@@ -41,7 +41,7 @@ subprojects {
   group = libGroup
   version = libVersion
   archivesBaseName = projectName
-  
+
   compileKotlin {
     kotlinOptions {
       jvmTarget = "1.6"
@@ -86,7 +86,7 @@ subprojects {
   }
 
   artifacts {
-    archives jar, javadocJar, sourcesJar
+    archives javadocJar, sourcesJar
   }
 
   tasks.withType(Sign) {
