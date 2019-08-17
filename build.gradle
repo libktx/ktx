@@ -41,6 +41,12 @@ subprojects {
   group = libGroup
   version = libVersion
   archivesBaseName = projectName
+  
+  compileKotlin {
+    kotlinOptions {
+      jvmTarget = "1.6"
+    }
+  }
 
   dependencies {
     provided "com.badlogicgames.gdx:gdx:$gdxVersion"
