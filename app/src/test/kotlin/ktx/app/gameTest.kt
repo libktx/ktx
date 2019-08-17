@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -46,7 +46,7 @@ class KtxGameTest {
     game.render()
 
     verify(Gdx.gl).glClearColor(0f, 0f, 0f, 1f)
-    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT)
+    verify(Gdx.gl).glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
   }
 
   @Test

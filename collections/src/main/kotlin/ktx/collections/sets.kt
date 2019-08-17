@@ -3,7 +3,6 @@
 package ktx.collections
 
 import com.badlogic.gdx.utils.IntSet
-import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 
 /** Alias for [com.badlogic.gdx.utils.ObjectSet]. Added for consistency with other collections and factory methods. */

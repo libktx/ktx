@@ -104,7 +104,7 @@ class KVisTree(styleName: String) : VisTree(styleName), TreeWidgetFactory {
 
 /** Extends [Tree] [Node] API with type-safe widget builders. */
 @VisDsl
-class KNode(actor: Actor) : Node(actor), TreeWidgetFactory {
+class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), TreeWidgetFactory {
   override fun <T : Actor> addActorToTree(actor: T): KNode {
     val node = KNode(actor)
     add(node)

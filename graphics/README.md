@@ -15,8 +15,8 @@ common bugs such as forgetting to start or end batch rendering.
 - `color` factory methods allows to use idiomatic named parameters to construct LibGDX `Color` instances.
 - `copy` extension method added to `Color`. It allows to create a new `Color` with copied color values. Supports values
 overriding with optional, named parameters.
-- `use` inlined extension methods added to `Batch` and `ShaderProgram`. They allow to omit the `begin()` and `end()`
-calls before using batches and shader programs.
+- `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow to safely
+omit the `begin()` and `end()` calls when using batches, shader programs and buffers.
 
 #### `ShapeRenderer`
 

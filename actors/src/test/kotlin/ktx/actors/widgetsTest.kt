@@ -12,11 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
 
 class WidgetsTest {
   @Before
@@ -25,9 +24,9 @@ class WidgetsTest {
     // constructors. Label will not successfully construct an instance without a BitmapFont.
     LwjglNativesLoader.load()
 
-    Gdx.graphics = mock<Graphics>()
-    Gdx.app = mock<Application>()
-    Gdx.gl20 = mock<GL20>()
+    Gdx.graphics = mock()
+    Gdx.app = mock()
+    Gdx.gl20 = mock()
     Gdx.files = LwjglFiles()
     Gdx.gl = Gdx.gl20
   }

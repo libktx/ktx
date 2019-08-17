@@ -1,3 +1,20 @@
+#### 1.9.10-b1
+
+- **[UPDATE]** Updated LibGDX to 1.9.10.
+- **[UPDATE]** Updated to Kotlin 1.3.41.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.0-RC2.
+- **[UPDATE]** Updated VisUI to 1.4.4.
+- **[UPDATE]** Updated to Gradle 5.5.1.
+- **[CHANGE]** (`ktx-app`) `clearScreen` now also clears depth buffer to support 3D applications.
+- **[FEATURE]** (`ktx-json`) Added a new KTX module with the goal of improving LibGDX `Json` API: `ktx-json`. The following extension methods were added to avoid passing Java class instances:
+    - `fromJson`
+    - `addClassTag`
+    - `getTag`
+    - `setElementType`
+    - `setSerializer`
+    - `readValue`
+- **[FEATURE]** (`ktx-graphics`) Added `GLFrameBuffer.use` to allow safe omission of the `begin()` and `end()` calls.
+
 #### 1.9.9-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.31.

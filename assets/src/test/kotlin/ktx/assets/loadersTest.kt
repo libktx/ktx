@@ -1,12 +1,9 @@
 package ktx.assets
 
 import com.badlogic.gdx.assets.loaders.AssetLoader
-import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.*
 import io.kotlintest.matchers.shouldThrow
 import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 import org.junit.Assert

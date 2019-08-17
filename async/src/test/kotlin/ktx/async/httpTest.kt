@@ -2,6 +2,7 @@ package ktx.async
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Net.*
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglNet
 import com.badlogic.gdx.net.HttpStatus
 import com.badlogic.gdx.utils.GdxRuntimeException
@@ -9,7 +10,7 @@ import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.async
@@ -143,10 +144,7 @@ class HttpTest {
   ) = HttpRequestResult(url, method, status, content, headers)
 }
 
-/**
- * Tests [httpRequest] API.
- */
-class AsynchronousHttpRequestsTest : AsyncTest() {
+abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration): AsyncTest() {
   private val port = FreePortFinder.findFreeLocalPort()
   @get:Rule
   val wireMock = WireMockRule(port)
@@ -154,7 +152,7 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should perform asynchronous HTTP request`() {
     // Given:
-    Gdx.net = LwjglNet()
+    Gdx.net = LwjglNet(configuration)
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")
@@ -199,7 +197,7 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
   @Test
   fun `should cancel HTTP request`() {
     // Given:
-    Gdx.net = spy(LwjglNet())
+    Gdx.net = spy(LwjglNet(configuration))
     wireMock.stubFor(get("/test").willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "text/plain")
@@ -221,6 +219,19 @@ class AsynchronousHttpRequestsTest : AsyncTest() {
     verify(Gdx.net).cancelHttpRequest(any())
   }
 }
+
+
+/**
+ * Tests [httpRequest] API with a single-threaded [LwjglNet].
+ */
+class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(LwjglApplicationConfiguration().apply {
+  maxNetThreads = 1
+})
+
+/**
+ * Tests [httpRequest] API with a multithreaded [LwjglNet].
+ */
+class MultiThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(LwjglApplicationConfiguration())
 
 class KtxHttpResponseListenerTest {
   @Test

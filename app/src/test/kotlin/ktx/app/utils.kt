@@ -1,8 +1,8 @@
 package ktx.app
 
 import com.badlogic.gdx.Graphics
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 
 /**
  * @param delta time since last render.

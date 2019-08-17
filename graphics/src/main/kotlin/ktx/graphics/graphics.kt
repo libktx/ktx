@@ -2,6 +2,7 @@ package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.GLFrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 
 /**
@@ -39,6 +40,16 @@ inline fun <B : Batch> B.use(action: (B) -> Unit) {
  * @param action inlined. Executed after [ShaderProgram.begin] and before [ShaderProgram.end].
  */
 inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {
+  begin()
+  action(this)
+  end()
+}
+
+/**
+ * Automatically calls [GLFrameBuffer.begin] and [GLFrameBuffer.end].
+ * @param action inlined. Executed after [GLFrameBuffer.begin] and before [GLFrameBuffer.end].
+ */
+inline fun <B : GLFrameBuffer<*>> B.use(action: (B) -> Unit) {
   begin()
   action(this)
   end()

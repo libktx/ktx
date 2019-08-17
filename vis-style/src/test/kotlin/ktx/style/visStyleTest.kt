@@ -27,7 +27,7 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerWidgetStyle
 import com.kotcrab.vis.ui.widget.spinner.Spinner.SpinnerStyle
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane.TabbedPaneStyle
 import com.kotcrab.vis.ui.widget.toast.Toast.ToastStyle
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

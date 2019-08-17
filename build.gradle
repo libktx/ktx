@@ -41,12 +41,18 @@ subprojects {
   group = libGroup
   version = libVersion
   archivesBaseName = projectName
+  
+  compileKotlin {
+    kotlinOptions {
+      jvmTarget = "1.6"
+    }
+  }
 
   dependencies {
     provided "com.badlogicgames.gdx:gdx:$gdxVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "io.kotlintest:kotlintest:$kotlinTestVersion"
-    testCompile "com.nhaarman:mockito-kotlin-kt1.1:$kotlinMockitoVersion"
+    testCompile "com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   }

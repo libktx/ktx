@@ -1,10 +1,9 @@
 package ktx.inject
 
-import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Test
@@ -301,7 +300,7 @@ class DependencyInjectionTest {
 
   @Test
   fun `should dispose of Disposable components with error handling`() {
-    Gdx.app = mock<Application>()
+    Gdx.app = mock()
     val singleton = mock<Disposable> {
       on(it.dispose()) doThrow GdxRuntimeException("Expected.")
     }

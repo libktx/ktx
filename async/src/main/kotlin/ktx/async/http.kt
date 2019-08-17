@@ -45,7 +45,7 @@ suspend fun httpRequest(
       this.followRedirects = followRedirects
       this.includeCredentials = includeCredentials
       contentStream?.let { setContent(it.first, it.second) }
-      headers.forEach { header, value -> setHeader(header, value) }
+      headers.forEach { (header, value) -> setHeader(header, value) }
     }
     val listener = KtxHttpResponseListener(httpRequest, continuation, onCancel)
     Gdx.net.sendHttpRequest(httpRequest, listener)

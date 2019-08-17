@@ -38,9 +38,14 @@ Project contributors listed chronologically.
 * [@jojomickymack](https://github.com/jojomickymack)
   * Wrote [a KTX tutorial](https://jojomickymack.gitlab.io/reverie/post/libktx_platformer/).
   * Prepared several KTX template projects and showcases.
+  * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
-  * Added utilities to [style module](../style)
+  * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
-  * Added utilities to [style module](../style)
+  * Added utilities to [style module](../style).
+  * Contributed [JSON serialization](../json) utilities.
+  * Updated the project to LibGDX 1.9.10.
+* [@kvonspiczak](https://github.com/kvonspiczak)
+  * Contributed documentation fix.

@@ -185,7 +185,7 @@ operator fun <Key, Value> IdentityMap<Key, Value>.set(key: Key, value: Value): V
  * @param action will be invoked on each key and value pair. Passed iterator is ensured to be the same instance throughout
  *    the iteration. It can be used to remove elements.
  */
-inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, MutableIterator<IdentityMap.Entry<Key, Value>>) -> Unit) {
+inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, MutableIterator<Entry<Key, Value>>) -> Unit) {
   val iterator = this.iterator()
   while (iterator.hasNext()) {
     val next = iterator.next()
@@ -283,18 +283,6 @@ inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component1() = key!
  * @return [ObjectMap.Entry.value]
  */
 inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component2(): Value? = value
-
-/**
- * Allows to destruct [IdentityMap.Entry] into key and value components.
- * @return [IdentityMap.Entry.key]
- */
-inline operator fun <Key, Value> IdentityMap.Entry<Key, Value>.component1() = key!!
-
-/**
- * Allows to destruct [IdentityMap.Entry] into key and value components. Nullable, since [IdentityMap] allows null values.
- * @return [IdentityMap.Entry.value]
- */
-inline operator fun <Key, Value> IdentityMap.Entry<Key, Value>.component2(): Value? = value
 
 /**
  * Allows to destruct [IntMap.Entry] into key and value components.

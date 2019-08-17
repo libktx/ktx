@@ -43,7 +43,7 @@ interface WidgetFactory<S> {
   fun image(drawableName: String, init: (@VisDsl VisImage).(S) -> Unit = {}): VisImage = actor(VisImage(drawableName), init)
 
   /** @see [VisList] */
-  fun <T> list(styleName: String = DEFAULT_STYLE, init: (@VisDsl VisList<T>).(S) -> Unit = {}): VisList<T> = actor(VisList<T>(styleName), init)
+  fun <T> list(styleName: String = DEFAULT_STYLE, init: (@VisDsl VisList<T>).(S) -> Unit = {}): VisList<T> = actor(VisList(styleName), init)
 
   /** @see [VisProgressBar] */
   fun progressBar(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false, init: (@VisDsl VisProgressBar).(S) -> Unit = {}): VisProgressBar
@@ -56,7 +56,7 @@ interface WidgetFactory<S> {
 
   /** @see [VisSelectBox] */
   fun <T> selectBox(styleName: String = DEFAULT_STYLE, init: (@VisDsl VisSelectBox<T>).(S) -> Unit = {}): VisSelectBox<T>
-      = actor(VisSelectBox<T>(styleName), init)
+      = actor(VisSelectBox(styleName), init)
 
   /** @see [VisSlider] */
   fun slider(min: Float = 0f, max: Float = 100f, step: Float = 1f, vertical: Boolean = false, init: (@VisDsl VisSlider).(S) -> Unit = {}): VisSlider
@@ -416,7 +416,7 @@ interface TreeWidgetFactory : WidgetFactory<KNode> {
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
     selectable?.let { node.isSelectable = selectable }
-    node.`object` = userObject
+    node.value = userObject
     return this
   }
 
