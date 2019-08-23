@@ -1,4 +1,7 @@
 #### 1.9.10-SNAPSHOT
+- **[CHANGE]** `Action.parallelTo` changed to `Action.along` and it now mutates the caller and argument if they are ParallelActions, to save wasted instantiations and avoid GC.
+- **[UPDATE]** Added `/` operator to Action, which performs the non-mutating version of along, wrapping the caller and argument in a new ParallelAction.
+- **[CHANGE]** `Action.then` now mutates the caller and argument if they are SequenceActions, to save wasted instantiations and avoid GC. The `+` operator still performs the old non-mutating version, wrapping the caller and argument in a new SequenceAction.
 
 #### 1.9.10-b1
 

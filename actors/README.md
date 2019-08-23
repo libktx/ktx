@@ -44,10 +44,11 @@ be enough for most use cases.
 
 - Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
-- `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
-- `Action.parallelTo` *infix* extension function allows to easily create parallel actions with pleasant syntax.
-- `+` operator can be used to create action sequences (alternative syntax to `then`).
-- `+=` operator allows to add an action to an existing `SequenceAction`.
+- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax.
+- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax.
+- `+` operator can be used to create action sequences (alternative non-mutating version of `then`).
+- `/` operator can be used combine actions in parallel (alternative non-mutating version of `along`).
+- `+=` operator allows to add an action to an existing `SequenceAction` or `ParallelAction`.
 
 #### Widgets
 
@@ -173,8 +174,7 @@ textField.onKeyboardFocusEvent { focusEvent, actor ->
 }
 ```
 
-Chaining actions with infix `then` function (`SequenceAction` utility):
-
+Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function
 ```Kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
