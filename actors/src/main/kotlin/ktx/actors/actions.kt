@@ -33,7 +33,7 @@ operator fun Actor.plusAssign(action: Action) = addAction(action)
 operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
- * Combines this action and the passed action into a single [SequenceAction].
+ * Wraps this action and the passed action in a [SequenceAction].
  *
  * @param action will be executed after this action.
  * @return [SequenceAction] storing both actions.
@@ -60,7 +60,8 @@ infix fun SequenceAction.then(action: Action): SequenceAction {
 operator fun Action.plus(action: Action): SequenceAction = then(action)
 
 /**
- * Adds another [Action] to this sequence.
+ * Adds [action] to this [SequenceAction].
+ *
  * @param action will be executed during this sequence.
  */
 operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
@@ -77,8 +78,8 @@ infix fun Action.along(action: Action): ParallelAction = Actions.parallel(this, 
 infix fun Action.parallelTo(action: Action): ParallelAction = along(action)
 
 /**
- * Adds [action] to this [ParallelAction], so long as it isn't a [SequenceAction]. If it is a [SequenceAction], see
- * [Action.along].
+ * Adds [action] to this [ParallelAction], so long as this isn't a [SequenceAction]. If it is a [SequenceAction],
+ * [@see Action.along].
  *
  * @param action will be added to this [ParallelAction].
  * @return [ParallelAction] this [ParallelAction], now containing [action]]
@@ -102,7 +103,7 @@ infix fun ParallelAction.parallelTo(action: Action): ParallelAction = along(acti
 operator fun Action.div(action: Action): ParallelAction = along(action)
 
 /**
- * Adds another [Action] to this action group.
+ * Adds another [Action] to this [ParallelAction].
  * @param action will be executed in parallel to the other actions of this [ParallelAction].
  */
 operator fun ParallelAction.plusAssign(action: Action) = addAction(action)
