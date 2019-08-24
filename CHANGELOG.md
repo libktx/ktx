@@ -1,7 +1,8 @@
 #### 1.9.10-SNAPSHOT
-- **[CHANGE]** `Action.parallelTo` changed to `Action.along` and it now mutates the caller and argument if they are ParallelActions, to save wasted instantiations and avoid GC.
+- **[CHANGE]** `Action.parallelTo` changed to `Action.along`.
+- **[CHANGE]** `Action.along` (formerly `Action.parallelTo`) and `Action.then` no longer unwrap the second action.
+- **[CHANGE]** `ParallelAction.along` (formerly `ParallelAction.parallelTo`) and `SequenceAction.then` simply add the second action to the group without unwrapping.
 - **[UPDATE]** Added `/` operator to Action, which performs the non-mutating version of along, wrapping the caller and argument in a new ParallelAction.
-- **[CHANGE]** `Action.then` now mutates the caller and argument if they are SequenceActions, to save wasted instantiations and avoid GC. The `+` operator still performs the old non-mutating version, wrapping the caller and argument in a new SequenceAction.
 - **[CHANGE]** `ParallelAction.plus()` and `SequenceAction.plus()` no longer unwrap their components.
 
 #### 1.9.10-b1
