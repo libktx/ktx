@@ -20,7 +20,8 @@ with the following shapes:
   - `chain`: `ChainShape`.
   - `loop`: looped `ChainShape`.
   - `edge`: looped `EdgeShape`.
-  - `fixture`: a custom `Shape` passed as parameter.
+  - `fixture`: a custom `Shape` passed as parameter. Note that in contrary to other fixture factory methods,
+  the passed custom `Shape` will _not_ be disposed of unless the `disposeOfShape` parameter is set to `true`.
 - `FixtureDef.filter` extension methods aim to simplify `Filter` API usage.
 - `Body` was extended with the following builder methods that ease creation of `Joint` instances:
   - `gearJointWith`: `GearJoint`.
@@ -83,7 +84,7 @@ val fixture = body.box(width = 2f, height = 1f) {
 ![PolygonShape](img/box.png)
 
 
-Creating a `Body` with a custom `PolygonShape` `Fixture`:
+Creating a `Body` with a customized `PolygonShape` `Fixture`:
 
 ```Kotlin
 import ktx.box2d.body
