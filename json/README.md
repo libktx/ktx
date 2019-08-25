@@ -1,18 +1,19 @@
-# KTX: Json extensions
+# KTX: JSON serialization utilities
 
-Extension methods for LibGDX JSON reader and writer.
+Extension methods for LibGDX JSON serialization API.
 
 ### Why?
 
-The JSON reader and writer in LibGDX uses a lot of `Class` parameter, which leads to a lot
-of `Type::class.java` in method arguments. Kotlin brings reified generics which create the
-possibility to get the `Class` of a generic type parameter. This module offers extension methods 
-with reified generics to avoid using `::class.java` in your code and to allow type inference and
-in some cases better type safety.
+The LibGDX JSON reader and writer methods often consume `Class` parameters, which forces the
+`Type::class.java` syntax on Kotlin users. Fortunately, Kotlin brings reified generics which effectively
+allow passing a `Class` parameter through a generic type. This module mostly offers extension methods 
+with reified generics to avoid using `::class.java` in your code, as well as to allow type inference
+and better type safety.
 
 ### Guide
 
 KTX brings the following extension methods to LibGDX `Json` API:
+
 - `fromJson`
 - `addClassTag`
 - `getTag`
@@ -21,7 +22,7 @@ KTX brings the following extension methods to LibGDX `Json` API:
 - `readValue`
 
 All of these extension methods are consistent with the official `Json` API, but provide inlined reified typing
-to avoid passing `Class` instances. This improves code readability.
+to avoid passing `Class` instances to improve code readability.
 
 A comparison of the APIs when used from Kotlin:
 
@@ -90,26 +91,26 @@ val json = Json()
 val player: Player = json.fromJson("""{
   "pos": {"x": 10, "y": 10},
   "cards": [1, 2, 3, 5, 8, 13]
-  }""")
+}""")
 
 ```
 
 ### Alternatives
 
-LibGDX JSON is quite limited and verbose compared to other JSON serialization libraries.
-It's a mostly untested alternative to all the other libraries around. It also accepts and
-produces corrupted JSON files by default, which might be problematic when integrating with
-external services.
+LibGDX JSON is quite limited, verbose and poorly tested compared to some other JSON
+serialization libraries. It also accepts and produces corrupted JSON files by default,
+since it omits quotation marks, which might be problematic when integrating with external
+services.
 
-But if your project is simple enough and you want to avoid including additional JSON 
-serialization library in your game (since it's already used internally throughout LibGDX),
-official LibGDX `Json` can be enough. In most cases however, you should probably look into
-other popular serialization libraries:
+However, if your project is simple enough and you want to avoid including additional JSON 
+serialization libraries in your game, official LibGDX `Json` can be enough. In most other
+cases, you should probably look into other popular serialization libraries:
 
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) provides
 reflection-free serialization to JSON, CBOR and protobuf. Serialization code is produced
 at compile time for classes marked with an annotation.
-- Many popular JSON serialization libraries for Java: Gson, Jackson, Moshi, org.json to name a few.
+- Many popular JSON serialization libraries for Java: `Gson`, `Jackson`, `Moshi`, `org.json`
+to name a few.
 
 #### Additional documentation
 
