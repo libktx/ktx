@@ -1,5 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.3.50.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.0.
 - **[CHANGE]** (`ktx-box2d`) Added `disposeOfShape` parameters to `fixture` extension methods of `Body` and `BodyDefinition`.
 Setting these values to `true` will cause the fixture shapes to be immediately disposed of after `Fixture` construction.
 - **[FIX]** (`ktx-box2d`) Removed memory leak caused by undisposed shapes.
