@@ -5,6 +5,12 @@
 - **[UPDATE]** Added `/` operator to Action, which performs the non-mutating version of along, wrapping the caller and argument in a new ParallelAction.
 - **[CHANGE]** `ParallelAction.plus()` and `SequenceAction.plus()` no longer unwrap their components.
 
+- **[UPDATE]** Updated to Kotlin 1.3.50.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.0.
+- **[CHANGE]** (`ktx-box2d`) Added `disposeOfShape` parameters to `fixture` extension methods of `Body` and `BodyDefinition`.
+Setting these values to `true` will cause the fixture shapes to be immediately disposed of after `Fixture` construction.
+- **[FIX]** (`ktx-box2d`) Removed memory leak caused by undisposed shapes.
+
 #### 1.9.10-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.10.

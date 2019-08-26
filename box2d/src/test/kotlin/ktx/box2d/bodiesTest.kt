@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -22,7 +25,9 @@ class BodiesTest : Box2DTest() {
     val fixtureDef = bodyDefinition.fixture(shape)
 
     assertSame(shape, fixtureDef.shape)
+    assertFalse(fixtureDef.disposeOfShape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    verify(shape, never()).dispose()
   }
 
   @Test
@@ -36,7 +41,20 @@ class BodiesTest : Box2DTest() {
     }
 
     assertSame(shape, fixtureDef.shape)
+    assertFalse(fixtureDef.disposeOfShape)
     assertEquals(0.5f, fixtureDef.density)
+    assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+  }
+
+  @Test
+  fun `should construct FixtureDef with a custom shape and mark it for disposing`() {
+    val bodyDefinition = BodyDefinition()
+    val shape = mock<Shape>()
+
+    val fixtureDef = bodyDefinition.fixture(shape, disposeOfShape = true)
+
+    assertSame(shape, fixtureDef.shape)
+    assertTrue(fixtureDef.disposeOfShape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
   }
 
@@ -52,6 +70,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(2f, shape.position.x)
     assertEquals(3f, shape.position.y)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -69,6 +88,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(3f, shape.position.y)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -89,6 +109,7 @@ class BodiesTest : Box2DTest() {
         Vector2(0f, 2f),
         Vector2(0f, 0f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -113,6 +134,7 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixtureDef.density)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -126,6 +148,7 @@ class BodiesTest : Box2DTest() {
     // Box2D seems to change vertices order:
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -142,6 +165,7 @@ class BodiesTest : Box2DTest() {
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -155,6 +179,7 @@ class BodiesTest : Box2DTest() {
     // Box2D seems to change vertices order:
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -171,6 +196,7 @@ class BodiesTest : Box2DTest() {
     assertPolygonEquals(arrayOf(Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -184,6 +210,7 @@ class BodiesTest : Box2DTest() {
     assertFalse(shape.isLooped)
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -200,6 +227,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -213,6 +241,7 @@ class BodiesTest : Box2DTest() {
     assertFalse(shape.isLooped)
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -229,6 +258,7 @@ class BodiesTest : Box2DTest() {
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -243,6 +273,7 @@ class BodiesTest : Box2DTest() {
     // Loop adds another vertex closing the chain:
     assertChainEquals(arrayOf(Vector2(1f, 1f), Vector2(2f, 2f), Vector2(1f, 2f), Vector2(1f, 1f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -264,6 +295,7 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -282,6 +314,7 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 2f),
         Vector2(1f, 1f)), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -303,6 +336,7 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f)), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -315,6 +349,7 @@ class BodiesTest : Box2DTest() {
     val shape = fixtureDef.shape as EdgeShape
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -330,6 +365,7 @@ class BodiesTest : Box2DTest() {
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -342,6 +378,7 @@ class BodiesTest : Box2DTest() {
     val shape = fixtureDef.shape as EdgeShape
     assertEdgeEquals(Vector2(1f, 2f), Vector2(3f, 4f), shape)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -357,6 +394,7 @@ class BodiesTest : Box2DTest() {
     assertEdgeEquals(Vector2(1f, 2f), Vector2(3f, 4f), shape)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
+    assertTrue(fixtureDef.disposeOfShape)
   }
 
   @Test
@@ -374,19 +412,20 @@ class BodiesTest : Box2DTest() {
   @Test
   fun `should construct Fixture with a custom shape`() {
     val body = createBody()
-    val shape = CircleShape()
+    val shape = spy(CircleShape())
 
     val fixture = body.fixture(shape)
 
     assertTrue(fixture.shape is CircleShape)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    verify(shape, never()).dispose()
   }
 
   @Test
   fun `should construct Fixture with a custom shape with init block`() {
     val body = createBody()
-    val shape = CircleShape()
+    val shape = spy(CircleShape())
 
     val fixture = body.fixture(shape) {
       density = 0.5f
@@ -397,6 +436,20 @@ class BodiesTest : Box2DTest() {
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
+    verify(shape, never()).dispose()
+  }
+
+  @Test
+  fun `should construct Fixture with a custom shape and dispose of it`() {
+    val body = createBody()
+    val shape = spy(CircleShape())
+
+    val fixture = body.fixture(shape, disposeOfShape = true)
+
+    assertTrue(fixture.shape is CircleShape)
+    assertSame(body, fixture.body)
+    assertTrue(fixture in body.fixtureList)
+    verify(shape).dispose()
   }
 
   @Test

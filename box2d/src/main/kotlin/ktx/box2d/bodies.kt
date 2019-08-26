@@ -25,6 +25,7 @@ class BodyDefinition : BodyDef() {
   /**
    * Utility builder method for constructing fixtures of custom shape type.
    * @param shape will be set as [FixtureDef] shape type.
+   * @param disposeOfShape whether to call [Shape.dispose] immediately after fixture creation. `false` by default.
    * @param init inlined. Allows to modify [FixtureDef] properties. Receives [shape] as first (`it`) argument.
    * @see circle
    * @see box
@@ -34,8 +35,10 @@ class BodyDefinition : BodyDef() {
    */
   inline fun <ShapeType : Shape> fixture(
       shape: ShapeType,
+      disposeOfShape: Boolean = false,
       init: FixtureDefinition.(ShapeType) -> Unit = {}): FixtureDefinition {
     val fixtureDefinition = FixtureDefinition()
+    fixtureDefinition.disposeOfShape = disposeOfShape
     fixtureDefinition.shape = shape
     fixtureDefinition.init(shape)
     fixtureDefinitions.add(fixtureDefinition)
@@ -56,7 +59,7 @@ class BodyDefinition : BodyDef() {
     val shape = CircleShape()
     shape.radius = radius
     shape.position = position
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -78,7 +81,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     shape.setAsBox(width / 2f, height / 2f, position, angle)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -96,7 +99,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     if (vertices != null) shape.set(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -111,7 +114,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
     val shape = PolygonShape()
     shape.set(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -126,7 +129,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -143,7 +146,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createChain(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -158,7 +161,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -176,7 +179,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
     val shape = ChainShape()
     shape.createLoop(vertices)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -193,7 +196,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(EdgeShape) -> Unit = {}): FixtureDefinition {
     val shape = EdgeShape()
     shape.set(from, to)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -216,7 +219,7 @@ class BodyDefinition : BodyDef() {
       init: FixtureDefinition.(EdgeShape) -> Unit = {}): FixtureDefinition {
     val shape = EdgeShape()
     shape.set(fromX, fromY, toX, toY)
-    return fixture(shape, init)
+    return fixture(shape, disposeOfShape = true, init = init)
   }
 
   /**
@@ -231,6 +234,7 @@ class BodyDefinition : BodyDef() {
 /**
  * Utility builder method for constructing fixtures of custom shape type.
  * @param shape will be set as [FixtureDef] shape type.
+ * @param disposeOfShape whether to call [Shape.dispose] immediately after fixture creation. `false` by default.
  * @param init inlined. Allows to modify [FixtureDef] properties. Receives [shape] as first (`it`) argument.
  * @return a fully constructed [Fixture] with properties from the defined [FixtureDef].
  * @see circle
@@ -241,13 +245,16 @@ class BodyDefinition : BodyDef() {
  */
 inline fun <ShapeType : Shape> Body.fixture(
     shape: ShapeType,
+    disposeOfShape: Boolean = false,
     init: FixtureDefinition.(ShapeType) -> Unit = {}): Fixture {
   val fixtureDefinition = FixtureDefinition()
+  fixtureDefinition.disposeOfShape = disposeOfShape
   fixtureDefinition.shape = shape
   fixtureDefinition.init(shape)
   val fixture = createFixture(fixtureDefinition)
   fixture.userData = fixtureDefinition.userData
   fixtureDefinition.creationCallback?.let { it(fixture) }
+  if (disposeOfShape) shape.dispose()
   return fixture
 }
 
@@ -265,7 +272,7 @@ inline fun Body.circle(
   val shape = CircleShape()
   shape.radius = radius
   shape.position = position
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -287,7 +294,7 @@ inline fun Body.box(
     init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   shape.setAsBox(width / 2f, height / 2f, position, angle)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -305,7 +312,7 @@ inline fun Body.polygon(
     init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   if (vertices != null) shape.set(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -320,7 +327,7 @@ inline fun Body.polygon(
     init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
   val shape = PolygonShape()
   shape.set(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -336,7 +343,7 @@ inline fun Body.chain(
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createChain(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -353,7 +360,7 @@ inline fun Body.chain(
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createChain(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -368,7 +375,7 @@ inline fun Body.loop(
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createLoop(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -386,7 +393,7 @@ inline fun Body.loop(
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
   val shape = ChainShape()
   shape.createLoop(vertices)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -403,7 +410,7 @@ inline fun Body.edge(
     init: FixtureDefinition.(EdgeShape) -> Unit = {}): Fixture {
   val shape = EdgeShape()
   shape.set(from, to)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
 
 /**
@@ -426,5 +433,5 @@ inline fun Body.edge(
     init: FixtureDefinition.(EdgeShape) -> Unit = {}): Fixture {
   val shape = EdgeShape()
   shape.set(fromX, fromY, toX, toY)
-  return fixture(shape, init)
+  return fixture(shape, disposeOfShape = true, init = init)
 }
