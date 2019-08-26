@@ -49,3 +49,5 @@ Project contributors listed chronologically.
   * Updated the project to LibGDX 1.9.10.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
+* [@cypherdare](https://github.com/cypherdare)
+  * Improved [actors](../actors) utilities.
