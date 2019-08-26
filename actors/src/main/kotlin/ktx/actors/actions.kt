@@ -46,9 +46,8 @@ infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, a
  * @param action will be added to this [SequenceAction]
  * @return [SequenceAction] this [SequenceAction]
  */
-infix fun SequenceAction.then(action: Action): SequenceAction {
+infix fun SequenceAction.then(action: Action): SequenceAction = apply{
   addAction(action)
-  return this
 }
 
 /**
@@ -57,7 +56,7 @@ infix fun SequenceAction.then(action: Action): SequenceAction {
  * @param action will be executed after [this] action.
  * @return [SequenceAction] storing both actions.
  */
-operator fun Action.plus(action: Action): SequenceAction = then(action)
+operator fun Action.plus(action: Action): SequenceAction = Actions.sequence(this, action)
 
 /**
  * Adds [action] to this [SequenceAction].
@@ -85,8 +84,10 @@ infix fun Action.parallelTo(action: Action): ParallelAction = along(action)
  * @return [ParallelAction] this [ParallelAction], now containing [action]]
  */
 infix fun ParallelAction.along(action: Action): ParallelAction {
-  if (this is SequenceAction)
-    return this as Action along action // workaround for SequenceAction inheritance from ParallelAction
+  if (this is SequenceAction) {
+    // Workaround for SequenceAction inheritance from ParallelAction:
+    return Actions.parallel(this, action)
+  }
   addAction(action)
   return this
 }
@@ -100,7 +101,7 @@ infix fun ParallelAction.parallelTo(action: Action): ParallelAction = along(acti
  * @param action will be executed at the same time as this action.
  * @return [SequenceAction] storing both actions.
  */
-operator fun Action.div(action: Action): ParallelAction = along(action)
+operator fun Action.div(action: Action): ParallelAction = Actions.parallel(this, action)
 
 /**
  * Adds another [Action] to this [ParallelAction].
