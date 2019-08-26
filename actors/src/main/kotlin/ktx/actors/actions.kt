@@ -46,7 +46,7 @@ infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, a
  * @param action will be added to this [SequenceAction]
  * @return [SequenceAction] this [SequenceAction]
  */
-infix fun SequenceAction.then(action: Action): SequenceAction = apply{
+infix fun SequenceAction.then(action: Action): SequenceAction = apply {
   addAction(action)
 }
 

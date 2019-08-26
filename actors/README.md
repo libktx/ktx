@@ -174,14 +174,17 @@ textField.onKeyboardFocusEvent { focusEvent, actor ->
 }
 ```
 
-Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function
+Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function (`ParallelAction` utility):
+
 ```Kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
 val sequence = alpha(0f) then fadeIn(1f) then delay(1f) then fadeOut(1f) 
 actor += sequence // Adding action to the actor.
-val parallel = fadeTo(0f) along scaleTo(0f, 0f) along moveTo(0f, 0f) // wrap three actions in ParallelAction
+
+val parallel = fadeTo(0f) along scaleTo(0f, 0f) along moveTo(0f, 0f)
+actor += parallel
 ```
 
 Chaining actions with `+` operator (`SequenceAction` utility) and `/` operator (`ParallelAction` utility):
@@ -192,7 +195,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
 val sequence = alpha(0f) + fadeIn(1f) + delay(1f) + fadeOut(1f)
 actor += sequence // Adding action to the actor.
-val parallel = fadeTo(0f) / scaleTo(0f, 0f) / moveTo(0f, 0f) // wrap three actions in ParallelAction
+
+val parallel = fadeTo(0f) / scaleTo(0f, 0f) / moveTo(0f, 0f)
+actor += parallel
 ```
 
 Adding and removing actions to stages and actors with operators:
