@@ -33,65 +33,78 @@ operator fun Actor.plusAssign(action: Action) = addAction(action)
 operator fun Actor.minusAssign(action: Action) = removeAction(action)
 
 /**
- * Wraps this action and the passed action with a [SequenceAction].
- *
- * If [this] or [action] are [SequenceAction]s, their nested actions will be unwrapped.
+ * Wraps this action and the passed action in a [SequenceAction].
  *
  * @param action will be executed after this action.
  * @return [SequenceAction] storing both actions.
  */
-infix fun Action.then(action: Action): SequenceAction {
-  val result = Actions.sequence()
-  result.addUnwrapped(this)
-  result.addUnwrapped(action)
-  return result
-}
+infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, action)
 
-private fun SequenceAction.addUnwrapped(action: Action) {
-  when (action) {
-    is SequenceAction -> action.actions.forEach(::addAction)
-    else -> addAction(action)
-  }
+/**
+ * Adds [action] to this [SequenceAction].
+ *
+ * @param action will be added to this [SequenceAction]
+ * @return [SequenceAction] this [SequenceAction]
+ */
+infix fun SequenceAction.then(action: Action): SequenceAction = apply{
+  addAction(action)
 }
 
 /**
- * Wraps this action and the passed action with a [SequenceAction].
- * @param action will be executed after this action.
+ * Wraps this action and the passed action in a [SequenceAction].
+ *
+ * @param action will be executed after [this] action.
  * @return [SequenceAction] storing both actions.
  */
-operator fun Action.plus(action: Action): SequenceAction = then(action)
+operator fun Action.plus(action: Action): SequenceAction = Actions.sequence(this, action)
 
 /**
- * Adds another [Action] to this sequence.
+ * Adds [action] to this [SequenceAction].
+ *
  * @param action will be executed during this sequence.
  */
 operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
 
 /**
- * Actions utility. Wraps this action and the passed action with a [ParallelAction], executing them both
- * at the same time.
- *
- * If [this] or [action] are [ParallelAction]s, their nested actions will be unwrapped.
+ * Wraps this action and the passed action with a [ParallelAction], executing them both at the same time.
  *
  * @param action will be executed at the same time as this action.
  * @return [ParallelAction] storing both actions.
  */
-infix fun Action.parallelTo(action: Action): ParallelAction {
-  val parallel = Actions.parallel()
-  parallel.addUnwrapped(this)
-  parallel.addUnwrapped(action)
-  return parallel
-}
+infix fun Action.along(action: Action): ParallelAction = Actions.parallel(this, action)
 
-private fun ParallelAction.addUnwrapped(action: Action) {
-  when (action) {
-    is ParallelAction -> action.actions.forEach(::addAction)
-    else -> addAction(action)
-  }
-}
+@Deprecated("parallelTo has been replaced with along.", ReplaceWith("this along action"), DeprecationLevel.WARNING)
+infix fun Action.parallelTo(action: Action): ParallelAction = along(action)
 
 /**
- * Adds another [Action] to this action group.
+ * Adds [action] to this [ParallelAction], so long as this isn't a [SequenceAction]. If it is a [SequenceAction],
+ * [@see Action.along].
+ *
+ * @param action will be added to this [ParallelAction].
+ * @return [ParallelAction] this [ParallelAction], now containing [action]]
+ */
+infix fun ParallelAction.along(action: Action): ParallelAction {
+  if (this is SequenceAction) {
+    // Workaround for SequenceAction inheritance from ParallelAction:
+    return Actions.parallel(this, action)
+  }
+  addAction(action)
+  return this
+}
+
+@Deprecated("parallelTo has been replaced with along.", ReplaceWith("this along action"), DeprecationLevel.WARNING)
+infix fun ParallelAction.parallelTo(action: Action): ParallelAction = along(action)
+
+/**
+ * Wraps this action and the passed action with a [ParallelAction].
+ *
+ * @param action will be executed at the same time as this action.
+ * @return [SequenceAction] storing both actions.
+ */
+operator fun Action.div(action: Action): ParallelAction = Actions.parallel(this, action)
+
+/**
+ * Adds another [Action] to this [ParallelAction].
  * @param action will be executed in parallel to the other actions of this [ParallelAction].
  */
 operator fun ParallelAction.plusAssign(action: Action) = addAction(action)

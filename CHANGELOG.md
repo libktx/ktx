@@ -1,10 +1,14 @@
 #### 1.9.10-SNAPSHOT
-
 - **[UPDATE]** Updated to Kotlin 1.3.50.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.0.
 - **[CHANGE]** (`ktx-box2d`) Added `disposeOfShape` parameters to `fixture` extension methods of `Body` and `BodyDefinition`.
 Setting these values to `true` will cause the fixture shapes to be immediately disposed of after `Fixture` construction.
 - **[FIX]** (`ktx-box2d`) Removed memory leak caused by undisposed shapes.
+- **[CHANGE]** `Action.parallelTo` changed to `Action.along`.
+- **[CHANGE]** `Action.along` (formerly `Action.parallelTo`) and `Action.then` no longer unwrap the second action.
+- **[CHANGE]** `ParallelAction.along` (formerly `ParallelAction.parallelTo`) and `SequenceAction.then` simply add the second action to the group without unwrapping.
+- **[FEATURE]** Added `/` operator to Action, which performs the non-mutating version of along, wrapping the caller and argument in a new ParallelAction.
+- **[CHANGE]** `ParallelAction.plus()` and `SequenceAction.plus()` no longer unwrap their components.
 
 #### 1.9.10-b1
 
