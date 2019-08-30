@@ -1,9 +1,11 @@
 package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
+import com.badlogic.gdx.math.Matrix4
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -65,6 +67,21 @@ class GraphicsTest {
     val batch = mock<Batch>()
 
     batch.use {
+      verify(batch, never()).projectionMatrix = null // should not be set if none passed
+      verify(batch).begin()
+      assertSame(batch, it)
+      verify(batch, never()).end()
+    }
+    verify(batch).end()
+  }
+
+  @Test
+  fun `should set projection matrix if passed`() {
+    val batch = mock<Batch>()
+    val cam = OrthographicCamera()
+
+    batch.use(cam) {
+      verify(batch).projectionMatrix = cam.combined
       verify(batch).begin()
       assertSame(batch, it)
       verify(batch, never()).end()
