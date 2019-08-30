@@ -46,6 +46,9 @@ fun World.create(bodyDefinition: BodyDefinition): Body {
     val fixture = body.createFixture(fixtureDefinition)
     fixture.userData = fixtureDefinition.userData
     fixtureDefinition.creationCallback?.let { it(fixture) }
+    if (fixtureDefinition.disposeOfShape) {
+      fixtureDefinition.shape.dispose()
+    }
   }
   bodyDefinition.creationCallback?.let { it(body) }
   return body

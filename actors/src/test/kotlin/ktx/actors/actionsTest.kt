@@ -3,7 +3,9 @@ package ktx.actors
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -84,50 +86,14 @@ class ActionsTest {
   }
 
   @Test
-  fun `should chain underling actions into sequence with action then sequence`() {
-    val firstAction = MockAction()
+  fun `should use existing sequence with then`() {
+    val firstAction = SequenceAction(MockAction(), MockAction())
     val secondAction = MockAction()
-    val thirdAction = MockAction()
 
-    val sequence = firstAction then Actions.sequence(secondAction, thirdAction)
-
-    assertEquals(firstAction, sequence.actions[0])
-    assertEquals(secondAction, sequence.actions[1])
-    assertEquals(thirdAction, sequence.actions[2])
-    assertEquals(3, sequence.actions.size)
-  }
-
-  @Test
-  fun `should chain underling actions into sequence with sequence then sequence`() {
-    val firstAction = MockAction()
-    val secondAction = MockAction()
-    val thirdAction = MockAction()
-    val fourthAction = MockAction()
-
-    val sequence = Actions.sequence(firstAction, secondAction) then Actions.sequence(thirdAction, fourthAction)
-
-    assertEquals(firstAction, sequence.actions[0])
-    assertEquals(secondAction, sequence.actions[1])
-    assertEquals(thirdAction, sequence.actions[2])
-    assertEquals(fourthAction, sequence.actions[3])
-    assertEquals(4, sequence.actions.size)
-  }
-
-  @Test
-  fun `should not mutate multiple actions with then`() {
-    // Given:
-    val firstAction = MockAction()
-    val secondAction = MockAction()
-    val thirdAction = MockAction()
     val sequence = firstAction then secondAction
 
-    // When:
-    sequence then thirdAction
-
-    // Then: should not mutate firstSequence.
-    assertEquals(2, sequence.actions.size)
-    assertEquals(firstAction, sequence.actions[0])
-    assertEquals(secondAction, sequence.actions[1])
+    assertEquals(3, sequence.actions.size)
+    assertSame(firstAction, sequence)
   }
 
   @Test
@@ -163,11 +129,11 @@ class ActionsTest {
   }
 
   @Test
-  fun `should create parallel action given two actors`() {
+  fun `should create parallel action given two actions`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
 
-    val parallel = firstAction.parallelTo(secondAction) // === firstAction parallelTo secondAction
+    val parallel = firstAction along secondAction // === firstAction parallelTo secondAction
 
     assertTrue(firstAction in parallel.actions)
     assertTrue(secondAction in parallel.actions)
@@ -180,7 +146,7 @@ class ActionsTest {
     val secondAction = MockAction()
     val thirdAction = MockAction()
 
-    val parallel = Actions.parallel(firstAction, secondAction) parallelTo thirdAction
+    val parallel = Actions.parallel(firstAction, secondAction) along thirdAction
 
     assertTrue(firstAction in parallel.actions)
     assertTrue(secondAction in parallel.actions)
@@ -189,33 +155,17 @@ class ActionsTest {
   }
 
   @Test
-  fun `should create parallel action given a regular action and parallel action`() {
+  fun `should wrap a regular action and parallel action with action along`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
 
-    val parallel = firstAction parallelTo Actions.parallel(secondAction, thirdAction)
+    val parallel = firstAction along Actions.parallel(secondAction, thirdAction)
 
     assertTrue(firstAction in parallel.actions)
-    assertTrue(secondAction in parallel.actions)
-    assertTrue(thirdAction in parallel.actions)
-    assertEquals(3, parallel.actions.size)
-  }
-
-  @Test
-  fun `should create parallel action given two parallel actions`() {
-    val firstAction = MockAction()
-    val secondAction = MockAction()
-    val thirdAction = MockAction()
-    val fourthAction = MockAction()
-
-    val parallel = Actions.parallel(firstAction, secondAction) parallelTo Actions.parallel(thirdAction, fourthAction)
-
-    assertTrue(firstAction in parallel.actions)
-    assertTrue(secondAction in parallel.actions)
-    assertTrue(thirdAction in parallel.actions)
-    assertTrue(fourthAction in parallel.actions)
-    assertEquals(4, parallel.actions.size)
+    assertEquals(2, parallel.actions.size)
+    assertSame(secondAction, (parallel.actions[1] as ParallelAction).actions[0])
+    assertSame(thirdAction, (parallel.actions[1] as ParallelAction).actions[1])
   }
 
   @Test
@@ -224,7 +174,7 @@ class ActionsTest {
     val secondAction = MockAction()
     val thirdAction = MockAction()
 
-    val parallel = firstAction parallelTo secondAction parallelTo thirdAction
+    val parallel = firstAction along secondAction along thirdAction
 
     assertTrue(firstAction in parallel.actions)
     assertTrue(secondAction in parallel.actions)
@@ -233,7 +183,7 @@ class ActionsTest {
   }
 
   @Test
-  fun `should not mutate parallel actions`() {
+  fun `should not mutate parallel actions with +`() {
     val firstAction = MockAction()
     val secondAction = MockAction()
     val thirdAction = MockAction()
@@ -245,6 +195,32 @@ class ActionsTest {
     assertTrue(secondAction in parallel.actions)
     assertFalse(thirdAction in parallel.actions)
     assertEquals(2, parallel.actions.size)
+  }
+
+  @Test
+  fun `should not mutate multiple actions with div`() {
+    val firstAction = MockAction()
+    val secondAction = MockAction()
+    val thirdAction = MockAction()
+    val sequence = Actions.sequence(firstAction, secondAction)
+
+    sequence / thirdAction
+
+    assertTrue(firstAction in sequence.actions)
+    assertTrue(secondAction in sequence.actions)
+    assertFalse(thirdAction in sequence.actions)
+    assertEquals(2, sequence.actions.size)
+  }
+
+  @Test
+  fun `should use existing parallel with along`() {
+    val firstAction = ParallelAction(MockAction(), MockAction())
+    val secondAction = MockAction()
+
+    val parallel = firstAction along secondAction
+
+    assertEquals(3, parallel.actions.size)
+    assertSame(firstAction, parallel)
   }
 
   @Test
@@ -260,6 +236,30 @@ class ActionsTest {
     assertTrue(secondAction in parallel.actions)
     assertTrue(thirdAction in parallel.actions)
     assertEquals(3, parallel.actions.size)
+  }
+
+  @Test
+  fun `should not unwrap sequences with along`() {
+    val firstSequence = SequenceAction(MockAction(), MockAction())
+    val secondSequence = SequenceAction(MockAction(), MockAction())
+
+    val parallel = firstSequence along secondSequence
+
+    assertTrue(firstSequence in parallel.actions)
+    assertTrue(secondSequence in parallel.actions)
+    assertEquals(2, parallel.actions.size)
+  }
+
+  @Test
+  fun `should make sequence actions parallel with div`() {
+    val firstSequence = SequenceAction(MockAction(), MockAction())
+    val secondSequence = SequenceAction(MockAction(), MockAction())
+
+    val parallel = firstSequence / secondSequence
+
+    assertTrue(firstSequence in parallel.actions)
+    assertTrue(secondSequence in parallel.actions)
+    assertEquals(2, parallel.actions.size)
   }
 
   @Test

@@ -1,9 +1,11 @@
 package ktx.graphics
 
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
+import com.badlogic.gdx.math.Matrix4
 
 /**
  * Factory methods for LibGDX [Color] class. Allows to use named parameters.
@@ -27,13 +29,24 @@ fun Color.copy(red: Float? = null, green: Float? = null, blue: Float? = null, al
 
 /**
  * Automatically calls [Batch.begin] and [Batch.end].
+ * @param projectionMatrix A projection matrix to set on the batch before [Batch.begin]. If null, the batch's matrix
+ * remains unchanged.
  * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
  */
-inline fun <B : Batch> B.use(action: (B) -> Unit) {
+inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> Unit) {
+  if (projectionMatrix != null)
+    this.projectionMatrix = projectionMatrix
   begin()
   action(this)
   end()
 }
+
+/**
+ * Automatically calls [Batch.begin] and [Batch.end].
+ * @param camera The camera's [Camera.combined] matrix will be set to the batch's projection matrix before [Batch.begin]
+ * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
+ */
+inline fun <B : Batch> B.use(camera: Camera, action: (B) -> Unit) = use(camera.combined, action)
 
 /**
  * Automatically calls [ShaderProgram.begin] and [ShaderProgram.end].

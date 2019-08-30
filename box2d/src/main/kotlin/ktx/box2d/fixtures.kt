@@ -20,6 +20,9 @@ class FixtureDefinition : FixtureDef() {
    * @see onCreate */
   var creationCallback: ((Fixture) -> Unit)? = null
 
+  /** If true, will dispose of [FixtureDef.shape] right after [Fixture] construction. */
+  var disposeOfShape: Boolean = true
+
   /**
    * @param callback will be invoked after the [Fixture] defined by this object will be fully constructed.
    * @see creationCallback

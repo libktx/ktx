@@ -1,3 +1,18 @@
+#### 1.9.10-b2
+
+- **[UPDATE]** Updated to Kotlin 1.3.50.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.0.
+- **[UPDATE]** Updated to Gradle 5.6.1.
+- **[CHANGE]** (`ktx-actors`) `Action.parallelTo` changed to `Action.along`.
+- **[CHANGE]** (`ktx-actors`) `Action.along` (formerly `Action.parallelTo`) and `Action.then` no longer unwrap the second action.
+- **[CHANGE]** (`ktx-actors`)`ParallelAction.along` (formerly `ParallelAction.parallelTo`) and `SequenceAction.then` simply add the second action to the group without unwrapping.
+- **[FEATURE]** (`ktx-actors`) Added `/` operator to `Action`, which performs the non-mutating version of `along`, wrapping the caller and argument in a new `ParallelAction`.
+- **[CHANGE]** (`ktx-actors`) `ParallelAction.plus()` and `SequenceAction.plus()` no longer unwrap their components.
+- **[FIX]** (`ktx-actors`) `along`, `then`, `+` and `/` `Action` extension methods now properly differentiate between `SequenceAction` and `ParallelAction`, taking their inheritance into account.
+- **[CHANGE]** (`ktx-box2d`) Added `disposeOfShape` parameters to `fixture` extension methods of `Body` and `BodyDefinition`. Setting these values to `true` will cause the fixture shapes to be immediately disposed of after `Fixture` construction.
+- **[FIX]** (`ktx-box2d`) Removed memory leak caused by undisposed shapes.
+- **[FEATURE]** (`ktx-graphics`) `Batch.use` extension methods now accept `Matrix4` and `Camera` to update the batch's projection matrix before rendering.
+
 #### 1.9.10-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.10.

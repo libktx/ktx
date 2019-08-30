@@ -44,10 +44,11 @@ be enough for most use cases.
 
 - Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
-- `Action.then` *infix* extension function allows to easily create action sequences with pleasant syntax.
-- `Action.parallelTo` *infix* extension function allows to easily create parallel actions with pleasant syntax.
-- `+` operator can be used to create action sequences (alternative syntax to `then`).
-- `+=` operator allows to add an action to an existing `SequenceAction`.
+- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a SequenceAction, adds the right action to it so long chains result in a single SequenceAction.
+- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a ParallelAction, adds the right action to it so long chains result in a single ParallelAction.
+- `+` operator can be used to create action sequences (alternative to `then`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `then` function may be preferred to avoid creating multiple nested SequenceActions.
+- `/` operator can be used combine actions in parallel (alternative to `along`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `along` function may be preferred to avoid creating multiple nested ParallelActions.
+- `+=` operator adds an action to an existing `SequenceAction` or `ParallelAction`.
 
 #### Widgets
 
@@ -173,17 +174,20 @@ textField.onKeyboardFocusEvent { focusEvent, actor ->
 }
 ```
 
-Chaining actions with infix `then` function (`SequenceAction` utility):
+Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function (`ParallelAction` utility):
 
 ```Kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
-val sequence = alpha(0f) then fadeIn(1f) then delay(1f) then fadeOut(1f)
+val sequence = alpha(0f) then fadeIn(1f) then delay(1f) then fadeOut(1f) 
 actor += sequence // Adding action to the actor.
+
+val parallel = fadeTo(0f) along scaleTo(0f, 0f) along moveTo(0f, 0f)
+actor += parallel
 ```
 
-Chaining actions with `+` operator (`SequenceAction` utility):
+Chaining actions with `+` operator (`SequenceAction` utility) and `/` operator (`ParallelAction` utility):
 
 ```Kotlin
 import ktx.actors.*
@@ -191,6 +195,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
 val sequence = alpha(0f) + fadeIn(1f) + delay(1f) + fadeOut(1f)
 actor += sequence // Adding action to the actor.
+
+val parallel = fadeTo(0f) / scaleTo(0f, 0f) / moveTo(0f, 0f)
+actor += parallel
 ```
 
 Adding and removing actions to stages and actors with operators:

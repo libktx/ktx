@@ -1,10 +1,15 @@
 package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
-import com.nhaarman.mockitokotlin2.*
+import com.badlogic.gdx.math.Matrix4
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -65,6 +70,35 @@ class GraphicsTest {
     val batch = mock<Batch>()
 
     batch.use {
+      verify(batch).begin()
+      assertSame(batch, it)
+      verify(batch, never()).end()
+    }
+    verify(batch).end()
+    verify(batch, never()).projectionMatrix = any()
+  }
+
+  @Test
+  fun `should set projection matrix`() {
+    val batch = mock<Batch>()
+    val matrix = Matrix4((0..15).map { it.toFloat() }.toFloatArray())
+
+    batch.use(matrix) {
+      verify(batch).projectionMatrix = matrix
+      verify(batch).begin()
+      assertSame(batch, it)
+      verify(batch, never()).end()
+    }
+    verify(batch).end()
+  }
+
+  @Test
+  fun `should set projection matrix if a camera is passed`() {
+    val batch = mock<Batch>()
+    val camera = OrthographicCamera()
+
+    batch.use(camera) {
+      verify(batch).projectionMatrix = camera.combined
       verify(batch).begin()
       assertSame(batch, it)
       verify(batch, never()).end()

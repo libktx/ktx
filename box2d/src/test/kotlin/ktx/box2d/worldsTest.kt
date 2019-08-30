@@ -3,6 +3,9 @@ package ktx.box2d
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -103,6 +106,21 @@ class WorldsTest : Box2DTest() {
     assertTrue(edge.shape is EdgeShape)
     assertEdgeEquals(Vector2(1f, 1f), Vector2(2f, 2f), edge.shape as EdgeShape)
     world.dispose()
+  }
+
+  @Test
+  fun `should dispose of Shape instances during Body construction`() {
+    val world = createWorld()
+    val reusable = spy(CircleShape())
+    val disposable = spy(CircleShape())
+
+    world.body {
+      fixture(reusable, disposeOfShape = false)
+      fixture(disposable, disposeOfShape = true)
+    }
+
+    verify(reusable, never()).dispose()
+    verify(disposable).dispose()
   }
 
   @Test
@@ -243,7 +261,7 @@ class WorldsTest : Box2DTest() {
     val matchingEdge2 = world.body().edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f))
     val matchedFixtures = mutableSetOf<Fixture>()
 
-    world.query(lowerX= -1f, lowerY = 1f, upperX = 1f, upperY = 1f) { fixture ->
+    world.query(lowerX = -1f, lowerY = 1f, upperX = 1f, upperY = 1f) { fixture ->
       matchedFixtures += fixture
       Query.CONTINUE
     }
@@ -259,7 +277,7 @@ class WorldsTest : Box2DTest() {
     world.body().edge(from = Vector2(1f, 0f), to = Vector2(1f, 2f))
     val matchedFixtures = mutableSetOf<Fixture>()
 
-    world.query(lowerX= -2f, lowerY = 1f, upperX = -1f, upperY = 1f) { fixture ->
+    world.query(lowerX = -2f, lowerY = 1f, upperX = -1f, upperY = 1f) { fixture ->
       matchedFixtures += fixture
       Query.CONTINUE
     }
