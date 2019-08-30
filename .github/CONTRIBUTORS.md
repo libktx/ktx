@@ -50,4 +50,4 @@ Project contributors listed chronologically.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
-  * Improved [actors](../actors) utilities.
+  * Improved [actors](../actors) and [graphics](../graphics) utilities.
