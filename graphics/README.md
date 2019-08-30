@@ -16,8 +16,8 @@ common bugs such as forgetting to start or end batch rendering.
 - `copy` extension method added to `Color`. It allows to create a new `Color` with copied color values. Supports values
 overriding with optional, named parameters.
 - `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the 
-`begin()` and `end()` calls when using batches, shader programs and buffers. A camera or matrix can also be passed to 
-the `use` function to have it automatically applied to the batch's projection matrix.
+`begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
+also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
 
 #### `ShapeRenderer`
 
@@ -62,17 +62,24 @@ batch.use {
   font.draw(batch, "KTX!", 100f, 100f)
   batch.end()
 */
+```
 
-val cam = OrthographicCamera()
+Using a `Batch` with a `Camera`:
 
-//Drawing with a camera:
-batch.use(cam) {
+```kotlin
+import ktx.graphics.*
+import com.badlogic.gdx.graphics.OrthographicCamera
+
+val camera = OrthographicCamera()
+
+// Projection matrix will be copied from the camera:
+batch.use(camera) {
   font.draw(it, "KTX!", 100f, 100f)
 }
 
-/* Which is an equivalent to:
+/* Equivalent to:
 
-  batch.projectionMatrix = cam.combined
+  batch.projectionMatrix = camera.combined
   batch.begin()
   font.draw(batch, "KTX!", 100f, 100f)
   batch.end()
