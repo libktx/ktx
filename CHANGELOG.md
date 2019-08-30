@@ -1,7 +1,8 @@
-#### 1.9.10-SNAPSHOT
+#### 1.9.10-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.50.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.0.
+- **[UPDATE]** Updated to Gradle 5.6.1.
 - **[CHANGE]** (`ktx-actors`) `Action.parallelTo` changed to `Action.along`.
 - **[CHANGE]** (`ktx-actors`) `Action.along` (formerly `Action.parallelTo`) and `Action.then` no longer unwrap the second action.
 - **[CHANGE]** (`ktx-actors`)`ParallelAction.along` (formerly `ParallelAction.parallelTo`) and `SequenceAction.then` simply add the second action to the group without unwrapping.
