@@ -10,7 +10,7 @@
 - **[FIX]** (`ktx-actors`) `along`, `then`, `+` and `/` `Action` extension methods now properly differentiate between `SequenceAction` and `ParallelAction`, taking their inheritance into account.
 - **[CHANGE]** (`ktx-box2d`) Added `disposeOfShape` parameters to `fixture` extension methods of `Body` and `BodyDefinition`. Setting these values to `true` will cause the fixture shapes to be immediately disposed of after `Fixture` construction.
 - **[FIX]** (`ktx-box2d`) Removed memory leak caused by undisposed shapes.
-
+- **[FEATURE]** (`ktx-graphics`) Can pass a Matrix4 or a Camera to `batch.use` to be set to the batch's projection matrix.
 #### 1.9.10-b1
 
 - **[UPDATE]** Updated LibGDX to 1.9.10.
