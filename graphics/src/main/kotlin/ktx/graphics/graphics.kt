@@ -49,6 +49,21 @@ inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> U
 inline fun <B : Batch> B.use(camera: Camera, action: (B) -> Unit) = use(camera.combined, action)
 
 /**
+ * Automatically calls [Batch.begin] with the provided matrix
+ * @param projectionMatrix A projection matrix to set on the batch before [Batch.begin].
+ */
+fun <B : Batch> B.begin(projectionMatrix: Matrix4) {
+  this.projectionMatrix = projectionMatrix
+  begin()
+}
+
+/**
+ * Sets the batch's projection matrix to the camera's [Camera.combined] matrix and calls [Batch.begin].
+ * @param camera The camera's [Camera.combined] matrix will be set to the batch's projection matrix before [Batch.begin].
+ */
+fun <B : Batch> B.begin(camera: Camera) = begin(camera.combined)
+
+/**
  * Automatically calls [ShaderProgram.begin] and [ShaderProgram.end].
  * @param action inlined. Executed after [ShaderProgram.begin] and before [ShaderProgram.end].
  */

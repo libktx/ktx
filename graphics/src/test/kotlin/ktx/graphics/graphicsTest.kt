@@ -107,6 +107,28 @@ class GraphicsTest {
   }
 
   @Test
+  fun `should begin with provided projection matrix`() {
+    val batch = mock<Batch>()
+    val matrix = Matrix4(FloatArray(16) {it.toFloat()})
+
+    batch.begin(projectionMatrix = matrix)
+    verify(batch).projectionMatrix = matrix
+    verify(batch).begin()
+    batch.end()
+  }
+
+  @Test
+  fun `should begin with provided camera combined matrix`() {
+    val batch = mock<Batch>()
+    val camera = OrthographicCamera()
+
+    batch.begin(camera = camera)
+    verify(batch).projectionMatrix = camera.combined
+    verify(batch).begin()
+    batch.end()
+  }
+
+  @Test
   fun `should begin and end ShaderProgram`() {
     val shaderProgram = mock<ShaderProgram>()
 
