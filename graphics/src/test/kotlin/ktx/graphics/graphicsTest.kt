@@ -112,9 +112,9 @@ class GraphicsTest {
     val matrix = Matrix4(FloatArray(16) {it.toFloat()})
 
     batch.begin(projectionMatrix = matrix)
+
     verify(batch).projectionMatrix = matrix
     verify(batch).begin()
-    batch.end()
   }
 
   @Test
@@ -123,9 +123,9 @@ class GraphicsTest {
     val camera = OrthographicCamera()
 
     batch.begin(camera = camera)
+
     verify(batch).projectionMatrix = camera.combined
     verify(batch).begin()
-    batch.end()
   }
 
   @Test
