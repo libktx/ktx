@@ -51,3 +51,5 @@ Project contributors listed chronologically.
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
   * Improved [actors](../actors) and [graphics](../graphics) utilities.
+* [@jakewilson](https://github.com/jakewilson)
+  * Added utilities to [graphics module](../graphics).
