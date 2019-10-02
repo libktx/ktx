@@ -1,5 +1,9 @@
 #### 1.9.10-SNAPSHOT
 
+- **[FEATURE]** (`ktx-style`) Added more extension methods to Skin, with reified type and name parameter that
+defaults to the "default" style name. `optional`, `add`, `remove`, `has` and `getAll` extension methods were added.
+The overloaded `+=` operator can also be used to add resource with "default" name.
+
 #### 1.9.10-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.50.
