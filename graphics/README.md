@@ -18,6 +18,7 @@ overriding with optional, named parameters.
 - `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the 
 `begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
 also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
+- `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
 
 #### `ShapeRenderer`
 
