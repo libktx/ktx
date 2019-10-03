@@ -1,8 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
-- **[FEATURE]** (`ktx-style`) Added more extension methods to Skin, with reified type and name parameter that
-defaults to the "default" style name. `optional`, `add`, `remove`, `has` and `getAll` extension methods were added.
-The overloaded `+=` operator can also be used to add resource with "default" name.
+- **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
+- **[FEATURE]** (`ktx-style`) The overloaded `+=` operator can now be used to add `"default"` resources to `Skin`.
 
 #### 1.9.10-b2
 

@@ -35,7 +35,8 @@ Note that both of these functions use reified generics, so they need to be able 
 context. For example, `val font = skin["name"]` would not compile, as the compiler would not be able to guess that
 instance of `BitmapFont` class is requested.
 
-More methods were also added to allow type inference:
+Additional methods were also added to leverage type inference and skip `Class` parameters:
+
 ```Kotlin
 val res: Resource? = skin.optional("name")
 val found = skin.has<Resource>("name")
@@ -47,7 +48,8 @@ skin.remove<Resource>("name")
 
 val map: ObjectMap<String, Resource>? = skin.getAll()
 ```
-All name parameters can also be left blank to use the default style name, `"default"`.
+
+Note that all `name` parameters can also be skipped to use the default style name, `"default"`.
 
 An extension method for every style of every Scene2D widget was added to `Skin`. Each method name matches `lowerCamelCase`
 name of the actor class. For example, the method used to create `ScrollPaneStyle` instances is named `scrollPane`.
