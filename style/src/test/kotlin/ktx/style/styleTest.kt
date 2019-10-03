@@ -101,6 +101,33 @@ class StyleTest {
   }
 
   @Test
+  fun `should extract optional resource with default style name`() {
+    val skin = Skin()
+
+    skin.add(defaultStyle, "Test.")
+
+    skin.optional<String>() shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract optional resource`() {
+    val skin = Skin()
+
+    skin.add("mock", "Test.")
+
+    skin.optional<String>("mock") shouldBe "Test."
+  }
+
+  @Test
+  fun `should extract optional resource and return null`() {
+    val skin = Skin()
+
+    skin.add("asset", "Test.")
+
+    skin.optional<Color>("mock") shouldBe null
+  }
+
+  @Test
   fun `should extract resource with default style name`() {
     val skin = Skin()
 
@@ -170,6 +197,82 @@ class StyleTest {
     val style = skin.get<LabelStyle>("mock")
     assertSame(existing, style)
     style.fontColor shouldBe Color.BLACK
+  }
+
+  @Test
+  fun `should add resource with default style name`() {
+    val skin = Skin()
+
+    skin.add("Test.")
+
+    skin.get<String>() shouldBe "Test."
+  }
+
+  @Test
+  fun `should add resource with default style name with plusAssign`() {
+    val skin = Skin()
+
+    skin += "Test."
+
+    skin.get<String>() shouldBe "Test."
+  }
+
+  @Test
+  fun `should remove resource with default style name`() {
+    val skin = Skin()
+
+    skin.add(defaultStyle, "Test.")
+
+    skin.remove<String>()
+
+    skin.has(defaultStyle, String::class.java) shouldBe false
+  }
+
+  @Test
+  fun `should remove resource`() {
+    val skin = Skin()
+
+    skin.add("mock", "Test.")
+
+    skin.remove<String>("mock")
+
+    skin.has("mock", String::class.java) shouldBe false
+  }
+
+  @Test
+  fun `should check if resource is present`() {
+    val skin = Skin()
+
+    skin.add("mock", "Test.")
+
+    skin.has<String>("mock") shouldBe true
+    skin.has<String>("mock-2") shouldBe false
+  }
+
+  @Test
+  fun `should check if resource with default style name is present`() {
+    val skin = Skin()
+
+    skin.add(defaultStyle, "Test.")
+
+    skin.has<String>() shouldBe true
+  }
+
+  @Test
+  fun `should return a map of all resources of a type`() {
+    val skin = Skin()
+
+    skin.add("mock-1", "Test.")
+    skin.add("mock-2", "Test 2.")
+
+    skin.getAll<String>()!!.size shouldBe 2
+  }
+
+  @Test
+  fun `should return null if resource is not in skin`() {
+    val skin = Skin()
+
+    skin.getAll<String>() shouldBe null
   }
 
   @Test
