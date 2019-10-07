@@ -3,6 +3,8 @@
 - **[FEATURE]** (`ktx-graphics`) Added `Batch.begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4`. 
 - **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
 - **[FEATURE]** (`ktx-style`) The overloaded `+=` operator can now be used to add `"default"` resources to `Skin`.
+- **[FEATURE]** (`ktx-json`) Added `JsonSerializer` and `ReadOnlyJsonSerializer` adapters to facilitate writing custom serializers.
+- **[FEATURE]** (`ktx-json`) Added `readOnlySerializer()` factory functions to simplify creation of `ReadOnlyJsonSerializer`.
 
 #### 1.9.10-b2
 
