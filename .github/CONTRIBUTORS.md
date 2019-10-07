@@ -53,3 +53,5 @@ Project contributors listed chronologically.
   * Improved [actors](../actors) and [graphics](../graphics) utilities.
 * [@jakewilson](https://github.com/jakewilson)
   * Added utilities to [graphics module](../graphics).
+* [@rhutsaliuk](https://github.com/rhutsaliuk)
+  * Contributed [json](../json) serializers utilities.
