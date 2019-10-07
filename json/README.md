@@ -26,8 +26,8 @@ KTX brings the following additions to LibGDX `Json` API:
     - `JsonSerializer<T>`
     - `ReadOnlyJsonSerializer<T>`
 
-All of these extension methods are consistent with the official `Json` API, but provide inlined reified typing
-to avoid passing `Class` instances to improve code readability.
+All of these extension methods are consistent with the official `Json` API, but provide improved Kotlin typing
+signatures and inlined reified type parameters to avoid passing `Class` instances and improve code readability.
 
 A comparison of the APIs when used from Kotlin:
 
@@ -49,6 +49,7 @@ json.fromJson<MyClass>(file)
 Creating a new `Json` serializer instance with custom parameters:
 
 ```kotlin
+import com.badlogic.gdx.utils.Json
 import ktx.json.*
 
 val json = Json()
@@ -90,6 +91,7 @@ class Player(
 Parsing a JSON object:
 
 ```kotlin
+import com.badlogic.gdx.utils.Json
 import ktx.json.*
 
 val json = Json()
@@ -99,26 +101,28 @@ val player: Player = json.fromJson("""{
 }""")
 ```
 
-A custom serializer class:
+Using a custom serializer:
 ```kotlin
-import ktx.json.*
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.JsonValue
+import ktx.json.*
 
 class Vector2AsArraySerializer: JsonSerializer<Vector2> {
-  override fun write(json: Json, obj: Vector2, knownType: Class<*>?) {
+  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): Vector2
+      = jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
+
+  override fun write(json: Json, value: Vector2, type: Class<*>?) {
     json.writeArrayStart()
-    json.writeValue(obj.x)
-    json.writeValue(obj.y)
+    json.writeValue(value.x)
+    json.writeValue(value.y)
     json.writeArrayEnd()
   }
-
-  override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): Vector2
-      = jsonData.asFloatArray().let { (x, y) -> Vector2(x, y) }
 }
 
-// You can also create a read-only serializer:
-val vector2AsArraySerializer = readOnlySerializer { jsonValue ->
- jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
+// A read-only serializer can be created with a simple lambda expression:
+val vector2AsArraySerializer = readOnlySerializer<Vector2> {
+  it.asFloatArray().let { (x, y) -> Vector2(x, y) }
 }
 
 val json = Json()

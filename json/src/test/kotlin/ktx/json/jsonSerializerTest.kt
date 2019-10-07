@@ -8,23 +8,23 @@ import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.matchers.shouldThrow
 import org.junit.Test
 
-@Suppress("unused")
-class `should implement ReadOnlyJsonSerializer with no 'write' method overriden`<T> : ReadOnlyJsonSerializer<T> {
-  // Guarantees that [write] method is optional to implement.
-
-  override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): T {
-    throw NotImplementedError()
-  }
+/**
+ * Guarantees that [write] method is optional to implement.
+ */
+@Suppress("unused", "ClassName")
+class `should implement ReadOnlyJsonSerializer with no 'write' method overridden`<T> : ReadOnlyJsonSerializer<T> {
+  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = throw NotImplementedError()
 }
 
 class ReadOnlyJsonSerializerTest {
-
   @Test
   fun `default implementation for 'write' method should throw UnsupportedOperationException`() {
+    val readOnlyJsonSerializer = object : ReadOnlyJsonSerializer<Any> {
+      override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): Any = throw NotImplementedError()
+    }
+
     shouldThrow<UnsupportedOperationException> {
-      object : ReadOnlyJsonSerializer<Any> {
-        override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): Any = throw NotImplementedError()
-      }.write(Json(), JsonValue(JsonValue.ValueType.`object`), Any::class.java)
+      readOnlyJsonSerializer.write(Json(), JsonValue(JsonValue.ValueType.`object`), Any::class.java)
     }
   }
 }

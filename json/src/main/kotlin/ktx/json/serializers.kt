@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.JsonValue
 
 /**
  * Wrapping interface around [com.badlogic.gdx.utils.Json.Serializer].
- * Provides null-safety for the methods.
+ * Improves typing by adding nullability information and changes default parameter names.
  */
 interface JsonSerializer<T> : Json.Serializer<T> {
-  override fun write(json: Json, obj: T, knownType: Class<*>?)
-  override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): T
+  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T
+  override fun write(json: Json, value: T, type: Class<*>?)
 }
 
 /**
@@ -18,17 +18,17 @@ interface JsonSerializer<T> : Json.Serializer<T> {
  * Unlike LibGDX [ReadOnlySerializer][com.badlogic.gdx.utils.Json.ReadOnlySerializer], the [write]
  * method throws [UnsupportedOperationException]
  */
-interface ReadOnlyJsonSerializer<T> : Json.Serializer<T> {
-  override fun write(json: Json, obj: T, knownType: Class<*>?) = throw UnsupportedOperationException("Read-only serializer does not support writing")
-  override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): T
+interface ReadOnlyJsonSerializer<T> : JsonSerializer<T> {
+  override fun write(json: Json, value: T, type: Class<*>?) =
+      throw UnsupportedOperationException("Read-only serializers do not support write method.")
 }
 
 /**
- * Factory function to create a [ReadOnlyJsonSerializer] from lambda
+ * Factory function to create a [ReadOnlyJsonSerializer] from lambda.
  */
 inline fun <T> readOnlySerializer(crossinline reader: (Json, JsonValue, Class<*>?) -> T): Json.Serializer<T> =
     object : ReadOnlyJsonSerializer<T> {
-      override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): T = reader(json, jsonData, type)
+      override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = reader(json, jsonValue, type)
     }
 
 /**
@@ -36,5 +36,5 @@ inline fun <T> readOnlySerializer(crossinline reader: (Json, JsonValue, Class<*>
  */
 inline fun <T> readOnlySerializer(crossinline read: (JsonValue) -> T): Json.Serializer<T> =
     object : ReadOnlyJsonSerializer<T> {
-      override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): T = read(jsonData)
+      override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = read(jsonValue)
     }
