@@ -15,8 +15,8 @@ interface JsonSerializer<T> : Json.Serializer<T> {
 /**
  * Wrapping interface around [com.badlogic.gdx.utils.Json.Serializer]. Provides null-safety
  * and convenient interface for serializer that is only able to [read].
- * Unlike LibGDX [ReadOnlySerializer][com.badlogic.gdx.utils.Json.ReadOnlySerializer], the [write]
- * method throws [UnsupportedOperationException]
+ * Unlike LibGDX [com.badlogic.gdx.utils.Json.ReadOnlySerializer], the default implementation of
+ * the [write] method throws [UnsupportedOperationException].
  */
 interface ReadOnlyJsonSerializer<T> : JsonSerializer<T> {
   override fun write(json: Json, value: T, type: Class<*>?) =
