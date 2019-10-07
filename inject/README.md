@@ -16,9 +16,9 @@ Java dependency injection mechanisms usually rely on annotations and compile-tim
 its inline functions, allows to omit the reflection and annotations usage altogether, while still providing a pleasant
 DSL.
 
-Why not use an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting a single source file with about
-150 lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage at
-runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
+Why not use an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting a single source file with a few
+hundred lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage
+at runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
 simplicity and nearly zero overhead at runtime.
 
 ### Guide
@@ -133,7 +133,7 @@ Removing all components from the `Context` and disposing of all `Disposable` sin
 context.dispose()
 ```
 
-### Implementation notes
+### Notes on implementation and design choices
 
 > How does it work?
 
@@ -145,22 +145,18 @@ dead simple and aims to introduce as little runtime overhead as possible.
 
 > No scopes? Huh?
 
-How often do you need these in simple games, anyway? Agreed: more complex projects might benefit from features of mature
-projects like [Kodein](https://github.com/SalomonBrys/Kodein), but in most simple games you just end up needing some
-glue between the components. Sometimes simplicity is something you aim for.
+How often do you need these in simple games, anyway? More complex projects might benefit from features of mature
+projects like [Koin](https://insert-koin.io/), but in most simple games you just end up needing some glue between
+the components. Sometimes simplicity is something you aim for.
 
 As for testing scope, it should be obvious that you can just register different components during testing. Don't worry,
 classes using `ktx-inject` are usually trivial to test.
 
 > Not even any named providers?
 
-Nope. Providers are mapped to the class of instances that they return and that's it. Criteria systems - which are a
+Nope. Providers are mapped to the class of instances that they return - and that's it. Criteria systems - which are a
 sensible alternative to simple string names - are somewhat easy to use when your system is based on annotations, but we
 don't have much to work with when the goal is simplicity.
-
-If desperately want to use string as IDs of components, create your custom container class with overloaded `get` or
-`invoke` operator - it could be worse than `inject<Sprites>()["player"]`, if you think about it. I've certainly _seen_
-worse!
 
 > Kodein-style single-parameter factories, anyone?
 
@@ -184,19 +180,12 @@ overhead - this pretty much sums up the strong sides of `ktx-inject`.
 
 ### Alternatives
 
-- [Kodein](https://github.com/SalomonBrys/Kodein) is a powerful, yet simple dependency injection framework written in
-Kotlin. It also detects circular dependencies and is able to pretty-print pretty much anything. While it would require
-additional benchmarking, this library *might be* slightly less efficient due to how it stores its data - **KTX** should
-keep less meta-data at runtime and create less objects overall, limiting garbage collection. If you ever feel the need
-for a more complex DI system, this is probably the way to go.
-- [Injekt](https://github.com/kohesive/injekt) is another dependency injection library written in Kotlin. It seems that
-the developer moved on to the *Kodein* project, although if you prefer *Injekt* API, it still seems viable to use.
+- [Koin](https://insert-koin.io/), [Kodein](https://github.com/Kodein-Framework/Kodein-DI) are powerful Kotlin
+dependency injection frameworks that support multiple platforms. If you ever feel that `ktx-inject` is not enough
+for your use case, try these out.
 - [Dagger](http://google.github.io/dagger/) is a Java dependency injection library based on annotations and compile-time
 code generation. It generates human-readable POJO classes, which makes it both easier to debug and more efficient that
 the usual reflection-based solutions. However, it is harder to set up and Kotlin solutions usually offer better syntax.
-To be honest, field injection with annotations works great in Java, but can be quite annoying in Kotlin with its
-`lateinit`, `?` and whatnot - actually, annotation-based dependency injection syntax
-[can be *less* verbose in Java than in Kotlin](https://stackoverflow.com/questions/37388357/which-is-the-preferred-syntax-when-using-annotation-based-dependency-injection-i).
 - [Spring](https://spring.io/) is a powerful dependency injection framework with automatic component scan. It relies on
 runtime class analysis with reflection, which generally makes it less efficient than Dagger or most Kotlin solutions.
 Thanks to its huge ecosystem and useful extensions, it might be a good solution for complex desktop games. Otherwise it
