@@ -61,12 +61,22 @@ inline operator fun <Type> Asset<Type>.getValue(receiver: Any?, property: KPrope
  * [AssetManager]. Assumes the asset was already scheduled for loading.
  */
 class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+  private var cached: Type? = null
   override val asset: Type
-    get() = manager[assetDescriptor]
+    get() {
+      cached?.let { return it }
+      with (manager[assetDescriptor]) {
+        cached = this
+        return this
+      }
+    }
 
   override fun isLoaded(): Boolean = manager.isLoaded(assetDescriptor.fileName, assetDescriptor.type)
   override fun load() = manager.load(assetDescriptor)
-  override fun unload() = manager.unload(assetDescriptor.fileName)
+  override fun unload() {
+    manager.unload(assetDescriptor.fileName)
+    cached = null
+  }
   override fun finishLoading() {
     if (!isLoaded()) manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
   }
