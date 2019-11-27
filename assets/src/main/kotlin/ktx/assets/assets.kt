@@ -257,8 +257,8 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * and the associated [AssetManager] will retain them.
    * @param onError Called in response to each caught exception. By default, the exceptions are ignored.
    * */
-  inline fun unloadAllSafely(onError: (Asset<*>, Exception) -> Unit = { _, exception -> exception.ignore() }) {
-    for (member in `access$members`){
+  fun unloadAllSafely(onError: (Asset<*>, Exception) -> Unit = { _, exception -> exception.ignore() }) {
+    for (member in members) {
       try {
         member.unload()
       } catch (exception: Exception) {
@@ -307,7 +307,4 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
   protected inline fun <reified T : Any> delayedAsset(fileName: String, params: AssetLoaderParameters<T>? = null) =
       manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
 
-  @PublishedApi
-  internal val `access$members`: ObjectSet<Asset<*>>
-    get() = members
 }

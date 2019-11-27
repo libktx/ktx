@@ -63,16 +63,28 @@ such as `loadAll()` or `unloadAll()`. The intended use is to subclass `AssetGrou
 list its member assets as properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using 
 a common prefix for the file names of the group in case they are stored in a specific subdirectory. For example:
 ```Kotlin
-class MapScreenAssets(manager: AssetManager) : AssetGroup(manager, "mapScreen/"){
+/** A group of assets that are stored in the mapScreen directory and are used only on the map screen. */
+class MapScreenAssets(manager: AssetManager) : AssetGroup(manager, filePrefix = "mapScreen/"){
     val atlas by asset<TextureAtlas>("atlas.json")
     val music by asset<Music>("mapScreen.ogg")
 }
 
 val mapScreenAssets = MapScreenAssets(manager)
-//...
-manager.finishLoading()
-//...
-mapScreenAssets.dispose()
+
+// Then, when ready to load them:
+// Using asset() to create the assets pre-queues them once the group is instantiated.
+// If you were using delayedAsset() instead, you would call mapScreenAssets.loadAll() when ready to queue them.
+if (mapScreenAssets.update()) {
+    // The member assets are now ready to use.
+} else {
+    // Continue showing loading screen, for example.
+}
+
+// Alternatively, mapScreenAsset.finishLoading() would block until the assets are loaded, possibly finishing earlier 
+// than manager.finishLoading() would.
+
+// When finished with these assets:
+mapScreenAssets.unloadAll()
 ```
 
 Note: if you can use coroutines in your project, [`ktx-assets-async`](../assets-async) module provides a lightweight
