@@ -58,6 +58,22 @@ loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")
 exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
+- The `AssetGroup` class is provided for easily grouping together assets so they can be managed as a group through calls 
+such as `loadAll()` or `unloadAll()`. The intended use is to subclass `AssetGroup` and 
+list its member assets as properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using 
+a common prefix for the file names of the group in case they are stored in a specific subdirectory. For example:
+```Kotlin
+class MapScreenAssets(manager: AssetManager) : AssetGroup(manager, "mapScreen/"){
+    val atlas by asset<TextureAtlas>("atlas.json")
+    val music by asset<Music>("mapScreen.ogg")
+}
+
+val mapScreenAssets = MapScreenAssets(manager)
+//...
+manager.finishLoading()
+//...
+mapScreenAssets.dispose()
+```
 
 Note: if you can use coroutines in your project, [`ktx-assets-async`](../assets-async) module provides a lightweight
 coroutines-based alternative to `AssetManager` that can greatly simplify your asset loading code.
