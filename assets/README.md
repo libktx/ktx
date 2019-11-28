@@ -63,27 +63,38 @@ such as `loadAll()` or `unloadAll()`. The intended use is to subclass `AssetGrou
 list its member assets as properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using 
 a common prefix for the file names of the group in case they are stored in a specific subdirectory. For example:
 ```Kotlin
-/** A group of assets that are stored in the mapScreen directory and are used only on the map screen. */
+/** An AssetGroup intended for instantiating at the time it should start being loaded, or an AssetGroup that does not 
+  * share its AssetManager with anything else. The assets are specified by using asset() so they are immediately
+  * queued with the AssetManager when the class is instantiated. */
+class UIAssets(manager: AssetManager) : AssetGroup(manager, filePrefix = "ui/"){
+    val skin by asset<Skin>("skin.json")
+    val clickSound by asset<Sound>("mapScreen.wav")
+}
+
+val uiAssets = UIAssets(manager)
+// No need to queue them. They are pre-queued by instantiating the class.
+uiAssets.finishLoading() // Block until they are finished loading. Incremental loading with update() is also available.
+
+/** An AssetGroup intended for instantiating before its members are needed (possibly referenced among other AssetGroups
+  * as non-nullable properties). The assets are specified using delayedAsset() so they are not queued for loading until
+  * loadAll() is called on the group. */
 class MapScreenAssets(manager: AssetManager) : AssetGroup(manager, filePrefix = "mapScreen/"){
-    val atlas by asset<TextureAtlas>("atlas.json")
+    val atlas by asset<TextureAtlas>("map.atlas")
     val music by asset<Music>("mapScreen.ogg")
 }
 
 val mapScreenAssets = MapScreenAssets(manager)
 
 // Then, when ready to load them:
-// Using asset() to create the assets pre-queues them once the group is instantiated.
-// If you were using delayedAsset() instead, you would call mapScreenAssets.loadAll() when ready to queue them.
+mapScreenAssets.loadALL()
 if (mapScreenAssets.update()) {
     // The member assets are now ready to use.
 } else {
     // Continue showing loading screen, for example.
 }
 
-// Alternatively, mapScreenAsset.finishLoading() would block until the assets are loaded, possibly finishing earlier 
-// than manager.finishLoading() would.
-
 // When finished with these assets:
+uiAssets.unloadAll()
 mapScreenAssets.unloadAll()
 ```
 
