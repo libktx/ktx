@@ -22,6 +22,9 @@ interface Asset<out Type> {
    */
   val asset: Type
 
+  /** The [AssetDescriptor] used by [AssetManager] to identify and load the asset. */
+  val assetDescriptor: AssetDescriptor<out Type>
+
   /**
    * @return true if the asset is already loaded. If this asset is not loaded on demand and this method returns false,
    *    trying to obtain the [asset] instance might cause an exception.
@@ -61,7 +64,7 @@ inline operator fun <Type> Asset<Type>.getValue(receiver: Any?, property: KPrope
  * Default implementation of [Asset]. Keeps asset data in an [AssetDescriptor] and delegates asset loading to an
  * [AssetManager]. Assumes the asset was already scheduled for loading.
  */
-class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class ManagedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type
     get() = manager[assetDescriptor]
 
@@ -81,7 +84,7 @@ class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
  * so it is advised to load eager assets with another [AssetManager] instance or use them after all regular assets are
  * already loaded.
  */
-class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type
     get() {
       if (!isLoaded()) finishLoading()
@@ -277,8 +280,8 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
   /** Blocks until all members of this group are loaded. This does not prioritize this group's members, so assets from
    * outside this group may be loaded as well. */
   fun finishLoading() {
-    while (!isLoaded()) {
-      if (manager.update()) break
+    for (member in members) {
+      manager.finishLoadingAsset<Any>(member.assetDescriptor)
     }
   }
 
