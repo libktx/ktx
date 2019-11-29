@@ -309,5 +309,4 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * */
   protected inline fun <reified T : Any> delayedAsset(fileName: String, params: AssetLoaderParameters<T>? = null) =
       manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
-
 }

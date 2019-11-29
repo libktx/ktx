@@ -559,5 +559,4 @@ class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
 
   /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
   class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
-
 }
