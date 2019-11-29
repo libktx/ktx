@@ -51,6 +51,7 @@ Project contributors listed chronologically.
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
   * Improved [actors](../actors) and [graphics](../graphics) utilities.
+  * Added `AssetGroup` API to [assets](../assets).
 * [@jakewilson](https://github.com/jakewilson)
   * Added utilities to [graphics module](../graphics).
 * [@rhutsaliuk](https://github.com/rhutsaliuk)
