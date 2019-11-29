@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.ObjectSet
 import kotlin.reflect.KProperty
 
 /**
@@ -20,6 +21,9 @@ interface Asset<out Type> {
    * @see isLoaded
    */
   val asset: Type
+
+  /** The [AssetDescriptor] used by [AssetManager] to identify and load the asset. */
+  val assetDescriptor: AssetDescriptor<out Type>
 
   /**
    * @return true if the asset is already loaded. If this asset is not loaded on demand and this method returns false,
@@ -60,7 +64,7 @@ inline operator fun <Type> Asset<Type>.getValue(receiver: Any?, property: KPrope
  * Default implementation of [Asset]. Keeps asset data in an [AssetDescriptor] and delegates asset loading to an
  * [AssetManager]. Assumes the asset was already scheduled for loading.
  */
-class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class ManagedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type
     get() = manager[assetDescriptor]
 
@@ -70,6 +74,7 @@ class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
   override fun finishLoading() {
     if (!isLoaded()) manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
   }
+  override fun toString(): String = "ManagedAsset<${assetDescriptor.type.simpleName}>(${assetDescriptor.fileName})"
 }
 
 /**
@@ -79,7 +84,7 @@ class ManagedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
  * so it is advised to load eager assets with another [AssetManager] instance or use them after all regular assets are
  * already loaded.
  */
-class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
   override val asset: Type
     get() {
       if (!isLoaded()) finishLoading()
@@ -95,6 +100,7 @@ class DelayedAsset<Type>(val manager: AssetManager, val assetDescriptor: AssetDe
       manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
     }
   }
+  override fun toString(): String = "DelayedAsset<${assetDescriptor.type.simpleName}>(${assetDescriptor.fileName})"
 }
 
 /**
@@ -211,4 +217,97 @@ inline fun <reified Type : Any, Parameters : AssetLoaderParameters<Type>> AssetM
     assetLoader: AssetLoader<Type, Parameters>,
     suffix: String? = null) {
   setLoader(Type::class.java, suffix, assetLoader)
+}
+
+/**
+ * A class for managing a group of assets together, such that they can be loaded or unloaded en masse.
+ * [AssetGroup] should be subclassed and the assets should be defined by properties in the subclass by using [asset] or,
+ * [delayedAsset], which can be used as delegates. If not using delegates, it is possible to selectively load and
+ * unload them, in which case it is not advised to use [loadAll] and [unloadAll], because AssetManager's reference
+ * counts may be thrown off.
+ *
+ * If fine control over individual assets of this group is not needed, a strategy to avoid the complexity of
+ * AssetManager's reference counting is to:
+ * - Use [asset]/[delayedAsset] exclusively as delegates.
+ * - Do not mix and match use of [asset] and [delayedAsset].
+ * - Never access any of the asset properties until the group is finished loading.
+ * - Do not initially call [loadAll] if using [asset] (as opposed to [delayedAsset]).
+ * @param manager The [AssetManager] that will handle loading and unloading of this group.
+ * @param filePrefix A string that will be prefixed to any file path parameter passed to [asset] or [delayedAsset].
+ */
+abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: String = "") {
+  /** The backing set containing the assets of this group. There is no need to manually add assets to this set if using
+   * [asset] or [delayedAsset]. */
+  protected val members = ObjectSet<Asset<*>>()
+
+  /** Queues all assets of this group for loading by the associated [AssetManager].
+   * If any assets of this group are already loaded, their load counts in the AssetManager will still be incremented. */
+  fun loadAll() {
+    for (member in members)
+      member.load()
+  }
+
+  /** Unloads all of the assets in this group. If any of the assets are dependencies of assets outside this group, or if
+   * they were loaded more than once, their load counts will only be decremented by one and the associated [AssetManager]
+   * will retain them. */
+  fun unloadAll() {
+    for (member in members)
+      member.unload()
+  }
+
+  /** Unloads all of the assets in this group, catching any exceptions. If any of the assets are dependencies of
+   * assets outside this group, or if they were loaded more than once, their load counts will only be decremented by one
+   * and the associated [AssetManager] will retain them.
+   * @param onError Called in response to each caught exception. By default, the exceptions are ignored.
+   * */
+  fun unloadAllSafely(onError: (Asset<*>, Exception) -> Unit = { _, exception -> exception.ignore() }) {
+    for (member in members) {
+      try {
+        member.unload()
+      } catch (exception: Exception) {
+        onError(member, exception)
+      }
+    }
+  }
+
+  /** Updates the associated [AssetManager] if the members of this group are not finished loading. This does not
+   * prioritize this group's assets, but it might provide early feedback that the members of this specific group are
+   * ready.
+   * @return Whether the assets of this group are finished loading.
+   */
+  fun update() = isLoaded() || manager.update()
+
+  /** Blocks until all members of this group are loaded. This does not prioritize this group's members, so assets from
+   * outside this group may be loaded as well. */
+  fun finishLoading() {
+    for (member in members) {
+      manager.finishLoadingAsset<Any>(member.assetDescriptor)
+    }
+  }
+
+  /** @return true if all of the assets in this group are finished being loaded by the associated [AssetManager]. */
+  fun isLoaded() = members.all { it.isLoaded() }
+
+  /** Creates a delegate for an asset, queues it for loading, and registers it as a member of this group. Beware that
+   * calling [loadAll] might increment the [AssetManager]'s reference count for this asset an additional time.
+   * @param fileName Name of the file used to reference this asset by the AssetManager. This value will be prefixed with
+   * [filePrefix].
+   * @param params optional asset loading parameters which might affect how the assets are loaded. Can be null.
+   * @return an [Asset], registered as a member of this AssetGroup.
+   * */
+  protected inline fun <reified T : Any> asset(fileName: String, params: AssetLoaderParameters<T>? = null) =
+      manager.load("$filePrefix$fileName", params).also { members.add(it) }
+
+  /** Creates a delegate for an asset and registers it as a member of this group. It is not queued for loading. Beware
+   * that if the asset property (or delegated property) of the returned [Asset] is accessed before it is queued for
+   * loading, it will eagerly be loaded by the [AssetManager]. This may cause [loadAll] to throw off AssetManager's
+   * reference counts.
+   * @param fileName Name of the file used to reference this asset by the AssetManager. This value will be prefixed with
+   * [filePrefix].
+   * @param params optional asset loading parameters which might affect how the assets are loaded. Can be null.
+   * @return an [Asset], registered as a member of this AssetGroup.
+   * */
+  protected inline fun <reified T : Any> delayedAsset(fileName: String, params: AssetLoaderParameters<T>? = null) =
+      manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
+
 }
