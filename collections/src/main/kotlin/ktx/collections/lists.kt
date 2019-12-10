@@ -26,7 +26,7 @@ typealias GdxList<Element> = PooledList<Element>
  *
  * @param nodePool provides and manages [Node] instances.
  */
-class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
+class PooledList<T>(val nodePool: Pool<Node<T>>) : MutableIterable<T> {
   /**
    * Current amount of elements in this list.
    */
@@ -306,7 +306,7 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
    * @see insertBefore
    * @see insertAfter
    */
-  class PooledListIterator<T>(var list: PooledList<T>) : MutableIterator<T>, Iterable<T> {
+  class PooledListIterator<T>(var list: PooledList<T>) : MutableIterator<T>, MutableIterable<T> {
     internal var current = list.main
 
     var reversed = false
@@ -344,7 +344,7 @@ class PooledList<T>(val nodePool: Pool<Node<T>>) : Iterable<T> {
     /**
      * @return this instance of [PooledList] iterator.
      */
-    override fun iterator(): Iterator<T> = this
+    override fun iterator(): MutableIterator<T> = this
   }
 
   // Internal API.
