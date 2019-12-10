@@ -365,6 +365,25 @@ class ArraysTest {
   }
 
   @Test
+  fun `should remove elements from existing GdxArray`() {
+    val array = GdxArray.with(1, 2, 3, 4, 5)
+
+    array.removeAll { it % 2 == 0 }
+
+    assertEquals(GdxArray.with(1, 3, 5), array)
+  }
+
+  @Test
+  fun `should retain elements from existing GdxArray`() {
+    val array = GdxArray.with(1, 2, 3, 4, 5)
+
+    array.retainAll { it % 2 == 1 }
+
+    assertEquals(GdxArray.with(1, 3, 5), array)
+  }
+
+
+  @Test
   fun `should map elements into a new GdxArray`() {
     val array = GdxArray.with(1, 2, 3)
 
@@ -372,7 +391,6 @@ class ArraysTest {
 
     assertEquals(GdxArray.with(2, 4, 6), result)
   }
-
   @Test
   fun `should filter elements into a new GdxArray`() {
     val array = GdxArray.with(1, 2, 3, 4, 5)
