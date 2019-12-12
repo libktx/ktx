@@ -230,11 +230,11 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
  */
 inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
-  for (i in 0 until size){
-    val value = this[i]
-    if (!predicate(value)){
-      if (currentWriteIndex != i){
-        this[currentWriteIndex] = value
+  for (i in 0 until size) {
+    val value = items[i]
+    if (!predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
       }
       currentWriteIndex++
     }
@@ -247,11 +247,11 @@ inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
  */
 inline fun <Type> GdxArray<Type>.retainAll(predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
-  for (i in 0 until size){
-    val value = this[i]
-    if (predicate(value)){
-      if (currentWriteIndex != i){
-        this[currentWriteIndex] = value
+  for (i in 0 until size) {
+    val value = items[i]
+    if (predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
       }
       currentWriteIndex++
     }
