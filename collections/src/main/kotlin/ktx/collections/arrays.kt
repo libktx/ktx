@@ -4,16 +4,22 @@ package ktx.collections
 
 /** Alias for [com.badlogic.gdx.utils.Array] avoiding name collision with the standard library. */
 typealias GdxArray<Element> = com.badlogic.gdx.utils.Array<Element>
+
 /** Alias for [com.badlogic.gdx.utils.BooleanArray] avoiding name collision with the standard library. */
 typealias GdxBooleanArray = com.badlogic.gdx.utils.BooleanArray
+
 /** Alias for [com.badlogic.gdx.utils.FloatArray] avoiding name collision with the standard library. */
 typealias GdxFloatArray = com.badlogic.gdx.utils.FloatArray
+
 /** Alias for [com.badlogic.gdx.utils.IntArray] avoiding name collision with the standard library. */
 typealias GdxIntArray = com.badlogic.gdx.utils.IntArray
+
 /** Alias for [com.badlogic.gdx.utils.CharArray] avoiding name collision with the standard library. */
 typealias GdxCharArray = com.badlogic.gdx.utils.CharArray
+
 /** Alias for [com.badlogic.gdx.utils.LongArray] avoiding name collision with the standard library. */
 typealias GdxLongArray = com.badlogic.gdx.utils.LongArray
+
 /** Alias for [com.badlogic.gdx.utils.ShortArray] avoiding name collision with the standard library. */
 typealias GdxShortArray = com.badlogic.gdx.utils.ShortArray
 
@@ -226,7 +232,7 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
 }
 
 /**
- * Removes elements from the array that satisfy the predicate.
+ * Removes elements from the array that satisfy the [predicate].
  */
 inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
@@ -243,7 +249,7 @@ inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
 }
 
 /**
- * Removes elements from the array that do not satisfy the predicate.
+ * Removes elements from the array that do not satisfy the [predicate].
  */
 inline fun <Type> GdxArray<Type>.retainAll(predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
