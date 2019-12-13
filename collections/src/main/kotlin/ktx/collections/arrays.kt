@@ -226,6 +226,40 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
 }
 
 /**
+ * Removes elements from the array that satisfy the predicate.
+ */
+inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
+  var currentWriteIndex = 0
+  for (i in 0 until size) {
+    val value = items[i]
+    if (!predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
+      }
+      currentWriteIndex++
+    }
+  }
+  truncate(currentWriteIndex)
+}
+
+/**
+ * Removes elements from the array that do not satisfy the predicate.
+ */
+inline fun <Type> GdxArray<Type>.retainAll(predicate: (Type) -> Boolean) {
+  var currentWriteIndex = 0
+  for (i in 0 until size) {
+    val value = items[i]
+    if (predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
+      }
+      currentWriteIndex++
+    }
+  }
+  truncate(currentWriteIndex)
+}
+
+/**
  * Returns a [GdxArray] containing the results of applying the given [transform] function
  * to each element in the original [GdxArray].
  */

@@ -1,6 +1,8 @@
 #### 1.9.10-SNAPSHOT
 
 - **[FEATURE]** (`ktx-assets`) Added `AssetGroup` abstract class that allows to manage groups of assets.
+- **[FEATURE]** (`ktx-collections`) Added `Array.removeAll` and `Array.retainAll` higher-order in-place filters.
+- **[FEATURE]** (`ktx-collections`) Made PooledList a MutableIterable.
 - **[FEATURE]** (`ktx-graphics`) Added `Batch.begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4`. 
 - **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
 - **[FEATURE]** (`ktx-style`) The overloaded `+=` operator can now be used to add `"default"` resources to `Skin`.
