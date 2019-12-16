@@ -1,5 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.3.61.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.3.
 - **[FEATURE]** (`ktx-assets`) Added `AssetGroup` abstract class that allows to manage groups of assets.
 - **[FEATURE]** (`ktx-collections`) Added `Array.removeAll` and `Array.retainAll` higher-order in-place filters.
 - **[CHANGE]** (`ktx-collections`) `PooledList` now implements `MutableIterable`.

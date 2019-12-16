@@ -1,6 +1,6 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.50-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.61-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.10-red.svg)](https://libgdx.badlogicgames.com/)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -11,10 +11,7 @@ _**K**o**t**lin utilities for LibGD**X** applications._
 
 **KTX** aims to make [LibGDX](http://libgdx.badlogicgames.com/) as [Kotlin](http://kotlinlang.org/)-friendly as possible
 without turning the API upside down. It provides modular utilities for certain parts of LibGDX with poor Kotlin support.
-This is **not** a new framework by any means - but Kotlin certainly makes LibGDX feel like one.
-
-Do not confuse **KTX** with [`android-ktx`](https://github.com/android/android-ktx): an official Google project with
-Android utilities. "**KTX**" name was chosen long before the Android project was announced.
+This is *not* a new framework by any means.
 
 ### Modules
 
