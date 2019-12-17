@@ -17,7 +17,7 @@ its inline functions, allows to omit the reflection and annotations usage altoge
 DSL.
 
 Why not use an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting a single source file with about
-150 lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage at
+230 lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage at
 runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
 simplicity and nearly zero overhead at runtime.
 
