@@ -104,6 +104,8 @@ all of the dependencies (outside of testing scope) up-to-date. Major dependencie
 `distributionUrl` rather than just the binaries (`bin`).
 - **VisUI**: update `visUiVersion` in the properties file and VisUI version in the tag on the top of the 
 [vis/README.md](../vis/README.md) file.
+- **Ashley**: update `ashleyVersion` in the properties file and Ashely version in the tag on the top of the 
+[ashley/README.md](../ashley/README.md) file.
 
 All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 

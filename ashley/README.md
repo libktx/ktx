@@ -1,3 +1,5 @@
+[![Ashley](https://img.shields.io/badge/ashley-1.7.3-red.svg)](https://libgdx.badlogicgames.com/)
+
 # KTX: `Ashley` entity component system utilities
 
 Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashley) entity component system.
