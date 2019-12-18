@@ -41,7 +41,7 @@ Module | Dependency | Description
 [freetype](freetype) | `ktx-freetype` | `FreeType` font loading utilities.
 [graphics](graphics) | `ktx-graphics` | Utilities related to rendering tools and graphics.
 [i18n](i18n) | `ktx-i18n` | Internationalization API utilities.
-[inject](inject) | `ktx-inject` | A simple dependency injection system with nearly zero runtime overhead and no reflection usage.
+[inject](inject) | `ktx-inject` | A simple dependency injection system with low overhead and no reflection usage.
 [json](json) | `ktx-json` | Utilities for LibGDX JSON serialization API.
 [log](log) | `ktx-log` | Minimal runtime overhead cross-platform logging using inlined functions.
 [math](math) | `ktx-math` | Operator functions for LibGDX math API and general math utilities.
@@ -68,6 +68,20 @@ version, but it might end with `-b` postfix if it is a beta release or `-SNAPSHO
 
 For example, the first official beta release with the current group ID `io.github.libktx` was compiled against
 LibGDX `1.9.6` and its version was `1.9.6-b2`. The corresponding snapshot release of this version was `1.9.6-SNAPSHOT`.
+Including `ktx-app` module would require the following changes in your `build.gradle` file:
+
+```Groovy
+ext {
+  // Update this version to match the latest release:
+  ktxVersion = '1.9.6-b2'
+}
+
+dependencies {
+  compile "io.github.libktx:ktx-app:$ktxVersion"
+}
+```
+
+**KTX** modules should generally be added to the shared `core` module of your LibGDX application.
 
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 or [on GitHub](https://github.com/libktx/ktx/releases).
@@ -82,9 +96,18 @@ it represents the latest stable release of **KTX**. The latest changes can be fo
 [`develop`](https://github.com/libktx/ktx/tree/develop/) branch.
 
 Note that you can also use the preview snapshot releases with the latest changed from the
-`https://oss.sonatype.org/content/repositories/snapshots/` repository. The latest snapshot version can be found on
-the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt) branch. Even the snapshots should be more or
-less stable, as the libraries are not pushed to _Maven Central_ unless they pass their extensive test suites.
+`https://oss.sonatype.org/content/repositories/snapshots/` repository.
+
+```Groovy
+repositories {
+  // Include your default repositories here.
+  maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+}
+```
+
+The latest snapshot version can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
+branch. Even the snapshots should be more or less stable, as the libraries are not pushed to _Maven Central_ unless
+they pass their extensive test suites.
 
 ## Documentation
 
