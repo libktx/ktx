@@ -9,7 +9,7 @@ aims to limit the boilerplate necessary to load FreeType fonts in LibGDX applica
 
 ### Guide
 
-This module consists of the following functions:
+This module consists of the following utilities:
 
 * Extension method `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders required to load FreeType
 font assets. It should be called right after constructing a `AssetManager` instance and before loading any assets.
@@ -29,7 +29,7 @@ import ktx.freetype.*
 
 fun initiateAssetManager(): AssetManager {
   val assetManager = AssetManager()
-  // Calling registerFreeTypeFontLoaders is necessary in order to load TTF/OTF files.
+  // Calling registerFreeTypeFontLoaders is necessary in order to load TTF/OTF files:
   assetManager.registerFreeTypeFontLoaders()
   return assetManager
 }
@@ -83,6 +83,7 @@ val font = assetManager.get<BitmapFont>("font.ttf")
 Using delegation to schedule loading of a FreeType font:
 
 ```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import ktx.assets.getValue
 import ktx.freetype.loadFreeTypeFont
 
@@ -129,6 +130,9 @@ val fontB = generator.generateFont {
 }
 ```
 
+### Synergy
+
+This module uses [`ktx-assets`](../assets) internally to improve `AssetManager` API.
 
 ### Alternatives
 
