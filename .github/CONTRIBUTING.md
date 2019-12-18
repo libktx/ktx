@@ -1,3 +1,5 @@
+# Contribution guidelines
+
 ## Issues
 
 - Before submitting a bug-related issue, make sure that **its source is not the LibGDX itself**.
@@ -15,15 +17,18 @@ JUnit and [Spek](http://spekframework.org/) can be used to write tests. Use
 [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
 - If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue or create
 an issue with your proposal first. Major API changes or new modules have to be discussed with the maintainers first.
+Skipping the issue will not get your pull request rejected outright, but note that undiscussed major changes might
+require a rewrite.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
-  - **[CHANGE]** - breaking API change.
-  - **[UPDATE]** - update of one of the dependencies.
-  - **[FIX]** - bug fix.
+  - **[CHANGE]** - an API breaking change.
+  - **[UPDATE]** - an update of one of the major dependencies.
+  - **[FIX]** - a bug fix.
   - **[MISC]** - other changes (e.g. related to documentation or the project itself).
 - Some libraries (like `ktx-collections` or `ktx-math`) list _all_ features in the `README.md` files to ease their
-usage. When adding new feature to these projects, please add description of your change to the file. Also, add all
-necessary imports in KTX examples in `README.md` files to make it easier to try them out.
+usage. When adding a new feature, please check the  `README.md` file of the module and add description of your change
+when appropriate. Any major change should include a usage example in the module guide. Also, make sure to add all
+of the necessary imports in KTX examples in `README.md` files to make it easier to try them out.
 
 ## Working from sources
 
@@ -36,36 +41,52 @@ git checkout develop
 ### Build tool
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
-Gradle installation - scripts should be compatible with Gradle `4.+`. If you consider working from sources, these are
-some useful Gradle tasks that you can look into:
+Gradle installation - scripts should be compatible with Gradle `5.+`. Some useful Gradle tasks include:
 
 - `build install` - builds the libraries archives and pushes them to _Maven Local_.
 - `check` - runs all tests in all projects.
-- `clean` - removes `build` directories.
+- `clean` - removes the `build` directories, which forces rebuilds of the modules.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
-- `uploadArchives` - pushes the archives to _Maven Central_. Requires proper `gradle.properties` with archive signing and
-Sonatype logging data.
+- `uploadArchives` - pushes the archives to _Maven Central_. Requires proper `gradle.properties` with archive signing
+and _Sonatype_ logging data.
 - `closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
-case of a non-snapshot upload to _Maven Central_.
+case of a non-snapshot upload to _Maven Central_. Might fail at times on the promotion task; running `promoteRepository`
+separately usually fixes the issue.
 
 ### Versioning and uploading
 
-Releasing a new KTX version:
+#### Stable release
 
-- Change `libVersion` settings in `version.txt`. KTX uses the same versioning schema as LibGDX (mimicking the
-LibGDX version that it was compiled against) with optional `-b#` or `-SNAPSHOT` suffixes depending on version status.
+- Create a new issue on GitHub. Include the number of the issue in commit messages of all commits related to the release.
+Apply `misc` label and milestone corresponding to the LibGDX version. An example can be found
+[here](https://github.com/libktx/ktx/issues/191).
+- Change `libVersion` setting in the [`version.txt`](../version.txt). KTX uses the same versioning schema as LibGDX
+(mimicking the LibGDX version that it was compiled against) with optional `-b#` suffix depending on the version status.
+- Create a pull request from the `develop` branch to the `master` branch. Review and merge the changes to the `master`
+branch.
+- Checkout the `master` branch. Fetch the latest changes.
 - Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both _Maven Local_ and
-_Maven Central_. Note that Maven plugin has its issues and you might need to run `gradle promoteRepository` after the
-previous task sequence (if it fails on the `closeAndPromoteRepository` task).
-- Run `gradle distZip` to prepare archive with KTX sources, compiled binary and documentation.
-- Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. Tag should match released version.
-Name of the release should match `KTX $libVersion`. Copy latest [changelog](../CHANGELOG.md) entries to release
-description. Note that a release is not necessary for snapshot versions. If there are any known issues with the previous
-or current versions, please attach additional _Known issues:_ section with the following labels:
+_Maven Central_. Note that the Maven plugin has its issues and you might need to run `gradle promoteRepository` after
+the previous task sequence (if it fails on the `closeAndPromoteRepository` task).
+- Run `gradle distZip` to prepare an archive with KTX sources, compiled binary and documentation.
+- Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. The tag should be made from the
+`master` branch and its name should match the released version. Name of the release should match `KTX $libVersion`.
+Add a short release summary and copy the latest [changelog](../CHANGELOG.md) entries to the release description.
+- If there are any known issues with the previous or current versions, please attach additional _Known issues:_ section
+with the following labels:
   - **[BUG]** - a known bug in the release that is or will be fixed in the following versions.
   - **[INCOMPATIBILITY]** - incompatibility with one of the previously supported or currently released versions of one
   of the major dependencies.
   - **[REMOVAL]** - temporary or permanent removal of a major feature (e.g. disabling a module for a single release).
+- Checkout the `develop` branch.
+- Change `libVersion` setting in the [`version.txt`](../version.txt) to the next snapshot release. The name should
+match the used LibGDX version followed by the `-SNAPSHOT` suffix.
+
+#### Snapshot release
+
+- Make sure that the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
+that the library was compiled against.
+- Run `gradle build install uploadArchives` to push artifacts to both _Maven Local_ and _Sonatype_ snapshots repository.
 
 ### Updating dependencies
 
@@ -88,11 +109,10 @@ All of the major dependencies updates should be added to the [changelog](../CHAN
 
 ### Adding a new KTX module
 
-Adding a new library to KTX:
-- Create folder matching module name in root of the repository. Modules should generally be named with a single word;
-if using multiple words, use dash (`-`) as separator.
-- Add folder name to `settings.gradle` file. This will also server as the project identifier that you use in
-`build.gradle` scripts and to run individual Gradle tasks (like `gradle actors:test`).
+- Create folder matching module name in root of the repository. Modules should generally be named with a single word.
+When multiple words are necessary, use a single dash (`-`) as the word separator.
+- Add folder name to `settings.gradle` file. This will also serve as the project identifier that you use in
+`build.gradle` scripts and to run individual Gradle tasks (e.g. `gradle actors:test`).
 - Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automatically marked
 as source thanks to Gradle. You should also create package structure matching `ktx/your/module` in each source folder.
 - Add `gradle.properties` file with the following properties:
@@ -102,20 +122,27 @@ projectName=ktx-your-module
 projectDesc=Description of your module as it will appear in Maven Central.
 ```
 
-- Add `build.gradle` file. It should contain dependencies specific to your module. If there are none, you can leave it
+- Add a `build.gradle` file. It should contain dependencies specific to your module. If there are none, you can leave it
 empty.
-- Add `README.md` file describing your module. Refer to other `README.md` files for guidelines.
-- Add short description of the module to root `README.md`.
+- Add a `README.md` file describing your module. Refer to other `README.md` files for guidelines. `README.md` files
+should generally consist of the following sections:
+  - _General description_ - in a single sentence, what problem does the module solve?
+  - _Motivation_ - why was the module created?
+  - _Guide_ - what features does the module provide? Does it require additional setup?
+  - _Usage examples_ - how to use the module?
+  - _Synergy_ - is the module complemented by any other KTX libraries?
+  - _Alternatives_ - are there any other libraries or modules that can be used instead?
+  - _Additional documentation_ - are there any other guides or articles on the topic?
 - Your final module structure should roughly match this schema:
 
 ```
 > your-module/
   > src/
     > main/kotlin/ktx/your/module/
-      > yourModule.kt
+      - yourModule.kt
     > test/kotlin/ktx/your/module/
-      > yourModuleTest.kt
-  > build.gradle
-  > gradle.properties
-  > README.md
+      - yourModuleTest.kt
+  - build.gradle
+  - gradle.properties
+  - README.md
 ```
