@@ -31,8 +31,6 @@ See the [_Choosing KTX_](https://github.com/libktx/ktx/wiki/Choosing-KTX) articl
 **KTX** was designed to be modular from day one - in fact, some of these libraries are just a single Kotlin file.
 You can include selected **KTX** modules based on the needs of your application.
 
-Current **KTX** modules:
-
 Module | Dependency name | Description
 :---: | :--- | ---
 [actors](actors) | `ktx-actors` | General [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI utilities for stages, actors, actions and event listeners.
@@ -67,7 +65,8 @@ compile "io.github.libktx:$module:$ktxVersion"
 
 Replace `$module` with the name of the selected **KTX** library.
 
-For example, including `ktx-app` module would require the following changes in your `build.gradle` file:
+For example, including the [app](app) module with the `ktx-app` identifier would require the following changes
+in your `build.gradle` file:
 
 ```Groovy
 ext {
@@ -80,8 +79,9 @@ dependencies {
 }
 ```
 
-Note that defining `ktxVersion` is not necessary and versions can be set directly in the `dependencies` section,
-but extracting the versions is a good practice and will speed up updating if you include multiple KTX modules.
+Note that defining `ktxVersion` is not necessary, as versions can be defined directly in the `dependencies` section.
+However, extracting the dependencies versions is a good practice, especially if they can be reused throughout the
+build files. This will speed up updating of your project if you include multiple KTX modules.
 
 **KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
 
@@ -95,7 +95,7 @@ LibGDX `1.9.6` and since it was the second beta release, its version was `1.9.6-
 of this version was `1.9.6-SNAPSHOT`.
 
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-or [on GitHub](https://github.com/libktx/ktx/releases).
+and [on GitHub](https://github.com/libktx/ktx/releases).
 
 Unfortunately, LibGDX does not follow the [semantic versioning](https://semver.org/) guidelines. Both minor and patch
 versions can introduce breaking changes. Please read the LibGDX and [**KTX** change logs](CHANGELOG.md) before updating.
@@ -127,15 +127,17 @@ ext {
 ```
 
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
-branch. Even the snapshots should be more or less stable, as the libraries are not pushed to _Maven Central_ unless
-they pass their extensive test suites.
+branch.
+
+Even the snapshots should be more or less stable, as the libraries are not pushed to _Maven Central_ unless they pass
+their extensive test suites.
 
 ## Documentation
 
 ### Official guides
 
 Each module contains a `README.md` file with a list of all features or a guide with some code snippets. Browse through
-the directories in root folder to find out more about each library.
+the directories in the root folder to find out more about each library.
 
 ### Source documentation
 
