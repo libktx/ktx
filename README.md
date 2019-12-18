@@ -18,8 +18,10 @@ Examples of Kotlin language features used to improve usability, performance and 
 * *Operator overloads* for collections and mathematical operations.
 * *Extension methods* with sensible *default parameters*.
 * *Inline methods* with reduced runtime overhead for various listeners, builders and loggers.
-* *Type-safe builders* for GUI and physics.
-* *Coroutines context* providing easier concurrency.
+* *Nullable types* which improve typing information of selected interfaces and functions.
+* *Default interface methods* simplifying the implementation.
+* *Type-safe builders* for GUI, styling and physics engine.
+* *Coroutines context* providing concurrency utilities.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
 ## Modules
@@ -31,7 +33,7 @@ Current **KTX** modules:
 
 Module | Dependency | Description
 :---: | :--- | ---
-[actors](actors) | `ktx-actors` | General `Scene2D` utilities for stages, actors, actions and event listeners.
+[actors](actors) | `ktx-actors` | General `Scene2D` GUI utilities for stages, actors, actions and event listeners.
 [app](app) | `ktx-app` | `ApplicationListener` implementations and other general LibGDX application utilities.
 [ashley](ashley) | `ktx-ashley` | `Ashley` entity-component-system utilities.
 [assets](assets) | `ktx-assets` | Resources management utilities.
@@ -63,11 +65,6 @@ compile "io.github.libktx:$module:$ktxVersion"
 
 Replace `$module` with the name of the selected **KTX** library.
 
-**KTX** versions match the LibGDX versions that they were compiled against. `$ktxVersion` will usually match your LibGDX
-version, but it might end with `-b` postfix if it is a beta release or `-SNAPSHOT` if you are using the development branch.
-
-For example, the first official beta release with the current group ID `io.github.libktx` was compiled against
-LibGDX `1.9.6` and its version was `1.9.6-b2`. The corresponding snapshot release of this version was `1.9.6-SNAPSHOT`.
 Including `ktx-app` module would require the following changes in your `build.gradle` file:
 
 ```Groovy
@@ -81,10 +78,22 @@ dependencies {
 }
 ```
 
-**KTX** modules should generally be added to the shared `core` module of your LibGDX application.
+**KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
+
+#### Versioning
+
+**KTX** versions match the LibGDX versions that they were compiled against. `$ktxVersion` will usually match your LibGDX
+version, but it might end with `-b` postfix if it is a beta release or `-SNAPSHOT` if you are using the development branch.
+
+For example, the first official beta release with the current group ID `io.github.libktx` was compiled against
+LibGDX `1.9.6` and since it was the second beta release, its version was `1.9.6-b2`. The corresponding snapshot release
+of this version was `1.9.6-SNAPSHOT`.
 
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 or [on GitHub](https://github.com/libktx/ktx/releases).
+
+Unfortunately, LibGDX does not follow the [semantic versioning](https://semver.org/) guidelines. Both minor and patch
+versions can introduce breaking changes. Please read the LibGDX and KTX change logs before updating.
 
 Although **KTX** is still in late beta, the official releases are stable enough for production use.
 All modules are thoroughly tested with unit tests.
