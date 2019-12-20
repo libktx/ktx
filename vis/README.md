@@ -31,8 +31,9 @@ builders.
 
 #### Additional extensions
 
-Consider using [ktx-actors](../actors) module to improve event handling with lambda-friendly extension methods like
-`onChange` and `onClick`.
+Consider using [`ktx-actors`](../actors) module to improve event handling with lambda-friendly extension methods like
+`onChange` and `onClick`. [`ktx-assets`](../assets) might help with UI resources management, while
+[`ktx-vis-style`](../vis-style) adds DSL for defining custom VisUI widgets.
 
 #### Note about `KWidgets`
 

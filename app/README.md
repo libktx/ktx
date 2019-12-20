@@ -1,11 +1,11 @@
 # KTX: basic application utilities
 
-Abstract `ApplicationListener` implementations and general LibGDX utilities.
+Basic `ApplicationListener` implementations and general LibGDX utilities.
 
 ### Why?
 
 LibGDX offers some basic `ApplicationListener` implementations in form of `ApplicationAdapter` and `Game`, but both are
-pretty basic. They do not handle screen clearing or fixed rendering time step, both of which often have to be set up
+pretty bare-bones. They do not handle screen clearing or manage views list, both of which often have to be set up
 manually in LibGDX applications. This module aims to provide a simple base for your custom `ApplicationListener`: if you
 do not have your favorite setup implemented just yet, it might be a good idea to base it on abstract classes provided
 by `ktx-app`.
@@ -14,16 +14,17 @@ by `ktx-app`.
 
 #### `ApplicationListener` implementations
 
-- `KtxApplicationAdapter` is an `ApplicationListener` extension. Provides no-op implementations of all methods, without
-being an abstract class like `com.badlogic.gdx.ApplicationAdapter`.
+- `KtxApplicationAdapter` is an interface that extends `ApplicationListener`. Provides no-op implementations of all
+methods, without being an abstract class like `com.badlogic.gdx.ApplicationAdapter`, which makes it more flexible.
 - `KtxGame` is a bit more opinionated `Game` equivalent that not only delegates all game events to the current `Screen`
 instance, but also ensures non-nullability of screens, manages screen clearing, and maintains screens collection, which
-allows switching screens while knowing only their concrete class. `KtxScreen` is an interface extending `Screen` that
-provides no-op method implementations, making all methods optional to override.
+allows switching screens while knowing only their concrete class.
+*`KtxScreen` is an interface extending `Screen` that provides no-op method implementations, making all methods optional
+to override.
 
 #### `InputProcessor` implementations
 
-- `KtxInputAdapter` is an `InputProcessor` extension. Provides no-op implementations of all methods, without
+- `KtxInputAdapter` is an interface extending `InputProcessor`. Provides no-op implementations of all methods, without
 being an abstract class like `com.badlogic.gdx.InputAdapter`.
 
 #### Miscellaneous utilities

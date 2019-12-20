@@ -1,8 +1,10 @@
 #### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.3.61.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.3.
 - **[FEATURE]** (`ktx-assets`) Added `AssetGroup` abstract class that allows to manage groups of assets.
 - **[FEATURE]** (`ktx-collections`) Added `Array.removeAll` and `Array.retainAll` higher-order in-place filters.
-- **[FEATURE]** (`ktx-collections`) Made PooledList a MutableIterable.
+- **[CHANGE]** (`ktx-collections`) `PooledList` now implements `MutableIterable`.
 - **[FEATURE]** (`ktx-graphics`) Added `Batch.begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4`. 
 - **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
 - **[FEATURE]** (`ktx-style`) The overloaded `+=` operator can now be used to add `"default"` resources to `Skin`.

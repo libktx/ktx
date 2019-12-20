@@ -228,7 +228,7 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
 }
 
 /**
- * Removes elements from the array that satisfy the predicate.
+ * Removes elements from the array that satisfy the [predicate].
  * @param pool Removed items are freed to this pool.
  */
 inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>?, predicate: (Type) -> Boolean) {
@@ -248,7 +248,7 @@ inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>?, predicate: (Type) 
 }
 
 /**
- * Removes elements from the array that do not satisfy the predicate.
+ * Removes elements from the array that do not satisfy the [predicate].
  * @param pool Removed items are freed to this optional pool.
  */
 inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {

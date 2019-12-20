@@ -427,6 +427,7 @@ class ArraysTest {
 
     assertEquals(GdxArray.with(2, 4, 6), result)
   }
+
   @Test
   fun `should filter elements into a new GdxArray`() {
     val array = GdxArray.with(1, 2, 3, 4, 5)
