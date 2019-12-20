@@ -1,5 +1,8 @@
 package ktx.collections
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.utils.Pools
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.LinkedList
@@ -381,6 +384,16 @@ class ArraysTest {
   }
 
   @Test
+  fun `should free removed elements`() {
+    val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
+    val pool = object : Pool<Vector2>() {
+      override fun newObject() = Vector2()
+    }
+    array.removeAll(pool) { it.len() > 0.5f }
+    assertEquals(pool.peak, 2)
+  }
+
+  @Test
   fun `should retain elements from existing GdxArray`() {
     val array = GdxArray.with(1, 2, 3, 4, 5)
     array.retainAll { it < 6 }
@@ -394,6 +407,16 @@ class ArraysTest {
 
     array.retainAll { it > 0 }
     assertEquals(GdxArray<Int>(), array)
+  }
+
+  @Test
+  fun `should free unretained elements`() {
+    val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
+    val pool = object : Pool<Vector2>() {
+      override fun newObject() = Vector2()
+    }
+    array.retainAll(pool) { it.len() < 0.5f }
+    assertEquals(pool.peak, 2)
   }
 
   @Test
