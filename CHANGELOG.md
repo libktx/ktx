@@ -1,5 +1,8 @@
 #### 1.9.10-SNAPSHOT
 
+- **[CHANGE]** `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
+- **[CHANGE]** `Array.transfer` is now less strict about typing.
+
 #### 1.9.10-b3
 
 - **[UPDATE]** Updated to Kotlin 1.3.61.
