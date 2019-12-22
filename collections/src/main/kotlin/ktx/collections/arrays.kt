@@ -237,7 +237,7 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
  * Removes elements from the array that satisfy the [predicate].
  * @param pool Removed items are freed to this pool.
  */
-inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {
+inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean): Boolean {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
@@ -250,14 +250,18 @@ inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>? = null, predicate: 
       pool?.free(value)
     }
   }
-  truncate(currentWriteIndex)
+  if (currentWriteIndex < size) {
+    truncate(currentWriteIndex)
+    return true
+  }
+  return false
 }
 
 /**
  * Removes elements from the array that do not satisfy the [predicate].
  * @param pool Removed items are freed to this optional pool.
  */
-inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {
+inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean): Boolean {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
@@ -270,14 +274,18 @@ inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: 
       pool?.free(value)
     }
   }
-  truncate(currentWriteIndex)
+  if (currentWriteIndex < size) {
+    truncate(currentWriteIndex)
+    return true
+  }
+  return false
 }
 
 /**
  * Transfers elements that match the [predicate] into the selected [toArray].
  * The elements will be removed from this array and added [toArray].
  */
-inline fun <Type> GdxArray<Type>.transfer(toArray: GdxArray<Type>, predicate: (Type) -> Boolean) {
+inline fun <Type: T, T> GdxArray<Type>.transfer(toArray: GdxArray<T>, predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
