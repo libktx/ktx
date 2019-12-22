@@ -35,11 +35,60 @@ Note that both of these functions use reified generics, so they need to be able 
 context. For example, `val font = skin["name"]` would not compile, as the compiler would not be able to guess that
 instance of `BitmapFont` class is requested.
 
+Additional methods were also added to leverage type inference and skip `Class` parameters:
+
+```Kotlin
+val res: Resource? = skin.optional("name")
+val found = skin.has<Resource>("name")
+
+skin.add(resource, "name")
+skin += otherResource  // Uses the "default" name
+
+skin.remove<Resource>("name")
+
+val map: ObjectMap<String, Resource>? = skin.getAll()
+```
+
+These extension methods and operators include:
+* `get` (square bracket operator): returns a resource from the `Skin` or throws an exception.
+* `optional`: returns `null` or a resource from the `Skin` if it exists.
+* `set` (square bracket operator): assigns a resource to the `Skin`.
+* `add`: assigns a resource to the `Skin`.
+* `plusAssign` (`+=` operator): assigns a resource with the default style to the `Skin`.
+* `remove`: removes a resource from the `Skin`.
+* `has`: checks is the `Skin` contains a resource.
+* `getAll`: returns all resources of the selected type.
+
+Note that all `name` parameters can also be skipped to use the default style name, `"default"`.
+
 An extension method for every style of every Scene2D widget was added to `Skin`. Each method name matches `lowerCamelCase`
 name of the actor class. For example, the method used to create `ScrollPaneStyle` instances is named `scrollPane`.
 Signature of every extension method is pretty much the same - they consume 3 parameters: style name (defaults to
 `"default"`), optional name of extended style and an init block, which is usually passed as a Kotlin lambda. If a name
 of existing style name is given as the `extend` parameter, the new style will copy its properties.
+
+Currently supported extension methods include:
+
+`Skin` method | Style class
+:---: | ---
+`color` | `com.badlogic.gdx.graphics.Color`
+`button` | `com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle`
+`checkBox` | `com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle`
+`imageButton` | `com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle`
+`imageTextButton` | `com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle`
+`label` | `com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle`
+`list` | `com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle`
+`progressBar` | `com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle`
+`scrollPane` | `com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle`
+`selectBox` | `com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle`
+`slider` | `com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle`
+`splitPaneStyle` | `com.badlogic.gdx.scenes.scene2d.ui.SplitPane.SplitPaneStyle`
+`textButton` | `com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle`
+`textField` | `com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle`
+`textTooltip` | `com.badlogic.gdx.scenes.scene2d.ui.TextTooltip.TextTooltipStyle`
+`touchpad` | `com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle`
+`tree` | `com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle`
+`window` | `com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle`
 
 ### Usage examples
 
@@ -61,6 +110,27 @@ import ktx.style.*
 val skin = skin(TextureAtlas(Gdx.files.internal("skin.atlas"))) {
   // Customize skin here.
   // Tip: ktx-assets could make the TextureAtlas loading much nicer.
+}
+```
+
+Extending an existing `Skin`:
+```Kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import ktx.style.*
+
+val skin = Skin()
+
+// All style builders are regular extension methods,
+// so they can be used directly on a `Skin` instance:
+skin.label {
+  // Define your label style here.
+}
+
+// Style definitions can also be wrapped in a block such as apply:
+skin.apply {
+  button {
+    // Define your button style here.
+  }
 }
 ```
 

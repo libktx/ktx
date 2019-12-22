@@ -58,9 +58,10 @@ loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")
 exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
-
-Note: if you can use coroutines in your project, [`ktx-assets-async`](../assets-async) module provides a lightweight
-coroutines-based alternative to `AssetManager` that can greatly simplify your asset loading code.
+- The `AssetGroup` class is provided for easily grouping together assets so they can be managed as a group through calls 
+such as `loadAll()` or `unloadAll()`. The intended use is to subclass `AssetGroup` and  list its member assets as
+properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using a common prefix for 
+the file names of the group in case they are stored in a specific subdirectory.
 
 #### `Disposable`
 
@@ -272,6 +273,51 @@ class MyApp : ApplicationAdapter() {
 }
 ```
 
+Using `AssetGroup` to schedule loading and manage a group of assets:
+
+```Kotlin
+/** An AssetGroup intended for instantiating at the time it should start being loaded, or an AssetGroup that does not 
+  * share its AssetManager with anything else. The assets are specified by using asset() so they are immediately
+  * queued with the AssetManager when the class is instantiated. */
+class UIAssets(manager: AssetManager) : AssetGroup(manager, filePrefix = "ui/"){
+    val skin by asset<Skin>("skin.json")
+    val clickSound by asset<Sound>("mapScreen.wav")
+}
+
+val uiAssets = UIAssets(manager)
+// No need to queue them. They are pre-queued by instantiating the class.
+uiAssets.finishLoading() // Block until they are finished loading. Incremental loading with update() is also available.
+// Accessing assets - same as with regular properties:
+uiAssets.skin
+// Disposing of the assets:
+uiAssets.unloadAll()
+```
+
+Using `AssetGroup` with assets loaded on demand once needed:
+
+```Kotlin
+/** An AssetGroup intended for instantiating before its members are needed (possibly referenced among other AssetGroups
+  * as non-nullable properties). The assets are specified using delayedAsset() so they are not queued for loading until
+  * loadAll() is called on the group or any of the assets is accessed. */
+class MapScreenAssets(manager: AssetManager) : AssetGroup(manager, filePrefix = "mapScreen/"){
+    val atlas by delayedAsset<TextureAtlas>("map.atlas")
+    val music by delayedAsset<Music>("mapScreen.ogg")
+}
+
+val mapScreenAssets = MapScreenAssets(manager)
+
+// Then, when ready to load them:
+mapScreenAssets.loadAll()
+if (mapScreenAssets.update()) {
+    // The member assets are now ready to use.
+} else {
+    // Continue showing loading screen, for example.
+}
+
+// When finished with these assets:
+mapScreenAssets.unloadAll()
+```
+
 #### Implementation tip: type-safe assets
 
 Create an enum with all assets of the selected type. Let's assume our application stores all images in `assets/images`
@@ -324,8 +370,6 @@ injects assets into annotated fields thanks to reflection.
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) library has some utilities for assets handling, like
 graceful `Disposable` destruction methods and LibGDX collections implementing `Disposable` interface. It is aimed at
 Java applications though - **KTX** syntax should feel more natural when using Kotlin.
-- [`ktx-assets-async`](../assets-async) module extends this library and provides `AssetStorage`: a lightweight
-coroutines-based alternative to `AssetManager`.
 
 #### Additional documentation
 

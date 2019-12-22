@@ -2,18 +2,26 @@
 
 package ktx.collections
 
+import com.badlogic.gdx.utils.Pool
+
 /** Alias for [com.badlogic.gdx.utils.Array] avoiding name collision with the standard library. */
 typealias GdxArray<Element> = com.badlogic.gdx.utils.Array<Element>
+
 /** Alias for [com.badlogic.gdx.utils.BooleanArray] avoiding name collision with the standard library. */
 typealias GdxBooleanArray = com.badlogic.gdx.utils.BooleanArray
+
 /** Alias for [com.badlogic.gdx.utils.FloatArray] avoiding name collision with the standard library. */
 typealias GdxFloatArray = com.badlogic.gdx.utils.FloatArray
+
 /** Alias for [com.badlogic.gdx.utils.IntArray] avoiding name collision with the standard library. */
 typealias GdxIntArray = com.badlogic.gdx.utils.IntArray
+
 /** Alias for [com.badlogic.gdx.utils.CharArray] avoiding name collision with the standard library. */
 typealias GdxCharArray = com.badlogic.gdx.utils.CharArray
+
 /** Alias for [com.badlogic.gdx.utils.LongArray] avoiding name collision with the standard library. */
 typealias GdxLongArray = com.badlogic.gdx.utils.LongArray
+
 /** Alias for [com.badlogic.gdx.utils.ShortArray] avoiding name collision with the standard library. */
 typealias GdxShortArray = com.badlogic.gdx.utils.ShortArray
 
@@ -223,6 +231,66 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortBy(crossinline selec
  */
 inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossinline selector: (Type) -> R?) {
   if (size > 1) this.sort(compareByDescending(selector))
+}
+
+/**
+ * Removes elements from the array that satisfy the [predicate].
+ * @param pool Removed items are freed to this pool.
+ */
+inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {
+  var currentWriteIndex = 0
+  for (i in 0 until size) {
+    val value = items[i]
+    if (!predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
+      }
+      currentWriteIndex++
+    } else {
+      pool?.free(value)
+    }
+  }
+  truncate(currentWriteIndex)
+}
+
+/**
+ * Removes elements from the array that do not satisfy the [predicate].
+ * @param pool Removed items are freed to this optional pool.
+ */
+inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {
+  var currentWriteIndex = 0
+  for (i in 0 until size) {
+    val value = items[i]
+    if (predicate(value)) {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
+      }
+      currentWriteIndex++
+    } else {
+      pool?.free(value)
+    }
+  }
+  truncate(currentWriteIndex)
+}
+
+/**
+ * Transfers elements that match the [predicate] into the selected [toArray].
+ * The elements will be removed from this array and added [toArray].
+ */
+inline fun <Type> GdxArray<Type>.transfer(toArray: GdxArray<Type>, predicate: (Type) -> Boolean) {
+  var currentWriteIndex = 0
+  for (i in 0 until size) {
+    val value = items[i]
+    if (predicate(value)) {
+      toArray.add(value)
+    } else {
+      if (currentWriteIndex != i) {
+        items[currentWriteIndex] = value
+      }
+      currentWriteIndex++
+    }
+  }
+  truncate(currentWriteIndex)
 }
 
 /**

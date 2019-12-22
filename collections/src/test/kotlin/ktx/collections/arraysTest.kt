@@ -1,5 +1,8 @@
 package ktx.collections
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.utils.Pools
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.LinkedList
@@ -362,6 +365,110 @@ class ArraysTest {
     array.sortByDescending { it.length }
 
     assertEquals(GdxArray.with("Twenty-one", "Eleven", "One"), array)
+  }
+
+  @Test
+  fun `should remove elements from existing GdxArray`() {
+    val array = GdxArray.with(1, 2, 3, 4, 5)
+    array.removeAll { it > 10 }
+    assertEquals(GdxArray.with(1, 2, 3, 4, 5), array)
+
+    array.removeAll { it % 2 == 0 }
+    assertEquals(GdxArray.with(1, 3, 5), array)
+
+    array.removeAll { it is Number }
+    assertEquals(GdxArray<Int>(), array)
+
+    array.removeAll { it > 0 }
+    assertEquals(GdxArray<Int>(), array)
+  }
+
+  @Test
+  fun `should free removed elements`() {
+    val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
+    val pool = object : Pool<Vector2>() {
+      override fun newObject() = Vector2()
+    }
+    array.removeAll(pool) { it.len() > 0.5f }
+    assertEquals(pool.peak, 2)
+  }
+
+  @Test
+  fun `should transfer elements matching predicate`() {
+    val array = GdxArray.with(0, 1, 2, 3, 4)
+    val target = GdxArray.with<Int>()
+
+    array.transfer(toArray = target) {
+      it % 2 == 0
+    }
+
+    assertEquals(GdxArray.with(1, 3), array)
+    assertEquals(GdxArray.with(0, 2, 4), target)
+  }
+
+  @Test
+  fun `should transfer all elements`() {
+    val array = GdxArray.with(0, 1, 2, 3, 4)
+    val target = GdxArray.with<Int>()
+
+    array.transfer(toArray = target) {
+      true
+    }
+
+    assertEquals(GdxArray.with<Int>(), array)
+    assertEquals(GdxArray.with(0, 1, 2, 3, 4), target)
+  }
+
+  @Test
+  fun `should transfer no elements`() {
+    val array = GdxArray.with(0, 1, 2, 3, 4)
+    val target = GdxArray.with<Int>()
+
+    array.transfer(toArray = target) {
+      false
+    }
+
+    assertEquals(GdxArray.with(0, 1, 2, 3, 4), array)
+    assertEquals(GdxArray.with<Int>(), target)
+  }
+
+  @Test
+  fun `should not transfer any elements from empty array`() {
+    val array = GdxArray.with<Int>()
+    val target = GdxArray.with<Int>()
+
+    array.transfer(toArray = target) {
+      it % 2 == 0
+    }
+
+    assertEquals(GdxArray.with<Int>(), array)
+    assertEquals(GdxArray.with<Int>(), target)
+  }
+
+  @Test
+  fun `should retain elements from existing GdxArray`() {
+    val array = GdxArray.with(1, 2, 3, 4, 5)
+    array.retainAll { it < 6 }
+    assertEquals(GdxArray.with(1, 2, 3, 4, 5), array)
+
+    array.retainAll { it % 2 == 1 }
+    assertEquals(GdxArray.with(1, 3, 5), array)
+
+    array.retainAll { it < 0 }
+    assertEquals(GdxArray<Int>(), array)
+
+    array.retainAll { it > 0 }
+    assertEquals(GdxArray<Int>(), array)
+  }
+
+  @Test
+  fun `should free unretained elements`() {
+    val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
+    val pool = object : Pool<Vector2>() {
+      override fun newObject() = Vector2()
+    }
+    array.retainAll(pool) { it.len() < 0.5f }
+    assertEquals(pool.peak, 2)
   }
 
   @Test

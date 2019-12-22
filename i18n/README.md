@@ -1,12 +1,12 @@
 # KTX: internationalization utilities
 
-This tiny module is a thin wrapper over LibGDX `I18NBundle` with some "global" functions that ease the use of its API.
+`I18NBundle` utilities.
 
 ### Why?
 
 As useful as `I18NBundle` is, it is often overlooked in pure Java applications due to sheer amount of work that it
-requires when compared to the "lazy" approach of plain strings usage. Passing `I18NBundle` instance around is tedious,
-and in the end i18n reloading might be so complex to implement, that it requires a complete application restart.
+requires when compared to the "lazy" approach of plain strings usage. This module provides a thin layer of syntax sugar
+that makes it easier to work with `I18NBundle` instances and provide some useful code completion.
 
 ### Guide
 
@@ -37,7 +37,16 @@ enum class Nls : BundleLine {
 }
 ```
 
-Listing - or generating - all expected bundle lines (is basically all you have to do to enjoy less verbose and safer
+This allows you to access bundle lines via enum instances:
+
+```Kotlin
+import ktx.i18n.get
+import ktx.i18n.example.Nls
+
+bundle[Nls.key1]
+```
+
+Listing - or generating - all expected bundle lines is basically all you have to do to enjoy less verbose and safer
 syntax with code completion and compile-time validation. See usage examples below to explore `BundleLine` API.
 
 Note that `BundleLine` assumes that `toString()` implementation returns a valid bundle line ID. If you want to change

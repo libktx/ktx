@@ -1,3 +1,16 @@
+#### 1.9.10-b3
+
+- **[UPDATE]** Updated to Kotlin 1.3.61.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.3.
+- **[FEATURE]** (`ktx-assets`) Added `AssetGroup` abstract class that allows to manage groups of assets.
+- **[FEATURE]** (`ktx-collections`) Added `removeAll`, `retainAll` and `transfer` extensions to LibGDX `Array` using lambda predicates to modify the array in-place.
+- **[CHANGE]** (`ktx-collections`) `PooledList` now implements `MutableIterable`.
+- **[FEATURE]** (`ktx-graphics`) Added `Batch.begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4`. 
+- **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
+- **[FEATURE]** (`ktx-style`) The overloaded `+=` operator can now be used to add `"default"` resources to `Skin`.
+- **[FEATURE]** (`ktx-json`) Added `JsonSerializer` and `ReadOnlyJsonSerializer` adapters to facilitate writing custom serializers.
+- **[FEATURE]** (`ktx-json`) Added `readOnlySerializer()` factory functions to simplify creation of `ReadOnlyJsonSerializer`.
+
 #### 1.9.10-b2
 
 - **[UPDATE]** Updated to Kotlin 1.3.50.
@@ -128,7 +141,7 @@ by the Ashley engine. This is still the case, but now an exception with a meanin
   - `rotate`
   - `scale`
   - `translate`
-  - `triange`
+  - `triangle`
 - **[CHANGE]** (`ktx-app`, `ktx-graphics`) Utility functions moved from `ktx-app` to the new `ktx-graphics`:
   - `color`
   - `Color.copy`
@@ -254,11 +267,11 @@ documentation for migration guide.
 
 #### 1.9.6-b4
 
-- **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return LibGDX collections.
-- **[FEATURE]** (`ktx-collections`) `PooledList` now properly implements `hashCode` and `equals`.
 - **[FEATURE]** (`ktx-app`) Added `KtxGame`: **KTX** equivalent of LibGDX `Game`.
 - **[FEATURE]** (`ktx-app`) Added `KtxScreen`: adapter of the LibGDX `Screen` interface making all methods optional to implement.
 - **[FEATURE]** (`ktx-app`) Added `emptyScreen` utility method returning a no-op implementation of `Screen`.
+- **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return LibGDX collections.
+- **[FEATURE]** (`ktx-collections`) `PooledList` now properly implements `hashCode` and `equals`.
 - **[FEATURE]** (`ktx-inject`) `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
 - **[FEATURE]** (`ktx-inject`) Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
 - **[FEATURE]** (`ktx-inject`) `getProvider`, `setProvider` and `clear` methods of `Context` are now open and can be overridden.
@@ -391,13 +404,65 @@ collections.
 
 - **[UPDATE]** Updated to LibGDX 1.9.4.
 - **[FEATURE]** (`ktx-actors`) Implemented `ktx-actors` module.
+  - `isShown`, `centerPosition`, `setKeyBoardFocus` and `setScrollFocus` extension methods for `Actor`.
+  - `contains` operator extension method of `Group` and `Stage` supporting `actor in group` syntax.
+  - `+` and `-` operator for adding actors to `Group` and `Stage`.
+  - `alpha` extension field for `Actor` and `Stage`.
+  - Lambda consuming `onChange`, `onClick`, `onKey`, `onScrollFocus` and `onKeyboardFocus` extension methods for `Actor`, allowing to quickly define event listeners.
+  - `+` and `-` operator extension methods can be used to add `Action` instances to a `Stage`.
+  - `Action.then` infix extension method can be used to chain actions into sequences.
 - **[FEATURE]** (`ktx-assets`) Implemented `ktx-assets` module.
+  - `Assets.manager` global `AssetManager` instance.
+    - `load` function can be used to load assets asynchronously via the global `AssetManager` instance. `loadOnDemand` can be used to load assets immediately in a blocking manner. `unload` can unload the assets.
+    - `asset` function can be used to access loaded assets from the global `AssetManager` instance.
+    - `isLoaded` allows to check if an asset has been loaded by the global `AssetManager`.
+  - `disposeSafely` and lambda consuming `dispose` were added to `Disposable`.
+  - `Iterable` and `Array` instances storing `Disposable` elements can now be disposed.
+  - `Exception.ignore` extension method was added for explicit no-op handling of exceptions.
+  - `Pool.invoke` operator extension method was added as an alternative to `Pool.obtain`.
+  - `Pool.invoke(T)` operator extension method was added as an alternative to `Pool.free(T)`.
+  - Lambda consuming `pool` factory function was added.
+  - `toClasspathFile`, `toInternalFile`, `toLocalFile`, `toExternalFile` and `toAbsoluteFile` converter methods added to `FileHandle`.
+  - `file` factory function was added.
 - **[FEATURE]** (`ktx-collections`) Implemented `ktx-collections` module.
+  - `Array` factory function `gdxArrayOf` and converter method `toGdxArray`.
+  - `Array` extensions including: `isEmpty`, `isNotEmpty`, `size`, `+`, `-`, `getLast`, `removeLast`, `get`, `addAll`, `removeAll`, `iterate`.
+  - `ObjectSet` factory function `gdxSetOf` and converter method `toGdxSet`.
+  - `ObjectSet` extensions including: `isEmpty`, `isNotEmpty`, `size`, `+`, `-`, `addAll`, `removeAll`, `iterate`.
+  - `ObjectMap` factory function `gdxMapOf` and `IdentityMap` factory `gdxIdentityMapOf`.
+  - Maps extensions including: `isEmpty`, `isNotEmpty`, `size`, `contains` (`in`), `set` (`[]`), `iterate`, `toGdxSet`.
+  - Lambda consuming `Iterable.toGdxMap` allows to convert any collection to a `ObjectMap`.
+  - `PooledList` collection as an alternative to `PooledLinkedList`. Includes `gdxListOf` and `toGdxList` factory methods.
 - **[FEATURE]** (`ktx-i18n`) Implemented `ktx-i18n` module.
+  - `I18n.defaultBundle` global `I18NBundle` instance loaded by `I18n.load`.
+  - `addListener`, `removeListener` and `clearListeners` of `I18n` allow to handle the lifecycle of the global `I18NBundle`.
+  - `nls` functions allow to access global `I18NBundle`.
+  - `I18NBundle.get` operator function improves access to the bundle lines.
+  - `BundleLine` is an interface designed to be implemented by enums that match bundle line names stored in an i18n properties file.
 - **[FEATURE]** (`ktx-inject`) Implemented `ktx-inject` module.
+  - `Context` is the core of the dependency injection framework, storing the registered singletons and providers.
+  - Global `Context` instance is available via `ContextContainer.defaultContext`.
+  - `inject` and `provider` functions allow to extract instances and providers of selected type from the global `Context`.
+  - `register` allows to add singletons and providers to the global `Context`.
 - **[FEATURE]** (`ktx-log`) Implemented `ktx-log` module.
+  - `debug`, `info` and `error` functions allow to log data with the LibGDX logging API.
+  - `logger` factory function provides instances of the KTX `Logger` that wraps LibGDX logging API.
 - **[FEATURE]** (`ktx-math`) Implemented `ktx-math` module.
+  - `vec2`, `vec3`, `mat3` and `mat4` factory methods for `Vector2`, `Vector3`, `Matrix3` and `Matrix4` respectively.
+  - `+`, `-`, `*`, `/`, `-`, `++`, `--`, `<`, `>`, `<=`, `>=` operators support for `Vector2` and `Vector3`.
+  - `+`, `-`, `*`, `!`, `-` operators support for `Matrix3` and `Matrix4`.
+  - `Vector2`, `Vector3`, `Matrix3` and `Matrix4` are now decomposable into 2, 3, 9 and 16 components respectively.
 - **[FEATURE]** (`ktx-scene2d`) Implemented `ktx-scene2d` module.
+  - Added DSL for constructing complex `Scene2D` widgets.
+    - Factory methods for parental actors: `buttonTable`, `container`, `dialog`, `horizontalGroup`, `scrollPane`, `splitPane`, `stack`, `table`, `tree`, `verticalGroup` and `window`.
+    - Factory methods for secondary parental actors: `button`, `checkBox`, `imageButton` and `imageTextButton`.
+    - Factory methods for child actors: `image`, `label`, `list`, `progressBar`, `selectBox`, `slider`, `textArea`, `textField` and `touchpad`.
 - **[FEATURE]** (`ktx-style`) Implemented `ktx-style` module.
+  - `skin` factory methods producing `Skin` instances.
+  - `get` operator infix function for quick access of `Skin` resources.
+  - `set` operator function for quick modification of `Skin` resources.
+  - Factory methods for styles of `Scene2D` widgets: `color`, `button`, `checkBox`, `imageButton`, `imageTextButton`, `label`, `list`, `progressBar`, `selectBox`, `slider`, `splitPane`, `textButton`, `textField`, `textTooltip`, `touchpad`, `tree`, `window`.
 - **[FEATURE]** (`ktx-vis`) Implemented `ktx-vis` module.
+  - Added DSL for constructing complex `VisUI` widgets.
 - **[FEATURE]** (`ktx-vis-style`) Implemented `ktx-vis-style` module.
+  - Factory methods for styles of `VisUI` widgets.

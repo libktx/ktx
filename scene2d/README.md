@@ -152,6 +152,8 @@ table {
 }
 ```
 
+When constructing `Skin` instances and defining styles for your UI, [`ktx-style`](../style) module might prove useful.
+
 #### `KWidgets`
 
 To avoid method collisions and ease the implementation of type-safe builders, most so-called "parental" widgets (extending

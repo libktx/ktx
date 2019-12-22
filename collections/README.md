@@ -32,6 +32,9 @@ chained.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows to iterate over collection's elements, while providing reference to `MutableInterator`. Can be
 used to easily remove collection elements during iteration.
+- `removeAll` and `retainAll` higher-order functions that work like collection extensions in Kotlin stdlib. A `Pool` can 
+optionally be passed to automatically free the removed items.
+- `transfer` extension method can be used to move elements from one array to another using a lambda predicate.
 - `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxArray`.
 - Every iterable and array can be converted to `Array` using `toGdxArray` method.
 - `IntArray`, `BooleanArray` and `FloatArray` can be converted to corresponding LibGDX primitive collections using
@@ -185,4 +188,3 @@ collections are not - Koloboke maps and sets can fully benefit from Kotlin stand
 #### Additional documentation
 
 - [LibGDX collections article.](https://github.com/libgdx/libgdx/wiki/Collections)
-

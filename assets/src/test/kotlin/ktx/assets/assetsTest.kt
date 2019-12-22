@@ -169,6 +169,15 @@ class AssetsTest {
   }
 
   @Test
+  fun `should ignore exception due to prior disposal`() {
+    assetManager.load<MockAsset>("test")
+    assetManager.finishLoading()
+    val mockAsset = assetManager.get<MockAsset>("test")
+    mockAsset.dispose()
+    assetManager.unloadSafely("test")
+  }
+
+  @Test
   fun `should unload asset handling exception`() {
     assetManager.load<MockAsset>("test")
     assetManager.finishLoading()
@@ -431,6 +440,78 @@ class AssetsTest {
 
     assertSame(loader, manager.getLoader(MockAsset::class.java, ".mock"))
   }
+
+  @Test
+  fun `should load and unload members`() {
+    class TestAssetGroup : AssetGroup(assetManager){
+      val member1 by asset<MockAsset>("member1")
+      val member2 by asset<MockAsset>("member2")
+    }
+
+    val group = TestAssetGroup()
+    group.finishLoading()
+    assert(group.isLoaded())
+
+    val mockAssets = listOf(group.member1, group.member2)
+    group.unloadAll()
+    assert(!group.isLoaded())
+    for (mockAsset in mockAssets)
+      assert(mockAsset.disposed)
+  }
+
+  @Test
+  fun `should load by update`() {
+    class TestAssetGroup : AssetGroup(assetManager){
+      val member1 by asset<MockAsset>("member1")
+      val member2 by asset<MockAsset>("member2")
+      val member3 by asset<MockAsset>("member3")
+    }
+    val nonmember = assetManager.load<MockAsset>("nonmember")
+
+    val group = TestAssetGroup()
+    nonmember.load()
+    while (true){
+      if (group.update())
+        break
+    }
+    assert(group.isLoaded())
+  }
+
+  @Test
+  fun `should catch exceptions`() {
+    class TestAssetGroup : AssetGroup(assetManager){
+      val member1 by asset<MockAsset>("member1")
+      val member2 by asset<MockAsset>("member2")
+    }
+
+    val group = TestAssetGroup()
+    with(group) {
+      finishLoading()
+      member1.dispose()
+      member2.dispose()
+    }
+
+    var caught = 0
+    group.unloadAllSafely { _, _ ->
+      caught++
+    }
+    assertEquals(caught, 2)
+  }
+
+  @Test
+  fun `should apply prefix`() {
+    class TestAssetGroup : AssetGroup(assetManager, "prefix/") {
+      val member1 = delayedAsset<MockAsset>("member1")
+      val member2 = delayedAsset<MockAsset>("member2")
+    }
+
+    val group = TestAssetGroup().apply {
+      loadAll()
+      manager.finishLoading()
+    }
+    for (i in 1..2)
+      assert(group.manager.isLoaded("prefix/member$i"))
+  }
 }
 
 /**
@@ -448,6 +529,7 @@ private fun managerWithMockAssetLoader() = AssetManager().apply {
 class MockAsset(val data: String, val additional: String?) : Disposable {
   var disposed = false
   override fun dispose() {
+    require(!disposed) { "Was already disposed!" } // Simulate behavior of some Gdx assets
     disposed = true
   }
 }

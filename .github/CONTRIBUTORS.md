@@ -1,3 +1,5 @@
+# Contributors
+
 Project contributors listed chronologically.
 
 * [@czyzby](https://github.com/czyzby)
@@ -7,13 +9,13 @@ Project contributors listed chronologically.
 * [@MrPlow442](https://github.com/MrPlow442)
   * Contributed LibGDX [collections](../collections) utilities.
 * [@sreich](https://github.com/sreich)
-  * Contributed various utilities from [Ore Infinium](https://github.com/sreich/ore-infinium) project.
+  * Contributed various utilities from the [Ore Infinium](https://github.com/sreich/ore-infinium) project.
 * [@raincole](https://github.com/raincole)
   * Contributed LibGDX [collections](../collections) utilities.
   * Provided insightful review of the [`Async`](../async) module.
 * [@Jkly](https://github.com/Jkly)
   * Author of the [`Ashley` module](../ashley).
-  * Author of the [gdx-box2d-kotlin](https://github.com/Jkly/gdx-box2d-kotlin) library, which inspired the `Box2D` **KTX** module.
+  * Author of the [gdx-box2d-kotlin](https://github.com/Jkly/gdx-box2d-kotlin) library, which inspired the [`Box2D`](../box2d) **KTX** module.
   * Provided insightful review of the [`Box2D`](../box2d) module. Contributed ray casting and AABB query utilities.
 * [@keturn](https://github.com/keturn)
   * Suggested the [`FreeType` extension](../freetype).
@@ -50,4 +52,13 @@ Project contributors listed chronologically.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
-  * Improved [actors](../actors) and [graphics](../graphics) utilities.
+  * Contributed to numerous utilities in [actors](../actors), [collections](../collections) and [graphics](../graphics) modules.
+  * Added `AssetGroup` API to [assets](../assets).
+* [@jakewilson](https://github.com/jakewilson)
+  * Added utilities to [graphics module](../graphics).
+* [@rhutsaliuk](https://github.com/rhutsaliuk)
+  * Contributed [json](../json) serializers utilities.
+
+### Metrics
+
+See [the GitHub insights](https://github.com/libktx/ktx/graphs/contributors).

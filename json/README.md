@@ -8,21 +8,26 @@ The LibGDX JSON reader and writer methods often consume `Class` parameters, whic
 `Type::class.java` syntax on Kotlin users. Fortunately, Kotlin brings reified generics which effectively
 allow passing a `Class` parameter through a generic type. This module mostly offers extension methods 
 with reified generics to avoid using `::class.java` in your code, as well as to allow type inference
-and better type safety.
+and better type safety. Additionally it provides couple of classes to facilitate creation of custom
+serializers.
 
 ### Guide
 
-KTX brings the following extension methods to LibGDX `Json` API:
+KTX brings the following additions to LibGDX `Json` API:
+- Extension methods and functions:
+    - `fromJson`
+    - `addClassTag`
+    - `getTag`
+    - `setElementType`
+    - `setSerializer`
+    - `readValue`
+    - `readOnlySerializer`
+- Classes:
+    - `JsonSerializer<T>`
+    - `ReadOnlyJsonSerializer<T>`
 
-- `fromJson`
-- `addClassTag`
-- `getTag`
-- `setElementType`
-- `setSerializer`
-- `readValue`
-
-All of these extension methods are consistent with the official `Json` API, but provide inlined reified typing
-to avoid passing `Class` instances to improve code readability.
+All of these extension methods are consistent with the official `Json` API, but provide improved Kotlin typing
+signatures and inlined reified type parameters to avoid passing `Class` instances and improve code readability.
 
 A comparison of the APIs when used from Kotlin:
 
@@ -44,6 +49,7 @@ json.fromJson<MyClass>(file)
 Creating a new `Json` serializer instance with custom parameters:
 
 ```kotlin
+import com.badlogic.gdx.utils.Json
 import ktx.json.*
 
 val json = Json()
@@ -59,7 +65,7 @@ json.setElementType<Player, Card>("cards")
 json.setSerializer(object : Json.Serializer<Vector2>() { /* ... */ })
 ```
 
-A class with a custom serializer:
+A class with custom serializable implementation:
 
 ```kotlin
 import com.badlogic.gdx.math.Vector2
@@ -85,6 +91,7 @@ class Player(
 Parsing a JSON object:
 
 ```kotlin
+import com.badlogic.gdx.utils.Json
 import ktx.json.*
 
 val json = Json()
@@ -92,7 +99,39 @@ val player: Player = json.fromJson("""{
   "pos": {"x": 10, "y": 10},
   "cards": [1, 2, 3, 5, 8, 13]
 }""")
+```
 
+Using a custom serializer:
+```kotlin
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.JsonValue
+import ktx.json.*
+
+class Vector2AsArraySerializer: JsonSerializer<Vector2> {
+  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): Vector2
+      = jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
+
+  override fun write(json: Json, value: Vector2, type: Class<*>?) {
+    json.writeArrayStart()
+    json.writeValue(value.x)
+    json.writeValue(value.y)
+    json.writeArrayEnd()
+  }
+}
+
+// A read-only serializer can be created with a simple lambda expression:
+val vector2AsArraySerializer = readOnlySerializer<Vector2> {
+  it.asFloatArray().let { (x, y) -> Vector2(x, y) }
+}
+
+val json = Json()
+json.setSerializer(Vector2AsArraySerializer())
+
+val player: Player = json.fromJson("""{
+    "pos": [10, 10]
+    "cards": [1, 2, 3, 5, 8, 13]
+}""")
 ```
 
 ### Alternatives
