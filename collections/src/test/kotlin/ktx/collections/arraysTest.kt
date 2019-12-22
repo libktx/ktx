@@ -2,7 +2,6 @@ package ktx.collections
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Pool
-import com.badlogic.gdx.utils.Pools
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.LinkedList
@@ -370,16 +369,20 @@ class ArraysTest {
   @Test
   fun `should remove elements from existing GdxArray`() {
     val array = GdxArray.with(1, 2, 3, 4, 5)
-    array.removeAll { it > 10 }
+    val noneRemovedResult = array.removeAll { it > 10 }
+    assert(!noneRemovedResult)
     assertEquals(GdxArray.with(1, 2, 3, 4, 5), array)
 
-    array.removeAll { it % 2 == 0 }
+    val evensRemovedResult = array.removeAll { it % 2 == 0 }
+    assert(evensRemovedResult)
     assertEquals(GdxArray.with(1, 3, 5), array)
 
-    array.removeAll { it is Number }
+    val allRemovedResult = array.removeAll { it is Number }
+    assert(allRemovedResult)
     assertEquals(GdxArray<Int>(), array)
 
-    array.removeAll { it > 0 }
+    val emptyRemoveResult = array.removeAll { it > 0 }
+    assert(!emptyRemoveResult)
     assertEquals(GdxArray<Int>(), array)
   }
 
@@ -396,16 +399,20 @@ class ArraysTest {
   @Test
   fun `should retain elements from existing GdxArray`() {
     val array = GdxArray.with(1, 2, 3, 4, 5)
-    array.retainAll { it < 6 }
+    val allRetainedResult = array.retainAll { it < 6 }
+    assert(!allRetainedResult)
     assertEquals(GdxArray.with(1, 2, 3, 4, 5), array)
 
-    array.retainAll { it % 2 == 1 }
+    val oddsRetainedResult = array.retainAll { it % 2 == 1 }
+    assert(oddsRetainedResult)
     assertEquals(GdxArray.with(1, 3, 5), array)
 
-    array.retainAll { it < 0 }
+    val noneRetainedResult = array.retainAll { it < 0 }
+    assert(noneRetainedResult)
     assertEquals(GdxArray<Int>(), array)
 
-    array.retainAll { it > 0 }
+    val emptyRetainResult = array.retainAll { it > 0 }
+    assert(!emptyRetainResult)
     assertEquals(GdxArray<Int>(), array)
   }
 
@@ -417,6 +424,11 @@ class ArraysTest {
     }
     array.retainAll(pool) { it.len() < 0.5f }
     assertEquals(pool.peak, 2)
+  }
+
+  @Test
+  fun `should transfer elements`() {
+
   }
 
   @Test
