@@ -12,6 +12,13 @@ and iterators and accessing properties or iterating over objects in the map beco
 Luckily for us with Kotlin we can write extension functions and properties to make our life
 a little bit easier and most notably make our code more readable.
 
+From a code point of view it makes it easier to read as most of the time we can skip the
+wrapper class and directly access things like e.g. we can directly get the `layer` from a `TiledMap`
+without mentioning the `layers` collection wrapper.
+
+Also, due to Kotlin's `reified` possibility we can retrieve properties without passing the `Class`
+parameter and therefore also have this information during runtime. 
+
 ### Guide
 
 #### Miscellaneous utilities
@@ -65,61 +72,109 @@ To summarize it, following extensions are available:
 
 ### Usage examples
 
-`MapObject`:
+#### General
+
+Properties functionality is the same for `MapObject`, `MapLayer` and `TiledMap`:
 
 ```kotlin
-// assume mapObj refers to a MapObject instance
+import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
 
-// before
-val myProp = mapObj.properties.get("myProperty", "", String::class.java)
-val myOtherProp = mapObj.properties.get("myOtherProperty", Int::class.java)
-val x = mapObj.properties.get("x", 0f, Float::class.java)
-val y = mapObj.properties.get("y", 0f, Float::class.java)
-val shape = (mapObj as RectangleMapObject).rectangle
 
-// using libktx
-val myProp = mapObj.property("myProperty", "")
-val myOtherProp: Int? = mapObj.propertyOrNull("myOtherProperty")
+val mapObj: MapObject = getMapObject()
+val mapLayer: MapLayer = getMapLayer()
+val map: TiledMap = getMap()
+
+// retrieve String property via defaultValue
+val myProp: String = mapObj.property("myProperty", "")
+
+// the explicit type can be omitted as it is automatically derived from the type of the default value
+// myProp2 is of type Float
+val myProp2 = mapLayer.property("myProperty2", 1f)
+
+// retrieve Int property without defaultValue
+val myOtherProp: Int? = map.propertyOrNull("myOtherProperty")
+
+// check if a certain property exists
+if (map.containsProperty("lightColor")) {
+    // change box2d light ambient color
+}
+```
+
+#### `MapObject`
+
+Retrieving standard properties of a `MapObject` like `id`, `x` or `shape`:
+
+```kotlin
+import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.math.Rectangle
+import ktx.tiled.*
+
+
+val mapObj: MapObject = getMapObject()
+
+// retrieve position of object
 val x = mapObj.x
 val y = mapObj.y
+
+// retrieve id of object
+val id = mapObj.id
+
+// retrieve shape
 val shape = mapObj.shape // if you only need the Shape2D instance
 val rect = mapObj.shape as Rectangle // if you need the rect
 ```
 
-`TiledMap`:
+#### `TiledMap`
+
+Retrieving standard properties of a `TiledMap` like `width` or `tileheight`:
 
 ```kotlin
-// assume map refers to a TiledMap instance
-
-// before
-val myProp = map.properties.get("myProp", String::class.java)
-val myProp2 = map.properties.get("myProp2", true, Boolean::class.java)
-val width = map.properties.get("width", Float::class.java)
-val totalWidth = map.properties.get("width", Float::class.java) * map.properties.get("tilewidth", Float::class.java)
-
-map.layers.get("myLayer")?.objects?.forEach {
-    val x = it.properties.get("x", Float::class.java)
-    val y = it.properties.get("y", Float::class.java)
-    // create an object at x/y position
-}
-
-val myLayerProp = map.layers.get("myLayer")?.properties?.get("myLayerProp", Int::class.java)
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
 
 
+val map: TiledMap = getTiledMap()
 
-// using libktx
-val myProp:String? = map.propertyOrNull("myProp")
-val myProp2 = map.property("myProp2", true)
-val width = map.width
+// get map size in pixels to e.g. lock camera movement within map boundaries
 val totalWidth = map.totalWidth()
+val totalHeight = map.totalHeight()
 
-map.forEachMapObject("myLayer") {
-    val x = it.x
-    val y = it.y
-    // create an object at x/y position
+// retrieve map size information
+val width = map.width
+val height = map.height
+val tileWidth = map.tileWidth
+val tileHeight = map.tileHeight
+```
+
+Retrieving a non-null layer of a `TiledMap`:
+
+```kotlin
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+
+val map: TiledMap = getTiledMap()
+
+// get collision layer - if it is missing an empty default layer is returned
+val collisionLayer = map.layer("collision")
+```
+
+Iterating over map objects of a specific `MapLayer` of a map:
+
+```kotlin
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+
+val map: TiledMap = getTiledMap()
+
+// create collision bodies for every map object of the collision layer
+map.forEachMapObject("collision") { mapObj ->
+    createStaticBox2DCollisionBody(mapObj.x, mapObj.y, mapObj.shape)
 }
-
-val myLayerProp: Int? = map.layer("myLayer").propertyOrNull("myLayerProp")
 ```
 
 #### Additional documentation
