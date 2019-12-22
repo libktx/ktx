@@ -44,6 +44,20 @@ val MapObject.y: Float
     get() = property("y", 0f)
 
 /**
+ * Extension property to retrieve the width of the [MapObject]. If the object does not have
+ * a width then 0 is returned
+ */
+val MapObject.width: Float
+    get() = property("width", 0f)
+
+/**
+ * Extension property to retrieve the height of the [MapObject]. If the object does not have
+ * a height then 0 is returned
+ */
+val MapObject.height: Float
+    get() = property("height", 0f)
+
+/**
  * Extension property to retrieve the unique ID of the [MapObject]. If the object does not have an
  * id then -1 is returned
  */

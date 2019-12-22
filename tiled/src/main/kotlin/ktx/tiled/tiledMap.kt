@@ -5,8 +5,6 @@ import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 
-private val DEFAULT_MAP_LAYER = MapLayer().apply { name = "ktx-default-map-layer" }
-
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMap]. The type is automatically
  * derived from the type of the given default value. If the property is not defined the defaultValue will be returned.
@@ -82,18 +80,12 @@ fun TiledMap.totalWidth() = width * tileWidth
 fun TiledMap.totalHeight() = height * tileHeight
 
 /**
- * Extension method to retrieve a non-null [MapLayer] of the [TiledMap]. In case the layer
- * cannot be found, a default empty layer is returned with name **ktx-default-map-layer**.
- * @param layerName name of [MapLayer]
- * @return [MapLayer] of given name or an empty default map layer, if the specified layer does not exist
- */
-fun TiledMap.layer(layerName: String) = layers[layerName] ?: DEFAULT_MAP_LAYER
-
-/**
  * Extension method to easily execute an action per [MapObject] of a given [MapLayer].
+ * If the layer does not exist then nothing is happening.
+ *
  * @param layerName name of [MapLayer]
  * @param action action to execute per [MapObject] of the [MapLayer]
  */
 fun TiledMap.forEachMapObject(layerName: String, action: (MapObject) -> Unit) {
-    layer(layerName).objects.forEach { action(it) }
+    layers[layerName]?.objects?.forEach { action(it) }
 }

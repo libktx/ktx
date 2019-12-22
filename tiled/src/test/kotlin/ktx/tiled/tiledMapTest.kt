@@ -52,15 +52,9 @@ class TiledMapTest {
     }
 
     @Test
-    fun `retrieve layers by name`() {
-        assertEquals("layer-2", tiledMap.layer("layer-2").name)
-        assertEquals("ktx-default-map-layer", tiledMap.layer("layer-3").name)
-    }
-
-    @Test
     fun `execute action per object of a layer`() {
         // check that there are objects in layer -1
-        assertEquals(3, tiledMap.layer("layer-1").objects.count)
+        assertEquals(3, tiledMap.layers["layer-1"].objects.count)
         // verify that they are all visible and set them to not visible
         var counter = 0
         tiledMap.forEachMapObject("layer-1") {
@@ -76,7 +70,6 @@ class TiledMapTest {
         }
 
         // also, test empty default layer which should do nothing
-        assertEquals(0, tiledMap.layer("non-existing").objects.count)
         counter = 0
         tiledMap.forEachMapObject("non-existing") { ++counter }
         assertEquals(0, counter)

@@ -1,6 +1,6 @@
 # KTX : TiledMap utilities
 
-TiledMap utilities for LibGDX applications written with Kotlin.
+Tiled utilities for LibGDX applications written with Kotlin.
 
 ### Why?
 
@@ -35,7 +35,7 @@ following new extensions:
 - `property(key, defaultValue)`
 - `propertyOrNull(key)`
 - `containsProperty(key)`
-- `x`, `y`, `id` and `shape`
+- `x`, `y`, `width`, `height`, `id` and `shape`
 
 #### `MapLayer`
 
@@ -51,15 +51,10 @@ What is true for `MapObject` and `MapLayer` is of course also true for `TiledMap
 Standard properties for a map are `width`, `height`, `tilewidth` and `tileheight`. They
 are part of any map and are useful to e.g. lock the camera movement to the map boundaries.
 
-As usual with Kotlin we are trying to avoid **null** and for that reason a new layer extension
-was added to retrieve a non-null `MapLayer` which is just an empty default layer without any properties
-or objects. Its name is **ktx-default-map-layer**.
-
 Often you need to iterate over all objects of a layer to do something with them like
 creating collision bodies for box2d or other things. To ease that use case a new
 extension was added called `forEachMapObject` which takes a lambda that is executed for each
-object of the given layer. Together with the `layer` extension mentioned above it becomes easy to write
-such loops.
+object of the given layer.
 
 To summarize it, following extensions are available:
 - `property(key, defaultValue)`
@@ -67,7 +62,6 @@ To summarize it, following extensions are available:
 - `containsProperty(key)`
 - `width`, `height`, `tileWidth`, `tileHeight`
 - `totalWidth()` and `totalHeight()`
-- `layer(layerName)`
 - `forEachMapObject(layerName, action)`
 
 ### Usage examples
@@ -147,19 +141,6 @@ val width = map.width
 val height = map.height
 val tileWidth = map.tileWidth
 val tileHeight = map.tileHeight
-```
-
-Retrieving a non-null layer of a `TiledMap`:
-
-```kotlin
-import com.badlogic.gdx.maps.tiled.TiledMap
-import ktx.tiled.*
-
-
-val map: TiledMap = getTiledMap()
-
-// get collision layer - if it is missing an empty default layer is returned
-val collisionLayer = map.layer("collision")
 ```
 
 Iterating over map objects of a specific `MapLayer` of a map:
