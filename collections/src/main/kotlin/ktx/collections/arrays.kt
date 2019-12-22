@@ -2,6 +2,8 @@
 
 package ktx.collections
 
+import com.badlogic.gdx.utils.Pool
+
 /** Alias for [com.badlogic.gdx.utils.Array] avoiding name collision with the standard library. */
 typealias GdxArray<Element> = com.badlogic.gdx.utils.Array<Element>
 
@@ -233,8 +235,9 @@ inline fun <Type, R : Comparable<R>> GdxArray<out Type>.sortByDescending(crossin
 
 /**
  * Removes elements from the array that satisfy the [predicate].
+ * @param pool Removed items are freed to this pool.
  */
-inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
+inline fun <Type> GdxArray<Type>.removeAll(pool: Pool<Type>?, predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
@@ -243,6 +246,8 @@ inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
         items[currentWriteIndex] = value
       }
       currentWriteIndex++
+    } else {
+      pool?.free(value)
     }
   }
   truncate(currentWriteIndex)
@@ -250,8 +255,9 @@ inline fun <Type> GdxArray<Type>.removeAll(predicate: (Type) -> Boolean) {
 
 /**
  * Removes elements from the array that do not satisfy the [predicate].
+ * @param pool Removed items are freed to this optional pool.
  */
-inline fun <Type> GdxArray<Type>.retainAll(predicate: (Type) -> Boolean) {
+inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
@@ -260,6 +266,8 @@ inline fun <Type> GdxArray<Type>.retainAll(predicate: (Type) -> Boolean) {
         items[currentWriteIndex] = value
       }
       currentWriteIndex++
+    } else {
+      pool?.free(value)
     }
   }
   truncate(currentWriteIndex)
