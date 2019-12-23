@@ -9,7 +9,6 @@ include(
     'json',
     'graphics',
     'freetype',
-//    'freetype-async',
     'i18n',
     'inject',
     'log',
@@ -18,5 +17,5 @@ include(
     'style',
     'tiled',
     'vis',
-    'vis-style'
+    'vis-style',
 )
