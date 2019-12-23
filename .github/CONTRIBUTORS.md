@@ -42,6 +42,7 @@ Project contributors listed chronologically.
   * Prepared several KTX template projects and showcases.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
+  * Author of the [Tiled](../tiled) module.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
