@@ -3,7 +3,6 @@ package ktx.tiled
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 
-
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMapTile]. If the property
  * is not defined then this method throws a [MissingPropertyException].
@@ -12,7 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
  * @throws MissingPropertyException If the property is not defined
  */
 inline fun <reified T> TiledMapTile.property(key: String): T = this.properties[key, T::class.java]
-        ?: throw MissingPropertyException("Property $key does not exist for tile ${this.id}")
+    ?: throw MissingPropertyException("Property $key does not exist for tile ${this.id}")
 
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMapTile]. The type is automatically
