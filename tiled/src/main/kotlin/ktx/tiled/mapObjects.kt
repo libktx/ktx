@@ -77,18 +77,16 @@ val MapObject.id: Int
   get() = property("id")
 
 /**
- * Extension property to retrieve the rotation of the [MapObject].
- * @throws MissingPropertyException if property rotation does not exist.
+ * Extension property to retrieve the rotation of the [MapObject]. Null if the property is unset.
  */
-val MapObject.rotation: Float
-  get() = property("rotation")
+val MapObject.rotation: Float?
+  get() = propertyOrNull("rotation")
 
 /**
- * Extension property to retrieve the type of the [MapObject].
- * @throws MissingPropertyException if property type does not exist.
+ * Extension property to retrieve the type of the [MapObject]. Null if the property is unset.
  */
-val MapObject.type: String
-  get() = property("type")
+val MapObject.type: String?
+  get() = propertyOrNull("type")
 
 /**
  * Extension method to retrieve the [Shape2D] instance of a [MapObject].

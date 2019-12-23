@@ -70,11 +70,10 @@ val TiledMap.tileHeight: Int
   get() = property("tileheight")
 
 /**
- * Extension property to retrieve the background color of the [TiledMap].
- * @throws MissingPropertyException if property backgroundcolor does not exist.
+ * Extension property to retrieve the background color of the [TiledMap]. Null if property was not set.
  */
-val TiledMap.backgroundColor: String
-  get() = property("backgroundcolor")
+val TiledMap.backgroundColor: String?
+  get() = propertyOrNull("backgroundcolor")
 
 /**
  * Extension property to retrieve the orientation of the [TiledMap].

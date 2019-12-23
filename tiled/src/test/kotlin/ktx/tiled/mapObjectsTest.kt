@@ -16,7 +16,8 @@ class MapObjectTest {
       put("y", 0f)
       put("rotation", -2.33f)
       put("type", "SomeType")
-      put("width", 1f)
+      put("width", 20f)
+      put("height", 30f)
       put("name", "Property")
       put("active", true)
     }
@@ -25,7 +26,7 @@ class MapObjectTest {
   @Test
   fun `should retrieve properties from MapObject`() {
     assertEquals(1, mapObject.property<Int>("x"))
-    assertEquals(1f, mapObject.property<Float>("width"))
+    assertEquals(20f, mapObject.property<Float>("width"))
     assertEquals("Property", mapObject.property<String>("name"))
     assertEquals(true, mapObject.property<Boolean>("active"))
   }
@@ -34,7 +35,7 @@ class MapObjectTest {
   fun `should retrieve properties from MapObject with default value`() {
     assertEquals(1, mapObject.property("x", 0))
     assertEquals(0, mapObject.property("non-existing", 0))
-    assertEquals(1f, mapObject.property("width", 0f))
+    assertEquals(20f, mapObject.property("width", 0f))
     assertEquals("Property", mapObject.property("name", ""))
     assertEquals(true, mapObject.property("active", false))
   }
@@ -53,9 +54,11 @@ class MapObjectTest {
 
   @Test
   fun `should retrieve standard properties of MapObject`() {
+    assertEquals(13, mapObject.id)
     assertEquals(1f, mapObject.x)
     assertEquals(0f, mapObject.y)
-    assertEquals(13, mapObject.id)
+    assertEquals(20f, mapObject.width)
+    assertEquals(30f, mapObject.height)
     assertEquals(-2.33f, mapObject.rotation)
     assertEquals("SomeType", mapObject.type)
   }
