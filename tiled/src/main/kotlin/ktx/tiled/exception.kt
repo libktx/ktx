@@ -8,16 +8,24 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.utils.GdxRuntimeException
 
 /**
- * [GdxRuntimeException] that is thrown when trying to access a non-existing property of a [MapProperties] instance
+ * Common type of exceptions thrown by the Tiled API extensions.
  */
-class MissingPropertyException(message: String) : GdxRuntimeException(message)
+open class TiledException(message: String, cause: Throwable? = null): GdxRuntimeException(message, cause)
 
 /**
- * [GdxRuntimeException] that is thrown when trying to access a non-existing [MapLayer] of a [TiledMap] instance
+ * [GdxRuntimeException] that is thrown when trying to access a non-existing property
+ * of a [MapProperties] instance.
  */
-class MissingLayerException(message: String) : GdxRuntimeException(message)
+class MissingPropertyException(message: String, cause: Throwable? = null) : TiledException(message, cause)
 
 /**
- * [GdxRuntimeException] that is thrown when trying to access a shape of a [MapObject] that do not have any shape like [TextureMapObject]
+ * [GdxRuntimeException] that is thrown when trying to access a non-existing [MapLayer]
+ * of a [TiledMap] instance.
  */
-class MissingShapeException(message: String) : GdxRuntimeException(message)
+class MissingLayerException(message: String, cause: Throwable? = null) : TiledException(message, cause)
+
+/**
+ * [GdxRuntimeException] that is thrown when trying to access a shape of a [MapObject]
+ * that do not have any shape such as the [TextureMapObject].
+ */
+class MissingShapeException(message: String, cause: Throwable? = null) : TiledException(message, cause)
