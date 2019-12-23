@@ -8,48 +8,55 @@ import org.junit.Test
 
 class TiledMapTest {
   private val tiledMap = TiledMap().apply {
-    properties.put("width", 16)
-    properties.put("height", 8)
-    properties.put("tilewidth", 32)
-    properties.put("tileheight", 32)
-
-    properties.put("backgroundcolor", "#ffffff")
-    properties.put("orientation", "orthogonal")
-    properties.put("hexsidelength", 0)
-    properties.put("staggeraxis", "Y")
-    properties.put("staggerindex", "Odd")
-
+    properties.apply {
+      put("width", 16)
+      put("height", 8)
+      put("tilewidth", 32)
+      put("tileheight", 32)
+      put("backgroundcolor", "#ffffff")
+      put("orientation", "orthogonal")
+      put("hexsidelength", 0)
+      put("staggeraxis", "Y")
+      put("staggerindex", "Odd")
+    }
     layers.add(MapLayer().apply {
       name = "layer-1"
-      objects.add(MapObject())
-      objects.add(MapObject())
-      objects.add(MapObject())
+      objects.apply {
+        add(MapObject())
+        add(MapObject())
+        add(MapObject())
+      }
     })
-    layers.add(MapLayer().apply { name = "layer-2" })
+    layers.add(MapLayer().apply {
+      name = "layer-2"
+    })
   }
 
   @Test
-  fun `retrieve properties from TiledMap with default value`() {
+  fun `should retrieve properties from TiledMap`() {
+    assertEquals(16, tiledMap.property<Int>("width"))
+  }
+
+  @Test
+  fun `should retrieve properties from TiledMap with default value`() {
     assertEquals(16, tiledMap.property("width", 0))
     assertEquals(-1, tiledMap.property("x", -1))
   }
 
   @Test
-  fun `retrieve properties from TiledMap without default value`() {
+  fun `should retrieve properties from TiledMap without default value`() {
     assertNull(tiledMap.propertyOrNull("x"))
-    val width: Int? = tiledMap.propertyOrNull("width")
-    assertNotNull(width)
-    assertEquals(16, width)
+    assertEquals(16, tiledMap.propertyOrNull<Int>("width"))
   }
 
   @Test
-  fun `check if property from TiledMap exists`() {
+  fun `should check if property from TiledMap exists`() {
     assertTrue(tiledMap.containsProperty("width"))
     assertFalse(tiledMap.containsProperty("x"))
   }
 
   @Test
-  fun `retrieve standard properties of TiledMap`() {
+  fun `should retrieve standard properties of TiledMap`() {
     assertEquals(16, tiledMap.width)
     assertEquals(8, tiledMap.height)
     assertEquals(32, tiledMap.tileWidth)
@@ -64,47 +71,53 @@ class TiledMapTest {
   }
 
   @Test(expected = MissingPropertyException::class)
-  fun `retrieve non-existing property from TiledMap using exception`() {
+  fun `should not retrieve non-existing property from TiledMap`() {
     tiledMap.property<String>("non-existing")
   }
 
   @Test
-  fun `retrieve existing layer from TiledMap`() {
+  fun `should retrieve existing layer from TiledMap`() {
     assertEquals("layer-1", tiledMap.layer("layer-1").name)
   }
 
   @Test(expected = MissingLayerException::class)
-  fun `retrieve non-existing layer from TiledMap using exception`() {
+  fun `should not retrieve non-existing layer from TiledMap`() {
     tiledMap.layer("non-existing")
   }
 
   @Test
-  fun `check if layer exists in TiledMap`() {
+  fun `should check if layer exists in TiledMap`() {
     assertTrue(tiledMap.contains("layer-1"))
+    assertFalse(tiledMap.contains("non-existing"))
+
+    assertTrue("layer-1" in tiledMap)
     assertFalse("non-existing" in tiledMap)
   }
 
   @Test
-  fun `execute action per object of a layer`() {
-    // check that there are objects in layer -1
-    assertEquals(3, tiledMap.layers["layer-1"].objects.count)
-    // verify that they are all visible and set them to not visible
+  fun `should execute action per object of a layer`() {
     var counter = 0
+
     tiledMap.forEachMapObject("layer-1") {
-      assertTrue(it.isVisible)
       it.isVisible = false
       counter++
     }
-    // verify again that they are now all invisible and revert them back to being visible
-    assertEquals(3, counter)
-    tiledMap.forEachMapObject("layer-1") {
-      assertFalse(it.isVisible)
-      it.isVisible = true
-    }
 
-    // also, test empty default layer which should do nothing
-    counter = 0
-    tiledMap.forEachMapObject("non-existing") { ++counter }
-    assertEquals(0, counter)
+    assertEquals(3, counter)
+    assertTrue(tiledMap.layers["layer-1"].objects.all { !it.isVisible })
+  }
+
+  @Test
+  fun `should not execute any action for empty layer`() {
+    tiledMap.forEachMapObject("layer-2") {
+      fail()
+    }
+  }
+
+  @Test
+  fun `should not execute any action for non-existing layer`() {
+    tiledMap.forEachMapObject("non-existing") {
+      fail()
+    }
   }
 }

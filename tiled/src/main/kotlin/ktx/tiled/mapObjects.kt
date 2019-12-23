@@ -8,82 +8,84 @@ import com.badlogic.gdx.math.*
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. If the property
  * is not defined then this method throws a [MissingPropertyException].
- * @param key property name
- * @return value of the property
- * @throws MissingPropertyException If the property is not defined
+ * @param key property name.
+ * @return value of the property.
+ * @throws MissingPropertyException If the property is not defined.
  */
-inline fun <reified T> MapObject.property(key: String): T = this.properties[key, T::class.java]
-    ?: throw MissingPropertyException("Property $key does not exist for object ${this.name}")
+inline fun <reified T> MapObject.property(key: String): T = properties[key, T::class.java]
+    ?: throw MissingPropertyException("Property $key does not exist for object $name")
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. The type is automatically
- * derived from the type of the given default value. If the property is not defined the defaultValue will be returned.
- * @param key property name
- * @param defaultValue default value in case the property is missing
- * @return value of the property or defaultValue if property is missing
+ * derived from the type of the given default value. If the property is not defined the [defaultValue]
+ * will be returned.
+ * @param key property name.
+ * @param defaultValue default value in case the property is missing.
+ * @return value of the property or defaultValue if property is missing.
  */
-inline fun <reified T> MapObject.property(key: String, defaultValue: T): T = this.properties[key, defaultValue, T::class.java]
+inline fun <reified T> MapObject.property(key: String, defaultValue: T): T = properties[key, defaultValue, T::class.java]
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. If the property
  * is not defined then this method returns null.
- * @param key property name
- * @return value of the property or null if the property is missing
+ * @param key property name.
+ * @return value of the property or null if the property is missing.
  */
-inline fun <reified T> MapObject.propertyOrNull(key: String): T? = this.properties[key, T::class.java]
+inline fun <reified T> MapObject.propertyOrNull(key: String): T? = properties[key, T::class.java]
 
 /**
- * Extension method to directly access the [MapProperties] of a [MapObject] and its [containsKey][MapProperties.containsKey] method
- * @param key property name
- * @return true if the property exists. Otherwise false
+ * Extension method to directly access the [MapProperties] of a [MapObject] and its
+ * [containsKey][MapProperties.containsKey] method.
+ * @param key property name.
+ * @return true if the property exists. Otherwise false.
  */
 fun MapObject.containsProperty(key: String) = properties.containsKey(key)
 
 /**
- * Extension property to retrieve the x-coordinate of the [MapObject]
- * @throws MissingPropertyException if property x does not exist
+ * Extension property to retrieve the x-coordinate of the [MapObject].
+ * @throws MissingPropertyException if property x does not exist.
  */
 val MapObject.x: Float
   get() = property("x")
 
 /**
- * Extension property to retrieve the y-coordinate of the [MapObject]
- * @throws MissingPropertyException if property y does not exist
+ * Extension property to retrieve the y-coordinate of the [MapObject].
+ * @throws MissingPropertyException if property y does not exist.
  */
 val MapObject.y: Float
   get() = property("y")
 
 /**
- * Extension property to retrieve the width of the [MapObject]
- * @throws MissingPropertyException if property width does not exist
+ * Extension property to retrieve the width of the [MapObject].
+ * @throws MissingPropertyException if property width does not exist.
  */
 val MapObject.width: Float
   get() = property("width")
 
 /**
- * Extension property to retrieve the height of the [MapObject]
- * @throws MissingPropertyException if property height does not exist
+ * Extension property to retrieve the height of the [MapObject].
+ * @throws MissingPropertyException if property height does not exist.
  */
 val MapObject.height: Float
   get() = property("height")
 
 /**
- * Extension property to retrieve the unique ID of the [MapObject]
- * @throws MissingPropertyException if property id does not exist
+ * Extension property to retrieve the unique ID of the [MapObject].
+ * @throws MissingPropertyException if property id does not exist.
  */
 val MapObject.id: Int
   get() = property("id")
 
 /**
- * Extension property to retrieve the rotation of the [MapObject]
- * @throws MissingPropertyException if property rotation does not exist
+ * Extension property to retrieve the rotation of the [MapObject].
+ * @throws MissingPropertyException if property rotation does not exist.
  */
 val MapObject.rotation: Float
   get() = property("rotation")
 
 /**
- * Extension property to retrieve the type of the [MapObject]
- * @throws MissingPropertyException if property type does not exist
+ * Extension property to retrieve the type of the [MapObject].
+ * @throws MissingPropertyException if property type does not exist.
  */
 val MapObject.type: String
   get() = property("type")
@@ -103,10 +105,10 @@ val MapObject.type: String
  */
 val MapObject.shape: Shape2D
   get() = when (this) {
-    is CircleMapObject -> this.circle
-    is EllipseMapObject -> this.ellipse
-    is PolylineMapObject -> this.polyline
-    is PolygonMapObject -> this.polygon
-    is RectangleMapObject -> this.rectangle
-    else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape")
+    is CircleMapObject -> circle
+    is EllipseMapObject -> ellipse
+    is PolylineMapObject -> polyline
+    is PolygonMapObject -> polygon
+    is RectangleMapObject -> rectangle
+    else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape.")
   }

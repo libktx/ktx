@@ -10,30 +10,28 @@ import org.junit.Test
 
 class MapObjectTest {
   private val mapObject = MapObject().apply {
-    properties.also {
-      it.put("id", 13)
-      it.put("x", 1)
-      it.put("y", 0f)
-      it.put("rotation", -2.33f)
-      it.put("type", "SomeType")
-      it.put("width", 1f)
-      it.put("name", "Property")
-      it.put("active", true)
+    properties.apply {
+      put("id", 13)
+      put("x", 1)
+      put("y", 0f)
+      put("rotation", -2.33f)
+      put("type", "SomeType")
+      put("width", 1f)
+      put("name", "Property")
+      put("active", true)
     }
   }
 
-  private val polylineVertices = floatArrayOf(0f, 0f, 1f, 1f)
-  private val polygonVertices = floatArrayOf(0f, 0f, 1f, 1f, 2f, 0f)
-
-  private val circleObject = CircleMapObject()
-  private val ellipseObject = EllipseMapObject()
-  private val polylineObject = PolylineMapObject(polylineVertices)
-  private val polygonObject = PolygonMapObject(polygonVertices)
-  private val rectObject = RectangleMapObject()
-  private val textureObject = TextureMapObject()
+  @Test
+  fun `should retrieve properties from MapObject`() {
+    assertEquals(1, mapObject.property<Int>("x"))
+    assertEquals(1f, mapObject.property<Float>("width"))
+    assertEquals("Property", mapObject.property<String>("name"))
+    assertEquals(true, mapObject.property<Boolean>("active"))
+  }
 
   @Test
-  fun `retrieve properties from MapObject with default value`() {
+  fun `should retrieve properties from MapObject with default value`() {
     assertEquals(1, mapObject.property("x", 0))
     assertEquals(0, mapObject.property("non-existing", 0))
     assertEquals(1f, mapObject.property("width", 0f))
@@ -42,21 +40,19 @@ class MapObjectTest {
   }
 
   @Test
-  fun `retrieve properties from MapObject without default value`() {
+  fun `should retrieve properties from MapObject without default value`() {
     assertNull(mapObject.propertyOrNull("non-existing"))
-    val x: Int? = mapObject.propertyOrNull("x")
-    assertNotNull(x)
-    assertEquals(1, x)
+    assertEquals(1, mapObject.propertyOrNull<Int>("x"))
   }
 
   @Test
-  fun `check if property from MapObject exists`() {
+  fun `should check if property from MapObject exists`() {
     assertTrue(mapObject.containsProperty("x"))
     assertFalse(mapObject.containsProperty("non-existing"))
   }
 
   @Test
-  fun `retrieve standard properties of MapObject`() {
+  fun `should retrieve standard properties of MapObject`() {
     assertEquals(1f, mapObject.x)
     assertEquals(0f, mapObject.y)
     assertEquals(13, mapObject.id)
@@ -64,22 +60,52 @@ class MapObjectTest {
     assertEquals("SomeType", mapObject.type)
   }
 
+  @Test(expected = MissingPropertyException::class)
+  fun `should not retrieve non-existing property from MapObject`() {
+    mapObject.property<String>("non-existing")
+  }
+
   @Test
-  fun `retrieve shape from MapObject`() {
+  fun `should retrieve shape from MapObject with Circle type`() {
+    val circleObject = CircleMapObject()
+
     assertEquals(Circle(0f, 0f, 1f), circleObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Ellipse type`() {
+    val ellipseObject = EllipseMapObject()
+
     assertEquals(Ellipse(0f, 0f, 1f, 1f), ellipseObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Polyline type`() {
+    val polylineVertices = floatArrayOf(0f, 0f, 1f, 1f)
+    val polylineObject = PolylineMapObject(polylineVertices)
+
     assertEquals(polylineObject.polyline, polylineObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Polygon type`() {
+    val polygonVertices = floatArrayOf(0f, 0f, 1f, 1f, 2f, 0f)
+    val polygonObject = PolygonMapObject(polygonVertices)
+
     assertEquals(polygonObject.polygon, polygonObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Rectangle type`() {
+    val rectObject = RectangleMapObject()
+
     assertEquals(Rectangle(0f, 0f, 1f, 1f), rectObject.shape)
   }
 
   @Test(expected = MissingShapeException::class)
   fun `retrieve shape from unsupported MapObject`() {
-    textureObject.shape
-  }
+    val textureObject = TextureMapObject()
 
-  @Test(expected = MissingPropertyException::class)
-  fun `retrieve non-existing property from MapObject using exception`() {
-    mapObject.property<String>("non-existing")
+    textureObject.shape
   }
 }

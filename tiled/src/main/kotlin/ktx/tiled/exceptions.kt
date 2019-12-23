@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 /**
  * Common type of exceptions thrown by the Tiled API extensions.
  */
-open class TiledException(message: String, cause: Throwable? = null): GdxRuntimeException(message, cause)
+open class TiledException(message: String, cause: Throwable? = null) : GdxRuntimeException(message, cause)
 
 /**
  * [GdxRuntimeException] that is thrown when trying to access a non-existing property
