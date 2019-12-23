@@ -1,7 +1,15 @@
 #### 1.9.10-SNAPSHOT
 
-- **[CHANGE]** `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
-- **[CHANGE]** `Array.transfer` is now less strict about typing.
+- **[CHANGE]** (`ktx-collections`) `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
+- **[CHANGE]** (`ktx-collections`) `Array.transfer` is now less strict about typing.
+- **[FEATURE]** (`ktx-tiled`) Added a new KTX module: Tiled API extensions.
+  - Added `contains` (`in`) and `set` (`[]`) operators support to `MapProperties`.
+  - Added extension methods that simplify properties extraction from `MapLayer`, `MapObject`, `TiledMap`, `TiledMapTile` and `TiledMapTileSet`:
+    - `property`
+    - `propertyOrNull`
+    - `containsProperty`
+  - Added `shape` extension field to `MapObject`.
+  - Added extension fields that ease extraction of basic properties from `TiledMap` and `MapObject`.
 
 #### 1.9.10-b3
 
