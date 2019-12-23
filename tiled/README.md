@@ -93,7 +93,7 @@ val myOtherProp: Int? = map.propertyOrNull("myOtherProperty")
 
 // check if a certain property exists
 if (map.containsProperty("lightColor")) {
-    // change box2d light ambient color
+    changeAmbientLightColor(map.property<String>("lightColor"))
 }
 ```
 

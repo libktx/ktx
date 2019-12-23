@@ -12,6 +12,13 @@ class TiledMapTest {
         properties.put("height", 8)
         properties.put("tilewidth", 32)
         properties.put("tileheight", 32)
+
+        properties.put("backgroundcolor", "#ffffff")
+        properties.put("orientation", "orthogonal")
+        properties.put("hexsidelength", 0)
+        properties.put("staggeraxis", "Y")
+        properties.put("staggerindex", "Odd")
+
         layers.add(MapLayer().apply {
             name = "layer-1"
             objects.add(MapObject())
@@ -49,6 +56,32 @@ class TiledMapTest {
         assertEquals(32, tiledMap.tileHeight)
         assertEquals(16 * 32, tiledMap.totalWidth())
         assertEquals(8 * 32, tiledMap.totalHeight())
+        assertEquals("#ffffff", tiledMap.backgroundColor)
+        assertEquals("orthogonal", tiledMap.orientation)
+        assertEquals(0, tiledMap.hexSideLength)
+        assertEquals("Y", tiledMap.staggerAxis)
+        assertEquals("Odd", tiledMap.staggerIndex)
+    }
+
+    @Test(expected = MissingPropertyException::class)
+    fun `retrieve non-existing property from TiledMap using exception`() {
+        tiledMap.property<String>("non-existing")
+    }
+
+    @Test
+    fun `retrieve existing layer from TiledMap`() {
+        assertEquals("layer-1", tiledMap.layer("layer-1").name)
+    }
+
+    @Test(expected = MissingLayerException::class)
+    fun `retrieve non-existing layer from TiledMap using exception`() {
+        tiledMap.layer("non-existing")
+    }
+
+    @Test
+    fun `check if layer exists in TiledMap`() {
+        assertTrue(tiledMap.contains("layer-1"))
+        assertFalse("non-existing" in tiledMap)
     }
 
     @Test

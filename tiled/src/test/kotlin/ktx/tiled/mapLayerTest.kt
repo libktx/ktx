@@ -30,4 +30,9 @@ class MapLayerTest {
         Assert.assertTrue(mapLayer.containsProperty("active"))
         Assert.assertFalse(mapLayer.containsProperty("x"))
     }
+
+    @Test(expected = MissingPropertyException::class)
+    fun `retrieve non-existing property from MapLayer using exception`() {
+        mapLayer.property<String>("non-existing")
+    }
 }

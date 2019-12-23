@@ -13,6 +13,9 @@ class MapObjectTest {
         properties.also {
             it.put("id", 13)
             it.put("x", 1)
+            it.put("y", 0f)
+            it.put("rotation", -2.33f)
+            it.put("type", "SomeType")
             it.put("width", 1f)
             it.put("name", "Property")
             it.put("active", true)
@@ -32,7 +35,7 @@ class MapObjectTest {
     @Test
     fun `retrieve properties from MapObject with default value`() {
         assertEquals(1, mapObject.property("x", 0))
-        assertEquals(0, mapObject.property("y", 0))
+        assertEquals(0, mapObject.property("non-existing", 0))
         assertEquals(1f, mapObject.property("width", 0f))
         assertEquals("Property", mapObject.property("name", ""))
         assertEquals(true, mapObject.property("active", false))
@@ -40,7 +43,7 @@ class MapObjectTest {
 
     @Test
     fun `retrieve properties from MapObject without default value`() {
-        assertNull(mapObject.propertyOrNull("y"))
+        assertNull(mapObject.propertyOrNull("non-existing"))
         val x: Int? = mapObject.propertyOrNull("x")
         assertNotNull(x)
         assertEquals(1, x)
@@ -49,7 +52,7 @@ class MapObjectTest {
     @Test
     fun `check if property from MapObject exists`() {
         assertTrue(mapObject.containsProperty("x"))
-        assertFalse(mapObject.containsProperty("y"))
+        assertFalse(mapObject.containsProperty("non-existing"))
     }
 
     @Test
@@ -57,6 +60,8 @@ class MapObjectTest {
         assertEquals(1f, mapObject.x)
         assertEquals(0f, mapObject.y)
         assertEquals(13, mapObject.id)
+        assertEquals(-2.33f, mapObject.rotation)
+        assertEquals("SomeType", mapObject.type)
     }
 
     @Test
@@ -68,8 +73,13 @@ class MapObjectTest {
         assertEquals(Rectangle(0f, 0f, 1f, 1f), rectObject.shape)
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test(expected = MissingShapeException::class)
     fun `retrieve shape from unsupported MapObject`() {
         textureObject.shape
+    }
+
+    @Test(expected = MissingPropertyException::class)
+    fun `retrieve non-existing property from MapObject using exception`() {
+        mapObject.property<String>("non-existing")
     }
 }

@@ -4,6 +4,16 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapProperties
 
 /**
+ * Extension method to directly access the [MapProperties] of a [MapLayer]. If the property
+ * is not defined then this method throws a [MissingPropertyException].
+ * @param key property name
+ * @return value of the property
+ * @throws MissingPropertyException If the property is not defined
+ */
+inline fun <reified T> MapLayer.property(key: String): T = this.properties[key, T::class.java]
+        ?: throw MissingPropertyException("Property $key does not exist for layer ${this.name}")
+
+/**
  * Extension method to directly access the [MapProperties] of a [MapLayer]. The type is automatically
  * derived from the type of the given default value. If the property is not defined the defaultValue will be returned.
  * @param key property name

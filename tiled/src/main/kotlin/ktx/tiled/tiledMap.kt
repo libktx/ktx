@@ -6,6 +6,16 @@ import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
 
 /**
+ * Extension method to directly access the [MapProperties] of a [TiledMap]. If the property
+ * is not defined then this method throws a [MissingPropertyException].
+ * @param key property name
+ * @return value of the property
+ * @throws MissingPropertyException If the property is not defined
+ */
+inline fun <reified T> TiledMap.property(key: String): T = this.properties[key, T::class.java]
+        ?: throw MissingPropertyException("Property $key does not exist for map")
+
+/**
  * Extension method to directly access the [MapProperties] of a [TiledMap]. The type is automatically
  * derived from the type of the given default value. If the property is not defined the defaultValue will be returned.
  * @param key property name
@@ -30,32 +40,67 @@ inline fun <reified T> TiledMap.propertyOrNull(key: String): T? = this.propertie
 fun TiledMap.containsProperty(key: String) = properties.containsKey(key)
 
 /**
- * Extension property to retrieve the width of the [TiledMap]. If the map does not have
- * a **width** property then 0 is returned
+ * Extension property to retrieve the width of the [TiledMap]
+ * @throws MissingPropertyException if property width does not exist
  */
 val TiledMap.width: Int
-    get() = property("width", 0)
+    get() = property("width")
 
 /**
- * Extension property to retrieve the height of the [TiledMap]. If the map does not have
- * a **height** property then 0 is returned
+ * Extension property to retrieve the height of the [TiledMap]
+ * @throws MissingPropertyException if property height does not exist
  */
 val TiledMap.height: Int
-    get() = property("height", 0)
+    get() = property("height")
 
 /**
- * Extension property to retrieve the tile width of each tile of the [TiledMap]. If the map does not have
- * a **tilewidth** property then 0 is returned
+ * Extension property to retrieve the tile width of each tile of the [TiledMap]
+ * @throws MissingPropertyException if property tilewidth does not exist
  */
 val TiledMap.tileWidth: Int
-    get() = property("tilewidth", 0)
+    get() = property("tilewidth")
 
 /**
- * Extension property to retrieve the tile height of each tile of the [TiledMap]. If the map does not have
- * a **tileheight** property then 0 is returned
+ * Extension property to retrieve the tile height of each tile of the [TiledMap]
+ * @throws MissingPropertyException if property tileheight does not exist
  */
 val TiledMap.tileHeight: Int
-    get() = property("tileheight", 0)
+    get() = property("tileheight")
+
+/**
+ * Extension property to retrieve the background color of the [TiledMap]
+ * @throws MissingPropertyException if property backgroundcolor does not exist
+ */
+val TiledMap.backgroundColor: String
+    get() = property("backgroundcolor")
+
+/**
+ * Extension property to retrieve the orientation of the [TiledMap]
+ * @throws MissingPropertyException if property orientation does not exist
+ */
+val TiledMap.orientation: String
+    get() = property("orientation")
+
+/**
+ * Extension property to retrieve the hex side length of a hexagonal [TiledMap]
+ * @throws MissingPropertyException if property hexsidelength does not exist
+ */
+val TiledMap.hexSideLength: Int
+    get() = property("hexsidelength")
+
+/**
+ * Extension property to retrieve the stagger axis of the [TiledMap]
+ * @throws MissingPropertyException if property staggeraxis does not exist
+ */
+val TiledMap.staggerAxis: String
+    get() = property("staggeraxis")
+
+/**
+ * Extension property to retrieve the stagger index of the [TiledMap]
+ * @throws MissingPropertyException if property staggerindex does not exist
+ */
+val TiledMap.staggerIndex: String
+    get() = property("staggerindex")
 
 /**
  * Extension method to retrieve the total width of the [TiledMap]. It is the result of the
@@ -78,6 +123,22 @@ fun TiledMap.totalWidth() = width * tileWidth
  * @return total height in pixels
  */
 fun TiledMap.totalHeight() = height * tileHeight
+
+/**
+ * Extension operator to check if a certain [MapLayer] is part of the [TiledMap]
+ * @param layerName name of [MapLayer]
+ * @return true if and only if the layer does exist
+ */
+operator fun TiledMap.contains(layerName: String) = layers[layerName] != null
+
+/**
+ * Extension method to retrieve a [MapLayer] of a [TiledMap]. If the layer does
+ * not exist then this method is throwing a [MissingLayerException]
+ * @param layerName name of [MapLayer]
+ * @throws MissingLayerException If the layer does not exist
+ */
+fun TiledMap.layer(layerName: String) = layers[layerName]
+        ?: throw MissingLayerException("Layer $layerName does not exist for map")
 
 /**
  * Extension method to easily execute an action per [MapObject] of a given [MapLayer].
