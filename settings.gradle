@@ -16,6 +16,7 @@ include(
     'math',
     'scene2d',
     'style',
+    'tiled',
     'vis',
     'vis-style'
 )
