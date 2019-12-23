@@ -49,6 +49,7 @@ Module | Dependency name | Description
 [math](math) | `ktx-math` | Operator functions for LibGDX math API and general math utilities.
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
+[tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
 [vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to the [scene2d](scene2d) module.
 [vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles. An _extension_ of [style](style) module.
 
@@ -79,9 +80,9 @@ dependencies {
 }
 ```
 
-Note that defining `ktxVersion` is not necessary, as versions can be defined directly in the `dependencies` section.
-However, extracting the dependencies versions is a good practice, especially if they can be reused throughout the
-build files. This will speed up updating of your project if you include multiple KTX modules.
+Note that defining `ktxVersion` as a property is not necessary, as versions can be set directly in the `dependencies`
+section. However, extracting the dependencies versions is a good practice, especially if they can be reused throughout
+the build files. This will speed up updating of your project if you include multiple KTX modules.
 
 **KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
 
@@ -147,7 +148,7 @@ directly.
 
 ### Links
 
-[KTX wiki](https://github.com/libktx/ktx/wiki) lists some useful resources that can help you get started.
+[**KTX** wiki](https://github.com/libktx/ktx/wiki) lists some useful resources that can help you get started.
 
 Note that most official guides and examples in this repository assume that the reader is at least a bit familiar with
 the LibGDX API. If you are just getting to know the framework, it might be helpful to go through
