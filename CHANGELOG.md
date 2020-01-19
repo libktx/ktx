@@ -10,6 +10,7 @@
     - `containsProperty`
   - Added `shape` extension field to `MapObject`.
   - Added extension fields that ease extraction of basic properties from `TiledMap` and `MapObject`.
+ - **[FEATURE]** (`ktx-actors`) Added extensions for `touch` events like `touchDown` and `touchUp` to be able to react on actor presses and releases
 
 #### 1.9.10-b3
 

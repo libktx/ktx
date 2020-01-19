@@ -86,7 +86,7 @@ inline fun <Widget : Actor> Widget.onClickEvent(
  * @return [ClickListener] instance.
  */
 inline fun Actor.onTouchDown(crossinline listener: () -> Boolean): ClickListener {
-  val clickListener = object: ClickListener() {
+  val clickListener = object : ClickListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = listener()
   }
   this.addListener(clickListener)
@@ -99,7 +99,7 @@ inline fun Actor.onTouchDown(crossinline listener: () -> Boolean): ClickListener
  * @return [ClickListener] instance.
  */
 inline fun Actor.onTouchUp(crossinline listener: () -> Unit): ClickListener {
-  val clickListener = object: ClickListener() {
+  val clickListener = object : ClickListener() {
     override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = listener()
   }
   this.addListener(clickListener)
@@ -110,16 +110,20 @@ inline fun Actor.onTouchUp(crossinline listener: () -> Unit): ClickListener {
  * Attaches a [ClickListener] to this actor.
  * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
+ * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
  * @return [ClickListener] instance.
  */
 inline fun <Widget : Actor> Widget.onTouchEvent(
   crossinline downListener: (event: InputEvent, actor: Widget) -> Boolean,
-  crossinline upListener: (event: InputEvent, actor: Widget) -> Unit): ClickListener {
+  crossinline upListener: (event: InputEvent, actor: Widget) -> Unit
+): ClickListener {
   val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = downListener(event, this@onTouchEvent)
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = upListener(event, this@onTouchEvent)
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean =
+      downListener(event, this@onTouchEvent)
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
+      upListener(event, this@onTouchEvent)
   }
   this.addListener(clickListener)
   return clickListener
@@ -129,16 +133,20 @@ inline fun <Widget : Actor> Widget.onTouchEvent(
  * Attaches a [ClickListener] to this actor.
  * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
+ * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
  * @return [ClickListener] instance.
  */
 inline fun <Widget : Actor> Widget.onTouchEvent(
   crossinline downListener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Boolean,
-  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit): ClickListener {
+  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit
+): ClickListener {
   val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = downListener(event, this@onTouchEvent, x, y)
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = upListener(event, this@onTouchEvent, x, y)
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean =
+      downListener(event, this@onTouchEvent, x, y)
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
+      upListener(event, this@onTouchEvent, x, y)
   }
   this.addListener(clickListener)
   return clickListener
@@ -148,16 +156,20 @@ inline fun <Widget : Actor> Widget.onTouchEvent(
  * Attaches a [ClickListener] to this actor.
  * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
+ * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
  * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
  * @return [ClickListener] instance.
  */
 inline fun <Widget : Actor> Widget.onTouchEvent(
   crossinline downListener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Boolean,
-  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Unit): ClickListener {
+  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Unit
+): ClickListener {
   val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = downListener(event, this@onTouchEvent, x, y, pointer, button)
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = upListener(event, this@onTouchEvent, x, y, pointer, button)
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean =
+      downListener(event, this@onTouchEvent, x, y, pointer, button)
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
+      upListener(event, this@onTouchEvent, x, y, pointer, button)
   }
   this.addListener(clickListener)
   return clickListener
