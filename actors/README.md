@@ -144,21 +144,27 @@ button.onTouchUp {
 
 button.onTouchEvent(
   // If you need access to the original InputEvent, use this expanded method variant.
-  downListener = { inputEvent, actor -> println("$actor down by $inputEvent!"); true },
+  downListener = { inputEvent, actor -> println("$actor down by $inputEvent!") },
   upListener = { inputEvent, actor -> println("$actor up by $inputEvent!") }
 )
+// or with a single lambda. In this case you can use InputEvent.Type to distinguish between touchDown and touchUp
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent!") })
 
 button.onTouchEvent(
   // If you need access to the local actor coordinates, use this expanded method variant.
-  downListener = { inputEvent, actor, x, y -> println("$actor down by $inputEvent! at ($x, $y)"); true },
-  upListener = { inputEvent, actor, x, y -> println("$actor up by $inputEvent! at ($x, $y)")}
+  downListener = { inputEvent, actor, x, y -> println("$actor down by $inputEvent at ($x, $y)!") },
+  upListener = { inputEvent, actor, x, y -> println("$actor up by $inputEvent at ($x, $y)!")}
 )
+// or again as single lambda
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y)!") })
 
 button.onTouchEvent(
   // If you need access to the pointer and mouse button, use this expanded method variant.
-  downListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor down by $inputEvent! at ($x, $y) with pointer $pointer and mouseButton $mouseButton"); true },
-  upListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor up by $inputEvent! at ($x, $y) with pointer $pointer and mouseButton $mouseButton")}
+  downListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor down by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") },
+  upListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor up by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!")}
 )
+// or again as single lambda
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") })
 ```
 
 Adding an `EventListener` which consumes typed characters:
