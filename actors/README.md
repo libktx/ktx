@@ -27,6 +27,7 @@ a `Group` with `actor in group` syntax.
 
 - Lambda-compatible `Actor.onChange` method was added. Allows to listen to `ChangeEvents`.
 - Lambda-compatible `Actor.onClick` method was added. Attaches `ClickListeners`.
+- Lambda-compatible `Actor.onTouchDown` and `Actor.onTouchUp` methods were added. Attaches `ClickListeners`. 
 - Lambda-compatible `Actor.onKey` method was added. Allows to listen to `InputEvents` with `keyTyped` type.
 - Lambda-compatible `Actor.onKeyDown` and `Actor.onKeyUp` methods were added. They allow to listen to `InputEvents`
 with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see LibGDX `Keys` class).
@@ -34,7 +35,7 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
 - `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
 improvements (nullability data).
-- `onChangeEvent`, `onClickEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent` and
+- `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent` and
 `onKeyboardFocusEvent` `Actor` extension methods were added. They consume the relevant `Event` instances as lambda
 parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
 and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
@@ -131,6 +132,39 @@ label.onClickEvent { inputEvent, actor, x, y ->
   // If you need access to the local actor click coordinates, use this expanded method variant.
   println("$actor clicked by $inputEvent at ($x, $y)!")
 }
+
+button.onTouchDown {
+  println("Button down!")
+  true
+}
+
+button.onTouchUp {
+  println("Button up!")
+}
+
+button.onTouchEvent(
+  // If you need access to the original InputEvent, use this expanded method variant.
+  downListener = { inputEvent, actor -> println("$actor down by $inputEvent!") },
+  upListener = { inputEvent, actor -> println("$actor up by $inputEvent!") }
+)
+// or with a single lambda. In this case you can use InputEvent.Type to distinguish between touchDown and touchUp
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent!") })
+
+button.onTouchEvent(
+  // If you need access to the local actor coordinates, use this expanded method variant.
+  downListener = { inputEvent, actor, x, y -> println("$actor down by $inputEvent at ($x, $y)!") },
+  upListener = { inputEvent, actor, x, y -> println("$actor up by $inputEvent at ($x, $y)!")}
+)
+// or again as single lambda
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y)!") })
+
+button.onTouchEvent(
+  // If you need access to the pointer and mouse button, use this expanded method variant.
+  downListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor down by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") },
+  upListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor up by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!")}
+)
+// or again as single lambda
+button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") })
 ```
 
 Adding an `EventListener` which consumes typed characters:
