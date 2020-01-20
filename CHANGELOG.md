@@ -2,6 +2,7 @@
 
 - **[CHANGE]** (`ktx-collections`) `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
 - **[CHANGE]** (`ktx-collections`) `Array.transfer` is now less strict about typing.
+- **[FEATURE]** (`ktx-actors`) Added `onTouchDown`, `onTouchUp` and `onTouchEvent` extension methods that allow to attach `ClickListener` instances to actors.
 - **[FEATURE]** (`ktx-tiled`) Added a new KTX module: Tiled API extensions.
   - Added `contains` (`in`) and `set` (`[]`) operators support to `MapProperties`.
   - Added extension methods that simplify properties extraction from `MapLayer`, `MapObject`, `TiledMap`, `TiledMapTile` and `TiledMapTileSet`:
@@ -10,7 +11,6 @@
     - `containsProperty`
   - Added `shape` extension field to `MapObject`.
   - Added extension fields that ease extraction of basic properties from `TiledMap` and `MapObject`.
- - **[FEATURE]** (`ktx-actors`) Added extensions for `touch` events like `touchDown` and `touchUp` to be able to react on actor presses and releases
 
 #### 1.9.10-b3
 

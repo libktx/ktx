@@ -135,7 +135,6 @@ label.onClickEvent { inputEvent, actor, x, y ->
 
 button.onTouchDown {
   println("Button down!")
-  true
 }
 
 button.onTouchUp {
