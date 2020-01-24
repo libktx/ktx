@@ -1,6 +1,6 @@
 # KTX: math utilities
 
-Math extensions and operator overloads for LibGDX math API.
+Math extensions and operator overloads for LibGDX math API and Kotlin ranges.
 
 ### Why?
 
@@ -8,6 +8,9 @@ Java does not feature operator overloading, which leads to weird constructs like
 the possibility to use a much more readable and natural syntax with its operators overloading: `vector + a - b`. However,
 LibGDX API does not match Kotlin naming conventions (necessary for operators to work), which means extension functions
 are necessary to make it work like that.
+
+Kotlin also provides convenient syntax for ranges, which can be used for clearly describing criteria for selecting random
+numbers.
 
 ### Guide
 
@@ -166,6 +169,59 @@ new instances of matrices.
 - `Matrix4` instances can be multiplied with a `Vector3` using `*` operator.
 - `Matrix4` instances can be destructed into sixteen float variables (each representing one of its cells) thanks to the
 `component1()` - `component16()` operator functions.
+  
+#### Ranges
+
+- The `amid` infix function for Int and Float allows easy creation of a range by using a center and a tolerance. Such a 
+definition is a convenient way to think about a range from which random values will be selected.
+- The four arithmetic operators are available for easily shifting or scaling ranges. This allows intuitive modification 
+of ranges in code, which can be useful for code clarity when defining a range for random number selection, or for 
+rapidly iterating a design.
+- `IntRange.random(random: java.util.Random)` allows using a Java Random to select a number from the range, and is 
+provided in case there is a need to use the `MathUtils.random` instance or an instance of Gdx's fast RandomXS128.
+- `ClosedRange<Float>.random()` allows a evenly distributed random number to be selected from a range (but treating
+the `endInclusive` as exclusive for simplicity).
+- `ClosedRange<Float>.randomGaussian()` selectes a normally distributed value to be selected from the range, scaled so the
+range is six standard deviations wide.
+- `ClosedRange<Float>.randomTriangular()` allow easy selection of a triangularly distributed number from the range. A
+a `normalizedMode` can be passed for asymmetrical distributions.
+
+##### Usage examples
+
+Suppose there is a class that has a random behavior. Its can be constructed by passing several ranges to its constructor.
+
+```kotlin
+class CreatureSpawner(val spawnIntervalRange: ClosedRange<Float>) {
+  //...
+  fun update(dt: Float){
+    untilNext -= dt
+    while (untilNext <= 0){
+      untilNext += spawnIntervalRange.random()
+      spawnSomething()
+    }
+  }
+}
+```
+
+In a parent class, there are many of these instances set up. The ranges can be described intuitively:
+
+```kotlin
+val spawners = listOf(
+  //...
+  CreatureSpawner(0.5f amid 0.2f),
+  //...
+)
+```
+
+And as the design is iterated, the range can be adjusted quickly and intuitively by applying arithmetic operations:
+
+```kotlin
+val spawners = listOf(
+  //...
+  CreatureSpawner((0.5f amid 0.2f) * 1.2f + 0.1f),
+  //...
+)
+```
 
 ### Alternatives
 
