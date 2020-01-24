@@ -205,7 +205,6 @@ Iterating over map objects of a specific `MapLayer` of a map:
 import com.badlogic.gdx.maps.tiled.TiledMap
 import ktx.tiled.*
 
-
 val map: TiledMap = getTiledMap()
 
 // Creates collision bodies for every map object of the collision layer:
