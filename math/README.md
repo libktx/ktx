@@ -186,9 +186,10 @@ range is six standard deviations wide.
 - `ClosedRange<Float>.randomTriangular()` allow easy selection of a triangularly distributed number from the range. A
 a `normalizedMode` can be passed for asymmetrical distributions.
 
-##### Usage example
+##### Usage examples
 
 Suppose there is a class that has a random behavior. Its can be constructed by passing several ranges to its constructor.
+
 ```kotlin
 class CreatureSpawner(val spawnIntervalRange: ClosedRange<Float>) {
   //...
@@ -203,6 +204,7 @@ class CreatureSpawner(val spawnIntervalRange: ClosedRange<Float>) {
 ```
 
 In a parent class, there are many of these instances set up. The ranges can be described intuitively:
+
 ```kotlin
 val spawners = listOf(
   //...
@@ -212,6 +214,7 @@ val spawners = listOf(
 ```
 
 And as the design is iterated, the range can be adjusted quickly and intuitively by applying arithmetic operations:
+
 ```kotlin
 val spawners = listOf(
   //...

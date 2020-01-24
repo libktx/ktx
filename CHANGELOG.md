@@ -1,8 +1,14 @@
 #### 1.9.10-SNAPSHOT
 
+- **[FEATURE]** (`ktx-actors`) Added `onTouchDown`, `onTouchUp` and `onTouchEvent` extension methods that allow to attach `ClickListener` instances to actors.
 - **[CHANGE]** (`ktx-collections`) `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
 - **[CHANGE]** (`ktx-collections`) `Array.transfer` is now less strict about typing.
-- **[FEATURE]** (`ktx-actors`) Added `onTouchDown`, `onTouchUp` and `onTouchEvent` extension methods that allow to attach `ClickListener` instances to actors.
+- **[FEATURE]** (`ktx-math`) Added Kotlin ranges extensions that simplify creating ranges and rolling random numbers:
+    - `Int.amid`, `Float.amid`;
+    - `+`, `-`, `*` and `/` for ranges;
+    - `ClosedRange<Float>.random`, `IntRange.random`;
+    - `ClosedRange<Float>.randomGaussian`;
+    - `ClosedRange<Float>.randomTriangular`.
 - **[FEATURE]** (`ktx-tiled`) Added a new KTX module: Tiled API extensions.
   - Added `contains` (`in`) and `set` (`[]`) operators support to `MapProperties`.
   - Added extension methods that simplify properties extraction from `MapLayer`, `MapObject`, `TiledMap`, `TiledMapTile` and `TiledMapTileSet`:
