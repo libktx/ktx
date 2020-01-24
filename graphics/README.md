@@ -1,4 +1,4 @@
-# KTX : Graphics utilities
+# KTX: graphics utilities
 
 General utilities for handling LibGDX graphics-related API.
 
