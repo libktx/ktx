@@ -1,4 +1,4 @@
-#### 1.9.10-SNAPSHOT
+#### 1.9.10-b4
 
 - **[FEATURE]** (`ktx-actors`) Added `onTouchDown`, `onTouchUp` and `onTouchEvent` extension methods that allow to attach `ClickListener` instances to actors.
 - **[CHANGE]** (`ktx-collections`) `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
