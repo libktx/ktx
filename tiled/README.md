@@ -1,4 +1,4 @@
-# KTX : TiledMap utilities
+# KTX: Tiled map editor utilities
 
 [Tiled](https://www.mapeditor.org/) API utilities.
 
