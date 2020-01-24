@@ -1,7 +1,6 @@
 package ktx.math
 
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.RandomXS128
 import org.junit.Assert.*
 import org.junit.Test
 import kotlin.math.abs
@@ -60,25 +59,25 @@ class RangesTest {
   }
 
   @Test
-  fun `should produce expected random int values`() {
-    val seed = 615843L
-    val start = 45
-    val endInclusive = 30654
-    val count = 10000
-    val directValues = mutableListOf<Int>()
-    val rangeValues = mutableListOf<Int>()
-    with(java.util.Random(seed)) {
-      repeat(count) {
-        directValues += nextInt(1 + endInclusive - start) + start
-      }
+  fun `should produce uniform int distribution`() {
+    val count = 100000
+    val allowableError = 0.03f
+
+    val range = -4060..24500
+    val values = Array(count) {
+      range.random(MathUtils.random)
     }
-    val range = start..endInclusive
-    with(java.util.Random(seed)) {
-      repeat(count) {
-        rangeValues += range.random(this)
-      }
-    }
-    assertEquals(directValues, rangeValues)
+
+    val numInnerRanges = 5
+    val expectedCountEach = count / numInnerRanges.toFloat()
+    (range step ((range.last - range.first) / numInnerRanges))
+        .zipWithNext()
+        .map { it.first until it.second }
+        .forEach { innerRange ->
+          val innerCount = values.count { it in innerRange }
+          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+        }
+    assert(values.all { it in range })
   }
 
   @Test
@@ -130,24 +129,25 @@ class RangesTest {
   }
 
   @Test
-  fun `should produce expected random float values`() {
-    val seed = 15658L
-    val start = 3f
-    val end = 45000f
-    val count = 10000
-    val directValues = mutableListOf<Float>()
-    val rangeValues = mutableListOf<Float>()
-    with(RandomXS128(seed)) {
-      repeat(count) {
-        directValues += nextFloat() * (end - start) + start
-      }
+  fun `should produce uniform float distribution`() {
+    val count = 100000
+    val allowableError = 0.03f
+
+    val range = -4060f..24500f
+    val values = Array(count) {
+      range.random()
     }
-    MathUtils.random = RandomXS128(seed)
-    val range = start..end
-    repeat(count) {
-      rangeValues += range.random()
-    }
-    assertEquals(directValues, rangeValues)
+
+    val numInnerRanges = 5
+    val expectedCountEach = count / numInnerRanges.toFloat()
+    List(numInnerRanges + 1) { it * (range.endInclusive - range.start) / numInnerRanges + range.start }
+        .zipWithNext()
+        .map { it.first..it.second }
+        .forEach { innerRange ->
+          val innerCount = values.count { it in innerRange }
+          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+        }
+    assert(values.all { it in range })
   }
 
   @Test
@@ -193,19 +193,15 @@ class RangesTest {
     val center = 0.5 * (range.endInclusive + range.start)
     val beforeModeSpan = center - range.start
     val afterModeSpan = range.endInclusive - center
-    val rangesToExpectedProbabilities =
-        listOf(0.2f, 0.4f, 0.6f, 0.8f)
-            .map { fraction ->
-              val checkRange = (beforeModeSpan * fraction + range.start)..(range.endInclusive - afterModeSpan * fraction)
-              val leftTriangleBase = checkRange.start - range.start
-              val leftTriangleArea = 0.5f * leftTriangleBase * (2 * leftTriangleBase / (span * beforeModeSpan))
-              val probability = 1f - leftTriangleArea * 2
-              checkRange to probability
-            }
-    for ((checkRange, probability) in rangesToExpectedProbabilities) {
-      var result = values.count { it in checkRange }.toFloat() / count
+    for (fraction in listOf(0.2f, 0.4f, 0.6f, 0.8f)) {
+      val innerRange = (beforeModeSpan * fraction + range.start)..(range.endInclusive - afterModeSpan * fraction)
+      val leftTriangleBase = innerRange.start - range.start
+      val leftTriangleArea = 0.5f * leftTriangleBase * (2 * leftTriangleBase / (span * beforeModeSpan))
+      val probability = 1f - leftTriangleArea * 2
+      val result = values.count { it in innerRange }.toFloat() / count
       assert(abs(result - probability) / probability <= allowableError)
     }
+    assert(values.all { it in range })
   }
 
   @Test
@@ -223,22 +219,18 @@ class RangesTest {
     val expectedMode = fractionalMode * (range.endInclusive - range.start) + range.start
     val beforeModeSpan = expectedMode - range.start
     val afterModeSpan = range.endInclusive - expectedMode
-    val rangesToExpectedProbabilities =
-        listOf(0.2f, 0.4f, 0.6f, 0.8f)
-            .map { fraction ->
-              // For simplicity, all checked ranges span the mode
-              val checkRange = (beforeModeSpan * fraction + range.start)..(range.endInclusive - afterModeSpan * fraction)
-              val leftTriangleBase = checkRange.start - range.start
-              val leftTriangleArea = 0.5f * leftTriangleBase * (2 * leftTriangleBase / (span * beforeModeSpan))
-              val rightTriangleBase = range.endInclusive - checkRange.endInclusive
-              val rightTriangleArea = 0.5f * rightTriangleBase * (2 * rightTriangleBase / (span * afterModeSpan))
-              val probability = 1f - leftTriangleArea - rightTriangleArea
-              checkRange to probability
-            }
-    for ((checkRange, probability) in rangesToExpectedProbabilities) {
-      var result = values.count { it in checkRange }.toFloat() / count
+    for (fraction in listOf(0.2f, 0.4f, 0.6f, 0.8f)) {
+      // For simplicity, all checked ranges span the mode
+      val innerRange = (beforeModeSpan * fraction + range.start)..(range.endInclusive - afterModeSpan * fraction)
+      val leftTriangleBase = innerRange.start - range.start
+      val leftTriangleArea = 0.5f * leftTriangleBase * (2 * leftTriangleBase / (span * beforeModeSpan))
+      val rightTriangleBase = range.endInclusive - innerRange.endInclusive
+      val rightTriangleArea = 0.5f * rightTriangleBase * (2 * rightTriangleBase / (span * afterModeSpan))
+      val probability = 1f - leftTriangleArea - rightTriangleArea
+      val result = values.count { it in innerRange }.toFloat() / count
       assert(abs(result - probability) / probability <= allowableError)
     }
+    assert(values.all { it in range })
   }
 
 }
