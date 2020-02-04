@@ -34,10 +34,16 @@ val Dispatchers.KTX
   get() = MainDispatcher
 
 /**
- * Creates a coroutine scope in the rendering thread with a supervisor job. An alternative to the global [KtxAsync].
+ * Creates a coroutine scope in the rendering thread with a supervisor job. Allows to manage multiple
+ * tasks executed on the main rendering thread within a single scope, providing mass actions such
+ * as task cancelling that do not affect other scopes.
+ *
+ * An alternative to direct usage of the global [KtxAsync].
+ *
+ * @see kotlinx.coroutines.MainScope
  */
 @Suppress("FunctionName")
-fun RenderScope() = CoroutineScope(SupervisorJob() + MainDispatcher)
+fun RenderingScope() = CoroutineScope(SupervisorJob() + MainDispatcher)
 
 /**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with a single thread to execute tasks

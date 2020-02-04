@@ -195,7 +195,7 @@ class KtxAsyncTest : AsyncTest() {
   @Test
   fun `should create non-global scope`() {
     // Given:
-    val scope = RenderScope()
+    val scope = RenderingScope()
     val localJob = scope.launch {
       while (true) {
         delay(50)
@@ -214,5 +214,4 @@ class KtxAsyncTest : AsyncTest() {
     assert(localJob.isCancelled)
     assert(globalJob.isActive)
   }
-
 }
