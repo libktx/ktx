@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.cancel
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.CompletableFuture
@@ -190,4 +191,28 @@ class KtxAsyncTest : AsyncTest() {
     assertNotSame(getMainRenderingThread(), executionThread.join())
     assertFalse(isOnRenderingThread.get())
   }
+
+  @Test
+  fun `should create non-global scope`() {
+    // Given:
+    val scope = RenderScope()
+    val localJob = scope.launch {
+      while (true) {
+        delay(50)
+      }
+    }
+    val globalJob = KtxAsync.launch {
+      while (true) {
+        delay(50)
+      }
+    }
+
+    // When:
+    scope.cancel()
+
+    // Then:
+    assert(localJob.isCancelled)
+    assert(globalJob.isActive)
+  }
+
 }
