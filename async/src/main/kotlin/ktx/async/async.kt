@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.resume
 
@@ -31,6 +32,12 @@ object KtxAsync : CoroutineScope {
 @Suppress("unused")
 val Dispatchers.KTX
   get() = MainDispatcher
+
+/**
+ * Creates a coroutine scope in the rendering thread with a supervisor job. An alternative to the global [KtxAsync].
+ */
+@Suppress("FunctionName")
+fun RenderScope() = CoroutineScope(SupervisorJob() + MainDispatcher)
 
 /**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with a single thread to execute tasks

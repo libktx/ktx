@@ -50,6 +50,9 @@ Before using `KtxAsync` scope, make sure to call `KtxAsync.initiate()` on the ma
 strictly required if immediate dispatcher is not used, but as a rule of thumb, you should invoke this method in `create`
 of your `ApplicationListener`.
 
+The `RenderScope()` factory function is the KTX rendering-thread version of `MainScope()`. It creates a scope to launch
+coroutines in the rendering thread and that has a supervisor job so the whole scope can be cancelled at once.
+
 KTX providers 2 main implementations of coroutine dispatchers:
 
 * `RenderingThreadDispatcher`: executes tasks on the main rendering thread. Available via `Dispatchers.KTX`. Default
@@ -298,6 +301,28 @@ fun withCancel() {
         println("Should not execute this.")
     }
     job.cancel()
+}
+```
+
+Creating a coroutine scope to confine jobs' lives to a specific class:
+
+```Kotlin
+import kotlinx.coroutines.launch
+import ktx.async.httpRequest
+import ktx.async.RenderScope
+
+class MyScreen: Screen, CoroutineScope by RenderScope() {
+
+    //...
+
+    override fun hide() {
+        cancel() // cancel any running coroutines when leaving screen
+    }
+    
+    private fun loadSomething() = launch { // Start coroutine in this screen's scope
+        val result = httpRequest(url = "https://example.com")
+        webResultLabel.text = result.contentAsString
+    }
 }
 ```
 
