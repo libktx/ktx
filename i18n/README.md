@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-i18n.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-i18n)
+
 # KTX: internationalization utilities
 
 `I18NBundle` utilities.

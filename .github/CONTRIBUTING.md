@@ -146,6 +146,12 @@ should generally consist of the following sections:
   - _Synergy_ - is the module complemented by any other KTX libraries?
   - _Alternatives_ - are there any other libraries or modules that can be used instead?
   - _Additional documentation_ - are there any other guides or articles on the topic?
+- Add _Maven Central_ badge to the top of the `README.md` to ease inclusion of the library:
+
+```markdown
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-your-module.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-your-module)
+```
+
 - Your final module structure should roughly match this schema:
 
 ```

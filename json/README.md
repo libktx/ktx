@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-json.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-json)
+
 # KTX: JSON serialization utilities
 
 Extension methods for LibGDX JSON serialization API.

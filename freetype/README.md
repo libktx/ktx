@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-freetype.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-freetype)
+
 # KTX: FreeType font utilities
 
 A tiny modules that makes it easier to use [`gdx-freetype`](https://github.com/libgdx/libgdx/wiki/Gdx-freetype) library.

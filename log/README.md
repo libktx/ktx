@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-log.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-log)
+
 # KTX: logging
 
 Minimal overhead logging for LibGDX applications.

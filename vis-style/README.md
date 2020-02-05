@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-vis-style.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-vis-style)
+
 # KTX: VisUI style builders
 
 Type-safe builders of **VisUI** widget styles.

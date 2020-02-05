@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-collections.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-collections)
+
 # KTX: collection utilities
 
 Utilities and extension function for custom LibGDX collections.

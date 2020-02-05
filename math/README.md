@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-math.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-math)
+
 # KTX: math utilities
 
 Math extensions and operator overloads for LibGDX math API and Kotlin ranges.

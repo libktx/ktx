@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-graphics.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-graphics)
+
 # KTX: graphics utilities
 
 General utilities for handling LibGDX graphics-related API.

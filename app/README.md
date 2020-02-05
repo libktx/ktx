@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-app)
+
 # KTX: basic application utilities
 
 Basic `ApplicationListener` implementations and general LibGDX utilities.

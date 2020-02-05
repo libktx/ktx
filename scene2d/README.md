@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-scene2d.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-scene2d)
+
 # KTX: `Scene2D` type-safe builders
 
 Utilities for creating `Scene2D` widgets using Kotlin type-safe builders.
