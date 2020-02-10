@@ -118,7 +118,7 @@ open class Context : Disposable {
    * @see bind
    * @see bindSingleton
    */
-  inline fun register(init: Context.() -> Unit): Context {
+   fun register(init: Context.() -> Unit): Context {
     this.init()
     return this
   }

@@ -1,6 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[MISC]** (`ktx-inject`) `Context.register` is not inlined anymore, so it can be mocked in tests and the bindings lambda stops being run.
 
 #### 1.9.10-b4
 
