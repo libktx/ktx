@@ -1,9 +1,12 @@
 package ktx.math
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import org.junit.Assert.*
 import org.junit.Test
 import kotlin.math.abs
+import kotlin.random.Random
+import kotlin.random.Random.Default
 
 /**
  * Tests [ClosedRange]-related utilities.
@@ -71,12 +74,12 @@ class RangesTest {
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
     (range step ((range.last - range.first) / numInnerRanges))
-        .zipWithNext()
-        .map { it.first until it.second }
-        .forEach { innerRange ->
-          val innerCount = values.count { it in innerRange }
-          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
-        }
+      .zipWithNext()
+      .map { it.first until it.second }
+      .forEach { innerRange ->
+        val innerCount = values.count { it in innerRange }
+        assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+      }
     assert(values.all { it in range })
   }
 
@@ -141,12 +144,12 @@ class RangesTest {
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
     List(numInnerRanges + 1) { it * (range.endInclusive - range.start) / numInnerRanges + range.start }
-        .zipWithNext()
-        .map { it.first..it.second }
-        .forEach { innerRange ->
-          val innerCount = values.count { it in innerRange }
-          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
-        }
+      .zipWithNext()
+      .map { it.first..it.second }
+      .forEach { innerRange ->
+        val innerCount = values.count { it in innerRange }
+        assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+      }
     assert(values.all { it in range })
   }
 
@@ -171,9 +174,9 @@ class RangesTest {
     }
 
     val resultsToExpected = listOf(
-        withinRange.toFloat() / count to 0.9973f,
-        withinFourSigma.toFloat() / count to 0.9545f,
-        withinTwoSigma.toFloat() / count to 0.6827f)
+      withinRange.toFloat() / count to 0.9973f,
+      withinFourSigma.toFloat() / count to 0.9545f,
+      withinTwoSigma.toFloat() / count to 0.6827f)
     for ((result, expected) in resultsToExpected) {
       assert(abs(result - expected) / expected <= allowableError)
     }
@@ -231,5 +234,19 @@ class RangesTest {
       assert(abs(result - probability) / probability <= allowableError)
     }
     assert(values.all { it in range })
+  }
+
+  @Test
+  fun `should interpolate`() {
+    val start = Random.nextFloat()
+    val end = Random.nextFloat()
+    val progress = Random.nextFloat()
+    val range = start..end
+    val expectedLinear = (end - start) * progress + start
+    assertEquals(range.lerp(progress), expectedLinear)
+
+    val interpolation = Interpolation.exp10
+    val expectedInterpolated = (end - start) * interpolation.apply(progress) + start
+    assertEquals(range.interpolate(progress, interpolation), expectedInterpolated)
   }
 }
