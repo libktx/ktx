@@ -135,7 +135,7 @@ fun ClosedRange<Float>.randomTriangular(normalizedMode: Float) =
  *
  * @param progress The position to interpolate, where 0 corresponds with [ClosedRange.start] and 1 corresponds with
  * [ClosedRange.endInclusive].
- * @return The intepolated value.
+ * @return The interpolated value.
  */
 fun ClosedRange<Float>.lerp(progress: Float) =
   progress * (endInclusive - start) + start
@@ -146,7 +146,7 @@ fun ClosedRange<Float>.lerp(progress: Float) =
  * @param progress The position to interpolate, where 0 corresponds with [ClosedRange.start] and 1 corresponds with
  * [ClosedRange.endInclusive].
  * @param interpolation The function to interpolate with.
- * @return The intepolated value.
+ * @return The interpolated value.
  */
 fun ClosedRange<Float>.interpolate(progress: Float, interpolation: Interpolation) =
   interpolation.apply(progress) * (endInclusive - start) + start
