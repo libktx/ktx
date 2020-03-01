@@ -237,16 +237,21 @@ class RangesTest {
   }
 
   @Test
-  fun `should interpolate`() {
-    val start = Random.nextFloat()
-    val end = Random.nextFloat()
-    val progress = Random.nextFloat()
+  fun `should lerp`() {
+    val start = 150f
+    val end = 300f
+    val progress = 0.75f
     val range = start..end
-    val expectedLinear = (end - start) * progress + start
-    assertEquals(range.lerp(progress), expectedLinear)
+    assert(range.lerp(progress) in 262.5f amid 0.000001f)
+  }
 
-    val interpolation = Interpolation.exp10
-    val expectedInterpolated = (end - start) * interpolation.apply(progress) + start
-    assertEquals(range.interpolate(progress, interpolation), expectedInterpolated)
+  @Test
+  fun `should interpolate`() {
+    val start = 0f
+    val end = 1f
+    val progress = 0.5f
+    val range = start..end
+    println(range.interpolate(progress, Interpolation.sineOut))
+    assert(range.interpolate(progress, Interpolation.sineOut) in 0.7071f amid 0.001f)
   }
 }
