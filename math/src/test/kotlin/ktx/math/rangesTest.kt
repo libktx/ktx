@@ -235,12 +235,14 @@ class RangesTest {
   }
 
   @Test
-  fun `should lerp`() {
+  fun `should interpolate linearly`() {
     val start = 150f
     val end = 300f
     val progress = 0.75f
+
     val range = start..end
-    assertEquals(null, range.lerp(progress), 262.5f, 0.000001f)
+
+    assertEquals(range.lerp(progress), 262.5f, 0.000001f)
   }
 
   @Test
@@ -248,7 +250,9 @@ class RangesTest {
     val start = 0f
     val end = 1f
     val progress = 0.5f
+
     val range = start..end
-    assertEquals(null, range.interpolate(progress, Interpolation.sineOut), 0.7071f, 0.001f)
+
+    assertEquals(range.interpolate(progress, Interpolation.sineOut), 0.7071f, 0.001f)
   }
 }

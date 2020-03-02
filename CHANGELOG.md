@@ -1,7 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
-- **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for Float ranges.
+- **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
 
 #### 1.9.10-b4
 
