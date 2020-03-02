@@ -187,6 +187,8 @@ the `endInclusive` as exclusive for simplicity).
 range is six standard deviations wide.
 - `ClosedRange<Float>.randomTriangular()` allow easy selection of a triangularly distributed number from the range. A
 a `normalizedMode` can be passed for asymmetrical distributions.
+- `ClosedRange<Float>.lerp(Float)` linearly interpolates between the ends of a range.
+- `ClosedRange<Float>.interpolate(Float, Interpolation)` interpolates between the ends of a range using an Interpolation.
 
 ##### Usage examples
 
