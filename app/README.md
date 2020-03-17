@@ -27,7 +27,7 @@ to override.
 #### `InputProcessor` implementations
 
 - `KtxInputAdapter` is an interface extending `InputProcessor`. Provides no-op implementations of all methods, without
-being an abstract class like `com.badlogic.gdx.InputAdapter`.
+being a class like `com.badlogic.gdx.InputAdapter`.
 
 #### Miscellaneous utilities
 
