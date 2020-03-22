@@ -43,6 +43,7 @@ Project contributors listed chronologically.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
   * Author of the [Tiled](../tiled) module.
+  * Contributed [actors](../actors) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
@@ -53,7 +54,8 @@ Project contributors listed chronologically.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
-  * Contributed to numerous utilities in [actors](../actors), [collections](../collections) and [graphics](../graphics) modules.
+  * Contributed to numerous utilities in [actors](../actors), [async](../async), [collections](../collections),
+  [graphics](../graphics) and [math](../math) modules.
   * Added `AssetGroup` API to [assets](../assets).
 * [@jakewilson](https://github.com/jakewilson)
   * Added utilities to [graphics module](../graphics).

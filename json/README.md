@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-json.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-json)
+
 # KTX: JSON serialization utilities
 
 Extension methods for LibGDX JSON serialization API.
@@ -32,16 +34,21 @@ signatures and inlined reified type parameters to avoid passing `Class` instance
 A comparison of the APIs when used from Kotlin:
 
 ```kotlin
+import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.Json
 import ktx.json.fromJson
 
-val json = Json()
+class MyClass
 
-// Using LibGDX API designed for Java:
-json.fromJson(MyClass::class.java, file)
+fun deserialize(file: FileHandle): MyClass {
+  val json = Json()
 
-// Using KTX Kotlin extensions:
-json.fromJson<MyClass>(file)
+  // Using LibGDX API designed for Java:
+  return json.fromJson(MyClass::class.java, file)
+
+  // Using KTX Kotlin extensions:
+  return json.fromJson<MyClass>(file) 
+}
 ```
 
 #### Usage examples
@@ -49,36 +56,65 @@ json.fromJson<MyClass>(file)
 Creating a new `Json` serializer instance with custom parameters:
 
 ```kotlin
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.JsonValue
 import ktx.json.*
 
-val json = Json()
+class Card
+data class Player(var cards: GdxArray<Card>)
 
-// Add shorthands for two classes:
-json.addClassTag<Vector2>("vec2")
-json.addClassTag<Color>("color")
+fun getSerializer(): Json {
+  val json = Json()
 
-// Set the type of elements in the "cards" collection of Player objects:
-json.setElementType<Player, Card>("cards")
+  // Add shorthands for two classes:
+  json.addClassTag<Vector2>("vec2")
+  json.addClassTag<Color>("color")
 
-// Add a custom serializer for Vector2:
-json.setSerializer(object : Json.Serializer<Vector2>() { /* ... */ })
+  // Set the type of elements in the "cards" collection of Player objects:
+  json.setElementType<Player, Card>("cards")
+
+  // Add a custom serializer for Vector2:
+  json.setSerializer(object : Json.Serializer<Vector2> {
+    override fun write(json: Json, vector: Vector2, knownType: Class<*>) {
+      json.writeObjectStart()
+      json.writeValue("x", vector.x)
+      json.writeValue("y", vector.y)
+      json.writeObjectEnd()
+    }
+
+    override fun read(json: Json, jsonData: JsonValue, type: Class<*>): Vector2 {
+      val vector2 = Vector2()
+      vector2.x = jsonData.getFloat("x")
+      vector2.y = jsonData.getFloat("y")
+      return vector2
+    }
+  })
+
+  return json
+}
 ```
 
 A class with custom serializable implementation:
 
 ```kotlin
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.JsonValue
 import ktx.json.*
 
+class Card
+
 class Player(
-    var position: Vector2 = Vector2(),
-    var cards: List<Card> = emptyList()
-  ) : Json.Serializable {
+  var position: Vector2 = Vector2(),
+  var cards: List<Card> = emptyList()
+) : Json.Serializable {
 
   override fun read(json: Json, jsonData: JsonValue) {
-    pos = json.readValue("position", jsonData)  // Type inference.
-    cards = json.readArrayValue("cards", jsonData)  // Type inference, better type safety.
+    position = json.readValue(jsonData, "position")  // Type inference.
+    cards = json.readArrayValue(jsonData, "cards")  // Type inference, better type safety.
   }
 
   override fun write(json: Json) {
@@ -110,7 +146,7 @@ import ktx.json.*
 
 class Vector2AsArraySerializer: JsonSerializer<Vector2> {
   override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): Vector2
-      = jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
+    = jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
 
   override fun write(json: Json, value: Vector2, type: Class<*>?) {
     json.writeArrayStart()
@@ -121,12 +157,13 @@ class Vector2AsArraySerializer: JsonSerializer<Vector2> {
 }
 
 // A read-only serializer can be created with a simple lambda expression:
-val vector2AsArraySerializer = readOnlySerializer<Vector2> {
-  it.asFloatArray().let { (x, y) -> Vector2(x, y) }
+val vector2AsArraySerializer = readOnlySerializer<Vector2> { jsonValue ->
+  jsonValue.asFloatArray().let { (x, y) -> Vector2(x, y) }
 }
 
-val json = Json()
-json.setSerializer(Vector2AsArraySerializer())
+val json = Json().apply {
+  setSerializer(vector2AsArraySerializer)
+}
 
 val player: Player = json.fromJson("""{
     "pos": [10, 10]

@@ -1,4 +1,6 @@
-# KTX : TiledMap utilities
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-tiled.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-tiled)
+
+# KTX: Tiled map editor utilities
 
 [Tiled](https://www.mapeditor.org/) API utilities.
 
@@ -204,7 +206,6 @@ Iterating over map objects of a specific `MapLayer` of a map:
 ```kotlin
 import com.badlogic.gdx.maps.tiled.TiledMap
 import ktx.tiled.*
-
 
 val map: TiledMap = getTiledMap()
 

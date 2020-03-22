@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-freetype-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-freetype-async)
+
 # Warning
 
 As of the `1.9.9-b1` version, the `ktx-freetype-async` module is **disabled**, since `AssetStorage` was removed

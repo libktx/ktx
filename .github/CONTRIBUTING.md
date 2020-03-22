@@ -53,6 +53,17 @@ and _Sonatype_ logging data.
 case of a non-snapshot upload to _Maven Central_. Might fail at times on the promotion task; running `promoteRepository`
 separately usually fixes the issue.
 
+Note that since [Dokka](https://github.com/Kotlin/dokka) is used to generate documentation archives, Java 8 is required
+to fully build the libraries due to a [Dokka bug](https://github.com/Kotlin/dokka/issues/294). If you prefer to develop
+the library using JDK 11, you can still install JDK 8 alongside 11 and run specific tasks with Java 8:
+
+```bash
+./gradlew clean test jar
+# Pass the correct path to JDK 8:
+./gradlew -Dorg.gradle.java.home=/usr/lib/jvm/java-1.8.0-openjdk-amd64 dokkaJavadoc
+./gradlew uploadArchives
+```
+
 ### Versioning and uploading
 
 #### Stable release
@@ -135,6 +146,12 @@ should generally consist of the following sections:
   - _Synergy_ - is the module complemented by any other KTX libraries?
   - _Alternatives_ - are there any other libraries or modules that can be used instead?
   - _Additional documentation_ - are there any other guides or articles on the topic?
+- Add _Maven Central_ badge to the top of the `README.md` to ease inclusion of the library:
+
+```markdown
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-your-module.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-your-module)
+```
+
 - Your final module structure should roughly match this schema:
 
 ```

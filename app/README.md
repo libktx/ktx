@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-app)
+
 # KTX: basic application utilities
 
 Basic `ApplicationListener` implementations and general LibGDX utilities.
@@ -25,7 +27,7 @@ to override.
 #### `InputProcessor` implementations
 
 - `KtxInputAdapter` is an interface extending `InputProcessor`. Provides no-op implementations of all methods, without
-being an abstract class like `com.badlogic.gdx.InputAdapter`.
+being a class like `com.badlogic.gdx.InputAdapter`.
 
 #### Miscellaneous utilities
 

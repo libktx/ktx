@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-assets.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-assets)
+
 # KTX: assets management
 
 Utilities for management of assets and heavy resources.

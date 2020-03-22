@@ -1,7 +1,19 @@
 #### 1.9.10-SNAPSHOT
 
+- **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
+
+#### 1.9.10-b4
+
+- **[FEATURE]** (`ktx-actors`) Added `onTouchDown`, `onTouchUp` and `onTouchEvent` extension methods that allow to attach `ClickListener` instances to actors.
 - **[CHANGE]** (`ktx-collections`) `Array.removeAll` and `retainAll` now return a boolean if any elements were removed.
 - **[CHANGE]** (`ktx-collections`) `Array.transfer` is now less strict about typing.
+- **[FEATURE]** (`ktx-math`) Added Kotlin ranges extensions that simplify creating ranges and rolling random numbers:
+    - `Int.amid`, `Float.amid`;
+    - `+`, `-`, `*` and `/` for ranges;
+    - `ClosedRange<Float>.random`, `IntRange.random`;
+    - `ClosedRange<Float>.randomGaussian`;
+    - `ClosedRange<Float>.randomTriangular`.
 - **[FEATURE]** (`ktx-tiled`) Added a new KTX module: Tiled API extensions.
   - Added `contains` (`in`) and `set` (`[]`) operators support to `MapProperties`.
   - Added extension methods that simplify properties extraction from `MapLayer`, `MapObject`, `TiledMap`, `TiledMapTile` and `TiledMapTileSet`:
@@ -10,7 +22,6 @@
     - `containsProperty`
   - Added `shape` extension field to `MapObject`.
   - Added extension fields that ease extraction of basic properties from `TiledMap` and `MapObject`.
- - **[FEATURE]** (`ktx-actors`) Added extensions for `touch` events like `touchDown` and `touchUp` to be able to react on actor presses and releases
 
 #### 1.9.10-b3
 

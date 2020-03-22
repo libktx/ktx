@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-actors.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-actors)
+
 # KTX: general `Scene2D` utilities
 
 Extensions and utilities for stages, actors, actions and event listeners.
@@ -135,7 +137,6 @@ label.onClickEvent { inputEvent, actor, x, y ->
 
 button.onTouchDown {
   println("Button down!")
-  true
 }
 
 button.onTouchUp {
