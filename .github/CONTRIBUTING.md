@@ -55,9 +55,9 @@ separately usually fixes the issue.
 
 Note that since [Dokka](https://github.com/Kotlin/dokka) is used to generate documentation archives, Java 8 is required
 to fully build the libraries due to a [Dokka bug](https://github.com/Kotlin/dokka/issues/294). If you prefer to develop
-the library using JDK 11, you can still install JDK 8 alongside 11 and run specific tasks with Java 8:
+the library using JDK 11 or newer, you can still install JDK 8 alongside 11 and run specific tasks with Java 8:
 
-```bash
+```bsh
 ./gradlew clean test jar
 # Pass the correct path to JDK 8:
 ./gradlew -Dorg.gradle.java.home=/usr/lib/jvm/java-1.8.0-openjdk-amd64 dokkaJavadoc
