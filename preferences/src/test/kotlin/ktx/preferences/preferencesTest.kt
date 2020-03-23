@@ -1,65 +1,87 @@
 package ktx.preferences
 
 import com.badlogic.gdx.Preferences
-import com.badlogic.gdx.utils.ObjectMap
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
+import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.ObjectSet
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+
+private class TestPreferences : Preferences {
+  private val map = HashMap<String, Any>()
+  var flushed = false
+
+  override fun contains(key: String) = map.containsKey(key)
+
+  override fun getBoolean(key: String) = map[key] as Boolean
+
+  override fun getBoolean(key: String, defValue: Boolean) = map.getOrDefault(key, defValue) as Boolean
+
+  override fun clear() = map.clear()
+
+  override fun putLong(key: String, value: Long): Preferences {
+    map[key] = value
+    return this
+  }
+
+  override fun put(vals: MutableMap<String, *>): Preferences {
+    vals.forEach { map[it.key] = it.value as Any }
+    return this
+  }
+
+  override fun putInteger(key: String, value: Int): Preferences {
+    map[key] = value
+    return this
+  }
+
+  override fun remove(key: String) {
+    map.remove(key)
+  }
+
+  override fun putBoolean(key: String, value: Boolean): Preferences {
+    map[key] = value
+    return this
+  }
+
+  override fun flush() {
+    flushed = true
+  }
+
+  override fun getInteger(key: String) = map[key] as Int
+
+  override fun getInteger(key: String, defValue: Int) = map.getOrDefault(key, defValue) as Int
+
+  override fun getLong(key: String) = map[key] as Long
+
+  override fun getLong(key: String, defValue: Long) = map.getOrDefault(key, defValue) as Long
+
+  override fun getFloat(key: String) = map[key] as Float
+
+  override fun getFloat(key: String, defValue: Float) = map.getOrDefault(key, defValue) as Float
+
+  override fun putFloat(key: String, value: Float): Preferences {
+    map[key] = value
+    return this
+  }
+
+  override fun getString(key: String) = map[key] as String
+
+  override fun getString(key: String, defValue: String) = map.getOrDefault(key, defValue) as String
+
+  override fun get(): MutableMap<String, *> = map
+
+  override fun putString(key: String, value: String): Preferences {
+    map[key] = value
+    return this
+  }
+}
 
 class PreferencesTest {
-  private lateinit var preferences: Preferences
-  private val map = ObjectMap<String, Any>()
+  private lateinit var preferences: TestPreferences
 
   @Before
   fun `setup preferences`() {
-    preferences = Mockito.mock(Preferences::class.java)
-    Mockito.`when`(preferences.contains(any())).then { invocation ->
-      return@then map.containsKey(invocation.getArgument(0))
-    }
-    // string
-    Mockito.`when`(preferences.putString(any(), any())).then { invocation ->
-      map.put(invocation.getArgument(0), invocation.getArgument(1))
-      return@then preferences
-    }
-    Mockito.`when`(preferences.getString(any())).then { invocation ->
-      return@then map.get(invocation.getArgument(0))
-    }
-    // boolean
-    Mockito.`when`(preferences.putBoolean(any(), any())).then { invocation ->
-      map.put(invocation.getArgument(0), invocation.getArgument(1))
-      return@then preferences
-    }
-    Mockito.`when`(preferences.getBoolean(any())).then { invocation ->
-      return@then map.get(invocation.getArgument(0))
-    }
-    // integer
-    Mockito.`when`(preferences.putInteger(any(), any())).then { invocation ->
-      map.put(invocation.getArgument(0), invocation.getArgument(1))
-      return@then preferences
-    }
-    Mockito.`when`(preferences.getInteger(any())).then { invocation ->
-      return@then map.get(invocation.getArgument(0))
-    }
-    // float
-    Mockito.`when`(preferences.putFloat(any(), any())).then { invocation ->
-      map.put(invocation.getArgument(0), invocation.getArgument(1))
-      return@then preferences
-    }
-    Mockito.`when`(preferences.getFloat(any())).then { invocation ->
-      return@then map.get(invocation.getArgument(0))
-    }
-    // long
-    Mockito.`when`(preferences.putLong(any(), any())).then { invocation ->
-      map.put(invocation.getArgument(0), invocation.getArgument(1))
-      return@then preferences
-    }
-    Mockito.`when`(preferences.getLong(any())).then { invocation ->
-      return@then map.get(invocation.getArgument(0))
-    }
+    preferences = TestPreferences()
   }
 
   @Test
@@ -103,13 +125,72 @@ class PreferencesTest {
   }
 
   @Test
+  fun `put values as pairs`() {
+    preferences.set("Key1" to "Value")
+    preferences.set("Key2" to 1)
+
+    Assert.assertEquals("Value", preferences.getString("Key1"))
+    Assert.assertEquals(1, preferences.getInteger("Key2"))
+  }
+
+  @Test(expected = GdxRuntimeException::class)
+  fun `put unsupported value`() {
+    preferences["Key"] = ObjectSet<Any>()
+  }
+
+  @Test
+  fun `get string value`() {
+    preferences["Key"] = "Value"
+
+    val result: String = preferences["Key"]
+
+    Assert.assertEquals("Value", result)
+  }
+
+  @Test
+  fun `get boolean value`() {
+    preferences["Key"] = true
+
+    val result: Boolean = preferences["Key"]
+
+    Assert.assertEquals(true, result)
+  }
+
+  @Test
+  fun `get int value`() {
+    preferences["Key"] = 1
+
+    val result: Int = preferences["Key"]
+
+    Assert.assertEquals(1, result)
+  }
+
+  @Test
+  fun `get float value`() {
+    preferences["Key"] = 1f
+
+    val result: Float = preferences["Key"]
+
+    Assert.assertEquals(1f, result)
+  }
+
+  @Test
+  fun `get long value`() {
+    preferences["Key"] = 1L
+
+    val result: Long = preferences["Key"]
+
+    Assert.assertEquals(1L, result)
+  }
+
+  @Test
   fun `flush changes`() {
     preferences.flush {
       this["Key1"] = "Value1"
       this["Key2"] = 1
     }
 
-    verify(preferences, times(1)).flush()
+    Assert.assertTrue(preferences.flushed)
     Assert.assertTrue("Key1" in preferences)
     Assert.assertTrue("Value1" == preferences.getString("Key1"))
     Assert.assertTrue("Key2" in preferences)
