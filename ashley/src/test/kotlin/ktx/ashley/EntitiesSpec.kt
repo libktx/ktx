@@ -66,5 +66,20 @@ object EntitiesSpec : Spek({
         assertThat(entity.hasNot(Texture.mapper)).isTrue()
       }
     }
+
+    describe("contains component function") {
+      it("should return true if component exists") {
+        assertThat(entity.contains(Transform.mapper)).isTrue()
+      }
+      it("should return false if component does not exists") {
+        assertThat(entity.contains(Texture.mapper)).isFalse()
+      }
+      it("should return true as operator if component exists") {
+        assertThat(Transform.mapper in entity).isTrue()
+      }
+      it("should return false as operator if component does not exists") {
+        assertThat(Texture.mapper !in entity).isTrue()
+      }
+    }
   }
 })
