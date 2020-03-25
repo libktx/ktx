@@ -47,6 +47,7 @@ Module | Dependency name | Description
 [json](json) | `ktx-json` | Utilities for LibGDX [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization API.
 [log](log) | `ktx-log` | Minimal runtime overhead cross-platform logging using inlined functions.
 [math](math) | `ktx-math` | Operator functions for LibGDX math API and general math utilities.
+[preferences](preferences) | `ktx-preferences` | Improved API for accessing and saving [preferences](https://github.com/libgdx/libgdx/wiki/Preferences).
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
@@ -55,8 +56,8 @@ Module | Dependency name | Description
 
 ### Installation
 
-**KTX** modules are uploaded to _Maven Central_ and are fully compatible with the Gradle build tool used by LibGDX
-by default.
+**KTX** modules are uploaded to _Maven Central_ and are fully compatible with the Gradle build tool, which is used
+in LibGDX projects by default.
 
 All libraries follow the same naming schema:
 
@@ -64,7 +65,7 @@ All libraries follow the same naming schema:
 compile "io.github.libktx:$module:$ktxVersion"
 ```
 
-Replace `$module` with the name of the selected **KTX** library.
+Replace `$module` with the name of the selected **KTX** library (see table above).
 
 For example, including the [app](app) module with the `ktx-app` identifier would require the following changes
 in your `build.gradle` file:
@@ -72,7 +73,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.6-b2'
+  ktxVersion = '1.9.10-b4'
 }
 
 dependencies {
@@ -80,9 +81,9 @@ dependencies {
 }
 ```
 
-Note that defining `ktxVersion` as a property is not necessary, as versions can be set directly in the `dependencies`
-section. However, extracting the dependencies versions is a good practice, especially if they can be reused throughout
-the build files. This will speed up updating of your project if you include multiple KTX modules.
+As a side note, defining `ktxVersion` as a property in `ext` is not necessary, as versions can be set directly in the
+`dependencies` section. However, extracting the dependencies versions is a good practice, especially if they can be
+reused throughout the build files. This will speed up updating of your project if you include multiple KTX modules.
 
 **KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
 
