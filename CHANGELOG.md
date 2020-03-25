@@ -1,7 +1,9 @@
 #### 1.9.10-SNAPSHOT
 
+- **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
+- **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
 
 #### 1.9.10-b4
@@ -421,6 +423,9 @@ collections.
 - **[FEATURE]** (`ktx-actors`) Added `Actor.onKeyUp` and `Actor.onKeyDown` extension methods that attach
 `EventListener` implementations listening to `InputEvent` instances.
 - **[FEATURE]** (`ktx-app`) Implemented `ktx-app` module.
+  - `KotlinApplication` is an `ApplicationAdapter` equivalent with fixed rendering time step.
+  - `clearScreen` utility function allows to easily clear the application screen.
+  - `LetterboxingViewport` is a `Viewport` implementation that combines `ScreenViewport` and `FitViewport` behaviors.
 - **[FEATURE]** (`ktx-vis`) Added `ListViewStyle` support to `ListView` factory methods.
 - **[FEATURE]** (`ktx-vis`) Added top level `tab()` method.
 - **[FEATURE]** (`ktx-vis-style`) Added `ListViewStyle` factory method: `listView`.

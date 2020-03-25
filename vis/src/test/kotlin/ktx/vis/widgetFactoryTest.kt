@@ -31,6 +31,15 @@ abstract class WidgetFactoryTest<out F : WidgetFactory<FR>, FR> : NeedsLibGDX() 
   fun shouldCreateImageFromName() = testFactoryMethod({ it.image("white") })
 
   @Test
+  fun shouldCreateImageFromNinePatch() = testFactoryMethod({ it.image(VisUI.getSkin().getPatch("border")) })
+
+  @Test
+  fun shouldCreateImageFromTexture() = testFactoryMethod({ it.image(VisUI.getSkin().getRegion("white").texture) })
+
+  @Test
+  fun shouldCreateImageFromTextureRegion() = testFactoryMethod({ it.image(VisUI.getSkin().getRegion("white")) })
+
+  @Test
   fun shouldCreateList() = testFactoryMethod({ it.list<String>() })
 
   @Test
