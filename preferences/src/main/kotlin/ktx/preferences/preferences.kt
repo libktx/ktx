@@ -35,7 +35,8 @@ operator fun Preferences.set(key: String, value: Any): Preferences = putString(k
 
 /**
  * Stores Any **value** under the given **key** in the [Preferences]. If the value is not of type
- * String, Boolean, Int, Float or Long then it will be stored as a Json string.
+ * String, Boolean, Int, Float or Long then it will be stored as a Json string by creating a **new
+ * Json instance**.
  */
 fun Preferences.set(pair: Pair<String, Any>): Preferences {
   return when (pair.second) {
@@ -50,7 +51,8 @@ fun Preferences.set(pair: Pair<String, Any>): Preferences {
 
 /**
  * Retrieves a value from the [Preferences] for the given **key**. If the value is not of type
- * String, Boolean, Int, Float or Long then it will be retrieved as Json string for the given **type**.
+ * String, Boolean, Int, Float or Long then it will be retrieved as Json string for the given **type**
+ * by creating a **new Json instance**.
  */
 inline operator fun <reified T> Preferences.get(key: String): T {
   return when (T::class) {

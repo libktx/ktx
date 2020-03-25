@@ -5,6 +5,9 @@
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
 - **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
+    - Added `set` operators for String, Int, Float, Long, Boolean, Pair<String, Any> and Any
+    - Added `get` operator
+    - Added `flush` extension function that takes additional `Preferences` calls as a Lambda
 
 #### 1.9.10-b4
 
