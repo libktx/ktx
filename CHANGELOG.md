@@ -3,11 +3,13 @@
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
-- **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
-    - Added `set` operators for String, Int, Float, Long, Boolean, Pair<String, Any> and Any
-    - Added `get` operator
-    - Added `flush` extension function that takes additional `Preferences` calls as a Lambda
+    - Added `set` operators for `String`, `Int`, `Float`, `Double`, `Long`, `Boolean`, `Pair<String, Any>` and `Any`
+    - Added `get` operator which automatically determines preference type and retrieves them with the correct method.
+    - `get` and `set` will automatically attempt to (de)serialize non-basic preferences to and from JSON.
+    - `set(String, Double)` is deprecated, since the LibGDX `Preferences` do not support doubles.
+    - Added `flush` inlined extension method that executes a lambda and automatically calls `Preferences.flush`.
+- **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 
 #### 1.9.10-b4
 

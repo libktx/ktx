@@ -45,6 +45,7 @@ Project contributors listed chronologically.
   * Author of the [Tiled](../tiled) module.
   * Contributed [actors](../actors) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
+  * Author of the [preferences](../preferences) module.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
