@@ -1,5 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.3.71.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.5.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.

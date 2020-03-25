@@ -1,7 +1,7 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.61-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.71-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.10-red.svg)](https://libgdx.badlogicgames.com/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
 

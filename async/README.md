@@ -1,5 +1,5 @@
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.5-orange.svg)](http://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.3-orange.svg)](http://kotlinlang.org/)
 
 # KTX: coroutines support and threading utilities
 
