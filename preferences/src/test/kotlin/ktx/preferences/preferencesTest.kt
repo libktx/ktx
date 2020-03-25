@@ -1,13 +1,13 @@
 package ktx.preferences
 
 import com.badlogic.gdx.Preferences
-import com.badlogic.gdx.utils.GdxRuntimeException
+import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.ObjectSet
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-private class TestPreferences : Preferences {
+class TestPreferences : Preferences {
   private val map = HashMap<String, Any>()
   var flushed = false
 
@@ -89,7 +89,7 @@ class PreferencesTest {
     preferences["Key"] = "Value"
 
     Assert.assertTrue("Key" in preferences)
-    Assert.assertTrue("Value" == preferences.getString("Key"))
+    Assert.assertEquals("Value", preferences.getString("Key"))
   }
 
   @Test
@@ -97,7 +97,7 @@ class PreferencesTest {
     preferences["Key"] = true
 
     Assert.assertTrue("Key" in preferences)
-    Assert.assertTrue(preferences.getBoolean("Key"))
+    Assert.assertEquals(true, preferences.getBoolean("Key"))
   }
 
   @Test
@@ -105,7 +105,7 @@ class PreferencesTest {
     preferences["Key"] = 1
 
     Assert.assertTrue("Key" in preferences)
-    Assert.assertTrue(1 == preferences.getInteger("Key"))
+    Assert.assertEquals(1, preferences.getInteger("Key"))
   }
 
   @Test
@@ -113,7 +113,7 @@ class PreferencesTest {
     preferences["Key"] = 1f
 
     Assert.assertTrue("Key" in preferences)
-    Assert.assertTrue(1f == preferences.getFloat("Key"))
+    Assert.assertEquals(1f, preferences.getFloat("Key"))
   }
 
   @Test
@@ -121,7 +121,7 @@ class PreferencesTest {
     preferences["Key"] = 1L
 
     Assert.assertTrue("Key" in preferences)
-    Assert.assertTrue(1L == preferences.getLong("Key"))
+    Assert.assertEquals(1L, preferences.getLong("Key"))
   }
 
   @Test
@@ -133,9 +133,12 @@ class PreferencesTest {
     Assert.assertEquals(1, preferences.getInteger("Key2"))
   }
 
-  @Test(expected = GdxRuntimeException::class)
-  fun `put unsupported value`() {
+  @Test
+  fun `put Any value`() {
     preferences["Key"] = ObjectSet<Any>()
+
+    Assert.assertTrue("Key" in preferences)
+    Assert.assertEquals(ObjectSet<Any>(), Json().fromJson(ObjectSet::class.java, preferences.getString("Key")))
   }
 
   @Test
@@ -181,6 +184,15 @@ class PreferencesTest {
     val result: Long = preferences["Key"]
 
     Assert.assertEquals(1L, result)
+  }
+
+  @Test
+  fun `get Any value`() {
+    preferences["Key"] = ObjectSet<Any>()
+
+    val result: ObjectSet<Any> = preferences["Key"]
+
+    Assert.assertEquals(ObjectSet<Any>(), result)
   }
 
   @Test
