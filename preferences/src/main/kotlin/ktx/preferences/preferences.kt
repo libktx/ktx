@@ -48,7 +48,7 @@ private fun Double.asFloat(): Float {
 }
 
 /**
- * Serializes any [value] as a JSON string amd stores it under the given [key] in the [Preferences].
+ * Serializes any [value] as a JSON string and stores it under the given [key] in the [Preferences].
  * Note that [value] must be JSON-serializable - see the [Json] module for details.
  *
  * A new [Json] instance is created for each serialized value. If the preference is saved frequently
