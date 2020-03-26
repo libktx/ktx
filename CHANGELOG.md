@@ -4,6 +4,7 @@
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.5.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
     - Added `set` operators for `String`, `Int`, `Float`, `Double`, `Long`, `Boolean`, `Pair<String, Any>` and `Any`

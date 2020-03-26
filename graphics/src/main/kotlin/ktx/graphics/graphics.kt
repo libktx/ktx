@@ -1,11 +1,17 @@
 package ktx.graphics
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.PixmapIO
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
+import com.badlogic.gdx.utils.BufferUtils
+import com.badlogic.gdx.utils.ScreenUtils
 
 /**
  * Factory methods for LibGDX [Color] class. Allows to use named parameters.
@@ -81,4 +87,26 @@ inline fun <B : GLFrameBuffer<*>> B.use(action: (B) -> Unit) {
   begin()
   action(this)
   end()
+}
+
+/**
+ * Takes a screenshot of the entire screen and saves the image using the given [fileHandle].
+ */
+fun takeScreenshot(fileHandle: FileHandle) {
+  val bufferWidth = Gdx.graphics.backBufferWidth
+  val bufferHeight = Gdx.graphics.backBufferHeight
+  val pixels = ScreenUtils.getFrameBufferPixels(0, 0, bufferWidth, bufferHeight, true)
+
+  // Ensuring the screenshot is opaque:
+  var i = 4
+  val alpha = 255.toByte()
+  while (i < pixels.size) {
+    pixels[i - 1] = alpha
+    i += 4
+  }
+
+  val screenshotImage = Pixmap(bufferWidth, bufferHeight, Pixmap.Format.RGBA8888)
+  BufferUtils.copy(pixels, 0, screenshotImage.pixels, pixels.size)
+  PixmapIO.writePNG(fileHandle, screenshotImage)
+  screenshotImage.dispose()
 }

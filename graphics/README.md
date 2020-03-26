@@ -21,6 +21,7 @@ overriding with optional, named parameters.
 `begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
 also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
 - `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
+- `takeScreenshot` allows to easily take a screenshot of current application screen.
 
 #### `ShapeRenderer`
 
@@ -160,6 +161,14 @@ fun drawCircle(renderer: ShapeRenderer) {
     val position = Vector2(1f, 0f)
     renderer.circle(position, radius=5f)
 }
+```
+
+Taking a screenshot of the current game screen:
+
+```Kotlin
+import ktx.graphics.takeScreenshot
+
+takeScreenshot(Gdx.files.external("mygame/screenshot.png"))
 ```
 
 #### Synergy
