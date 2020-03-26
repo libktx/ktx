@@ -39,6 +39,12 @@ similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is id
 different screen sizes.
 - `emptyScreen` provides no-op implementations of `Screen`.
 
+#### Profiling
+
+- `profile` inlined function allows to measure performance of the chosen operation with LibGDX `PerformanceCounter`.
+- `PerformanceCounter.profile` inlined extension method eases direct usage of the `PerformanceCounter` class.
+- `PerformanceCounter.prettyPrint` extension method allows to quickly log basic performance metrics.
+
 ### Usage examples
 
 Implementing `KtxApplicationAdapter`:
@@ -129,6 +135,41 @@ val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f
 viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
 ```
 
+Profiling an operation:
+
+```Kotlin
+import ktx.app.profile
+
+fun profileThreadSleep() {
+  profile(name = "Thread.sleep", repeats = 10) {
+    // Will be repeated 10 times to measure performance:
+    Thread.sleep(10L)
+  }
+}
+```
+
+Profiling an operation with an existing `PerformanceCounter`:
+
+```Kotlin
+import com.badlogic.gdx.utils.PerformanceCounter
+import ktx.app.prettyPrint
+import ktx.app.profile
+
+fun profileThreadSleep() {
+  // Window size passed to the constructor as the second argument
+  // will be the default amount of repetitions during profiling:
+  val profiler = PerformanceCounter("Thread.sleep", 10)
+  profiler.profile {
+    // Will be repeated 10 times to measure performance:
+    Thread.sleep(10L)
+  }
+
+  // You can also print the report manually
+  // with a custom number format:
+  profiler.prettyPrint(decimalFormat = "%.4f s")
+}
+```
+
 ### Alternatives
 
 There are some general purpose LibGDX utility libraries out there, but most lack first-class Kotlin support.
@@ -138,11 +179,12 @@ library with some classes similar to `ktx-app`.
 - [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
 HTML-like syntax. It also features a custom `ApplicationListener` implementation, which helps with managing `Scene2D`
 screens.
-- [Autumn MVC](https://github.com/czyzby/gdx-lml/tree/master/mvc) is a [Spring](https://spring.io/)-inspired
+- [Autumn MVC](https://github.com/czyzby/gdx-lml/tree/master/mvc) is a [Spring](https://spring.io/) inspired
 model-view-controller framework built on top of LibGDX. It features its own `ApplicationListener` implementation, which
 initiates and handles annotated view instances.
 
 #### Additional documentation
 
-- [The life cycle article.](https://github.com/libgdx/libgdx/wiki/The-life-cycle)
-- [Viewports article.](https://github.com/libgdx/libgdx/wiki/Viewports)
+- [Official life cycle article.](https://github.com/libgdx/libgdx/wiki/The-life-cycle)
+- [Official viewports article.](https://github.com/libgdx/libgdx/wiki/Viewports)
+- [Official article on profiling.](https://github.com/libgdx/libgdx/wiki/Profiling)

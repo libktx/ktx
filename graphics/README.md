@@ -166,6 +166,7 @@ fun drawCircle(renderer: ShapeRenderer) {
 Taking a screenshot of the current game screen:
 
 ```Kotlin
+import com.badlogic.gdx.Gdx
 import ktx.graphics.takeScreenshot
 
 takeScreenshot(Gdx.files.external("mygame/screenshot.png"))
@@ -188,3 +189,4 @@ library with some utilities similar to `ktx-graphics`.
 - [`SpriteBatch` official article.](https://github.com/libgdx/libgdx/wiki/Spritebatch%2C-Textureregions%2C-and-Sprites)
 - [Official article on shaders.](https://github.com/libgdx/libgdx/wiki/Shaders)
 - [`ShapeRenderer` official article.](https://github.com/libgdx/libgdx/wiki/Rendering-shapes)
+- [Official article on screenshots.](https://github.com/libgdx/libgdx/wiki/Taking-a-Screenshot)
