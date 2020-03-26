@@ -2,11 +2,106 @@ package ktx.graphics
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+
+class CameraUtilitiesTest {
+  @Before
+  fun `mock graphics`() {
+    LwjglNativesLoader.load()
+    Gdx.graphics = mock {
+      on { width } doReturn 800
+      on { height } doReturn 600
+    }
+  }
+
+  @Test
+  fun `should center camera to screen center`() {
+    val camera = OrthographicCamera()
+
+    camera.center()
+    camera.update()
+
+    assertEquals(Vector3(400f, 300f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should center camera to rectangle center with offset`() {
+    val camera = OrthographicCamera()
+
+    camera.center(x = 100f, y = 50f, width = 1000f, height = 500f)
+    camera.update()
+
+    assertEquals(Vector3(600f, 300f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should immediately move camera to target`() {
+    val target = Vector2(100f, 200f)
+    val camera = OrthographicCamera()
+
+    camera.moveTo(target)
+    camera.update()
+
+    assertEquals(Vector3(100f, 200f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should immediately move camera to target with offset`() {
+    val target = Vector2(100f, 200f)
+    val camera = OrthographicCamera()
+
+    camera.moveTo(target, x = 50f, y = -25f)
+    camera.update()
+
+    assertEquals(Vector3(150f, 175f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should smoothly move the camera`() {
+    val target = Vector2(200f, 400f)
+    val camera = OrthographicCamera()
+    camera.position.set(100f, 100f, 0f)
+    camera.update()
+
+    camera.lerpTo(target, lerp = 0.5f)
+    camera.update()
+
+    assertEquals(Vector3(150f, 250f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should smoothly move the camera with non-interpolated offsets`() {
+    val target = Vector2(200f, 400f)
+    val camera = OrthographicCamera()
+    camera.position.set(100f, 100f, 0f)
+    camera.update()
+
+    camera.lerpTo(target, lerp = 0.5f, x = -25f, y = 100f)
+    camera.update()
+
+    assertEquals(Vector3(125f, 350f, 0f), camera.position)
+  }
+
+  @Test
+  fun `should update camera automatically`() {
+    val camera = spy(OrthographicCamera())
+    var operationCalls = 0
+
+    camera.update {
+      operationCalls++
+      verify(camera, never()).update()
+    }
+
+    assertEquals(1, operationCalls)
+    verify(camera, times(1)).update()
+  }
+}
 
 /**
  * Tests [LetterboxingViewport] class, which merges ScreenViewport and FitViewport behavior.

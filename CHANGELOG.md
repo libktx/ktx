@@ -11,6 +11,11 @@
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
 - **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
+- **[FEATURE]** (`ktx-graphics`) Added `Camera` utilities.
+    - `center` extension method allows to center the camera's position to screen center or the center of the chosen rectangle.
+    - `moveTo` extension method allows to move the camera immediately at the chosen target position with optional offset.
+    - `lerpTo` extension method allows to move the camera smoothly to the chosen target position with optional offset.
+    - `update` inlined extension method allows to change camera state with automatic `Camera.update` call.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
     - Added `set` operators for `String`, `Int`, `Float`, `Double`, `Long`, `Boolean`, `Pair<String, Any>` and `Any`

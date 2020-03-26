@@ -46,6 +46,10 @@ and `end()` calls.
 
 #### Cameras and viewports
 
+- `Camera.center` extension method allows to center the camera's position to screen center or the center of the chosen rectangle.
+- `Camera.moveTo` extension method allows to move the camera immediately at the chosen target position with optional offset.
+- `Camera.lerpTo` extension method allows to move the camera smoothly to the chosen target position with optional offset.
+- `Camera.update` inlined extension method allows to change camera state with automatic `Camera.update` call.
 - `LetterboxingViewport` combines `ScreenViewport` and `FitViewport` behavior: it targets a specific aspect ratio and
 applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
 similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
@@ -196,6 +200,54 @@ class Application: ApplicationAdapter() {
 }
 ```
 
+Centering camera position:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import ktx.graphics.center
+
+fun centerCamera(camera: OrthographicCamera) {
+  // Sets position to the middle of the screen:
+  camera.center()
+  
+  // Sets position to the middle of the chosen rectangle:
+  camera.center(x = 100f, y = 100f, width = 800f, height = 800f)
+}
+```
+
+Moving the camera to a target:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.lerpTo
+import ktx.graphics.moveTo
+
+fun moveCamera(camera: OrthographicCamera, target: Vector2) {
+  // Moves the camera immediately at the target:
+  camera.moveTo(target)
+
+  // Moves the camera smoothly to the target:
+  camera.lerpTo(target, lerp = 0.1f)
+}
+```
+
+Changing the camera state with automatic update:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.lerpTo
+import ktx.graphics.update
+
+fun moveCamera(camera: OrthographicCamera, target: Vector2) {
+  camera.update {
+    lerpTo(target, lerp = 0.1f)
+    // camera.update() will be called automatically after this block.
+  }
+}
+```
+
 #### Synergy
 
 Use [`ktx-math`](../math) for `Vector2` and `Vector3` extensions, including idiomatic Kotlin factory
@@ -207,6 +259,7 @@ There are some general purpose LibGDX utility libraries out there, but most lack
 
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
 library with some utilities similar to `ktx-graphics`.
+- [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework provides similar utilities for cameras and screenshots.
 
 #### Additional documentation
 
