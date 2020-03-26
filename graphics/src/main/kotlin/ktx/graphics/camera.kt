@@ -1,4 +1,4 @@
-package ktx.app
+package ktx.graphics
 
 import com.badlogic.gdx.Application.ApplicationType.Android
 import com.badlogic.gdx.Application.ApplicationType.iOS
@@ -22,16 +22,16 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport
  * FitViewport is excellent for the actual (2D) game rendering.
 
  * @param targetPpiX this is the targeted pixel per inch ratio on X axis, which allows to scale the viewport
- *            correctly on different devices. Usually about 96 for desktop and WebGL platforms, 160 for mobiles.
- *            Make sure to call [updateScale] after changing this variable.
+ *    correctly on different devices. Usually about 96 for desktop and WebGL platforms, 160 for mobiles.
+ *    Make sure to call [updateScale] after changing this variable.
  * @param targetPpiY targeted pixel per inch ratio on Y axis. Usually about 96 for desktop and WebGL platforms, 160
- *            for mobiles. Make sure to call [updateScale] after changing this variable.
+ *    for mobiles. Make sure to call [updateScale] after changing this variable.
  * @param aspectRatio width divided by height. Will preserve this aspect ratio by applying letterboxing.
  */
 class LetterboxingViewport(
-    var targetPpiX: Float = defaultTargetPpi,
-    var targetPpiY: Float = defaultTargetPpi,
-    var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
+  var targetPpiX: Float = defaultTargetPpi,
+  var targetPpiY: Float = defaultTargetPpi,
+  var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
   /** You can directly modify unit per pixel ratio (bypassing PPI check) by modifying this value.
    * @see updateScale */
   var scaleX = 0f

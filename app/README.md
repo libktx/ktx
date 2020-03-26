@@ -33,10 +33,6 @@ being a class like `com.badlogic.gdx.InputAdapter`.
 
 - `clearScreen` is an inlined utility function that hides the OpenGL calls, allowing to clear the screen with a chosen
 color.
-- `LetterboxingViewport` combines `ScreenViewport` and `FitViewport` behavior: it targets a specific aspect ratio and
-applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
-similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
-different screen sizes.
 - `emptyScreen` provides no-op implementations of `Screen`.
 
 #### Profiling
@@ -123,16 +119,6 @@ class MyInputListener : KtxInputAdapter {
     return true
   }
 }
-```
-
-Creating and customizing a new `LetterboxingViewport`:
-
-```Kotlin
-import ktx.app.LetterboxingViewport
-
-val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
-// Updating viewport on resize:
-viewport.update(Gdx.graphics.width, Gdx.graphics.height, true)
 ```
 
 Profiling an operation:

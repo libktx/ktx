@@ -44,6 +44,13 @@ original `ShapeRenderer` methods and perform the same actions. The methods inclu
 A `use` inlined extension method is also available for `ShapeRenderer`, ensuring you won't have unbalanced `begin()`
 and `end()` calls.
 
+#### Cameras and viewports
+
+- `LetterboxingViewport` combines `ScreenViewport` and `FitViewport` behavior: it targets a specific aspect ratio and
+applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
+similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
+different screen sizes.
+
 ### Usage examples
 
 Using a `Batch`:
@@ -170,6 +177,23 @@ import com.badlogic.gdx.Gdx
 import ktx.graphics.takeScreenshot
 
 takeScreenshot(Gdx.files.external("mygame/screenshot.png"))
+```
+
+Creating and customizing a new `LetterboxingViewport`:
+
+```Kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.utils.viewport.Viewport
+import ktx.graphics.LetterboxingViewport
+
+class Application: ApplicationAdapter() {
+  val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
+
+  override fun resize(width: Int, height: Int) {
+    // Updating viewport to the new screen size:
+    viewport.update(width, height, true)
+  }
+}
 ```
 
 #### Synergy

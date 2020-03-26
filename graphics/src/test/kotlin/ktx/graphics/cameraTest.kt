@@ -1,4 +1,4 @@
-package ktx.app
+package ktx.graphics
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader

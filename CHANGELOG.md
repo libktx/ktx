@@ -6,8 +6,10 @@
     - `profile` inlined function allows to profile an operation with the LibGDX `PerformanceCounter`.
     - `PerformanceCounter.profile` inlined extension method eases usage of `PerformanceCounter` API.
     - `PerformanceCounter.prettyPrint` allows to print basic performance data after profiling.
+- **[CHANGE]** (`ktx-app`) `LetterboxingViewport` moved from `ktx-app` to `ktx-graphics`.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
 - **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
