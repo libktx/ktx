@@ -22,6 +22,8 @@ overriding with optional, named parameters.
 also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
 - `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
 - `takeScreenshot` allows to easily take a screenshot of current application screen.
+- `BitmapFont.center` extension method allows to calculate center position of text in order to draw it in the middle
+of a chosen object.
 
 #### `ShapeRenderer`
 
@@ -183,6 +185,25 @@ import ktx.graphics.takeScreenshot
 takeScreenshot(Gdx.files.external("mygame/screenshot.png"))
 ```
 
+Finding out where to draw text in order to center it on a `Sprite`:
+
+```Kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.center
+
+fun getCenterAtSprite(
+  bitmapFont: BitmapFont, text: String, sprite: Sprite
+): Vector2 =
+  bitmapFont.center(
+    text,
+    // Note that x or y can be modified if you want a slight offset:
+    x = sprite.x, y = sprite.y,
+    width = sprite.width, height = sprite.height
+  )
+```
+
 Creating and customizing a new `LetterboxingViewport`:
 
 ```Kotlin
@@ -259,7 +280,7 @@ There are some general purpose LibGDX utility libraries out there, but most lack
 
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
 library with some utilities similar to `ktx-graphics`.
-- [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework provides similar utilities for cameras and screenshots.
+- [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework provides similar utilities for cameras, text and screenshots.
 
 #### Additional documentation
 

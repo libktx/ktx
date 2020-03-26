@@ -11,6 +11,7 @@
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
 - **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
+- **[FEATURE]** (`ktx-graphics`) Added `BitmapFont.center` extension method that allows to center text on an object.
 - **[FEATURE]** (`ktx-graphics`) Added `Camera` utilities.
     - `center` extension method allows to center the camera's position to screen center or the center of the chosen rectangle.
     - `moveTo` extension method allows to move the camera immediately at the chosen target position with optional offset.
