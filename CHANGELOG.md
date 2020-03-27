@@ -2,6 +2,7 @@
 
 - **[UPDATE]** Updated to Kotlin 1.3.71.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.5.
+- **[UPDATE]** Updated to Gradle 5.6.4.
 - **[FEATURE]** (`ktx-app`) Added profiling utilities.
     - `profile` inlined function allows to profile an operation with the LibGDX `PerformanceCounter`.
     - `PerformanceCounter.profile` inlined extension method eases usage of `PerformanceCounter` API.
