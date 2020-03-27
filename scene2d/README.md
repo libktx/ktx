@@ -325,13 +325,12 @@ of LibGDX `Tree.Node` with additional building API support):
 ```Kotlin
 import ktx.scene2d.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 
 tree {
   val label: Label = label("Node properties modified.").node(expanded = true)
-  val cell: Node = label("Wrapped in node.").inNode
-  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
-  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
+  val cell: KNode<Label> = label("Wrapped in node.").inNode
+  val combined: KNode<Label> = label("Modified and wrapped.").node(expanded = true).inNode
+  val afterBuildingBlock: KNode<Label> = label("Not limited to no init block actors.") {
     setWrap(true)
   }.node(expanded = true).inNode
   // Nodes are available only for children of trees.

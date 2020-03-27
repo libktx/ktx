@@ -169,7 +169,7 @@ class KTreeTest : NeedsLibGDX() {
     val group = TestTree()
     val actor = Actor()
 
-    val result: Node<*, *, *> = group.storeActor(actor)
+    val result: KNode<Actor> = group.storeActor(actor)
 
     assertTrue(actor in group.children)
     assertSame(actor, result.actor)
@@ -181,7 +181,7 @@ class KTreeTest : NeedsLibGDX() {
     tree.apply {
       val label = label("Test")
 
-      val node: KNode = label.inNode
+      val node: KNode<Label> = label.inNode
 
       assertNotNull(node)
       assertSame(label, node.actor)
@@ -193,7 +193,7 @@ class KTreeTest : NeedsLibGDX() {
     val tree = TestTree()
     val icon = mock<Drawable>()
     tree.apply {
-      val node: KNode = label("Test") {}.node(
+      val node: KNode<Label> = label("Test") {}.node(
           icon = icon,
           selectable = false,
           expanded = true,
@@ -208,7 +208,7 @@ class KTreeTest : NeedsLibGDX() {
   }
 
   class TestTree : Tree<Node<*, *, *>, Any?>(VisUI.getSkin()), KTree {
-    override fun add(actor: Actor): KNode {
+    override fun <T: Actor> add(actor: T): KNode<T> {
       val node = KNode(actor)
       add(node)
       return node

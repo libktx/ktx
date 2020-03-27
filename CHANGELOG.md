@@ -24,6 +24,10 @@
     - `get` and `set` will automatically attempt to (de)serialize non-basic preferences to and from JSON.
     - `set(String, Double)` is deprecated, since the LibGDX `Preferences` do not support doubles.
     - Added `flush` inlined extension method that executes a lambda and automatically calls `Preferences.flush`.
+- **[CHANGE]** (`ktx-scene2d`) Improved typing support for `Tree.Node` widgets. Since LibGDX 1.9.10, `Tree.Node` is
+a generic class, but KTX `KNode` remained non-generic until now. Type of stored actors must now be specified for `KNode`
+variables, but thanks to that actors from `KNode` instances are now correctly typed and easier to handle. This required
+minor internal changes - `KWidget.storeActor` is now generic.
 - **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 
 #### 1.9.10-b4
