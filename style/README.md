@@ -338,6 +338,11 @@ The advantage of using an `enum` over a "standard" singleton (`object`) with `St
 constants is that you can easily extract a list of all values from an `enum`, while getting all fields from
 an object or constants from a package is not trivial.
 
+#### Synergy
+
+[`ktx-assets`](../assets) or [`ktx-assets-async`](../assets-async) might prove useful for loading and management
+of `Skin` assets including `Textures` and `TextureAtlases`.
+
 ### Alternatives
 
 - Default LibGDX JSON skin loading mechanism allows to customize `Skin` instances thanks to reflection. Apart from the

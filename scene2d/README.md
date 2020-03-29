@@ -361,8 +361,9 @@ table {
 
 #### Synergy
 
-Pair this library with [`ktx-style`](../style) for type-safe styles building and [`ktx-actors`](../actors) for useful
-extension methods for `Scene2D` API. [`ktx-assets`](../assets) might help with `Skin` management.
+Pair this library with [`ktx-style`](../style) for type-safe actor styles building and [`ktx-actors`](../actors)
+for useful extension methods for `Scene2D` API. [`ktx-assets`](../assets) or [`ktx-assets-async`](../assets-async)
+might help with `Skin` loading and management.
 
 ### Alternatives
 

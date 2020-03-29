@@ -6,9 +6,9 @@ Utilities for management of assets and heavy resources.
 
 ### Why?
 
-LibGDX does a good job of helping you with assets (through `AssetManager`, for example), but - as usual in case of Java
-APIs - it does not use the full potential of Kotlin features. This library aims to provide Kotlin extensions and wrappers
-for the existing API to make assets usage more natural in Kotlin applications.
+LibGDX does a good job of helping you with assets through `AssetManager` and related APIs, but - as usual in case of
+Java libraries - it does not allow to use the full potential of Kotlin features. This library aims to provide Kotlin
+extensions and wrappers for the existing asset APIs to make assets usage more idiomatic in Kotlin applications.
 
 ### Guide
 
@@ -364,6 +364,9 @@ val textures = Images.values().map { it() }
 
 ### Alternatives
 
+- [`ktx-assets-async`](../assets-async) provides an alternative asset manager with non-blocking API based on coroutines.
+In contrary to LibGDX `AssetManager`, **KTX** `AssetStorage` supports concurrent loading of assets on multiple threads
+performing asynchronous operations.
 - [libgdx-utils](https://bitbucket.org/dermetfan/libgdx-utils/) feature an annotation-based asset manager implementation
 which easies loading of assets (through internal reflection usage).
 - [Autumn MVC](https://github.com/czyzby/gdx-lml/tree/master/mvc) is a [Spring](https://spring.io/)-inspired
