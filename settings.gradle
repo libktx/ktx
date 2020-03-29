@@ -3,6 +3,7 @@ include(
     'app',
     'ashley',
     'assets',
+    'assets-async',
     'async',
     'box2d',
     'collections',

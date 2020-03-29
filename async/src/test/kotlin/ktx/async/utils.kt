@@ -1,11 +1,11 @@
 package ktx.async
 
-import com.badlogic.gdx.Application
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import org.junit.After
+import org.junit.Assert.assertSame
 import org.junit.Before
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit.SECONDS
@@ -25,12 +25,13 @@ abstract class AsyncTest {
       initTask.complete(Unit)
     }
     initTask.join()
+    assertSame(getExecutionThread(Gdx.app::postRunnable), getMainRenderingThread())
   }
 
   /**
-   * Finds the main rendering [Thread] used to execute runnables scheduled with [Application.postRunnable].
+   * Finds the main rendering [Thread] registered in [MainDispatcher].
    */
-  protected fun getMainRenderingThread(): Thread = getExecutionThread(Gdx.app::postRunnable)
+  protected fun getMainRenderingThread(): Thread = MainDispatcher.mainThread
 
   /**
    * Finds the [Thread] that [AsyncExecutor] executes tasks with. Note that if the executor uses more than a single
