@@ -18,11 +18,11 @@ object KtxAsync : CoroutineScope {
   override val coroutineContext = MainDispatcher
 
   /**
-   * Should be invoked on the main rendering thread before using KTX coroutines. Might slightly affect performance
-   * otherwise.
+   * Should be invoked on the main rendering thread before using KTX coroutines.
+   * Failing to do so will cause some parts of the API to throw exceptions.
    */
   fun initiate() {
-    ImmediateDispatcher.initiate()
+    MainDispatcher.initiate()
   }
 }
 
@@ -48,14 +48,19 @@ fun RenderingScope() = CoroutineScope(SupervisorJob() + MainDispatcher)
 /**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with a single thread to execute tasks
  * asynchronously outside of the main rendering thread.
+ *
+ * [AsyncExecutor] thread will be named according to the [threadName] pattern.
  */
-fun newSingleThreadAsyncContext() = newAsyncContext(1)
+fun newSingleThreadAsyncContext(threadName: String = "AsyncExecutor-Thread") = newAsyncContext(1, threadName)
 
 /**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with the chosen amount of [threads]
  * to execute tasks asynchronously outside of the main rendering thread.
+ *
+ * [AsyncExecutor] threads will be named according to the [threadName] pattern.
  */
-fun newAsyncContext(threads: Int) = AsyncExecutorDispatcher(AsyncExecutor(threads), threads)
+fun newAsyncContext(threads: Int, threadName: String = "AsyncExecutor-Thread") =
+  AsyncExecutorDispatcher(AsyncExecutor(threads, threadName), threads)
 
 /**
  * Suspends the coroutine to execute the defined [block] on the main rendering thread and return its result.
@@ -65,7 +70,10 @@ suspend fun <T> onRenderingThread(block: suspend CoroutineScope.() -> T) = withC
 /**
  * Returns true if the coroutine was launched from a rendering thread dispatcher.
  */
-fun CoroutineScope.isOnRenderingThread() = coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher
+fun CoroutineScope.isOnRenderingThread() =
+  coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher
+    && Thread.currentThread() === MainDispatcher.mainThread
+
 
 /**
  * Attempts to skip the current frame. Resumes the execution using a task scheduled with [Application.postRunnable].

@@ -114,15 +114,7 @@ class RenderingThreadDispatcherFactory : MainDispatcherFactory {
  */
 object MainDispatcher : RenderingThreadDispatcher() {
   @ExperimentalCoroutinesApi
-  override val immediate: MainCoroutineDispatcher = ImmediateDispatcher
-}
-
-/**
- * Supports immediate tasks execution in the main rendering thread context.
- */
-object ImmediateDispatcher : RenderingThreadDispatcher() {
-  @ExperimentalCoroutinesApi
-  override val immediate: MainCoroutineDispatcher = this
+  override val immediate = this
   lateinit var mainThread: Thread
 
   /** Must be called **on the rendering thread** before using KTX coroutines. */
@@ -130,7 +122,5 @@ object ImmediateDispatcher : RenderingThreadDispatcher() {
     mainThread = Thread.currentThread()
   }
 
-  override fun isDispatchNeeded(context: CoroutineContext): Boolean = Thread.currentThread() != mainThread
-
-  override fun toString(): String = super.toString() + "(immediate)"
+  override fun isDispatchNeeded(context: CoroutineContext): Boolean = !KtxAsync.isOnRenderingThread()
 }

@@ -245,10 +245,16 @@ import ktx.async.AsyncExecutorDispatcher
 import ktx.async.newAsyncContext
 import ktx.async.newSingleThreadAsyncContext
 
+// Context with a single thread:
 val singleThreaded = newSingleThreadAsyncContext()
 
+// Context with multiple threads:
 val multiThreaded = newAsyncContext(threads = 4)
 
+// Context with a custom thread name pattern:
+val multiThreadedWithNamedThreads = newAsyncContext(threads = 4, threadName = "MyThread")
+
+// Context with an existing executor:
 val executor = AsyncExecutor(2)
 val fromExistingExecutor = AsyncExecutorDispatcher(executor, threads = 2)
 ```

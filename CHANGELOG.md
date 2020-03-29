@@ -10,6 +10,9 @@
 - **[CHANGE]** (`ktx-app`) `LetterboxingViewport` moved from `ktx-app` to `ktx-graphics`.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-async`) `newAsyncContext` and `newSingleThreadAsyncContext` now support `threadName` parameter
+that allows to set thread name pattern of `AsyncExecutor` threads.
+- **[FIX]** (`ktx-async`) `isOnRenderingThread` now behaves consistently regardless of launching coroutine context.
 - **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
 - **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
 - **[FEATURE]** (`ktx-graphics`) Added `BitmapFont.center` extension method that allows to center text on an object.
