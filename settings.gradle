@@ -10,6 +10,7 @@ include(
     'json',
     'graphics',
     'freetype',
+    'freetype-async',
     'i18n',
     'inject',
     'log',

@@ -170,6 +170,11 @@ Since these values can be passed in 3 basic ways, most methods are available in 
 - With LibGDX `AssetDescriptor` storing `Class`, path and loading data of the asset.
 
 All three variants behave identically and are available for convenience.
+To ease the API usage, the following utilities are provided:
+
+- `AssetStorage.getAssetDescriptor` - creates an `AssetDescriptor` instance that has loading data of an asset.
+- `AssetStorage.getIdentifier` - creates an `Identifier` instance that uniquely identifies a stored asset.
+- `AssetDescriptor.toIdentifier` - converts an `AssetDescriptor` to an `Identifier`.
 
 ### Usage examples
 

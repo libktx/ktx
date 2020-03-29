@@ -100,8 +100,10 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/string.txt"
 
+    // When:
     val asset = runBlocking { storage.load<String>(path) }
 
+    // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
     assertSame(asset, storage.get<String>(path).joinAndGet())
@@ -590,8 +592,6 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<Texture>(path))
     assertEquals(0, storage.getReferenceCount<Texture>(path))
-
-    storage.dispose()
   }
 
   @Test
@@ -663,8 +663,6 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<Pixmap>(path))
     assertEquals(0, storage.getReferenceCount<Pixmap>(path))
-
-    storage.dispose()
   }
 
   @Test
