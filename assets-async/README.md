@@ -549,16 +549,16 @@ class App : ApplicationAdapter() {
 }
 ```
 
-As a rule of thumb, you should prefer to use suspending `AssetStorage` only from non-blocking coroutines,
-e.g. launched with `KtxAsync.launch` or `GlobalScope.launch`. If you change `runBlocking` in either of the
-examples to a proper coroutine launch, you will notice that the deadlocks no longer occur.
+As a rule of thumb, you should prefer to use suspending `AssetStorage` methods only from non-blocking coroutines,
+e.g. those launched with `KtxAsync.launch` or `GlobalScope.launch`. If you change `runBlocking` to a proper coroutine
+launch in either of the examples, you will notice that the deadlocks no longer occur.
 
 It does not mean that `runBlocking` will always cause a deadlock, however. You can safely use `runBlocking`:
 
-- From within other threads than the main rendering thread and `AssetStorage` loading threads.
+- From within other threads than the main rendering thread and the `AssetStorage` loading threads.
 - For `dispose`, both suspending and non-suspending variants.
 - For all non-suspending methods such as `contains`, `isLoaded`, `getReferenceCount`, `setLoader`, `getLoader`.
-- For `load` and `get` calls on already loaded assets. **With caution.**
+- For `load` and `get` calls requesting already loaded assets. **With caution.**
 
 #### Synergy
 
@@ -576,8 +576,7 @@ Alternatives include:
 - Using [`ktx-assets`](../assets) extensions for `AssetManager`.
 - [`AnnotationAssetManager`](https://bitbucket.org/dermetfan/libgdx-utils/wiki/net.dermetfan.gdx.assets.AnnotationAssetManager)
 from [`libgdx-utils`](https://bitbucket.org/dermetfan/libgdx-utils) that extends `AssetManager` and allows
-to specify assets for loading by marking fields with annotations. However, it's annotation-based API relies
-on reflection and is not really idiomatic in Kotlin.
+to specify assets for loading by marking fields with annotations.
 
 #### Additional documentation
 
