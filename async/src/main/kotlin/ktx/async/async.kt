@@ -77,14 +77,16 @@ fun CoroutineScope.isOnRenderingThread() =
 
 /**
  * Attempts to skip the current frame. Resumes the execution using a task scheduled with [Application.postRunnable].
+ *
  * Due to asynchronous nature of the execution, there is no guarantee that this method will always skip only a *single*
- * frame before further method calls are executed, but it will always skip *at least one* frame.
+ * frame before resuming, but it will always suspend the current coroutine until the [Runnable] instances scheduled
+ * with [Application.postRunnable] are executed by the [Application].
  */
 suspend fun skipFrame() {
   suspendCancellableCoroutine<Unit> { continuation ->
     Gdx.app.postRunnable {
-      val context = continuation.context[ContinuationInterceptor.Key]
       if (continuation.isActive) {
+        val context = continuation.context[ContinuationInterceptor.Key]
         if (context is RenderingThreadDispatcher) {
           // Executed via main thread dispatcher and already on the main thread - resuming immediately:
           with(continuation) { context.resumeUndispatched(Unit) }

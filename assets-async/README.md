@@ -191,8 +191,8 @@ fun create() {
 }
 ```
 
-Customizing `AssetStorage`. In this example a multi-threaded coroutine context
-was assigned to storage, so the assets will be loaded in parallel on multiple threads:
+Customizing an `AssetStorage`. In this example a multi-threaded coroutine context
+was assigned to storage, so the assets can be loaded in parallel on multiple threads:
 
 ```kotlin
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
@@ -203,7 +203,7 @@ import ktx.async.newAsyncContext
 fun create() {
   KtxAsync.initiate()
   val assetStorage = AssetStorage(
-    // Used to asynchronous file loading:
+    // Used to perform asynchronous file loading:
     asyncContext = newAsyncContext(threads = 4),
     // Used for resolving file paths:
     fileResolver = InternalFileHandleResolver(),
@@ -213,7 +213,358 @@ fun create() {
 }
 ```
 
-TODO
+Loading assets using `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun loadAsset(assetStorage: AssetStorage) {
+  // Launching a coroutine to load the assets asynchronously:
+  KtxAsync.launch {
+    // This will suspend the coroutine until the texture is loaded:
+    val texture = assetStorage.load<Texture>("images/logo.png")
+    // Now the coroutine resumes and the texture can be used.
+  }
+}
+```
+
+Loading assets with customized loading parameters:
+
+```kotlin
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun loadAsset(assetStorage: AssetStorage) {
+  KtxAsync.launch {
+    // You can optionally specify loading parameters for each asset.
+    // AssetStorage reuses default LibGDX asset loaders and their
+    // parameters classes.
+    val texture = assetStorage.load<Texture>(
+      path = "images/logo.png",
+      parameters = TextureParameter().apply {
+        genMipMaps = true
+      }
+    )
+    // Now the texture is loaded and can be used.
+  }
+}
+```
+
+Loading assets asynchronously:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun loadAssets(assetStorage: AssetStorage) {
+  KtxAsync.launch {
+    // Launching asynchronous asset loading:
+    val texture = async { assetStorage.load<Texture>("images/logo.png") }
+    val font = async { assetStorage.load<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt") }
+    // Suspending the coroutine until both assets are loaded:
+    doSomethingWithTextureAndFont(texture.await(), font.await())
+  }
+}
+```
+
+Loading assets in parallel:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+import ktx.async.newAsyncContext
+
+fun loadAssets() {
+  // Using Kotlin's `async` will ensure that the coroutine is not
+  // immediately suspended and assets are scheduled asynchronously,
+  // but to take advantage of parallel asset loading, we have to pass
+  // a context with multiple threads to AssetStorage:
+  val assetStorage = AssetStorage(asyncContext = newAsyncContext(threads = 2))
+  
+  KtxAsync.launch {
+    // Passing context to `async` is optional, but it allows you to
+    // perform even less operations on the main rendering thread:
+    val texture = async(assetStorage.asyncContext) {
+      assetStorage.load<Texture>("images/logo.png")
+    }
+    val font = async(assetStorage.asyncContext) {
+      assetStorage.load<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+    }
+    // Suspending the coroutine until both assets are loaded:
+    doSomethingWithTextureAndFont(texture.await(), font.await())
+  }
+}
+```
+
+Unloading assets from `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun unloadAsset(assetStorage: AssetStorage) {
+  KtxAsync.launch {
+    // Suspends the coroutine until the asset is unloaded:
+    assetStorage.unload<Texture>("images/logo.png")
+    // When the coroutine resumes here, the asset is unloaded.
+    // If no other assets use it as dependency, it will
+    // be removed from the asset storage and disposed of.
+  }
+}
+```
+
+Accessing assets from `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun accessAsset(assetStorage: AssetStorage) {
+  // Typically you can use assets returned by `load`,
+  // but AssetStorage also allows you to access assets
+  // already loaded by other coroutines.
+
+  // Returns true is asset is in the storage, loaded or not:
+  assetStorage.contains<Texture>("images/logo.png")
+  // Returns true if the asset loading has finished:
+  assetStorage.isLoaded<Texture>("images/logo.png")
+  // Checks how many times the asset was loaded or used as dependency:
+  assetStorage.getReferenceCount<Texture>("images/logo.png")
+  // Returns a list of dependencies loaded along with the asset:
+  assetStorage.getDependencies<Texture>("images/logo.png")
+  
+  KtxAsync.launch {
+    // By default, AssetStorage will not suspend the coroutine
+    // to get the asset and instead will return a Kotlin Deferred
+    // reference. This allows you to handle the asset however
+    // you need:
+    val asset: Deferred<Texture> = assetStorage["images/logo.png"]
+    // Checking if the asset loading has finished:
+    asset.isCompleted
+    // Suspending the coroutine to obtain asset instance:
+    var texture = asset.await()
+    
+    // If you want to suspend the coroutine to wait for the asset,
+    // you can do this in a single line:
+    texture = assetStorage.get<Texture>("images/logo.png").await()
+    
+    // Now the coroutine is resumed and `texture` can be used.
+  }
+}
+```
+
+Adding a fully loaded asset manually to the `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun addAsset(assetStorage: AssetStorage) {
+  KtxAsync.launch {
+    // You can store arbitrary objects in AssetStorage.
+    // They will be marked as loaded and accessible with `get`.
+    // If they are disposable, calling `unload` will also
+    // dispose of these assets. This might be useful for
+    // expensive objects such as the Batch.
+    val batch: Batch = SpriteBatch()
+    // Suspending the coroutine until the `batch` is added:
+    assetStorage.add("batch", batch)
+    // Now our `batch` will be available under "batch" path.
+  }
+}
+```
+
+Disposing of all assets stored by `AssetStorage`:
+
+```kotlin
+// Will block the current thread to unload all assets:
+assetStorage.dispose()
+// This will also disrupt loading of all unloaded assets.
+// Disposing errors are logged by default, but do not
+// cancel the process.
+```
+
+Disposing of all assets asynchronously:
+
+```kotlin
+import com.badlogic.gdx.Gdx
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun unloadAllAssets(assetStorage: AssetStorage) {
+  KtxAsync.launch { 
+    assetStorage.dispose { identifier, exception ->
+      // This lambda will be invoked for each encountered disposing error:
+      Gdx.app.error("KTX","Unable to dispose of asset: $identifier", exception)
+    }
+  }
+}
+```
+
+Loading assets with error handling:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetLoadingException
+import ktx.assets.async.AssetStorage
+import ktx.assets.async.AssetStorageException
+import ktx.async.KtxAsync
+
+fun loadAsset(assetStorage: AssetStorage) {
+  KtxAsync.launch {
+    // You can handle loading errors with a classic try-catch:
+    try {
+      val texture = assetStorage.load<Texture>("images/logo.png")
+    } catch (exception: AssetLoadingException) {
+      // Asset loader threw an exception - unable to load the asset.
+    } catch (exception: AssetStorageException) {
+      // Other error occurred. See AssetStorageException subclasses. 
+    }
+
+    // Note that is the asset threw an exception during loading,
+    // the exception will be rethrown by Deferred from `get`.
+  }
+}
+```
+
+Adding a custom `AssetLoader` to `AssetStorage`:
+
+```kotlin
+import ktx.assets.async.AssetStorage
+
+fun createCustomAssetStorage(): AssetStorage {
+  val assetStorage = AssetStorage()
+  // Custom asset loaders should be added before 
+  // loading any assets:
+  assetStorage.setLoader(suffix = ".file.extension") {
+    MyCustomAssetLoader(assetStorage.fileResolver)
+  }
+  // Remember to extend one of:
+  // com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
+  // com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
+
+  return assetStorage
+}
+```
+
+#### Implementation notes
+
+##### Multiple calls of `load` and `unload`
+
+It is completely safe to call `load` multiple times, even to obtain asset instances without dealing
+with `Deferred`. In that sense, it can be used as an alternative to `get`. Instead of loading the same
+asset multiple times, `AssetStorage` will just increase the reference count to the asset and return
+the same instance on each request.
+
+However, to eventually unload the asset, you have to call `unload` the same number of times as `load`.
+That, or simply dispose of all assets with `dispose`, which clears all reference counts and unloads everything.
+
+##### `runBlocking`
+
+Kotlin's `runBlocking` function allows to launch a coroutine and block the current thread until the coroutine
+is finished. In general, you should **avoid** `runBlocking` calls from the main rendering thread or the threads
+assigned to `AssetStorage` for asynchronous loading.
+
+This simple example will cause a deadlock:
+
+```kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.runBlocking
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun main() {
+  LwjglApplication(App())
+}
+
+class App : ApplicationAdapter() {
+  override fun create() {
+    KtxAsync.initiate()
+    val assetStorage = AssetStorage()
+    runBlocking {
+      assetStorage.load<Texture>("images/logo.png")
+    }
+    println("Will never be printed.")
+  }
+}
+```
+
+This is because `AssetStorage` needs access to the main rendering thread to finish loading the `Texture`
+with OpenGL context, but we have blocked the main rendering thread to wait for the asset.
+
+In as similar manner, this example blocks the only thread assigned to `AssetStorage` for asynchronous operations:
+
+```kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+import ktx.async.newSingleThreadAsyncContext
+
+fun main() {
+  LwjglApplication(App())
+}
+
+class App : ApplicationAdapter() {
+  override fun create() {
+    KtxAsync.initiate()
+    val asyncContext = newSingleThreadAsyncContext()
+    val assetStorage = AssetStorage(asyncContext = asyncContext)
+    KtxAsync.launch(asyncContext) {
+      runBlocking {
+        assetStorage.load<Texture>("images/logo.png")
+      }
+      println("Will never be printed and AssetStorage will be unusable.")
+    }
+  }
+}
+```
+
+As a rule of thumb, you should prefer to use suspending `AssetStorage` only from non-blocking coroutines,
+e.g. launched with `KtxAsync.launch` or `GlobalScope.launch`. If you change `runBlocking` in either of the
+examples to a proper coroutine launch, you will notice that the deadlocks no longer occur.
+
+It does not mean that `runBlocking` will always cause a deadlock, however. You can safely use `runBlocking`:
+
+- From within other threads than the main rendering thread and `AssetStorage` loading threads.
+- For `dispose`, both suspending and non-suspending variants.
+- For all non-suspending methods such as `contains`, `isLoaded`, `getReferenceCount`, `setLoader`, `getLoader`.
+- For `load` and `get` calls on already loaded assets. **With caution.**
+
+#### Synergy
+
+While [`ktx-assets`](../assets) module does provide some extensions to the `AssetManager`, which is a direct
+alternative to the `AssetStorage`, this module's other utilities for LibGDX assets and files APIs might still
+prove useful.
 
 ### Alternatives
 
