@@ -21,7 +21,7 @@ Examples of Kotlin language features used to improve usability, performance and 
 * *Nullable types* which improve typing information of selected interfaces and functions.
 * *Default interface methods* simplifying the implementation.
 * *Type-safe builders* for GUI, styling and physics engine.
-* *Coroutines context* providing concurrency utilities.
+* *Coroutines context* providing concurrency utilities and non-blocking asset loading.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
 See the [_Choosing KTX_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
@@ -34,13 +34,15 @@ You can include selected **KTX** modules based on the needs of your application.
 Module | Dependency name | Description
 :---: | :--- | ---
 [actors](actors) | `ktx-actors` | General [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI utilities for stages, actors, actions and event listeners.
-[app](app) | `ktx-app` | `ApplicationListener` implementations and other general application utilities.
+[app](app) | `ktx-app` | `ApplicationListener` implementations and general application utilities.
 [ashley](ashley) | `ktx-ashley` | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.
 [assets](assets) | `ktx-assets` | Resources management utilities.
+[assets-async](assets-async) | `ktx-assets-async` | Non-blocking asset loading using coroutines.
 [async](async) | `ktx-async` | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 [box2d](box2d) | `ktx-box2d` | [`Box2D`](https://github.com/libgdx/libgdx/wiki/Box2d) physics engine utilities.
 [collections](collections) | `ktx-collections` | Extensions for LibGDX custom collections.
-[freetype](freetype) | `ktx-freetype` | `FreeType` font loading utilities.
+[freetype](freetype) | `ktx-freetype` | `FreeType` fonts loading utilities.
+[freetype-async](freetype-async) | `ktx-freetype-async` | Non-blocking `FreeType` fonts loading using coroutines.
 [graphics](graphics) | `ktx-graphics` | Utilities related to rendering tools and graphics.
 [i18n](i18n) | `ktx-i18n` | Internationalization API utilities.
 [inject](inject) | `ktx-inject` | A simple dependency injection system with low overhead and no reflection usage.
@@ -51,8 +53,8 @@ Module | Dependency name | Description
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
-[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to the [scene2d](scene2d) module.
-[vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles. An _extension_ of [style](style) module.
+[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to [scene2d](scene2d).
+[vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles.
 
 ### Installation
 
