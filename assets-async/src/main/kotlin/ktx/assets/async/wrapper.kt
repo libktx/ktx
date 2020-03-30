@@ -126,7 +126,8 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   }
 
   override fun <Asset : Any> getLoader(type: Class<Asset>): AssetLoader<*, *>? = getLoader(type, "")
-  override fun <T : Any> getLoader(type: Class<T>, fileName: String): AssetLoader<*, *>? = assetStorage.getLoader(type, fileName)
+  override fun <T : Any> getLoader(type: Class<T>, fileName: String): AssetLoader<*, *>? =
+    assetStorage.getLoader(type, fileName)
 
   override fun isLoaded(assetDesc: AssetDescriptor<*>): Boolean = assetStorage.isLoaded(assetDesc)
   override fun isLoaded(fileName: String, type: Class<*>): Boolean = isLoaded(AssetDescriptor(fileName, type))
@@ -156,7 +157,8 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   @Deprecated("AssetLoader instances can be mutable." +
     "AssetStorage requires functional providers of loaders rather than singular instances.",
     replaceWith = ReplaceWith("AssetStorage.setLoader"))
-  override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(type: Class<T>, loader: AssetLoader<T, P>) = setLoader(type, null, loader)
+  override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(type: Class<T>, loader: AssetLoader<T, P>) =
+    setLoader(type, null, loader)
 
   @Deprecated("AssetLoader instances can be mutable." +
     "AssetStorage requires functional providers of loaders rather than singular instances.",

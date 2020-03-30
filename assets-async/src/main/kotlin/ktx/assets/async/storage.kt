@@ -323,6 +323,12 @@ class AssetStorage(
    * Note that to unload an asset, [unload] method should be called the same amount of times as [load].
    * Asset dependencies should not be unloaded directly; instead, unload the asset that required them
    * and caused them to load in the first place.
+   *
+   * If the [parameters] define a [AssetLoaderParameters.loadedCallback], it will be invoked on the main
+   * rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
   suspend inline fun <reified T> load(path: String, parameters: AssetLoaderParameters<T>? = null): T =
     load(getAssetDescriptor(path, parameters))
@@ -348,6 +354,12 @@ class AssetStorage(
    * Note that to unload an asset, [unload] method should be called the same amount of times as [load].
    * Asset dependencies should not be unloaded directly; instead, unload the asset that required them
    * and caused them to load in the first place.
+   *
+   * If the [parameters] define a [AssetLoaderParameters.loadedCallback], it will be invoked on the main
+   * rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
   suspend fun <T> load(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null): T =
     load(identifier.toAssetDescriptor(parameters))
@@ -371,6 +383,12 @@ class AssetStorage(
    * Note that to unload an asset, [unload] method should be called the same amount of times as [load].
    * Asset dependencies should not be unloaded directly; instead, unload the asset that required them
    * and caused them to load in the first place.
+   *
+   * If the [AssetDescriptor.params] define a [AssetLoaderParameters.loadedCallback], it will be invoked on
+   * the main rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
   suspend fun <T> load(descriptor: AssetDescriptor<T>): T {
     lateinit var newAssets: List<Asset<*>>
@@ -515,7 +533,21 @@ class AssetStorage(
 
   private fun <T> setLoaded(asset: Asset<T>, value: T) {
     val isAssigned = asset.reference.complete(value)
-    if (!isAssigned) {
+    if (isAssigned) {
+      // The asset was correctly loaded and assigned.
+      try {
+        // Notifying the LibGDX loading callback to support AssetManager behavior:
+        asset.descriptor.params?.loadedCallback?.finishedLoading(
+          asAssetManager, asset.identifier.path, asset.identifier.type
+        )
+      } catch (exception: Throwable) {
+        // We are unable to propagate the exception at this point, so we just log it:
+        logger.error(
+          "Exception occurred during execution of loaded callback of asset: ${asset.identifier}",
+          exception
+        )
+      }
+    } else {
       // The asset was unloaded asynchronously. The deferred was likely completed with an exception.
       // Now we have to take care of the loaded value or it will remain loaded and unreferenced.
       try {

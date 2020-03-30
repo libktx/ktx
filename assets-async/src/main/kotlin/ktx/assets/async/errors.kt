@@ -1,6 +1,7 @@
 package ktx.assets.async
 
 import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
@@ -67,6 +68,9 @@ class AssetLoadingException(descriptor: AssetDescriptor<*>, cause: Throwable)
   : AssetStorageException(message = "Unable to load asset: $descriptor", cause = cause)
 
 /**
+ * Thrown when unsupported methods are called on the [AssetManagerWrapper].
+ * It is typically only caused by [AssetLoader] instances or a [AssetLoaderParameters.LoadedCallback].
+ *
  * [AssetStorage] reuses official [AssetLoader] implementations to load the assets.
  * [SynchronousAssetLoader] and [AsynchronousAssetLoader] both expect an instance of [AssetManager]
  * to perform some basic operations on assets. To support the loaders API, [AssetStorage] is wrapped
@@ -86,15 +90,18 @@ class UnsupportedMethodException(method: String) :
 
 /**
  * This exception is only ever thrown when trying to access assets via [AssetManagerWrapper].
- * It is typically only called by [AssetLoader] instances.
+ * It is typically only caused by [AssetLoader] instances or a [AssetLoaderParameters.LoadedCallback].
  *
- * If this exception is thrown, it means that [AssetLoader] attempts to access an asset that either:
+ * If this exception is thrown, it usually means that [AssetLoader] attempts to access an asset that either:
  * - Is already unloaded.
  * - Failed to load with exception.
  * - Was not listed by [AssetLoader.getDependencies].
  * - Has not loaded yet, which should never happen if the dependency was listed correctly.
  *
- * This exception is only expected in case of concurrent loading and unloading of the same asset.
+ * It can also be caused by an [AssetLoaderParameters.LoadedCallback] assigned to an asset when it tries
+ * to access unloaded assets with [AssetManagerWrapper.get].
+ *
+ * Normally this exception is only expected in case of concurrent loading and unloading of the same asset.
  * If it occurs otherwise, the [AssetLoader] associated with the asset might incorrect list
  * asset's dependencies.
  */

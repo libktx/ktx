@@ -30,7 +30,7 @@ Feature | **KTX** `AssetStorage` | LibGDX `AssetManager`
 *Error handling* | **Build-in language syntax.** A regular try-catch block within coroutine body can be used to handle loading errors. Provides a clean way to handle exceptions thrown by each asset separately. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown. Flow of the application is undisturbed, which makes it difficult to handle exceptions of specific assets.
 *File name collisions* | **Multiple assets of different types can be loaded from same path.** For example, you can load both a `Texture` and a `Pixmap` from the same PNG file. | **File paths act as unique identifiers.** `AssetManager` cannot store multiple assets with the same path, even if they have different types.
 *Progress tracking* | **Limited.** Since `AssetStorage` does not force the users to schedule loading of all assets up front, it does not know the exact percent of the loaded assets. Progress must be tracked externally. | **Supported.** Since all loaded assets have to be scheduled up front, `AssetManager` can track total loading progress.
-*Usage* | **Launch coroutine, load assets, use as soon as loaded.** Asynchronous complexity is hidden by the coroutines. | **Schedule loading, update in loop until loaded, extract from manager.** API based on polling _(are you done yet?)_ rather than callbacks, which might prove tedious during loading phase. Event listeners or callbacks are not supported.
+*Usage* | **Launch coroutine, load assets, use as soon as loaded.** Asynchronous complexity is hidden by the coroutines. | **Schedule loading, update in loop until loaded, extract from manager.** API based on polling _(are you done yet?),_ which might prove tedious during loading phase. Loading callbacks are available, but have obscure API and still require constant updating of the manager.
 
 #### Usage comparison
 
@@ -588,6 +588,21 @@ It does not mean that `runBlocking` will always cause a deadlock, however. You c
 - For `load` and `get.await` calls requesting already loaded assets. **Use with caution.**
 - From within other threads than the main rendering thread and the `AssetStorage` loading threads. These threads
 will be blocked until the operation is finished, which isn't ideal, but at least the loading will remain possible.
+
+##### Integration with LibGDX and known unsupported features
+
+`AssetStorage` does its best to integrate with LibGDX APIs - including the `AssetLoader` implementations, which were
+designed for the `AssetManager`. [A dedicated wrapper](src/main/kotlin/ktx/assets/async/wrapper.kt) extends and
+overrides `AssetManager`, delegating a subset of supported methods to `AssetStorage`. The official `AssetLoader`
+implementations use supported methods such as `get`, but please note that some third-party loaders might not
+work out of the box with `AssetStorage`. Exceptions related to broken loaders include `UnsupportedMethodException`
+and `MissingDependencyException`.
+
+`AssetStorage`, even with its wrapper, cannot be used as drop-in replacement for `AssetManager` throughout the
+official APIs. In particular, `Texture.setAssetManager` and `Cubemap.setAssetManager` are both unsupported.
+
+If you heavily rely on these unsupported APIs or custom asset loaders, you might need to use `AssetManager` instead.
+See [`ktx-assets`](../assets) module for `AssetManager` utilities.
 
 #### Synergy
 

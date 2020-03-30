@@ -2445,6 +2445,68 @@ class AssetStorageTest : AsyncTest() {
     assertSame(file, assetDescriptor.file)
   }
 
+  @Test
+  fun `should invoke loaded callback on rendering thread to match AssetManager behavior`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val callbackFinished = CompletableFuture<Boolean>()
+    val callbackExecutions = AtomicInteger()
+    var callbackExecutedOnRenderingThread = false
+    lateinit var callbackManager: AssetManager
+    var callbackPath = ""
+    var callbackType = Any::class.java
+    val parameters = TextAssetLoaderParameters().apply {
+      loadedCallback = AssetLoaderParameters.LoadedCallback { assetManager, fileName, type ->
+        callbackExecutions.incrementAndGet()
+        callbackExecutedOnRenderingThread = KtxAsync.isOnRenderingThread()
+        callbackManager = assetManager
+        callbackPath = fileName
+        callbackType = type
+        callbackFinished.complete(true)
+      }
+    }
+
+    // When:
+    runBlocking { storage.load<String>(path, parameters) }
+
+    // Then:
+    callbackFinished.join()
+    assertEquals(1, callbackExecutions.get())
+    assertTrue(callbackExecutedOnRenderingThread)
+    assertTrue(callbackManager is AssetManagerWrapper)
+    assertSame(storage, (callbackManager as AssetManagerWrapper).assetStorage)
+    assertEquals(path, callbackPath)
+    assertSame(String::class.java, callbackType)
+  }
+
+  @Test
+  fun `should log exceptions thrown by loading callbacks`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val loggingFinished = CompletableFuture<Boolean>()
+    val exception = IllegalStateException("Expected.")
+    val logger = mock<Logger> {
+      on(it.error(any(), any())) doAnswer { loggingFinished.complete(true); Unit }
+    }
+    storage.logger = logger
+    val parameters = TextAssetLoaderParameters().apply {
+      loadedCallback = AssetLoaderParameters.LoadedCallback { _, _, _ ->
+        throw exception
+      }
+    }
+
+    // When:
+    runBlocking { storage.load<String>(path, parameters) }
+
+    // Then: asset should still be loaded, but the callback exception must be logged:
+    loggingFinished.join()
+    assertTrue(storage.isLoaded<String>(path))
+    assertEquals("Content.", storage.get<String>(path).joinAndGet())
+    verify(logger).error(any(), eq(exception))
+  }
+
   /** For [Disposable.dispose] interface testing and loaders testing. */
   class FakeAsset : Disposable {
     val disposingFinished = CompletableFuture<Boolean>()
