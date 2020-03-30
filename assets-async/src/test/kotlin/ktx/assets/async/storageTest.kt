@@ -1438,6 +1438,53 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
+  fun `should unload assets with path`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    runBlocking { storage.load<String>(path) }
+
+    // When:
+    runBlocking { storage.unload<String>(path) }
+
+    // Then:
+    assertFalse(storage.isLoaded<String>(path))
+    assertEquals(0, storage.getReferenceCount<String>(path))
+  }
+
+  @Test
+  fun `should unload assets with descriptor`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val descriptor = storage.getAssetDescriptor<String>(path)
+    runBlocking { storage.load(descriptor) }
+
+    // When:
+    runBlocking { storage.unload(descriptor) }
+
+    // Then:
+    assertFalse(storage.isLoaded(descriptor))
+    assertEquals(0, storage.getReferenceCount(descriptor))
+  }
+
+  @Test
+  fun `should unload assets with identifier`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val identifier = storage.getIdentifier<String>(path)
+    runBlocking { storage.load(identifier) }
+
+    // When:
+    runBlocking { storage.unload(identifier) }
+
+    // Then:
+    assertFalse(storage.isLoaded(identifier))
+    assertEquals(0, storage.getReferenceCount(identifier))
+  }
+
+  @Test
   fun `should differentiate assets by path and type`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
@@ -2291,6 +2338,35 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
+  fun `should create AssetDescriptor with a custom file`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+    val file = mock<FileHandle>()
+
+    // When:
+    val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt", fileHandle = file)
+
+    // Then:
+    assertEquals("ktx/assets/async/string.txt", descriptor.fileName)
+    assertEquals(String::class.java, descriptor.type)
+    assertSame(file, descriptor.file)
+  }
+
+  @Test
+  fun `should create Identifier`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+    val path = "my\\file.png"
+
+    // When:
+    val identifier = storage.getIdentifier<Vector2>(path)
+
+    // Then: should normalize path and extract reified type:
+    assertEquals("my/file.png", identifier.path)
+    assertSame(Vector2::class.java, identifier.type)
+  }
+
+  @Test
   fun `should normalize file paths`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
@@ -2324,6 +2400,49 @@ class AssetStorageTest : AsyncTest() {
     // Then: should copy path and class without loading parameters:
     assertEquals(assetDescriptor.fileName, identifier.path)
     assertEquals(assetDescriptor.type, identifier.type)
+  }
+
+  @Test
+  fun `should convert Identifier to AssetDescriptor`() {
+    // Given:
+    val identifier = Identifier(String::class.java, "file.path")
+
+    // When:
+    val assetDescriptor = identifier.toAssetDescriptor()
+
+    // Then:
+    assertEquals("file.path", assetDescriptor.fileName)
+    assertSame(String::class.java, assetDescriptor.type)
+  }
+
+  @Test
+  fun `should convert Identifier to AssetDescriptor with loading parameters`() {
+    // Given:
+    val identifier = Identifier(String::class.java, "file.path")
+    val parameters = mock<AssetLoaderParameters<String>>()
+
+    // When:
+    val assetDescriptor = identifier.toAssetDescriptor(parameters)
+
+    // Then:
+    assertEquals("file.path", assetDescriptor.fileName)
+    assertSame(String::class.java, assetDescriptor.type)
+    assertSame(parameters, assetDescriptor.params)
+  }
+
+  @Test
+  fun `should convert Identifier to AssetDescriptor with a custom file`() {
+    // Given:
+    val identifier = Identifier(String::class.java, "file.path")
+    val file = mock<FileHandle>()
+
+    // When:
+    val assetDescriptor = identifier.toAssetDescriptor(fileHandle = file)
+
+    // Then:
+    assertEquals("file.path", assetDescriptor.fileName)
+    assertSame(String::class.java, assetDescriptor.type)
+    assertSame(file, assetDescriptor.file)
   }
 
   /** For [Disposable.dispose] interface testing and loaders testing. */

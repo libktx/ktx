@@ -27,19 +27,20 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleE
  *
  * Note that [KtxAsync.initiate] must be called before creating an [AssetStorage].
  *
- * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
- * internal files.
- *
  * [asyncContext] is used to perform asynchronous file loading. Defaults to a single-threaded context using an
  * [AsyncExecutor]. See [newSingleThreadAsyncContext] or [ktx.async.newAsyncContext] functions to create a custom
  * loading context. Multi-threaded contexts are supported and might boost loading performance if the assets
  * are loaded asynchronously.
  *
- * If `useDefaultLoaders` is true (which is the default), all default LibGDX asset loaders will be registered.
+ * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
+ * internal files.
+ *
+ * If `useDefaultLoaders` is true (which is the default), all default LibGDX [AssetLoader] implementations
+ * will be registered.
  */
 class AssetStorage(
-  val fileResolver: FileHandleResolver = InternalFileHandleResolver(),
   val asyncContext: CoroutineContext = newSingleThreadAsyncContext(threadName = "AssetStorage-Thread"),
+  val fileResolver: FileHandleResolver = InternalFileHandleResolver(),
   useDefaultLoaders: Boolean = true
 ) : Disposable {
   @Suppress("LeakingThis")
@@ -82,23 +83,28 @@ class AssetStorage(
    * Uses reified [T] type to obtain the asset class.
    *
    * [T] is type of the loaded asset.
-   * [path] to the file should be consistent with [fileResolver] asset type.
+   * [path] to the file must be consistent with [fileResolver] asset type.
    */
-  inline fun <reified T> getIdentifier(path: String): Identifier<T> = Identifier(T::class.java, path)
+  inline fun <reified T> getIdentifier(path: String): Identifier<T> = Identifier(T::class.java, path.normalizePath())
 
   /**
    * Creates a new [AssetDescriptor] for the selected asset.
+   *
    * [T] is type of the loaded asset.
    * [path] to the file should be consistent with [fileResolver] asset type.
    * Loading [parameters] are optional and passed to the associated [AssetLoader].
    * Returns a new instance of [AssetDescriptor] with a resolved [FileHandle].
+   *
+   * If the asset requires a [FileHandle] incompatible with the storage [fileResolver],
+   * use the [fileHandle] parameter to set it.
    */
   inline fun <reified T> getAssetDescriptor(
     path: String,
-    parameters: AssetLoaderParameters<T>? = null
+    parameters: AssetLoaderParameters<T>? = null,
+    fileHandle: FileHandle? = null
   ): AssetDescriptor<T> {
     val descriptor = AssetDescriptor(path.normalizePath(), T::class.java, parameters)
-    descriptor.file = fileResolver.resolve(path)
+    descriptor.file = fileHandle ?: fileResolver.resolve(path)
     return descriptor
   }
 
@@ -264,7 +270,7 @@ class AssetStorage(
    * Throws [AlreadyLoadedAssetException] if an asset with the same path is already loaded or scheduled for loading.
    */
   suspend fun <T> add(identifier: Identifier<T>, asset: T) =
-    add(AssetDescriptor(identifier.path, identifier.type), asset)
+    add(identifier.toAssetDescriptor(), asset)
 
   /**
    * Adds a fully loaded [asset] to the storage. Allows to avoid loading the asset with the [AssetStorage]
@@ -344,7 +350,7 @@ class AssetStorage(
    * and caused them to load in the first place.
    */
   suspend fun <T> load(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null): T =
-    load(AssetDescriptor(identifier.path, identifier.type, parameters))
+    load(identifier.toAssetDescriptor(parameters))
 
   /**
    * Schedules loading of an asset of [T] type described by the [descriptor].
@@ -802,120 +808,54 @@ internal data class Asset<T>(
 )
 
 /**
- * Thrown by [AssetStorage] and related services.
- * [message] describes the problem, while [cause] is the optional cause of the exception.
- *
- * Note that [AssetStorage] usually throws subclasses of this exception, rather than
- * instances of this exception directly. This class acts as the common superclass
- * with which all [AssetStorage]-related exceptions can be caught and handled.
- */
-open class AssetStorageException(message: String, cause: Throwable? = null) : GdxRuntimeException(message, cause)
-
-/**
- * Thrown when the asset requested by [AssetStorage.get] is not available in the [AssetStorage].
- */
-class MissingAssetException(identifier: Identifier<*>) :
-  AssetStorageException(message = "Asset: $identifier is not loaded.")
-
-/**
- * Thrown by [AssetStorage.load] or [AssetStorage.get] when the requested asset
- * was unloaded asynchronously.
- */
-class UnloadedAssetException(identifier: Identifier<*>) :
-  AssetStorageException(message = "Asset: $identifier was unloaded.")
-
-/**
- * Thrown by [AssetStorage.add] when attempting to add an asset with [Identifier]
- * that is already present in the [AssetStorage].
- */
-class AlreadyLoadedAssetException(identifier: Identifier<*>) :
-  AssetStorageException(message = "Asset: $identifier was already added to storage.")
-
-/**
- * Thrown by [AssetStorage.load] when the [AssetLoader] for the requested asset type
- * and path is unavailable. See [AssetStorage.setLoader].
- */
-class MissingLoaderException(descriptor: AssetDescriptor<*>) :
-  AssetStorageException(
-    message = "No loader available for assets of type: ${descriptor.type} " +
-      "with path: ${descriptor.fileName}."
-  )
-
-/**
- * Thrown by [AssetStorage.load] or [AssetStorage.get] when the asset failed to load
- * due to invalid loader implementation. Since loaders are pre-validated during
- * registration, normally this exception is extremely rare and caused by invalid
- * [AssetStorage.setLoader] usage.
- */
-class InvalidLoaderException(loader: Loader<*>) :
-  AssetStorageException(
-    message = "Invalid loader: $loader. It must extend either " +
-      "SynchronousAssetLoader or AsynchronousAssetLoader."
-  )
-
-/**
- * Thrown by [AssetStorage.load] or [AssetStorage.get] when the asset failed to load
- * due to an unexpected loading exception, usually thrown by the associated [AssetLoader].
- */
-class AssetLoadingException(descriptor: AssetDescriptor<*>, cause: Throwable)
-  : AssetStorageException(message = "Unable to load asset: $descriptor", cause = cause)
-
-/**
- * [AssetStorage] reuses official [AssetLoader] implementations to load the assets.
- * [SynchronousAssetLoader] and [AsynchronousAssetLoader] both expect an instance of [AssetManager]
- * to perform some basic operations on assets. To support the loaders API, [AssetStorage] is wrapped
- * with an [AssetManagerWrapper] which delegates supported methods to [AssetStorage] and throws
- * this exception otherwise.
- *
- * Most official loaders only call [AssetManager.get] to obtain asset dependencies, but custom loaders
- * can perform operations that are unsupported by [AssetStorage] due to its asynchronous nature
- * and storing assets mapped by path and type rather than path alone. If this exception causes the loading
- * to fail, [AssetLoader] associated with the asset has to be refactored.
- */
-class UnsupportedMethodException(method: String) :
-  AssetStorageException(
-    message = "AssetLoader used unsupported operation of AssetManager wrapper: $method " +
-      "Please refactor AssetLoader not to call this method on AssetManager."
-  )
-
-/**
- * This exception is only ever thrown when trying to access assets via [AssetManagerWrapper].
- * It is typically only called by [AssetLoader] instances.
- *
- * If this exception is thrown, it means that [AssetLoader] attempts to access an asset that either:
- * - Is already unloaded.
- * - Failed to load with exception.
- * - Was not listed by [AssetLoader.getDependencies].
- * - Has not loaded yet, which should never happen if the dependency was listed correctly.
- *
- * This exception is only expected in case of concurrent loading and unloading of the same asset.
- * If it occurs otherwise, the [AssetLoader] associated with the asset might incorrect list
- * asset's dependencies.
- */
-class MissingDependencyException(identifier: Identifier<*>, cause: Throwable? = null) :
-  AssetStorageException(
-    message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
-      "This asset was either not listed in dependencies, loaded with exception, not loaded yet " +
-      "or unloaded asynchronously.",
-    cause = cause
-  )
-
-/**
  * Uniquely identifies a single asset stored in an [AssetStorage] by its [type] and [path].
  *
  * Multiple assets with the same [path] can be stored in an [AssetStorage] as long as they
  * have a different [type]. Similarly, [AssetStorage] can store multiple assets of the same
  * [type], as long as each has a different [path].
+ *
+ * Avoid using [Identifier] constructor directly. Instead, rely on [AssetStorage.getIdentifier]
+ * or [AssetDescriptor.toIdentifier].
  */
 data class Identifier<T>(
   /** [Class] of the asset specified during loading. */
   val type: Class<T>,
-  /** File path to the asset compatible with the [AssetStorage.fileResolver]. */
+  /** File path to the asset compatible with the [AssetStorage.fileResolver]. Must be normalized. */
   val path: String
-)
+) {
+  /**
+   * Converts this [Identifier] to an [AssetDescriptor] that describes the asset and its loading data.
+   *
+   * If the returned [AssetDescriptor] is used to load an asset, and the asset requires specific loading
+   * instructions, make sure to pass the loading [parameters] to set [AssetDescriptor.parameters]. Similarly,
+   * if the asset requires a custom [FileHandle] incompatible with [AssetStorage.fileResolver], pass the
+   * [fileHandle] parameter to set it as [AssetDescriptor.file].
+   *
+   * If the [AssetDescriptor] is used to simply identify an asset similarly to an [Identifier],
+   * [parameters] and [fileHandle] are not required. You can retrieve a loaded asset from the
+   * [AssetStorage] with either its [Identifier] or an [AssetDescriptor] without loading data -
+   * the parameters and file are only used when calling [AssetStorage.load].
+   */
+  fun toAssetDescriptor(
+    parameters: AssetLoaderParameters<T>? = null, fileHandle: FileHandle? = null
+  ): AssetDescriptor<T> =
+    AssetDescriptor(path, type, parameters).apply {
+      if (fileHandle != null) {
+        file = fileHandle
+      }
+    }
+}
 
 /**
  * Converts this [AssetDescriptor] to an [AssetStorage] [Identifier].
  * Copies [AssetDescriptor.type] to [Identifier.type] and [AssetDescriptor.fileName] to [Identifier.path].
+ *
+ * Note that loading parameters from [AssetDescriptor.parameters] are ignored. If the returned [Identifier]
+ * is used to load an asset, and the asset requires specific loading instructions, make sure to pass the
+ * loading parameters to the [AssetStorage.load] method.
+ *
+ * Similarly, [AssetDescriptor.file] is not used by the [Identifier]. Instead, [AssetDescriptor.fileName]
+ * will be used to resolve the file using [AssetStorage.fileResolver]. If a [FileHandle] of different type
+ * is required, use [AssetDescriptor] for loading instead.
  */
 fun <T> AssetDescriptor<T>.toIdentifier(): Identifier<T> = Identifier(type, fileName)
