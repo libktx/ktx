@@ -19,13 +19,14 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 open class AssetStorageException(message: String, cause: Throwable? = null) : GdxRuntimeException(message, cause)
 
 /**
- * Thrown when the asset requested by [AssetStorage.get] is not available in the [AssetStorage].
+ * Thrown when the asset requested by an [AssetStorage.get] variant is not available
+ * in the [AssetStorage] at all or has not been loaded yet.
  */
 class MissingAssetException(identifier: Identifier<*>) :
   AssetStorageException(message = "Asset: $identifier is not loaded.")
 
 /**
- * Thrown by [AssetStorage.load] or [AssetStorage.get] when the requested asset
+ * Thrown by [AssetStorage.load] or [AssetStorage.get] variant when the requested asset
  * was unloaded asynchronously.
  */
 class UnloadedAssetException(identifier: Identifier<*>) :

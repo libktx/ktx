@@ -137,7 +137,9 @@ See [`ktx-async`](../async) setup section to enable coroutines in your project.
 
 `AssetStorage` contains the following core methods:
 
-- `get: Deferred<T>` - returns a `Deferred` reference to the asset if it was scheduled for loading.
+- `get: T` - returns a loaded asset or throws `MissingAssetException` if the asset is unavailable.
+- `getOrNull: T?` - returns a loaded asset or `null` if the asset is unavailable.
+- `getAsync: Deferred<T>` - returns a `Deferred` reference to the asset if it was scheduled for loading.
 Suspending `await()` can be called to obtain the asset instance. `isCompleted` can be used to check
 if the asset loading was finished.
 - `load: T` _(suspending)_ - schedules asset for asynchronous loading. Suspends the coroutine until
@@ -355,6 +357,11 @@ fun accessAsset(assetStorage: AssetStorage) {
   // but AssetStorage also allows you to access assets
   // already loaded by other coroutines.
 
+  // Immediately returns loaded asset or throws exception if missing:
+  var texture = assetStorage.get<Texture>("images/logo.png")
+  // Immediately returns loaded asset or null if missing:
+  val textureOrNull = assetStorage.getOrNull<Texture>("images/logo.png")
+
   // Returns true is asset is in the storage, loaded or not:
   assetStorage.contains<Texture>("images/logo.png")
   // Returns true if the asset loading has finished:
@@ -365,19 +372,22 @@ fun accessAsset(assetStorage: AssetStorage) {
   assetStorage.getDependencies<Texture>("images/logo.png")
   
   KtxAsync.launch {
-    // By default, AssetStorage will not suspend the coroutine
-    // to get the asset and instead will return a Kotlin Deferred
-    // reference. This allows you to handle the asset however
-    // you need:
-    val asset: Deferred<Texture> = assetStorage["images/logo.png"]
+    // You can also access your assets in coroutines, so you can
+    // wait for the assets to be loaded.
+
+    // When calling getAsync, AssetStorage will not throw an exception
+    // or return null if the asset is still loading. Instead, it will
+    // return a Kotlin Deferred reference. This allows you suspend the
+    // coroutine until the asset is loaded:
+    val asset: Deferred<Texture> = assetStorage.getAsync("images/logo.png")
     // Checking if the asset loading has finished:
     asset.isCompleted
     // Suspending the coroutine to obtain asset instance:
-    var texture = asset.await()
+    texture = asset.await()
     
     // If you want to suspend the coroutine to wait for the asset,
     // you can do this in a single line:
-    texture = assetStorage.get<Texture>("images/logo.png").await()
+    texture = assetStorage.getAsync<Texture>("images/logo.png").await()
     
     // Now the coroutine is resumed and `texture` can be used.
   }
@@ -461,7 +471,7 @@ fun loadAsset(assetStorage: AssetStorage) {
 
     // Note that if the asset loading ended with an exception,
     // the same exception will be rethrown each time the asset
-    // is accessed with `get.await()` or `load`.
+    // is accessed with `get`, `getOrNull`, `getAsync.await` or `load`.
   }
 }
 ```
@@ -490,7 +500,7 @@ fun createCustomAssetStorage(): AssetStorage {
 ##### Multiple calls of `load` and `unload`
 
 It is completely safe to call `load` multiple times with the same asset data, even to obtain asset instances
-without dealing with `Deferred`. In that sense, it can be used as an alternative to `get`.
+without dealing with `Deferred`. In that sense, it can be used as an alternative to `getAsync` inside coroutines.
 
 Instead of loading the same asset multiple times, `AssetStorage` will just increase the reference count
 to the asset and return the same instance on each request. This also works concurrently - the storage will
@@ -584,7 +594,8 @@ in either of the examples, you will notice that the deadlocks no longer occur.
 It does not mean that `runBlocking` will always cause a deadlock, however. You can safely use `runBlocking`:
 
 - For `dispose`, both suspending and non-suspending variants.
-- For all non-suspending methods such as `contains`, `isLoaded`, `getReferenceCount`, `setLoader`, `getLoader`.
+- For all non-suspending methods such as `get`, `getOrNull`, `contains`, `isLoaded`, `setLoader`, `getLoader`.
+- For `add`. While `add` does suspend the coroutine, it requires neither the rendering thread nor the loading threads.
 - For `load` and `get.await` calls requesting already loaded assets. **Use with caution.**
 - From within other threads than the main rendering thread and the `AssetStorage` loading threads. These threads
 will be blocked until the operation is finished, which isn't ideal, but at least the loading will remain possible.

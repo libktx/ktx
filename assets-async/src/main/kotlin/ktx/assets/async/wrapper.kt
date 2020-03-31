@@ -8,7 +8,6 @@ import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.utils.Logger
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ktx.async.KtxAsync
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -82,20 +81,14 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   override fun <Asset : Any> get(assetDescriptor: AssetDescriptor<Asset>): Asset =
     get(assetDescriptor.fileName, assetDescriptor.type)
 
-  override fun <Asset : Any> get(fileName: String, type: Class<Asset>): Asset =
-    runBlocking {
-      val identifier = Identifier(type, fileName)
-      val asset = assetStorage[identifier]
-      if (asset.isCompleted) {
-        try {
-          asset.await()
-        } catch (exception: Throwable) {
-          throw MissingDependencyException(identifier, exception)
-        }
-      } else {
-        throw MissingDependencyException(identifier)
-      }
+  override fun <Asset : Any> get(fileName: String, type: Class<Asset>): Asset {
+    val identifier = Identifier(type, fileName)
+    return try {
+      assetStorage[identifier]
+    } catch (exception: Throwable) {
+      throw MissingDependencyException(identifier, exception)
     }
+  }
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("get(fileName, type)"))
   override fun <Asset : Any> get(fileName: String): Asset = throw UnsupportedMethodException("get(String)")

@@ -19,7 +19,7 @@ Examples of Kotlin language features used to improve usability, performance and 
 * *Extension methods* with sensible *default parameters*.
 * *Inline methods* with reduced runtime overhead for various listeners, builders and loggers.
 * *Nullable types* which improve typing information of selected interfaces and functions.
-* *Default interface methods* simplifying the implementation.
+* *Default interface methods* for common interfaces, simplifying their implementations.
 * *Type-safe builders* for GUI, styling and physics engine.
 * *Coroutines context* providing concurrency utilities and non-blocking asset loading.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
@@ -33,7 +33,7 @@ You can include selected **KTX** modules based on the needs of your application.
 
 Module | Dependency name | Description
 :---: | :--- | ---
-[actors](actors) | `ktx-actors` | General [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI utilities for stages, actors, actions and event listeners.
+[actors](actors) | `ktx-actors` | [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI extensions for stages, actors, actions and event listeners.
 [app](app) | `ktx-app` | `ApplicationListener` implementations and general application utilities.
 [ashley](ashley) | `ktx-ashley` | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.
 [assets](assets) | `ktx-assets` | Resources management utilities.
@@ -45,7 +45,7 @@ Module | Dependency name | Description
 [freetype-async](freetype-async) | `ktx-freetype-async` | Non-blocking `FreeType` fonts loading using coroutines.
 [graphics](graphics) | `ktx-graphics` | Utilities related to rendering tools and graphics.
 [i18n](i18n) | `ktx-i18n` | Internationalization API utilities.
-[inject](inject) | `ktx-inject` | A simple dependency injection system with low overhead and no reflection usage.
+[inject](inject) | `ktx-inject` | A dependency injection system with low overhead and no reflection usage.
 [json](json) | `ktx-json` | Utilities for LibGDX [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization API.
 [log](log) | `ktx-log` | Minimal runtime overhead cross-platform logging using inlined functions.
 [math](math) | `ktx-math` | Operator functions for LibGDX math API and general math utilities.

@@ -31,6 +31,7 @@ import com.google.common.collect.Sets
 import com.nhaarman.mockitokotlin2.*
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.*
+import kotlinx.coroutines.future.asCompletableFuture
 import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 import ktx.async.*
 import org.junit.*
@@ -88,12 +89,6 @@ class AssetStorageTest : AsyncTest() {
     (Gdx.audio as OpenALAudio).dispose()
   }
 
-  /**
-   * Testing utility. Obtains instance of [T] by blocking the thread until the
-   * [Deferred] is completed. Rethrows any exceptions caught by [Deferred].
-   */
-  private fun <T> Deferred<T>.joinAndGet(): T = runBlocking { await() }
-
   @Test
   fun `should load text assets`() {
     // Given:
@@ -106,7 +101,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path).joinAndGet())
+    assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
@@ -125,7 +120,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path).joinAndGet())
+    assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
@@ -143,7 +138,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path).joinAndGet())
+    assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
@@ -161,7 +156,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path).joinAndGet())
+    assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
@@ -181,7 +176,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertEquals("Content.", asset)
     assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path).joinAndGet())
+    assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
@@ -213,13 +208,13 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path).joinAndGet())
+    assertSame(asset, storage.get<BitmapFont>(path))
     assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
     // Font dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.region.texture, storage.get<Texture>(dependency))
 
     storage.dispose()
   }
@@ -237,13 +232,13 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path).joinAndGet())
+    assertSame(asset, storage.get<BitmapFont>(path))
     assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
     // Font dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.region.texture, storage.get<Texture>(dependency))
 
     storage.dispose()
   }
@@ -261,13 +256,13 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path).joinAndGet())
+    assertSame(asset, storage.get<BitmapFont>(path))
     assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
     // Font dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.region.texture, storage.get<Texture>(dependency))
 
     storage.dispose()
   }
@@ -301,7 +296,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path).joinAndGet())
+    assertSame(asset, storage.get<Music>(path))
     assertEquals(1, storage.getReferenceCount<Music>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
 
@@ -320,7 +315,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path).joinAndGet())
+    assertSame(asset, storage.get<Music>(path))
     assertEquals(1, storage.getReferenceCount<Music>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
 
@@ -340,7 +335,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path).joinAndGet())
+    assertSame(asset, storage.get<Music>(path))
     assertEquals(1, storage.getReferenceCount<Music>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
 
@@ -374,7 +369,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path).joinAndGet())
+    assertSame(asset, storage.get<Sound>(path))
     assertEquals(1, storage.getReferenceCount<Sound>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
 
@@ -393,7 +388,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path).joinAndGet())
+    assertSame(asset, storage.get<Sound>(path))
     assertEquals(1, storage.getReferenceCount<Sound>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
 
@@ -412,7 +407,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path).joinAndGet())
+    assertSame(asset, storage.get<Sound>(path))
     assertEquals(1, storage.getReferenceCount<Sound>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
 
@@ -446,12 +441,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path).joinAndGet())
+    assertSame(asset, storage.get<TextureAtlas>(path))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -470,12 +465,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path).joinAndGet())
+    assertSame(asset, storage.get<TextureAtlas>(path))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -494,12 +489,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path).joinAndGet())
+    assertSame(asset, storage.get<TextureAtlas>(path))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency).joinAndGet())
+    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -534,7 +529,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path).joinAndGet())
+    assertSame(asset, storage.get<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
 
@@ -553,7 +548,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path).joinAndGet())
+    assertSame(asset, storage.get<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
 
@@ -572,7 +567,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path).joinAndGet())
+    assertSame(asset, storage.get<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
 
@@ -605,7 +600,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path).joinAndGet())
+    assertSame(asset, storage.get<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
 
@@ -624,7 +619,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path).joinAndGet())
+    assertSame(asset, storage.get<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
 
@@ -643,7 +638,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path).joinAndGet())
+    assertSame(asset, storage.get<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
 
@@ -678,18 +673,18 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path).joinAndGet())
+    assertSame(asset, storage.get<Skin>(path))
     assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
     assertEquals(1, storage.getReferenceCount<Skin>(path))
     assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
     // Skin dependencies:
     assertTrue(storage.isLoaded<TextureAtlas>(atlas))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas).joinAndGet())
+    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
     assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture).joinAndGet())
+    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
     assertEquals(1, storage.getReferenceCount<Texture>(texture))
 
     storage.dispose()
@@ -709,18 +704,18 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path).joinAndGet())
+    assertSame(asset, storage.get<Skin>(path))
     assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
     assertEquals(1, storage.getReferenceCount<Skin>(path))
     assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
     // Skin dependencies:
     assertTrue(storage.isLoaded<TextureAtlas>(atlas))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas).joinAndGet())
+    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
     assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture).joinAndGet())
+    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
     assertEquals(1, storage.getReferenceCount<Texture>(texture))
 
     storage.dispose()
@@ -740,18 +735,18 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path).joinAndGet())
+    assertSame(asset, storage.get<Skin>(path))
     assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
     assertEquals(1, storage.getReferenceCount<Skin>(path))
     assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
     // Skin dependencies:
     assertTrue(storage.isLoaded<TextureAtlas>(atlas))
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas).joinAndGet())
+    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
     assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
     // Atlas dependencies:
     assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture).joinAndGet())
+    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
     assertEquals(1, storage.getReferenceCount<Texture>(texture))
 
     storage.dispose()
@@ -790,7 +785,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(storage.isLoaded<I18NBundle>(path))
     assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path).joinAndGet())
+    assertSame(asset, storage.get<I18NBundle>(path))
     assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
 
@@ -810,7 +805,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(storage.isLoaded<I18NBundle>(path))
     assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path).joinAndGet())
+    assertSame(asset, storage.get<I18NBundle>(path))
     assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
 
@@ -830,7 +825,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(storage.isLoaded<I18NBundle>(path))
     assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path).joinAndGet())
+    assertSame(asset, storage.get<I18NBundle>(path))
     assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
 
@@ -863,7 +858,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
 
@@ -882,7 +877,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
 
@@ -901,7 +896,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
 
@@ -935,12 +930,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect3D>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
     // Particle dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency).joinAndGet())
+    assertNotNull(storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -959,12 +954,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect3D>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
     // Particle dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency).joinAndGet())
+    assertNotNull(storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -983,12 +978,12 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path).joinAndGet())
+    assertSame(asset, storage.get<ParticleEffect3D>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
     assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
     // Particle dependencies:
     assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency).joinAndGet())
+    assertNotNull(storage.get<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
 
     storage.dispose()
@@ -1023,7 +1018,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1042,7 +1037,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1061,7 +1056,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1094,7 +1089,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1113,7 +1108,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1132,7 +1127,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1165,7 +1160,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1184,7 +1179,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1203,7 +1198,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path).joinAndGet())
+    assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
 
@@ -1238,7 +1233,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path).joinAndGet())
+    assertSame(asset, storage.get<ShaderProgram>(path))
     assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
 
@@ -1259,7 +1254,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path).joinAndGet())
+    assertSame(asset, storage.get<ShaderProgram>(path))
     assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
 
@@ -1280,7 +1275,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path).joinAndGet())
+    assertSame(asset, storage.get<ShaderProgram>(path))
     assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
 
@@ -1315,7 +1310,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path).joinAndGet())
+    assertSame(asset, storage.get<Cubemap>(path))
     assertEquals(1, storage.getReferenceCount<Cubemap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
 
@@ -1334,7 +1329,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path).joinAndGet())
+    assertSame(asset, storage.get<Cubemap>(path))
     assertEquals(1, storage.getReferenceCount<Cubemap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
 
@@ -1353,7 +1348,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path).joinAndGet())
+    assertSame(asset, storage.get<Cubemap>(path))
     assertEquals(1, storage.getReferenceCount<Cubemap>(path))
     assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
 
@@ -1376,12 +1371,115 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
-  fun `should return deferred that throws exception when attempting to get unloaded asset`() {
+  fun `should throw exception when attempting to get unloaded asset`() {
+    // Given:
+    val storage = AssetStorage()
+
+    // Expect:
+    shouldThrow<MissingAssetException> {
+      storage.get<String>("ktx/assets/async/string.txt")
+    }
+  }
+
+  @Test
+  fun `should return null when attempting to get unloaded asset or null`() {
     // Given:
     val storage = AssetStorage()
 
     // When:
-    val result = storage.get<String>("ktx/assets/async/string.txt")
+    val asset = storage.getOrNull<String>("ktx/assets/async/string.txt")
+
+    // Then:
+    assertNull(asset)
+  }
+
+  @Test
+  fun `should return deferred that throws exception when attempting to get unloaded asset asynchronously`() {
+    // Given:
+    val storage = AssetStorage()
+
+    // When:
+    val result = storage.getAsync<String>("ktx/assets/async/string.txt")
+
+    // Expect:
+    shouldThrow<MissingAssetException> {
+      runBlocking { result.await() }
+    }
+  }
+
+  @Test
+  fun `should throw exception when attempting to get unloaded asset with identifier`() {
+    // Given:
+    val storage = AssetStorage()
+    val identifier = storage.getIdentifier<String>("ktx/assets/async/string.txt")
+
+    // Expect:
+    shouldThrow<MissingAssetException> {
+      storage[identifier]
+    }
+  }
+
+  @Test
+  fun `should return null when attempting to get unloaded asset or null with identifier`() {
+    // Given:
+    val storage = AssetStorage()
+    val identifier = storage.getIdentifier<String>("ktx/assets/async/string.txt")
+
+    // When:
+    val asset = storage.getOrNull(identifier)
+
+    // Then:
+    assertNull(asset)
+  }
+
+  @Test
+  fun `should return deferred that throws exception when attempting to get unloaded asset asynchronously with identifier`() {
+    // Given:
+    val storage = AssetStorage()
+    val identifier = storage.getIdentifier<String>("ktx/assets/async/string.txt")
+
+    // When:
+    val result = storage.getAsync(identifier)
+
+    // Expect:
+    shouldThrow<MissingAssetException> {
+      runBlocking { result.await() }
+    }
+  }
+
+  @Test
+  fun `should throw exception when attempting to get unloaded asset with descriptor`() {
+    // Given:
+    val storage = AssetStorage()
+    val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt")
+
+    // Expect:
+    shouldThrow<MissingAssetException> {
+      storage[descriptor]
+    }
+  }
+
+  @Test
+  fun `should return null when attempting to get unloaded asset or null with descriptor`() {
+    // Given:
+    val storage = AssetStorage()
+    val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt")
+
+    // When:
+    val asset = storage.getOrNull(descriptor)
+
+    // Then:
+    assertNull(asset)
+  }
+
+  @Test
+  fun `should return deferred that throws exception when attempting to get unloaded asset asynchronously with descriptor`() {
+    // Given:
+    val storage = AssetStorage()
+    val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt")
+
+    // When:
+    val result = storage.getAsync(descriptor)
 
     // Expect:
     shouldThrow<MissingAssetException> {
@@ -1401,7 +1499,9 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(storage.contains<String>(path))
     assertTrue(storage.isLoaded<String>(path))
-    assertEquals("Content.", storage.get<String>(path).joinAndGet())
+    assertEquals("Content.", storage.get<String>(path))
+    assertEquals("Content.", storage.getOrNull<String>(path))
+    assertEquals("Content.", runBlocking { storage.getAsync<String>(path).await() })
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
   }
 
@@ -1417,7 +1517,9 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(identifier in storage)
     assertTrue(storage.isLoaded(identifier))
-    assertEquals("Content.", storage[identifier].joinAndGet())
+    assertEquals("Content.", storage[identifier])
+    assertEquals("Content.", storage.getOrNull(identifier))
+    assertEquals("Content.", runBlocking { storage.getAsync(identifier).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(identifier))
   }
 
@@ -1433,7 +1535,9 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(descriptor in storage)
     assertTrue(storage.isLoaded(descriptor))
-    assertEquals("Content.", storage[descriptor].joinAndGet())
+    assertEquals("Content.", storage[descriptor])
+    assertEquals("Content.", storage.getOrNull(descriptor))
+    assertEquals("Content.", runBlocking { storage.getAsync(descriptor).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(descriptor))
   }
 
@@ -1530,7 +1634,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Vector2>(fakePath))
-    assertSame(asset, storage.get<Vector2>(fakePath).joinAndGet())
+    assertSame(asset, storage.get<Vector2>(fakePath))
     assertEquals(1, storage.getReferenceCount<Vector2>(fakePath))
   }
 
@@ -1547,7 +1651,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded(descriptor))
-    assertSame(asset, storage[descriptor].joinAndGet())
+    assertSame(asset, storage[descriptor])
     assertEquals(1, storage.getReferenceCount(descriptor))
   }
 
@@ -1564,7 +1668,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded(identifier))
-    assertSame(asset, storage[identifier].joinAndGet())
+    assertSame(asset, storage[identifier])
     assertEquals(1, storage.getReferenceCount(identifier))
   }
 
@@ -1582,7 +1686,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path).joinAndGet())
+    assertSame(asset, storage.get<Texture>(path))
   }
 
   @Test
@@ -1599,7 +1703,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(storage.isLoaded<Texture>(path))
     assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path).joinAndGet())
+    assertSame(asset, storage.get<Pixmap>(path))
 
     storage.dispose()
   }
@@ -1621,7 +1725,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertNotSame(storage.get<Texture>(path).joinAndGet(), storage.get<Pixmap>(path).joinAndGet())
+    assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path))
 
     storage.dispose()
   }
@@ -1650,8 +1754,8 @@ class AssetStorageTest : AsyncTest() {
     runBlocking { tasks.joinAll() }
     assertTrue(storage.isLoaded<Texture>(firstPath))
     assertTrue(storage.isLoaded<Model>(secondPath))
-    assertSame(tasks[0].joinAndGet(), storage.get<Texture>(firstPath).joinAndGet())
-    assertSame(tasks[1].joinAndGet(), storage.get<Model>(secondPath).joinAndGet())
+    assertSame(tasks[0].asCompletableFuture().join(), storage.get<Texture>(firstPath))
+    assertSame(tasks[1].asCompletableFuture().join(), storage.get<Model>(secondPath))
 
     storage.dispose()
   }
@@ -1937,7 +2041,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(100, storage.getReferenceCount<BitmapFont>(path))
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(100, storage.getReferenceCount<Texture>(dependency))
-    assertEquals(1, assets.map { it.joinAndGet() }.toSet().size)
+    assertEquals(1, assets.map { it.asCompletableFuture().join() }.toSet().size)
 
     storage.dispose()
   }
@@ -1987,7 +2091,7 @@ class AssetStorageTest : AsyncTest() {
     runBlocking { assets.joinAll() }
     assertTrue(storage.isLoaded<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals("Content.", storage.get<String>(path).joinAndGet())
+    assertEquals("Content.", storage.get<String>(path))
 
     storage.dispose()
   }
@@ -2026,8 +2130,8 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
     assertSame(
-      storage.get<BitmapFont>(path).joinAndGet().region.texture,
-      storage.get<Texture>(dependency).joinAndGet()
+      storage.get<BitmapFont>(path).region.texture,
+      storage.get<Texture>(dependency)
     )
 
     storage.dispose()
@@ -2068,9 +2172,9 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(1, storage.getReferenceCount<TextureAtlas>(dependency))
     assertTrue(storage.isLoaded<Texture>(nestedDependency))
     assertEquals(1, storage.getReferenceCount<Texture>(nestedDependency))
-    val skin = storage.get<Skin>(path).joinAndGet()
-    val atlas = storage.get<TextureAtlas>(dependency).joinAndGet()
-    val texture = storage.get<Texture>(nestedDependency).joinAndGet()
+    val skin = storage.get<Skin>(path)
+    val atlas = storage.get<TextureAtlas>(dependency)
+    val texture = storage.get<Texture>(nestedDependency)
     assertSame(skin.atlas, atlas)
     assertSame(atlas.textures.first(), texture)
 
@@ -2092,7 +2196,7 @@ class AssetStorageTest : AsyncTest() {
     val loads = AtomicInteger()
     val unloads = AtomicInteger()
 
-    // When: spawning 1000 coroutines that randomly load or unload the asset:
+    // When: spawning 1000 coroutines that randomly load or unload the asset and try to access it:
     val assets = (1..1000).map {
       val result = CompletableDeferred<Boolean>()
       KtxAsync.launch(schedulers) {
@@ -2105,6 +2209,12 @@ class AssetStorageTest : AsyncTest() {
         } else {
           val unloaded = storage.unload<Skin>(path)
           if (unloaded) unloads.incrementAndGet()
+        }
+        try {
+          // Concurrent access:
+          storage.getOrNull<Skin>(path)
+        } catch (expected: UnloadedAssetException) {
+          // Assets can be unloaded asynchronously. This is OK.
         }
         result.complete(true)
       }
@@ -2229,7 +2339,7 @@ class AssetStorageTest : AsyncTest() {
       assertEquals(0, storage.getReferenceCount(it))
       assertEquals(emptyList<String>(), storage.getDependencies(it))
       shouldThrow<MissingAssetException> {
-        storage[it].joinAndGet()
+        storage[it]
       }
     }
   }
@@ -2503,7 +2613,7 @@ class AssetStorageTest : AsyncTest() {
     // Then: asset should still be loaded, but the callback exception must be logged:
     loggingFinished.join()
     assertTrue(storage.isLoaded<String>(path))
-    assertEquals("Content.", storage.get<String>(path).joinAndGet())
+    assertEquals("Content.", storage.get<String>(path))
     verify(logger).error(any(), eq(exception))
   }
 
@@ -2620,7 +2730,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<AssetLoadingException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2663,7 +2773,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(exception is UnloadedAssetException)
     assertFalse(storage.contains<FakeAsset>(path))
     shouldThrow<MissingAssetException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2690,7 +2800,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<UnsupportedMethodException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2717,7 +2827,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<MissingDependencyException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2741,7 +2851,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<AssetLoadingException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2765,7 +2875,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<AssetLoadingException> {
-      storage.get<FakeAsset>(path).joinAndGet()
+      storage.get<FakeAsset>(path)
     }
   }
 
@@ -2891,7 +3001,7 @@ class AssetStorageTest : AsyncTest() {
     assertFalse(storage.isLoaded(identifier))
 
     loadingFinished.complete(true)
-    runBlocking { storage.get<FakeAsset>(path).await() }
+    runBlocking { storage.getAsync<FakeAsset>(path).await() }
     assertTrue(identifier in storage)
     assertTrue(storage.isLoaded(identifier))
   }

@@ -1,5 +1,3 @@
-@file:Suppress("DeferredIsResult")
-
 package ktx.assets.async
 
 import com.badlogic.gdx.assets.AssetDescriptor
@@ -109,20 +107,15 @@ class AssetStorage(
   }
 
   /**
-   * Returns the reference to the asset wrapped with [Deferred].
-   * Use [Deferred.await] to obtain the instance.
+   * Returns a loaded asset of type [T] loaded from selected [path] or throws [MissingAssetException]
+   * if the asset is not loaded yet or was never scheduled for loading. Rethrows any exceptions
+   * encountered during asset loading.
    *
    * [T] is the type of the asset. Must match the type requested during loading.
-   * [identifier] uniquely identifies a file by its path and type.
+   * [path] must match the asset path passed during loading.
    *
-   * To avoid concurrency issues, it is encouraged to load assets with [load] and save the returned instances
-   * of the loaded assets rather than to rely on [get].
-   *
-   * Note that while the result is a [CompletableDeferred], it should never be completed manually.
-   * Instead, rely on the [AssetStorage] to load the asset.
-   *
-   * Using [Deferred.await] might throw the following exceptions:
-   * - [MissingAssetException] if the asset with [identifier] was never added with [load] or [add].
+   * This method might throw the following exceptions:
+   * - [MissingAssetException] if the asset of [T] type with the given [path] was never added with [load] or [add].
    * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
    * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
    * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
@@ -130,17 +123,117 @@ class AssetStorage(
    * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
    * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
    *
-   * Otherwise, using [Deferred.await] will suspend the coroutine until the asset is loaded
-   * and return its instance.
+   * See also [getOrNull] and [getAsync].
    */
-  operator fun <T> get(identifier: Identifier<T>): Deferred<T> {
-    val asset = assets[identifier]
-    @Suppress("UNCHECKED_CAST")
-    return if (asset != null) asset.reference as Deferred<T> else getMissingAssetReference(identifier)
-  }
+  inline operator fun <reified T> get(path: String): T = this[getIdentifier(path)]
 
-  private fun <T> getMissingAssetReference(identifier: Identifier<T>): Deferred<T> = CompletableDeferred<T>().apply {
-    completeExceptionally(MissingAssetException(identifier))
+  /**
+   * Returns a loaded asset of type [T] described by [descriptor] or throws [MissingAssetException]
+   * if the asset is not loaded yet or was never scheduled for loading. Rethrows any exceptions
+   * encountered during asset loading.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [descriptor] contains the asset data. See [getAssetDescriptor].
+   *
+   * This method might throw the following exceptions:
+   * - [MissingAssetException] if the asset of [T] type described by [descriptor] was never added with [load] or [add].
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * See also [getOrNull] and [getAsync].
+   */
+  operator fun <T> get(descriptor: AssetDescriptor<T>): T = this[descriptor.toIdentifier()]
+
+  /**
+   * Returns a loaded asset of type [T] identified by [identifier] or throws [MissingAssetException]
+   * if the asset is not loaded yet or was never scheduled for loading. Rethrows any exceptions
+   * encountered during asset loading.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [identifier] uniquely identifies a file by its path and type. See [Identifier].
+   *
+   * This method might throw the following exceptions:
+   * - [MissingAssetException] if the asset of [T] type identified by [identifier] was never added with [load] or [add].
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * See also [getOrNull] and [getAsync].
+   */
+  operator fun <T> get(identifier: Identifier<T>): T  {
+    val reference = getAsync(identifier)
+    @Suppress( "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
+    return if (reference.isCompleted) reference.getCompleted() else throw MissingAssetException(identifier)
+  }
+  /**
+   * Returns a loaded asset of type [T] loaded from selected [path] or `null`
+   * if the asset is not loaded yet or was never scheduled for loading.
+   * Rethrows any exceptions encountered during asset loading.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [path] must match the asset path passed during loading.
+   *
+   * This method might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * See also [get] and [getAsync].
+   */
+  inline fun <reified T> getOrNull(path: String): T? = getOrNull(getIdentifier(path))
+
+  /**
+   * Returns a loaded asset of type [T] described by [descriptor] or `null`
+   * if the asset is not loaded yet or was never scheduled for loading.
+   * Rethrows any exceptions encountered during asset loading.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [descriptor] contains the asset data. See [getAssetDescriptor].
+   *
+   * This method might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * See also [get] and [getAsync].
+   */
+  fun <T> getOrNull(descriptor: AssetDescriptor<T>): T? = getOrNull(descriptor.toIdentifier())
+
+  /**
+   * Returns a loaded asset of type [T] identified by [identifier] or `null`
+   * if the asset is not loaded yet or was never scheduled for loading.
+   * Rethrows any exceptions encountered during asset loading.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [identifier] uniquely identifies a file by its path and type. See [Identifier].
+   *
+   * This method might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * See also [get] and [getAsync].
+   */
+  fun <T> getOrNull(identifier: Identifier<T>): T?  {
+    val asset = assets[identifier]
+    @Suppress( "UNCHECKED_CAST", "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
+    return if (asset == null || !asset.reference.isCompleted) null else asset.reference.getCompleted() as T
   }
 
   /**
@@ -149,9 +242,6 @@ class AssetStorage(
    *
    * [T] is the type of the asset. Must match the type requested during loading.
    * [path] must match the asset path passed during loading.
-   *
-   * To avoid concurrency issues, it is encouraged to load assets with [load] and save the returned instances
-   * of the loaded assets rather than to rely on [get].
    *
    * Note that while the result is a [CompletableDeferred], it should never be completed manually.
    * Instead, rely on the [AssetStorage] to load the asset.
@@ -167,8 +257,10 @@ class AssetStorage(
    *
    * Otherwise, using [Deferred.await] will suspend the coroutine until the asset is loaded
    * and return its instance.
+   *
+   * See also [get] and [getOrNull] for synchronous alternatives.
    */
-  inline operator fun <reified T> get(path: String): Deferred<T> = get(getIdentifier(path))
+  inline fun <reified T> getAsync(path: String): Deferred<T> = getAsync(getIdentifier(path))
 
   /**
    * Returns the reference to the asset wrapped with [Deferred]. Use [Deferred.await] to obtain the instance.
@@ -176,9 +268,6 @@ class AssetStorage(
    *
    * [T] is the type of the asset. Must match the type requested during loading.
    * [descriptor] contains the asset data. See [getAssetDescriptor].
-   *
-   * To avoid concurrency issues, it is encouraged to load assets with [load] and save the returned instances
-   * of the loaded assets rather than to rely on [get].
    *
    * Note that while the result is a [CompletableDeferred], it should never be completed manually.
    * Instead, rely on the [AssetStorage] to load the asset.
@@ -194,8 +283,44 @@ class AssetStorage(
    *
    * Otherwise, using [Deferred.await] will suspend the coroutine until the asset is loaded
    * and return its instance.
+   *
+   * See also [get] and [getOrNull] for synchronous alternatives.
    */
-  operator fun <T> get(descriptor: AssetDescriptor<T>): Deferred<T> = get(descriptor.toIdentifier())
+  fun <T> getAsync(descriptor: AssetDescriptor<T>): Deferred<T> = getAsync(descriptor.toIdentifier())
+
+  /**
+   * Returns the reference to the asset wrapped with [Deferred].
+   * Use [Deferred.await] to obtain the instance.
+   *
+   * [T] is the type of the asset. Must match the type requested during loading.
+   * [identifier] uniquely identifies a file by its path and type. See [Identifier].
+   *
+   * Note that while the result is a [CompletableDeferred], it should never be completed manually.
+   * Instead, rely on the [AssetStorage] to load the asset.
+   *
+   * Using [Deferred.await] might throw the following exceptions:
+   * - [MissingAssetException] if the asset with [identifier] was never added with [load] or [add].
+   * - [UnloadedAssetException] if the asset was already unloaded asynchronously.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * Otherwise, using [Deferred.await] will suspend the coroutine until the asset is loaded
+   * and return its instance.
+   *
+   * See also [get] and [getOrNull] for synchronous alternatives.
+   */
+  fun <T> getAsync(identifier: Identifier<T>): Deferred<T> {
+    val asset = assets[identifier]
+    @Suppress("UNCHECKED_CAST")
+    return if (asset != null) asset.reference as Deferred<T> else getMissingAssetReference(identifier)
+  }
+
+  private fun <T> getMissingAssetReference(identifier: Identifier<T>): Deferred<T> = CompletableDeferred<T>().apply {
+    completeExceptionally(MissingAssetException(identifier))
+  }
 
   /**
    * Checks whether an asset in the selected [path] with [T] type is already loaded.
