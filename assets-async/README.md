@@ -139,11 +139,12 @@ See [`ktx-async`](../async) setup section to enable coroutines in your project.
 
 - `get: T` - returns a loaded asset or throws `MissingAssetException` if the asset is unavailable.
 - `getOrNull: T?` - returns a loaded asset or `null` if the asset is unavailable.
-- `getAsync: Deferred<T>` - returns a `Deferred` reference to the asset if it was scheduled for loading.
-Suspending `await()` can be called to obtain the asset instance. `isCompleted` can be used to check
-if the asset loading was finished.
+- `getAsync: Deferred<T>` - returns a `Deferred` reference to the asset. Suspending `await()` can be
+called to obtain the asset instance. `isCompleted` can be used to check if the asset loading was finished.
 - `load: T` _(suspending)_ - schedules asset for asynchronous loading. Suspends the coroutine until
 the asset is fully loaded. Resumes the coroutine and returns the asset once it is loaded.
+- `loadAsync: Deferred<T>` - schedules asset for asynchronous loading. Returns a `Deferred` reference
+to the asset which will be completed after the loading is finished.
 - `unload: Boolean` _(suspending)_ - unloads the selected asset. If the asset is no longer referenced,
 it will be removed from the storage and disposed of. Suspends the coroutine until the asset is unloaded.
 Returns `true` is the selected asset was present in storage or `false` if the asset was absent.
@@ -270,6 +271,28 @@ fun loadAsset(assetStorage: AssetStorage) {
 }
 ```
 
+Loading assets sequentially using `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.Texture
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+
+fun loadAssets(assetStorage: AssetStorage) {
+  // Unlike AssetManager, AssetStorage allows to easily control the order of loading.
+  KtxAsync.launch {
+    // This will suspend the coroutine until the texture is loaded:
+    val logo = assetStorage.load<Texture>("images/logo.png")
+    // After the first image is loaded,
+    // the coroutine resumes and loads the second asset:
+    val background = assetStorage.load<Texture>("images/background.png")
+
+    // Now both images are loaded and can be used.
+  }
+}
+```
+
 Loading assets asynchronously:
 
 ```kotlin
@@ -281,10 +304,13 @@ import ktx.assets.async.AssetStorage
 import ktx.async.KtxAsync
 
 fun loadAssets(assetStorage: AssetStorage) {
+  // You can also schedule the assets for asynchronous loading
+  // without suspending the coroutine.
   KtxAsync.launch {
-    // Launching asynchronous asset loading:
+    // Launching asynchronous asset loading with Kotlin's built-in `async`:
     val texture = async { assetStorage.load<Texture>("images/logo.png") }
-    val font = async { assetStorage.load<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt") }
+    val font = async { assetStorage.load<BitmapFont>("fonts/font.fnt") }
+
     // Suspending the coroutine until both assets are loaded:
     doSomethingWithTextureAndFont(texture.await(), font.await())
   }
@@ -296,7 +322,6 @@ Loading assets in parallel:
 ```kotlin
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ktx.assets.async.AssetStorage
 import ktx.async.KtxAsync
@@ -305,19 +330,18 @@ import ktx.async.newAsyncContext
 fun loadAssets() {
   // Using Kotlin's `async` will ensure that the coroutine is not
   // immediately suspended and assets are scheduled asynchronously,
-  // but to take advantage of parallel asset loading, we have to pass
-  // a context with multiple threads to AssetStorage:
+  // but to take advantage of really parallel asset loading, we have
+  // to pass a context with multiple loading threads to AssetStorage:
   val assetStorage = AssetStorage(asyncContext = newAsyncContext(threads = 2))
-  
+
+  // Instead of using Kotlin's built-in `async`, you can also use
+  // the `loadAsync` method of AssetStorage with is a shortcut for
+  // `async(assetStorage.asyncContext) { assetStorage.load }`:
+  val texture = assetStorage.loadAsync<Texture>("images/logo.png")
+  val font = assetStorage.loadAsync<BitmapFont>("fonts/font.fnt")
+  // Now both assets will be loaded asynchronously, in parallel.
+
   KtxAsync.launch {
-    // Passing context to `async` is optional, but it allows you to
-    // perform even less operations on the main rendering thread:
-    val texture = async(assetStorage.asyncContext) {
-      assetStorage.load<Texture>("images/logo.png")
-    }
-    val font = async(assetStorage.asyncContext) {
-      assetStorage.load<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
-    }
     // Suspending the coroutine until both assets are loaded:
     doSomethingWithTextureAndFont(texture.await(), font.await())
   }
@@ -339,6 +363,10 @@ fun unloadAsset(assetStorage: AssetStorage) {
     // When the coroutine resumes here, the asset is unloaded.
     // If no other assets use it as dependency, it will
     // be removed from the asset storage and disposed of.
+
+    // Note that you can also do this asynchronously if you don't
+    // want to suspend the coroutine:
+    async { assetStorage.unload<Texture>("images/logo.png") }
   }
 }
 ```
@@ -353,13 +381,13 @@ import ktx.assets.async.AssetStorage
 import ktx.async.KtxAsync
 
 fun accessAsset(assetStorage: AssetStorage) {
-  // Typically you can use assets returned by `load`,
+  // Typically you can simply use assets returned by `load`,
   // but AssetStorage also allows you to access assets
   // already loaded by other coroutines.
 
-  // Immediately returns loaded asset or throws exception if missing:
+  // Immediately returns loaded asset or throws an exception if missing:
   var texture = assetStorage.get<Texture>("images/logo.png")
-  // Immediately returns loaded asset or null if missing:
+  // Immediately returns loaded asset or returns null if missing:
   val textureOrNull = assetStorage.getOrNull<Texture>("images/logo.png")
 
   // Returns true is asset is in the storage, loaded or not:
@@ -372,10 +400,10 @@ fun accessAsset(assetStorage: AssetStorage) {
   assetStorage.getDependencies<Texture>("images/logo.png")
   
   KtxAsync.launch {
-    // You can also access your assets in coroutines, so you can
-    // wait for the assets to be loaded.
+    // There is also a special way to access your assets within coroutines
+    // when you need to wait until they are loaded asynchronously.
 
-    // When calling getAsync, AssetStorage will not throw an exception
+    // When calling `getAsync`, AssetStorage will not throw an exception
     // or return null if the asset is still loading. Instead, it will
     // return a Kotlin Deferred reference. This allows you suspend the
     // coroutine until the asset is loaded:
@@ -425,8 +453,7 @@ Disposing of all assets stored by `AssetStorage`:
 assetStorage.dispose()
 
 // This will also disrupt loading of all unloaded assets.
-// Disposing errors are logged by default, but do not
-// cancel the process.
+// Disposing errors are logged by default, and do not stop the process.
 ```
 
 Disposing of all assets asynchronously:
@@ -497,27 +524,27 @@ fun createCustomAssetStorage(): AssetStorage {
 
 #### Implementation notes
 
-##### Multiple calls of `load` and `unload`
+##### Multiple calls of `load`, `loadAsync` and `unload`
 
-It is completely safe to call `load` multiple times with the same asset data, even to obtain asset instances
-without dealing with `Deferred`. In that sense, it can be used as an alternative to `getAsync` inside coroutines.
+It is completely safe to call `load` and `loadAsync` multiple times with the same asset data, even just to obtain
+asset instances. In that sense, they can be used as an alternative to `getAsync` inside coroutines.
 
 Instead of loading the same asset multiple times, `AssetStorage` will just increase the reference count
 to the asset and return the same instance on each request. This also works concurrently - the storage will
-always load just one asset instance, regardless of how many different threads and coroutines called `load`
+always load just _one_ asset instance, regardless of how many different threads and coroutines called `load`
 in parallel.
 
-However, to eventually unload the asset, you have to call `unload` the same number of times as `load`,
+However, to eventually unload the asset, you have to call `unload` the same number of times as `load`/`loadAsync`,
 or simply dispose of all assets with `dispose`, which clears all reference counts and unloads everything
 from the storage.
 
-Unlike `load`, `add` should be called only once on a single asset, and only when the path and type are absent
+Unlike `load` and `loadAsync`, `add` should be called only once on a single asset, and when it is not stored
 in the storage. You cannot add existing assets to the storage, even if they were previously loaded by it.
 This is because if we are not sure that `AssetStorage` handled the loading (or creation) of an object, tracking
-its dependencies and lifecycle is difficult and left to the user. Trying to `add` an existing asset will not
-increase its reference count, and instead throw an exception.
+its dependencies and lifecycle is difficult and left to the user. Trying to `add` an asset with existing path
+and type will not increase its reference count, and will throw an exception instead.
 
-Adding assets that were previously loaded by the `AssetStorage` under different paths is also a misuse of the API,
+Adding assets that were previously loaded by the `AssetStorage` under different paths is also a misuse of the API
 which might result in unloading the asset or its dependencies prematurely. True aliases are currently unsupported.
 
 ##### `runBlocking`
@@ -599,6 +626,131 @@ It does not mean that `runBlocking` will always cause a deadlock, however. You c
 - For `load` and `get.await` calls requesting already loaded assets. **Use with caution.**
 - From within other threads than the main rendering thread and the `AssetStorage` loading threads. These threads
 will be blocked until the operation is finished, which isn't ideal, but at least the loading will remain possible.
+
+##### Asynchronous operations
+
+Most common operations - `get` and `load` - offer both synchronous/suspending and asynchronous variants.
+To perform other methods asynchronously, use `KtxAsync.launch` if you do not need the result or `KtxAsync.async`
+to get a `Deferred` reference to the result which will be completed after the operation is finished.
+
+```kotlin
+// Unloading an asset asynchronously:
+KtxAsync.launch { storage.unload<AssetType>(path) }
+```
+
+##### `AssetStorage` as a drop-in replacement for `AssetManager`
+
+Consider this typical application using `AssetManager`:
+
+```kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+
+class WithAssetManager: ApplicationAdapter() {
+  private lateinit var assetManager: AssetManager
+
+  override fun create() {
+    assetManager = AssetManager()
+
+    // Scheduling assets for asynchronous loading:
+    assetManager.load("images/logo.png", Texture::class.java)
+    assetManager.load("com/badlogic/gdx/utils/arial-15.fnt", BitmapFont::class.java)
+  }
+
+  override fun render() {
+    // Manager has to be constantly updated until the assets are loaded:
+    if (assetManager.update()) {
+      // Now the assets are loaded:
+      changeView()
+    }
+    // Render loading prompt.
+  }
+
+  private fun changeView() {
+    val texture: Texture = assetManager["images/logo.png"]
+    TODO("Now the assets are loaded and can be accessed with $assetManager.get!")
+  }
+}
+```
+
+Since usually applications have more assets than just 2, many developers choose to treat `AssetManager` as a map
+of loaded assets with file paths as keys and loaded assets are values. You typically call load all or most assets
+on the loading screen and then just use `AssetManager.get(path)` to obtain the assets after they are loaded.
+
+However, this approach has some inconveniences and problems:
+
+- The API is not very idiomatic to Kotlin, but in this particular case [ktx-assets](../assets) can help with that.
+- `update` has to be called on render during loading.
+- If you forget to stop updating the manager after the assets are loaded, the initiation code (such as `changeView`
+in our example) can be ran multiple times. If you replace `TODO` with `println` in the example, you will notice that
+`changeView` is invoked on every render after the loading is finished.
+- The majority of `AssetManager` methods are `synchronized`, which means they block the thread that they are
+executed in and are usually more expensive to call than regular methods. This includes the `get` method, which does
+not change the internal state of the manager at all. Even if the assets are fully loaded and you no longer modify
+the `AssetManager` state, you still pay the cost of synchronization. This is especially relevant if you use multiple
+threads, as they can block each other waiting for the assets.
+- `AssetManager` stores assets mapped only by their paths. `manager.get<Texture>(path)` and `manager.get<Pixmap>(path)`
+are both valid calls that will throw a runtime class cast exception.
+
+`AssetStorage` avoids most of these problems.
+
+Similarly to `AssetManager`, `AssetStorage` offers API to `get` your loaded assets, so if you want to migrate
+from `AssetManager` to `AssetStorage`, all you have to change initially is the loading code:
+
+```kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+import ktx.async.newAsyncContext
+
+class WithAssetStorage: ApplicationAdapter() {
+  override fun create() {
+    KtxAsync.initiate()
+
+    // Using multiple threads to load the assets in parallel:
+    val assetStorage = AssetStorage(newAsyncContext(threads = 4))
+
+    // Scheduling assets for asynchronous loading:
+    val assets = listOf(
+      assetStorage.loadAsync<Texture>("images/logo.png"),
+      assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+    )
+
+    // Instead of updating, we're launching a coroutine that waits for the assets:
+    KtxAsync.launch {
+      // Suspending coroutine until all assets are loaded:
+      assets.joinAll()
+      // Now the assets are loaded and we can use them with `get`:
+      changeView(assetStorage)
+    }
+  }
+
+  private fun changeView(assetStorage: AssetStorage) {
+    val texture: Texture = assetStorage["images/logo.png"]
+    TODO("Now the assets are loaded and can be accessed with $assetStorage.get!")
+  }
+}
+```
+
+As you can see, after the assets are loaded, the API of both `AssetManager` and `AssetStorage` is similar.
+
+The code using `AssetStorage` is not necessarily shorter in this case, but:
+
+- You get the performance improvements of loading assets in parallel.
+- `AssetStorage` does not have to be updated on render.
+- Your code is reactive and `changeView` is called only once as soon as the assets are loaded.
+- You can easily integrate more coroutines into your application later for other asynchronous operations.
+- `AssetStorage.get` is non-blocking and faster. `AssetStorage` does a better job of storing your assets
+efficiently after loading.
+- `AssetStorage` stores assets mapped by their path _and_ type. You will not have to deal with class cast exceptions.
+
+Besides, you get the additional benefits of other `AssetStorage` features and methods described in this file.
 
 ##### Integration with LibGDX and known unsupported features
 

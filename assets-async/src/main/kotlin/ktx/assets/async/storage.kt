@@ -428,12 +428,107 @@ class AssetStorage(
   }
 
   /**
-   * Schedules loading of an asset of [T] type located at [path].
+   * Schedules asynchronous loading of an asset of [T] type located at [path].
+   * Return a [Deferred] reference which will eventually point to a fully loaded instance of [T].
+   *
    * [path] must be compatible with the [fileResolver].
    * Loading [parameters] are optional and can be used to configure the loaded asset.
+   *
+   * [Deferred.await] might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * If the asset was already loaded, added or scheduled for loading, this method will not fail or throw
+   * an exception (unless the original loading fails). Instead, the coroutine will be suspended until
+   * the original loading is finished and then return the same result.
+   *
+   * Note that to unload an asset, [unload] method should be called the same amount of times as [load]
+   * or [loadAsync]. Asset dependencies should not be unloaded directly; instead, unload the asset that
+   * required them and caused them to load in the first place.
+   *
+   * If the [parameters] define a [AssetLoaderParameters.loadedCallback], it will be invoked on the main
+   * rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
+   */
+  inline fun <reified T> loadAsync(path: String, parameters: AssetLoaderParameters<T>? = null): Deferred<T> =
+    loadAsync(getAssetDescriptor(path, parameters))
+
+  /**
+   * Schedules loading of an asset with path and type specified by [identifier].
+   * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
+   * 
+   * [Identifier.path] must be compatible with the [fileResolver].
+   * Loading [parameters] are optional and can be used to configure the loaded asset.
+   *
+   * [Deferred.await] might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * If the asset was already loaded, added or scheduled for loading, this method will not fail or throw
+   * an exception (unless the original loading fails). Instead, the coroutine will be suspended until
+   * the original loading is finished and then return the same result.
+   *
+   * Note that to unload an asset, [unload] method should be called the same amount of times as [load]
+   * or [loadAsync]. Asset dependencies should not be unloaded directly; instead, unload the asset that
+   * required them and caused them to load in the first place.
+   *
+   * If the [parameters] define a [AssetLoaderParameters.loadedCallback], it will be invoked on the main
+   * rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
+   */
+  fun <T> loadAsync(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null): Deferred<T> =
+    loadAsync(identifier.toAssetDescriptor(parameters))
+
+  /**
+   * Schedules loading of an asset of [T] type described by the [descriptor].
    * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
    *
-   * Might throw the following exceptions exceptions:
+   * [Deferred.await] might throw the following exceptions:
+   * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
+   * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
+   * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
+   * - [AssetLoadingException] if the [AssetLoader] has thrown an exception during loading.
+   * - [MissingDependencyException] is the [AssetLoader] is unable to obtain an instance of asset's dependency.
+   * - [UnsupportedMethodException] is the [AssetLoader] uses unsupported operation on [AssetManagerWrapper].
+   *
+   * If the asset was already loaded, added or scheduled for loading, this method will not fail or throw
+   * an exception (unless the original loading fails). Instead, the coroutine will be suspended until
+   * the original loading is finished and then return the same result.
+   *
+   * Note that to unload an asset, [unload] method should be called the same amount of times as [load]
+   * or [loadAsync]. Asset dependencies should not be unloaded directly; instead, unload the asset that
+   * required them and caused them to load in the first place.
+   *
+   * If the [AssetDescriptor.params] define a [AssetLoaderParameters.loadedCallback], it will be invoked on
+   * the main rendering thread after the asset is loaded successfully with this [AssetStorage] wrapped as an
+   * [AssetManager] with [AssetManagerWrapper]. Note that the wrapper supports a limited number of methods.
+   * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
+   * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
+   */
+  fun <T> loadAsync(descriptor: AssetDescriptor<T>): Deferred<T> = KtxAsync.async(asyncContext) {
+    load(descriptor)
+  }
+
+  /**
+   * Schedules loading of an asset of [T] type located at [path].
+   * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
+   *
+   * [path] must be compatible with the [fileResolver].
+   * Loading [parameters] are optional and can be used to configure the loaded asset.
+   *
+   * Might throw the following exceptions:
    * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
    * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
    * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
@@ -459,12 +554,13 @@ class AssetStorage(
     load(getAssetDescriptor(path, parameters))
 
   /**
-   * Schedules loading of an asset with path and type specified by [identifier]
-   * [Identifier.path] must be compatible with the [fileResolver].
-   * Loading [parameters] are optional and can be used to configure the loaded asset.
+   * Schedules loading of an asset with path and type specified by [identifier].
    * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
    *
-   * Might throw the following exceptions exceptions:
+   * [Identifier.path] must be compatible with the [fileResolver].
+   * Loading [parameters] are optional and can be used to configure the loaded asset.
+   *
+   * Might throw the following exceptions:
    * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
    * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
    * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.
@@ -493,7 +589,7 @@ class AssetStorage(
    * Schedules loading of an asset of [T] type described by the [descriptor].
    * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
    *
-   * Might throw the following exceptions exceptions:
+   * Might throw the following exceptions:
    * - [UnloadedAssetException] if the asset unloaded asynchronously by another coroutine.
    * - [MissingLoaderException] if the [AssetLoader] for asset of requested type is not registered.
    * - [InvalidLoaderException] if the [AssetLoader] implementation of requested type is invalid.

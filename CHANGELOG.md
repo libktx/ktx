@@ -14,7 +14,8 @@
          - `get` operator obtains an asset from the storage or throws a `MissingAssetException`.
          - `getOrNull` obtains an asset from the storage or return `null` if the asset is unavailable.
          - `getAsync` obtains a reference to the asset from the storage as `Deferred`.
-         - `load` schedules asynchronous loading of an asset.
+         - `load` suspends a coroutine until an asset is loaded and returns its instance.
+         - `loadAsync` schedules asynchronous loading of an asset.
          - `unload` schedules asynchronous unloading of an asset.
          - `add` allows to manually add a loaded asset to `AssetManager`.
          - `dispose` unloads all assets from the storage.

@@ -1488,6 +1488,25 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
+  fun `should return same asset instance with subsequent load calls on loaded asset`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/texture.png"
+    val loaded = runBlocking { storage.load<Texture>(path) }
+
+    // When:
+    val assets = (1..10).map { runBlocking { storage.load<Texture>(path) } }
+
+    // Then:
+    assertEquals(11, storage.getReferenceCount<Texture>(path))
+    assets.forEach { asset ->
+      assertSame(loaded, asset)
+    }
+
+    storage.dispose()
+  }
+
+  @Test
   fun `should obtain loaded asset with path`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
@@ -1586,6 +1605,56 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
+  }
+
+  @Test
+  fun `should load assets asynchronously with path`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/texture.png"
+
+    // When:
+    val asset = runBlocking { storage.loadAsync<Texture>(path).await() }
+
+    // Then:
+    assertTrue(storage.contains<Texture>(path))
+    assertTrue(storage.isLoaded<Texture>(path))
+    assertEquals(1, storage.getReferenceCount<Texture>(path))
+    assertSame(asset, storage.get<Texture>(path))
+  }
+
+  @Test
+  fun `should load assets asynchronously with identifier`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/texture.png"
+    val identifier = storage.getIdentifier<Texture>(path)
+
+    // When:
+    val asset = runBlocking { storage.loadAsync(identifier).await() }
+
+    // Then:
+    assertTrue(identifier in storage)
+    assertTrue(storage.isLoaded(identifier))
+    assertEquals(1, storage.getReferenceCount(identifier))
+    assertSame(asset, storage[identifier])
+  }
+
+  @Test
+  fun `should load assets asynchronously with descriptor`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/texture.png"
+    val descriptor = storage.getAssetDescriptor<Texture>(path)
+
+    // When:
+    val asset = runBlocking { storage.loadAsync(descriptor).await() }
+
+    // Then:
+    assertTrue(descriptor in storage)
+    assertTrue(storage.isLoaded(descriptor))
+    assertEquals(1, storage.getReferenceCount(descriptor))
+    assertSame(asset, storage[descriptor])
   }
 
   @Test
@@ -2578,7 +2647,7 @@ class AssetStorageTest : AsyncTest() {
     }
 
     // When:
-    runBlocking { storage.load<String>(path, parameters) }
+    runBlocking { storage.load(path, parameters) }
 
     // Then:
     callbackFinished.join()
@@ -2608,7 +2677,7 @@ class AssetStorageTest : AsyncTest() {
     }
 
     // When:
-    runBlocking { storage.load<String>(path, parameters) }
+    runBlocking { storage.load(path, parameters) }
 
     // Then: asset should still be loaded, but the callback exception must be logged:
     loggingFinished.join()
@@ -2732,6 +2801,75 @@ class AssetStorageTest : AsyncTest() {
     shouldThrow<AssetLoadingException> {
       storage.get<FakeAsset>(path)
     }
+    shouldThrow<AssetLoadingException> {
+      storage.getOrNull<FakeAsset>(path)
+    }
+    val reference = storage.getAsync<FakeAsset>(path)
+    shouldThrow<AssetLoadingException> {
+      runBlocking { reference.await() }
+    }
+  }
+
+  @Test
+  fun `should handle asynchronous loading exceptions`() {
+    // Given:
+    val loader = FakeAsyncLoader(
+      onAsync = { throw IllegalStateException("Expected.") },
+      onSync = {}
+    )
+    val storage = AssetStorage(useDefaultLoaders = false)
+    storage.setLoader { loader }
+    val path = "fake path"
+
+    // When:
+    shouldThrow<AssetLoadingException> {
+      runBlocking { storage.load<FakeAsset>(path) }
+    }
+
+    // Then: asset should still be in storage, but rethrowing original exception:
+    assertTrue(storage.contains<FakeAsset>(path))
+    assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
+    shouldThrow<AssetLoadingException> {
+      storage.get<FakeAsset>(path)
+    }
+    shouldThrow<AssetLoadingException> {
+      storage.getOrNull<FakeAsset>(path)
+    }
+    val reference = storage.getAsync<FakeAsset>(path)
+    shouldThrow<AssetLoadingException> {
+      runBlocking { reference.await() }
+    }
+  }
+
+  @Test
+  fun `should handle synchronous loading exceptions`() {
+    // Given:
+    val loader = FakeAsyncLoader(
+      onAsync = { },
+      onSync = { throw IllegalStateException("Expected.") }
+    )
+    val storage = AssetStorage(useDefaultLoaders = false)
+    storage.setLoader { loader }
+    val path = "fake path"
+
+    // When:
+    shouldThrow<AssetLoadingException> {
+      runBlocking { storage.load<FakeAsset>(path) }
+    }
+
+    // Then: asset should still be in storage, but rethrowing original exception:
+    assertTrue(storage.contains<FakeAsset>(path))
+    assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
+    shouldThrow<AssetLoadingException> {
+      storage.get<FakeAsset>(path)
+    }
+    shouldThrow<AssetLoadingException> {
+      storage.getOrNull<FakeAsset>(path)
+    }
+    val reference = storage.getAsync<FakeAsset>(path)
+    shouldThrow<AssetLoadingException> {
+      runBlocking { reference.await() }
+    }
   }
 
   @Test
@@ -2827,54 +2965,6 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(path))
     assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
     shouldThrow<MissingDependencyException> {
-      storage.get<FakeAsset>(path)
-    }
-  }
-
-  @Test
-  fun `should handle asynchronous loading exceptions`() {
-    // Given:
-    val loader = FakeAsyncLoader(
-      onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {}
-    )
-    val storage = AssetStorage(useDefaultLoaders = false)
-    storage.setLoader { loader }
-    val path = "fake path"
-
-    // When:
-    shouldThrow<AssetLoadingException> {
-      runBlocking { storage.load<FakeAsset>(path) }
-    }
-
-    // Then: asset should still be in storage, but rethrowing original exception:
-    assertTrue(storage.contains<FakeAsset>(path))
-    assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
-    shouldThrow<AssetLoadingException> {
-      storage.get<FakeAsset>(path)
-    }
-  }
-
-  @Test
-  fun `should handle synchronous loading exceptions`() {
-    // Given:
-    val loader = FakeAsyncLoader(
-      onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") }
-    )
-    val storage = AssetStorage(useDefaultLoaders = false)
-    storage.setLoader { loader }
-    val path = "fake path"
-
-    // When:
-    shouldThrow<AssetLoadingException> {
-      runBlocking { storage.load<FakeAsset>(path) }
-    }
-
-    // Then: asset should still be in storage, but rethrowing original exception:
-    assertTrue(storage.contains<FakeAsset>(path))
-    assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
-    shouldThrow<AssetLoadingException> {
       storage.get<FakeAsset>(path)
     }
   }
