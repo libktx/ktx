@@ -503,6 +503,32 @@ fun loadAsset(assetStorage: AssetStorage) {
 }
 ```
 
+Tracking loading progress:
+
+```kotlin
+import ktx.assets.async.AssetStorage
+
+fun trackProgress(assetStorage: AssetStorage) {
+  // Current loading progress can be tracked with the `progress` property:
+  val progress = assetStorage.progress
+
+  // Total number of scheduled assets:
+  progress.total
+  // Total number of loaded assets:
+  progress.loaded
+  // Current progress percentage in [0, 1]:
+  progress.percent
+  // Checks if all scheduled assets are loaded:
+  progress.isFinished
+
+  // Remember that due to the asynchronous nature of AssetStorage,
+  // the progress is only _eventually consistent_ with the storage.
+  // It will not know about the assets that are not fully scheduled
+  // for loading yet. Use progress for display only and base your
+  // application logic on coroutine callbacks instead.
+}
+```
+
 Adding a custom `AssetLoader` to `AssetStorage`:
 
 ```kotlin
@@ -703,6 +729,53 @@ from `AssetManager` to `AssetStorage`, all you have to change initially is the l
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+import ktx.async.newAsyncContext
+
+class WithAssetStorageBasic: ApplicationAdapter() {
+  // Using multiple threads to load the assets in parallel:
+  private val assetStorage = AssetStorage(newAsyncContext(threads = 2))
+  
+  override fun create() {
+    KtxAsync.initiate()
+
+    // Scheduling assets for asynchronous loading:
+    assetStorage.loadAsync<Texture>("images/logo.png")
+    assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+  }
+
+  override fun render() {
+    // The closest alternative to `update` would be to check the progress on each render:
+    if (assetStorage.progress.isFinished) {
+      changeView()
+    }
+  }
+
+  private fun changeView() {
+    val texture: Texture = assetStorage["images/logo.png"]
+    println(texture)
+    TODO("Now the assets are loaded and you can get them from $assetStorage.get!")
+  }
+}
+```
+
+As you can see, after the assets are loaded, the API of both `AssetManager` and `AssetStorage` is very similar.
+
+Now, this example looks almost identically to the `AssetManager` code and it might just work in some cases,
+but there are two things we should address:
+
+- You will notice that your IDE warns you about not using the results of `loadAsync` which return `Deferred` instances.
+This means we're launching asynchronous coroutines and ignore their results.
+- `AssetStorage.progress` should be used only for display and debugging. You generally should not base your application
+logic on `progress`, as it is only _eventually consistent_ with the `AssetStorage` state.
+
+Let's rewrite it again - this time with coroutines:
+
+```kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import ktx.assets.async.AssetStorage
@@ -710,11 +783,11 @@ import ktx.async.KtxAsync
 import ktx.async.newAsyncContext
 
 class WithAssetStorage: ApplicationAdapter() {
+  // Using multiple threads to load the assets in parallel:
+  private val assetStorage = AssetStorage(newAsyncContext(threads = 2))
+
   override fun create() {
     KtxAsync.initiate()
-
-    // Using multiple threads to load the assets in parallel:
-    val assetStorage = AssetStorage(newAsyncContext(threads = 4))
 
     // Scheduling assets for asynchronous loading:
     val assets = listOf(
@@ -722,23 +795,22 @@ class WithAssetStorage: ApplicationAdapter() {
       assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
     )
 
-    // Instead of updating, we're launching a coroutine that waits for the assets:
+    // Instead of constantly updating or checking the progress,
+    // we're launching a coroutine that "waits" for the assets:
     KtxAsync.launch {
       // Suspending coroutine until all assets are loaded:
       assets.joinAll()
-      // Now the assets are loaded and we can use them with `get`:
+      // Resuming! Now the assets are loaded and we can obtain them with `get`:
       changeView(assetStorage)
     }
   }
 
-  private fun changeView(assetStorage: AssetStorage) {
+  private fun changeView() {
     val texture: Texture = assetStorage["images/logo.png"]
     TODO("Now the assets are loaded and can be accessed with $assetStorage.get!")
   }
 }
 ```
-
-As you can see, after the assets are loaded, the API of both `AssetManager` and `AssetStorage` is similar.
 
 The code using `AssetStorage` is not necessarily shorter in this case, but:
 
@@ -746,8 +818,8 @@ The code using `AssetStorage` is not necessarily shorter in this case, but:
 - `AssetStorage` does not have to be updated on render.
 - Your code is reactive and `changeView` is called only once as soon as the assets are loaded.
 - You can easily integrate more coroutines into your application later for other asynchronous operations.
-- `AssetStorage.get` is non-blocking and faster. `AssetStorage` does a better job of storing your assets
-efficiently after loading.
+- `AssetStorage.get` is non-blocking and faster than `AssetManager.get`. `AssetStorage` does a better job of storing
+your assets efficiently after loading.
 - `AssetStorage` stores assets mapped by their path _and_ type. You will not have to deal with class cast exceptions.
 
 Besides, you get the additional benefits of other `AssetStorage` features and methods described in this file.

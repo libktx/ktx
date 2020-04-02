@@ -54,9 +54,6 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   override fun contains(fileName: String, type: Class<*>?): Boolean =
     assetStorage.contains(AssetDescriptor(fileName, type))
 
-  @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
-  override fun isFinished(): Boolean = true
-
   @Deprecated("This operation is non-blocking. Assets might not be available in storage after call.",
     replaceWith = ReplaceWith("AssetStorage.add"))
   override fun <T : Any> addAsset(fileName: String, type: Class<T>, asset: T) {
@@ -113,10 +110,9 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   override fun getDiagnostics(): String = assetStorage.toString()
   override fun getFileHandleResolver(): FileHandleResolver = assetStorage.fileResolver
 
-  @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
-  override fun getLoadedAssets(): Int = 0.also {
-    logger.error("Not supported AssetManagerWrapper.getLoadedAssets called by AssetLoader.")
-  }
+  override fun getProgress(): Float = assetStorage.progress.percent
+  override fun getLoadedAssets(): Int = assetStorage.progress.loaded
+  override fun isFinished(): Boolean = assetStorage.progress.isFinished
 
   override fun <Asset : Any> getLoader(type: Class<Asset>): AssetLoader<*, *>? = getLoader(type, "")
   override fun <T : Any> getLoader(type: Class<T>, fileName: String): AssetLoader<*, *>? =
@@ -179,19 +175,14 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   }
 
   @Deprecated("AssetStorage does not have to be updated.", ReplaceWith("Nothing"))
-  override fun update(millis: Int): Boolean = true
+  override fun update(millis: Int): Boolean = isFinished
 
   @Deprecated("AssetStorage does not have to be updated.", ReplaceWith("Nothing"))
-  override fun update(): Boolean = true
+  override fun update(): Boolean = isFinished
 
   @Deprecated("Unsupported operation.", ReplaceWith("Nothing"))
   override fun setReferenceCount(fileName: String, refCount: Int) =
     throw UnsupportedMethodException("setReferenceCount")
-
-  @Deprecated("Since AssetStorage does not force asset scheduling up front, " +
-    "it cannot track the file loading progress.",
-    ReplaceWith("Nothing"))
-  override fun getProgress(): Float = 1f
 
   @Deprecated("AssetStorage does not maintain an assets queue.", ReplaceWith("Nothing"))
   override fun getQueuedAssets(): Int = 0.also {
@@ -207,8 +198,7 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
   override fun <T : Any> finishLoadingAsset(assetDesc: AssetDescriptor<*>): T =
     get(assetDesc as AssetDescriptor<T>)
 
-  @Deprecated("Unsupported without asset type.",
-    ReplaceWith("finishLoadingAsset(assetDescriptor)"))
+  @Deprecated("Unsupported without asset type.", ReplaceWith("finishLoadingAsset(assetDescriptor)"))
   override fun <T : Any?> finishLoadingAsset(fileName: String): T =
     throw UnsupportedMethodException("finishLoadingAsset(String)")
 

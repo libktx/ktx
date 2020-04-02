@@ -36,6 +36,8 @@ import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 import ktx.async.*
 import org.junit.*
 import org.junit.Assert.*
+import org.junit.rules.TestName
+import java.lang.Integer.min
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
@@ -56,6 +58,9 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * using [AssetStorage.getAssetDescriptor] is a much easier way of obtaining [AssetDescriptor] instances.
  */
 class AssetStorageTest : AsyncTest() {
+  @get:Rule
+  var testName = TestName()
+
   companion object {
     @JvmStatic
     @BeforeClass
@@ -1370,15 +1375,54 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(0, storage.getReferenceCount<Cubemap>(path))
   }
 
+  /**
+   * Allows to validate state of [LoadingProgress] without failing the test case.
+   * Pass [warn] not to fail the test on progress mismatch.
+   *
+   * Progress is eventually consistent. It does not have to be up to date with the [AssetStorage] state.
+   * Usually it will be and all tests would pass just fine, but there are these rare situations where
+   * the asserts are evaluated before the progress is updated. That's why if such case is possible,
+   * only a warning will be printed instead of failing the test.
+   *
+   * If the warnings are common, it might point to a bug within the progress updating.
+   */
+  private fun checkProgress(
+    storage: AssetStorage,
+    loaded: Int = 0, failed: Int = 0,
+    total: Int = loaded + failed,
+    warn: Boolean = false
+  ) {
+    if (warn) {
+      val progress = storage.progress
+      if (total != progress.total || loaded != progress.loaded || failed != progress.failed) {
+        System.err.println("""
+          Warning: mismatch in progress value in `${testName.methodName}`.
+          Value  | Expected | Actual
+          total  | ${"%8d".format(total)} | ${progress.total}
+          loaded | ${"%8d".format(loaded)} | ${progress.loaded}
+          failed | ${"%8d".format(failed)} | ${progress.failed}
+          If this warning is repeated consistently, there might be a related bug in progress reporting.
+        """.trimIndent())
+      }
+    } else {
+      assertEquals(total, storage.progress.total)
+      assertEquals(loaded, storage.progress.loaded)
+      assertEquals(failed, storage.progress.failed)
+    }
+  }
+
   @Test
   fun `should throw exception when attempting to get unloaded asset`() {
     // Given:
     val storage = AssetStorage()
 
-    // Expect:
+    // When:
     shouldThrow<MissingAssetException> {
       storage.get<String>("ktx/assets/async/string.txt")
     }
+
+    // Then:
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1391,6 +1435,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertNull(asset)
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1401,10 +1446,11 @@ class AssetStorageTest : AsyncTest() {
     // When:
     val result = storage.getAsync<String>("ktx/assets/async/string.txt")
 
-    // Expect:
+    // Then:
     shouldThrow<MissingAssetException> {
       runBlocking { result.await() }
     }
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1413,10 +1459,13 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage()
     val identifier = storage.getIdentifier<String>("ktx/assets/async/string.txt")
 
-    // Expect:
+    // When:
     shouldThrow<MissingAssetException> {
       storage[identifier]
     }
+
+    // Then:
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1430,6 +1479,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertNull(asset)
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1441,10 +1491,11 @@ class AssetStorageTest : AsyncTest() {
     // When:
     val result = storage.getAsync(identifier)
 
-    // Expect:
+    // Then:
     shouldThrow<MissingAssetException> {
       runBlocking { result.await() }
     }
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1453,10 +1504,13 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage()
     val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt")
 
-    // Expect:
+    // When:
     shouldThrow<MissingAssetException> {
       storage[descriptor]
     }
+
+    // Then:
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1470,6 +1524,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertNull(asset)
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1481,10 +1536,11 @@ class AssetStorageTest : AsyncTest() {
     // When:
     val result = storage.getAsync(descriptor)
 
-    // Expect:
+    // Then:
     shouldThrow<MissingAssetException> {
       runBlocking { result.await() }
     }
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1502,6 +1558,7 @@ class AssetStorageTest : AsyncTest() {
     assets.forEach { asset ->
       assertSame(loaded, asset)
     }
+    checkProgress(storage, loaded = 1)
 
     storage.dispose()
   }
@@ -1522,6 +1579,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull<String>(path))
     assertEquals("Content.", runBlocking { storage.getAsync<String>(path).await() })
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1540,6 +1598,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull(identifier))
     assertEquals("Content.", runBlocking { storage.getAsync(identifier).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(identifier))
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1558,6 +1617,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull(descriptor))
     assertEquals("Content.", runBlocking { storage.getAsync(descriptor).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(descriptor))
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1573,6 +1633,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<String>(path))
     assertEquals(0, storage.getReferenceCount<String>(path))
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1589,6 +1650,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(descriptor))
     assertEquals(0, storage.getReferenceCount(descriptor))
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1605,6 +1667,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1621,6 +1684,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertSame(asset, storage.get<Texture>(path))
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1638,6 +1702,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(identifier))
     assertEquals(1, storage.getReferenceCount(identifier))
     assertSame(asset, storage[identifier])
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1655,6 +1720,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(descriptor))
     assertEquals(1, storage.getReferenceCount(descriptor))
     assertSame(asset, storage[descriptor])
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1689,6 +1755,7 @@ class AssetStorageTest : AsyncTest() {
     assertSame(viaPath, viaDescriptor)
     assertSame(viaDescriptor, viaIdentifier)
     assertEquals(3, storage.getReferenceCount<String>(path))
+    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1705,6 +1772,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Vector2>(fakePath))
     assertSame(asset, storage.get<Vector2>(fakePath))
     assertEquals(1, storage.getReferenceCount<Vector2>(fakePath))
+    checkProgress(storage, loaded = 1)
   }
 
   @Test
@@ -1722,6 +1790,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(descriptor))
     assertSame(asset, storage[descriptor])
     assertEquals(1, storage.getReferenceCount(descriptor))
+    checkProgress(storage, loaded = 1)
   }
 
   @Test
@@ -1739,6 +1808,26 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(identifier))
     assertSame(asset, storage[identifier])
     assertEquals(1, storage.getReferenceCount(identifier))
+    checkProgress(storage, loaded = 1)
+  }
+
+  @Test
+  fun `should unload and dispose assets manually added to storage`() {
+    // Given:
+    val storage = AssetStorage()
+    val asset = FakeAsset()
+    val fakePath = "disposable"
+    runBlocking { storage.add(fakePath, asset) }
+
+    // When:
+    val unloaded = runBlocking { storage.unload<FakeAsset>(fakePath) }
+
+    // Then:
+    assertTrue(unloaded)
+    assertFalse(storage.isLoaded<FakeAsset>(fakePath))
+    assertEquals(0, storage.getReferenceCount<FakeAsset>(fakePath))
+    assertTrue(asset.isDisposed)
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1795,6 +1884,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
     assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path))
+    checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
   }
@@ -1825,6 +1915,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Model>(secondPath))
     assertSame(tasks[0].asCompletableFuture().join(), storage.get<Texture>(firstPath))
     assertSame(tasks[1].asCompletableFuture().join(), storage.get<Model>(secondPath))
+    checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
   }
@@ -1870,24 +1961,6 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
-  fun `should unload and dispose assets manually added to storage`() {
-    // Given:
-    val storage = AssetStorage()
-    val asset = FakeAsset()
-    val fakePath = "disposable"
-    runBlocking { storage.add(fakePath, asset) }
-
-    // When:
-    val unloaded = runBlocking { storage.unload<FakeAsset>(fakePath) }
-
-    // Then:
-    assertTrue(unloaded)
-    assertFalse(storage.isLoaded<FakeAsset>(fakePath))
-    assertEquals(0, storage.getReferenceCount<FakeAsset>(fakePath))
-    assertTrue(asset.isDisposed)
-  }
-
-  @Test
   fun `should increase references count and return the same asset when trying to load asset with same path`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
@@ -1920,6 +1993,7 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertFalse(storage.contains<Vector2>(path))
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -1970,7 +2044,6 @@ class AssetStorageTest : AsyncTest() {
     assertNull(storage.getLoader<Cubemap>())
   }
 
-
   @Test
   fun `should increase references counts of dependencies when loading asset with same path`() {
     // Given:
@@ -1996,6 +2069,7 @@ class AssetStorageTest : AsyncTest() {
       assertEquals(3, storage.getReferenceCount(it))
     }
     assertEquals(1, loadedAssets.size)
+    checkProgress(storage, loaded = 3, warn = true)
   }
 
   @Test
@@ -2023,6 +2097,7 @@ class AssetStorageTest : AsyncTest() {
       assertEquals(3, storage.getReferenceCount(it))
     }
     assertEquals(1, loadedAssets.size)
+    checkProgress(storage, loaded = 3, warn = true)
 
     storage.dispose()
   }
@@ -2052,6 +2127,7 @@ class AssetStorageTest : AsyncTest() {
       assertEquals(3, storage.getReferenceCount(it))
     }
     assertEquals(1, loadedAssets.size)
+    checkProgress(storage, loaded = 3, warn = true)
 
     storage.dispose()
   }
@@ -2078,6 +2154,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<TextureAtlas>(dependency))
     assertEquals(1, storage.getReferenceCount<Texture>(nestedDependency))
     assertTrue(storage.isLoaded<Texture>(nestedDependency))
+    checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
   }
@@ -2111,6 +2188,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(100, storage.getReferenceCount<Texture>(dependency))
     assertEquals(1, assets.map { it.asCompletableFuture().join() }.toSet().size)
+    checkProgress(storage, loaded = 2)
 
     storage.dispose()
   }
@@ -2161,6 +2239,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
     assertEquals("Content.", storage.get<String>(path))
+    checkProgress(storage, loaded = 1, warn = true)
 
     storage.dispose()
   }
@@ -2202,6 +2281,7 @@ class AssetStorageTest : AsyncTest() {
       storage.get<BitmapFont>(path).region.texture,
       storage.get<Texture>(dependency)
     )
+    checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
   }
@@ -2246,6 +2326,7 @@ class AssetStorageTest : AsyncTest() {
     val texture = storage.get<Texture>(nestedDependency)
     assertSame(skin.atlas, atlas)
     assertSame(atlas.textures.first(), texture)
+    checkProgress(storage, loaded = 3, warn = true)
 
     storage.dispose()
   }
@@ -2296,10 +2377,12 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(expectedReferences, storage.getReferenceCount<Skin>(path))
     assertEquals(expectedReferences, storage.getReferenceCount<TextureAtlas>(dependency))
     assertEquals(expectedReferences, storage.getReferenceCount<Texture>(nestedDependency))
+    // Either the skin is unloaded or there are 3 assets - skin, atlas, texture:
+    val assetsCount = min(1, expectedReferences) * 3
+    checkProgress(storage, loaded = assetsCount, warn = true)
 
     storage.dispose()
   }
-
 
   @Test
   fun `should register asset loader`() {
@@ -2344,10 +2427,11 @@ class AssetStorageTest : AsyncTest() {
   fun `should reject invalid asset loader implementations`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
-    // Does not extend Synchronous/AsynchronousAssetLoader:
+
+    // When: loader does not extend Synchronous/AsynchronousAssetLoader:
     val invalidLoader = mock<Loader<Int>>()
 
-    // Expect:
+    // Then:
     shouldThrow<InvalidLoaderException> {
       storage.setLoader { invalidLoader }
     }
@@ -2368,6 +2452,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertTrue(assets.all { it.isDisposed })
     assertTrue(paths.all { it !in storage })
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -2808,6 +2893,7 @@ class AssetStorageTest : AsyncTest() {
     shouldThrow<AssetLoadingException> {
       runBlocking { reference.await() }
     }
+    checkProgress(storage, failed = 1, warn = true)
   }
 
   @Test
@@ -2839,6 +2925,7 @@ class AssetStorageTest : AsyncTest() {
     shouldThrow<AssetLoadingException> {
       runBlocking { reference.await() }
     }
+    checkProgress(storage, failed = 1, warn = true)
   }
 
   @Test
@@ -2870,6 +2957,7 @@ class AssetStorageTest : AsyncTest() {
     shouldThrow<AssetLoadingException> {
       runBlocking { reference.await() }
     }
+    checkProgress(storage, failed = 1, warn = true)
   }
 
   @Test
@@ -2913,6 +3001,7 @@ class AssetStorageTest : AsyncTest() {
     shouldThrow<MissingAssetException> {
       storage.get<FakeAsset>(path)
     }
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -3019,6 +3108,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.contains<FakeAsset>(path))
     assertFalse(storage.contains<Vector2>(dependency))
+    checkProgress(storage, total = 0)
   }
 
   @Test
@@ -3080,20 +3170,22 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader { loader }
 
     // When:
-    KtxAsync.launch { storage.load<FakeAsset>(path) }
+    KtxAsync.launch { storage.load(identifier) }
 
     // Then:
-    assertFalse(storage.isLoaded<FakeAsset>(path))
+    assertFalse(storage.isLoaded(identifier))
 
     loadingStarted.complete(true)
     loading.join()
     assertTrue(identifier in storage)
     assertFalse(storage.isLoaded(identifier))
+    checkProgress(storage, loaded = 0, total = 1)
 
     loadingFinished.complete(true)
     runBlocking { storage.getAsync<FakeAsset>(path).await() }
     assertTrue(identifier in storage)
     assertTrue(storage.isLoaded(identifier))
+    checkProgress(storage, loaded = 1, total = 1, warn = true)
   }
 
   @Test

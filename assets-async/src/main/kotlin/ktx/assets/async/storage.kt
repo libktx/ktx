@@ -48,6 +48,22 @@ class AssetStorage(
   private val lock = Mutex()
   private val assets = mutableMapOf<Identifier<*>, Asset<*>>()
 
+  /**
+   * Allows to track progress of the loaded assets.
+   *
+   * The values stored by the [LoadingProgress] are _eventually consistent._
+   * The progress can go slightly out of sync of the actual amounts of loaded assets,
+   * as it is not protected by the [lock].
+   *
+   * Due to the asynchronous nature of [AssetStorage], some assets that will eventually
+   * be scheduled by coroutines might not be counted by [LoadingProgress] yet.
+   * Calling [load] and [loadAsync] is not guaranteed to immediately update the
+   * [LoadingProgress.total] number of assets.
+   *
+   * Use the [progress] for display only and base your actual application logic on [AssetStorage] API.
+   */
+  val progress = LoadingProgress()
+
   /** LibGDX Logger used internally by the asset loaders, usually to report issues. */
   var logger: Logger
     get() = asAssetManager.logger
@@ -167,11 +183,12 @@ class AssetStorage(
    *
    * See also [getOrNull] and [getAsync].
    */
-  operator fun <T> get(identifier: Identifier<T>): T  {
+  operator fun <T> get(identifier: Identifier<T>): T {
     val reference = getAsync(identifier)
-    @Suppress( "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
+    @Suppress("EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
     return if (reference.isCompleted) reference.getCompleted() else throw MissingAssetException(identifier)
   }
+
   /**
    * Returns a loaded asset of type [T] loaded from selected [path] or `null`
    * if the asset is not loaded yet or was never scheduled for loading.
@@ -230,9 +247,9 @@ class AssetStorage(
    *
    * See also [get] and [getAsync].
    */
-  fun <T> getOrNull(identifier: Identifier<T>): T?  {
+  fun <T> getOrNull(identifier: Identifier<T>): T? {
     val asset = assets[identifier]
-    @Suppress( "UNCHECKED_CAST", "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
+    @Suppress("UNCHECKED_CAST", "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
     return if (asset == null || !asset.reference.isCompleted) null else asset.reference.getCompleted() as T
   }
 
@@ -315,10 +332,10 @@ class AssetStorage(
   fun <T> getAsync(identifier: Identifier<T>): Deferred<T> {
     val asset = assets[identifier]
     @Suppress("UNCHECKED_CAST")
-    return if (asset != null) asset.reference as Deferred<T> else getMissingAssetReference(identifier)
+    return if (asset != null) asset.reference as Deferred<T> else getMissingAssetAsync(identifier)
   }
 
-  private fun <T> getMissingAssetReference(identifier: Identifier<T>): Deferred<T> = CompletableDeferred<T>().apply {
+  private fun <T> getMissingAssetAsync(identifier: Identifier<T>): Deferred<T> = CompletableDeferred<T>().apply {
     completeExceptionally(MissingAssetException(identifier))
   }
 
@@ -424,6 +441,7 @@ class AssetStorage(
         referenceCount = 1,
         loader = ManualLoader as Loader<T>
       )
+      progress.registerAddedAsset()
     }
   }
 
@@ -462,7 +480,7 @@ class AssetStorage(
   /**
    * Schedules loading of an asset with path and type specified by [identifier].
    * Suspends the coroutine until an asset is loaded and returns a fully loaded instance of [T].
-   * 
+   *
    * [Identifier.path] must be compatible with the [fileResolver].
    * Loading [parameters] are optional and can be used to configure the loaded asset.
    *
@@ -620,6 +638,7 @@ class AssetStorage(
     }
     newAssets.forEach { assetToLoad ->
       // Loading new assets asynchronously:
+      progress.registerScheduledAsset()
       KtxAsync.launch(asyncContext) {
         withAssetLoadingErrorHandling(assetToLoad) {
           loadAsset(assetToLoad)
@@ -709,11 +728,13 @@ class AssetStorage(
     try {
       operation()
     } catch (exception: AssetStorageException) {
-      asset.reference.completeExceptionally(exception)
+      if (asset.reference.completeExceptionally(exception)) {
+        progress.registerFailedAsset()
+      }
     } catch (exception: Throwable) {
-      asset.reference.completeExceptionally(
-        AssetLoadingException(asset.descriptor, cause = exception)
-      )
+      if (asset.reference.completeExceptionally(AssetLoadingException(asset.descriptor, cause = exception))) {
+        progress.registerFailedAsset()
+      }
     }
   }
 
@@ -753,10 +774,10 @@ class AssetStorage(
   }
 
   private fun <T> setLoaded(asset: Asset<T>, value: T) {
-    val isAssigned = asset.reference.complete(value)
-    if (isAssigned) {
+    if (asset.reference.complete(value)) {
       // The asset was correctly loaded and assigned.
       try {
+        progress.registerLoadedAsset()
         // Notifying the LibGDX loading callback to support AssetManager behavior:
         asset.descriptor.params?.loadedCallback?.finishedLoading(
           asAssetManager, asset.identifier.path, asset.identifier.type
@@ -771,11 +792,7 @@ class AssetStorage(
     } else {
       // The asset was unloaded asynchronously. The deferred was likely completed with an exception.
       // Now we have to take care of the loaded value or it will remain loaded and unreferenced.
-      try {
-        value.dispose()
-      } catch (exception: Throwable) {
-        logger.error("Failed to dispose asset: ${asset.descriptor}", exception)
-      }
+      value.dispose(asset.identifier)
     }
   }
 
@@ -855,54 +872,61 @@ class AssetStorage(
    * of an asset that is still loaded), the asset will not be disposed of and will remain
    * in the storage even if `true` is returned.
    */
-  suspend fun unload(identifier: Identifier<*>): Boolean {
-    var unloaded = true
-    lock.withLock {
-      val root = assets[identifier]
-      if (root == null) {
-        unloaded = false
-      } else {
-        val queue = Queue<Asset<*>>()
-        queue.addLast(root)
-        while (!queue.isEmpty) {
-          val asset = queue.removeFirst()
-          asset.referenceCount--
-          if (asset.referenceCount == 0) {
-            disposeOf(asset)
-            assets.remove(asset.identifier)
-          }
-          asset.dependencies.forEach(queue::addLast)
+  suspend fun unload(identifier: Identifier<*>): Boolean = lock.withLock {
+    val root = assets[identifier]
+    if (root == null) {
+      // Asset is absent in the storage. Returning false - unsuccessful unload:
+      false
+    } else {
+      val queue = Queue<Asset<*>>()
+      queue.addLast(root)
+      while (!queue.isEmpty) {
+        val asset = queue.removeFirst()
+        asset.referenceCount--
+        if (asset.referenceCount == 0) {
+          // The asset is no longer referenced by the user or any dependencies. Removing and disposing.
+          assets.remove(asset.identifier)
+          disposeOf(asset)
         }
+        asset.dependencies.forEach(queue::addLast)
       }
+      // Asset was present in the storage. Returning true - successful unload:
+      true
     }
-    return unloaded
   }
 
-  private suspend fun disposeOf(asset: Asset<*>) {
-    val path = asset.descriptor.fileName
+  @Suppress("EXPERIMENTAL_API_USAGE") // Allows to dispose of assets without suspending calls.
+  private fun disposeOf(asset: Asset<*>) {
     if (!asset.reference.isCompleted) {
       val exception = UnloadedAssetException(asset.identifier)
       // If the asset is not loaded yet, we complete the reference with exception:
       val cancelled = asset.reference.completeExceptionally(exception)
       if (cancelled) {
+        progress.removeScheduledAsset()
         // We managed to complete the reference exceptionally. The loading coroutine will dispose of the asset.
         return
       }
     }
-    try {
-      // We did not manage to complete the reference. Asset should be disposed of.
-      val value = asset.reference.await()
-      value.dispose()
-    } catch (exception: UnloadedAssetException) {
-      // The asset was already unloaded. Should not happen, but it's not an issue.
-    } catch (exception: Throwable) {
-      // Asset failed to load or failed to dispose. Either way, we just log the exception.
-      logger.error("Failed to dispose asset with path: $path", exception)
+    val exception = asset.reference.getCompletionExceptionOrNull()
+    if (exception != null) {
+      // The asset was not loaded successfully. Nothing to dispose of.
+      progress.removeFailedAsset()
+    } else {
+      progress.removeLoadedAsset()
+      asset.reference.getCompleted().dispose(asset.identifier)
     }
   }
 
-  private fun Any?.dispose() {
-    (this as? Disposable)?.dispose()
+  /**
+   * Performs cast to [Disposable] if possible and disposes of the object with [Disposable.dispose].
+   * Logs any disposing errors.
+   */
+  private fun Any?.dispose(identifier: Identifier<*>) {
+    try {
+      (this as? Disposable)?.dispose()
+    } catch (exception: Throwable) {
+      logger.error("Failed to dispose of asset: $identifier", exception)
+    }
   }
 
   /**
@@ -1001,6 +1025,11 @@ class AssetStorage(
    * Logs all disposing exceptions.
    *
    * Prefer suspending [dispose] method that takes an error handler as parameter.
+   *
+   * Calling [dispose] is not guaranteed to keep the eventual consistency of [progress]
+   * if [dispose] is called during asynchronous asset loading.
+   * If exact loading progress is crucial, prefer creating another instance of [AssetStorage]
+   * than reusing existing one that has been disposed.
    */
   override fun dispose() {
     runBlocking {
@@ -1013,6 +1042,11 @@ class AssetStorage(
   /**
    * Unloads all assets. Cancels loading of all scheduled assets.
    * [onError] will be invoked on every caught disposing exception.
+   *
+   * Calling [dispose] is not guaranteed to keep the eventual consistency of [progress]
+   * if [dispose] is called during asynchronous asset loading.
+   * If exact loading progress is crucial, prefer creating another instance of [AssetStorage]
+   * than reusing existing one that has been disposed.
    */
   suspend fun dispose(onError: (identifier: Identifier<*>, cause: Throwable) -> Unit) {
     lock.withLock {
@@ -1026,13 +1060,14 @@ class AssetStorage(
           }
         }
         try {
-          asset.reference.await().dispose()
+          (asset.reference.await() as? Disposable)?.dispose()
         } catch (exception: Throwable) {
           onError(asset.identifier, exception)
         }
         asset.referenceCount = 0
       }
       assets.clear()
+      progress.reset()
     }
   }
 
