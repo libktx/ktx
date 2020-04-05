@@ -16,6 +16,7 @@
          - `getAsync` obtains a reference to the asset from the storage as `Deferred`.
          - `load` suspends a coroutine until an asset is loaded and returns its instance.
          - `loadAsync` schedules asynchronous loading of an asset.
+         - `loadSync` blocks the thread until selected asset is loaded.
          - `unload` schedules asynchronous unloading of an asset.
          - `add` allows to manually add a loaded asset to `AssetManager`.
          - `dispose` unloads all assets from the storage.

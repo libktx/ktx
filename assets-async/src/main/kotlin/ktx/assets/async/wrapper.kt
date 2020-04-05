@@ -34,7 +34,6 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
 
   override fun clear() = dispose()
 
-
   @Deprecated("This operation is non-blocking. Assets might still be loaded after this call.",
     replaceWith = ReplaceWith("AssetStorage.dispose"))
   override fun dispose() {
@@ -79,7 +78,7 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
     get(assetDescriptor.fileName, assetDescriptor.type)
 
   override fun <Asset : Any> get(fileName: String, type: Class<Asset>): Asset {
-    val identifier = Identifier(type, fileName)
+    val identifier = Identifier(fileName, type)
     return try {
       assetStorage[identifier]
     } catch (exception: Throwable) {

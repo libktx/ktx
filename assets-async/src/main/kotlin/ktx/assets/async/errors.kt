@@ -21,6 +21,9 @@ open class AssetStorageException(message: String, cause: Throwable? = null) : Gd
 /**
  * Thrown when the asset requested by an [AssetStorage.get] variant is not available
  * in the [AssetStorage] at all or has not been loaded yet.
+ *
+ * This exception can also be thrown by [AssetStorage.loadSync] when mixing synchronous asset
+ * loading with asynchronous loading via [AssetStorage.load] or [AssetStorage.loadAsync].
  */
 class MissingAssetException(identifier: Identifier<*>) :
   AssetStorageException(message = "Asset: $identifier is not loaded.")
@@ -90,10 +93,16 @@ class UnsupportedMethodException(method: String) :
   )
 
 /**
- * This exception is only ever thrown when trying to access assets via [AssetManagerWrapper].
- * It is typically only caused by [AssetLoader] instances or a [AssetLoaderParameters.LoadedCallback].
+ * This exception can be thrown by [AssetStorage.loadSync] if dependencies of an asset were scheduled
+ * for asynchronous loading, but are not loaded yet. [AssetStorage.loadSync] will not wait for the
+ * assets and instead will throw this exception.
  *
- * If this exception is thrown, it usually means that [AssetLoader] attempts to access an asset that either:
+ * If [AssetStorage.loadSync] was not used, this exception is only ever thrown when trying to access
+ * assets via [AssetManagerWrapper]. It is then typically only caused by [AssetLoader] instances or
+ * a [AssetLoaderParameters.LoadedCallback].
+ *
+ * If you did not use [AssetStorage.loadSync], it usually means that [AssetLoader] attempts to access
+ * an asset that either:
  * - Is already unloaded.
  * - Failed to load with exception.
  * - Was not listed by [AssetLoader.getDependencies].
@@ -102,14 +111,14 @@ class UnsupportedMethodException(method: String) :
  * It can also be caused by an [AssetLoaderParameters.LoadedCallback] assigned to an asset when it tries
  * to access unloaded assets with [AssetManagerWrapper.get].
  *
- * Normally this exception is only expected in case of concurrent loading and unloading of the same asset.
- * If it occurs otherwise, the [AssetLoader] associated with the asset might incorrect list
- * asset's dependencies.
+ * Normally this exception is only expected in case of concurrent loading and unloading of the same asset, or when
+ * mixing synchronous [AssetStorage.loadSync] with asynchronous [AssetStorage.load] or [AssetStorage.loadAsync].
+ * If it occurs otherwise, the [AssetLoader] associated with the asset might incorrectly list its dependencies.
  */
 class MissingDependencyException(identifier: Identifier<*>, cause: Throwable? = null) :
   AssetStorageException(
     message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
-      "This asset was either not listed in dependencies, loaded with exception, not loaded yet " +
-      "or unloaded asynchronously.",
+      "This asset was either not listed in dependencies, loaded with exception, is not loaded yet " +
+      "or was unloaded asynchronously.",
     cause = cause
   )

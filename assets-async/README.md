@@ -22,15 +22,15 @@ on any `CoroutineContext`.
 Feature | **KTX** `AssetStorage` | LibGDX `AssetManager`
 --- | --- | ---
 *Asynchronous loading* | **Supported.** Loading that can be done asynchronously is performed in the chosen coroutine context. Parts that require OpenGL context are performed on the main rendering thread. | **Supported.** Loading that can be performed asynchronously is done a dedicated thread, with necessary sections executed on the main rendering thread.
-*Synchronous loading* | **Limited.** A blocking coroutine can be launched to selected assets eagerly, but it cannot block the rendering thread or loader threads to work correctly. | **Limited.** `finishLoading(String fileName)` method can be used to block the thread until the asset is loaded, but since it has no effect on loading order, all _other_ assets can be loaded before the requested one.
-*Thread safety* | **Excellent.** Forces [`ktx-async`](../async) threading model based on coroutines. Executes blocking IO operations in a separate coroutine context and - when necessary - finishes loading on the main rendering thread. Same asset - or assets with same dependencies - can be safely scheduled for loading by multiple coroutines concurrently. Multi-threaded coroutine context can be used for asynchronous loading, possibly achieving loading performance boost. Concurrent `AssetStorage` usage is tested extensively by unit tests. | **Good.** Achieved through synchronizing most methods, which unfortunately blocks the threads that use them. Thread blocking might affect application performance, especially since even the basic `get` method is synchronized. Some operations, such as `update` or `finishLoading`, must be called from specific threads (i.e. rendering thread).
-*Concurrency* | **Supported.** Multiple asset loading coroutines can be launched in parallel. Coroutine context used for asynchronous loading can have multiple threads that will be used concurrently. | **Not supported.** `update()` loads assets one by one. `AsyncExecutor` with a single thread is used internally by the `AssetManager`. To utilize multiple threads for loading, one must use multiple manager instances.
-*Loading order* | **Controlled by the user.** `AssetStorage` starts loading assets as soon as the `load` method is called, giving the user full control over the order of asset loading. Selected assets can be loaded one after another within a single coroutine or in parallel with multiple coroutines, depending on the need. | **Unpredictable.** If multiple assets are scheduled at once, it is difficult to reason about their loading order. `finishLoading` has no effect on loading order and instead blocks the thread until the asset is loaded.
+*Synchronous loading* | **Supported.** `loadSync` blocks the current thread until a selected asset is loaded. A blocking coroutine can also be launched to load selected assets eagerly, but it cannot block the rendering thread or loader threads to work correctly. | **Limited.** `finishLoading` method can be used to block the thread until the asset is loaded, but since it has no effect on loading order, it requires precise scheduling or it will block the thread until some or all unselected assets are loaded.
+*Thread safety* | **Excellent.** Uses [`ktx-async`](../async) threading model based on coroutines. Executes blocking IO operations in a separate coroutine context and - when necessary - finishes loading on the main rendering thread. Same asset - or assets with same dependencies - can be safely scheduled for loading by multiple coroutines concurrently. Multi-threaded coroutine context can be used for asynchronous loading, possibly achieving loading performance boost. Concurrent `AssetStorage` usage is tested extensively by unit tests. | **Good.** Achieved through synchronizing most methods, which unfortunately blocks the threads that use them. Thread blocking might affect application performance, especially since even the basic `get` method is synchronized. Some operations, such as `update` or `finishLoading`, must be called from specific threads (i.e. rendering thread).
+*Concurrency* | **Supported.** Multiple asset loading coroutines can be launched in parallel. Coroutine context used for asynchronous loading can have multiple threads that will be used concurrently. | **Limited.** `update()` loads assets one by one. `AsyncExecutor` with only a single thread is used internally by the `AssetManager`. To utilize multiple threads for loading, one must use multiple manager instances.
+*Loading order* | **Controlled by the user.** With suspending `load`, synchronous `loadSync` and `Deferred`-returning `loadAsync`, the user can have full control over asset loading order. Selected assets can be loaded one after another within a single coroutine or in parallel with multiple coroutines, depending on the need. | **Unpredictable.** If multiple assets are scheduled at once, it is difficult to reason about their loading order. `finishLoading` has no effect on loading order and instead blocks the thread until the selected asset is loaded.
 *Exceptions* | **Customized.** All expected issues are given separate exception classes with common root type for easier handling. Each loading issue can be handled differently. | **Generic.** Throws either `GdxRuntimeException` or a built-in Java runtime exception. Specific issues are difficult to handle separately.
-*Error handling* | **Build-in language syntax.** A regular try-catch block within coroutine body can be used to handle loading errors. Provides a clean way to handle exceptions thrown by each asset separately. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown. Flow of the application is undisturbed, which makes it difficult to handle exceptions of specific assets.
+*Error handling* | **Build-in language syntax.** A regular try-catch block within coroutine body can be used to handle asynchronous loading errors. Provides a clean way to handle exceptions thrown by each asset separately. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown. Flow of the application is undisturbed, which makes it difficult to handle exceptions of specific assets.
 *File name collisions* | **Multiple assets of different types can be loaded from same path.** For example, you can load both a `Texture` and a `Pixmap` from the same PNG file. | **File paths act as unique identifiers.** `AssetManager` cannot store multiple assets with the same path, even if they have different types.
-*Progress tracking* | **Limited.** Since `AssetStorage` does not force the users to schedule loading of all assets up front, it does not know the exact percent of the loaded assets. Progress must be tracked externally. | **Supported.** Since all loaded assets have to be scheduled up front, `AssetManager` can track total loading progress.
-*Usage* | **Launch coroutine, load assets, use as soon as loaded.** Asynchronous complexity is hidden by the coroutines. | **Schedule loading, update in loop until loaded, extract from manager.** API based on polling _(are you done yet?),_ which might prove tedious during loading phase. Loading callbacks are available, but have obscure API and still require constant updating of the manager.
+*Progress tracking* | **Supported with caveats.** `AssetStorage` does not force the users to schedule loading of all assets up front. To get the exact percent of loaded assets, all assets must be scheduled first (e.g. with `loadAsync`). | **Supported.** Since all loaded assets have to be scheduled up front, `AssetManager` can track total loading progress.
+*Usage* | **Launch coroutine, load assets, use as soon as loaded.** Asynchronous complexity is hidden by the coroutines. | **Schedule loading, update in loop until loaded, extract from manager.** API based on polling _(are you done yet?),_ which might prove tedious during loading phase. Loading callbacks for individual assets are available, but have obscure API and still require constant updating of the manager.
 
 #### Usage comparison
 
@@ -118,12 +118,10 @@ identifies assets by their paths and types, i.e. you can load multiple assets wi
 classes from the same file.
 
 The key difference between **KTX** storage and LibGDX manager is the threading model:
-`AssetStorage` provides suspending methods executed via coroutines that resume the
-coroutine as soon as the asset is loaded, while `AssetManager` requires scheduling
-of asset loading up front, continuous updating until the assets are loaded and
-retrieving the assets once the loading is finished. `AssetManager` leverages
-a single thread for asynchronous loading operations, while `AssetStorage` can utilize
-any chosen number of threads by specifying a coroutine context.
+ `AssetManager` leverages only a single thread for asynchronous loading operations and ensures
+thread safety by relying on the `synchronized` methods,
+while `AssetStorage` can utilize any chosen number of threads specified by its coroutine
+context and uses non-blocking coroutines to load the assets.
 
 ### Guide
 
@@ -145,6 +143,8 @@ called to obtain the asset instance. `isCompleted` can be used to check if the a
 the asset is fully loaded. Resumes the coroutine and returns the asset once it is loaded.
 - `loadAsync: Deferred<T>` - schedules asset for asynchronous loading. Returns a `Deferred` reference
 to the asset which will be completed after the loading is finished.
+- `loadSync: T` - blocks the current thread until the selected asset is loaded. Use only for crucial
+assets that need to be loaded synchronously (e.g. loading screen assets).
 - `unload: Boolean` _(suspending)_ - unloads the selected asset. If the asset is no longer referenced,
 it will be removed from the storage and disposed of. Suspends the coroutine until the asset is unloaded.
 Returns `true` is the selected asset was present in storage or `false` if the asset was absent.
@@ -446,6 +446,21 @@ fun addAsset(assetStorage: AssetStorage) {
 }
 ```
 
+Loading assets _synchronously_ with `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+
+// Sometimes you need to load assets immediately and coroutines just get in the way.
+// A common example of this would be getting the assets for the loading screen.
+// In this case you can use `loadSync`, which will block the current thread until
+// the asset is loaded:
+val font = assetStorage.loadSync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+
+// Whenever possible, prefer `load` or `loadAsync`. Try not to mix synchronous and
+// asynchronous loading, especially on the same assets or assets with same dependencies.
+```
+
 Disposing of all assets stored by `AssetStorage`:
 
 ```kotlin
@@ -475,7 +490,7 @@ fun unloadAllAssets(assetStorage: AssetStorage) {
 }
 ```
 
-Loading assets with error handling:
+Loading assets with custom error handling:
 
 ```kotlin
 import com.badlogic.gdx.graphics.Texture
@@ -550,7 +565,7 @@ fun createCustomAssetStorage(): AssetStorage {
 
 #### Implementation notes
 
-##### Multiple calls of `load`, `loadAsync` and `unload`
+##### Multiple calls of `load`, `loadAsync`, `loadSync` and `unload`
 
 It is completely safe to call `load` and `loadAsync` multiple times with the same asset data, even just to obtain
 asset instances. In that sense, they can be used as an alternative to `getAsync` inside coroutines.
@@ -573,7 +588,31 @@ and type will not increase its reference count, and will throw an exception inst
 Adding assets that were previously loaded by the `AssetStorage` under different paths is also a misuse of the API
 which might result in unloading the asset or its dependencies prematurely. True aliases are currently unsupported.
 
-##### `runBlocking`
+`loadSync` can also be used multiple times on the same asset in addition to `load` and `loadAsync`, but keep in mind
+that mixing synchronous and asynchronous loading can cause loading exceptions. In particular, `loadSync` will not wait
+for asset dependencies loaded by other asynchronous coroutines and will raise an exception instead. As a rule of thumb,
+it is best not to mix synchronous and asynchronous loading of the same asset or assets with the same dependencies.
+
+##### Loading methods comparison: `load` vs `loadAsync` vs `loadSync`
+
+Loading method | Return type | Suspending | Loading type | When to use
+:---: | :---: | :---: | --- | ---
+`load` | `Asset` | Yes | Asynchronous. Schedules asset loading and awaits for the loaded asset, suspending the coroutine. | Within coroutines for controlled, sequential loading.
+`loadAsync` | `Deferred<Asset>` | No, but can be with `Deferred.await` | Asynchronous. Schedules asset loading and returns a `Deferred` reference to the asset. | Outside of coroutines: for scheduling of assets that can be loaded non-sequentially and in parallel. Within coroutines: for controlled order of loading with `Deferred.await`.
+`loadSync` | `Asset` | No | Synchronous. Blocks the current thread until an asset is loaded. Loading is performed on the rendering thread. | **Only** outside of coroutines, for crucial assets that need to be loaded synchronously (e.g. loading screen assets).
+
+_`Asset` is the generic type of the loaded asset._
+
+* Avoid mixing synchronous (`loadSync`) and asynchronous (`load`, `loadAsync`) loading of the same asset or assets with
+the same dependencies concurrently.
+* Prefer asynchronous (`load`, `loadAsync`) asset loading methods whenever possible due to better performance and
+compatibility with coroutines.
+* Note that `loadSync` is not _necessary_ to load initial assets. You launch a coroutine with `KtxAsync.launch`,
+load the assets sequentially with `load` or in parallel with `loadAsync`/`await`, and switch to the first view
+that uses the assets once they are loaded. Loading assets asynchronously might be faster - especially when done
+in parallel, but ultimately it comes down to personal preference and code maintainability.
+
+##### Avoid `runBlocking`
 
 Kotlin's `runBlocking` function allows to launch a coroutine and block the current thread until the coroutine
 is finished. In general, you should **avoid** `runBlocking` calls from the main rendering thread or the threads
@@ -652,17 +691,6 @@ It does not mean that `runBlocking` will always cause a deadlock, however. You c
 - For `load` and `get.await` calls requesting already loaded assets. **Use with caution.**
 - From within other threads than the main rendering thread and the `AssetStorage` loading threads. These threads
 will be blocked until the operation is finished, which isn't ideal, but at least the loading will remain possible.
-
-##### Asynchronous operations
-
-Most common operations - `get` and `load` - offer both synchronous/suspending and asynchronous variants.
-To perform other methods asynchronously, use `KtxAsync.launch` if you do not need the result or `KtxAsync.async`
-to get a `Deferred` reference to the result which will be completed after the operation is finished.
-
-```kotlin
-// Unloading an asset asynchronously:
-KtxAsync.launch { storage.unload<AssetType>(path) }
-```
 
 ##### `AssetStorage` as a drop-in replacement for `AssetManager`
 
@@ -801,7 +829,7 @@ class WithAssetStorage: ApplicationAdapter() {
       // Suspending coroutine until all assets are loaded:
       assets.joinAll()
       // Resuming! Now the assets are loaded and we can obtain them with `get`:
-      changeView(assetStorage)
+      changeView()
     }
   }
 
@@ -823,6 +851,32 @@ your assets efficiently after loading.
 - `AssetStorage` stores assets mapped by their path _and_ type. You will not have to deal with class cast exceptions.
 
 Besides, you get the additional benefits of other `AssetStorage` features and methods described in this file.
+
+Closest method equivalents in `AssetManager` and `AssetStorage` APIs:
+
+`AssetManager` | `AssetStorage` | Note
+:---: | :---: | ---
+`get<T>(String)` | `get<T>(String)` |
+`get(String, Class)` | `get(Identifier)` |
+`get(AssetDescriptor)` | `get(AssetDescriptor)` |
+`load(String, Class)` | `loadAsync<T>(String)` | `load<T>(String)` can also be used as an alternative within coroutines.
+`load(String, Class, AssetLoaderParameters)` | `loadAsync<T>(String, AssetLoaderParameters)` | `load<T>(String, AssetLoaderParameters)` can also be used as an alternative within coroutines.
+`load(AssetDescriptor)` | `loadAsync(AssetDescriptor)` |  `load(AssetDescriptor)` can also be used as an alternative within coroutines.
+`isLoaded(String)` | `isLoaded<T>(String)` | `AssetStorage` requires asset type, so the method is generic.
+`isLoaded(String, Class)` | `isLoaded(Identifier)` |
+`isLoaded(AssetDescriptor)` | `isLoaded(AssetDescriptor)` |
+`unload(String)` | `unload<T>(String)`, `unload(Identifier)` | `AssetStorage` requires asset type, so the methods are generic.
+`getProgress()` | `progress.percent` |
+`isFinished()` | `progress.isFinished` |
+`update()`, `update(Int)` | N/A | `AssetStorage` does not need to be updated. Rely on coroutines to execute code when the assets are loaded or use `progress.isFinished`.
+`finishLoadingAsset(String)` | `loadSync<T>(String)` | Assets that need to be loaded immediately (e.g. loading screen assets) can be loaded with `loadSync` instead of asynchronous `load` or `loadAsync` for convenience.
+`finishLoadingAsset(AssetDescriptor)` | `loadSync(AssetDescriptor)` |
+`finishLoading()` | N/A | `AssetStorage` does not provide methods that block the thread until all assets are loaded. Rely on `progress.isFinished` instead. 
+`addAsset<T>(String, Class, T)` | `add<T>(String, T)` |
+`contains(String)` | `contains<T>(String)`, `contains(Identifier)` | `AssetStorage` requires asset type, so the methods are generic.
+`setErrorHandler` | N/A, `try-catch` | With `AssetStorage` you can handle loading errors immediately with regular built-in `try-catch` syntax. Error listener is not required.
+`clear()` | `dispose()` | `AssetStorage.dispose` will not kill `AssetStorage` threads and can be safely used multiple times like `AssetManager.clear`.
+`dispose()` | `dispose()` | `AssetStorage` also provides a suspending variant with custom error handling.
 
 ##### Integration with LibGDX and known unsupported features
 
@@ -849,7 +903,7 @@ prove useful.
 
 There seem to be no other coroutines-based asset loaders available.
 However, LibGDX `AssetManager` is still viable when efficient parallel loading is not a requirement.
-Alternatives include:
+Alternatives to the `AssetStorage` include:
 
 - Using [`AssetManager`](https://github.com/libgdx/libgdx/wiki/Managing-your-assets) directly.
 - Using [`ktx-assets`](../assets) extensions for `AssetManager`.

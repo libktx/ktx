@@ -45,6 +45,9 @@ fun AssetStorage.registerFreeTypeFontLoaders(
  * It will be inlined and invoked on a [FreeTypeFontParameter].
  *
  * Returns the result of font loading. See [AssetStorage.load] for lists of possible outcomes.
+ *
+ * Note that you can also call [AssetStorage.loadSync] or [AssetStorage.loadAsync] directly if needed,
+ * but you must pass [FreeTypeFontParameter]. See [freeTypeFontParameters] utility.
  */
 suspend inline fun AssetStorage.loadFreeTypeFont(
   path: String,

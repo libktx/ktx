@@ -10,7 +10,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Cubemap
 import com.badlogic.gdx.graphics.Pixmap
@@ -21,7 +20,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
@@ -34,8 +32,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.future.asCompletableFuture
 import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 import ktx.async.*
-import org.junit.*
+import org.junit.AfterClass
 import org.junit.Assert.*
+import org.junit.BeforeClass
+import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestName
 import java.lang.Integer.min
 import java.util.*
@@ -48,6 +49,9 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [AssetStorage]: coroutines-based asset manager.
+ *
+ * This suite tests the behavior and logic of the [AssetStorage]. [AbstractAssetStorageLoadingTest]
+ * and its extensions test whether [AssetStorage] can correctly load all default asset types.
  *
  * Implementation note: the tests use [runBlocking] to launch the coroutines for simplicity
  * of asserts. Normally [KtxAsync].launch is highly encouraged to build truly asynchronous applications.
@@ -80,1299 +84,6 @@ class AssetStorageTest : AsyncTest() {
       Gdx.gl20 = null
       Gdx.gl = null
     }
-  }
-
-  @Before
-  override fun `setup LibGDX application`() {
-    super.`setup LibGDX application`()
-    Gdx.audio = OpenALAudio()
-  }
-
-  @After
-  override fun `exit LibGDX application`() {
-    super.`exit LibGDX application`()
-    (Gdx.audio as OpenALAudio).dispose()
-  }
-
-  @Test
-  fun `should load text assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-
-    // When:
-    val asset = runBlocking { storage.load<String>(path) }
-
-    // Then:
-    assertEquals("Content.", asset)
-    assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path))
-    assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
-  }
-
-  @Test
-  fun `should load text assets with parameters`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-
-    // When:
-    val asset = runBlocking {
-      storage.load(path, parameters = TextAssetLoaderParameters("UTF-8"))
-    }
-
-    // Then:
-    assertEquals("Content.", asset)
-    assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path))
-    assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
-  }
-
-  @Test
-  fun `should load text assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-    val descriptor = AssetDescriptor(path, String::class.java, TextAssetLoaderParameters("UTF-8"))
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertEquals("Content.", asset)
-    assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path))
-    assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
-  }
-
-  @Test
-  fun `should load text assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-    val identifier = storage.getIdentifier<String>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertEquals("Content.", asset)
-    assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path))
-    assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
-  }
-
-  @Test
-  fun `should load text assets with identifier and parameters`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-    val identifier = storage.getIdentifier<String>(path)
-
-    // When:
-    val asset = runBlocking {
-      storage.load(identifier, TextAssetLoaderParameters("UTF-8"))
-    }
-
-    // Then:
-    assertEquals("Content.", asset)
-    assertTrue(storage.isLoaded<String>(path))
-    assertSame(asset, storage.get<String>(path))
-    assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
-  }
-
-  @Test
-  fun `should unload text assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/string.txt"
-    runBlocking { storage.load<String>(path) }
-
-    // When:
-    runBlocking { storage.unload<String>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<String>(path))
-    assertEquals(0, storage.getReferenceCount<String>(path))
-  }
-
-  @Test
-  fun `should load BitmapFont assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
-
-    // When:
-    val asset = runBlocking { storage.load<BitmapFont>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path))
-    assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
-    // Font dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load BitmapFont assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
-    val descriptor = AssetDescriptor(path, BitmapFont::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path))
-    assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
-    // Font dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load BitmapFont assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
-    val identifier = storage.getIdentifier<BitmapFont>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<BitmapFont>(path))
-    assertSame(asset, storage.get<BitmapFont>(path))
-    assertEquals(1, storage.getReferenceCount<BitmapFont>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<BitmapFont>(path))
-    // Font dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-    assertSame(asset.region.texture, storage.get<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload BitmapFont with dependencies`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
-    runBlocking { storage.load<BitmapFont>(path) }
-
-    // When:
-    runBlocking { storage.unload<BitmapFont>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<BitmapFont>(path))
-    assertEquals(0, storage.getReferenceCount<BitmapFont>(path))
-    assertFalse(storage.isLoaded<Texture>(dependency))
-    assertEquals(0, storage.getReferenceCount<Texture>(path))
-  }
-
-  @Test
-  fun `should load Music assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-
-    // When:
-    val asset = runBlocking { storage.load<Music>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path))
-    assertEquals(1, storage.getReferenceCount<Music>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Music assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    val descriptor = AssetDescriptor(path, Music::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path))
-    assertEquals(1, storage.getReferenceCount<Music>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
-
-    storage.dispose()
-  }
-
-
-  @Test
-  fun `should load Music assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    val identifier = storage.getIdentifier<Music>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Music>(path))
-    assertSame(asset, storage.get<Music>(path))
-    assertEquals(1, storage.getReferenceCount<Music>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Music assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    runBlocking { storage.load<Music>(path) }
-
-    // When:
-    runBlocking { storage.unload<Music>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Music>(path))
-    assertEquals(0, storage.getReferenceCount<Music>(path))
-  }
-
-
-  @Test
-  fun `should load Sound assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-
-    // When:
-    val asset = runBlocking { storage.load<Sound>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path))
-    assertEquals(1, storage.getReferenceCount<Sound>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Sound assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    val descriptor = AssetDescriptor(path, Sound::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path))
-    assertEquals(1, storage.getReferenceCount<Sound>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Sound assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    val identifier = storage.getIdentifier<Sound>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Sound>(path))
-    assertSame(asset, storage.get<Sound>(path))
-    assertEquals(1, storage.getReferenceCount<Sound>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Sound assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/sound.ogg"
-    runBlocking { storage.load<Sound>(path) }
-
-    // When:
-    runBlocking { storage.unload<Sound>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Sound>(path))
-    assertEquals(0, storage.getReferenceCount<Sound>(path))
-  }
-
-  @Test
-  fun `should load TextureAtlas assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.atlas"
-    val dependency = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load<TextureAtlas>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load TextureAtlas assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.atlas"
-    val dependency = "ktx/assets/async/texture.png"
-    val descriptor = AssetDescriptor(path, TextureAtlas::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load TextureAtlas assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.atlas"
-    val dependency = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<TextureAtlas>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<TextureAtlas>(path))
-    assertSame(asset, storage.get<TextureAtlas>(path))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<TextureAtlas>(path))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertSame(asset.textures.first(), storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload TextureAtlas assets with dependencies`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.atlas"
-    val dependency = "ktx/assets/async/texture.png"
-    runBlocking { storage.load<TextureAtlas>(path) }
-
-    // When:
-    runBlocking { storage.unload<TextureAtlas>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<TextureAtlas>(path))
-    assertEquals(0, storage.getReferenceCount<TextureAtlas>(path))
-    assertFalse(storage.isLoaded<Texture>(dependency))
-    assertEquals(0, storage.getReferenceCount<Texture>(dependency))
-  }
-
-  @Test
-  fun `should load Texture assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load<Texture>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path))
-    assertEquals(1, storage.getReferenceCount<Texture>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Texture assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val descriptor = AssetDescriptor(path, Texture::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path))
-    assertEquals(1, storage.getReferenceCount<Texture>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Texture assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<Texture>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path))
-    assertEquals(1, storage.getReferenceCount<Texture>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Texture assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    runBlocking { storage.load<Texture>(path) }
-
-    // When:
-    runBlocking { storage.unload<Texture>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Texture>(path))
-    assertEquals(0, storage.getReferenceCount<Texture>(path))
-  }
-
-  @Test
-  fun `should load Pixmap assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load<Pixmap>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path))
-    assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Pixmap assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val descriptor = AssetDescriptor(path, Pixmap::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path))
-    assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Pixmap assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<Pixmap>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Pixmap>(path))
-    assertSame(asset, storage.get<Pixmap>(path))
-    assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Pixmap assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    runBlocking { storage.load<Pixmap>(path) }
-
-    // When:
-    runBlocking { storage.unload<Pixmap>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Pixmap>(path))
-    assertEquals(0, storage.getReferenceCount<Pixmap>(path))
-  }
-
-  @Test
-  fun `should load Skin assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.json"
-    val atlas = "ktx/assets/async/skin.atlas"
-    val texture = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load<Skin>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path))
-    assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
-    assertEquals(1, storage.getReferenceCount<Skin>(path))
-    assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
-    // Skin dependencies:
-    assertTrue(storage.isLoaded<TextureAtlas>(atlas))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
-    assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
-    assertEquals(1, storage.getReferenceCount<Texture>(texture))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Skin assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.json"
-    val atlas = "ktx/assets/async/skin.atlas"
-    val texture = "ktx/assets/async/texture.png"
-    val descriptor = AssetDescriptor(path, Skin::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path))
-    assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
-    assertEquals(1, storage.getReferenceCount<Skin>(path))
-    assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
-    // Skin dependencies:
-    assertTrue(storage.isLoaded<TextureAtlas>(atlas))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
-    assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
-    assertEquals(1, storage.getReferenceCount<Texture>(texture))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Skin assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.json"
-    val atlas = "ktx/assets/async/skin.atlas"
-    val texture = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<Skin>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Skin>(path))
-    assertSame(asset, storage.get<Skin>(path))
-    assertNotNull(asset.get("default", Button.ButtonStyle::class.java))
-    assertEquals(1, storage.getReferenceCount<Skin>(path))
-    assertEquals(listOf(storage.getIdentifier<TextureAtlas>(atlas)), storage.getDependencies<Skin>(path))
-    // Skin dependencies:
-    assertTrue(storage.isLoaded<TextureAtlas>(atlas))
-    assertEquals(1, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertSame(asset.atlas, storage.get<TextureAtlas>(atlas))
-    assertEquals(listOf(storage.getIdentifier<Texture>(texture)), storage.getDependencies<TextureAtlas>(atlas))
-    // Atlas dependencies:
-    assertTrue(storage.isLoaded<Texture>(texture))
-    assertSame(asset.atlas.textures.first(), storage.get<Texture>(texture))
-    assertEquals(1, storage.getReferenceCount<Texture>(texture))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Skin assets with dependencies`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/skin.json"
-    val atlas = "ktx/assets/async/skin.atlas"
-    val texture = "ktx/assets/async/texture.png"
-    runBlocking { storage.load<Skin>(path) }
-
-    // When:
-    runBlocking { storage.unload<Skin>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Skin>(path))
-    assertEquals(0, storage.getReferenceCount<Skin>(path))
-    assertFalse(storage.isLoaded<TextureAtlas>(atlas))
-    assertEquals(0, storage.getReferenceCount<TextureAtlas>(atlas))
-    assertFalse(storage.isLoaded<Texture>(texture))
-    assertEquals(0, storage.getReferenceCount<Texture>(texture))
-  }
-
-  @Test
-  fun `should load I18NBundle assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/i18n"
-
-    // When:
-    val asset = runBlocking { storage.load<I18NBundle>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<I18NBundle>(path))
-    assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path))
-    assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load I18NBundle assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/i18n"
-    val descriptor = AssetDescriptor(path, I18NBundle::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<I18NBundle>(path))
-    assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path))
-    assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load I18NBundle assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/i18n"
-    val identifier = storage.getIdentifier<I18NBundle>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<I18NBundle>(path))
-    assertEquals("Value.", asset["key"])
-    assertSame(asset, storage.get<I18NBundle>(path))
-    assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload I18NBundle assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/i18n"
-    runBlocking { storage.load<I18NBundle>(path) }
-
-    // When:
-    runBlocking { storage.unload<I18NBundle>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<I18NBundle>(path))
-    assertEquals(0, storage.getReferenceCount<I18NBundle>(path))
-  }
-
-  @Test
-  fun `should load ParticleEffect assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p2d"
-
-    // When:
-    val asset = runBlocking { storage.load<ParticleEffect>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ParticleEffect assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p2d"
-    val descriptor = AssetDescriptor(path, ParticleEffect::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ParticleEffect assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p2d"
-    val identifier = storage.getIdentifier<ParticleEffect>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect>(path))
-    assertSame(asset, storage.get<ParticleEffect>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload ParticleEffect assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p2d"
-    runBlocking { storage.load<ParticleEffect>(path) }
-
-    // When:
-    runBlocking { storage.unload<ParticleEffect>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<ParticleEffect>(path))
-    assertEquals(0, storage.getReferenceCount<ParticleEffect>(path))
-  }
-
-  @Test
-  fun `should load ParticleEffect3D assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p3d"
-    val dependency = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load<ParticleEffect3D>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
-    // Particle dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ParticleEffect3D assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p3d"
-    val descriptor = AssetDescriptor(path, ParticleEffect3D::class.java)
-    val dependency = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
-    // Particle dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ParticleEffect3D assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p3d"
-    val dependency = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<ParticleEffect3D>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ParticleEffect3D>(path))
-    assertSame(asset, storage.get<ParticleEffect3D>(path))
-    assertEquals(1, storage.getReferenceCount<ParticleEffect3D>(path))
-    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<ParticleEffect3D>(path))
-    // Particle dependencies:
-    assertTrue(storage.isLoaded<Texture>(dependency))
-    assertNotNull(storage.get<Texture>(dependency))
-    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload ParticleEffect3D assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/particle.p3d"
-    val dependency = "ktx/assets/async/texture.png"
-    runBlocking { storage.load<ParticleEffect3D>(path) }
-
-    // When:
-    runBlocking { storage.unload<ParticleEffect3D>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<ParticleEffect3D>(path))
-    assertEquals(0, storage.getReferenceCount<ParticleEffect3D>(path))
-    assertFalse(storage.isLoaded<Texture>(dependency))
-    assertEquals(0, storage.getReferenceCount<Texture>(dependency))
-  }
-
-  @Test
-  fun `should load OBJ Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.obj"
-
-    // When:
-    val asset = runBlocking { storage.load<Model>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load OBJ Model assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.obj"
-    val descriptor = AssetDescriptor(path, Model::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load OBJ Model assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.obj"
-    val identifier = storage.getIdentifier<Model>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload OBJ Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.obj"
-    runBlocking { storage.load<Model>(path) }
-
-    // When:
-    runBlocking { storage.unload<Model>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Model>(path))
-    assertEquals(0, storage.getReferenceCount<Model>(path))
-  }
-
-  @Test
-  fun `should load G3DJ Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3dj"
-
-    // When:
-    val asset = runBlocking { storage.load<Model>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load G3DJ Model assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3dj"
-    val descriptor = AssetDescriptor(path, Model::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load G3DJ Model assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3dj"
-    val identifier = storage.getIdentifier<Model>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload G3DJ Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3dj"
-    runBlocking { storage.load<Model>(path) }
-
-    // When:
-    runBlocking { storage.unload<Model>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Model>(path))
-    assertEquals(0, storage.getReferenceCount<Model>(path))
-  }
-
-  @Test
-  fun `should load G3DB Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3db"
-
-    // When:
-    val asset = runBlocking { storage.load<Model>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load G3DB Model assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3db"
-    val descriptor = AssetDescriptor(path, Model::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load G3DB Model assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3db"
-    val descriptor = storage.getIdentifier<Model>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Model>(path))
-    assertSame(asset, storage.get<Model>(path))
-    assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload G3DB Model assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/model.g3db"
-    runBlocking { storage.load<Model>(path) }
-
-    // When:
-    runBlocking { storage.unload<Model>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Model>(path))
-    assertEquals(0, storage.getReferenceCount<Model>(path))
-  }
-
-  @Test
-  fun `should load ShaderProgram assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/shader.frag"
-    // Silencing logs - shader will fail to compile, as GL is mocked:
-    storage.logger.level = Logger.NONE
-
-    // When:
-    val asset = runBlocking { storage.load<ShaderProgram>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path))
-    assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ShaderProgram assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/shader.vert"
-    val descriptor = AssetDescriptor(path, ShaderProgram::class.java)
-    // Silencing logs - shader will fail to compile, as GL is mocked:
-    storage.logger.level = Logger.NONE
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path))
-    assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load ShaderProgram assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/shader.vert"
-    val identifier = storage.getIdentifier<ShaderProgram>(path)
-    // Silencing logs - shader will fail to compile, as GL is mocked:
-    storage.logger.level = Logger.NONE
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<ShaderProgram>(path))
-    assertSame(asset, storage.get<ShaderProgram>(path))
-    assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload ShaderProgram assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/shader.frag"
-    // Silencing logs - shader will fail to compile, as GL is mocked:
-    storage.logger.level = Logger.NONE
-    runBlocking { storage.load<ShaderProgram>(path) }
-
-    // When:
-    runBlocking { storage.unload<ShaderProgram>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<ShaderProgram>(path))
-    assertEquals(0, storage.getReferenceCount<ShaderProgram>(path))
-  }
-
-  @Test
-  fun `should load Cubemap assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/cubemap.zktx"
-
-    // When:
-    val asset = runBlocking { storage.load<Cubemap>(path) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path))
-    assertEquals(1, storage.getReferenceCount<Cubemap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Cubemap assets with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/cubemap.zktx"
-    val descriptor = AssetDescriptor(path, Cubemap::class.java)
-
-    // When:
-    val asset = runBlocking { storage.load(descriptor) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path))
-    assertEquals(1, storage.getReferenceCount<Cubemap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should load Cubemap assets with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/cubemap.zktx"
-    val identifier = storage.getIdentifier<Cubemap>(path)
-
-    // When:
-    val asset = runBlocking { storage.load(identifier) }
-
-    // Then:
-    assertTrue(storage.isLoaded<Cubemap>(path))
-    assertSame(asset, storage.get<Cubemap>(path))
-    assertEquals(1, storage.getReferenceCount<Cubemap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
-
-    storage.dispose()
-  }
-
-  @Test
-  fun `should unload Cubemap assets`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/cubemap.zktx"
-    runBlocking { storage.load<Cubemap>(path) }
-
-    // When:
-    runBlocking { storage.unload<Cubemap>(path) }
-
-    // Then:
-    assertFalse(storage.isLoaded<Cubemap>(path))
-    assertEquals(0, storage.getReferenceCount<Cubemap>(path))
   }
 
   /**
@@ -1544,26 +255,6 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
-  fun `should return same asset instance with subsequent load calls on loaded asset`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val loaded = runBlocking { storage.load<Texture>(path) }
-
-    // When:
-    val assets = (1..10).map { runBlocking { storage.load<Texture>(path) } }
-
-    // Then:
-    assertEquals(11, storage.getReferenceCount<Texture>(path))
-    assets.forEach { asset ->
-      assertSame(loaded, asset)
-    }
-    checkProgress(storage, loaded = 1)
-
-    storage.dispose()
-  }
-
-  @Test
   fun `should obtain loaded asset with path`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
@@ -1589,7 +280,7 @@ class AssetStorageTest : AsyncTest() {
     val identifier = storage.getIdentifier<String>("ktx/assets/async/string.txt")
 
     // When:
-    runBlocking { storage.load(identifier) }
+    runBlocking { storage.loadAsync<String>(identifier.path).await() }
 
     // Then:
     assertTrue(identifier in storage)
@@ -1608,7 +299,7 @@ class AssetStorageTest : AsyncTest() {
     val descriptor = storage.getAssetDescriptor<String>("ktx/assets/async/string.txt")
 
     // When:
-    runBlocking { storage.load(descriptor) }
+    storage.loadSync<String>(descriptor.fileName)
 
     // Then:
     assertTrue(descriptor in storage)
@@ -1642,7 +333,7 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/string.txt"
     val descriptor = storage.getAssetDescriptor<String>(path)
-    runBlocking { storage.load(descriptor) }
+    runBlocking { storage.loadAsync<String>(path).await() }
 
     // When:
     runBlocking { storage.unload(descriptor) }
@@ -1659,7 +350,7 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/string.txt"
     val identifier = storage.getIdentifier<String>(path)
-    runBlocking { storage.load(identifier) }
+    storage.loadSync<String>(path)
 
     // When:
     runBlocking { storage.unload(identifier) }
@@ -1668,59 +359,6 @@ class AssetStorageTest : AsyncTest() {
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
     checkProgress(storage, total = 0)
-  }
-
-  @Test
-  fun `should load assets asynchronously with path`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-
-    // When:
-    val asset = runBlocking { storage.loadAsync<Texture>(path).await() }
-
-    // Then:
-    assertTrue(storage.contains<Texture>(path))
-    assertTrue(storage.isLoaded<Texture>(path))
-    assertEquals(1, storage.getReferenceCount<Texture>(path))
-    assertSame(asset, storage.get<Texture>(path))
-    checkProgress(storage, loaded = 1, warn = true)
-  }
-
-  @Test
-  fun `should load assets asynchronously with identifier`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val identifier = storage.getIdentifier<Texture>(path)
-
-    // When:
-    val asset = runBlocking { storage.loadAsync(identifier).await() }
-
-    // Then:
-    assertTrue(identifier in storage)
-    assertTrue(storage.isLoaded(identifier))
-    assertEquals(1, storage.getReferenceCount(identifier))
-    assertSame(asset, storage[identifier])
-    checkProgress(storage, loaded = 1, warn = true)
-  }
-
-  @Test
-  fun `should load assets asynchronously with descriptor`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "ktx/assets/async/texture.png"
-    val descriptor = storage.getAssetDescriptor<Texture>(path)
-
-    // When:
-    val asset = runBlocking { storage.loadAsync(descriptor).await() }
-
-    // Then:
-    assertTrue(descriptor in storage)
-    assertTrue(storage.isLoaded(descriptor))
-    assertEquals(1, storage.getReferenceCount(descriptor))
-    assertSame(asset, storage[descriptor])
-    checkProgress(storage, loaded = 1, warn = true)
   }
 
   @Test
@@ -1749,6 +387,51 @@ class AssetStorageTest : AsyncTest() {
     val viaPath = runBlocking { storage.load<String>(path) }
     val viaDescriptor = runBlocking { storage.load(descriptor) }
     val viaIdentifier = runBlocking { storage.load(identifier) }
+
+    // Then:
+    assertTrue(storage.isLoaded<String>(path))
+    assertSame(viaPath, viaDescriptor)
+    assertSame(viaDescriptor, viaIdentifier)
+    assertEquals(3, storage.getReferenceCount<String>(path))
+    checkProgress(storage, loaded = 1, warn = true)
+  }
+
+  @Test
+  fun `should point to the same asset when loading with path, descriptor and identifier asynchronously`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val descriptor = storage.getAssetDescriptor<String>(path)
+    val identifier = storage.getIdentifier<String>(path)
+    val pathReference = storage.loadAsync<String>(path)
+    val descriptorReference = storage.loadAsync(descriptor)
+    val identifierReference = storage.loadAsync(identifier)
+
+    // When:
+    val viaPath = runBlocking { pathReference.await() }
+    val viaDescriptor = runBlocking { descriptorReference.await() }
+    val viaIdentifier = runBlocking { identifierReference.await() }
+
+    // Then:
+    assertTrue(storage.isLoaded<String>(path))
+    assertSame(viaPath, viaDescriptor)
+    assertSame(viaDescriptor, viaIdentifier)
+    assertEquals(3, storage.getReferenceCount<String>(path))
+    checkProgress(storage, loaded = 1, warn = true)
+  }
+
+  @Test
+  fun `should point to the same asset when loading with path, descriptor and identifier synchronously`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+    val descriptor = storage.getAssetDescriptor<String>(path)
+    val identifier = storage.getIdentifier<String>(path)
+
+    // When:
+    val viaPath = storage.loadSync<String>(path)
+    val viaDescriptor = storage.loadSync(descriptor)
+    val viaIdentifier = storage.loadSync(identifier)
 
     // Then:
     assertTrue(storage.isLoaded<String>(path))
@@ -2086,7 +769,7 @@ class AssetStorageTest : AsyncTest() {
     // When:
     runBlocking {
       repeat(3) {
-        val asset = storage.load(descriptor)
+        val asset = storage.loadAsync(descriptor).await()
         loadedAssets[asset] = true
       }
     }
@@ -2114,11 +797,9 @@ class AssetStorageTest : AsyncTest() {
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
     // When:
-    runBlocking {
-      repeat(3) {
-        val asset = storage.load(identifier)
-        loadedAssets[asset] = true
-      }
+    repeat(3) {
+      val asset = storage.loadSync(identifier)
+      loadedAssets[asset] = true
     }
 
     // Then:
@@ -2456,49 +1137,6 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
-  fun `should dispose of multiple assets of different types without errors`() {
-    // Given:
-    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    storage.logger.level = Logger.NONE
-    val assets = listOf(
-      storage.getIdentifier<String>("ktx/assets/async/string.txt"),
-      storage.getIdentifier<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt"),
-      storage.getIdentifier<Music>("ktx/assets/async/sound.ogg"),
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-      storage.getIdentifier<Skin>("ktx/assets/async/skin.json"),
-      storage.getIdentifier<I18NBundle>("ktx/assets/async/i18n"),
-      storage.getIdentifier<ParticleEffect>("ktx/assets/async/particle.p2d"),
-      storage.getIdentifier<ParticleEffect3D>("ktx/assets/async/particle.p3d"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.obj"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
-      storage.getIdentifier<ShaderProgram>("ktx/assets/async/shader.frag"),
-      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx")
-    )
-    runBlocking {
-      assets.forEach {
-        storage.load(it)
-        assertTrue(storage.isLoaded(it))
-      }
-    }
-
-    // When:
-    storage.dispose()
-
-    // Then:
-    assets.forEach {
-      assertFalse(it in storage)
-      assertFalse(storage.isLoaded(it))
-      assertEquals(0, storage.getReferenceCount(it))
-      assertEquals(emptyList<String>(), storage.getDependencies(it))
-      shouldThrow<MissingAssetException> {
-        storage[it]
-      }
-    }
-  }
-
-  @Test
   fun `should dispose of all assets with optional error handling`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
@@ -2669,7 +1307,7 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should convert Identifier to AssetDescriptor`() {
     // Given:
-    val identifier = Identifier(String::class.java, "file.path")
+    val identifier = Identifier("file.path", String::class.java)
 
     // When:
     val assetDescriptor = identifier.toAssetDescriptor()
@@ -2682,7 +1320,7 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should convert Identifier to AssetDescriptor with loading parameters`() {
     // Given:
-    val identifier = Identifier(String::class.java, "file.path")
+    val identifier = Identifier("file.path", String::class.java)
     val parameters = mock<AssetLoaderParameters<String>>()
 
     // When:
@@ -2697,7 +1335,7 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should convert Identifier to AssetDescriptor with a custom file`() {
     // Given:
-    val identifier = Identifier(String::class.java, "file.path")
+    val identifier = Identifier("file.path", String::class.java)
     val file = mock<FileHandle>()
 
     // When:
@@ -2771,6 +1409,45 @@ class AssetStorageTest : AsyncTest() {
     verify(logger).error(any(), eq(exception))
   }
 
+  @Test
+  fun `should not block the main rendering thread when loading assets synchronously`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/string.txt"
+
+    // When:
+    val asset = runBlocking(KtxAsync.coroutineContext) {
+      storage.loadSync<String>(path)
+    }
+
+    // Then:
+    assertEquals("Content.", asset)
+    assertTrue(storage.isLoaded<String>(path))
+  }
+
+  @Test
+  fun `should not block the main rendering thread when loading assets with dependencies synchronously`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/skin.json"
+    val dependencies = arrayOf(
+      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+    )
+
+    // When:
+    val asset = runBlocking(KtxAsync.coroutineContext) {
+      storage.loadSync<Skin>(path)
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<Skin>(path))
+    dependencies.forEach {
+      assertTrue(storage.isLoaded(it))
+    }
+    assertSame(asset.atlas, storage[dependencies[0]])
+  }
+
   /** For [Disposable.dispose] interface testing and loaders testing. */
   class FakeAsset : Disposable {
     val disposingFinished = CompletableFuture<Boolean>()
@@ -2804,7 +1481,7 @@ class AssetStorageTest : AsyncTest() {
   }
 
   /** For loaders testing. */
-  class FakeSyncLoader(
+  open class FakeSyncLoader(
     private val onLoad: (asset: FakeAsset) -> Unit,
     private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with()
   ) : SynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
@@ -2849,7 +1526,7 @@ class AssetStorageTest : AsyncTest() {
   }
 
   @Test
-  fun `should execute synchronous loading on rendering thread`() {
+  fun `should load assets on rendering thread with synchronous loading `() {
     // Given:
     val isRenderingThread = CompletableFuture<Boolean>()
     val loader = FakeSyncLoader(
@@ -2859,10 +1536,47 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader { loader }
 
     // When:
-    runBlocking { storage.load<FakeAsset>("fake.path") }
+    storage.loadSync<FakeAsset>("fake.path")
 
     // Then:
     assertTrue(isRenderingThread.getNow(false))
+  }
+
+  @Test
+  fun `should load assets synchronously on rendering thread with synchronous loader`() {
+    // Given:
+    val isRenderingThread = CompletableFuture<Boolean>()
+    val loader = FakeSyncLoader(
+      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) }
+    )
+    val storage = AssetStorage(useDefaultLoaders = false)
+    storage.setLoader { loader }
+
+    // When:
+    storage.loadSync<FakeAsset>("fake.path")
+
+    // Then:
+    assertTrue(isRenderingThread.getNow(false))
+  }
+
+  @Test
+  fun `should load assets synchronously on rendering thread with asynchronous loader`() {
+    // Given:
+    val isRenderingThreadDuringAsync = CompletableFuture<Boolean>()
+    val isRenderingThreadDuringSync = CompletableFuture<Boolean>()
+    val loader = FakeAsyncLoader(
+      onAsync = { isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread()) },
+      onSync = { isRenderingThreadDuringSync.complete(KtxAsync.isOnRenderingThread()) }
+    )
+    val storage = AssetStorage(useDefaultLoaders = false)
+    storage.setLoader { loader }
+
+    // When:
+    storage.loadSync<FakeAsset>("fake.path")
+
+    // Then: entire synchronous loading should be executed on the rendering thread:
+    assertTrue(isRenderingThreadDuringAsync.getNow(false))
+    assertTrue(isRenderingThreadDuringSync.getNow(false))
   }
 
   @Test
@@ -3331,5 +2045,88 @@ class AssetStorageTest : AsyncTest() {
     assertFalse(storage.contains<FakeAsset>(path))
     assertTrue(exception is AssetLoadingException)
     assertEquals(storage.getIdentifier<FakeAsset>(path), identifier)
+  }
+
+  @Test
+  fun `should immediately throw exception when attempting to synchronously load already scheduled asset`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+    val path = "fake path"
+    val loadingStarted = CompletableFuture<Boolean>()
+    val loadingFinished = CompletableFuture<Boolean>()
+    storage.setLoader {
+      FakeSyncLoader(
+        onLoad = {
+          loadingStarted.complete(true)
+          loadingFinished.join()
+        }
+      )
+    }
+    val reference = storage.loadAsync<FakeAsset>(path)
+    loadingStarted.join()
+
+    // When: asset is not loaded yet:
+    shouldThrow<MissingAssetException> {
+      storage.loadSync<FakeAsset>(path)
+    }
+
+    // Then:
+    assertFalse(storage.isLoaded<FakeAsset>(path))
+    loadingFinished.complete(true)
+    runBlocking { reference.await() }
+    assertTrue(storage.isLoaded<FakeAsset>(path))
+    // Should still count the reference, since load was called:
+    assertEquals(2, storage.getReferenceCount<FakeAsset>(path))
+  }
+
+  @Test
+  fun `should throw exception when a dependency of a synchronously loaded asset is being loaded asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+    val path = "fake.path"
+    val dependency = "path.dep"
+    val loadingStarted = CompletableFuture<Boolean>()
+    val loadingFinished = CompletableFuture<Boolean>()
+    storage.setLoader {
+      object: FakeSyncLoader(
+        dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
+        onLoad = {}
+      ) {
+        override fun load(
+          assetManager: AssetManager,
+          fileName: String?,
+          file: FileHandle?,
+          parameter: FakeParameters?
+        ): FakeAsset {
+          assetManager.get(dependency, FakeAsset::class.java)
+          return super.load(assetManager, fileName, file, parameter)
+        }
+      }
+    }
+    storage.setLoader(suffix = ".dep") {
+      FakeSyncLoader(
+        onLoad = {
+          loadingStarted.complete(true)
+          loadingFinished.join()
+        }
+      )
+    }
+    val reference = storage.loadAsync<FakeAsset>(dependency)
+    loadingStarted.join()
+
+    // When: dependency is not loaded yet:
+    shouldThrow<MissingDependencyException> {
+      storage.loadSync<FakeAsset>(path)
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<FakeAsset>(path))
+    assertEquals(1, storage.getReferenceCount<FakeAsset>(path))
+    assertFalse(storage.isLoaded<FakeAsset>(dependency))
+    loadingFinished.complete(true)
+    runBlocking { reference.await() }
+    assertTrue(storage.isLoaded<FakeAsset>(dependency))
+    // Should still count the reference, since load was called:
+    assertEquals(2, storage.getReferenceCount<FakeAsset>(dependency))
   }
 }
