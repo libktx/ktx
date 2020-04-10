@@ -23,6 +23,7 @@
          - `getLoader` and `setLoader` manage `AssetLoader` instances used to load assets.
          - `isLoaded` checks if loading of an asset was finished.
          - `contains` operator checks if the asset was scheduled for loading or added to the storage.
+         - `progress` allows to check asset loading progress.
          - `getReferenceCount` returns how many times the asset was loaded or referenced by other assets as a dependency.
          - `getDependencies` returns a list of dependencies of the selected asset.
          - `getAssetDescriptor` creates an `AssetDescriptor` with loading data for the selected asset.
@@ -30,6 +31,7 @@
     - `Identifier` data class added as an utility to uniquely identify assets by their type and path.
          - `Identifier.toAssetDescriptor` allows to convert an `Identifier` to an `AssetDescriptor`. 
     - `AssetDescriptor.toIdentifier` allows to convert an `AssetDescriptor` to `Identifier` used to uniquely identify `AssetStorage` assets.
+    - `LoadingProgress` is an internal class used by the `AssetStorage` to track loading progress.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
 - **[FEATURE]** (`ktx-async`) `newAsyncContext` and `newSingleThreadAsyncContext` now support `threadName` parameter
 that allows to set thread name pattern of `AsyncExecutor` threads.

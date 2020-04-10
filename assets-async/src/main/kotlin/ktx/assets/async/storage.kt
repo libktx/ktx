@@ -23,12 +23,12 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleE
 /**
  * Asynchronous asset loader based on coroutines API. An [AssetManager] alternative.
  *
- * Note that [KtxAsync.initiate] must be called before creating an [AssetStorage].
+ * Note that [KtxAsync.initiate] must be called on the rendering thread before creating an [AssetStorage].
  *
  * [asyncContext] is used to perform asynchronous file loading. Defaults to a single-threaded context using an
  * [AsyncExecutor]. See [newSingleThreadAsyncContext] or [ktx.async.newAsyncContext] functions to create a custom
- * loading context. Multi-threaded contexts are supported and might boost loading performance if the assets
- * are loaded asynchronously.
+ * loading context. Multi-threaded contexts are fully supported and might boost loading performance if the assets
+ * are loaded asynchronously in parallel.
  *
  * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
  * internal files.
@@ -64,7 +64,7 @@ class AssetStorage(
    */
   val progress = LoadingProgress()
 
-  /** LibGDX Logger used internally by the asset loaders, usually to report issues. */
+  /** LibGDX [Logger] used internally, usually to report issues. */
   var logger: Logger
     get() = asAssetManager.logger
     set(value) {
@@ -741,6 +741,7 @@ class AssetStorage(
 
   private fun setLoadedExceptionally(asset: Asset<*>, exception: AssetStorageException) {
     if (asset.reference.completeExceptionally(exception)) {
+      // This the passed exception managed to complete the loading, we record a failed asset loading:
       progress.registerFailedAsset()
     }
   }
@@ -749,6 +750,7 @@ class AssetStorage(
     synchronousLoader: SynchronousLoader<T>,
     asset: Asset<T>
   ) {
+    // If any of the isCompleted checks returns true, asset is likely to be unloaded asynchronously.
     if (asset.reference.isCompleted) {
       return
     }
@@ -764,6 +766,7 @@ class AssetStorage(
     asynchronousLoader: AsynchronousLoader<T>,
     asset: Asset<T>
   ) {
+    // If any of the isCompleted checks returns true, asset is likely to be unloaded asynchronously.
     withContext(asyncContext) {
       if (!asset.reference.isCompleted) {
         asynchronousLoader.loadAsync(asAssetManager, asset.descriptor)
@@ -783,8 +786,8 @@ class AssetStorage(
   private fun <T> setLoaded(asset: Asset<T>, value: T) {
     if (asset.reference.complete(value)) {
       // The asset was correctly loaded and assigned.
+      progress.registerLoadedAsset()
       try {
-        progress.registerLoadedAsset()
         // Notifying the LibGDX loading callback to support AssetManager behavior:
         asset.descriptor.params?.loadedCallback?.finishedLoading(
           asAssetManager, asset.identifier.path, asset.identifier.type
@@ -808,7 +811,8 @@ class AssetStorage(
    *
    * This method is safe to call from the main rendering thread, as well as other application threads.
    * However, avoid loading the same asset or assets with the same dependencies with both synchronous
-   * [loadSync] and asynchronous [load] or [loadAsync].
+   * [loadSync] and asynchronous [load] or [loadAsync], and avoid running this method from within
+   * coroutines.
    *
    * This method should be used only to load crucial assets that are needed to initiate the application,
    * e.g. assets required to display the loading screen. Whenever possible, prefer [load] and [loadAsync].
@@ -834,7 +838,8 @@ class AssetStorage(
    *
    * This method is safe to call from the main rendering thread, as well as other application threads.
    * However, avoid loading the same asset or assets with the same dependencies with both synchronous
-   * [loadSync] and asynchronous [load] or [loadAsync].
+   * [loadSync] and asynchronous [load] or [loadAsync], and avoid running this method from within
+   * coroutines.
    *
    * This method should be used only to load crucial assets that are needed to initiate the application,
    * e.g. assets required to display the loading screen. Whenever possible, prefer [load] and [loadAsync].
@@ -860,7 +865,8 @@ class AssetStorage(
    *
    * This method is safe to call from the main rendering thread, as well as other application threads.
    * However, avoid loading the same asset or assets with the same dependencies with both synchronous
-   * [loadSync] and asynchronous [load] or [loadAsync].
+   * [loadSync] and asynchronous [load] or [loadAsync], and avoid running this method from within
+   * coroutines.
    *
    * This method should be used only to load crucial assets that are needed to initiate the application,
    * e.g. assets required to display the loading screen. Whenever possible, prefer [load] and [loadAsync].
@@ -1286,7 +1292,7 @@ data class Identifier<T>(
  * loading parameters to the [AssetStorage.load] method.
  *
  * Similarly, [AssetDescriptor.file] is not used by the [Identifier]. Instead, [AssetDescriptor.fileName]
- * will be used to resolve the file using [AssetStorage.fileResolver]. If a [FileHandle] of different type
+ * will be used to resolve the file using [AssetStorage.fileResolver]. If a [FileHandle] of a different type
  * is required, use [AssetDescriptor] for loading instead.
  */
 fun <T> AssetDescriptor<T>.toIdentifier(): Identifier<T> = Identifier(fileName, type)
