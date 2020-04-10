@@ -9,7 +9,35 @@
     - `PerformanceCounter.prettyPrint` allows to print basic performance data after profiling.
 - **[CHANGE]** (`ktx-app`) `LetterboxingViewport` moved from `ktx-app` to `ktx-graphics`.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
+- **[FEATURE]** (`ktx-assets-async`) Added a new KTX module: coroutines-based asset loading.
+    - `AssetStorage` is a non-blocking coroutines-based alternative to LibGDX `AssetManager`.
+         - `get` operator obtains an asset from the storage or throws a `MissingAssetException`.
+         - `getOrNull` obtains an asset from the storage or return `null` if the asset is unavailable.
+         - `getAsync` obtains a reference to the asset from the storage as `Deferred`.
+         - `load` suspends a coroutine until an asset is loaded and returns its instance.
+         - `loadAsync` schedules asynchronous loading of an asset.
+         - `loadSync` blocks the thread until selected asset is loaded.
+         - `unload` schedules asynchronous unloading of an asset.
+         - `add` allows to manually add a loaded asset to `AssetManager`.
+         - `dispose` unloads all assets from the storage.
+         - `getLoader` and `setLoader` manage `AssetLoader` instances used to load assets.
+         - `isLoaded` checks if loading of an asset was finished.
+         - `contains` operator checks if the asset was scheduled for loading or added to the storage.
+         - `progress` allows to check asset loading progress.
+         - `getReferenceCount` returns how many times the asset was loaded or referenced by other assets as a dependency.
+         - `getDependencies` returns a list of dependencies of the selected asset.
+         - `getAssetDescriptor` creates an `AssetDescriptor` with loading data for the selected asset.
+         - `getIdentifier` creates an `Identifier` uniquely pointing to an asset of selected type and file path.
+    - `Identifier` data class added as an utility to uniquely identify assets by their type and path.
+         - `Identifier.toAssetDescriptor` allows to convert an `Identifier` to an `AssetDescriptor`. 
+    - `AssetDescriptor.toIdentifier` allows to convert an `AssetDescriptor` to `Identifier` used to uniquely identify `AssetStorage` assets.
+    - `LoadingProgress` is an internal class used by the `AssetStorage` to track loading progress.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-async`) `newAsyncContext` and `newSingleThreadAsyncContext` now support `threadName` parameter
+that allows to set thread name pattern of `AsyncExecutor` threads.
+- **[FIX]** (`ktx-async`) `isOnRenderingThread` now behaves consistently regardless of launching coroutine context.
+- **[FEATURE]** (`ktx-freetype-async`) This KTX module is now restored and updated to the new `AssetStorage` API.
+There are no public API changes since the last released version.
 - **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
 - **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
 - **[FEATURE]** (`ktx-graphics`) Added `BitmapFont.center` extension method that allows to center text on an object.

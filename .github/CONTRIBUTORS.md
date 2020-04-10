@@ -10,7 +10,7 @@ Project contributors listed chronologically.
   * Contributed LibGDX [collections](../collections) utilities.
 * [@sreich](https://github.com/sreich)
   * Contributed various utilities from the [Ore Infinium](https://github.com/sreich/ore-infinium) project.
-* [@raincole](https://github.com/raincole)
+* [@yhlai-code](https://github.com/yhlai-code) (_raincole_)
   * Contributed LibGDX [collections](../collections) utilities.
   * Provided insightful review of the [`Async`](../async) module.
 * [@Jkly](https://github.com/Jkly)
@@ -46,6 +46,7 @@ Project contributors listed chronologically.
   * Contributed [actors](../actors) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
   * Author of the [preferences](../preferences) module.
+  * Tested and reviewed the [assets async](../assets-async) module.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
