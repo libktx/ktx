@@ -1,10 +1,64 @@
-package ktx.app
+package ktx.graphics
 
 import com.badlogic.gdx.Application.ApplicationType.Android
 import com.badlogic.gdx.Application.ApplicationType.iOS
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
+
+/**
+ * Centers this [Camera] in the middle of the given rectangle. [width] and [height]
+ * represent the size of the rectangle in world (camera/viewport) units.
+ * [x] and [y] are optional offsets in world units that will modify camera position.
+ *
+ * Note that [Camera.update] should be called in order to update to the new position.
+ */
+fun Camera.center(
+  width: Float = Gdx.graphics.width.toFloat(),
+  height: Float = Gdx.graphics.height.toFloat(),
+  x: Float = 0f, y: Float = 0f) {
+  position.set(x + width / 2f, y + height / 2f, 0f)
+}
+
+/**
+ * Immediately moves [Camera] to the selected [target] coordinates.
+ * Not suitable for all cases, as it may cause a very rough motion when used every frame.
+ * [x] and [y] are optional offsets in world units that will modify camera position.
+ *
+ * Note that [Camera.update] should be called in order to update to the new position.
+ */
+fun Camera.moveTo(target: Vector2, x: Float = 0f, y: Float = 0f) {
+  position.set(target.x + x, target.y + y, 0f)
+}
+
+/**
+ * Will smoothly move the [Camera] at the selected [target] coordinated.
+ * The [Camera] will follow a [target] with a smooth linear interpolation, based on a [lerp] amount.
+ * [lerp] should be in range of 0 (slowest) to 1 (fastest).
+ * The lower that interpolation amount, the smoother - and thus slower - the following motion.
+ *
+ * [x] and [y] are optional offsets in world units that will modify the final camera position.
+ * Offsets are added as-is and are not interpolated.
+ *
+ * Note that [Camera.update] should be called in order to update to the new position.
+ * [moveTo] can be used to set the initial position while honoring the same [x] and [y] offset.
+ */
+fun Camera.lerpTo(target: Vector2, lerp: Float, x: Float = 0f, y: Float = 0f) {
+  val newX = this.position.x + ((target.x - position.x) * lerp) + x
+  val newY = this.position.y + ((target.y - position.y) * lerp) + y
+  position.set(newX, newY, 0f)
+}
+
+/**
+ * Inlines the [operation], which can update the camera position.
+ * Automatically calls [Camera.update] after the [operation] is finished.
+ */
+inline fun Camera.update(operation: Camera.() -> Unit) {
+  operation()
+  update()
+}
 
 /**
  * Combines [screen][com.badlogic.gdx.utils.viewport.ScreenViewport] and
@@ -22,16 +76,16 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport
  * FitViewport is excellent for the actual (2D) game rendering.
 
  * @param targetPpiX this is the targeted pixel per inch ratio on X axis, which allows to scale the viewport
- *            correctly on different devices. Usually about 96 for desktop and WebGL platforms, 160 for mobiles.
- *            Make sure to call [updateScale] after changing this variable.
+ *    correctly on different devices. Usually about 96 for desktop and WebGL platforms, 160 for mobiles.
+ *    Make sure to call [updateScale] after changing this variable.
  * @param targetPpiY targeted pixel per inch ratio on Y axis. Usually about 96 for desktop and WebGL platforms, 160
- *            for mobiles. Make sure to call [updateScale] after changing this variable.
+ *    for mobiles. Make sure to call [updateScale] after changing this variable.
  * @param aspectRatio width divided by height. Will preserve this aspect ratio by applying letterboxing.
  */
 class LetterboxingViewport(
-    var targetPpiX: Float = defaultTargetPpi,
-    var targetPpiY: Float = defaultTargetPpi,
-    var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
+  var targetPpiX: Float = defaultTargetPpi,
+  var targetPpiY: Float = defaultTargetPpi,
+  var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
   /** You can directly modify unit per pixel ratio (bypassing PPI check) by modifying this value.
    * @see updateScale */
   var scaleX = 0f

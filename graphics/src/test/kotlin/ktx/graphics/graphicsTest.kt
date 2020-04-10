@@ -1,17 +1,18 @@
 package ktx.graphics
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
+import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
 
 /**
  * Tests general utilities related to LibGDX graphics API.
@@ -109,7 +110,7 @@ class GraphicsTest {
   @Test
   fun `should begin with provided projection matrix`() {
     val batch = mock<Batch>()
-    val matrix = Matrix4(FloatArray(16) {it.toFloat()})
+    val matrix = Matrix4(FloatArray(16) { it.toFloat() })
 
     batch.begin(projectionMatrix = matrix)
 
@@ -150,5 +151,20 @@ class GraphicsTest {
       verify(frameBuffer, never()).end()
     }
     verify(frameBuffer).end()
+  }
+
+  @Test
+  fun `should take screenshot`() {
+    LwjglNativesLoader.load()
+    Gdx.gl = mock()
+    Gdx.graphics = mock {
+      on { backBufferHeight } doReturn 4
+      on { backBufferWidth } doReturn 4
+    }
+    val fileHandle = spy(FileHandle(File.createTempFile("screenshot", ".png")))
+
+    takeScreenshot(fileHandle)
+
+    verify(fileHandle).write(false)
   }
 }

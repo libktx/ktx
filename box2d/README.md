@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-box2d.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-box2d)
+
 # KTX: `Box2D` physics engine utilities
 
 Utilities and type-safe builders for the default LibGDX 2D physics engine: *Box2D*.

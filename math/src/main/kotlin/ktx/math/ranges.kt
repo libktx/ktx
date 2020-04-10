@@ -1,5 +1,6 @@
 package ktx.math
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 
 /**
@@ -98,12 +99,12 @@ fun ClosedRange<Float>.random() = MathUtils.random.nextFloat() * (endInclusive -
  * @param clamped If true (the default), values outside the range are clamped to the range.
  */
 fun ClosedRange<Float>.randomGaussian(clamped: Boolean = true) =
-    ((MathUtils.random.nextGaussian() / 6.0 + 0.5).toFloat() * (endInclusive - start) + start).let {
-      if (clamped)
-        it.coerceIn(this)
-      else
-        it
-    }
+  ((MathUtils.random.nextGaussian() / 6.0 + 0.5).toFloat() * (endInclusive - start) + start).let {
+    if (clamped)
+      it.coerceIn(this)
+    else
+      it
+  }
 
 /**
  * Returns a triangularly distributed random number in this range, with the *mode* centered in this range, giving a
@@ -124,7 +125,28 @@ fun ClosedRange<Float>.randomTriangular() = MathUtils.randomTriangular(start, en
  * is treated as exclusive as it is not practical to keep it inclusive. Results are undefined for an empty range, and
  * there is no error checking.
  */
-fun ClosedRange<Float>.randomTriangular(normalizedMode: Float) =
-    MathUtils.randomTriangular(start, endInclusive,
-        normalizedMode * (endInclusive - start) + start
-    )
+fun ClosedRange<Float>.randomTriangular(normalizedMode: Float): Float =
+  MathUtils.randomTriangular(start, endInclusive,
+    normalizedMode * (endInclusive - start) + start
+  )
+
+/**
+ * Linearly interpolate between the start and end of this range.
+ *
+ * @param progress The position to interpolate, where 0 corresponds with [ClosedRange.start] and 1 corresponds with
+ * [ClosedRange.endInclusive].
+ * @return The interpolated value.
+ */
+fun ClosedRange<Float>.lerp(progress: Float): Float =
+  progress * (endInclusive - start) + start
+
+/**
+ * Interpolate between the start and end of this range.
+ *
+ * @param progress The position to interpolate, where 0 corresponds with [ClosedRange.start] and 1 corresponds with
+ * [ClosedRange.endInclusive].
+ * @param interpolation The function to interpolate with.
+ * @return The interpolated value.
+ */
+fun ClosedRange<Float>.interpolate(progress: Float, interpolation: Interpolation): Float =
+  interpolation.apply(progress) * (endInclusive - start) + start

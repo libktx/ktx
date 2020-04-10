@@ -1,4 +1,5 @@
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.3-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.5-orange.svg)](http://kotlinlang.org/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
 
 # KTX: coroutines support and threading utilities
 
@@ -54,6 +55,7 @@ KTX providers 2 main implementations of coroutine dispatchers:
 
 * `RenderingThreadDispatcher`: executes tasks on the main rendering thread. Available via `Dispatchers.KTX`. Default
     dispatcher used by the `KtxAsync` scope internally.
+    * `RenderingScope` factory method allows to define a `CoroutineScope` using the `RenderingThreadDispatcher`.
 * `AsyncExecutorDispatcher`: wraps LibGDX `AsyncExecutor` to execute the tasks. Can be initiated in the following ways:
     * `newSingleThreadAsyncContext()` factory method: creates an `AsyncExecutor` with a single thread.
     * `newAsyncContext(threads)` factory method: creates an `AsyncExecutor` with the given amount of threads.
@@ -70,6 +72,8 @@ Additionally, `ktx-async` provides the following utility methods:
     guaranteed to skip _at least one_ frame, but - depending on the thread it was invoked on - it might skip multiple
     frames. Do not rely on this method for precise frame measurements.
 * `httpRequest`: allows to perform an asynchronous HTTP request.
+* `RenderingScope` factory function is the KTX rendering-thread version of the official `MainScope`. It creates a scope
+to launch coroutines in the rendering thread and that has a supervisor job so the whole scope can be cancelled at once.
 
 #### Utilities
 
@@ -241,10 +245,16 @@ import ktx.async.AsyncExecutorDispatcher
 import ktx.async.newAsyncContext
 import ktx.async.newSingleThreadAsyncContext
 
+// Context with a single thread:
 val singleThreaded = newSingleThreadAsyncContext()
 
+// Context with multiple threads:
 val multiThreaded = newAsyncContext(threads = 4)
 
+// Context with a custom thread name pattern:
+val multiThreadedWithNamedThreads = newAsyncContext(threads = 4, threadName = "MyThread")
+
+// Context with an existing executor:
 val executor = AsyncExecutor(2)
 val fromExistingExecutor = AsyncExecutorDispatcher(executor, threads = 2)
 ```
@@ -299,6 +309,46 @@ fun withCancel() {
     }
     job.cancel()
 }
+```
+
+Creating a coroutine scope to confine jobs' lives to a specific class:
+
+```Kotlin
+import com.badlogic.gdx.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import ktx.async.httpRequest
+import ktx.async.RenderingScope
+
+class MyScreen: Screen, CoroutineScope by RenderingScope() {
+  // Implement your application screen here. 
+
+  override fun hide() {
+    // Cancels any running coroutines when leaving the screen:
+    cancel()
+  }
+
+  // Starts coroutine in this screen's scope:
+  private fun loadSomething() = launch {
+    val result = httpRequest(url = "https://example.com")
+    webResultLabel.text = result.contentAsString
+  }
+}
+```
+
+Creating a custom cancellable scope with an `AsyncExecutor` dispatcher:
+
+```kotlin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import ktx.async.AsyncExecutorDispatcher
+import ktx.async.newSingleThreadAsyncContext
+
+class MyScope(dispatcher: AsyncExecutorDispatcher)
+  : CoroutineScope by CoroutineScope(SupervisorJob() + dispatcher)
+
+val myScope = MyScope(newSingleThreadAsyncContext())
 ```
 
 Scheduling a task executed on the main rendering thread after one second:

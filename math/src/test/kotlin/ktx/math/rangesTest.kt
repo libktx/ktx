@@ -1,5 +1,6 @@
 package ktx.math
 
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import org.junit.Assert.*
 import org.junit.Test
@@ -71,13 +72,13 @@ class RangesTest {
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
     (range step ((range.last - range.first) / numInnerRanges))
-        .zipWithNext()
-        .map { it.first until it.second }
-        .forEach { innerRange ->
-          val innerCount = values.count { it in innerRange }
-          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
-        }
-    assert(values.all { it in range })
+      .zipWithNext()
+      .map { it.first until it.second }
+      .forEach { innerRange ->
+        val innerCount = values.count { it in innerRange }
+        assertTrue(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+      }
+    assertTrue(values.all { it in range })
   }
 
   @Test
@@ -141,13 +142,13 @@ class RangesTest {
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
     List(numInnerRanges + 1) { it * (range.endInclusive - range.start) / numInnerRanges + range.start }
-        .zipWithNext()
-        .map { it.first..it.second }
-        .forEach { innerRange ->
-          val innerCount = values.count { it in innerRange }
-          assert(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
-        }
-    assert(values.all { it in range })
+      .zipWithNext()
+      .map { it.first..it.second }
+      .forEach { innerRange ->
+        val innerCount = values.count { it in innerRange }
+        assertTrue(abs(innerCount.toFloat() - expectedCountEach) / expectedCountEach <= allowableError)
+      }
+    assertTrue(values.all { it in range })
   }
 
   @Test
@@ -171,11 +172,11 @@ class RangesTest {
     }
 
     val resultsToExpected = listOf(
-        withinRange.toFloat() / count to 0.9973f,
-        withinFourSigma.toFloat() / count to 0.9545f,
-        withinTwoSigma.toFloat() / count to 0.6827f)
+      withinRange.toFloat() / count to 0.9973f,
+      withinFourSigma.toFloat() / count to 0.9545f,
+      withinTwoSigma.toFloat() / count to 0.6827f)
     for ((result, expected) in resultsToExpected) {
-      assert(abs(result - expected) / expected <= allowableError)
+      assertTrue(abs(result - expected) / expected <= allowableError)
     }
   }
 
@@ -199,9 +200,9 @@ class RangesTest {
       val leftTriangleArea = 0.5f * leftTriangleBase * (2 * leftTriangleBase / (span * beforeModeSpan))
       val probability = 1f - leftTriangleArea * 2
       val result = values.count { it in innerRange }.toFloat() / count
-      assert(abs(result - probability) / probability <= allowableError)
+      assertTrue(abs(result - probability) / probability <= allowableError)
     }
-    assert(values.all { it in range })
+    assertTrue(values.all { it in range })
   }
 
   @Test
@@ -228,8 +229,30 @@ class RangesTest {
       val rightTriangleArea = 0.5f * rightTriangleBase * (2 * rightTriangleBase / (span * afterModeSpan))
       val probability = 1f - leftTriangleArea - rightTriangleArea
       val result = values.count { it in innerRange }.toFloat() / count
-      assert(abs(result - probability) / probability <= allowableError)
+      assertTrue(abs(result - probability) / probability <= allowableError)
     }
-    assert(values.all { it in range })
+    assertTrue(values.all { it in range })
+  }
+
+  @Test
+  fun `should interpolate linearly`() {
+    val start = 150f
+    val end = 300f
+    val progress = 0.75f
+
+    val range = start..end
+
+    assertEquals(range.lerp(progress), 262.5f, 0.000001f)
+  }
+
+  @Test
+  fun `should interpolate`() {
+    val start = 0f
+    val end = 1f
+    val progress = 0.5f
+
+    val range = start..end
+
+    assertEquals(range.interpolate(progress, Interpolation.sineOut), 0.7071f, 0.001f)
   }
 }

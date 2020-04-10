@@ -1,4 +1,5 @@
 [![Ashley](https://img.shields.io/badge/ashley-1.7.3-red.svg)](https://libgdx.badlogicgames.com/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-ashley.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-ashley)
 
 # KTX: `Ashley` entity component system utilities
 
@@ -19,7 +20,8 @@ builder DSL.
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
 `with` methods.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
-- Accessors for `Entity` objects using `ComponentMappers`: `get`, `has`, `hasNot`, `remove`.
+- Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
+`contains` (`in` operator), `remove`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
 
@@ -115,7 +117,9 @@ val transform = mapperFor<Transform>()
 val entity = engine.entity {
   with<Transform>()
 }
-val canBeTransformed: Boolean = entity.has(transform)
+val hasTransform: Boolean = entity.has(transform)
+// Or alternatively:
+val containsTransform: Boolean = transform in entity
 ```
 
 Removing a `Component` from an `Entity`:

@@ -1,0 +1,15 @@
+
+texture.png
+size: 32,32
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+button
+  rotate: false
+  xy: 1, 1
+  size: 27, 27
+  split: 8, 8, 8, 8
+  pad: 10, 10, 10, 10
+  orig: 27, 27
+  offset: 0, 0
+  index: -1

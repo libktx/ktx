@@ -1,5 +1,8 @@
 package ktx.vis
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
@@ -41,6 +44,15 @@ interface WidgetFactory<S> {
 
   /** @see [VisImage] */
   fun image(drawableName: String, init: (@VisDsl VisImage).(S) -> Unit = {}): VisImage = actor(VisImage(drawableName), init)
+
+  /** @see [VisImage] */
+  fun image(texture: Texture, init: (@VisDsl VisImage).(S) -> Unit = {}): VisImage = actor(VisImage(texture), init)
+
+  /** @see [VisImage] */
+  fun image(ninePatch: NinePatch, init: (@VisDsl VisImage).(S) -> Unit = {}): VisImage = actor(VisImage(ninePatch), init)
+
+  /** @see [VisImage] */
+  fun image(textureRegion: TextureRegion, init: (@VisDsl VisImage).(S) -> Unit = {}): VisImage = actor(VisImage(textureRegion), init)
 
   /** @see [VisList] */
   fun <T> list(styleName: String = DEFAULT_STYLE, init: (@VisDsl VisList<T>).(S) -> Unit = {}): VisList<T> = actor(VisList(styleName), init)

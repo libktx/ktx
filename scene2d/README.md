@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-scene2d.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-scene2d)
+
 # KTX: `Scene2D` type-safe builders
 
 Utilities for creating `Scene2D` widgets using Kotlin type-safe builders.
@@ -323,13 +325,12 @@ of LibGDX `Tree.Node` with additional building API support):
 ```Kotlin
 import ktx.scene2d.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 
 tree {
   val label: Label = label("Node properties modified.").node(expanded = true)
-  val cell: Node = label("Wrapped in node.").inNode
-  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
-  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
+  val cell: KNode<Label> = label("Wrapped in node.").inNode
+  val combined: KNode<Label> = label("Modified and wrapped.").node(expanded = true).inNode
+  val afterBuildingBlock: KNode<Label> = label("Not limited to no init block actors.") {
     setWrap(true)
   }.node(expanded = true).inNode
   // Nodes are available only for children of trees.
@@ -360,8 +361,9 @@ table {
 
 #### Synergy
 
-Pair this library with [`ktx-style`](../style) for type-safe styles building and [`ktx-actors`](../actors) for useful
-extension methods for `Scene2D` API. [`ktx-assets`](../assets) might help with `Skin` management.
+Pair this library with [`ktx-style`](../style) for type-safe actor styles building and [`ktx-actors`](../actors)
+for useful extension methods for `Scene2D` API. [`ktx-assets`](../assets) or [`ktx-assets-async`](../assets-async)
+might help with `Skin` loading and management.
 
 ### Alternatives
 

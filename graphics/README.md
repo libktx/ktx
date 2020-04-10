@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-graphics.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-graphics)
+
 # KTX: graphics utilities
 
 General utilities for handling LibGDX graphics-related API.
@@ -19,6 +21,9 @@ overriding with optional, named parameters.
 `begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
 also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
 - `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
+- `takeScreenshot` allows to easily take a screenshot of current application screen.
+- `BitmapFont.center` extension method allows to calculate center position of text in order to draw it in the middle
+of a chosen object.
 
 #### `ShapeRenderer`
 
@@ -40,6 +45,17 @@ original `ShapeRenderer` methods and perform the same actions. The methods inclu
 
 A `use` inlined extension method is also available for `ShapeRenderer`, ensuring you won't have unbalanced `begin()`
 and `end()` calls.
+
+#### Cameras and viewports
+
+- `Camera.center` extension method allows to center the camera's position to screen center or the center of the chosen rectangle.
+- `Camera.moveTo` extension method allows to move the camera immediately at the chosen target position with optional offset.
+- `Camera.lerpTo` extension method allows to move the camera smoothly to the chosen target position with optional offset.
+- `Camera.update` inlined extension method allows to change camera state with automatic `Camera.update` call.
+- `LetterboxingViewport` combines `ScreenViewport` and `FitViewport` behavior: it targets a specific aspect ratio and
+applies letterboxing like `FitViewport`, but it does not scale rendered objects when resized, keeping them in fixed size
+similarly to `ScreenViewport`. Thanks to customizable target PPI value, it is ideal for GUIs and can easily support
+different screen sizes.
 
 ### Usage examples
 
@@ -160,6 +176,99 @@ fun drawCircle(renderer: ShapeRenderer) {
 }
 ```
 
+Taking a screenshot of the current game screen:
+
+```Kotlin
+import com.badlogic.gdx.Gdx
+import ktx.graphics.takeScreenshot
+
+takeScreenshot(Gdx.files.external("mygame/screenshot.png"))
+```
+
+Finding out where to draw text in order to center it on a `Sprite`:
+
+```Kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.center
+
+fun getCenterAtSprite(
+  bitmapFont: BitmapFont, text: String, sprite: Sprite
+): Vector2 =
+  bitmapFont.center(
+    text,
+    // Note that x or y can be modified if you want a slight offset:
+    x = sprite.x, y = sprite.y,
+    width = sprite.width, height = sprite.height
+  )
+```
+
+Creating and customizing a new `LetterboxingViewport`:
+
+```Kotlin
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.utils.viewport.Viewport
+import ktx.graphics.LetterboxingViewport
+
+class Application: ApplicationAdapter() {
+  val viewport: Viewport = LetterboxingViewport(targetPpiX = 96f, targetPpiY = 96f, aspectRatio = 4f / 3f)
+
+  override fun resize(width: Int, height: Int) {
+    // Updating viewport to the new screen size:
+    viewport.update(width, height, true)
+  }
+}
+```
+
+Centering camera position:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import ktx.graphics.center
+
+fun centerCamera(camera: OrthographicCamera) {
+  // Sets position to the middle of the screen:
+  camera.center()
+  
+  // Sets position to the middle of the chosen rectangle:
+  camera.center(x = 100f, y = 100f, width = 800f, height = 800f)
+}
+```
+
+Moving the camera to a target:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.lerpTo
+import ktx.graphics.moveTo
+
+fun moveCamera(camera: OrthographicCamera, target: Vector2) {
+  // Moves the camera immediately at the target:
+  camera.moveTo(target)
+
+  // Moves the camera smoothly to the target:
+  camera.lerpTo(target, lerp = 0.1f)
+}
+```
+
+Changing the camera state with automatic update:
+
+```Kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector2
+import ktx.graphics.lerpTo
+import ktx.graphics.update
+
+fun moveCamera(camera: OrthographicCamera, target: Vector2) {
+  camera.update {
+    lerpTo(target, lerp = 0.1f)
+    // camera.update() will be called automatically after this block.
+  }
+}
+```
+
 #### Synergy
 
 Use [`ktx-math`](../math) for `Vector2` and `Vector3` extensions, including idiomatic Kotlin factory
@@ -171,9 +280,11 @@ There are some general purpose LibGDX utility libraries out there, but most lack
 
 - [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
 library with some utilities similar to `ktx-graphics`.
+- [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework provides similar utilities for cameras, text and screenshots.
 
 #### Additional documentation
 
 - [`SpriteBatch` official article.](https://github.com/libgdx/libgdx/wiki/Spritebatch%2C-Textureregions%2C-and-Sprites)
 - [Official article on shaders.](https://github.com/libgdx/libgdx/wiki/Shaders)
 - [`ShapeRenderer` official article.](https://github.com/libgdx/libgdx/wiki/Rendering-shapes)
+- [Official article on screenshots.](https://github.com/libgdx/libgdx/wiki/Taking-a-Screenshot)

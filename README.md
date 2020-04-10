@@ -1,7 +1,7 @@
 [![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.61-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.71-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.10-red.svg)](https://libgdx.badlogicgames.com/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
 
@@ -19,9 +19,9 @@ Examples of Kotlin language features used to improve usability, performance and 
 * *Extension methods* with sensible *default parameters*.
 * *Inline methods* with reduced runtime overhead for various listeners, builders and loggers.
 * *Nullable types* which improve typing information of selected interfaces and functions.
-* *Default interface methods* simplifying the implementation.
+* *Default interface methods* for common interfaces, simplifying their implementations.
 * *Type-safe builders* for GUI, styling and physics engine.
-* *Coroutines context* providing concurrency utilities.
+* *Coroutines context* providing concurrency utilities and non-blocking asset loading.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
 See the [_Choosing KTX_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
@@ -33,30 +33,33 @@ You can include selected **KTX** modules based on the needs of your application.
 
 Module | Dependency name | Description
 :---: | :--- | ---
-[actors](actors) | `ktx-actors` | General [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI utilities for stages, actors, actions and event listeners.
-[app](app) | `ktx-app` | `ApplicationListener` implementations and other general application utilities.
+[actors](actors) | `ktx-actors` | [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI extensions for stages, actors, actions and event listeners.
+[app](app) | `ktx-app` | `ApplicationListener` implementations and general application utilities.
 [ashley](ashley) | `ktx-ashley` | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.
 [assets](assets) | `ktx-assets` | Resources management utilities.
+[assets-async](assets-async) | `ktx-assets-async` | Non-blocking asset loading using coroutines.
 [async](async) | `ktx-async` | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
 [box2d](box2d) | `ktx-box2d` | [`Box2D`](https://github.com/libgdx/libgdx/wiki/Box2d) physics engine utilities.
 [collections](collections) | `ktx-collections` | Extensions for LibGDX custom collections.
-[freetype](freetype) | `ktx-freetype` | `FreeType` font loading utilities.
+[freetype](freetype) | `ktx-freetype` | `FreeType` fonts loading utilities.
+[freetype-async](freetype-async) | `ktx-freetype-async` | Non-blocking `FreeType` fonts loading using coroutines.
 [graphics](graphics) | `ktx-graphics` | Utilities related to rendering tools and graphics.
 [i18n](i18n) | `ktx-i18n` | Internationalization API utilities.
-[inject](inject) | `ktx-inject` | A simple dependency injection system with low overhead and no reflection usage.
+[inject](inject) | `ktx-inject` | A dependency injection system with low overhead and no reflection usage.
 [json](json) | `ktx-json` | Utilities for LibGDX [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization API.
 [log](log) | `ktx-log` | Minimal runtime overhead cross-platform logging using inlined functions.
 [math](math) | `ktx-math` | Operator functions for LibGDX math API and general math utilities.
+[preferences](preferences) | `ktx-preferences` | Improved API for accessing and saving [preferences](https://github.com/libgdx/libgdx/wiki/Preferences).
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
-[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to the [scene2d](scene2d) module.
-[vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles. An _extension_ of [style](style) module.
+[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to [scene2d](scene2d).
+[vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles.
 
 ### Installation
 
-**KTX** modules are uploaded to _Maven Central_ and are fully compatible with the Gradle build tool used by LibGDX
-by default.
+**KTX** modules are uploaded to _Maven Central_ and are fully compatible with the Gradle build tool, which is used
+in LibGDX projects by default.
 
 All libraries follow the same naming schema:
 
@@ -64,7 +67,7 @@ All libraries follow the same naming schema:
 compile "io.github.libktx:$module:$ktxVersion"
 ```
 
-Replace `$module` with the name of the selected **KTX** library.
+Replace `$module` with the name of the selected **KTX** library (see table above).
 
 For example, including the [app](app) module with the `ktx-app` identifier would require the following changes
 in your `build.gradle` file:
@@ -72,7 +75,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.6-b2'
+  ktxVersion = '1.9.10-b4'
 }
 
 dependencies {
@@ -80,9 +83,9 @@ dependencies {
 }
 ```
 
-Note that defining `ktxVersion` as a property is not necessary, as versions can be set directly in the `dependencies`
-section. However, extracting the dependencies versions is a good practice, especially if they can be reused throughout
-the build files. This will speed up updating of your project if you include multiple KTX modules.
+As a side note, defining `ktxVersion` as a property in `ext` is not necessary, as versions can be set directly in the
+`dependencies` section. However, extracting the dependencies versions is a good practice, especially if they can be
+reused throughout the build files. This will speed up updating of your project if you include multiple KTX modules.
 
 **KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
 

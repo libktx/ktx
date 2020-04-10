@@ -21,7 +21,7 @@ interface KWidget<out Storage> {
    * @see Node
    * @see Cell
    */
-  fun storeActor(actor: Actor): Storage
+  fun <T: Actor> storeActor(actor: T): Storage
 
   /**
    * Internal utility method for adding actors to the group.
@@ -43,7 +43,7 @@ interface KTable : KWidget<Cell<*>> {
    */
   fun <T : Actor> add(actor: T): Cell<T>
 
-  override fun storeActor(actor: Actor): Cell<*> {
+  override fun <T : Actor> storeActor(actor: T): Cell<T> {
     val cell = add(actor)
     actor.userObject = cell
     return cell
@@ -202,7 +202,7 @@ interface KGroup : KWidget<Actor> {
     return actor
   }
 
-  override fun storeActor(actor: Actor) = add(actor)
+  override fun <T: Actor> storeActor(actor: T) = add(actor)
   override fun <T : Actor> appendActor(actor: T): T {
     addActor(actor)
     return actor
@@ -211,14 +211,14 @@ interface KGroup : KWidget<Actor> {
 
 /** Common interface applied to widgets that keep their children in [Tree] [Node] instances. */
 @Scene2dDsl
-interface KTree : KWidget<KNode> {
+interface KTree : KWidget<KNode<*>> {
   /**
    * @param actor will be placed in a [Node] inside this widget.
    * @return [Node] instance containing the actor.
    */
-  fun add(actor: Actor): KNode
+  fun <T : Actor> add(actor: T): KNode<T>
 
-  override fun storeActor(actor: Actor): KNode {
+  override fun <T : Actor> storeActor(actor: T): KNode<T> {
     val node = add(actor)
     actor.userObject = node
     return node
@@ -258,8 +258,9 @@ interface KTree : KWidget<KNode> {
    *    assigned as user object.
    * @see node
    */
-  val <T : Actor> T.inNode: KNode
-    get() = userObject as? KNode ?:
+  @Suppress("UNCHECKED_CAST")
+  val <T : Actor> T.inNode: KNode<T>
+    get() = userObject as? KNode<T> ?:
         throw IllegalStateException("This actor has no declared Node. " +
             "Was it properly added to the tree? Was its user object cleared?")
 }
@@ -342,8 +343,8 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
 
 /** Extends [Tree] [Node] API with type-safe widget builders. */
 @Scene2dDsl
-class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), KTree {
-  override fun add(actor: Actor): KNode {
+class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
+  override fun <T: Actor> add(actor: T): KNode<T> {
     val node = KNode(actor)
     add(node)
     return node
@@ -354,7 +355,7 @@ class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), KTree {
    * @param init will be invoked on this node.
    * @return this node.
    */
-  inline operator fun invoke(init: KNode.() -> Unit): KNode {
+  inline operator fun invoke(init: KNode<T>.() -> Unit): KNode<T> {
     this.init()
     return this
   }
@@ -419,7 +420,7 @@ class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, sk
 /** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
 class KTreeWidget(skin: Skin, style: String) : Tree<Node<*, *, *>, Any?>(skin, style), KTree {
-  override fun add(actor: Actor): KNode {
+  override fun <A: Actor> add(actor: A): KNode<A> {
     val node = KNode(actor)
     add(node)
     return node

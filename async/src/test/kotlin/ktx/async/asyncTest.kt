@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.cancel
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.CompletableFuture
@@ -44,12 +45,32 @@ class KtxAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should create a single-threaded AsyncExecutorDispatcher with selected name`() {
+    // When:
+    val dispatcher: AsyncExecutorDispatcher = newSingleThreadAsyncContext(threadName = "MyThreadName")
+
+    // Then:
+    assertEquals(1, dispatcher.threads)
+    assertTrue("MyThreadName" in getExecutionThread(dispatcher.executor).name)
+  }
+
+  @Test
   fun `should create a multi-threaded AsyncExecutorDispatcher`() {
     // When:
     val dispatcher: AsyncExecutorDispatcher = newAsyncContext(threads = 4)
 
     // Then:
     assertEquals(4, dispatcher.threads)
+  }
+
+  @Test
+  fun `should create a multi-threaded AsyncExecutorDispatcher with selected name`() {
+    // When:
+    val dispatcher: AsyncExecutorDispatcher = newAsyncContext(threads = 4, threadName = "MyThreadName")
+
+    // Then:
+    assertEquals(4, dispatcher.threads)
+    assertTrue("MyThreadName" in getExecutionThread(dispatcher.executor).name)
   }
 
   @Test
@@ -134,6 +155,45 @@ class KtxAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should detect rendering thread from coroutine with different context`() {
+    // Given:
+    val executionThread = CompletableFuture<Thread>()
+    val isOnRenderingThread = AtomicBoolean(true)
+    val dispatcher: AsyncExecutorDispatcher = newSingleThreadAsyncContext()
+
+    // When:
+    KtxAsync.launch(dispatcher) {
+      onRenderingThread {
+        isOnRenderingThread.set(isOnRenderingThread())
+        executionThread.complete(Thread.currentThread())
+      }
+    }
+
+    // Then:
+    assertSame(getMainRenderingThread(), executionThread.join())
+    assertTrue(isOnRenderingThread.get())
+  }
+
+  @Test
+  fun `should detect rendering thread from coroutine launched from global context`() {
+    // Given:
+    val executionThread = CompletableFuture<Thread>()
+    val isOnRenderingThread = AtomicBoolean(false)
+
+    // When:
+    GlobalScope.launch {
+      onRenderingThread {
+        isOnRenderingThread.set(isOnRenderingThread())
+        executionThread.complete(Thread.currentThread())
+      }
+    }
+
+    // Then:
+    assertSame(getMainRenderingThread(), executionThread.join())
+    assertTrue(isOnRenderingThread.get())
+  }
+
+  @Test
   fun `should detect non-rendering threads`() {
     // Given:
     val executionThread = CompletableFuture<Thread>()
@@ -142,6 +202,23 @@ class KtxAsyncTest : AsyncTest() {
 
     // When:
     KtxAsync.launch(dispatcher) {
+      isOnRenderingThread.set(isOnRenderingThread())
+      executionThread.complete(Thread.currentThread())
+    }
+
+    // Then:
+    assertNotSame(getMainRenderingThread(), executionThread.join())
+    assertFalse(isOnRenderingThread.get())
+  }
+
+  @Test
+  fun `should detect non-rendering thread launched from global scope`() {
+    // Given:
+    val executionThread = CompletableFuture<Thread>()
+    val isOnRenderingThread = AtomicBoolean(true)
+
+    // When:
+    GlobalScope.launch {
       isOnRenderingThread.set(isOnRenderingThread())
       executionThread.complete(Thread.currentThread())
     }
@@ -170,6 +247,25 @@ class KtxAsyncTest : AsyncTest() {
     assertNotSame(getMainRenderingThread(), executionThread.join())
     assertFalse(isOnRenderingThread.get())
   }
+  @Test
+  fun `should detect nested non-rendering threads with separate context`() {
+    // Given:
+    val executionThread = CompletableFuture<Thread>()
+    val isOnRenderingThread = AtomicBoolean(true)
+    val dispatcher: AsyncExecutorDispatcher = newSingleThreadAsyncContext()
+
+    // When:
+    KtxAsync.launch(Dispatchers.KTX) {
+      withContext(dispatcher) {
+        isOnRenderingThread.set(isOnRenderingThread())
+        executionThread.complete(Thread.currentThread())
+      }
+    }
+
+    // Then:
+    assertNotSame(getMainRenderingThread(), executionThread.join())
+    assertFalse(isOnRenderingThread.get())
+  }
 
   @Test
   fun `should detect non-rendering threads with context switch`() {
@@ -189,5 +285,28 @@ class KtxAsyncTest : AsyncTest() {
     // Then:
     assertNotSame(getMainRenderingThread(), executionThread.join())
     assertFalse(isOnRenderingThread.get())
+  }
+
+  @Test
+  fun `should create non-global scope`() {
+    // Given:
+    val scope = RenderingScope()
+    val localJob = scope.launch {
+      while (true) {
+        delay(50)
+      }
+    }
+    val globalJob = KtxAsync.launch {
+      while (true) {
+        delay(50)
+      }
+    }
+
+    // When:
+    scope.cancel()
+
+    // Then:
+    assert(localJob.isCancelled)
+    assert(globalJob.isActive)
   }
 }

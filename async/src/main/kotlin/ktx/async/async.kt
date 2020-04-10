@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.resume
 
@@ -17,11 +18,11 @@ object KtxAsync : CoroutineScope {
   override val coroutineContext = MainDispatcher
 
   /**
-   * Should be invoked on the main rendering thread before using KTX coroutines. Might slightly affect performance
-   * otherwise.
+   * Should be invoked on the main rendering thread before using KTX coroutines.
+   * Failing to do so will cause some parts of the API to throw exceptions.
    */
   fun initiate() {
-    ImmediateDispatcher.initiate()
+    MainDispatcher.initiate()
   }
 }
 
@@ -33,16 +34,33 @@ val Dispatchers.KTX
   get() = MainDispatcher
 
 /**
+ * Creates a coroutine scope in the rendering thread with a supervisor job. Allows to manage multiple
+ * tasks executed on the main rendering thread within a single scope, providing mass actions such
+ * as task cancelling that do not affect other scopes.
+ *
+ * An alternative to direct usage of the global [KtxAsync].
+ *
+ * @see kotlinx.coroutines.MainScope
+ */
+@Suppress("FunctionName")
+fun RenderingScope() = CoroutineScope(SupervisorJob() + MainDispatcher)
+
+/**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with a single thread to execute tasks
  * asynchronously outside of the main rendering thread.
+ *
+ * [AsyncExecutor] thread will be named according to the [threadName] pattern.
  */
-fun newSingleThreadAsyncContext() = newAsyncContext(1)
+fun newSingleThreadAsyncContext(threadName: String = "AsyncExecutor-Thread") = newAsyncContext(1, threadName)
 
 /**
  * Creates a new [AsyncExecutorDispatcher] wrapping around an [AsyncExecutor] with the chosen amount of [threads]
  * to execute tasks asynchronously outside of the main rendering thread.
+ *
+ * [AsyncExecutor] threads will be named according to the [threadName] pattern.
  */
-fun newAsyncContext(threads: Int) = AsyncExecutorDispatcher(AsyncExecutor(threads), threads)
+fun newAsyncContext(threads: Int, threadName: String = "AsyncExecutor-Thread") =
+  AsyncExecutorDispatcher(AsyncExecutor(threads, threadName), threads)
 
 /**
  * Suspends the coroutine to execute the defined [block] on the main rendering thread and return its result.
@@ -52,18 +70,23 @@ suspend fun <T> onRenderingThread(block: suspend CoroutineScope.() -> T) = withC
 /**
  * Returns true if the coroutine was launched from a rendering thread dispatcher.
  */
-fun CoroutineScope.isOnRenderingThread() = coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher
+fun CoroutineScope.isOnRenderingThread() =
+  coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher
+    && Thread.currentThread() === MainDispatcher.mainThread
+
 
 /**
  * Attempts to skip the current frame. Resumes the execution using a task scheduled with [Application.postRunnable].
+ *
  * Due to asynchronous nature of the execution, there is no guarantee that this method will always skip only a *single*
- * frame before further method calls are executed, but it will always skip *at least one* frame.
+ * frame before resuming, but it will always suspend the current coroutine until the [Runnable] instances scheduled
+ * with [Application.postRunnable] are executed by the [Application].
  */
 suspend fun skipFrame() {
   suspendCancellableCoroutine<Unit> { continuation ->
     Gdx.app.postRunnable {
-      val context = continuation.context[ContinuationInterceptor.Key]
       if (continuation.isActive) {
+        val context = continuation.context[ContinuationInterceptor.Key]
         if (context is RenderingThreadDispatcher) {
           // Executed via main thread dispatcher and already on the main thread - resuming immediately:
           with(continuation) { context.resumeUndispatched(Unit) }

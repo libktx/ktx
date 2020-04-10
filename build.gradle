@@ -115,7 +115,7 @@ subprojects {
           name = projectName
           packaging 'jar'
           description = projectDesc
-          url 'http://github.com/libktx/ktx'
+          url 'https://libktx.github.io/'
 
           licenses {
             license {
@@ -127,14 +127,13 @@ subprojects {
           scm {
             connection 'scm:git:git@github.com:libktx/ktx.git'
             developerConnection 'scm:git:git@github.com:libktx/ktx.git'
-            url 'http://github.com/libktx/ktx/'
+            url 'https://github.com/libktx/ktx/'
           }
 
           developers {
             developer {
               id 'mj'
               name 'MJ'
-              email 'john.hervicc@gmail.com'
             }
           }
         }

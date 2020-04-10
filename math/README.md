@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-math.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-math)
+
 # KTX: math utilities
 
 Math extensions and operator overloads for LibGDX math API and Kotlin ranges.
@@ -178,13 +180,16 @@ definition is a convenient way to think about a range from which random values w
 of ranges in code, which can be useful for code clarity when defining a range for random number selection, or for 
 rapidly iterating a design.
 - `IntRange.random(random: java.util.Random)` allows using a Java Random to select a number from the range, and is 
-provided in case there is a need to use the `MathUtils.random` instance or an instance of Gdx's fast RandomXS128.
+provided in case there is a need to use the `MathUtils.random` instance or an instance of LibGDX's fast RandomXS128.
 - `ClosedRange<Float>.random()` allows a evenly distributed random number to be selected from a range (but treating
 the `endInclusive` as exclusive for simplicity).
-- `ClosedRange<Float>.randomGaussian()` selectes a normally distributed value to be selected from the range, scaled so the
+- `ClosedRange<Float>.randomGaussian()` selects a normally distributed value to be selected from the range, scaled so the
 range is six standard deviations wide.
 - `ClosedRange<Float>.randomTriangular()` allow easy selection of a triangularly distributed number from the range. A
 a `normalizedMode` can be passed for asymmetrical distributions.
+- `ClosedRange<Float>.lerp(Float)` linearly interpolates between the ends of a range.
+- `ClosedRange<Float>.interpolate(Float, Interpolation)` interpolates between the ends of a range using an
+`Interpolation` instance.
 
 ##### Usage examples
 

@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-inject.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-inject)
+
 # KTX: dependency injection
 
 A tiny, lightweight dependency injection system with simple syntax and no reflection usage.

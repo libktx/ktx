@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-style.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-style)
+
 # KTX: style builders
 
 Type-safe builders of official Scene2D widget styles.
@@ -335,6 +337,11 @@ fonts, colors and non-default styles names as enums to ensure complete safely at
 The advantage of using an `enum` over a "standard" singleton (`object`) with `String` properties or `String` 
 constants is that you can easily extract a list of all values from an `enum`, while getting all fields from
 an object or constants from a package is not trivial.
+
+#### Synergy
+
+[`ktx-assets`](../assets) or [`ktx-assets-async`](../assets-async) might prove useful for loading and management
+of `Skin` assets including `Textures` and `TextureAtlases`.
 
 ### Alternatives
 
