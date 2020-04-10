@@ -324,7 +324,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<String>(path))
     assertEquals(0, storage.getReferenceCount<String>(path))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -341,7 +341,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(descriptor))
     assertEquals(0, storage.getReferenceCount(descriptor))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -358,7 +358,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
