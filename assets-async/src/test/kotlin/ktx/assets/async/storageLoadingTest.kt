@@ -1091,13 +1091,15 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Before
   override fun `setup LibGDX application`() {
     super.`setup LibGDX application`()
-    Gdx.audio = OpenALAudio()
+    if (System.getenv("TEST_PROFILE") != "travis") {
+      Gdx.audio = OpenALAudio()
+    }
   }
 
   @After
   override fun `exit LibGDX application`() {
     super.`exit LibGDX application`()
-    (Gdx.audio as OpenALAudio).dispose()
+    (Gdx.audio as? OpenALAudio)?.dispose()
   }
 }
 

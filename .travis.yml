@@ -12,3 +12,5 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+env:
+  - TEST_PROFILE=travis
