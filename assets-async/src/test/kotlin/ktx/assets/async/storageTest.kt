@@ -510,7 +510,7 @@ class AssetStorageTest : AsyncTest() {
     assertFalse(storage.isLoaded<FakeAsset>(fakePath))
     assertEquals(0, storage.getReferenceCount<FakeAsset>(fakePath))
     assertTrue(asset.isDisposed)
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test

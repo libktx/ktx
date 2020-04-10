@@ -716,7 +716,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assets.forEach { asset ->
       assertSame(loaded, asset)
     }
-    checkProgress(storage, loaded = 1)
+    checkProgress(storage, loaded = 1, warn = true)
 
     storage.dispose()
   }
@@ -791,7 +791,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<String>(path))
     assertEquals(0, storage.getReferenceCount<String>(path))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -808,7 +808,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(descriptor))
     assertEquals(0, storage.getReferenceCount(descriptor))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -825,7 +825,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
-    checkProgress(storage, total = 0)
+    checkProgress(storage, total = 0, warn = true)
   }
 
   @Test
@@ -1091,13 +1091,15 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Before
   override fun `setup LibGDX application`() {
     super.`setup LibGDX application`()
-    Gdx.audio = OpenALAudio()
+    if (System.getenv("TEST_PROFILE") != "travis") {
+      Gdx.audio = OpenALAudio()
+    }
   }
 
   @After
   override fun `exit LibGDX application`() {
     super.`exit LibGDX application`()
-    (Gdx.audio as OpenALAudio).dispose()
+    (Gdx.audio as? OpenALAudio)?.dispose()
   }
 }
 
