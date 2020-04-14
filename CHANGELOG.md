@@ -1,5 +1,9 @@
 #### 1.9.10-SNAPSHOT
 
+- **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
+- **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
+- **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
+
 #### 1.9.10-b5
 
 - **[UPDATE]** Updated to Kotlin 1.3.71.

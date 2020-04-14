@@ -9,7 +9,7 @@ import org.junit.Test
  * Tests [Vector3]-related utilities.
  */
 class Vector3Test {
-  val floatTolerance = 0.00001f
+  private val floatTolerance = 0.00001f
 
   @Test
   fun `should create vector with default values`() {
@@ -81,6 +81,28 @@ class Vector3Test {
   }
 
   @Test
+  fun `should add floats to vectors with += operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector += 10f
+
+    assertEquals(20f, vector.x, floatTolerance)
+    assertEquals(20f, vector.y, floatTolerance)
+    assertEquals(20f, vector.z, floatTolerance)
+  }
+
+  @Test
+  fun `should add ints to vectors with += operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector += 10
+
+    assertEquals(20f, vector.x, floatTolerance)
+    assertEquals(20f, vector.y, floatTolerance)
+    assertEquals(20f, vector.z, floatTolerance)
+  }
+
+  @Test
   fun `should subtract vectors with -= operator`() {
     val vector = Vector3(10f, 10f, 10f)
 
@@ -103,6 +125,28 @@ class Vector3Test {
   }
 
   @Test
+  fun `should subtract floats from vectors with += operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector -= 20f
+
+    assertEquals(-10f, vector.x, floatTolerance)
+    assertEquals(-10f, vector.y, floatTolerance)
+    assertEquals(-10f, vector.z, floatTolerance)
+  }
+
+  @Test
+  fun `should subtract ints from vectors with += operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector -= 20f
+
+    assertEquals(-10f, vector.x, floatTolerance)
+    assertEquals(-10f, vector.y, floatTolerance)
+    assertEquals(-10f, vector.z, floatTolerance)
+  }
+
+  @Test
   fun `should multiply vectors with *= operator`() {
     val vector = Vector3(10f, 10f, 10f)
 
@@ -110,39 +154,6 @@ class Vector3Test {
 
     assertEquals(30f, vector.x, floatTolerance)
     assertEquals(-10f, vector.y, floatTolerance)
-    assertEquals(5f, vector.z, floatTolerance)
-  }
-
-  @Test
-  fun `should divide vectors with divAssign operator`() {
-    val vector = Vector3(10f, 10f, 10f)
-
-    vector /= Vector3(2f, -5f, 0.5f)
-
-    assertEquals(5f, vector.x, floatTolerance)
-    assertEquals(-2f, vector.y, floatTolerance)
-    assertEquals(20f, vector.z, floatTolerance)
-  }
-
-  @Test
-  fun `should multiply vectors by int scalars with *= operator`() {
-    val vector = Vector3(10f, 10f, 10f)
-
-    vector *= 2
-
-    assertEquals(20f, vector.x, floatTolerance)
-    assertEquals(20f, vector.y, floatTolerance)
-    assertEquals(20f, vector.z, floatTolerance)
-  }
-
-  @Test
-  fun `should divide vectors by int scalars with divAssign operator`() {
-    val vector = Vector3(10f, 10f, 10f)
-
-    vector /= 2
-
-    assertEquals(5f, vector.x, floatTolerance)
-    assertEquals(5f, vector.y, floatTolerance)
     assertEquals(5f, vector.z, floatTolerance)
   }
 
@@ -158,6 +169,28 @@ class Vector3Test {
   }
 
   @Test
+  fun `should multiply vectors by int scalars with *= operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector *= 2
+
+    assertEquals(20f, vector.x, floatTolerance)
+    assertEquals(20f, vector.y, floatTolerance)
+    assertEquals(20f, vector.z, floatTolerance)
+  }
+
+  @Test
+  fun `should divide vectors with divAssign operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector /= Vector3(2f, -5f, 0.5f)
+
+    assertEquals(5f, vector.x, floatTolerance)
+    assertEquals(-2f, vector.y, floatTolerance)
+    assertEquals(20f, vector.z, floatTolerance)
+  }
+
+  @Test
   fun `should divide vectors by float scalars with divAssign operator`() {
     val vector = Vector3(10f, 10f, 10f)
 
@@ -166,6 +199,17 @@ class Vector3Test {
     assertEquals(4f, vector.x, floatTolerance)
     assertEquals(4f, vector.y, floatTolerance)
     assertEquals(4f, vector.z, floatTolerance)
+  }
+
+  @Test
+  fun `should divide vectors by int scalars with divAssign operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    vector /= 2
+
+    assertEquals(5f, vector.x, floatTolerance)
+    assertEquals(5f, vector.y, floatTolerance)
+    assertEquals(5f, vector.z, floatTolerance)
   }
 
   @Test
@@ -191,6 +235,28 @@ class Vector3Test {
   }
 
   @Test
+  fun `should add vectors and floats with + operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    val result = vector + 10f
+
+    assertEquals(20f, result.x, floatTolerance)
+    assertEquals(20f, result.y, floatTolerance)
+    assertEquals(20f, result.z, floatTolerance)
+  }
+
+  @Test
+  fun `should add vectors and ints with + operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    val result = vector + 10
+
+    assertEquals(20f, result.x, floatTolerance)
+    assertEquals(20f, result.y, floatTolerance)
+    assertEquals(20f, result.z, floatTolerance)
+  }
+
+  @Test
   fun `should subtract vectors with - operator`() {
     val vector = Vector3(10f, 10f, 10f)
 
@@ -210,6 +276,28 @@ class Vector3Test {
     assertEquals(-10f, result.x, floatTolerance)
     assertEquals(30f, result.y, floatTolerance)
     assertEquals(10f, result.z, floatTolerance)
+  }
+
+  @Test
+  fun `should subtract vectors and floats with - operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    val result = vector - 20f
+
+    assertEquals(-10f, result.x, floatTolerance)
+    assertEquals(-10f, result.y, floatTolerance)
+    assertEquals(-10f, result.z, floatTolerance)
+  }
+
+  @Test
+  fun `should subtract vectors and ints with - operator`() {
+    val vector = Vector3(10f, 10f, 10f)
+
+    val result = vector - 20
+
+    assertEquals(-10f, result.x, floatTolerance)
+    assertEquals(-10f, result.y, floatTolerance)
+    assertEquals(-10f, result.z, floatTolerance)
   }
 
   @Test
@@ -280,24 +368,32 @@ class Vector3Test {
 
   @Test
   fun `should increment vector values with ++ operator`() {
-    var vector = Vector3(10f, 10f, 10f)
+    val originalVector = Vector3(10f, 10f, 10f)
+    var vector = originalVector
 
     vector++
 
     assertEquals(11f, vector.x, floatTolerance)
     assertEquals(11f, vector.y, floatTolerance)
     assertEquals(11f, vector.z, floatTolerance)
+    assertEquals(10f, originalVector.x, floatTolerance)
+    assertEquals(10f, originalVector.y, floatTolerance)
+    assertEquals(10f, originalVector.z, floatTolerance)
   }
 
   @Test
   fun `should decrement vector values with -- operator`() {
-    var vector = Vector3(10f, 10f, 10f)
+    val originalVector = Vector3(10f, 10f, 10f)
+    var vector = originalVector
 
     vector--
 
     assertEquals(9f, vector.x, floatTolerance)
     assertEquals(9f, vector.y, floatTolerance)
     assertEquals(9f, vector.z, floatTolerance)
+    assertEquals(10f, originalVector.x, floatTolerance)
+    assertEquals(10f, originalVector.y, floatTolerance)
+    assertEquals(10f, originalVector.z, floatTolerance)
   }
 
   @Test
