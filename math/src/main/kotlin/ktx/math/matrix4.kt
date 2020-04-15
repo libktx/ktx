@@ -51,21 +51,22 @@ fun mat4(m00: Float = 0f, m01: Float = 0f, m02: Float = 0f, m03: Float = 0f,
 
 /**
  * Inverts currently stored values.
- * @return this matrix for chaining.
+ * @return a new [Matrix4] with the operation result.
  */
 operator fun Matrix4.unaryMinus(): Matrix4 {
+  val matrix = Matrix4()
   for (index in 0..15) {
-    this.`val`[index] = -this.`val`[index]
+    matrix.`val`[index] = -this.`val`[index]
   }
-  return this
+  return matrix
 }
 
 /**
  * Inverts the current matrix.
- * @return this matrix for chaining.
+ * @return a new [Matrix4] with the operation result.
  * @see Matrix4.inv
  */
-operator fun Matrix4.not(): Matrix4 = this.inv()
+operator fun Matrix4.not(): Matrix4 = Matrix4(this).inv()
 
 /**
  * @param matrix4 values from this matrix will be added to this matrix.

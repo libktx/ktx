@@ -20,15 +20,12 @@ numbers.
 
 - `vec2` is a global factory function that can create `Vector2` instances with named parameters for extra readability.
 - `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second
-vector. Use these operators to _mutate_ existing vectors.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector, resulting
-in a new vector. Use these operators to _create_ new instances of vectors.
-- Unary `-` operator (a single minus before the vector) allows to negate both vector values.
-- `*` and `/` can be used with floats and ints to multiply or divide both vector values.
-- `++` and `--` operators can be used to increment and decrement both x and y values of the vector. Note that since
-`Vector2` class is mutable, both these operations modify the internal state of the vector. This means that both `++vector`
-and `vector++` are effectively the same, as previous state of the vector is not kept (to limit the amount of constructed
-objects).
+vector or number. Use these operators to _mutate_ existing vectors.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector or
+number, resulting in a new vector. Use these operators to _create_ new instances of vectors.
+- Unary `-` operator (a single minus before the vector) allows to negate both vector values, creating a new vector.
+- `++` and `--` operators can be used to increment and decrement both x and y values of the vector, resulting in a new
+vector. To avoid creating new vectors, prefer `+= 1` and `-= 1` instead.
 - `Vector2` instances can be destructed to two float variables in one step with `val (x, y) = vector2` syntax thanks to
 `component1()` and `component2()` operator methods.
 - `Vector2` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
@@ -45,29 +42,30 @@ Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be u
 call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or doesn't) the point stored by the vector.
 
 #### `ImmutableVector2`
+
 - `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionality of `Vector2`, but
 mutation methods return new vectors instead of mutate the reference.
 - Note that one may want to create type aliases to makes the usage more concise: `typealias Vect2 = ImmutableVector2`
-- `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length
-- instances can be destructed: `val (x, y) = vector2`
+- `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length.
+- Instances can be destructed: `val (x, y) = vector2`.
 - `Vector2.toImmutable()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
 - `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
 - Most of the functions of `Vector2` which mutate the vector are provided but deprecated. This allow smooth migration from
-`Vector2`. 
-- Notable difference with `Vector2`
+`Vector2`.
+- Notable differences with `Vector2`:
   - `+`, `-`, `*`, `/` are available and replace `add`, `sub` and `scl`.
   - `withLength()` and `withLength2()` replace `setLength()` and `setLength2()` and return a new vector of same direction
-  with the specified length
-  - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation
+  with the specified length.
+  - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation.
   - `withAngleDeg()` and `withAngleRad` replace `setAngle` and `setAngleRad` and return a new vector of same length and
-  the given angle to x-axis
+  the given angle to x-axis.
   - `cpy` is deprecated and is not necessary. Immutable vectors can be safely shared. However since `ImmutableVector` is
   a `data class`, there is a `copy(x, y)` method available allowing to easily create new vectors based on existing ones. 
   - `set(x, y)` and `setZero()` are not provided.   
   - Functions dealing with angles in degree are suffixed with `Deg` and all returns values between `-180` and `+180`.
   - All angle functions return the angle toward positive y-axis.
-  - `dot` is an infix function
-  - `x` and `crs` infix functions replace `crs` (cross product)
+  - `dot` is an infix function.
+  - `x` and `crs` infix functions replace `crs` (cross product).
 
 ##### Usage examples
 
@@ -126,15 +124,12 @@ var v2 = Vec2(1f, 2f).withLength(3f)
 - `vec3` is a global factory function that can create `Vector3` instances with named parameters for extra readability.
 It is also overloaded with a second variant that allows to convert `Vector2` instances to `Vector3`.
 - `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second
-vector. Use these operators to _mutate_ existing vectors.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second
-vector, resulting in a new vector. Use these operators to _create_ new instances of vectors.
-- Unary `-` operator (a single minus before the vector) allows to negate all vector values.
-- `*` and `/` can be used with floats and ints to multiply or divide all vector values.
-- `++` and `--` operators can be used to increment and decrement x, y and z values of the vector. Note that since
-`Vector3` class is mutable, both these operations modify the internal state of the vector. This means that both `++vector`
-and `vector++` are effectively the same, as previous state of the vector is not kept (to limit the amount of constructed
-objects).
+vector or number. Use these operators to _mutate_ existing vectors.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector or
+number, resulting in a new vector. Use these operators to _create_ new instances of vectors.
+- Unary `-` operator (a single minus before the vector) allows to negate both vector values, creating a new vector.
+- `++` and `--` operators can be used to increment and decrement x, y and z values of the vector, resulting in a new
+vector. To avoid creating new vectors, prefer `+= 1` and `-= 1` instead.
 - `Vector3` instances can be destructed to tree float variables in one step with `val (x, y, z) = vector3` syntax thanks
 to `component1()`, `component2()` and `component3` operator methods.
 - `Vector3` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
@@ -230,14 +225,12 @@ val spawners = listOf(
 
 ### Alternatives
 
+You can use LibGDX APIs directly or rely on third-party math libraries:
+
 - [Kotlin Statistics](https://github.com/thomasnield/kotlin-statistics) contains idiomatic Kotlin wrappers over
 [Apache Commons Math](http://commons.apache.org/proper/commons-math/userguide/stat.html). Its extension functions might
 prove useful during game development.
 - [Jvm Glm](https://github.com/kotlin-graphics/glm) is the kotlin port of the famous [glm](https://github.com/g-truc/glm) lib by g-truc.
-
-Sadly, it does not seem that there are any public math-related Kotlin libraries that would make LibGDX math API usage more
-natural. You can try browsing through existing general purpose LibGDX extensions - some of them contain static methods
-for various math operations missing in the official API.
 
 #### Additional documentation
 

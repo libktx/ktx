@@ -36,21 +36,22 @@ fun mat3(m00: Float = 0f, m01: Float = 0f, m02: Float = 0f,
 
 /**
  * Inverts currently stored values.
- * @return this matrix for chaining.
+ * @return a new [Matrix3] with the operation result.
  */
 operator fun Matrix3.unaryMinus(): Matrix3 {
+  val matrix = Matrix3()
   for (index in 0..8) {
-    this.`val`[index] = -this.`val`[index]
+    matrix.`val`[index] = -this.`val`[index]
   }
-  return this
+  return matrix
 }
 
 /**
  * Inverts the current matrix.
- * @return this matrix for chaining.
+ * @return a new [Matrix3] with the operation result.
  * @see Matrix3.inv
  */
-operator fun Matrix3.not(): Matrix3 = this.inv()
+operator fun Matrix3.not(): Matrix3 = Matrix3(this).inv()
 
 /**
  * @param matrix3 values from this matrix will be added to this matrix.
