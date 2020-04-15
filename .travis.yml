@@ -2,7 +2,7 @@ language: java
 jdk:
   - openjdk11
 
-install: ./gradlew assemble install -x dokka -x dokkaJavadoc
+install: ./gradlew assemble install -x dokka -x dokkaZip
 script: ./gradlew check --info --stacktrace
 
 before_cache:
