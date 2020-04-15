@@ -1,6 +1,11 @@
 #### 1.9.10-SNAPSHOT
 
 - **[UPDATE]** Updated to Kotlin 1.3.72.
+- **[UPDATE]** Updated to Dokka 0.10.1.
+- **[CHANGE]** Javadocs are no longer generated with Dokka. Since KTX focuses solely on Kotlin support for LibGDX,
+usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
+Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
+Starting from this release, GitHub releases will no longer contain the Javadoc archives.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
