@@ -25,6 +25,6 @@ jobs:
     - name: Build
       run: ./gradlew assemble install -x dokka -x dokkaZip
     - name: Tests
-      run: ./gradlew test
+      run: ./gradlew test --continue
       env:
-        TEST_PROFILE: travis
+        TEST_PROFILE: ci
