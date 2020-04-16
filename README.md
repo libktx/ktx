@@ -53,7 +53,7 @@ Module | Dependency name | Description
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
-[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to [scene2d](scene2d).
+[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).
 [vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles.
 
 ### Installation
