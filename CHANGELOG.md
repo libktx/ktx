@@ -9,6 +9,22 @@ Starting from this release, GitHub releases will no longer contain the Javadoc a
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
+- **[FEATURE]** (`ktx-scene2d`) `scene2d` object was added. It supports the entire Scene2D DSL and allows to create root-level widgets.
+- **[CHANGE]** (`ktx-scene2d`) Root-level `actor` function was deprecated.
+- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix to create these widgets.
+Note that the actors can still be created via standard DSL. See the migration guide in README. This includes:
+  - `stack`
+  - `horizontalGroup`
+  - `verticalGroup`
+  - `container`
+  - `splitPane`
+  - `scrollPane`
+  - `table`
+  - `window`
+  - `dialog`
+  - `buttonGroup`
+  - `tree`
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` method was removed.
 
 #### 1.9.10-b5
 
