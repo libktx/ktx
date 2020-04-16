@@ -183,7 +183,7 @@ object scene2d : KWidget<Actor> {
   inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
 
   /**
-   * Constructs a root level [Window] widget.
+   * Constructs a top-level [Window] widget.
    * @param title will be displayed as window's title.
    * @param style name of the widget style. Defaults to [defaultStyle].
    * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
@@ -199,7 +199,7 @@ object scene2d : KWidget<Actor> {
   ): KWindow = KWindow(title, skin, style).apply(init)
 
   /**
-   * Constructs a root level [Dialog] widget.
+   * Constructs a top-level [Dialog] widget.
    * @param title will be displayed as dialog's title.
    * @param style name of the widget style. Defaults to [defaultStyle].
    * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
@@ -211,7 +211,8 @@ object scene2d : KWidget<Actor> {
     title: String,
     style: String = defaultStyle,
     skin: Skin = Scene2DSkin.defaultSkin,
-    init: KDialog.() -> Unit = {}) = KDialog(title, skin, style).apply(init)
+    init: KDialog.() -> Unit = {}
+  ): KDialog = KDialog(title, skin, style).apply(init)
 }
 
 /**
@@ -416,12 +417,13 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   }
 }
 
-/** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
+/** Extends [SplitPane] API with type-safe widget builders. Note that this widget may store only two children.
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
-class KSplitPane(vertical: Boolean, skin: Skin, style: String) :
-  SplitPane(null, null, vertical, skin, style), KGroup {
+class KSplitPane(
+  vertical: Boolean, skin: Skin, style: String
+) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
       0 -> setFirstWidget(actor)

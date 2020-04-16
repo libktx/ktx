@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.kotcrab.vis.ui.VisUI
+import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
@@ -329,12 +330,15 @@ class KContainerTest {
     assertTrue(actor in container.children)
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store multiple children`() {
     val container = KContainer<Actor>()
 
     container.addActor(Actor())
-    container.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      container.addActor(Actor())
+    }
   }
 }
 
@@ -407,12 +411,15 @@ class KScrollPaneTest : NeedsLibGDX() {
     assertTrue(actor in scrollPane.children)
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store multiple children`() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
 
     scrollPane.addActor(Actor())
-    scrollPane.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      scrollPane.addActor(Actor())
+    }
   }
 }
 
@@ -470,13 +477,16 @@ class KSplitPaneTest : NeedsLibGDX() {
     // No way to access first and second widget managed internally by SplitPane (except for reflection...).
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store more than two children`() {
     val splitPane = KSplitPane(false, VisUI.getSkin(), defaultHorizontalStyle)
 
     splitPane.addActor(Actor())
     splitPane.addActor(Actor())
-    splitPane.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      splitPane.addActor(Actor())
+    }
   }
 }
 

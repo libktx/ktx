@@ -3,7 +3,7 @@
 
 # KTX: VisUI type-safe builders
 
-Utilities for creating VisUI widgets using Kotlin type-safe builders.
+Utilities for creating [VisUI](https://github.com/kotcrab/vis-ui) widgets using Kotlin type-safe builders.
 
 ### Why?
 
@@ -14,286 +14,349 @@ allow to write DSL that is both as readable as markup languages and as powerful 
 
 ### Guide
 
-To start creating UI layout, call one of top level functions from `builder.kt` such as `table { }`, `verticalGroup { }`
-or `gridGroup { }`. Every VisUI and LibGDX `WidgetGroup` has an equivalent method. By passing lambdas to these methods,
-you can fully customize their content with extension functions for each `Actor`, as well as invoke any internal methods:
+This modules extends [`ktx-scene2d`](../scene2d), providing additional factory methods for the following VisUI widgets:
 
-```Kotlin
-val root = table {
-  setFillParent(true)
-  label("Hello, World!")
-}
-stage.addActor(root)
-```
+* *Root* actors:
+  * `visDialog`
+  * `visWindow`
+  * `toastTable`
+* *Parent* actors:
+  * _Designed_ to store actors and control their layout:
+    * `visTable`
+    * `visTree`
+    * `horizontalFlowGroup`
+    * `verticalFlowGroup`
+    * `gridGroup`
+    * `floatingGroup`
+    * `dragPane`
+    * `visScrollPane`
+    * `visSplitPane`
+    * `multiSplitPane`
+    * `collapsible`
+    * `horizontalCollapsible`
+  * _Can_ store actors due to type hierarchy:
+    * `visTextButton`
+    * `visImageButton`
+    * `visImageTextButton`
+    * `visCheckBox`
+    * `visRadioButton`
+    * `basicColorPicker`
+    * `extendedColorPicker`
+    * `spinner`
+* *Child* actors:
+  * `visLabel`
+  * `linkLabel`
+  * `visImage`
+  * `visList`, `visListOf`
+  * `visProgressBar`
+  * `visSelectBox`, `visSelectBoxOf`
+  * `visSlider`
+  * `visTextArea`
+  * `highlightTextArea`
+  * `scrollableTextArea`
+  * `visTextField`
+  * `visValidatableTextField`
+  * `busyBar`
+  * `separator`
+* Other widget managers:
+  * `buttonBar`
+  * `listView`
+  * `tabbedPane`
 
-The closures get full access to all public methods that chosen `WidgetGroup` has. You can also create and immediately add 
-new widgets to group simply by invoking methods from `WidgetFactory` interface, which is available from all type-safe 
-builders.
-
-#### Additional extensions
-
-Consider using [`ktx-actors`](../actors) module to improve event handling with lambda-friendly extension methods like
-`onChange` and `onClick`. [`ktx-assets`](../assets) might help with UI resources management, while
-[`ktx-vis-style`](../vis-style) adds DSL for defining custom VisUI widgets.
-
-#### Note about `KWidgets`
-
-In `ktx-vis` there are many utility widget classes starting with `K` followed by their original names. Those widgets
-purpose is to provide syntax sugar for type-safe builders, and there is usually no need use them directly. In fact, all
-factory methods for root actors already return the extended widgets where necessary to help you with GUI building.
+Please refer to [`ktx-scene2d`](../scene2d) documentation for general info about GUI builders.
 
 #### Tooltips
 
 `ktx-vis` provides extension methods for creating VisUI tooltips:
-```Kotlin
-import ktx.vis.*
 
-label("Label with tooltip") {
-  addTextTooltip("Tooltip text")
+```kotlin
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
+
+val myLabel = scene2d.visLabel("Label with tooltip") {
+  visTextTooltip("Tooltip text")
 }
 ```
 
 These methods include:
 
-- `addTextTooltip` - adds simple text tooltip.
-- `addTooltip` - adds tooltip with fully customized content.
+* `visTextTooltip` - adds simple text tooltip.
+* `visTooltip` - adds tooltip with fully customized content.
 
 #### Menus
 
 `Menu` and `PopupMenu` instances are created in very similar way to UI layouts.
 
-```Kotlin
-import ktx.vis.*
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.Stage
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-val menu = popupMenu {
-  menuItem("First Item")
-  menuItem("Second Item")
-  menuItem("Third Item") {
-    subMenu {
-      menuItem("SubMenu Item")
+fun createMenu(stage: Stage) {
+  val menu = scene2d.popupMenu {
+    menuItem("First Item")
+    menuItem("Second Item")
+    menuItem("Third Item") {
+      subMenu {
+        menuItem("SubMenu Item")
+      }
     }
   }
+  menu.showMenu(stage, 0f, 0f) 
 }
-menu.showMenu(stage, 0f, 0f)
 ```
 
 See examples section for `MenuBar` usage.
 
+#### Validation
+
+* `validator` is an inlined function that allows to create and customize a VisUI `FormValidator`.
+See usage examples for further details.
+
 ### Usage examples
+
+Before using `ktx-vis`, make sure that the VisUI skin is loaded and set as the default skin:
+
+```kotlin
+import com.kotcrab.vis.ui.VisUI
+import ktx.scene2d.Scene2DSkin
+
+fun create() {
+  VisUI.load()
+  Scene2DSkin.defaultSkin = VisUI.getSkin()
+}
+```
 
 Creating a `VisWindow`, immediately added to a `Stage`:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.Stage
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-stage.addActor(window("Window") {
-  isModal = true
-  label("Hello from Window")
-})
+fun createWindow(stage: Stage) {
+  stage.addActor(
+    scene2d.visWindow("Title") {
+      isModal = true
+      visLabel("Hello world!")
+    }
+  )
+}
 ```
 
 Creating a `MenuBar`:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.Stage
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-val menuBar = menuBar {
-  menu("File") {
-    menuItem("New") {
-      subMenu {
-        menuItem("Project")
-        menuItem("Module")
-        menuItem("File")
+fun createMenuBar(stage: Stage) {
+  val table = scene2d.visTable {
+    menuBar { cell ->
+      cell.top().growX().expandY().row()
+      menu("File") {
+        menuItem("New") {
+          subMenu {
+            menuItem("Project")
+            menuItem("Module")
+            menuItem("File")
+          }
+        }
+        menuItem("Open") { /**/ }
+      }
+      menu ("Edit") {
+        menuItem("Undo") {
+          setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.Z)
+        }
+        menuItem("Redo") { /**/ }
       }
     }
-    menuItem("Open") { /**/ }
+    setFillParent(true)
   }
-  menu ("Edit") {
-    menuItem("Undo") {
-      setShortcut(Keys.CONTROL_LEFT, Keys.Z)
-    }
-    menuItem("Undo") { /**/ }
-  }
+  stage.addActor(table)
 }
-rootTable.add(menuBar.table).top().growX().row()
 ```
 
 ![](img/menu.png)
 
-Creating `ButtonGroup`:
-```Kotlin
-import ktx.vis.*
+Creating a `ButtonGroup` with `VisRadioButton` instances:
 
-buttonTable {
-    checkBox("First")
-    checkBox("Second")
-    checkBox("Third")
-    buttonGroup.setMinCheckCount(1)
-    buttonGroup.setMaxCheckCount(1)
-}
+```kotlin
+import ktx.scene2d.buttonGroup
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
+
+fun createMenuBar() =
+  scene2d.buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
+    visRadioButton("First")
+    visRadioButton("Second")
+    visRadioButton("Third")
+  }
 ```
-
-`ButtonTable` is a specialized `Table` that adds all `Button` instances to internal `ButtonGroup`, allowing to keep
-minimum and maximum counts of buttons checked at once.
 
 Creating a `ButtonBar`:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
 import com.kotcrab.vis.ui.widget.ButtonBar.ButtonType
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-buttonBar {
-  setButton(ButtonType.APPLY, textButton("Accept"))
-  setButton(ButtonType.CANCEL, textButton("Cancel"))
-}
+fun createButtonBar() =
+  scene2d.buttonBar {
+    setButton(ButtonType.APPLY, scene2d.visTextButton("Accept"))
+    setButton(ButtonType.CANCEL, scene2d.visTextButton("Cancel"))
+  }
 ```
 
 Creating `Tree` of `Label` instances:
-```Kotlin
-import ktx.scene2d.*
 
-tree {
-  label("Node")
-  label("Node")
-  label("Nest") { node ->
-    node {
-      label("Nested") { node ->
-        node.label("Nested")
+```kotlin
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
+
+fun createTree() =
+  scene2d.visTree {
+    visLabel("Node")
+    visLabel("Node")
+    visLabel("Nest") { node ->
+      node {
+        visLabel("Nested") { node ->
+          node.visLabel("Nested")
+        }
+        visLabel("Nested")
       }
-      label("Nested")
     }
+    visLabel("Node")
   }
-  label("Node")
-}
 ```
 ![Tree](img/tree.png)
 
 Creating a `TabbedPane` with multiple tabs:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-table { cell ->
-  cell.grow()
+fun createTabbedPane() =
+  scene2d.visTable {
+    val pane = tabbedPane("vertical") { cell ->
+      cell.growY()
+      tab("Tab1") {
+        visLabel("Inside tab 1")
+      }
+      tab("Tab2") {
+        visLabel("Inside tab 2")
+      }
+      tab("Tab3") {
+        visLabel("Inside tab 3")
+      }
+    }
+    val container = visTable().cell(grow = true)
+    pane.addTabContentsTo(container)
+    pane.switchTab(0)
 
-  tabbedPane("vertical", { cell ->
-    cell.growY()
-    tab("Tab1") {
-      label("Inside tab 1")
-    }
-    tab("Tab2") {
-      label("Inside tab 2")
-    }
-    tab("Tab3") {
-      label("Inside tab 3")
-    }
-  }).apply {
-    addTabContentsTo(table().cell(grow = true))
-    //OR addTabContentsTo(container<Table>().cell(grow = true))
-    switchTab(0)
+    setFillParent(true)
   }
-}
 ```
 
 ![](img/tabs.png)
 
 Creating a form using `FormValidator`:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
+import com.badlogic.gdx.utils.Align
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-table(true) {
-  validator {
-    defaults().left()
+fun createValidator() =
+  scene2d.visTable(defaultSpacing = true) {
+    validator {
+      defaults().left()
 
-    label("Name: ")
-    notEmpty(validatableTextField().cell(grow = true), "Name can't be empty")
-    row()
+      visLabel("Name: ")
+      notEmpty(visValidatableTextField().cell(grow = true), "Name can't be empty")
+      row()
 
-    label("Age: ")
-    val ageField = validatableTextField().cell(grow = true)
-    notEmpty(ageField, "Age can't be empty")
-    integerNumber(ageField, "Age must be number")
-    valueGreaterThan(ageField, "You must be at least 18 years old", 18f, true)
-    row()
+      visLabel("Age: ")
+      val ageField = visValidatableTextField().cell(grow = true)
+      notEmpty(ageField, "Age can't be empty")
+      integerNumber(ageField, "Age must be number")
+      valueGreaterThan(ageField, "You must be at least 18 years old", 18f, true)
+      row()
 
-    checked(checkBox("Accept terms").cell(colspan = 2), "You must accept terms")
-    row()
+      checked(visCheckBox("Accept terms").cell(colspan = 2), "You must accept terms")
+      row()
 
-    setMessageLabel(label("").cell(minWidth = 200f))
-    addDisableTarget(textButton("Accept").cell(align = Align.right))
+      setMessageLabel(visLabel("").cell(minWidth = 200f))
+      addDisableTarget(visTextButton("Accept").cell(align = Align.right))
+    }
+    pack()
   }
-}
 ```
 
 ![](img/form.png)
 
 Creating a `ListView`:
 
-```Kotlin
-import ktx.vis.*
+```kotlin
 import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter.SelectionMode
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
+import ktx.scene2d.scene2d
+import ktx.scene2d.vis.*
 
-table(true) {
-  val osList = GdxArray<String>()
-  osList.add("Windows")
-  osList.add("Linux")
-  osList.add("Mac")
+fun createValidator() =
+  scene2d.visTable(defaultSpacing = true) {
+    val osList = GdxArray<String>()
+    osList.add("Windows")
+    osList.add("Linux")
+    osList.add("Mac")
 
-  val adapter = SimpleListAdapter(osList)
-  adapter.selectionMode = SelectionMode.SINGLE
-  listView(adapter) {
-    header = label("ListView header")
-    footer = label("ListView footer")
+    val adapter = SimpleListAdapter(osList)
+    adapter.selectionMode = SelectionMode.SINGLE
+    listView(adapter) {
+      header = visLabel("ListView header")
+      footer = visLabel("ListView footer")
+    }
+
+    pack()
   }
-}
 ```
 
 ![](img/list.png)
 
-Accessing `Cell` instances with`Table` children outside of building blocks:
-```Kotlin
-import ktx.vis.*
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
+#### Synergy
 
-table {
-  val label: Label = label("Cell properties modified.").cell(expand = true)
-  val cell: Cell<Label> = label("Wrapped in cell.").inCell
-  val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
-  val afterBuildingBlock: Cell<Label> = label("Not limited to no init block actors.") {
-    setWrap(true)
-  }.cell(expand = true).inCell
+Consider using [`ktx-actors`](../actors) module to improve event handling with lambda-friendly extension methods like
+`onChange` and `onClick`, as well as other general Scene2D extensions.
 
-  // Cells are available only for direct children of tables (or its extensions). 
-  stack {
-    // These would not compile:
-    label("Invalid.").cell(expand = true)
-    label("Invalid").inCell
-  }
-}
-```
+[`ktx-assets`](../assets) might help with UI resources management.
 
-Accessing `Node` instances with `Table` children outside of building blocks (note that `KNode` is **KTX** custom wrapper
-of LibGDX `Tree.Node` with additional building API support):
-```Kotlin
-import ktx.vis.*
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+[`ktx-vis-style`](../vis-style) adds DSL for defining custom VisUI widget styles.
 
-tree {
-  val label: VisLabel = label("Node properties modified.").node(expanded = true)
-  val cell: Node = label("Wrapped in node.").inNode
-  val combined: Node = label("Modified and wrapped.").node(expanded = true).inNode
-  val afterBuildingBlock: KNode = label("Not limited to no init block actors.") {
-    setWrap(true)
-  }.node(expanded = true).inNode
-  // Nodes are available only for children of trees.
-}
-```
+### Migration guide
 
+Since `1.9.10-b6`, `ktx-vis` extends the [`ktx-scene2d`](../scene2d) module. If you are migrating from a previous
+`ktx-vis` version, see the `ktx-scene2d` migration guide first.
+
+Additionally to changes that apply to `ktx-scene2d`, `ktx-vis` was rewritten to match the `ktx-scene2d` API.
+Notable changes include:
+
+* All factory methods for VisUI widgets are now inlined.
+* `vis` prefix was added to the names of some VisUI widget factory methods to avoid clashes with Scene2D 
+and better reflect the widget class names. A complete list is available in the change log. 
+* Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
+`multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
+created or can be defined as nested children with the same DSL.
+* `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
+* `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
+* `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
+
+Since `ktx-vis` required a complete rewrite and had to match `ktx-scene2d` API, there is no intermediate version with
+deprecated methods. All legacy APIs were removed in `1.9.10-b6`. Please refer to the [change log](../CHANGELOG.md)
+for a complete list of changes.
 
 ### Alternatives
 
@@ -308,4 +371,3 @@ it lacks first-class Kotlin support and the flexibility of a powerful programmin
 - [Scene2D article.](https://github.com/libgdx/libgdx/wiki/Scene2d)
 - [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
 - [`Table` article.](https://github.com/libgdx/libgdx/wiki/Table)
-

@@ -41,7 +41,7 @@ val myFirstActor = scene2d.label(text = "Hello World!")
   * `textField`
   * `touchpad`
 * *Parent* actors - widgets that can have nested children:
-  * Parental widgets that were _designed_ to store actors:
+  * Parental widgets that were _designed_ to store actors and control their layout:
     * `buttonTable`
     * `container`
     * `horizontalGroup`
@@ -510,7 +510,8 @@ for automatic replacement. To ease migration to the newer KTX versions, use `1.9
 - [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
 HTML-like syntax. It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However,
 it lacks first-class Kotlin support and the flexibility of a powerful programming language.
-- [ktx-vis](../vis) features type-safe builders of [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widgets.
+- [`ktx-vis`](../vis) extends `ktx-scene2d` with type-safe builders of
+[VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widgets.
 
 #### Additional documentation
 

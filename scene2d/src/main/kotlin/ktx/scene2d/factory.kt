@@ -242,7 +242,7 @@ inline fun <S> KWidget<S>.scrollPane(
 ): KScrollPane = actor(KScrollPane(skin, style), init)
 
 /**
- * @param items optional LibGDX array [SelectBox] items. Defaults to null.
+ * @param items optional LibGDX array of the [SelectBox] items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @return a [SelectBox] instance added to this group.

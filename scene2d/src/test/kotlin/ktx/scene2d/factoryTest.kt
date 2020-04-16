@@ -74,7 +74,7 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create List`() = test { listWidgetOf<String>() }
 
   @Test
-  fun `should create ListWithItems`() = test(
+  fun `should create List with items`() = test(
     widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
@@ -96,7 +96,7 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create SelectBox`() = test { selectBoxOf<String>() }
 
   @Test
-  fun `should create SelectBoxWithItems`() = test(
+  fun `should create SelectBox with items`() = test(
     widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)

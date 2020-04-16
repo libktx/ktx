@@ -25,6 +25,35 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `buttonGroup`
   - `tree`
 - **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` method was removed.
+- **[CHANGE]** (`ktx-vis`) Overhaul of the module.
+  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of internal APIs are now shared.
+  - All factory methods for VisUI widgets are now inlined, which can improve the performance of GUI building.
+  - Factory methods of some VisUI widgets were renamed to avoid clashes with Scene2D methods and better reflect the wrapped widget class names:
+    - `label`: `visLabel`
+    - `image`: `visImage`
+    - `list`: `visList`, `visListOf`
+    - `selectBox`: `visSelectBox`, `visSelectBoxOf`
+    - `slider`: `visSlider`
+    - `textArea`: `visTextArea`
+    - `textField`: `visTextField`
+    - `validatableTextField`: `visValidatableTextField`
+    - `textButton`: `visTextButton`
+    - `imageButton`: `visImageButton`
+    - `imageTextButton`: `visImageTextButton`
+    - `radioButton`: `visRadioButton`
+    - `tree`: `visTree`
+    - `table`: `visTable`
+    - `scrollPane`: `visScrollPane`
+    - `splitPane`: `visSplitPane`
+    - `addTooltip`: `visTooltip`
+    - `addTextTooltip`: `visTextTooltip`
+  - Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
+  `multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
+  created or can be defined as nested children with the same DSL.
+  - `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
+  - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
+  - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
+  - The sources documentation was greatly expanded.
 
 #### 1.9.10-b5
 
