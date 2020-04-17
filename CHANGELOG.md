@@ -6,6 +6,9 @@
 usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
 Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
 Starting from this release, GitHub releases will no longer contain the Javadoc archives.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access a chosen `EntitySystem`.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` extension method to access a chosen `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
+- **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` extension method to create a `Component` for an existing `Entity`. 
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
@@ -55,9 +58,6 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
   - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
   - The sources documentation was greatly expanded.
- - **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access an `EntitySystem`.
- - **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` function to access an `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
- - **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` function to create a `Component` for an already existing `Entity`. 
 
 #### 1.9.10-b5
 

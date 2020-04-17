@@ -17,8 +17,8 @@ import kotlin.reflect.KClass
  */
 @AshleyDsl
 class EngineEntity(
-    val engine: Engine,
-    val entity: Entity) {
+  val engine: Engine,
+  val entity: Entity) {
 
   /**
    * Get or creates an instance of the component [T] and adds it to this [entity][EngineEntity].
@@ -66,7 +66,7 @@ inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) = configure()
  * Create and add an [Entity] to the [Engine].
  *
  * @param configure inlined function with the created [Entity] as the receiver to allow further configuration of
- *  the [Entity]. The [Entity] holds the [Entity] created and the [Engine] that created it.
+ * the [Entity]. The [Entity] holds the [Entity] created and the [Engine] that created it.
  * @return the created [Entity].
  */
 inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
@@ -77,17 +77,16 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
 }
 
 /**
- * Quick [EntitySystem] retrieval.
- *
- * @return the [EntitySystem] of the given type. May be null if it does not exist.
+ * @param T type of the system to retrieve.
+ * @return the [EntitySystem] of the given type.
+ * @throws MissingEntitySystemException if no system under [T] type is registered.
  * @see Engine.getSystem
  */
 inline fun <reified T : EntitySystem> Engine.getSystem(): T =
   getSystem(T::class.java) ?: throw MissingEntitySystemException(T::class)
 
 /**
- * Quick [EntitySystem] retrieval.
- *
+ * @param type type of the system to retrieve.
  * @return the [EntitySystem] of the given type. May be null if it does not exist.
  * @see Engine.getSystem
  */
