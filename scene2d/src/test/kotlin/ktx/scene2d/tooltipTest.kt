@@ -15,7 +15,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   fun `should add TextTooltip`() {
     val actor = Actor()
 
-    val tooltip = actor.addTextTooltip("Test.")
+    val tooltip = actor.textTooltip("Test.")
 
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)
@@ -26,7 +26,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   fun `should add TextTooltip with init block`() {
     val actor = Actor()
 
-    val tooltip = actor.addTextTooltip("Test.") {
+    val tooltip = actor.textTooltip("Test.") {
       // Changing Label color:
       color = Color.BLUE
     }
@@ -41,7 +41,7 @@ class TooltipFactoriesTest : NeedsLibGDX() {
   fun `should add Tooltip with init block`() {
     val actor = Actor()
 
-    val tooltip = actor.addTooltip {
+    val tooltip = actor.tooltip {
       // Changing Table color:
       color = Color.BLUE
       // Adding child to Table content:

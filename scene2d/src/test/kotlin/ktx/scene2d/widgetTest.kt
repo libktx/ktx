@@ -7,26 +7,113 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
 import com.kotcrab.vis.ui.VisUI
+import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
 import org.junit.Assert.*
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
+ * Tests [scene2d] DSL object.
+ */
+class Scene2DTest : NeedsLibGDX() {
+  @Test
+  fun `should not add an actor to a group`() {
+    val actor = Actor()
+
+    val result = scene2d.storeActor(actor)
+
+    assertSame(actor, result)
+    assertNull(actor.parent)
+  }
+
+  @Test
+  fun `should support Scene2D DSL`() {
+    val label = scene2d.label("Test")
+
+    assertEquals("Test", label.text.toString())
+  }
+
+  @Test
+  fun `should support creating actors via DSL building block`() {
+    val label = scene2d {
+      label("Test")
+    }
+
+    assertEquals("Test", label.text.toString())
+  }
+
+  @Test
+  fun `should create Window`() {
+    val window = scene2d.window(title = "test")
+
+    assertNotNull(window)
+    assertEquals(Scene2DSkin.defaultSkin, window.skin)
+    assertEquals("test", window.titleLabel.text.toString())
+  }
+
+  @Test
+  fun `should create Window with init block`() {
+    val window = scene2d.window(title = "test") {
+      height = 100f
+    }
+
+    assertNotNull(window)
+    assertEquals(Scene2DSkin.defaultSkin, window.skin)
+    assertEquals("test", window.titleLabel.text.toString())
+    assertEquals(100f, window.height, TOLERANCE)
+  }
+
+  @Test
+  fun `should create Window with nested children`() {
+    lateinit var label: Label
+
+    val window = scene2d.window(title = "test") {
+      label = label("Test")
+    }
+
+    assertTrue(label in window.children)
+  }
+
+  @Test
+  fun `should create Dialog`() {
+    val dialog = scene2d.dialog(title = "test")
+
+    assertNotNull(dialog)
+    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
+    assertEquals("test", dialog.titleLabel.text.toString())
+  }
+
+  @Test
+  fun `should create Dialog with init block`() {
+    val dialog = scene2d.dialog(title = "test") {
+      height = 100f
+    }
+
+    assertNotNull(dialog)
+    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
+    assertEquals("test", dialog.titleLabel.text.toString())
+    assertEquals(100f, dialog.height, TOLERANCE)
+  }
+
+  @Test
+  fun `should create Dialog with nested children`() {
+    lateinit var label: Label
+
+    val dialog = scene2d.dialog(title = "test") {
+      label = label("Test")
+    }
+
+    assertTrue(label in dialog.children)
+  }
+
+  // Factory methods for other actors are tested separately in `factoryTest`.
+}
+
+/**
  * Tests [KGroup] interface: base for all simple WidgetGroup-based parental actors.
  */
 class KGroupTest {
-  @Test
-  fun `should add widget to group and return it`() {
-    val group = TestGroup()
-    val actor = Actor()
-
-    val result = group.appendActor(actor)
-
-    assertTrue(actor in group.children)
-    assertSame(actor, result)
-  }
-
   @Test
   fun `should add widget to group and return the actor instead of storage object`() {
     val group = TestGroup()
@@ -45,17 +132,6 @@ class KGroupTest {
  * Tests [KTable] interface: base for all Table-based parental actors.
  */
 class KTableTest : NeedsLibGDX() {
-  @Test
-  fun `should add widget to group and return it`() {
-    val group = TestTable()
-    val actor = Actor()
-
-    val result = group.appendActor(actor)
-
-    assertTrue(actor in group.children)
-    assertSame(actor, result)
-  }
-
   @Test
   fun `should add widget to group and return its cell`() {
     val group = TestTable()
@@ -85,39 +161,39 @@ class KTableTest : NeedsLibGDX() {
     val table = TestTable()
     table.apply {
       val cell: Cell<Label> = label("Test") {}.cell(
-          grow = true, // Overridden.
-          growX = false, // Overridden.
-          growY = false, // Overridden.
-          expand = true, // Overridden.
-          expandX = true,
-          expandY = false,
-          fill = true, // Overridden.
-          fillX = false,
-          fillY = true,
-          uniform = true, // Overridden.
-          uniformX = false,
-          uniformY = true,
-          align = Align.center,
-          colspan = 3,
-          width = 100f, // Overridden.
-          minWidth = 10f,
-          preferredWidth = 50f,
-          maxWidth = 150f,
-          height = 75f, // Overridden.
-          minHeight = 5f,
-          preferredHeight = 25f,
-          maxHeight = 55f,
-          pad = 42f, // Overridden.
-          padTop = 6f,
-          padLeft = 7f,
-          padRight = 8f,
-          padBottom = 9f,
-          space = 24f, // Overridden.
-          spaceTop = 26f,
-          spaceLeft = 27f,
-          spaceRight = 28f,
-          spaceBottom = 29f,
-          row = true
+        grow = true, // Overridden.
+        growX = false, // Overridden.
+        growY = false, // Overridden.
+        expand = true, // Overridden.
+        expandX = true,
+        expandY = false,
+        fill = true, // Overridden.
+        fillX = false,
+        fillY = true,
+        uniform = true, // Overridden.
+        uniformX = false,
+        uniformY = true,
+        align = Align.center,
+        colspan = 3,
+        width = 100f, // Overridden.
+        minWidth = 10f,
+        preferredWidth = 50f,
+        maxWidth = 150f,
+        height = 75f, // Overridden.
+        minHeight = 5f,
+        preferredHeight = 25f,
+        maxHeight = 55f,
+        pad = 42f, // Overridden.
+        padTop = 6f,
+        padLeft = 7f,
+        padRight = 8f,
+        padBottom = 9f,
+        space = 24f, // Overridden.
+        spaceTop = 26f,
+        spaceLeft = 27f,
+        spaceRight = 28f,
+        spaceBottom = 29f,
+        row = true
       ).inCell
 
       assertEquals(1, cell.expandX)
@@ -154,22 +230,11 @@ class KTableTest : NeedsLibGDX() {
  */
 class KTreeTest : NeedsLibGDX() {
   @Test
-  fun `should add widget to group and return it`() {
+  fun `should add widget to group and return its node`() {
     val group = TestTree()
     val actor = Actor()
 
-    val result = group.appendActor(actor)
-
-    assertTrue(actor in group.children)
-    assertSame(actor, result)
-  }
-
-  @Test
-  fun `should add widget to group and return its cell`() {
-    val group = TestTree()
-    val actor = Actor()
-
-    val result: Node<*, *, *> = group.storeActor(actor)
+    val result: KNode<Actor> = group.storeActor(actor)
 
     assertTrue(actor in group.children)
     assertSame(actor, result.actor)
@@ -181,7 +246,7 @@ class KTreeTest : NeedsLibGDX() {
     tree.apply {
       val label = label("Test")
 
-      val node: KNode = label.inNode
+      val node: KNode<Label> = label.inNode
 
       assertNotNull(node)
       assertSame(label, node.actor)
@@ -193,11 +258,11 @@ class KTreeTest : NeedsLibGDX() {
     val tree = TestTree()
     val icon = mock<Drawable>()
     tree.apply {
-      val node: KNode = label("Test") {}.node(
-          icon = icon,
-          selectable = false,
-          expanded = true,
-          userObject = "Test"
+      val node: KNode<Label> = label("Test") {}.node(
+        icon = icon,
+        selectable = false,
+        expanded = true,
+        userObject = "Test"
       ).inNode
 
       assertSame(icon, node.icon)
@@ -208,7 +273,7 @@ class KTreeTest : NeedsLibGDX() {
   }
 
   class TestTree : Tree<Node<*, *, *>, Any?>(VisUI.getSkin()), KTree {
-    override fun add(actor: Actor): KNode {
+    override fun <T : Actor> add(actor: T): KNode<T> {
       val node = KNode(actor)
       add(node)
       return node
@@ -265,12 +330,15 @@ class KContainerTest {
     assertTrue(actor in container.children)
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store multiple children`() {
     val container = KContainer<Actor>()
 
     container.addActor(Actor())
-    container.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      container.addActor(Actor())
+    }
   }
 }
 
@@ -343,12 +411,15 @@ class KScrollPaneTest : NeedsLibGDX() {
     assertTrue(actor in scrollPane.children)
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store multiple children`() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
 
     scrollPane.addActor(Actor())
-    scrollPane.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      scrollPane.addActor(Actor())
+    }
   }
 }
 
@@ -406,13 +477,16 @@ class KSplitPaneTest : NeedsLibGDX() {
     // No way to access first and second widget managed internally by SplitPane (except for reflection...).
   }
 
-  @Test(expected = IllegalStateException::class)
+  @Test
   fun `should fail to store more than two children`() {
     val splitPane = KSplitPane(false, VisUI.getSkin(), defaultHorizontalStyle)
 
     splitPane.addActor(Actor())
     splitPane.addActor(Actor())
-    splitPane.addActor(Actor()) // Throws.
+
+    shouldThrow<IllegalStateException> {
+      splitPane.addActor(Actor())
+    }
   }
 }
 
@@ -435,5 +509,5 @@ class KTreeWidgetTest : NeedsLibGDX() {
 }
 
 // Note: other extended Scene2D widgets are not tested, as they do not implement any custom logic and simply inherit
-// from KGroup  or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
+// from KGroup or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
 // implemented - we are basically relying on LibGDX to behave correctly.

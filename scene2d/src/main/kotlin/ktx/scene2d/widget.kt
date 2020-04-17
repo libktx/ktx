@@ -15,20 +15,13 @@ import com.badlogic.gdx.utils.Array as GdxArray
 @Scene2dDsl
 interface KWidget<out Storage> {
   /**
-   * Internal utility method for adding actors to the group. Assumes the actor is stored in a container.
+   * Internal utility method for adding actors to the group. Assumes the actor might be stored in a container.
    * @param actor will be added to this group.
-   * @return storage object, wrapping around the actor or the actor itself if there is no storage object.
+   * @return storage object, wrapping around the [actor] or the [actor] itself if no storage objets are used.
    * @see Node
    * @see Cell
    */
-  fun storeActor(actor: Actor): Storage
-
-  /**
-   * Internal utility method for adding actors to the group.
-   * @param actor will be added to this group.
-   * @return actor passed as the parameter.
-   */
-  fun <T : Actor> appendActor(actor: T): T
+  fun <T : Actor> storeActor(actor: T): Storage
 }
 
 /**
@@ -43,16 +36,10 @@ interface KTable : KWidget<Cell<*>> {
    */
   fun <T : Actor> add(actor: T): Cell<T>
 
-  override fun storeActor(actor: Actor): Cell<*> {
+  override fun <T : Actor> storeActor(actor: T): Cell<T> {
     val cell = add(actor)
     actor.userObject = cell
     return cell
-  }
-
-  override fun <T : Actor> appendActor(actor: T): T {
-    val cell = add(actor)
-    actor.userObject = cell
-    return actor
   }
 
   /**
@@ -94,39 +81,40 @@ interface KTable : KWidget<Cell<*>> {
    * @see inCell
    */
   fun <T : Actor> T.cell(
-      grow: Boolean = false,
-      growX: Boolean = false,
-      growY: Boolean = false,
-      expand: Boolean? = null,
-      expandX: Boolean? = null,
-      expandY: Boolean? = null,
-      fill: Boolean? = null,
-      fillX: Boolean? = null,
-      fillY: Boolean? = null,
-      uniform: Boolean? = null,
-      uniformX: Boolean? = null,
-      uniformY: Boolean? = null,
-      align: Int? = null,
-      colspan: Int? = null,
-      width: Float? = null,
-      minWidth: Float? = null,
-      preferredWidth: Float? = null,
-      maxWidth: Float? = null,
-      height: Float? = null,
-      minHeight: Float? = null,
-      preferredHeight: Float? = null,
-      maxHeight: Float? = null,
-      pad: Float? = null,
-      padTop: Float? = null,
-      padLeft: Float? = null,
-      padRight: Float? = null,
-      padBottom: Float? = null,
-      space: Float? = null,
-      spaceTop: Float? = null,
-      spaceLeft: Float? = null,
-      spaceRight: Float? = null,
-      spaceBottom: Float? = null,
-      row: Boolean = false): T {
+    grow: Boolean = false,
+    growX: Boolean = false,
+    growY: Boolean = false,
+    expand: Boolean? = null,
+    expandX: Boolean? = null,
+    expandY: Boolean? = null,
+    fill: Boolean? = null,
+    fillX: Boolean? = null,
+    fillY: Boolean? = null,
+    uniform: Boolean? = null,
+    uniformX: Boolean? = null,
+    uniformY: Boolean? = null,
+    align: Int? = null,
+    colspan: Int? = null,
+    width: Float? = null,
+    minWidth: Float? = null,
+    preferredWidth: Float? = null,
+    maxWidth: Float? = null,
+    height: Float? = null,
+    minHeight: Float? = null,
+    preferredHeight: Float? = null,
+    maxHeight: Float? = null,
+    pad: Float? = null,
+    padTop: Float? = null,
+    padLeft: Float? = null,
+    padRight: Float? = null,
+    padBottom: Float? = null,
+    space: Float? = null,
+    spaceTop: Float? = null,
+    spaceLeft: Float? = null,
+    spaceRight: Float? = null,
+    spaceBottom: Float? = null,
+    row: Boolean = false
+  ): T {
     val cell = this.inCell
     if (grow) cell.grow()
     if (growX) cell.growX()
@@ -172,9 +160,59 @@ interface KTable : KWidget<Cell<*>> {
    */
   @Suppress("UNCHECKED_CAST")
   val <T : Actor> T.inCell: Cell<T>
-    get() = userObject as? Cell<T> ?:
-        throw IllegalStateException("This actor has no declared Cell. " +
-            "Was it properly added to the table? Was its user object cleared?")
+    get() = userObject as? Cell<T> ?: throw IllegalStateException("This actor has no declared Cell. " +
+      "Was it properly added to the table? Was its user object cleared?")
+}
+
+/**
+ * Root of the Scene2D DSL. Use this object to create new Scene2D actors and widgets.
+ */
+@Scene2dDsl
+@Suppress("ClassName")
+object scene2d : KWidget<Actor> {
+  override fun <T : Actor> storeActor(actor: T): Actor {
+    // Actor is not modified or added to a group.
+    return actor
+  }
+
+  /**
+   * Allows to define an actor within a DSL lambda block.
+   * @param dsl will be immediately invoked. Must return an actor.
+   * @return [Actor] returned by [dsl].
+   */
+  inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
+
+  /**
+   * Constructs a top-level [Window] widget.
+   * @param title will be displayed as window's title.
+   * @param style name of the widget style. Defaults to [defaultStyle].
+   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+   * @param init will be invoked on the [Window] widget. Inlined.
+   * @return a new [Window] instance.
+   */
+  @Scene2dDsl
+  inline fun window(
+    title: String,
+    style: String = defaultStyle,
+    skin: Skin = Scene2DSkin.defaultSkin,
+    init: KWindow.() -> Unit = {}
+  ): KWindow = KWindow(title, skin, style).apply(init)
+
+  /**
+   * Constructs a top-level [Dialog] widget.
+   * @param title will be displayed as dialog's title.
+   * @param style name of the widget style. Defaults to [defaultStyle].
+   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+   * @param init will be invoked on the [Dialog] widget. Inlined.
+   * @return a new [Dialog] instance.
+   */
+  @Scene2dDsl
+  inline fun dialog(
+    title: String,
+    style: String = defaultStyle,
+    skin: Skin = Scene2DSkin.defaultSkin,
+    init: KDialog.() -> Unit = {}
+  ): KDialog = KDialog(title, skin, style).apply(init)
 }
 
 /**
@@ -202,32 +240,22 @@ interface KGroup : KWidget<Actor> {
     return actor
   }
 
-  override fun storeActor(actor: Actor) = add(actor)
-  override fun <T : Actor> appendActor(actor: T): T {
-    addActor(actor)
-    return actor
-  }
+  override fun <T : Actor> storeActor(actor: T) = add(actor)
 }
 
 /** Common interface applied to widgets that keep their children in [Tree] [Node] instances. */
 @Scene2dDsl
-interface KTree : KWidget<KNode> {
+interface KTree : KWidget<KNode<*>> {
   /**
    * @param actor will be placed in a [Node] inside this widget.
    * @return [Node] instance containing the actor.
    */
-  fun add(actor: Actor): KNode
+  fun <T : Actor> add(actor: T): KNode<T>
 
-  override fun storeActor(actor: Actor): KNode {
+  override fun <T : Actor> storeActor(actor: T): KNode<T> {
     val node = add(actor)
     actor.userObject = node
     return node
-  }
-
-  override fun <T : Actor> appendActor(actor: T): T {
-    val node = add(actor)
-    actor.userObject = node
-    return actor
   }
 
   /**
@@ -240,10 +268,10 @@ interface KTree : KWidget<KNode> {
    * @see inNode
    */
   fun <T : Actor> T.node(
-      icon: Drawable? = null,
-      expanded: Boolean? = null,
-      selectable: Boolean? = null,
-      userObject: Any? = null): T {
+    icon: Drawable? = null,
+    expanded: Boolean? = null,
+    selectable: Boolean? = null,
+    userObject: Any? = null): T {
     val node = inNode
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
@@ -258,10 +286,10 @@ interface KTree : KWidget<KNode> {
    *    assigned as user object.
    * @see node
    */
-  val <T : Actor> T.inNode: KNode
-    get() = userObject as? KNode ?:
-        throw IllegalStateException("This actor has no declared Node. " +
-            "Was it properly added to the tree? Was its user object cleared?")
+  @Suppress("UNCHECKED_CAST")
+  val <T : Actor> T.inNode: KNode<T>
+    get() = userObject as? KNode<T> ?: throw IllegalStateException("This actor has no declared Node. " +
+      "Was it properly added to the tree? Was its user object cleared?")
 }
 
 /** Extends [Button] API with type-safe widget builders. */
@@ -342,8 +370,8 @@ class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2
 
 /** Extends [Tree] [Node] API with type-safe widget builders. */
 @Scene2dDsl
-class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), KTree {
-  override fun add(actor: Actor): KNode {
+class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
+  override fun <T : Actor> add(actor: T): KNode<T> {
     val node = KNode(actor)
     add(node)
     return node
@@ -354,7 +382,7 @@ class KNode(actor: Actor) : Node<Node<*, *, *>, Any?, Actor>(actor), KTree {
    * @param init will be invoked on this node.
    * @return this node.
    */
-  inline operator fun invoke(init: KNode.() -> Unit): KNode {
+  inline operator fun invoke(init: KNode<T>.() -> Unit): KNode<T> {
     this.init()
     return this
   }
@@ -389,12 +417,13 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   }
 }
 
-/** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child.
+/** Extends [SplitPane] API with type-safe widget builders. Note that this widget may store only two children.
  * It is advised to use the inlined extension factory methods added by [KGroup] rather than set its widgets directly
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
-class KSplitPane(vertical: Boolean, skin: Skin, style: String) :
-    SplitPane(null, null, vertical, skin, style), KGroup {
+class KSplitPane(
+  vertical: Boolean, skin: Skin, style: String
+) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
       0 -> setFirstWidget(actor)
@@ -419,7 +448,7 @@ class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, sk
 /** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
 class KTreeWidget(skin: Skin, style: String) : Tree<Node<*, *, *>, Any?>(skin, style), KTree {
-  override fun add(actor: Actor): KNode {
+  override fun <A : Actor> add(actor: A): KNode<A> {
     val node = KNode(actor)
     add(node)
     return node

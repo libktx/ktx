@@ -1,5 +1,5 @@
+[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.5-orange.svg)](http://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.3.3-orange.svg)](http://kotlinlang.org/)
 
 # KTX: coroutines support and threading utilities
 
@@ -245,10 +245,16 @@ import ktx.async.AsyncExecutorDispatcher
 import ktx.async.newAsyncContext
 import ktx.async.newSingleThreadAsyncContext
 
+// Context with a single thread:
 val singleThreaded = newSingleThreadAsyncContext()
 
+// Context with multiple threads:
 val multiThreaded = newAsyncContext(threads = 4)
 
+// Context with a custom thread name pattern:
+val multiThreadedWithNamedThreads = newAsyncContext(threads = 4, threadName = "MyThread")
+
+// Context with an existing executor:
 val executor = AsyncExecutor(2)
 val fromExistingExecutor = AsyncExecutorDispatcher(executor, threads = 2)
 ```

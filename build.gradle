@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 buildscript {
   repositories {
     jcenter()
@@ -57,28 +60,47 @@ subprojects {
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   }
 
+  tasks.withType(Test) {
+    testLogging {
+      events TestLogEvent.FAILED,
+          TestLogEvent.SKIPPED,
+          TestLogEvent.STANDARD_OUT
+      exceptionFormat TestExceptionFormat.FULL
+      showExceptions true
+      showCauses true
+      showStackTraces true
+
+      debug {
+        events TestLogEvent.STARTED,
+            TestLogEvent.FAILED,
+            TestLogEvent.PASSED,
+            TestLogEvent.SKIPPED,
+            TestLogEvent.STANDARD_ERROR,
+            TestLogEvent.STANDARD_OUT
+        exceptionFormat TestExceptionFormat.FULL
+      }
+      info.events = debug.events
+      info.exceptionFormat = debug.exceptionFormat
+    }
+  }
+
   jar {
     from project.sourceSets.main.output
     baseName = archivesBaseName
   }
-
-  task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from "$buildDir/dokkaJavadoc"
-  }
-
-  task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/dokkaJavadoc"
-  }
-
-  javadocJar.dependsOn('dokkaJavadoc')
 
   task dokkaZip(type: Zip) {
     from "$buildDir/dokka"
   }
 
   dokkaZip.dependsOn('dokka')
+
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from "$buildDir/dokka"
+  }
+
+  javadocJar.dependsOn('dokka')
 
   task sourcesJar(type: Jar) {
     classifier = 'sources'
@@ -96,6 +118,12 @@ subprojects {
   signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask('uploadArchives') }
     sign configurations.archives
+  }
+
+  task uploadSnapshot {}
+
+  if (!isReleaseVersion) {
+    uploadSnapshot.finalizedBy uploadArchives
   }
 
   uploadArchives {
@@ -160,12 +188,48 @@ distributions {
           from sub.sourcesJar
         }
         into('doc') {
-          from sub.javadocJar
-        }
-        into('dokka') {
           from sub.dokkaZip
         }
       }
     }
   }
 }
+
+task gatherDokkaDocumentation(type: Copy) {
+  subprojects.each { subproject ->
+    from subproject.buildDir
+    include "dokka/${subproject.name}/**"
+    include "dokka/style.css"
+  }
+  into buildDir
+}
+
+task generateDocumentationIndex {
+  doLast {
+    def indexFile = file("$buildDir/dokka/index.html")
+    delete indexFile
+    indexFile << """
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>KTX Sources Documentation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<ul>
+  <h1>KTX Documentation</h1>
+  <p>This page contains documentation generated via Dokka from KTX sources.</p>
+  <p>To see the official KTX website, follow <a href="https://libktx.github.io/">this link</a>.</p>
+  <h2>Modules</h2>
+${
+      subprojects.collect {
+        "  <li><a href=\"${it.name}/\">ktx-${it.name}</a></li>"
+      }.join('\n')
+    }
+</ul>
+</body>
+</html>
+"""
+  }
+}
+gatherDokkaDocumentation.finalizedBy generateDocumentationIndex

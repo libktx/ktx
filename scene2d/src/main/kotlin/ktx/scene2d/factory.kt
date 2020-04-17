@@ -13,6 +13,9 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * @param init will be invoked on the actor. Inlined.
  * @return passed [Actor].
  */
+@Deprecated(
+  message = "This function was used internally for defining root-level actors and will be removed.",
+  replaceWith = ReplaceWith("actor.apply(init)"))
 inline fun <T : Actor> actor(actor: T, init: (@Scene2dDsl T).() -> Unit = {}): T {
   actor.init()
   return actor
@@ -42,9 +45,10 @@ inline fun <S, A : Actor> KWidget<S>.actor(actor: A, init: (@Scene2dDsl A).(S) -
  * @return a [Button] instance added to this group.
  */
 inline fun <S> KWidget<S>.button(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KButton.(S) -> Unit = {}) = actor(KButton(skin, style), init)
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KButton.(S) -> Unit = {}
+): KButton = actor(KButton(skin, style), init)
 
 /**
  * @param minCheckedCount minimum amount of buttons checked at once.
@@ -57,10 +61,11 @@ inline fun <S> KWidget<S>.button(
  * [Button]-extending children of this widget will be added to the internal [ButtonGroup].
  */
 inline fun <S> KWidget<S>.buttonGroup(
-    minCheckedCount: Int,
-    maxCheckedCount: Int,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KButtonTable.(S) -> Unit = {}) = actor(KButtonTable(minCheckedCount, maxCheckedCount, skin), init)
+  minCheckedCount: Int,
+  maxCheckedCount: Int,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KButtonTable.(S) -> Unit = {}
+): KButtonTable = actor(KButtonTable(minCheckedCount, maxCheckedCount, skin), init)
 
 /**
  * @param text will be displayed as [CheckBox] text.
@@ -72,10 +77,11 @@ inline fun <S> KWidget<S>.buttonGroup(
  * @return a [CheckBox] instance added to this group.
  */
 inline fun <S> KWidget<S>.checkBox(
-    text: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KCheckBox.(S) -> Unit = {}) = actor(KCheckBox(text, skin, style), init)
+  text: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KCheckBox.(S) -> Unit = {}
+): KCheckBox = actor(KCheckBox(text, skin, style), init)
 
 /**
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
@@ -84,7 +90,8 @@ inline fun <S> KWidget<S>.checkBox(
  * @return a [Container] instance added to this group. Note that this actor might store only a single child.
  */
 inline fun <S> KWidget<S>.container(
-    init: KContainer<Actor>.(S) -> Unit = {}) = actor(KContainer(), init)
+  init: KContainer<Actor>.(S) -> Unit = {}
+): KContainer<Actor> = actor(KContainer(), init)
 
 /**
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
@@ -93,7 +100,8 @@ inline fun <S> KWidget<S>.container(
  * @return a [HorizontalGroup] instance added to this group.
  */
 inline fun <S> KWidget<S>.horizontalGroup(
-    init: KHorizontalGroup.(S) -> Unit = {}) = actor(KHorizontalGroup(), init)
+  init: KHorizontalGroup.(S) -> Unit = {}
+): KHorizontalGroup = actor(KHorizontalGroup(), init)
 
 /**
  * @param drawable name of a drawable stored in the chosen skin.
@@ -104,9 +112,10 @@ inline fun <S> KWidget<S>.horizontalGroup(
  * @return a [Image] instance added to this group.
  */
 inline fun <S> KWidget<S>.image(
-    drawable: String,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl Image).(S) -> Unit = {}) = actor(Image(skin.getDrawable(drawable)), init)
+  drawable: String,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl Image).(S) -> Unit = {}
+): Image = actor(Image(skin.getDrawable(drawable)), init)
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -117,9 +126,10 @@ inline fun <S> KWidget<S>.image(
  * @return a [ImageButton] instance added to this group.
  */
 inline fun <S> KWidget<S>.imageButton(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KImageButton.(S) -> Unit = {}) = actor(KImageButton(skin, style), init)
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KImageButton.(S) -> Unit = {}
+): KImageButton = actor(KImageButton(skin, style), init)
 
 /**
  * @param text will be displayed as [ImageTextButton] text.
@@ -131,10 +141,11 @@ inline fun <S> KWidget<S>.imageButton(
  * @return a [ImageTextButton] instance added to this group.
  */
 inline fun <S> KWidget<S>.imageTextButton(
-    text: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KImageTextButton.(S) -> Unit = {}) = actor(KImageTextButton(text, skin, style), init)
+  text: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KImageTextButton.(S) -> Unit = {}
+): KImageTextButton = actor(KImageTextButton(text, skin, style), init)
 
 /**
  * @param text will be displayed on the label.
@@ -146,10 +157,11 @@ inline fun <S> KWidget<S>.imageTextButton(
  * @return a [Label] instance added to this group.
  */
 inline fun <S> KWidget<S>.label(
-    text: CharSequence,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl Label).(S) -> Unit = {}) = actor(Label(text, skin, style), init)
+  text: CharSequence,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl Label).(S) -> Unit = {}
+): Label = actor(Label(text, skin, style), init)
 
 /**
  * @param items optional LibGDX array of list widget items. Defaults to null.
@@ -159,10 +171,12 @@ inline fun <S> KWidget<S>.label(
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  */
 fun <I> KWidget<*>.listWidgetOf(
-    items: GdxArray<I>? = null,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin): KListWidget<I> {
-  val list = appendActor(KListWidget<I>(skin, style))
+  items: GdxArray<I>? = null,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin
+): KListWidget<I> {
+  val list = KListWidget<I>(skin, style)
+  storeActor(list)
   if (items != null && items.size > 0) {
     list.setItems(items)
   }
@@ -180,9 +194,10 @@ fun <I> KWidget<*>.listWidgetOf(
  * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 inline fun <I, S> KWidget<S>.listWidget(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KListWidget<I>.(S) -> Unit = {}): KListWidget<I> {
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KListWidget<I>.(S) -> Unit = {}
+): KListWidget<I> {
   val list = KListWidget<I>(skin, style)
   list.init(storeActor(list))
   list.refreshItems()
@@ -203,13 +218,14 @@ inline fun <I, S> KWidget<S>.listWidget(
  * @return a [ProgressBar] instance added to this group.
  */
 inline fun <S> KWidget<S>.progressBar(
-    min: Float = 0f,
-    max: Float = 1f,
-    step: Float = 0.01f,
-    vertical: Boolean = false,
-    style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl ProgressBar).(S) -> Unit = {}) = actor(ProgressBar(min, max, step, vertical, skin, style), init)
+  min: Float = 0f,
+  max: Float = 1f,
+  step: Float = 0.01f,
+  vertical: Boolean = false,
+  style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl ProgressBar).(S) -> Unit = {}
+): ProgressBar = actor(ProgressBar(min, max, step, vertical, skin, style), init)
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -220,22 +236,25 @@ inline fun <S> KWidget<S>.progressBar(
  * @return a [ScrollPane] instance added to this group. Note that this actor may have only a single child.
  */
 inline fun <S> KWidget<S>.scrollPane(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KScrollPane.(S) -> Unit = {}) = actor(KScrollPane(skin, style), init)
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KScrollPane.(S) -> Unit = {}
+): KScrollPane = actor(KScrollPane(skin, style), init)
 
 /**
- * @param items optional LibGDX array [SelectBox] items. Defaults to null.
+ * @param items optional LibGDX array of the [SelectBox] items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @return a [SelectBox] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  */
 fun <I> KWidget<*>.selectBoxOf(
-    items: GdxArray<I>? = null,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin): KSelectBox<I> {
-  val selectBox = appendActor(KSelectBox<I>(skin, style))
+  items: GdxArray<I>? = null,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin
+): KSelectBox<I> {
+  val selectBox = KSelectBox<I>(skin, style)
+  storeActor(selectBox)
   if (items != null && items.size > 0) {
     selectBox.items = items
   }
@@ -253,9 +272,10 @@ fun <I> KWidget<*>.selectBoxOf(
  * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 inline fun <I, S> KWidget<S>.selectBox(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KSelectBox<I>.(S) -> Unit = {}): KSelectBox<I> {
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KSelectBox<I>.(S) -> Unit = {}
+): KSelectBox<I> {
   val selectBox = KSelectBox<I>(skin, style)
   selectBox.init(storeActor(selectBox))
   selectBox.refreshItems()
@@ -276,13 +296,14 @@ inline fun <I, S> KWidget<S>.selectBox(
  * @return a [Slider] instance added to this group.
  */
 inline fun <S> KWidget<S>.slider(
-    min: Float = 0f,
-    max: Float = 1f,
-    step: Float = 0.01f,
-    vertical: Boolean = false,
-    style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl Slider).(S) -> Unit = {}) = actor(Slider(min, max, step, vertical, skin, style), init)
+  min: Float = 0f,
+  max: Float = 1f,
+  step: Float = 0.01f,
+  vertical: Boolean = false,
+  style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl Slider).(S) -> Unit = {}
+): Slider = actor(Slider(min, max, step, vertical, skin, style), init)
 
 /**
  * @param vertical true if the widget is vertical, false if horizontal.
@@ -295,10 +316,11 @@ inline fun <S> KWidget<S>.slider(
  * @return a [SplitPane] instance added to this group. Note that this actor can store only two children.
  */
 inline fun <S> KWidget<S>.splitPane(
-    vertical: Boolean = false,
-    style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KSplitPane.(S) -> Unit = {}) = actor(KSplitPane(vertical, skin, style), init)
+  vertical: Boolean = false,
+  style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KSplitPane.(S) -> Unit = {}
+): KSplitPane = actor(KSplitPane(vertical, skin, style), init)
 
 /**
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
@@ -307,7 +329,8 @@ inline fun <S> KWidget<S>.splitPane(
  * @return a [Stack] instance added to this group.
  */
 inline fun <S> KWidget<S>.stack(
-    init: KStack.(S) -> Unit = {}) = actor(KStack(), init)
+  init: KStack.(S) -> Unit = {}
+): KStack = actor(KStack(), init)
 
 /**
  * @param skin [Skin] instance that will be applied to some table children. Defaults to [Scene2DSkin.defaultSkin].
@@ -317,8 +340,9 @@ inline fun <S> KWidget<S>.stack(
  * @return a [Table] instance added to this group.
  */
 inline fun <S> KWidget<S>.table(
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KTableWidget.(S) -> Unit = {}) = actor(KTableWidget(skin), init)
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KTableWidget.(S) -> Unit = {}
+): KTableWidget = actor(KTableWidget(skin), init)
 
 /**
  * @param text initial text displayed by the area. Defaults to empty string.
@@ -330,10 +354,11 @@ inline fun <S> KWidget<S>.table(
  * @return a [TextArea] instance added to this group.
  */
 inline fun <S> KWidget<S>.textArea(
-    text: String = "",
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl TextArea).(S) -> Unit = {}) = actor(TextArea(text, skin, style), init)
+  text: String = "",
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl TextArea).(S) -> Unit = {}
+): TextArea = actor(TextArea(text, skin, style), init)
 
 /**
  * @param text initial text displayed by the field. Defaults to empty string.
@@ -345,10 +370,11 @@ inline fun <S> KWidget<S>.textArea(
  * @return a [TextField] instance added to this group.
  */
 inline fun <S> KWidget<S>.textField(
-    text: String = "",
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl TextField).(S) -> Unit = {}) = actor(TextField(text, skin, style), init)
+  text: String = "",
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl TextField).(S) -> Unit = {}
+): TextField = actor(TextField(text, skin, style), init)
 
 /**
  * @param text will be displayed as [TextButton] text.
@@ -360,10 +386,11 @@ inline fun <S> KWidget<S>.textField(
  * @return a [TextButton] instance added to this group.
  */
 inline fun <S> KWidget<S>.textButton(
-    text: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KTextButton.(S) -> Unit = {}) = actor(KTextButton(text, skin, style), init)
+  text: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KTextButton.(S) -> Unit = {}
+): KTextButton = actor(KTextButton(text, skin, style), init)
 
 /**
  * @param deadzone the distance from the center of the touchpad required for the knob to be moved.
@@ -375,10 +402,11 @@ inline fun <S> KWidget<S>.textButton(
  * @return a [Touchpad] instance added to this group.
  */
 inline fun <S> KWidget<S>.touchpad(
-    deadzone: Float,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: (@Scene2dDsl Touchpad).(S) -> Unit = {}) = actor(Touchpad(deadzone, skin, style), init)
+  deadzone: Float,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: (@Scene2dDsl Touchpad).(S) -> Unit = {}
+): Touchpad = actor(Touchpad(deadzone, skin, style), init)
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
@@ -389,15 +417,17 @@ inline fun <S> KWidget<S>.touchpad(
  * @return a [Tree] instance added to this group.
  */
 inline fun <S> KWidget<S>.tree(
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KTreeWidget.(S) -> Unit = {}) = actor(KTreeWidget(skin, style), init)
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KTreeWidget.(S) -> Unit = {}
+): KTreeWidget = actor(KTreeWidget(skin, style), init)
 
 /**
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  * Inlined.
- * @return a [HorizontalGroup] instance added to this group.
+ * @return a [VerticalGroup] instance added to this group.
  */
 inline fun <S> KWidget<S>.verticalGroup(
-    init: KVerticalGroup.(S) -> Unit = {}) = actor(KVerticalGroup(), init)
+  init: KVerticalGroup.(S) -> Unit = {}
+): KVerticalGroup = actor(KVerticalGroup(), init)

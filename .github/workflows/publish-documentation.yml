@@ -1,0 +1,29 @@
+name: publish-documentation
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+      - name: JDK setup
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Execution permission for Gradle wrapper
+        run: chmod +x gradlew
+      - name: Dokka
+        run: ./gradlew dokka
+      - name: Gather modules documentation
+        run: ./gradlew gatherDokkaDocumentation
+      - name: Publish GitHub pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.accessToken }}
+          BRANCH: gh-pages
+          FOLDER: build/dokka

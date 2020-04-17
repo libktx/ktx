@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -11,6 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Tree] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.tree"))
 inline fun tree(
     style: String = defaultStyle,
     skin: Skin = Scene2DSkin.defaultSkin,

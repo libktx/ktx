@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-collections.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-collections)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-preferences.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-preferences)
 
 # KTX: preference utilities
 
@@ -6,79 +6,161 @@ Utilities and extension function for LibGDX preferences.
 
 ### Why?
 
-LibGDX [Preferences](https://github.com/libgdx/libgdx/wiki/Preferences) do not support a generic way to
-set and get values. Since they work very similar to a Map, they should ideally support a similar
-syntax. Especially with Kotlin we can use the advantage of square bracket operators.
+LibGDX [`Preferences`](https://github.com/libgdx/libgdx/wiki/Preferences) do not provide a consistent
+API for setting and getting values, and they do not support Kotlin operators either. Since in principle
+`Preferences` work very similarly to a `Map`, ideally they should support a similar syntax -
+especially since in Kotlin you can take advantage of the square bracket operators.
 
 ### Guide
 
-- Values can be set via new `set` operators using the square bracket syntax. It is no longer needed
-to call type specific methods like `putString` or `putBoolean`. `Set` already supports any type.
-- Values can be retrieved via new generic `get` operator.
-- Preferences now support `Pair<String, Any>` parameter. Values can be set by using the `infix to` function
-- New `flush` extension that supports a Lambda to easily update the Preferences before flushing.
-- `set` and `get` support objects of any type. If the type is not a String, Boolean, Int, Float or Long value
-then the value is stored and retrieved using [Json](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON). 
-.
+- Values can be set and read via the new `set` and `get` operators using the square bracket (`[]`) syntax.
+It is no longer necessary to call type specific methods like `putString` or `getBoolean` for
+each type separately. `set` and `get` support objects of any type. If the type is not of `String`, `Boolean`,
+`Int`, `Float`, `Double` or `Long` type, the value is stored and retrieved using 
+[JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization.
+  - Note that `Double` type is not supported by LibGDX `Preferences` and converted to `Float`
+  instead. Use explicit casts (`toFloat()`) or wrap the value with a JSON-serializable object
+  when storing numbers that do not fit in a `Float`.
+- Preferences can now be set with a `Pair<String, Any>` parameter. Keys and values can be paired using
+the standard library `to` infix function.
+- New `flush` extension supports a lambda parameter to easily update the `Preferences` before flushing.
+
 ### Usage examples
+
+Reading basic application preferences:
 
 ```kotlin
 import com.badlogic.gdx.Gdx
-import ktx.preferences.flush
-import ktx.preferences.get
-import ktx.preferences.set
+import ktx.preferences.*
 
-private class Player(val name: String = "Player 1", val life: Int = 100)
+fun readValuesFromPreferences() {
+  val preferences = Gdx.app.getPreferences("myPreferences")
+  // Accessing preferences by keys passed as parameters:
+  val string: String? = preferences["SomeString"]
+  val float: Float? = preferences["SomeFloat"]
+  val boolean: Boolean? = preferences["SomeBoolean"]
+  val integer: Int? = preferences["SomeInt"]
+  val long: Long? = preferences["SomeLong"]
+  // Do something with preferences here.
+}
+```
 
-fun main() {
-  val prefs = Gdx.app.getPreferences("MyPreferences")
+Reading basic preferences with custom default values in case they are missing:
 
-  // set values with new set operator functions
-  prefs["Key1"] = "someStringValue"
-  prefs["Key2"] = 1
-  prefs["Key3"] = 1.23f
-  prefs["Key4"] = 100L
-  prefs["Key5"] = true
-  // Any classes are automatically converted to a Json string
-  prefs["Key6"] = Player()
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
 
-  prefs.run {
-    // use Pair<String, Any> to update preference values
-    set("Key7" to 123)
-    set("Key8" to "someOtherStringValue")
+fun readValuesWithDefaultsFromPreferences(preferences: Preferences) {
+  // If the key (given as the first parameter) is absent in the preferences,
+  // the default value (passed as the second parameter) will be returned:
+  val string: String = preferences["SomeString", "default value"]
+  val float: Float = preferences["SomeFloat", 2.0f]
+  val boolean: Boolean = preferences["SomeBoolean", true]
+  val integer: Int = preferences["SomeInt", 42]
+  val long: Long = preferences["SomeLong", 3L]
+  // Alternative syntax without the [] operator:
+  val preference = preferences.get<Int>("Key", defaultValue = 42)
+  // Do something with preferences here.
+}
+```
+
+Loading objects serialized as JSON from preferences:
+
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
+
+/**
+ * This class will be serialized.
+ * 
+ * Remember to add default values for each variable,
+ * so the class remains JSON-serializable!
+ */
+data class Player(val name: String = "Player", val life: Int = 100)
+
+fun readObjectFromPreferences(preferences: Preferences): Player? {
+  // Will automatically deserialize the object from JSON:
+  return preferences["Player"]
+}
+```
+
+Saving preferences:
+
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
+
+fun saveInPreferences(
+    preferences: Preferences,
+    string: String, float: Float, bool: Boolean, int: Int, long: Long) {
+  // The values will be stored in preferences under the given keys:
+  preferences["SomeString"] = string
+  preferences["SomeFloat"] = float
+  preferences["SomeBoolean"] = bool
+  preferences["SomeInt"] = int
+  preferences["SomeLong"] = long
+  // Remember to call flush in order to save the preferences:
+  preferences.flush()
+}
+```
+
+Saving preferences with automatic flushing using `flush` extension method:
+
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
+
+fun saveInPreferencesWithFlush(
+    preferences: Preferences,
+    string: String, float: Float, bool: Boolean, int: Int, long: Long) {
+  preferences.flush {
+    // This extension method changes `this` to preferences within the scope:
+    this["SomeString"] = string
+    this["SomeFloat"] = float
+    this["SomeBoolean"] = bool
+    this["SomeInt"] = int
+    this["SomeLong"] = long 
+    // preferences.flush() will be called automatically after this block.
   }
+}
+```
 
-  // get values with new get operator function
-  val value1: String = prefs["Key1"]
-  val value2: Int = prefs["Key2"]
-  val value3: Float = prefs["Key3"]
-  val value4: Long = prefs["Key4"]
-  val value5: Boolean = prefs["Key5"]
-  // Any classes are automatically loaded from a Json string
-  val value6: Player = prefs["Key6"]
-  val value7: Int = prefs["Key7"]
-  val value8: String = prefs["Key8"]
+Saving objects as JSON in preferences:
 
-  println(value1) // prints 'someStringValue'
-  println(value2) // prints 1
-  println(value3) // prints 1.23
-  println(value4) // prints 100
-  println(value5) // prints true
-  println("${value6.name} - ${value6.life}") // prints 'Player 1 - 100'
-  println(value7) // prints 123
-  println(value8) // prints 'someOtherStringValue'
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
 
-  // adjust preferences before calling flush
-  // Key9 and Key10 will be flushed as well
-  prefs.flush {
-    set("Key9" to 10000)
-    set("Key10" to true)
+data class Player(val name: String = "Player", val life: Int = 100)
+
+fun saveObjectInPreferences(preferences: Preferences, player: Player) {
+  preferences.flush {
+    // Will automatically serialize the object to JSON:
+    this["Player"] = player
   }
+}
+```
+
+Setting preferences using Kotlin pairs and `to` infix function:
+
+```kotlin
+import com.badlogic.gdx.Preferences
+import ktx.preferences.*
+
+data class Player(val name: String = "Player", val life: Int = 100)
+
+fun addPreferencesUsingKotlinPairs(preferences: Preferences) {
+  preferences.set("SomeInt" to 1)
+  preferences.set("SomeFloat" to 1.0f)
+  preferences.set("SomeLong" to 1L)
+  preferences.set("SomeBoolean" to true)
+  preferences.set("SomeString" to "value")
+  preferences.set("Player" to Player(name = "Example", life = 75))
 }
 ```
 
 ### Additional documentation
 
-- [LibGDX Json](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON)
-- [LibGDX Preferences](https://github.com/libgdx/libgdx/wiki/Preferences)
-- [Kotlin infix to function for Pair](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/to.html)
+- [Official LibGDX `Preferences` article](https://github.com/libgdx/libgdx/wiki/Preferences).
+- [Official LibGDX `Json` article](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON).

@@ -1,13 +1,120 @@
 #### 1.9.10-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.3.72.
+- **[UPDATE]** Updated to Dokka 0.10.1.
+- **[CHANGE]** Javadocs are no longer generated with Dokka. Since KTX focuses solely on Kotlin support for LibGDX,
+usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
+Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
+Starting from this release, GitHub releases will no longer contain the Javadoc archives.
+- **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
+- **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
+- **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
+- **[FEATURE]** (`ktx-scene2d`) `scene2d` object was added. It supports the entire Scene2D DSL and allows to create root-level widgets.
+- **[CHANGE]** (`ktx-scene2d`) Root-level `actor` function was deprecated.
+- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix to create these widgets.
+Note that the actors can still be created via standard DSL. See the migration guide in README. This includes:
+  - `stack`
+  - `horizontalGroup`
+  - `verticalGroup`
+  - `container`
+  - `splitPane`
+  - `scrollPane`
+  - `table`
+  - `window`
+  - `dialog`
+  - `buttonGroup`
+  - `tree`
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` method was removed.
+- **[CHANGE]** (`ktx-vis`) Overhaul of the module.
+  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of internal APIs are now shared.
+  - All factory methods for VisUI widgets are now inlined, which can improve the performance of GUI building.
+  - Factory methods of some VisUI widgets were renamed to avoid clashes with Scene2D methods and better reflect the wrapped widget class names:
+    - `label`: `visLabel`
+    - `image`: `visImage`
+    - `list`: `visList`, `visListOf`
+    - `selectBox`: `visSelectBox`, `visSelectBoxOf`
+    - `slider`: `visSlider`
+    - `textArea`: `visTextArea`
+    - `textField`: `visTextField`
+    - `validatableTextField`: `visValidatableTextField`
+    - `textButton`: `visTextButton`
+    - `imageButton`: `visImageButton`
+    - `imageTextButton`: `visImageTextButton`
+    - `radioButton`: `visRadioButton`
+    - `tree`: `visTree`
+    - `table`: `visTable`
+    - `scrollPane`: `visScrollPane`
+    - `splitPane`: `visSplitPane`
+    - `addTooltip`: `visTooltip`
+    - `addTextTooltip`: `visTextTooltip`
+  - Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
+  `multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
+  created or can be defined as nested children with the same DSL.
+  - `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
+  - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
+  - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
+  - The sources documentation was greatly expanded.
+
+#### 1.9.10-b5
+
+- **[UPDATE]** Updated to Kotlin 1.3.71.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.5.
+- **[UPDATE]** Updated to Gradle 5.6.4.
+- **[FEATURE]** (`ktx-app`) Added profiling utilities.
+    - `profile` inlined function allows to profile an operation with the LibGDX `PerformanceCounter`.
+    - `PerformanceCounter.profile` inlined extension method eases usage of `PerformanceCounter` API.
+    - `PerformanceCounter.prettyPrint` allows to print basic performance data after profiling.
+- **[CHANGE]** (`ktx-app`) `LetterboxingViewport` moved from `ktx-app` to `ktx-graphics`.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
+- **[FEATURE]** (`ktx-assets-async`) Added a new KTX module: coroutines-based asset loading.
+    - `AssetStorage` is a non-blocking coroutines-based alternative to LibGDX `AssetManager`.
+         - `get` operator obtains an asset from the storage or throws a `MissingAssetException`.
+         - `getOrNull` obtains an asset from the storage or return `null` if the asset is unavailable.
+         - `getAsync` obtains a reference to the asset from the storage as `Deferred`.
+         - `load` suspends a coroutine until an asset is loaded and returns its instance.
+         - `loadAsync` schedules asynchronous loading of an asset.
+         - `loadSync` blocks the thread until selected asset is loaded.
+         - `unload` schedules asynchronous unloading of an asset.
+         - `add` allows to manually add a loaded asset to `AssetManager`.
+         - `dispose` unloads all assets from the storage.
+         - `getLoader` and `setLoader` manage `AssetLoader` instances used to load assets.
+         - `isLoaded` checks if loading of an asset was finished.
+         - `contains` operator checks if the asset was scheduled for loading or added to the storage.
+         - `progress` allows to check asset loading progress.
+         - `getReferenceCount` returns how many times the asset was loaded or referenced by other assets as a dependency.
+         - `getDependencies` returns a list of dependencies of the selected asset.
+         - `getAssetDescriptor` creates an `AssetDescriptor` with loading data for the selected asset.
+         - `getIdentifier` creates an `Identifier` uniquely pointing to an asset of selected type and file path.
+    - `Identifier` data class added as an utility to uniquely identify assets by their type and path.
+         - `Identifier.toAssetDescriptor` allows to convert an `Identifier` to an `AssetDescriptor`. 
+    - `AssetDescriptor.toIdentifier` allows to convert an `AssetDescriptor` to `Identifier` used to uniquely identify `AssetStorage` assets.
+    - `LoadingProgress` is an internal class used by the `AssetStorage` to track loading progress.
 - **[FEATURE]** (`ktx-async`) Added `RenderingScope` factory function for custom scopes using rendering thread dispatcher.
+- **[FEATURE]** (`ktx-async`) `newAsyncContext` and `newSingleThreadAsyncContext` now support `threadName` parameter
+that allows to set thread name pattern of `AsyncExecutor` threads.
+- **[FIX]** (`ktx-async`) `isOnRenderingThread` now behaves consistently regardless of launching coroutine context.
+- **[FEATURE]** (`ktx-freetype-async`) This KTX module is now restored and updated to the new `AssetStorage` API.
+There are no public API changes since the last released version.
+- **[FEATURE]** (`ktx-graphics`) Added `LetterboxingViewport` from `ktx-app`.
+- **[FEATURE]** (`ktx-graphics`) Added `takeScreenshot` utility function that allows to save a screenshot of the application.
+- **[FEATURE]** (`ktx-graphics`) Added `BitmapFont.center` extension method that allows to center text on an object.
+- **[FEATURE]** (`ktx-graphics`) Added `Camera` utilities.
+    - `center` extension method allows to center the camera's position to screen center or the center of the chosen rectangle.
+    - `moveTo` extension method allows to move the camera immediately at the chosen target position with optional offset.
+    - `lerpTo` extension method allows to move the camera smoothly to the chosen target position with optional offset.
+    - `update` inlined extension method allows to change camera state with automatic `Camera.update` call.
 - **[FEATURE]** (`ktx-math`) Added `lerp` and `interpolate` extension functions for `Float` ranges.
-- **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 - **[FEATURE]** (`ktx-preferences`) Added a new KTX module: Preferences API extensions.
-    - Added `set` operators for String, Int, Float, Long, Boolean, Pair<String, Any> and Any
-    - Added `get` operator
-    - Added `flush` extension function that takes additional `Preferences` calls as a Lambda
+    - Added `set` operators for `String`, `Int`, `Float`, `Double`, `Long`, `Boolean`, `Pair<String, Any>` and `Any`
+    - Added `get` operator which automatically determines preference type and retrieves them with the correct method.
+    - `get` and `set` will automatically attempt to (de)serialize non-basic preferences to and from JSON.
+    - `set(String, Double)` is deprecated, since the LibGDX `Preferences` do not support doubles.
+    - Added `flush` inlined extension method that executes a lambda and automatically calls `Preferences.flush`.
+- **[CHANGE]** (`ktx-scene2d`) Improved typing support for `Tree.Node` widgets. Since LibGDX 1.9.10, `Tree.Node` is
+a generic class, but KTX `KNode` remained non-generic until now. Type of stored actors must now be specified for `KNode`
+variables, but thanks to that actors from `KNode` instances are now correctly typed and easier to handle. This required
+minor internal changes - `KWidget.storeActor` is now generic.
+- **[FEATURE]** (`ktx-vis`) Added `image` (`VisImage`) factory methods consuming `Texture`, `TextureRegion` and `NinePatch`.
 
 #### 1.9.10-b4
 
