@@ -1,7 +1,8 @@
 package ktx.ashley
 
 import com.badlogic.ashley.core.Entity
-import org.assertj.core.api.Assertions.*
+import com.badlogic.ashley.core.PooledEngine
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -15,6 +16,9 @@ object EntitiesSpec : Spek({
       Entity().apply {
         add(transform)
       }
+    }
+    val engine by memoized {
+      PooledEngine()
     }
     describe("get operator") {
       it("should get component with component mapper for better performance") {
@@ -79,6 +83,13 @@ object EntitiesSpec : Spek({
       }
       it("should return false as operator if component does not exists") {
         assertThat(Texture.mapper !in entity).isTrue()
+      }
+    }
+
+    describe("add component function") {
+      it("should add a component and return the entity") {
+        assertThat(entity.add<Transform>(engine)).isEqualTo(entity)
+        assertThat(Transform.mapper in entity).isTrue()
       }
     }
   }

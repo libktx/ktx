@@ -54,6 +54,9 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
   - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
   - The sources documentation was greatly expanded.
+ - **[FEATURE]** (`ktx-ashley`) 
+   - Added `Engine.get` operator and `Engine.getSystem` function to access an `EntitySystem`
+   - Added `Entity.add` function to create a `Component` for an already existing `Entity` 
 
 #### 1.9.10-b5
 

@@ -2,6 +2,7 @@ package ktx.ashley
 
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 
 /**
@@ -65,3 +66,15 @@ operator fun <T : Component> Entity.contains(mapper: ComponentMapper<T>): Boolea
  * @see Entity.remove
  */
 inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class.java) as? T
+
+/**
+ * Adds a [Component] to this [Entity]. If a [Component] of the same type already exists, it'll be replaced.
+ *
+ * @return the Entity for easy chaining
+ * @see Entity.add
+ */
+inline fun <reified T : Component> Entity.add(engine: Engine, configure: (@AshleyDsl T).() -> Unit = {}): Entity {
+  val component = engine.create<T>()
+  component.configure()
+  return add(component)
+}

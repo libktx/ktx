@@ -124,5 +124,16 @@ object EnginesSpec : Spek({
         assertThat(entity.getComponent(Texture::class.java)).isNotNull()
       }
     }
+
+    describe("getSystem function") {
+      it("should add a system and return it") {
+        engine.addSystem(TestSystem())
+        assertThat(engine.getSystem<TestSystem>()).isNotNull()
+      }
+      it("should add a system and return it as operator") {
+        engine.addSystem(TestSystem())
+        assertThat(engine[TestSystem::class]).isNotNull()
+      }
+    }
   }
 })

@@ -3,6 +3,7 @@ package ktx.ashley
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.EntitySystem
 import kotlin.reflect.KClass
 
 /**
@@ -73,6 +74,22 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   addEntity(entity)
   return entity
 }
+
+/**
+ * Quick [EntitySystem] retrieval.
+ *
+ * @return the [EntitySystem] of the given type. May be null if it does not exist.
+ * @see Engine.getSystem
+ */
+inline fun <reified T : EntitySystem> Engine.getSystem(): T? = getSystem(T::class.java)
+
+/**
+ * Quick [EntitySystem] retrieval.
+ *
+ * @return the [EntitySystem] of the given type. May be null if it does not exist.
+ * @see Engine.getSystem
+ */
+inline operator fun <reified T : EntitySystem> Engine.get(type: KClass<T>): T? = getSystem(type.java)
 
 /**
  * Thrown when unable to create a component of given type.

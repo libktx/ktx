@@ -17,11 +17,13 @@ builder DSL.
 `ktx-ashley` provides the following extensions and utilities:
 
 - `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating `Entities`.
+- `Engine.getSystem` and `Engine.get` (`[]` operator) to access an `EntitySystem` of the engine
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
 `with` methods.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
+- `Entity.add` extension to create and add a `Component` to an existing entity
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
 
@@ -75,6 +77,28 @@ fun setupEngine() = engine.add {
 }
 ```
 
+Getting an `EntitySystem` from an `Engine`:
+
+```kotlin
+import com.badlogic.ashley.core.EntitySystem
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.get
+import ktx.ashley.getSystem
+
+class MoveSystem : EntitySystem()
+class RenderSystem : EntitySystem()
+
+val engine = PooledEngine()
+
+fun getSystem() {
+    engine.addSystem(MoveSystem())
+    engine.addSystem(RenderSystem())
+
+    val moveSystem = engine.getSystem<MoveSystem>()
+    val renderSystem = engine[RenderSystem::class]
+}
+```
+
 Creating a `ComponentMapper`:
 
 ```Kotlin
@@ -84,6 +108,26 @@ import ktx.ashley.mapperFor
 class Transform: Component
 
 val transformMapper = mapperFor<Transform>()
+```
+
+Adding a `Component` to an `Entity`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.add
+import ktx.ashley.entity
+
+class Remove(var delay: Float = 0f) : Component
+
+val engine = PooledEngine()
+val entity = engine.entity {}
+
+fun addComponent() {
+    entity.add<Remove>(engine) {
+        delay = 2.5f
+    }
+}
 ```
 
 Getting a `Component` from an `Entity`:
