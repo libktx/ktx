@@ -56,7 +56,7 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - The sources documentation was greatly expanded.
  - **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access an `EntitySystem`.
  - **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` function to access an `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
- - **[FEATURE]** (`ktx-ashley`) Added `Entity.add` function to create a `Component` for an already existing `Entity`. 
+ - **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` function to create a `Component` for an already existing `Entity`. 
 
 #### 1.9.10-b5
 
