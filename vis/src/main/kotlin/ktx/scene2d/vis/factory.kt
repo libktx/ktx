@@ -73,6 +73,7 @@ inline fun scene2d.toastTable(
  * Inlined.
  * @return a [VisLabel] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visLabel(
   text: CharSequence,
   style: String = defaultStyle,
@@ -88,6 +89,7 @@ inline fun <S> KWidget<S>.visLabel(
  * Inlined.
  * @return a [LinkLabel] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.linkLabel(
   text: CharSequence,
   url: CharSequence = text,
@@ -102,6 +104,7 @@ inline fun <S> KWidget<S>.linkLabel(
  * Inlined.
  * @return a [VisImage] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImage(
   drawable: Drawable,
   scaling: Scaling = Scaling.stretch,
@@ -116,6 +119,7 @@ inline fun <S> KWidget<S>.visImage(
  * Inlined.
  * @return a [VisImage] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImage(
   drawableName: String,
   init: (@Scene2dDsl VisImage).(S) -> Unit = {}
@@ -128,6 +132,7 @@ inline fun <S> KWidget<S>.visImage(
  * Inlined.
  * @return a [VisImage] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImage(
   texture: Texture,
   init: (@Scene2dDsl VisImage).(S) -> Unit = {}
@@ -140,6 +145,7 @@ inline fun <S> KWidget<S>.visImage(
  * Inlined.
  * @return a [VisImage] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImage(
   ninePatch: NinePatch,
   init: (@Scene2dDsl VisImage).(S) -> Unit = {}
@@ -152,6 +158,7 @@ inline fun <S> KWidget<S>.visImage(
  * Inlined.
  * @return a [VisImage] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImage(
   textureRegion: TextureRegion,
   init: (@Scene2dDsl VisImage).(S) -> Unit = {}
@@ -166,6 +173,7 @@ inline fun <S> KWidget<S>.visImage(
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
+@Scene2dDsl
 inline fun <I, S> KWidget<S>.visList(
   style: String = defaultStyle,
   init: KVisList<I>.(S) -> Unit = {}
@@ -182,6 +190,7 @@ inline fun <I, S> KWidget<S>.visList(
  * @return a [VisList] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  */
+@Scene2dDsl
 fun <I> KWidget<*>.visListOf(
   items: GdxArray<I>? = null,
   style: String = defaultStyle
@@ -206,6 +215,7 @@ fun <I> KWidget<*>.visListOf(
  * Inlined.
  * @return a [VisProgressBar] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visProgressBar(
   min: Float = 0f,
   max: Float = 100f,
@@ -221,6 +231,7 @@ inline fun <S> KWidget<S>.visProgressBar(
  * @return a [VisSelectBox] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  */
+@Scene2dDsl
 fun <I> KWidget<*>.visSelectBoxOf(
   items: GdxArray<I>? = null,
   style: String = defaultStyle
@@ -242,6 +253,7 @@ fun <I> KWidget<*>.visSelectBoxOf(
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
+@Scene2dDsl
 inline fun <I, S> KWidget<S>.visSelectBox(
   style: String = defaultStyle,
   init: KVisSelectBox<I>.(S) -> Unit = {}
@@ -264,6 +276,7 @@ inline fun <I, S> KWidget<S>.visSelectBox(
  * Inlined.
  * @return a [VisSlider] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visSlider(
   min: Float = 0f,
   max: Float = 100f,
@@ -281,6 +294,7 @@ inline fun <S> KWidget<S>.visSlider(
  * Inlined.
  * @return a [VisTextArea] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visTextArea(
   text: String = "",
   style: String = defaultStyle,
@@ -295,6 +309,7 @@ inline fun <S> KWidget<S>.visTextArea(
  * Inlined.
  * @return a [HighlightTextArea] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.highlightTextArea(
   text: String = "",
   style: String = defaultStyle,
@@ -309,6 +324,7 @@ inline fun <S> KWidget<S>.highlightTextArea(
  * Inlined.
  * @return a [ScrollableTextArea] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.scrollableTextArea(
   text: String = "",
   style: String = defaultStyle,
@@ -323,6 +339,7 @@ inline fun <S> KWidget<S>.scrollableTextArea(
  * Inlined.
  * @return a [VisTextField] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visTextField(
   text: String = "",
   style: String = defaultStyle,
@@ -337,6 +354,7 @@ inline fun <S> KWidget<S>.visTextField(
  * Inlined.
  * @return a [VisValidatableTextField] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visValidatableTextField(
   text: String = "",
   style: String = defaultStyle,
@@ -350,6 +368,7 @@ inline fun <S> KWidget<S>.visValidatableTextField(
  * Inlined.
  * @return a [BusyBar] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.busyBar(
   style: String = defaultStyle,
   init: (@Scene2dDsl BusyBar).(S) -> Unit = {}
@@ -362,6 +381,7 @@ inline fun <S> KWidget<S>.busyBar(
  * Inlined.
  * @return a [Separator] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.separator(
   style: String = defaultStyle,
   init: (@Scene2dDsl Separator).(S) -> Unit = {}
@@ -375,6 +395,7 @@ inline fun <S> KWidget<S>.separator(
  * Inlined.
  * @return a [VisTextButton] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visTextButton(
   text: String,
   style: String = defaultStyle,
@@ -388,6 +409,7 @@ inline fun <S> KWidget<S>.visTextButton(
  * Inlined.
  * @return a [VisImageButton] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImageButton(
   style: String = defaultStyle,
   init: KVisImageButton.(S) -> Unit = {}
@@ -401,6 +423,7 @@ inline fun <S> KWidget<S>.visImageButton(
  * Inlined.
  * @return a [VisImageTextButton] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visImageTextButton(
   text: String,
   style: String = defaultStyle,
@@ -415,6 +438,7 @@ inline fun <S> KWidget<S>.visImageTextButton(
  * Inlined.
  * @return a [VisCheckBox] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visCheckBox(
   text: String,
   style: String = defaultStyle,
@@ -429,6 +453,7 @@ inline fun <S> KWidget<S>.visCheckBox(
  * Inlined.
  * @return a [VisRadioButton] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visRadioButton(
   text: String,
   style: String = "radio",
@@ -442,7 +467,8 @@ inline fun <S> KWidget<S>.visRadioButton(
  * Inlined.
  * @return a [VisTree] instance added to this group.
  */
-  inline fun <S> KWidget<S>.visTree(
+@Scene2dDsl
+inline fun <S> KWidget<S>.visTree(
   style: String = defaultStyle,
   init: KVisTree.(S) -> Unit = {}
 ): KVisTree = actor(KVisTree(style), init)
@@ -454,6 +480,7 @@ inline fun <S> KWidget<S>.visRadioButton(
  * Inlined.
  * @return a [BasicColorPicker] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.basicColorPicker(
   style: String = defaultStyle,
   init: KBasicColorPicker.(S) -> Unit = {}
@@ -466,11 +493,11 @@ inline fun <S> KWidget<S>.basicColorPicker(
  * Inlined.
  * @return a [ExtendedColorPicker] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.extendedColorPicker(
   style: String = defaultStyle,
   init: KExtendedColorPicker.(S) -> Unit = {}
 ): KExtendedColorPicker = actor(KExtendedColorPicker(style), init)
-
 
 /**
  * @param name label of the [Spinner].
@@ -481,6 +508,7 @@ inline fun <S> KWidget<S>.extendedColorPicker(
  * Inlined.
  * @return a [Spinner] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.spinner(
   name: String,
   model: SpinnerModel,
@@ -495,6 +523,7 @@ inline fun <S> KWidget<S>.spinner(
  * Inlined.
  * @return a [VisTable] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visTable(
   defaultSpacing: Boolean = false,
   init: KVisTable.(S) -> Unit = {}
@@ -507,6 +536,7 @@ inline fun <S> KWidget<S>.visTable(
  * Inlined.
  * @return a [HorizontalFlowGroup] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.horizontalFlowGroup(
   spacing: Float = 0f,
   init: KHorizontalFlowGroup.(S) -> Unit = {}
@@ -519,6 +549,7 @@ inline fun <S> KWidget<S>.horizontalFlowGroup(
  * Inlined.
  * @return a [VerticalFlowGroup] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.verticalFlowGroup(
   spacing: Float = 0f,
   init: KVerticalFlowGroup.(S) -> Unit = {}
@@ -532,6 +563,7 @@ inline fun <S> KWidget<S>.verticalFlowGroup(
  * Inlined.
  * @return a [GridGroup] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.gridGroup(
   itemSize: Float = 256f,
   spacing: Float = 8f,
@@ -544,6 +576,7 @@ inline fun <S> KWidget<S>.gridGroup(
  * Inlined.
  * @return a [FloatingGroup] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.floatingGroup(
   init: KFloatingGroup.(S) -> Unit = {}
 ): KFloatingGroup = actor(KFloatingGroup(), init)
@@ -554,6 +587,7 @@ inline fun <S> KWidget<S>.floatingGroup(
  * Inlined.
  * @return a [FloatingGroup] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.dragPane(
   init: KDragPane.(S) -> Unit = {}
 ): KDragPane = actor(KDragPane(), init)
@@ -565,6 +599,7 @@ inline fun <S> KWidget<S>.dragPane(
  * Inlined.
  * @return a [VisScrollPane] instance added to this group. Note that this actor may have only a single child.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visScrollPane(
   style: String = defaultStyle,
   init: (@Scene2dDsl VisScrollPane).(S) -> Unit = {}
@@ -579,6 +614,7 @@ inline fun <S> KWidget<S>.visScrollPane(
  * Inlined.
  * @return a [VisSplitPane] instance added to this group. Note that this actor can store only two children.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.visSplitPane(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
@@ -594,6 +630,7 @@ inline fun <S> KWidget<S>.visSplitPane(
  * Inlined.
  * @return a [MultiSplitPane] instance added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.multiSplitPane(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
@@ -607,6 +644,7 @@ inline fun <S> KWidget<S>.multiSplitPane(
  * Inlined.
  * @return a [CollapsibleWidget] instance with a [VisTable] added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.collapsible(
   defaultSpacing: Boolean = false,
   init: KCollapsible.(S) -> Unit = {}
@@ -619,6 +657,7 @@ inline fun <S> KWidget<S>.collapsible(
  * Inlined.
  * @return a [HorizontalCollapsibleWidget] instance with a [VisTable] added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.horizontalCollapsible(
   defaultSpacing: Boolean = false,
   init: KHorizontalCollapsible.(S) -> Unit = {}
@@ -632,6 +671,7 @@ inline fun <S> KWidget<S>.horizontalCollapsible(
  * @param init will be invoked with the [ButtonBar] as "this". Inlined.
  * @return a [HorizontalCollapsibleWidget] instance with a [VisTable] added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.buttonBar(
   order: String? = null,
   tableInit: VisTable.(S) -> Unit = {},
@@ -649,6 +689,7 @@ inline fun <S> KWidget<S>.buttonBar(
  * @param init will be invoked with the [ListView] instance as "this". Inlined.
  * @return a new instance of [ListView]. [ListView.mainTable] will be added to this group.
  */
+@Scene2dDsl
 inline fun <I> KWidget<*>.listView(
   itemAdapter: ListAdapter<I>,
   style: String = defaultStyle,
@@ -666,6 +707,7 @@ inline fun <I> KWidget<*>.listView(
  * does not store actors in containers.
  * @return a new instance of [TabbedPane]. [TabbedPane.mainTable] will be added to this group.
  */
+@Scene2dDsl
 inline fun <S> KWidget<S>.tabbedPane(
   style: String = defaultStyle,
   init: KTabbedPane.(S) -> Unit = {}

@@ -187,6 +187,7 @@ class KVisList<T>(style: String) : VisList<T>(style) {
   /**
    * Allows to add items to the list with builder-like syntax.
    */
+  @Scene2dDsl
   operator fun T.unaryMinus() {
     items.add(this)
   }
@@ -207,6 +208,7 @@ class KVisSelectBox<T>(style: String) : VisSelectBox<T>(style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
    */
+  @Scene2dDsl
   operator fun T.unaryMinus() {
     items.add(this)
   }

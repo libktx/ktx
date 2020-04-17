@@ -180,6 +180,7 @@ object scene2d : KWidget<Actor> {
    * @param dsl will be immediately invoked. Must return an actor.
    * @return [Actor] returned by [dsl].
    */
+  @Scene2dDsl
   inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
 
   /**
@@ -382,6 +383,7 @@ class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
    * @param init will be invoked on this node.
    * @return this node.
    */
+  @Scene2dDsl
   inline operator fun invoke(init: KNode<T>.() -> Unit): KNode<T> {
     this.init()
     return this
@@ -403,6 +405,7 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
    */
+  @Scene2dDsl
   operator fun T.unaryMinus() {
     items.add(this)
   }

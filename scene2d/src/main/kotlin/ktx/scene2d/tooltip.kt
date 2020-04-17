@@ -27,6 +27,7 @@ inline fun Actor.addTextTooltip(
  * [TextTooltip] as its parameter, so it can be modified with the *it* reference as well. See usage examples.
  * @return a new [TextTooltip] instance added to the actor.
  */
+@Scene2dDsl
 inline fun Actor.textTooltip(
     text: String,
     style: String = defaultStyle,
@@ -62,6 +63,7 @@ inline fun Actor.addTooltip(
  * [Tooltip] as its parameter, so it can be modified with the *it* reference. See usage examples.
  * @return a new [Tooltip] instance added to this actor.
  */
+@Scene2dDsl
 inline fun Actor.tooltip(
     background: String? = null,
     skin: Skin = Scene2DSkin.defaultSkin,

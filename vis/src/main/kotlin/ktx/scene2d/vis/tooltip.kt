@@ -15,6 +15,7 @@ import ktx.scene2d.scene2d
  * @param init will be invoked on the [Tooltip], allowing to customize it.
  * @return a new instance of [Tooltip] added to this [Actor].
  */
+@Scene2dDsl
 fun Actor.visTooltip(
   content: Actor,
   style: String = defaultStyle,
@@ -35,6 +36,7 @@ fun Actor.visTooltip(
  * @param init will be invoked on the [Tooltip], allowing to customize it.
  * @return a new instance of [Tooltip] added to this [Actor].
  */
+@Scene2dDsl
 fun Actor.visTextTooltip(
   text: CharSequence,
   textAlign: Int = Align.center,
