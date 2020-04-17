@@ -10,8 +10,9 @@ Starting from this release, GitHub releases will no longer contain the Javadoc a
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
 - **[FEATURE]** (`ktx-scene2d`) `scene2d` object was added. It supports the entire Scene2D DSL and allows to create root-level widgets.
+- **[FEATURE]** (`ktx-scene2d`) `Stage.actors` extension method was added. It allows to define actors with Scene2D DSL and adds all top-level actors to the `Stage`.
 - **[CHANGE]** (`ktx-scene2d`) Root-level `actor` function was deprecated.
-- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix to create these widgets.
+- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix or `Stage.actors` to create these widgets.
 Note that the actors can still be created via standard DSL. See the migration guide in README. This includes:
   - `stack`
   - `horizontalGroup`
@@ -24,9 +25,9 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `dialog`
   - `buttonGroup`
   - `tree`
-- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` method was removed.
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods was removed.
 - **[CHANGE]** (`ktx-vis`) Overhaul of the module.
-  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of internal APIs are now shared.
+  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of APIs are now shared.
   - All factory methods for VisUI widgets are now inlined, which can improve the performance of GUI building.
   - Factory methods of some VisUI widgets were renamed to avoid clashes with Scene2D methods and better reflect the wrapped widget class names:
     - `label`: `visLabel`

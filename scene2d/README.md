@@ -14,11 +14,12 @@ flexibility and the expressiveness of a programming language.
 ### Guide
 
 `ktx-scene2d` provides a number of factory and extension methods that slightly modify the original `Scene2D` API,
-allowing you to use Kotlin type-safe builder DSL. Methods were designed to match the original API as closely as possible:
-all methods' names match lower camel case names of widget classes and contain similar parameters to widgets' constructors.
-For example, `label` is the name of `com.badlogic.gdx.scenes.scene2d.ui.Label` factory methods, which consume
-`CharSequence` (text of the label) and optional `Skin` and `LabelStyle` name. If you are familiar with `Scene2D`,
-`ktx-scene2d` should feel natural.
+allowing you to use Kotlin type-safe builder DSL. Methods were designed to match the original API as closely as possible.
+
+All `ktx-scene2d` DSL methods that create Scene2D widgets match names of their classes converted to lower camel case,
+and contain similar parameters to widgets constructors. For example, you can use `label` method to construct a
+`com.badlogic.gdx.scenes.scene2d.ui.Label`, passing a `CharSequence` (text of the label) and optional `Skin` and
+`LabelStyle` name as parameters. If you are familiar with `Scene2D` API, `ktx-scene2d` should feel natural.
 
 To access the Scene2D DSL, you should use `scene2d` object:
 
@@ -33,9 +34,9 @@ val myFirstActor = scene2d.label(text = "Hello World!")
 * *Child* actors - basic Scene2D widgets that cannot have any children:
   * `image`
   * `label`
-  * `listWidget`, `listWidgetOf`
+  * `listWidget`, `listWidgetOf` (`List`)
   * `progressBar`
-  * `selectBox`,
+  * `selectBox`, `selectBoxOf`
   * `slider`
   * `textArea`
   * `textField`
@@ -61,7 +62,7 @@ val myFirstActor = scene2d.label(text = "Hello World!")
   * `dialog`
   * `window`
 
-Additionally, `addTooltip` and `addTextTooltip` extension methods were added to all actors to ease creation of tooltips.
+Additionally, `tooltip` and `textTooltip` extension methods were added to all actors to ease creation of tooltips.
 
 When it comes to building user interfaces, you usually start with a single *parent* or *root* actor and fill it with
 widgets:
@@ -69,7 +70,7 @@ widgets:
 ```kotlin
 import ktx.scene2d.*
 
-val myTable = scene2d.table {
+scene2d.table {
   label("Hello world!")
 }
 ```
@@ -99,7 +100,7 @@ val myTable = scene2d.table {
 }
 ```
 
-This snippet would create a `Table` instance with a single `Button` child, which is a parent of a `Label`. There is no
+This snippet would create a `Table` instance with a single `Button` child containing a nested `Label`. There is no
 practical nesting limit: as long as you do not manually set up circular references (actors being parents of themselves),
 your widget hierarchies should *just work*.
 
@@ -111,15 +112,47 @@ import ktx.scene2d.*
 
 val myTable = scene2d.table {
   label("Not a real parent.") {
-    label("Invalid.") // Does not compile: outside of table scope.
+    label("Invalid.") // !!! Does not compile: outside of `table` scope.
   }
 }
 ```
 
-When it comes to widget customization, only the data crucial to construct the actors is present in factory methods
-as parameters. For example, `Label` requires some text that it can draw, so it has a `CharSequence` (`String` or
-`StringBuilder`) parameter. However, most other settings must be changed manually inside widgets' blocks by invoking
-their methods - even if they are as common as `Color`:
+While certainly less verbose than Java, this DSL would not be very useful without the possibility to customize
+the widgets. Let's consider this example of widgets customization written in Java:
+
+```java
+public Table createTableWithLabel(Skin skin) {
+    Table table = new Table(skin);
+    table.pad(4f);
+
+    Label label = new Label("Example.", skin);
+    label.setColor(Color.RED);
+
+    table.add(label);
+
+    return table;
+}
+```
+
+Notice how you have to pass the `Skin` instance every time you want to create a new widget with predefined styles.
+The widgets hierarchy is not clear at first glance, which only gets worse as more widgets are added. You have
+to read through the code and find `add` calls to understand widgets hierarchy.
+
+When to it comes to `ktx-scene2d`, widgets can be customized in the following ways:
+
+* Method parameters: values necessary to construct the widgets can be passed as parameters.
+* Building blocks: lambdas can be used along with the factory methods to customize the widgets.
+Lambdas receive the widget as `this`, which makes it very simple to change widget properties. For example:
+
+```kotlin
+val label = scene2d.label("Label text is a necessary parameter!") {
+  this is Label // == true
+  // You can customize your label here! Let's change the color of the label:
+  color = Color.RED
+}
+```
+
+Now, let's rewrite the previous Java customization example in Kotlin with `ktx-scene2D` DSL:
 
 ```kotlin
 import ktx.scene2d.*
@@ -127,30 +160,45 @@ import com.badlogic.gdx.graphics.Color
 
 val myTable = scene2d.table {
   pad(4f) // Setting table padding.
-  label("Test.") {
+
+  label("Example.") {
     color = Color.RED // Setting text's color.
-    setWrap(true) // Setting label's text wrapping.
   }
 }
 ```
 
-This was a design choice - instead of duplicating the whole `Scene2D` widgets API in method parameters, we
-decided to simply expose the widgets themselves instance during building.
+Not only the hierarchy is now clearer - the `label` is clearly a child of the `table` - but also settings are less
+verbose to customize.
 
-This means that you have full access to the `Scene2D` widgets API - type-safe Kotlin builders are just providing some
-syntax sugar. While some properties are Kotlin-compatible (`color = Color.RED`), most are not (`setWrap(true)`), but
-it is pretty straightforward to configure most actors.
+Readability and usability comes with extra safety in this case. Actors hierarchy in your code is preserved and reflected
+in the UI. For example, you do not have to add `Label` to the `Table` explicitly, as the structure of your code already
+dictates how and when the actors will be added to the group. Also, you do not have to worry to accidentally changing
+properties of nested actors - Kotlin DSL capabilities prevent that during compilation:
 
-What is best about it: all the lambdas are inlined during compile time, which means there is little to no runtime
-overhead when using `ktx-scene2d`. This code will be pretty much as fast as your good old Java.
+```kotlin
+scene2d.table { 
+  label("This would not compile") {
+    pad(4f) // !!! Compilation error: `pad` belongs to the `table`, not `label`.
+  }
+  pad(4f) // This is OK, as we are still in the `table` scope.
+}
+```
+
+In the building blocks you have a full access to the Scene2D widgets API - type-safe Kotlin builders are just
+providing some syntax sugar. Keep in mind Scene2D was written in Java, so while some properties are Kotlin-compatible
+(`color = Color.RED`), most are not (`setWrap(true)`). This is because we wanted to create a thin wrapper over Scene2D,
+and we opted against duplicating its entire API. It is still pretty straightforward to configure most actors.
+
+All building blocks are inlined during compile time, which means there is little to no runtime overhead when using
+`ktx-scene2d`. This code will be pretty much as fast as your good old Java, while remaining cleaner and safer.
 
 #### Working with `Skin`
 
-`Skin` instances store styles of the widgets and other required assets - like fonts and drawables.
+`Skin` instances store styles of the widgets and other GUI assets - like fonts and drawables.
 
-Additionally to constructor parameters, most factory methods also include `skin` and `style` name parameters that default
-to `Scene2DSkin.defaultSkin` and `"default"` respectively. To globally set the `Skin` instance that will be used by
-default to create your widgets, modify `defaultSkin` field of `Scene2DSkin` container:
+Additionally to standard constructor parameters, most factory methods also include `skin` and `style` name parameters
+that default to `Scene2DSkin.defaultSkin` and `"default"` respectively. To globally set the `Skin` instance that will
+be used by default to create your widgets, modify `defaultSkin` field of `Scene2DSkin` container:
 
 ```kotlin
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -180,9 +228,9 @@ fun setupListener(myViewsManager: MyClass) {
 }
 ```
 
-You can easily access `Skin` resources for your widgets. `style` name parameter allows you to choose the look of your widgets
-based on the style stored in the chosen skin. For example, you can easily change styles of labels by using `style`
-and `skin` parameters:
+This makes it easy to access `Skin` resources for your widgets. `style` name parameter allows you to choose
+the look of your widgets by fetching the widget style defined in your `Skin`. For example, you can easily change
+styles of labels by using their `style` and `skin` parameters:
 
 ```kotlin
 import ktx.scene2d.*
@@ -222,13 +270,35 @@ import ktx.actors.stage
 val stage = stage(batch = SpriteBatch())
 ```
 
-Remember that you have to add your actors to the `Stage` and render the `Stage` in order to build your UI.
+`ktx-scene2d` provides an `actors` extension method that allows to add actors directly to a `Stage`:
+
+```kotlin
+stage.actors {
+  label("Will be added to the stage!")
+}
+```
+
+You can define multiple widgets in the `actors` block. All top-level widgets will be added to the stage:
+
+```kotlin
+stage.actors {
+  label("This stage will have 3 direct children:")
+  textButton("A label, a text button and a table.")
+  table {
+    label("Nested actors still work as expected.")
+  }
+}
+```
+
+Remember that if you **do not** use the `actors` extension, you have to add your actors to the `Stage` with `addActor`.
+
 This is a minimal example application that creates and renders a very basic UI:
 
 ```kotlin
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.kotcrab.vis.ui.VisUI
 import ktx.scene2d.*
 
 class Example: ApplicationAdapter() {
@@ -237,17 +307,18 @@ class Example: ApplicationAdapter() {
   override fun create() {
     stage = Stage()
     Scene2DSkin.defaultSkin = TODO("Load your skin here.")
- 
-    // Root actor - a Table:
-    val table = scene2d.table {
-      // Table settings:
-      setFillParent(true)
-      background("gray")
-      // Table children:
-      label("Hello world!")
+
+    stage.actors {
+      // Root actor added directly to the stage - a table:
+      table {
+        // Table settings:
+        setFillParent(true)
+        background("white")
+        // Table children:
+        label("Hello world!")
+      }
     }
 
-    stage.addActor(table)
     Gdx.input.inputProcessor = stage
   }
 
@@ -261,7 +332,7 @@ class Example: ApplicationAdapter() {
 
 If you are already using a `SpriteBatch` to render your textures, reusing the same instance for `Stage` is recommended.
 
-Make sure to set the `Stage` as the input processor before it is rendered:
+Make sure to set the `Stage` as the input processor before it is rendered to listen for input events:
 
 ```kotlin
 Gdx.input.inputProcessor = stage
@@ -291,7 +362,7 @@ This is basically just an internal representation: we choose not to create entir
 
 ### Usage examples
 
-Loading and setting of the default application's `Skin`:
+Loading and setting up the default `Skin`:
 
 ```kotlin
 import ktx.scene2d.*
@@ -330,7 +401,23 @@ val table = scene2d.table {
 ```
 ![Background](img/01.png)
 
-Manipulating `Cell` properties of `Window` and its children:
+Adding actors to a `Stage`:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.Stage
+import ktx.scene2d.*
+
+fun addActorsToStage(stage: Stage) {
+  stage.actors { 
+    table {
+      label("This table will be added to the stage.")
+    }
+    textButton("This button will also be added to the stage.")
+  }
+}
+```
+
+Customizing layout of a `Window` using `Cell` properties:
 
 ```kotlin
 import ktx.scene2d.*
@@ -369,6 +456,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 
 val table = scene2d.table {
+  // Actors within tables (and other widgets that extend table like windows)
+  // have access to their cells which allow to customize the layout.
   val label: Label = label("Cell properties modified.").cell(expand = true)
   val cell: Cell<Label> = label("Wrapped in cell.").inCell
   val combined: Cell<Label> = label("Modified and wrapped.").cell(expand = true).inCell
@@ -417,6 +506,7 @@ import ktx.scene2d.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 
 val tree = scene2d.tree {
+  // Children on trees have access to nodes, which allow to customize tree layout:
   val label: Label = label("Node properties modified.").node(expanded = true)
   val cell: KNode<Label> = label("Wrapped in node.").inNode
   val combined: KNode<Label> = label("Modified and wrapped.").node(expanded = true).inNode
@@ -426,7 +516,6 @@ val tree = scene2d.tree {
   val inBuildingBlock = label("Also available as building block parameter.") { node ->
     node.isExpanded = true
   }
-  // Nodes are available only for children of trees.
 }
 ```
 
@@ -471,6 +560,8 @@ val labelWithTooltips = scene2d {
 }
 ```
 
+_The examples were made using [VisUI](../vis) skin._
+
 #### Synergy
 
 Pair this library with [`ktx-style`](../style) for type-safe actor styles building and [`ktx-actors`](../actors)
@@ -496,8 +587,9 @@ val myTable = scene2d.table {
 }
 ```
 
-The migration is pretty straightforward: add `scene2d.` prefix to all root actor definitions. Note that nested
-actor definitions do not require any changes.
+The migration is pretty straightforward: add `scene2d.` prefix to all root actor definitions. You can also leverage
+the new `Stage.actors` extension method to add actors directly to a `Stage`. Note that nested actor definitions do not
+require any changes.
 
 `ktx-scene2d` version `1.9.10-b6` has the deprecated root actor factory functions available with annotations
 for automatic replacement. To ease migration to the newer KTX versions, use `1.9.10-b6` to refactor your application.

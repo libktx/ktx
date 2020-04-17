@@ -33,11 +33,11 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * @return a new [VisWindow] instance.
  */
 @Scene2dDsl
-inline fun scene2d.visWindow(
+inline fun RootWidget.visWindow(
   title: String,
   style: String = defaultStyle,
   init: KVisWindow.() -> Unit = {}
-): KVisWindow = KVisWindow(title, style).also { storeActor(it) }.apply(init)
+): KVisWindow = storeActor(KVisWindow(title, style)).apply(init)
 
 /**
  * Constructs a top-level [VisDialog] widget.
@@ -47,11 +47,11 @@ inline fun scene2d.visWindow(
  * @return a new [VisDialog] instance.
  */
 @Scene2dDsl
-inline fun scene2d.visDialog(
+inline fun RootWidget.visDialog(
   title: String,
   style: String = defaultStyle,
   init: KVisDialog.() -> Unit = {}
-): KVisDialog = KVisDialog(title, style).also { storeActor(it) }.apply(init)
+): KVisDialog = storeActor(KVisDialog(title, style)).apply(init)
 
 /**
  * Constructs a top-level [ToastTable] widget. Utility for constructing [Toast] instances.
@@ -60,10 +60,10 @@ inline fun scene2d.visDialog(
  * @return a new [ToastTable] instance.
  */
 @Scene2dDsl
-inline fun scene2d.toastTable(
+inline fun RootWidget.toastTable(
   defaultSpacing: Boolean = false,
   init: KToastTable.() -> Unit = {}
-): KToastTable = KToastTable(defaultSpacing).also { storeActor(it) }.apply(init)
+): KToastTable = storeActor(KToastTable(defaultSpacing)).apply(init)
 
 /**
  * @param text will be displayed on the label.

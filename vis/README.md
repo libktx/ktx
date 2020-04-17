@@ -131,16 +131,16 @@ Creating a `VisWindow`, immediately added to a `Stage`:
 
 ```kotlin
 import com.badlogic.gdx.scenes.scene2d.Stage
-import ktx.scene2d.scene2d
+import ktx.scene2d.actors
 import ktx.scene2d.vis.*
 
 fun createWindow(stage: Stage) {
-  stage.addActor(
-    scene2d.visWindow("Title") {
+  stage.actors {
+    visWindow("Title") {
       isModal = true
       visLabel("Hello world!")
     }
-  )
+  }
 }
 ```
 
@@ -149,33 +149,34 @@ Creating a `MenuBar`:
 ```kotlin
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Stage
-import ktx.scene2d.scene2d
+import ktx.scene2d.actors
 import ktx.scene2d.vis.*
 
 fun createMenuBar(stage: Stage) {
-  val table = scene2d.visTable {
-    menuBar { cell ->
-      cell.top().growX().expandY().row()
-      menu("File") {
-        menuItem("New") {
-          subMenu {
-            menuItem("Project")
-            menuItem("Module")
-            menuItem("File")
+  stage.actors {
+    visTable {
+      menuBar { cell ->
+        cell.top().growX().expandY().row()
+        menu("File") {
+          menuItem("New") {
+            subMenu {
+              menuItem("Project")
+              menuItem("Module")
+              menuItem("File")
+            }
           }
+          menuItem("Open") { /**/ }
         }
-        menuItem("Open") { /**/ }
-      }
-      menu ("Edit") {
-        menuItem("Undo") {
-          setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.Z)
+        menu ("Edit") {
+          menuItem("Undo") {
+            setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.Z)
+          }
+          menuItem("Redo") { /**/ }
         }
-        menuItem("Redo") { /**/ }
       }
+      setFillParent(true)
     }
-    setFillParent(true)
   }
-  stage.addActor(table)
 }
 ```
 

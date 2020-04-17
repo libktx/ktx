@@ -17,11 +17,40 @@ interface KWidget<out Storage> {
   /**
    * Internal utility method for adding actors to the group. Assumes the actor might be stored in a container.
    * @param actor will be added to this group.
-   * @return storage object, wrapping around the [actor] or the [actor] itself if no storage objets are used.
+   * @return storage object, wrapping around the [actor] or the [actor] itself if no storage objects are used.
    * @see Node
    * @see Cell
    */
   fun <T : Actor> storeActor(actor: T): Storage
+}
+
+/**
+ * A specialized interface for widgets that can create top-level root actors.
+ * @see scene2d
+ */
+@Scene2dDsl
+interface RootWidget : KWidget<Actor> {
+  override fun <T : Actor> storeActor(actor: T) : T
+}
+
+/**
+ * Root of the Scene2D DSL. Use this object to create new Scene2D actors and widgets without parents.
+ */
+@Scene2dDsl
+@Suppress("ClassName")
+object scene2d : RootWidget {
+  override fun <T : Actor> storeActor(actor: T): T {
+    // Actor is not modified or added to a group.
+    return actor
+  }
+
+  /**
+   * Allows to define an actor within a DSL lambda block.
+   * @param dsl will be immediately invoked. Must return an actor.
+   * @return [Actor] returned by [dsl].
+   */
+  @Scene2dDsl
+  inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
 }
 
 /**
@@ -30,6 +59,7 @@ interface KWidget<out Storage> {
 @Scene2dDsl
 interface KTable : KWidget<Cell<*>> {
   /**
+   * Matches [Table.add] API.
    * @param actor will be added to this widget.
    * @return [Cell] instance wrapping around the actor.
    * @see [Table.add]
@@ -165,83 +195,20 @@ interface KTable : KWidget<Cell<*>> {
 }
 
 /**
- * Root of the Scene2D DSL. Use this object to create new Scene2D actors and widgets.
- */
-@Scene2dDsl
-@Suppress("ClassName")
-object scene2d : KWidget<Actor> {
-  override fun <T : Actor> storeActor(actor: T): Actor {
-    // Actor is not modified or added to a group.
-    return actor
-  }
-
-  /**
-   * Allows to define an actor within a DSL lambda block.
-   * @param dsl will be immediately invoked. Must return an actor.
-   * @return [Actor] returned by [dsl].
-   */
-  @Scene2dDsl
-  inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
-
-  /**
-   * Constructs a top-level [Window] widget.
-   * @param title will be displayed as window's title.
-   * @param style name of the widget style. Defaults to [defaultStyle].
-   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
-   * @param init will be invoked on the [Window] widget. Inlined.
-   * @return a new [Window] instance.
-   */
-  @Scene2dDsl
-  inline fun window(
-    title: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KWindow.() -> Unit = {}
-  ): KWindow = KWindow(title, skin, style).apply(init)
-
-  /**
-   * Constructs a top-level [Dialog] widget.
-   * @param title will be displayed as dialog's title.
-   * @param style name of the widget style. Defaults to [defaultStyle].
-   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
-   * @param init will be invoked on the [Dialog] widget. Inlined.
-   * @return a new [Dialog] instance.
-   */
-  @Scene2dDsl
-  inline fun dialog(
-    title: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KDialog.() -> Unit = {}
-  ): KDialog = KDialog(title, skin, style).apply(init)
-}
-
-/**
  * Common interface applied to widgets that extend [WidgetGroup] or [Group] and keep their children in an internal
- * collection.
+ * collection with no specialized containers such as [Cell] or [Node].
  */
 @Scene2dDsl
 interface KGroup : KWidget<Actor> {
   /**
+   * Matches [Group.addActor] API.
    * @param actor will be added to this group.
    * @see [Group.addActor]
    * @see [WidgetGroup.addActor]
    */
   fun addActor(actor: Actor?)
 
-  /**
-   * Utility method that allows to add actors to the group with fluent API.
-   * @param actor will be added to this group.
-   * @return passed actor instance.
-   * @see [Group.addActor]
-   * @see [WidgetGroup.addActor]
-   */
-  fun <T : Actor> add(actor: T): T {
-    addActor(actor)
-    return actor
-  }
-
-  override fun <T : Actor> storeActor(actor: T) = add(actor)
+  override fun <T : Actor> storeActor(actor: T): T = actor.also { addActor(it) }
 }
 
 /** Common interface applied to widgets that keep their children in [Tree] [Node] instances. */

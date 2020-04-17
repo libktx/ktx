@@ -20,6 +20,38 @@ inline fun <T : Actor> actor(actor: T, init: (@Scene2dDsl T).() -> Unit = {}): T
 }
 
 /**
+ * Constructs a top-level [Window] widget.
+ * @param title will be displayed as window's title.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked on the [Window] widget. Inlined.
+ * @return a new [Window] instance.
+ */
+@Scene2dDsl
+inline fun RootWidget.window(
+  title: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KWindow.() -> Unit = {}
+): KWindow = storeActor(KWindow(title, skin, style)).apply(init)
+
+/**
+ * Constructs a top-level [Dialog] widget.
+ * @param title will be displayed as dialog's title.
+ * @param style name of the widget style. Defaults to [defaultStyle].
+ * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
+ * @param init will be invoked on the [Dialog] widget. Inlined.
+ * @return a new [Dialog] instance.
+ */
+@Scene2dDsl
+inline fun RootWidget.dialog(
+  title: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  init: KDialog.() -> Unit = {}
+): KDialog = storeActor(KDialog(title, skin, style)).apply(init)
+
+/**
  * Utility function for adding existing actors to the group with a type-safe builder init block.
  * Mostly for internal use.
  * @param actor will be added to the group.
