@@ -104,5 +104,5 @@ class CreateComponentException(type: KClass<*>, cause: Throwable? = null) : Runt
  * Thrown when accessing an [EntitySystem] via [getSystem] that does not exist in the [Engine].
  */
 class MissingEntitySystemException(type: KClass<out EntitySystem>) : GdxRuntimeException(
-  "Could not access system of type $type - is it added to the engine?"
+  "Could not access system of type ${type.qualifiedName} - is it added to the engine?"
 )
