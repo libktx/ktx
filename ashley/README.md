@@ -100,7 +100,7 @@ fun getSystem() {
     val moveSystem = engine.getSystem<MoveSystem>()
     val renderSystem = engine[RenderSystem::class]
     // the next line throws a MissingEntitySystemException
-    engine.getSystem<DamageSystem>
+    engine.getSystem<DamageSystem>()
 
     val damageSystem = engine[DamageSystem::class]
     println(damageSystem) // prints null
