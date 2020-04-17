@@ -70,11 +70,13 @@ inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class
 /**
  * Adds a [Component] to this [Entity]. If a [Component] of the same type already exists, it'll be replaced.
  *
- * @return the Entity for easy chaining
+ * @return a [Component] instance of the given type.
+ * @throws [CreateComponentException] if the engine was unable to create the component.
  * @see Entity.add
  */
-inline fun <reified T : Component> Entity.add(engine: Engine, configure: (@AshleyDsl T).() -> Unit = {}): Entity {
+inline fun <reified T : Component> Entity.addComponent(engine: Engine, configure: (@AshleyDsl T).() -> Unit = {}): T {
   val component = engine.create<T>()
   component.configure()
-  return add(component)
+  add(component)
+  return component
 }
