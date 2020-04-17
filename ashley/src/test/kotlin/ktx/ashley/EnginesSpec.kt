@@ -127,12 +127,22 @@ object EnginesSpec : Spek({
 
     describe("getSystem function") {
       it("should add a system and return it") {
-        engine.addSystem(TestSystem())
-        assertThat(engine.getSystem<TestSystem>()).isNotNull()
+        val system = TestSystem()
+        engine.addSystem(system)
+        assertThat(engine.getSystem<TestSystem>()).isEqualTo(system)
       }
       it("should add a system and return it as operator") {
-        engine.addSystem(TestSystem())
-        assertThat(engine[TestSystem::class]).isNotNull()
+        val system = TestSystem()
+        engine.addSystem(system)
+        assertThat(engine[TestSystem::class]).isEqualTo(system)
+      }
+      it("should throw an exception if the system is missing in the engine") {
+        assertThatExceptionOfType(MissingEntitySystemException::class.java).isThrownBy {
+          engine.getSystem<TestSystem>()
+        }
+      }
+      it("should return null if the system is missing in the engine") {
+        assertThat(engine[TestSystem::class]).isNull()
       }
     }
   }
