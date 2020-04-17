@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
+import com.badlogic.gdx.utils.GdxRuntimeException
 import kotlin.reflect.KClass
 
 /**
@@ -81,7 +82,8 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
  * @return the [EntitySystem] of the given type. May be null if it does not exist.
  * @see Engine.getSystem
  */
-inline fun <reified T : EntitySystem> Engine.getSystem(): T? = getSystem(T::class.java)
+inline fun <reified T : EntitySystem> Engine.getSystem(): T =
+  getSystem(T::class.java) ?: throw MissingEntitySystemException(T::class)
 
 /**
  * Quick [EntitySystem] retrieval.
@@ -89,10 +91,18 @@ inline fun <reified T : EntitySystem> Engine.getSystem(): T? = getSystem(T::clas
  * @return the [EntitySystem] of the given type. May be null if it does not exist.
  * @see Engine.getSystem
  */
-inline operator fun <reified T : EntitySystem> Engine.get(type: KClass<T>): T? = getSystem(type.java)
+operator fun <T : EntitySystem> Engine.get(type: KClass<T>): T? = getSystem(type.java)
 
 /**
  * Thrown when unable to create a component of given type.
  */
-class CreateComponentException(type: KClass<*>, cause: Throwable? = null): RuntimeException(
-    "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?", cause)
+class CreateComponentException(type: KClass<*>, cause: Throwable? = null) : RuntimeException(
+  "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?", cause
+)
+
+/**
+ * Thrown when accessing an [EntitySystem] via [getSystem] that does not exist in the [Engine].
+ */
+class MissingEntitySystemException(type: KClass<out EntitySystem>) : GdxRuntimeException(
+  "Could not access system of type $type - is it added to the engine?"
+)
