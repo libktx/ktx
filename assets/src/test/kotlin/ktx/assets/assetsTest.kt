@@ -40,6 +40,7 @@ class AssetsTest {
     assertTrue(asset is MockAsset)
     assertSame(assetManager["test"], asset)
     assertEquals("test", asset.data)
+    assertSame(assetManager, (assetWrapper as ManagedAsset).manager)
   }
 
   @Test
@@ -53,6 +54,7 @@ class AssetsTest {
     assertEquals(assetManager["test"], asset)
     assertEquals("test", asset.data)
     assertEquals("additional", asset.additional)
+    assertSame(assetManager, (assetWrapper as ManagedAsset).manager)
   }
 
   @Test
@@ -65,6 +67,7 @@ class AssetsTest {
     assertTrue(asset is MockAsset)
     assertEquals(assetManager["test"], asset)
     assertEquals("test", asset.data)
+    assertSame(assetManager, (assetWrapper as ManagedAsset).manager)
   }
 
   @Test
@@ -81,6 +84,7 @@ class AssetsTest {
     assertTrue(asset is MockAsset)
     assertEquals(assetManager["test"], asset)
     assertEquals("test", asset.data)
+    assertSame(assetManager, (assetWrapper as DelayedAsset).manager)
   }
 
   @Test
@@ -98,6 +102,7 @@ class AssetsTest {
     assertEquals(assetManager["test"], asset)
     assertEquals("test", asset.data)
     assertEquals("additional", asset.additional)
+    assertSame(assetManager, (assetWrapper as DelayedAsset).manager)
   }
 
   @Test
@@ -114,6 +119,7 @@ class AssetsTest {
     assertTrue(asset is MockAsset)
     assertEquals(assetManager["test"], asset)
     assertEquals("test", asset.data)
+    assertSame(assetManager, (assetWrapper as DelayedAsset).manager)
   }
 
   @Test
@@ -450,13 +456,13 @@ class AssetsTest {
 
     val group = TestAssetGroup()
     group.finishLoading()
-    assert(group.isLoaded())
+    assertTrue(group.isLoaded())
 
     val mockAssets = listOf(group.member1, group.member2)
     group.unloadAll()
-    assert(!group.isLoaded())
+    assertTrue(!group.isLoaded())
     for (mockAsset in mockAssets)
-      assert(mockAsset.disposed)
+      assertTrue(mockAsset.disposed)
   }
 
   @Test
@@ -474,7 +480,8 @@ class AssetsTest {
       if (group.update())
         break
     }
-    assert(group.isLoaded())
+    assertTrue(group.isLoaded())
+    assertTrue(listOf(group.member1, group.member2, group.member3).all { it != null })
   }
 
   @Test
@@ -510,7 +517,7 @@ class AssetsTest {
       manager.finishLoading()
     }
     for (i in 1..2)
-      assert(group.manager.isLoaded("prefix/member$i"))
+      assertTrue(group.manager.isLoaded("prefix/member$i"))
   }
 }
 
@@ -547,8 +554,9 @@ class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
     }
   }
 
-  override fun loadSync(manager: AssetManager, fileName: String,
-                        file: FileHandle, parameter: MockParameter?): MockAsset {
+  override fun loadSync(
+    manager: AssetManager, fileName: String, file: FileHandle, parameter: MockParameter?
+  ): MockAsset {
     val asset = MockAsset(file.path(), additional)
     additional = null
     return asset
