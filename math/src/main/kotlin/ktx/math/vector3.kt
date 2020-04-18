@@ -23,15 +23,10 @@ fun vec3(x: Float = 0f, y: Float = 0f, z: Float = 0f): Vector3 = Vector3(x, y, z
 fun vec3(vector2: Vector2, z: Float = 0f): Vector3 = Vector3(vector2, z)
 
 /**
- * Inverts currently stored X, Y and Z values.
- * @return this vector for chaining.
+ * Inverts stored X, Y and Z values.
+ * @return a new [Vector3] with negated values.
  */
-operator fun Vector3.unaryMinus(): Vector3 {
-  x = -x
-  y = -y
-  z = -z
-  return this
-}
+operator fun Vector3.unaryMinus(): Vector3 = Vector3(-x, -y, -z)
 
 /**
  * @param vector3 values from this vector will be added to this vector.

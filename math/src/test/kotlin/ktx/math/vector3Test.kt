@@ -49,13 +49,16 @@ class Vector3Test {
 
   @Test
   fun `should invert values with unary - operator`() {
-    val vector = Vector3(10f, 10f, -10f)
+    val originalVector = Vector3(10f, 10f, -10f)
 
-    -vector
+    val vector = -originalVector
 
     assertEquals(-10f, vector.x, floatTolerance)
     assertEquals(-10f, vector.y, floatTolerance)
     assertEquals(10f, vector.z, floatTolerance)
+    assertEquals(10f, originalVector.x, floatTolerance)
+    assertEquals(10f, originalVector.y, floatTolerance)
+    assertEquals(-10f, originalVector.z, floatTolerance)
   }
 
   @Test
