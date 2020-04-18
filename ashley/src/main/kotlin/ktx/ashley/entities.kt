@@ -68,6 +68,14 @@ operator fun <T : Component> Entity.contains(mapper: ComponentMapper<T>): Boolea
 inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class.java) as? T
 
 /**
+ * Adds a constructed [Component] to this [Entity]. If a [Component] of the same type exists, it will be replaced.
+ * @param component will be added to this [Entity].
+ */
+operator fun Entity.plusAssign(component: Component) {
+  add(component)
+}
+
+/**
  * Adds a [Component] to this [Entity]. If a [Component] of the same type already exists, it will be replaced.
  *
  * @param T type of component to add. Must have a no-argument constructor.

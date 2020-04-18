@@ -25,7 +25,8 @@ builder DSL.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
-- `Entity.addComponent` extension method allows to create and add a `Component` to an existing entity.
+- `Entity.addComponent` extension method allows to create and add a `Component` to an existing `Entity`.
+- `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
 
@@ -121,14 +122,19 @@ import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import ktx.ashley.addComponent
+import ktx.ashley.plusAssign
 
 class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
 fun addComponentToEntity(entity: Entity, engine: Engine) {
+  // Creating and adding a component:
   entity.addComponent<Transform>(engine) {
     x = 2.5f
     y = 5f
   }
+
+  // Or alternatively, if we already have a constructed component:
+  entity += Transform(x = 1f, y = 2f)
 }
 ```
 
