@@ -523,21 +523,31 @@ Creating `List` and `SelectBox` widgets storing strings:
 
 ```kotlin
 import ktx.scene2d.*
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.utils.Array as GdxArray
 
 val table = scene2d.table {
-  // List and SelectBox generics represent the type of items that
-  // they store and type of their parent actor container (like Cell).
-  listWidget<String, Cell<*>> {
-    -"First."
-    -"Second"
-    -"Third."
-  }
-  selectBox<String, Cell<*>> {
+  // List and SelectBox generics represent the types of items that they store.
+  listWidget<String> {
     -"First"
     -"Second"
     -"Third"
   }
+  selectBox<String> {
+    -"First"
+    -"Second"
+    -"Third"
+    // Note that these building blocks have no cell or node parameters.
+    // You can access table cells and tree nodes outside of the lambdas:
+  }.cell(row = true)
+}
+
+val withoutBuildingBlocks = scene2d.table { 
+  // You can also define the widgets with lists of items:
+  listWidgetOf(GdxArray.with("First", "Second", "Third"))
+  selectBoxOf(GdxArray.with("First", "Second", "Third"))
+
+  // Empty list:
+  listWidgetOf<String>()
 }
 ```
 ![List](img/04.png)
@@ -590,6 +600,10 @@ val myTable = scene2d.table {
 The migration is pretty straightforward: add `scene2d.` prefix to all root actor definitions. You can also leverage
 the new `Stage.actors` extension method to add actors directly to a `Stage`. Note that nested actor definitions do not
 require any changes.
+
+Only 2 factory methods were changed significantly: `listWidget` and `selectBox`. Now they have only a single 
+generic parameter - type of the items - and no longer consume `Cell` or `Node` instances in their building blocks.
+Instead, you have to call `cell`, `inCell`, `node` or `inNode` outside of their building blocks to configure the layout.
 
 `ktx-scene2d` version `1.9.10-b6` has the deprecated root actor factory functions available with annotations
 for automatic replacement. To ease migration to the newer KTX versions, use `1.9.10-b6` to refactor your application.

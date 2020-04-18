@@ -166,20 +166,20 @@ inline fun <S> KWidget<S>.visImage(
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
- * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
- * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
- * Inlined. Allows to fill list's items.
+ * @param init will be invoked with the widget as "this". Note that in contrary to other widgets, this [init] function
+ * has no parameters. If you need to access [Cell] or [Node] that this list is in, use [KTable.cell], [KTable.inCell],
+ * [KTree.node] or [KTree.inNode]. Allows to fill list items.
  * @return a [VisList] widget instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
- * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 @Scene2dDsl
-inline fun <I, S> KWidget<S>.visList(
+inline fun <I> KWidget<*>.visList(
   style: String = defaultStyle,
-  init: KVisList<I>.(S) -> Unit = {}
+  init: KVisList<I>.() -> Unit = {}
 ): KVisList<I> {
   val list = KVisList<I>(style)
-  list.init(storeActor(list))
+  storeActor(list)
+  list.init()
   list.refreshItems()
   return list
 }
@@ -246,20 +246,20 @@ fun <I> KWidget<*>.visSelectBoxOf(
 
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
- * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
- * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
- * Inlined. Allows to fill list's items.
+ * @param init will be invoked with the widget as "this". Note that in contrary to other widgets, this [init] function
+ * has no parameters. If you need to access [Cell] or [Node] that this list is in, use [KTable.cell], [KTable.inCell],
+ * [KTree.node] or [KTree.inNode]. Allows to fill select box items.
  * @return a [VisSelectBox] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
- * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 @Scene2dDsl
-inline fun <I, S> KWidget<S>.visSelectBox(
+inline fun <I> KWidget<*>.visSelectBox(
   style: String = defaultStyle,
-  init: KVisSelectBox<I>.(S) -> Unit = {}
+  init: KVisSelectBox<I>.() -> Unit = {}
 ): KVisSelectBox<I> {
   val selectBox = KVisSelectBox<I>(style)
-  selectBox.init(storeActor(selectBox))
+  storeActor(selectBox)
+  selectBox.init()
   selectBox.refreshItems()
   return selectBox
 }

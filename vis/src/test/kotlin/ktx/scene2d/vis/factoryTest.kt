@@ -479,7 +479,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create VisList`() = test(
     widget = {
-      visList<String, Cell<*>> {
+      visList<String> {
         color = Color.BLUE
         // Adding list items:
         -"one"
@@ -503,7 +503,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create VisSelectBox`() = test(
     widget = {
-      visSelectBox<String, Cell<*>> {
+      visSelectBox<String> {
         color = Color.BLUE
         // Adding select box items:
         -"one"

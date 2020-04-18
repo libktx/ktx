@@ -30,6 +30,8 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `dialog`
   - `buttonGroup`
   - `tree`
+- **[CHANGE]** (`ktx-scene2d`) `listWidget` and `selectBox` now have a single generic type to improve usability.
+Their building blocks no longer consume `Cell` and `Node` instances.
 - **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods was removed.
 - **[CHANGE]** (`ktx-vis`) Overhaul of the module.
   - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of APIs are now shared.

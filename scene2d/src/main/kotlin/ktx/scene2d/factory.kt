@@ -210,6 +210,7 @@ inline fun <S> KWidget<S>.label(
  * @return a List widget instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
  */
+@Scene2dDsl
 fun <I> KWidget<*>.listWidgetOf(
   items: GdxArray<I>? = null,
   style: String = defaultStyle,
@@ -226,21 +227,21 @@ fun <I> KWidget<*>.listWidgetOf(
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
- * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
- * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
- * Inlined. Allows to fill list's items.
+ * @param init will be invoked with the widget as "this". Note that in contrary to other widgets, this [init] function
+ * has no parameters. If you need to access [Cell] or [Node] that this list is in, use [KTable.cell], [KTable.inCell],
+ * [KTree.node] or [KTree.inNode]. Allows to fill list items.
  * @return a List widget instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
- * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 @Scene2dDsl
-inline fun <I, S> KWidget<S>.listWidget(
+inline fun <I> KWidget<*>.listWidget(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KListWidget<I>.(S) -> Unit = {}
+  init: KListWidget<I>.() -> Unit = {}
 ): KListWidget<I> {
   val list = KListWidget<I>(skin, style)
-  list.init(storeActor(list))
+  storeActor(list)
+  list.init()
   list.refreshItems()
   return list
 }
@@ -308,21 +309,21 @@ fun <I> KWidget<*>.selectBoxOf(
 /**
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
- * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
- * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
- * Inlined. Allows to fill list's items.
+ * @param init will be invoked with the widget as "this". Note that in contrary to other widgets, this [init] function
+ * has no parameters. If you need to access [Cell] or [Node] that this list is in, use [KTable.cell], [KTable.inCell],
+ * [KTree.node] or [KTree.inNode]. Allows to fill select box items.
  * @return a [SelectBox] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
- * @param S type of actor containers used by the parent. Usually [Cell], [Node] or [Actor].
  */
 @Scene2dDsl
-inline fun <I, S> KWidget<S>.selectBox(
+inline fun <I> KWidget<*>.selectBox(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KSelectBox<I>.(S) -> Unit = {}
+  init: KSelectBox<I>.() -> Unit = {}
 ): KSelectBox<I> {
   val selectBox = KSelectBox<I>(skin, style)
-  selectBox.init(storeActor(selectBox))
+  storeActor(selectBox)
+  selectBox.init()
   selectBox.refreshItems()
   return selectBox
 }

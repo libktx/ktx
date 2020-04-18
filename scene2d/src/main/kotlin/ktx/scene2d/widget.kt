@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
@@ -318,7 +319,7 @@ class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButto
 
 /** Extends LibGDX List widget with items building method. */
 @Scene2dDsl
-class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2d.ui.List<T>(skin, style) {
+class KListWidget<T>(skin: Skin, style: String) : GdxList<T>(skin, style) {
   /**
    * Allows to add items to the list with builder-like syntax.
    */

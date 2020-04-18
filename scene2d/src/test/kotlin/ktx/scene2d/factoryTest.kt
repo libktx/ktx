@@ -358,7 +358,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create List`() = test(
     widget = {
-      listWidget<String, Cell<*>> {
+      listWidget<String> {
         color = Color.BLUE
         // Adding list items:
         -"one"
@@ -393,7 +393,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create SelectBox`() = test(
     widget = {
-      selectBox<String, Cell<*>> {
+      selectBox<String> {
         color = Color.BLUE
         // Adding select box items:
         -"one"
