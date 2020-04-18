@@ -481,7 +481,7 @@ class AssetsTest {
         break
     }
     assertTrue(group.isLoaded())
-    assertTrue(listOf(group.member1, group.member2, group.member3).all { it != null })
+    assertTrue(listOf(group.member1, group.member2, group.member3).all { !it.disposed })
   }
 
   @Test
