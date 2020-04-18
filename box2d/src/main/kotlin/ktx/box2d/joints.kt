@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.joints.*
  * @see revoluteJointWith
  * @see prismaticJointWith
  */
+@Box2DDsl
 inline fun <JointDefinition : JointDef> Body.jointWith(
     body: Body,
     jointDefinition: JointDefinition,
@@ -44,6 +45,7 @@ inline fun <JointDefinition : JointDef> Body.jointWith(
  * @see RevoluteJointDef
  * @see RevoluteJoint
  */
+@Box2DDsl
 inline fun Body.revoluteJointWith(body: Body, init: (@Box2DDsl RevoluteJointDef).() -> Unit = {}): RevoluteJoint
     = jointWith(body, RevoluteJointDef(), init) as RevoluteJoint
 
@@ -57,6 +59,7 @@ inline fun Body.revoluteJointWith(body: Body, init: (@Box2DDsl RevoluteJointDef)
  * @see PrismaticJointDef
  * @see PrismaticJoint
  */
+@Box2DDsl
 inline fun Body.prismaticJointWith(body: Body, init: (@Box2DDsl PrismaticJointDef).() -> Unit = {}): PrismaticJoint
     = jointWith(body, PrismaticJointDef(), init) as PrismaticJoint
 
@@ -70,6 +73,7 @@ inline fun Body.prismaticJointWith(body: Body, init: (@Box2DDsl PrismaticJointDe
  * @see DistanceJointDef
  * @see DistanceJoint
  */
+@Box2DDsl
 inline fun Body.distanceJointWith(body: Body, init: (@Box2DDsl DistanceJointDef).() -> Unit = {}): DistanceJoint
     = jointWith(body, DistanceJointDef(), init) as DistanceJoint
 
@@ -83,6 +87,7 @@ inline fun Body.distanceJointWith(body: Body, init: (@Box2DDsl DistanceJointDef)
  * @see PulleyJointDef
  * @see PulleyJoint
  */
+@Box2DDsl
 inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() -> Unit = {}): PulleyJoint
     = jointWith(body, PulleyJointDef().apply {
   localAnchorA.set(0f, 0f)
@@ -99,6 +104,7 @@ inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() 
  * @see MouseJointDef
  * @see MouseJoint
  */
+@Box2DDsl
 inline fun Body.mouseJointWith(body: Body, init: (@Box2DDsl MouseJointDef).() -> Unit = {}): MouseJoint
     = jointWith(body, MouseJointDef(), init) as MouseJoint
 
@@ -112,6 +118,7 @@ inline fun Body.mouseJointWith(body: Body, init: (@Box2DDsl MouseJointDef).() ->
  * @see GearJointDef
  * @see GearJoint
  */
+@Box2DDsl
 inline fun Body.gearJointWith(body: Body, init: (@Box2DDsl GearJointDef).() -> Unit = {}): GearJoint
     = jointWith(body, GearJointDef(), init) as GearJoint
 
@@ -125,6 +132,7 @@ inline fun Body.gearJointWith(body: Body, init: (@Box2DDsl GearJointDef).() -> U
  * @see WheelJointDef
  * @see WheelJoint
  */
+@Box2DDsl
 inline fun Body.wheelJointWith(body: Body, init: (@Box2DDsl WheelJointDef).() -> Unit = {}): WheelJoint
     = jointWith(body, WheelJointDef(), init) as WheelJoint
 
@@ -138,6 +146,7 @@ inline fun Body.wheelJointWith(body: Body, init: (@Box2DDsl WheelJointDef).() ->
  * @see WeldJointDef
  * @see WeldJoint
  */
+@Box2DDsl
 inline fun Body.weldJointWith(body: Body, init: (@Box2DDsl WeldJointDef).() -> Unit = {}): WeldJoint
     = jointWith(body, WeldJointDef(), init) as WeldJoint
 
@@ -151,6 +160,7 @@ inline fun Body.weldJointWith(body: Body, init: (@Box2DDsl WeldJointDef).() -> U
  * @see FrictionJointDef
  * @see FrictionJoint
  */
+@Box2DDsl
 inline fun Body.frictionJointWith(body: Body, init: (@Box2DDsl FrictionJointDef).() -> Unit = {}): FrictionJoint
     = jointWith(body, FrictionJointDef(), init) as FrictionJoint
 
@@ -164,6 +174,7 @@ inline fun Body.frictionJointWith(body: Body, init: (@Box2DDsl FrictionJointDef)
  * @see RopeJointDef
  * @see RopeJoint
  */
+@Box2DDsl
 inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> Unit = {}): RopeJoint
     = jointWith(body, RopeJointDef().apply {
   // Rope joint anchors are initiated with unexpected defaults (might be incompatible with user's Box2D world scale).
@@ -182,5 +193,6 @@ inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> U
  * @see MotorJointDef
  * @see MotorJoint
  */
+@Box2DDsl
 inline fun Body.motorJointWith(body: Body, init: (@Box2DDsl MotorJointDef).() -> Unit = {}): MotorJoint
     = jointWith(body, MotorJointDef(), init) as MotorJoint

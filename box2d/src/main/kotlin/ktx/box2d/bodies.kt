@@ -33,6 +33,7 @@ class BodyDefinition : BodyDef() {
    * @see loop
    * @see edge
    */
+  @Box2DDsl
   inline fun <ShapeType : Shape> fixture(
       shape: ShapeType,
       disposeOfShape: Boolean = false,
@@ -52,6 +53,7 @@ class BodyDefinition : BodyDef() {
    * @param init inlined. Allows to modify [FixtureDef] properties. Receives [CircleShape] as first (`it`) argument.
    * @return [FixtureDefinition] with [Fixture] properties.
    */
+  @Box2DDsl
   inline fun circle(
       radius: Float = 1f,
       position: Vector2 = Vector2.Zero,
@@ -73,6 +75,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see PolygonShape.setAsBox
    */
+  @Box2DDsl
   inline fun box(
       width: Float = 1f,
       height: Float = 1f,
@@ -94,6 +97,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see PolygonShape.set
    */
+  @Box2DDsl
   inline fun polygon(
       vertices: FloatArray? = null,
       init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
@@ -109,6 +113,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see PolygonShape.set
    */
+  @Box2DDsl
   inline fun polygon(
       vararg vertices: Vector2,
       init: FixtureDefinition.(PolygonShape) -> Unit = {}): FixtureDefinition {
@@ -124,6 +129,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see ChainShape.createChain
    */
+  @Box2DDsl
   inline fun chain(
       vararg vertices: Vector2,
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
@@ -141,6 +147,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see ChainShape.createChain
    */
+  @Box2DDsl
   inline fun chain(
       vertices: FloatArray,
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
@@ -156,6 +163,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see ChainShape.createLoop
    */
+  @Box2DDsl
   inline fun loop(
       vararg vertices: Vector2,
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
@@ -174,6 +182,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see ChainShape.createLoop
    */
+  @Box2DDsl
   inline fun loop(
       vertices: FloatArray,
       init: FixtureDefinition.(ChainShape) -> Unit = {}): FixtureDefinition {
@@ -190,6 +199,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see EdgeShape.set
    */
+  @Box2DDsl
   inline fun edge(
       from: Vector2,
       to: Vector2,
@@ -211,6 +221,7 @@ class BodyDefinition : BodyDef() {
    * @return [FixtureDefinition] with [Fixture] properties.
    * @see EdgeShape.set
    */
+  @Box2DDsl
   inline fun edge(
       fromX: Float,
       fromY: Float,
@@ -243,6 +254,7 @@ class BodyDefinition : BodyDef() {
  * @see loop
  * @see edge
  */
+@Box2DDsl
 inline fun <ShapeType : Shape> Body.fixture(
     shape: ShapeType,
     disposeOfShape: Boolean = false,
@@ -265,6 +277,7 @@ inline fun <ShapeType : Shape> Body.fixture(
  * @param init inlined. Allows to modify [FixtureDef] properties. Receives [CircleShape] as first (`it`) argument.
  * @return a fully constructed [Fixture] with [CircleShape].
  */
+@Box2DDsl
 inline fun Body.circle(
     radius: Float = 1f,
     position: Vector2 = Vector2.Zero,
@@ -286,6 +299,7 @@ inline fun Body.circle(
  * @return a fully constructed [Fixture] with box [PolygonShape].
  * @see PolygonShape.setAsBox
  */
+@Box2DDsl
 inline fun Body.box(
     width: Float = 1f,
     height: Float = 1f,
@@ -307,6 +321,7 @@ inline fun Body.box(
  * @return a fully constructed [Fixture] with [PolygonShape].
  * @see PolygonShape.set
  */
+@Box2DDsl
 inline fun Body.polygon(
     vertices: FloatArray? = null,
     init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
@@ -322,6 +337,7 @@ inline fun Body.polygon(
  * @return a fully constructed [Fixture] with [PolygonShape].
  * @see PolygonShape.set
  */
+@Box2DDsl
 inline fun Body.polygon(
     vararg vertices: Vector2,
     init: FixtureDefinition.(PolygonShape) -> Unit = {}): Fixture {
@@ -338,6 +354,7 @@ inline fun Body.polygon(
  * @return a fully constructed [Fixture] with [ChainShape].
  * @see ChainShape.createChain
  */
+@Box2DDsl
 inline fun Body.chain(
     vararg vertices: Vector2,
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
@@ -355,6 +372,7 @@ inline fun Body.chain(
  * @return a fully constructed [Fixture] with [ChainShape].
  * @see ChainShape.createChain
  */
+@Box2DDsl
 inline fun Body.chain(
     vertices: FloatArray,
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
@@ -370,6 +388,7 @@ inline fun Body.chain(
  * @return a fully constructed [Fixture] with looped [ChainShape].
  * @see ChainShape.createLoop
  */
+@Box2DDsl
 inline fun Body.loop(
     vararg vertices: Vector2,
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
@@ -388,6 +407,7 @@ inline fun Body.loop(
  * @return a fully constructed [Fixture] with looped [ChainShape].
  * @see ChainShape.createLoop
  */
+@Box2DDsl
 inline fun Body.loop(
     vertices: FloatArray,
     init: FixtureDefinition.(ChainShape) -> Unit = {}): Fixture {
@@ -404,6 +424,7 @@ inline fun Body.loop(
  * @return a fully constructed [Fixture] with [EdgeShape].
  * @see EdgeShape.set
  */
+@Box2DDsl
 inline fun Body.edge(
     from: Vector2,
     to: Vector2,
@@ -425,6 +446,7 @@ inline fun Body.edge(
  * @return a fully constructed [Fixture] with [EdgeShape].
  * @see EdgeShape.set
  */
+@Box2DDsl
 inline fun Body.edge(
     fromX: Float,
     fromY: Float,

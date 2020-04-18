@@ -23,6 +23,7 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
  * @see BodyDefinition
  * @see FixtureDefinition
  */
+@Box2DDsl
 inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit = {}): Body {
   val bodyDefinition = BodyDefinition()
   bodyDefinition.type = type
