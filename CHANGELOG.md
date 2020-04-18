@@ -6,6 +6,7 @@
 usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
 Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
 Starting from this release, GitHub releases will no longer contain the Javadoc archives.
+- **[FEATURE]** (`ktx-actors`) Added `Action.repeat` extension method that allows to repeat an action for the given amount of times.
 - **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access a chosen `EntitySystem`.
 - **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` extension method to access a chosen `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` extension method to create a `Component` for an existing `Entity`. 
@@ -556,6 +557,7 @@ collections.
   - Lambda consuming `onChange`, `onClick`, `onKey`, `onScrollFocus` and `onKeyboardFocus` extension methods for `Actor`, allowing to quickly define event listeners.
   - `+` and `-` operator extension methods can be used to add `Action` instances to a `Stage`.
   - `Action.then` infix extension method can be used to chain actions into sequences.
+  - `Action.repeatForever` wraps an action in a `RepeatAction` without a repetitions limit.
 - **[FEATURE]** (`ktx-assets`) Implemented `ktx-assets` module.
   - `Assets.manager` global `AssetManager` instance.
     - `load` function can be used to load assets asynchronously via the global `AssetManager` instance. `loadOnDemand` can be used to load assets immediately in a blocking manner. `unload` can unload the assets.
