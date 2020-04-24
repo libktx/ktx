@@ -570,7 +570,72 @@ val labelWithTooltips = scene2d {
 }
 ```
 
-_The examples were made using [VisUI](../vis) skin._
+Extending the `ktx-scene2d` DSL with a custom widget:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import ktx.scene2d.*
+
+/** Example of a custom widget that extends LibGDX Table. */
+@Scene2dDsl
+class MyCustomWidget(
+  styleName: String, skin: Skin
+) : Table(skin), KTable {
+  // Implement your custom widget here.
+  init {
+    // Example of widget customization -
+    // setting table defaults with a custom style object:
+    val style = skin[styleName, MyCustomWidgetStyle::class.java]
+    this.pad(style.pad)
+  }
+}
+
+// Depending on the class hierarchy, your widget should implement
+// the following ktx-scene2d interface:
+// - Table: ktx.scene2d.KTable
+// - Group: ktx.scene2d.KGroup
+// - Tree: ktx.scene2d.KTree
+// If the actor is not a group and cannot have any children,
+// you do not need to implement any interface.
+
+/** Example of a custom widget style class . */
+data class MyCustomWidgetStyle(val pad: Float = 0f)
+
+
+// Adding a factory method for the custom widget:
+
+/**
+ * Adds DSL that creates [MyCustomWidget].
+ * @param skin defines style of the widget.
+ * @param style name of a [MyCustomWidgetStyle] stored in [skin].
+ * @param init customization code.
+ */
+@Scene2dDsl
+inline fun <S> KWidget<S>.myCustomWidget(
+  // This ensures a Skin is supplied by default:
+  skin: Skin = Scene2DSkin.defaultSkin,
+  // This supplies a default style name, making it optional:
+  style: String = defaultStyle,
+  // This is the lambda that you can use to customize the widget:
+  init: MyCustomWidget.(S) -> Unit = {}
+): MyCustomWidget = actor(MyCustomWidget(style, skin), init)
+
+
+// Creating our custom widget with ktx-scene2d DSL:
+
+fun usageExample() {
+  scene2d.myCustomWidget { 
+    // Customize your widget here!
+    setFillParent(true)
+    
+    // Since we implemented KTable, this actor can have children:
+    label("A child of the custom widget!").cell(grow = true)
+  }
+}
+```
+
+_The example images were made using [VisUI](../vis) skin._
 
 #### Synergy
 
