@@ -111,6 +111,8 @@ class AssetStorage(
    *
    * If the asset requires a [FileHandle] incompatible with the storage [fileResolver],
    * use the [fileHandle] parameter to set it.
+   *
+   * Top-level (static) alternatives can be found in `ktx-assets`. See [ktx.assets.assetDescriptor].
    */
   inline fun <reified T> getAssetDescriptor(
     path: String,
