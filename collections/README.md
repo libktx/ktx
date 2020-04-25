@@ -25,9 +25,11 @@ necessary.
 if the variable is a possible null.
 - Null-safe inlined extension property `lastIndex` was added. It returns index of last element in the list - or `-1` if
 the list is null or empty.
-- `+` and `-` operators were overridden: they allow to add and remove elements from the collection. They can be invoked
+- `+` and `-` operators were overridden: they allow to add or remove elements from the collection. They can be invoked
 with a compatible element type or another collection storing values of the same type. Both operator invocations can be
-chained.
+chained. These operators return a new collection with specified added or removed elements.
+- `+=` and `-=` operators were overridden: they allow to add or remove elements from an existing collection, modifying
+its content.
 - `getLast` and `removeLast` utility extension methods were added.
 - Utility `sortDescending`, `sortBy` and `sortByDescending` extension methods were added to ease list sorting.
 - Get-or-else extension method was added and is available through `array[index, alternative]` syntax.
@@ -57,9 +59,11 @@ LibGDX features `ObjectSet` class, which works similarly to `HashSet`, but it re
 - `ObjectSet` instances can be constructed with `gdxSetOf` methods, similarly to how you create native arrays in Kotlin.
 - Null-safe `isEmpty()`, `isNotEmpty()` and `size()` methods where added. They allow you to inspect the collection even
 if the variable is a possible null.
-- `+` and `-` operators were overridden: they allow to add and remove elements from the collection. They can be invoked
+- `+` and `-` operators were overridden: they allow to add or remove elements from the collection. They can be invoked
 with a compatible element type or another collection storing values of the same type. Both operator invocations can be
-chained.
+chained. These operators return a new collection with specified added or removed elements.
+- `+=` and `-=` operators were overridden: they allow to add or remove elements from an existing collection, modifying
+its content.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows to iterate over collection's elements, while providing reference to `MutableIterator`. Can be
 used to easily remove collection elements during iteration.
@@ -89,15 +93,6 @@ has to be provided - since the method is inlined, no new lambda object will be c
 - Type alias added for consistency with other collections: `GdxMap` - `com.badlogic.gdx.utils.ObjectMap`.
 - All LibGDX maps now feature `component1()` and `component2()` operator extension methods, so they can be destructed.
 
-#### Lists
-
-LibGDX features `PooledLinkedList` class, which is an equivalent to `LinkedList` - but since it does not even implement
-the `Iterable` interface (making it rather unpleasant to use), a custom `PooledList` was included. It caches its nodes
-and iterators, limiting garbage collection. This collection should be used for storage of objects that are often
-iterated over, and their efficient removal and insertion during iteration is necessary. It can be created with
-`gdxListOf` method. Every `Array` and `Iterable` can be converted to `PooledList` with `toGdxList` utility method.
-It features a `GdxList` type alias for consistency with other collections.
-
 #### Note
 
 It is highly advised to use `ktx.collections.*` import when working with LibGDX collections. Kotlin standard library
@@ -117,9 +112,9 @@ import ktx.collections.*
 val array = gdxArrayOf("zero", "one", "two")
 array[0] // "zero"
 "one" in array // true
-array + "three" // array[3] == "three"; array.size == 4
-array - "three" // "three" in array == false; array.size == 3
-array + arrayOf("three", "four") // array[3] == "three", array[4] = "four"
+array += "three" // array[3] == "three"; array.size == 4
+array -= "three" // "three" in array == false; array.size == 3
+array += arrayOf("three", "four") // array[3] == "three", array[4] = "four"
   
 val empty = gdxArrayOf<String>()
 ```
@@ -130,9 +125,9 @@ import ktx.collections.*
 
 val set = gdxSetOf("zero", "one", "two")
 "one" in set // true
-set + "three" // "three" in set == true; set.size = 4
-set - "three" // "three" in set == false; set.size == 3
-set + arrayOf("three", "four") // "three" in set == true; "four" in set == true
+set += "three" // "three" in set == true; set.size = 4
+set -= "three" // "three" in set == false; set.size == 3
+set += arrayOf("three", "four") // "three" in set == true; "four" in set == true
 
 val empty = gdxSetOf<String>()
 ```
@@ -157,21 +152,6 @@ val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
 map.forEach { (key, value) ->
   println("$value was mapped to $key.")
 }
-```
-
-Working with **KTX** `PooledList`:
-```Kotlin
-import ktx.collections.*
-
-val list = gdxListOf("zero", "one", "two")
-"zero" in list // true
-list + "three" // "three" in list == true
-list.forEach { 
-  println(it) // "zero"; "one"; "two"; "three"
-  if(it == "three") list.remove() // Cheap element removal during iteration.
-} // "three" in list == false; list.toString() == "[zero, one, two]"
-
-val empty = gdxListOf<String>()
 ```
 
 ### Alternatives

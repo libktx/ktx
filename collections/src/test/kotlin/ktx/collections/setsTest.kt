@@ -95,82 +95,149 @@ class SetsTest {
   }
 
   @Test
+  fun `should add values with += operator`() {
+    val set = ObjectSet.with("1", "2")
+
+    set += "3"
+
+    assertEquals(gdxSetOf("1", "2", "3"), set)
+  }
+
+  @Test
   fun `should add values with + operator`() {
     val set = ObjectSet<String>()
 
-    set + "1"
+    val result = set + "1"
 
-    assertEquals(gdxSetOf("1"), set)
+    assertEquals(gdxSetOf("1"), result)
+    assertEquals(gdxSetOf<String>(), set)
 
-    set + "2" + "3"
+    val chained = result + "2" + "3"
 
-    assertEquals(gdxSetOf("2", "1", "3"), set)
+    assertEquals(gdxSetOf("1", "2", "3"), chained)
+    assertEquals(gdxSetOf("1"), result)
+  }
+
+  @Test
+  fun `should remove values with -= operator`() {
+    val set = ObjectSet.with("1", "2", "3")
+
+    set -= "1"
+
+    assertEquals(gdxSetOf("2", "3"), set)
+
+    set -= "4"
+
+    assertEquals(gdxSetOf("2", "3"), set)
   }
 
   @Test
   fun `should remove values with - operator`() {
     val set = ObjectSet.with("1", "2", "3")
 
-    set - "1"
+    val result = set - "1"
 
-    assertEquals(gdxSetOf("2", "3"), set)
+    assertEquals(gdxSetOf("2", "3"), result)
+    assertEquals(gdxSetOf("1", "2", "3"), set)
 
-    set - "2" - "3"
+    val chained = result - "2" - "3"
 
-    assertEquals(gdxSetOf<String>(), set)
+    assertEquals(gdxSetOf<String>(), chained)
+    assertEquals(gdxSetOf("2", "3"), result)
   }
 
   @Test
   fun `should chain operators`() {
     val set = ObjectSet.with("1", "2", "3")
 
-    set + "5" - "2" + "7"
+    val result = set + "5" - "2" + "7"
 
-    assertEquals(ObjectSet.with("1", "3", "5", "7"), set)
+    assertEquals(gdxSetOf("1", "3", "5", "7"), result)
+    assertEquals(gdxSetOf("1", "2", "3"), set)
+  }
+
+  @Test
+  fun `should add elements from iterables with += operator`() {
+    val set = ObjectSet.with("1", "2")
+
+    set += ObjectSet.with("2", "3")
+
+    assertEquals(ObjectSet.with("1", "2", "3"), set)
   }
 
   @Test
   fun `should add elements from iterables with + operator`() {
-    val set = ObjectSet<String>()
+    val set = ObjectSet.with("1", "2")
 
-    set + ObjectSet.with("1", "2", "3")
+    val result = set + ObjectSet.with("2", "3")
+
+    assertEquals(ObjectSet.with("1", "2", "3"), result)
+    assertEquals(ObjectSet.with("1", "2"), set)
+  }
+
+  @Test
+  fun `should add elements from Arrays with += operator`() {
+    val set = ObjectSet.with("1", "2")
+
+    set += arrayOf("2", "3")
 
     assertEquals(ObjectSet.with("1", "2", "3"), set)
   }
 
   @Test
   fun `should add elements from Arrays with + operator`() {
-    val set = ObjectSet<String>()
+    val set = ObjectSet.with("1", "2")
 
-    set + arrayOf("1", "2", "3")
+    val result = set + arrayOf("2", "3")
 
-    assertEquals(ObjectSet.with("1", "2", "3"), set)
+    assertEquals(ObjectSet.with("1", "2", "3"), result)
+    assertEquals(ObjectSet.with("1", "2"), set)
+  }
+
+  @Test
+  fun `should remove elements from iterables with -= operator`() {
+    val set = ObjectSet.with("1", "2", "3")
+
+    set -= ObjectSet.with("2", "3", "4")
+
+    assertEquals(gdxSetOf("1"), set)
+  }
+
+  @Test
+  fun `should remove elements from Arrays with -= operator`() {
+    val set = ObjectSet.with("1", "2", "3")
+
+    set -= arrayOf("2", "3", "4")
+
+    assertEquals(gdxSetOf("1"), set)
   }
 
   @Test
   fun `should remove elements from iterables with - operator`() {
     val set = ObjectSet.with("1", "2", "3")
 
-    set - ObjectSet.with("1", "2", "3")
+    val result = set - ObjectSet.with("2", "3", "4")
 
-    assertEquals(gdxSetOf<String>(), set)
+    assertEquals(gdxSetOf("1"), result)
+    assertEquals(gdxSetOf("1", "2", "3"), set)
   }
 
   @Test
   fun `should remove elements from Arrays with - operator`() {
     val set = ObjectSet.with("1", "2", "3")
 
-    set - arrayOf("1", "2", "3")
+    val result = set - arrayOf("2", "3", "4")
 
-    assertEquals(gdxSetOf<String>(), set)
+    assertEquals(gdxSetOf("1"), result)
+    assertEquals(gdxSetOf("1", "2", "3"), set)
   }
 
   @Test
   fun `should chain collection operators`() {
     val set = ObjectSet.with("1", "2", "3", "4") +
-        ObjectSet.with("3", "5") -
-        arrayOf("2", "4", "6") +
-        arrayOf("5", "7")
+      ObjectSet.with("3", "5") -
+      arrayOf("2", "4", "6") +
+      arrayOf("5", "7")
 
     assertEquals(ObjectSet.with("1", "3", "5", "7"), set)
   }

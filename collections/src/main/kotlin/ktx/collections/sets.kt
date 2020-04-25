@@ -12,6 +12,7 @@ typealias GdxSet<Element> = ObjectSet<Element>
  * Default LibGDX set size used by most constructors.
  */
 const val defaultSetSize = 51
+
 /**
  * Default LibGDX map and set load factor used by most constructors.
  */
@@ -23,7 +24,7 @@ const val defaultLoadFactor = 0.8f
  * @return a new [ObjectSet].
  */
 fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor): GdxSet<Type> =
-    GdxSet(initialCapacity, loadFactor)
+  GdxSet(initialCapacity, loadFactor)
 
 /**
  * @param elements will be initially stored in the set.
@@ -31,8 +32,9 @@ fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = d
  * @param loadFactor decides under what load the set is resized.
  * @return a new [ObjectSet].
  */
-inline fun <Type> gdxSetOf(vararg elements: Type, initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor):
-    GdxSet<Type> {
+inline fun <Type> gdxSetOf(
+  vararg elements: Type, initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor
+): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(*elements)
   return set
@@ -58,78 +60,133 @@ inline fun <Type> GdxSet<Type>?.isNotEmpty(): Boolean = this != null && this.siz
  * @param elements will be iterated over and added to the set.
  */
 fun <Type> GdxSet<Type>.addAll(elements: Iterable<Type>) =
-    elements.forEach { this.add(it) }
+  elements.forEach { this.add(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
 fun <Type> GdxSet<Type>.removeAll(elements: Iterable<Type>) =
-    elements.forEach { this.remove(it) }
+  elements.forEach { this.remove(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
 fun <Type> GdxSet<Type>.removeAll(elements: Array<out Type>) =
-    elements.forEach { this.remove(it) }
+  elements.forEach { this.remove(it) }
 
 /**
- * Allows to append elements to sets with pleasant, chainable `set + element0 + element1` syntax.
- * @param element will be added to the set.
- * @return this set.
+ * Allows to append elements to sets with `set + element` syntax.
+ * @param element will be added to the result set.
+ * @return a new [GdxSet] with elements from this set and [element].
  */
 operator fun <Type> GdxSet<Type>.plus(element: Type): GdxSet<Type> {
-  this.add(element)
-  return this
+  val result = GdxSet(this)
+  result.add(element)
+  return result
 }
 
 /**
- * Allows to quickly add all elements of another iterable to this set with a pleasant, chainable operator syntax.
- * @param elements will be added to the set.
- * @return this set.
+ * Allows to add all elements of another iterable to this set with + operator syntax.
+ * @param elements will be added to the result set.
+ * @return a new [GdxSet] with elements from this set and [elements].
  */
 operator fun <Type> GdxSet<Type>.plus(elements: Iterable<Type>): GdxSet<Type> {
-  this.addAll(elements)
-  return this
+  val result = GdxSet(this)
+  result.addAll(elements)
+  return result
 }
 
 /**
- * Allows to quickly add all elements of an array to this set with a pleasant, chainable operator syntax.
+ * Allows to add all elements of an array to this set with + operator syntax.
+ * @param elements will be added to the result set.
+ * @return a new [GdxSet] with elements from this set and [elements].
+ */
+operator fun <Type> GdxSet<Type>.plus(elements: Array<out Type>): GdxSet<Type> {
+  val result = GdxSet(this)
+  result.addAll(elements, 0, elements.size)
+  return result
+}
+
+/**
+ * Allows to append elements to sets with += operator syntax.
+ * @param element will be added to the set.
+ */
+operator fun <Type> GdxSet<Type>.plusAssign(element: Type) {
+  add(element)
+}
+
+/**
+ * Allows to add all elements of another iterable to this set with += operator syntax.
+ * @param elements will be added to the set.
+ */
+operator fun <Type> GdxSet<Type>.plusAssign(elements: Iterable<Type>) {
+  this.addAll(elements)
+}
+
+/**
+ * Allows to add all elements of an array to this set with += operator syntax.
  * @param elements will be added to the set.
  * @return this set.
  */
-operator fun <Type> GdxSet<Type>.plus(elements: Array<out Type>): GdxSet<Type> {
-  this.addAll(elements, 0, elements.size)
-  return this
+operator fun <Type> GdxSet<Type>.plusAssign(elements: Array<out Type>) {
+  addAll(elements, 0, elements.size)
 }
 
 /**
- * Allows to remove elements from sets with pleasant, chainable `set - element0 - element1` syntax.
- * @param element will be removed from the set.
- * @return this set.
+ * Allows to remove elements from sets with `set - element` syntax.
+ * @param element will not be added to the new set.
+ * @return a new [GdxSet] with elements from this set except for the [element].
  */
 operator fun <Type> GdxSet<Type>.minus(element: Type): GdxSet<Type> {
-  this.remove(element)
-  return this
+  val result = GdxSet(this)
+  result.remove(element)
+  return result
 }
 
 /**
- * Allows to quickly remove all elements of another iterable from this set with a pleasant, chainable operator syntax.
- * @param elements will be removed from the set.
- * @return this set.
+ * Allows to remove all elements of another iterable from this set with - operator syntax.
+ * @param elements will not be added to the new set.
+ * @return a new [GdxSet] with elements from this set except for the [elements].
  */
 operator fun <Type> GdxSet<Type>.minus(elements: Iterable<Type>): GdxSet<Type> {
-  this.removeAll(elements)
-  return this
+  val result = GdxSet(this)
+  result.removeAll(elements)
+  return result
 }
 
 /**
- * Allows to quickly remove all elements of an array from this set with a pleasant, chainable operator syntax.
- * @param elements will be removed from the set.
- * @return this set.
+ * Allows to remove all elements of an array from this set with - operator syntax.
+ * @param elements will not be added to the new set.
+ * @return a new [GdxSet] with elements from this set except for the [elements].
  */
 operator fun <Type> GdxSet<Type>.minus(elements: Array<out Type>): GdxSet<Type> {
-  this.removeAll(elements)
-  return this
+  val result = GdxSet(this)
+  result.removeAll(elements)
+  return result
+}
+
+/**
+ * Allows to remove elements from sets -= operator syntax.
+ * @param element will be removed from this set.
+ */
+operator fun <Type> GdxSet<Type>.minusAssign(element: Type) {
+  remove(element)
+}
+
+/**
+ * Allows to remove all elements of another iterable from this set with -= operator syntax.
+ * @param elements will be removed from the set.
+ */
+operator fun <Type> GdxSet<Type>.minusAssign(elements: Iterable<Type>) {
+  removeAll(elements)
+}
+
+/**
+ * Allows to remove all elements of an array from this set with -= operator syntax.
+ * @param elements will be removed from the set.
+ */
+operator fun <Type> GdxSet<Type>.minusAssign(elements: Array<out Type>) {
+  removeAll(elements)
 }
 
 /**
@@ -194,8 +251,9 @@ inline fun <Type, R> GdxSet<Type>.flatMap(transform: (Type) -> Iterable<R>): Gdx
  * @param initialCapacity initial size of the backing array. Defaults to set size.
  * @return values copied from this set stored in a LibGDX array.
  */
-inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size):
-    com.badlogic.gdx.utils.Array<Type> {
+inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(
+  ordered: Boolean = true, initialCapacity: Int = this.size
+): GdxArray<Type> {
   val array = com.badlogic.gdx.utils.Array<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
   return array
@@ -206,8 +264,9 @@ inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(ordered: Boolean = true,
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
  * @return values copied from this iterable stored in a LibGDX set.
  */
-fun <Type> Iterable<Type>.toGdxSet(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor):
-    GdxSet<Type> {
+fun <Type> Iterable<Type>.toGdxSet(
+  initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor
+): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
   return set
@@ -218,8 +277,9 @@ fun <Type> Iterable<Type>.toGdxSet(initialCapacity: Int = defaultSetSize, loadFa
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
  * @return values copied from this iterable stored in a LibGDX set.
  */
-fun <Type> Array<Type>.toGdxSet(initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor):
-    GdxSet<Type> = gdxSetOf(*this, initialCapacity = initialCapacity, loadFactor = loadFactor)
+fun <Type> Array<Type>.toGdxSet(
+  initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor
+): GdxSet<Type> = gdxSetOf(*this, initialCapacity = initialCapacity, loadFactor = loadFactor)
 
 /**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary. Defaults to this array size.

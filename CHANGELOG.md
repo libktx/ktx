@@ -15,20 +15,23 @@ Starting from this release, GitHub releases will no longer contain the Javadoc a
 add `Entity.addComponent`. Now their lambda parameters are ensured to be executed exactly once:
 ```kotlin
 // Before:
-lateinit var data: Int
+lateinit var value: Int
 engine.add {
-  data = 42
+  value = 42
 }
 
 // Now:
-val data: Int
+val value: Int
 engine.add {
-  data = 42
+  value = 42
 }
 ```
 - **[FEATURE]** (`ktx-assets`) `Iterable.dispose` and `Array.dispose` extension methods consuming an error handler are now inlined.
 - **[FEATURE]** (`ktx-box2d`) Added contracts support to body, fixture and joint factory methods, as well as `FixtureDef.filter`
 This ensures that the configuration lambdas are executed exactly once.
+- **[CHANGE]** (`ktx-collections`) `PooledList` was removed due to concurrent iteration safety issues. Use standard library lists instead.
+- **[CHANGE]** (`ktx-collections`) `-` and `+` operators no longer mutate the collections. Instead, they create a new collection instance and add or removed the selected elements.
+To modify an existing collection, use new mutating `+=` and `-=` operators.
 - **[FEATURE]** (`ktx-freetype`) Added contracts support to `AssetManager.loadFreeTypeFont`, `freeTypeFontParameters`
 and `FreeTypeFontGenerator.generateFont`. This ensures that the font configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-freetype-async`) Added contracts support to `AssetStorage.loadFreeTypeFont`.

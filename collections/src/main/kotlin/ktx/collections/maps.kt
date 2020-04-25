@@ -276,13 +276,13 @@ operator fun <Value> IntMap<Value>.set(key: Int, value: Value): Value? = this.pu
  * Allows to destruct [ObjectMap.Entry] into key and value components.
  * @return [ObjectMap.Entry.key]
  */
-inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component1() = key!!
+inline operator fun <Key, Value> Entry<Key, Value>.component1() = key!!
 
 /**
  * Allows to destruct [ObjectMap.Entry] into key and value components. Nullable, since [ObjectMap] allows null values.
  * @return [ObjectMap.Entry.value]
  */
-inline operator fun <Key, Value> ObjectMap.Entry<Key, Value>.component2(): Value? = value
+inline operator fun <Key, Value> Entry<Key, Value>.component2(): Value? = value
 
 /**
  * Allows to destruct [IntMap.Entry] into key and value components.
