@@ -25,14 +25,18 @@ class FreeTypeTest {
 
   @Test
   fun `should initiate font loading parameters`() {
+    val variable: Int
+
     val parameters = freeTypeFontParameters("file.ttf") {
       size = 12
       flip = false
+      variable = 42
     }
 
     assertEquals("file.ttf", parameters.fontFileName)
     assertEquals(12, parameters.fontParameters.size)
     assertFalse(parameters.fontParameters.flip)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -87,10 +91,12 @@ class FreeTypeTest {
   fun `should load OTF file into BitmapFont with custom parameters`() {
     val assetManager = assetManager()
     assetManager.registerFreeTypeFontLoaders()
+    val variable: Int
 
     val asset = assetManager.loadFreeTypeFont(otfFile) {
       size = 12
       borderWidth = 1f
+      variable = 42
     }
 
     asset.finishLoading()
@@ -98,6 +104,7 @@ class FreeTypeTest {
     assertNotNull(font)
     assertTrue(font is BitmapFont)
     assertSame(asset.asset, font)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -118,10 +125,12 @@ class FreeTypeTest {
   fun `should load TTF file into BitmapFont with custom parameters`() {
     val assetManager = assetManager()
     assetManager.registerFreeTypeFontLoaders()
+    val variable: Int
 
     val asset = assetManager.loadFreeTypeFont(ttfFile) {
       size = 12
       borderWidth = 1f
+      variable = 42
     }
 
     asset.finishLoading()
@@ -129,6 +138,7 @@ class FreeTypeTest {
     assertNotNull(font)
     assertTrue(font is BitmapFont)
     assertSame(asset.asset, font)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -197,12 +207,15 @@ class FreeTypeTest {
   @Test
   fun `should generate font from TTF file with custom parameters `() {
     val generator = FreeTypeFontGenerator(Gdx.files.classpath(ttfFile))
+    val variable: Int
 
     val font = generator.generateFont {
       size = 40
+      variable = 42
     }
 
     assertNotNull(font)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -217,12 +230,15 @@ class FreeTypeTest {
   @Test
   fun `should generate font from OTF file with custom parameters `() {
     val generator = FreeTypeFontGenerator(Gdx.files.classpath(otfFile))
+    val variable: Int
 
     val font = generator.generateFont {
       size = 40
+      variable = 42
     }
 
     assertNotNull(font)
+    assertEquals(42, variable)
   }
 
   @Before

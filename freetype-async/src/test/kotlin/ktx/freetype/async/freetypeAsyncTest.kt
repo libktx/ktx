@@ -307,6 +307,24 @@ class FreeTypeAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should configure font parameters exactly once`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+    runBlocking {
+      val variable: Int
+
+      // When:
+      storage.loadFreeTypeFont(ttfFile) {
+        variable = 42
+      }
+
+      // Then:
+      assertEquals(42, variable)
+    }
+  }
+
+  @Test
   fun `should allow to load BitmapFont and FreeTypeFontGenerator assets in parallel`() {
     // Given:
     val storage = AssetStorage(

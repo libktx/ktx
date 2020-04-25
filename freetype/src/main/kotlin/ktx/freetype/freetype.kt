@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 import ktx.assets.Asset
 import ktx.assets.load
 import ktx.assets.setLoader
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator] instances from TTF and OTF files.
@@ -21,8 +24,9 @@ import ktx.assets.setLoader
  * will be used by default unless overridden.
  */
 fun AssetManager.registerFreeTypeFontLoaders(
-    fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
-    replaceDefaultBitmapFontLoader: Boolean = false) {
+  fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
+  replaceDefaultBitmapFontLoader: Boolean = false
+) {
   val fontGeneratorLoader = FreeTypeFontGeneratorLoader(fileHandleResolver)
   setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorParameters>(fontGeneratorLoader)
 
@@ -42,21 +46,30 @@ fun AssetManager.registerFreeTypeFontLoaders(
  * @param setup should specify font parameters. Will be invoked on a new instance of [FreeTypeFontParameter]. Inlined.
  * @return [Asset] wrapper which allows to access the font once it is loaded.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun AssetManager.loadFreeTypeFont(
-    file: String,
-    setup: FreeTypeFontParameter.() -> Unit = {}): Asset<BitmapFont> =
-    load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
+  file: String,
+  setup: FreeTypeFontParameter.() -> Unit = {}
+): Asset<BitmapFont> {
+  contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
+  return load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
+}
 
 /**
  * Syntax sugar for [FreeTypeFontLoaderParameter] initialization. Used internally by [loadFreeTypeFont].
  * @param file path to the font file. Must be the same as the path passed to the loader.
  * @param setup should specify font parameters. Will be invoked on a new instance of [FreeTypeFontParameter]. Inlined.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun freeTypeFontParameters(
-    file: String,
-    setup: FreeTypeFontParameter.() -> Unit = {}) = FreeTypeFontLoaderParameter().apply {
-  fontFileName = file
-  fontParameters.apply(setup)
+  file: String,
+  setup: FreeTypeFontParameter.() -> Unit = {}
+): FreeTypeFontLoaderParameter {
+  contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
+  return FreeTypeFontLoaderParameter().apply {
+    fontFileName = file
+    fontParameters.apply(setup)
+  }
 }
 
 /**
@@ -64,5 +77,8 @@ inline fun freeTypeFontParameters(
  * @param setup will be applied to newly constructed [FreeTypeFontParameter]. Inlined. If not given, will create a font
  * with default parameters.
  */
-inline fun FreeTypeFontGenerator.generateFont(setup: FreeTypeFontParameter.() -> Unit = {}): BitmapFont =
-    generateFont(FreeTypeFontParameter().apply(setup))
+@OptIn(ExperimentalContracts::class)
+inline fun FreeTypeFontGenerator.generateFont(setup: FreeTypeFontParameter.() -> Unit = {}): BitmapFont {
+  contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
+  return generateFont(FreeTypeFontParameter().apply(setup))
+}
