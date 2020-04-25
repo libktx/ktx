@@ -11,6 +11,21 @@ Starting from this release, GitHub releases will no longer contain the Javadoc a
 - **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` extension method to access a chosen `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` extension method to create a `Component` for an existing `Entity`. 
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.plusAssign` (`+=`) operator that allows to add an `Component` to an `Entity`. 
+- **[FEATURE]** (`ktx-ashley`) Added contracts support to `EngineEntity.with`, `Engine.create`, `Engine.add`, `Engine.entity`
+add `Entity.addComponent`. Now their lambda parameters are ensured to be executed exactly once:
+```kotlin
+// Before:
+lateinit var data: Int
+engine.add {
+  data = 42
+}
+
+// Now:
+val data: Int
+engine.add {
+  data = 42
+}
+```
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.

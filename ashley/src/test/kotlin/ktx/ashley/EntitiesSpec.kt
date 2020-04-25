@@ -113,6 +113,13 @@ object EntitiesSpec : Spek({
         assertThat(entity[Transform.mapper]).isEqualTo(component)
         assertThat(component.x).isEqualTo(3f)
       }
+      it("should configure component exactly once") {
+        val variable: Int
+        entity.addComponent<Transform>(engine) {
+          variable = 42
+        }
+        assertThat(variable).isEqualTo(42)
+      }
     }
   }
 })
