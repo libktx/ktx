@@ -29,6 +29,18 @@ class FixturesTest : Box2DTest() {
   }
 
   @Test
+  fun `should configure filter exactly once`() {
+    val fixtureDefinition = FixtureDef()
+    val variable: Int
+
+    fixtureDefinition.filter {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should copy filter properties into filter of FixtureDef`() {
     val fixtureDefinition = FixtureDef()
     val filter = Filter().apply {

@@ -109,6 +109,21 @@ class WorldsTest : Box2DTest() {
   }
 
   @Test
+  fun `should construct Body exactly once`() {
+    val world = createWorld()
+    val fixture: FixtureDefinition
+    val variable: Int
+
+    world.body {
+      fixture = circle()
+      variable = 42
+    }
+
+    assertNotNull(fixture)
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should dispose of Shape instances during Body construction`() {
     val world = createWorld()
     val reusable = spy(CircleShape())

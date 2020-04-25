@@ -27,6 +27,8 @@ engine.add {
 }
 ```
 - **[FEATURE]** (`ktx-assets`) `Iterable.dispose` and `Array.dispose` extension methods consuming an error handler are now inlined.
+- **[FEATURE]** (`ktx-box2d`) Added contracts support to body, fixture and joint factory methods, as well as `FixtureDef.filter`
+This ensures that the configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
@@ -78,6 +80,12 @@ Their building blocks no longer consume `Cell` and `Node` instances.
   - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
   - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
   - The sources documentation was greatly expanded.
+
+Known issues:
+
+- **[BUG]** (`ktx-box2d`) Due to a Kotlin compiler bug, methods with _vararg_ parameters do not support contracts.
+This includes some `polygon`, `chain` and `loop` factory methods. See [this issue](https://youtrack.jetbrains.com/issue/KT-30497).
+They can still be used and work as expected, but the compiler does not ensure that their lambda parameters are executed exactly once.
 
 #### 1.9.10-b5
 
