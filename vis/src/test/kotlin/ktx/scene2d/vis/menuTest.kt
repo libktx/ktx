@@ -18,7 +18,7 @@ import org.junit.Test
 class MenusTest : NeedsLibGDX() {
   @Test
   fun `should create PopupMenu`() {
-    var initInvoked = false
+    var initInvoked: Boolean
 
     val menu = scene2d.popupMenu {
       initInvoked = true
@@ -30,7 +30,7 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create MenuBar`() {
-    var initInvoked = false
+    var initInvoked: Boolean
 
     val menu = scene2d.menuBar {
       initInvoked = true
@@ -42,7 +42,7 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should add MenuBar table to parent`() {
-    lateinit var menuBar: MenuBar
+    val menuBar: MenuBar
 
     val table = scene2d.table {
       menuBar = menuBar()
@@ -53,8 +53,8 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create Menu`() {
-    var initInvoked = false
-    lateinit var menu: Menu
+    var initInvoked: Boolean
+    val menu: Menu
 
     val menuBar = scene2d.menuBar {
       menu = menu("Test menu") {
@@ -69,8 +69,8 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create MenuItem`() {
-    var initInvoked = false
-    lateinit var menuItem: MenuItem
+    var initInvoked: Boolean
+    val menuItem: MenuItem
 
     scene2d.popupMenu {
       menuItem = menuItem("Test item") {
@@ -84,9 +84,9 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create MenuItem with Drawable`() {
-    var initInvoked = false
+    var initInvoked: Boolean
     val drawable = VisUI.getSkin().getDrawable("white")
-    lateinit var menuItem: MenuItem
+    val menuItem: MenuItem
 
     scene2d.popupMenu {
       menuItem = menuItem("Test item", drawable) {
@@ -101,9 +101,9 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create MenuItem with Drawable name`() {
-    var initInvoked = false
+    var initInvoked: Boolean
     val drawableName = "white"
-    lateinit var menuItem: MenuItem
+    val menuItem: MenuItem
 
     scene2d.popupMenu {
       menuItem = menuItem("Test item", drawableName = drawableName) {
@@ -118,9 +118,9 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create MenuItem with Image`() {
-    var initInvoked = false
+    var initInvoked: Boolean
     val image = Image(VisUI.getSkin().getDrawable("white"))
-    lateinit var menuItem: MenuItem
+    val menuItem: MenuItem
 
     scene2d.popupMenu {
       menuItem = menuItem("Test item", image) {
@@ -135,9 +135,9 @@ class MenusTest : NeedsLibGDX() {
 
   @Test
   fun `should create submenu`() {
-    var initInvoked = false
-    lateinit var menuItem: MenuItem
-    lateinit var subMenu: PopupMenu
+    var initInvoked: Boolean
+    val menuItem: MenuItem
+    val subMenu: PopupMenu
 
     scene2d.popupMenu {
       menuItem = menuItem("") {

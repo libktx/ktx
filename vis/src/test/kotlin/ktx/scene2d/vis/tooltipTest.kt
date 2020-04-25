@@ -24,7 +24,7 @@ class TooltipsTest : NeedsLibGDX() {
   @Test
   fun `should create Tooltip with init block`() {
     val actor = Actor()
-    var initInvoked = false
+    var initInvoked: Boolean
 
     val tooltip = actor.visTooltip(VisTable()) {
       initInvoked = true
@@ -50,7 +50,7 @@ class TooltipsTest : NeedsLibGDX() {
   fun `should create text Tooltip with init block`() {
     val actor = Actor()
     val text = "text tooltip"
-    var initInvoked = false
+    var initInvoked: Boolean
 
     val tooltip = actor.visTextTooltip(text) {
       initInvoked = true

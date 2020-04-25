@@ -5,6 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Disableable
 import com.kotcrab.vis.ui.util.form.FormValidator
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.defaultStyle
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * [FormValidator] factory function.
@@ -14,9 +17,13 @@ import ktx.scene2d.defaultStyle
  * @return a new instance of a [FormValidator]
  */
 @Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 inline fun validator(
   targetToDisable: Disableable? = null,
   messageLabel: Label? = null,
   style: String = defaultStyle,
   init: FormValidator.() -> Unit
-): FormValidator = FormValidator(targetToDisable, messageLabel, style).apply(init)
+): FormValidator {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return FormValidator(targetToDisable, messageLabel, style).apply(init)
+}

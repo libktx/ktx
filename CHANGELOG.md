@@ -85,6 +85,8 @@ This ensures that widget configuration lambdas are executed exactly once.
   - Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
   `multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
   created or can be defined as nested children with the same DSL.
+  - Inlined functions with lambda parameters, such as widget factories with their building block lambdas, now use
+  Kotlin contracts to ensure that they are executed exactly once.
   - `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
   - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
   - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.

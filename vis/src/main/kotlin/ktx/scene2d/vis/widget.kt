@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Container
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.GdxRuntimeException
@@ -20,6 +19,9 @@ import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneAdapter
 import com.kotcrab.vis.ui.widget.toast.ToastTable
 import ktx.scene2d.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /** Extends [VisTable] with type-safe widget builders. */
 @Scene2dDsl
@@ -107,27 +109,29 @@ class KDragPane : DragPane(KVisTable(false)), KGroup {
 
 /** Extends [TabbedPane] with type-safe widget builders. */
 @Scene2dDsl
-class KTabbedPane(styleName: String) : TabbedPane(styleName) {
-  /**
-   * Begins creation of new [Tab] using type-safe builder. Newly created tab will be added to tabbed pane automatically
-   * so there is no need to call [add] manually.
-   * @param title title of the [Tab].
-   * @param savable see [Tab.savable].
-   * @param closeableByUser see [Tab.closeableByUser].
-   * @param init allows to customize the [Tab].
-   * @return a new [Tab] instance added to this pane.
-   */
-  inline fun tab(
-    title: String,
-    savable: Boolean = false,
-    closeableByUser: Boolean = true,
-    init: KTab.() -> Unit = {}
-  ): Tab {
-    val tab = KTab(title, savable, closeableByUser)
-    super.add(tab)
-    tab.init()
-    return tab
-  }
+class KTabbedPane(styleName: String) : TabbedPane(styleName)
+
+/**
+ * Begins creation of new [Tab] using type-safe builder. Newly created tab will be added to tabbed pane automatically
+ * so there is no need to call [add] manually.
+ * @param title title of the [Tab].
+ * @param savable see [Tab.savable].
+ * @param closeableByUser see [Tab.closeableByUser].
+ * @param init allows to customize the [Tab].
+ * @return a new [Tab] instance added to this pane.
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun KTabbedPane.tab(
+  title: String,
+  savable: Boolean = false,
+  closeableByUser: Boolean = true,
+  init: KTab.() -> Unit = {}
+): Tab {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  val tab = KTab(title, savable, closeableByUser)
+  add(tab)
+  tab.init()
+  return tab
 }
 
 /**

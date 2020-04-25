@@ -7,7 +7,7 @@ import org.junit.Test
 class ValidationTest : NeedsLibGDX() {
   @Test
   fun `should create FormValidator`() {
-    var invoked = false
+    var invoked: Boolean
 
     val formValidator = validator {
       invoked = true
