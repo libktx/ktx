@@ -367,8 +367,8 @@ class PreferencesTest {
 
   @Test
   fun `should flush changes after executing passed operations`() {
-    var wasExecuted = false
-    var wasFlushedDuringExecution = true
+    var wasExecuted: Boolean
+    var wasFlushedDuringExecution: Boolean
     preferences.flush {
       wasExecuted = true
       wasFlushedDuringExecution = (preferences as TestPreferences).flushed
