@@ -2,6 +2,9 @@ package ktx.inject
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -112,18 +115,6 @@ open class Context : Disposable {
   inline fun <reified Type : Any> contains(): Boolean = Type::class.java in this
 
   /**
-   * Allows to register new components in the context with builder-like DSL
-   * @param init will be invoked on this context.
-   * @return this context.
-   * @see bind
-   * @see bindSingleton
-   */
-  inline fun register(init: Context.() -> Unit): Context {
-    this.init()
-    return this
-  }
-
-  /**
    * Allows to bind a provider producing instances of the selected type.
    * @param provider will be bind with the selected type. If no type argument is passed, it will be bind to the same
    *    exact class as the object it provides.
@@ -209,6 +200,21 @@ open class Context : Disposable {
     }
     clear()
   }
+}
+
+
+/**
+ * Allows to register new components in the context with builder-like DSL.
+ * @param init will be invoked on this context.
+ * @return this context.
+ * @see Context.bind
+ * @see Context.bindSingleton
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun Context.register(init: Context.() -> Unit): Context {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  this.init()
+  return this
 }
 
 /**
