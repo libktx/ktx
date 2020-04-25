@@ -2,6 +2,9 @@ package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 
 /** See [textTooltip]. */
@@ -28,6 +31,7 @@ inline fun Actor.addTextTooltip(
  * @return a new [TextTooltip] instance added to the actor.
  */
 @Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Actor.textTooltip(
     text: String,
     style: String = defaultStyle,
@@ -35,6 +39,7 @@ inline fun Actor.textTooltip(
     tooltipManager: TooltipManager = TooltipManager.getInstance(),
     init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
 ): TextTooltip {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
   tooltip.actor.init(tooltip)
   this.addListener(tooltip)
@@ -64,12 +69,14 @@ inline fun Actor.addTooltip(
  * @return a new [Tooltip] instance added to this actor.
  */
 @Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Actor.tooltip(
     background: String? = null,
     skin: Skin = Scene2DSkin.defaultSkin,
     tooltipManager: TooltipManager = TooltipManager.getInstance(),
     init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
 ): Tooltip<KTableWidget> {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val table = KTableWidget(skin)
   if (background != null) {
     table.setBackground(background)

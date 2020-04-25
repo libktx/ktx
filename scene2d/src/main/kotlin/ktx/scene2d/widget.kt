@@ -5,6 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -44,14 +47,18 @@ object scene2d : RootWidget {
     // Actor is not modified or added to a group.
     return actor
   }
+}
 
-  /**
-   * Allows to define an actor within a DSL lambda block.
-   * @param dsl will be immediately invoked. Must return an actor.
-   * @return [Actor] returned by [dsl].
-   */
-  @Scene2dDsl
-  inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
+/**
+ * Allows to define an actor within a DSL lambda block.
+ * @param dsl will be immediately invoked. Must return an actor.
+ * @return [Actor] returned by [dsl].
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <T : Actor> scene2d(dsl: RootWidget.() -> T): T {
+  contract { callsInPlace(dsl, InvocationKind.EXACTLY_ONCE) }
+  return scene2d.dsl()
 }
 
 /**
@@ -345,6 +352,8 @@ class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
     add(node)
     return node
   }
+
+  // TODO As of Kotlin 1.3, contracts are prohibited in operators. Add contracts to `invoke` methods.
 
   /**
    * Allows to inline a function block on a [KNode]. Syntax sugar for nested [Tree] nodes creation.

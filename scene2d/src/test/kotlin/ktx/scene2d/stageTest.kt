@@ -23,9 +23,9 @@ class StageWidgetTest : NeedsLibGDX() {
   @Test
   fun `should add multiple top-level actors to the Stage within actors block`() {
     val stage = Stage(mock(), mock())
-    lateinit var label: Label
-    lateinit var table: Table
-    lateinit var button: Button
+    val label: Label
+    val table: Table
+    val button: Button
 
     stage.actors {
       label = label("Test")
@@ -45,11 +45,23 @@ class StageWidgetTest : NeedsLibGDX() {
   }
 
   @Test
+  fun `should configure Stage exactly once`() {
+    val stage = Stage(mock(), mock())
+    val variable: Int
+
+    stage.actors {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should store root actors in Stage when using actors block`() {
     val stage = Stage(mock(), mock())
-    lateinit var window: Window
-    lateinit var dialog: Dialog
-    lateinit var label: Label
+    val window: Window
+    val dialog: Dialog
+    val label: Label
 
     stage.actors {
       window = window("Test")

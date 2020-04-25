@@ -57,8 +57,9 @@ Note that the actors can still be created via standard DSL. See the migration gu
 - **[CHANGE]** (`ktx-scene2d`) `listWidget` and `selectBox` now have a single generic type to improve usability.
 Their building blocks no longer consume `Cell` and `Node` instances.
 - **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods was removed.
-- **[FEATURE]** (`ktx-style`) Added contracts support to widget style factory methods and top-level `skin` functions.
-This ensures that configuration lambdas are executed exactly once.
+- **[FEATURE]** (`ktx-scene2d`) Added contracts support to widget factory methods and `Stage.actors`.
+This ensures that widget configuration lambdas are executed exactly once.
+- **[FEATURE]** (`ktx-style`) Added contracts support to style factory methods and top-level `skin` functions.
 - **[CHANGE]** (`ktx-vis`) Overhaul of the module.
   - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of APIs are now shared.
   - All factory methods for VisUI widgets are now inlined, which can improve the performance of GUI building.

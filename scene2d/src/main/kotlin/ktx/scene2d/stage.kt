@@ -2,6 +2,9 @@ package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * A dummy widget that allows to add actors directly to the [stage] with Scene2D DSL.
@@ -19,6 +22,8 @@ class StageWidget(val stage: Stage) : RootWidget {
  * @param init inlined. All defined top-level widgets will be added to this [Stage].
  */
 @Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Stage.actors(init: (@Scene2dDsl StageWidget).() -> Unit) {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   StageWidget(this).init()
 }

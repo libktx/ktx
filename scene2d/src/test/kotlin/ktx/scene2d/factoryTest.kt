@@ -38,7 +38,7 @@ class RootActorFactoriesTest : NeedsLibGDX() {
 
   @Test
   fun `should create Window with nested children`() {
-    lateinit var label: Label
+    val label: Label
 
     val window = scene2d.window(title = "test") {
       label = label("Test")
@@ -70,7 +70,7 @@ class RootActorFactoriesTest : NeedsLibGDX() {
 
   @Test
   fun `should create Dialog with nested children`() {
-    lateinit var label: Label
+    val label: Label
 
     val dialog = scene2d.dialog(title = "test") {
       label = label("Test")

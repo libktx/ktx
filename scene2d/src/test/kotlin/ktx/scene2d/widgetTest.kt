@@ -42,6 +42,24 @@ class Scene2DTest : NeedsLibGDX() {
 
     assertEquals("Test", label.text.toString())
   }
+
+  @Test
+  fun `should execute DSL building block exactly once`() {
+    val variable: Int
+    val nestedLabel: Label
+
+    val table = scene2d {
+      variable = 42
+      table {
+        nestedLabel = label("Test")
+      }
+    }
+
+    assertSame(table, nestedLabel.parent)
+    assertEquals("Test", nestedLabel.text.toString())
+    assertEquals(42, variable)
+  }
+
   // Factory methods for other actors are tested separately in `factoryTest`.
 }
 

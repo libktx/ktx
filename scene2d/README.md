@@ -417,6 +417,22 @@ fun addActorsToStage(stage: Stage) {
 }
 ```
 
+Accessing nested actors:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import ktx.scene2d.*
+
+// Thanks to Kotlin contracts, our widget builders are ensured
+// to be executed exactly once, which makes assignment of nested
+// actors possible:
+
+val myLabel: Label
+val myTable = scene2d.table { 
+  myLabel = label("Kotlin contracts make it possible!")
+}
+```
+
 Customizing layout of a `Window` using `Cell` properties:
 
 ```kotlin
@@ -633,6 +649,10 @@ fun usageExample() {
     label("A child of the custom widget!").cell(grow = true)
   }
 }
+
+// Note: you can also use experimental contracts to ensure
+// that the `init` lambda is executed exactly once.
+// See sources of official builders for contract examples.
 ```
 
 _The example images were made using [VisUI](../vis) skin._
