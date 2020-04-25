@@ -99,6 +99,7 @@ inline fun error(cause: Throwable, tag: String = "[ERROR]", message: () -> Strin
  * @param infoPrefix will proceed [tag] in info logs.
  * @param errorPrefix will proceed [tag] in error logs.
  */
+@Suppress("LeakingThis")
 open class Logger(
   open val tag: String,
   debugPrefix: String = "[DEBUG] ",
@@ -130,7 +131,7 @@ open class Logger(
    * @see Application.LOG_INFO
    * @see Application.getLogLevel
    */
-  inline operator fun Logger.invoke(message: () -> String) {
+  inline operator fun invoke(message: () -> String) {
     if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(infoTag, message())
   }
 
@@ -142,7 +143,7 @@ open class Logger(
    * @see Application.LOG_INFO
    * @see Application.getLogLevel
    */
-  inline operator fun Logger.invoke(cause: Throwable, message: () -> String) {
+  inline operator fun invoke(cause: Throwable, message: () -> String) {
     if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(infoTag, message(), cause)
   }
 }
