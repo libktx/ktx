@@ -48,6 +48,7 @@ subprojects {
   compileKotlin {
     kotlinOptions {
       jvmTarget = "1.6"
+      freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
   }
 
