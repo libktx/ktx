@@ -26,6 +26,7 @@ engine.add {
   data = 42
 }
 ```
+- **[FEATURE]** (`ktx-assets`) `Iterable.dispose` and `Array.dispose` extension methods consuming an error handler are now inlined.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.

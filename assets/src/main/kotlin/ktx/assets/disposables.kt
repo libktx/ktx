@@ -1,6 +1,9 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Allows to gracefully dispose a resource implementing [Disposable] interface. Will silently ignore nulls and exceptions
@@ -22,7 +25,9 @@ fun Disposable?.disposeSafely() {
  * @param onError will be invoked if an exception (except for JVM internal [Error]s, which should not be caught anyway)
  *    is thrown during asset disposing.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun Disposable?.dispose(onError: (Exception) -> Unit) {
+  contract { callsInPlace(onError, InvocationKind.AT_MOST_ONCE) }
   if (this != null) {
     try {
       this.dispose()
@@ -52,7 +57,9 @@ fun <Asset : Disposable> Iterable<Asset?>?.disposeSafely() = this?.forEach { it.
  * @param onError will be invoked each time an exception (except for JVM internal [Error]s, which should not be caught
  *    anyway) is thrown during asset disposing.
  */
-fun <Asset : Disposable> Iterable<Asset?>?.dispose(onError: (Exception) -> Unit) = this?.forEach { it.dispose(onError) }
+inline fun <Asset : Disposable> Iterable<Asset?>?.dispose(onError: (Exception) -> Unit) = this?.forEach {
+  it.dispose(onError)
+}
 
 /**
  * Allows to dispose a collection of resources implementing [Disposable] interface. Will silently ignore stored nulls.
@@ -74,7 +81,9 @@ fun <Asset : Disposable> Array<Asset>?.disposeSafely() = this?.forEach { it.disp
  * @param onError will be invoked each time an exception (except for JVM internal [Error]s, which should not be caught
  *    anyway) is thrown during asset disposing.
  */
-fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Unit) = this?.forEach { it.dispose(onError) }
+inline fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Unit) = this?.forEach {
+  it.dispose(onError)
+}
 
 /**
  * This method does nothing. This is a null-safe call that allows to clearly mark an exception as ignored. This approach

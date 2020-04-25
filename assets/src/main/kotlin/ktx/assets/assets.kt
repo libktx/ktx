@@ -7,6 +7,9 @@ import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KProperty
 
 /**
@@ -187,7 +190,9 @@ fun AssetManager.unloadSafely(path: String) {
  * @param path path of a loaded asset. Asset associated with this path will be unloaded.
  * @param onError any thrown exceptions will be passed to this handler.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun AssetManager.unload(path: String, onError: (Exception) -> Unit) {
+  contract { callsInPlace(onError, InvocationKind.AT_MOST_ONCE) }
   try {
     unload(path)
   } catch (exception: Exception) {
