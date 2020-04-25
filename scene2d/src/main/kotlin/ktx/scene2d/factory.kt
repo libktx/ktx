@@ -9,20 +9,6 @@ import kotlin.contracts.contract
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
- * Allows to create an actor and immediately invoke its type-safe building init block. Internal utility method.
- * @param actor will be initiated.
- * @param init will be invoked on the actor. Inlined.
- * @return passed [Actor].
- */
-@Deprecated(
-  message = "This function was used internally for defining root-level actors and will be removed.",
-  replaceWith = ReplaceWith("actor.apply(init)"))
-inline fun <T : Actor> actor(actor: T, init: (@Scene2dDsl T).() -> Unit = {}): T {
-  actor.init()
-  return actor
-}
-
-/**
  * Constructs a top-level [Window] widget.
  * @param title will be displayed as window's title.
  * @param style name of the widget style. Defaults to [defaultStyle].

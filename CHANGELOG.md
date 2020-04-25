@@ -1,5 +1,7 @@
 #### 1.9.10-SNAPSHOT
 
+- **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
+
 #### 1.9.10-b6
 
 - **[UPDATE]** Updated to Kotlin 1.3.72.

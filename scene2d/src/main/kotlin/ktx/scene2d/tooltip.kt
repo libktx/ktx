@@ -6,19 +6,6 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-
-/** See [textTooltip]. */
-@Deprecated(
-  message = "This extension method was renamed to `textTooltip`.",
-  replaceWith = ReplaceWith("textTooltip", imports = ["ktx.scene2d.textTooltip"]))
-inline fun Actor.addTextTooltip(
-  text: String,
-  style: String = defaultStyle,
-  skin: Skin = Scene2DSkin.defaultSkin,
-  tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
-): TextTooltip = textTooltip(text, style, skin, tooltipManager, init)
-
 /**
  * Adds a new [TextTooltip] to this actor.
  * @param text will be displayed on the tooltip.
@@ -45,17 +32,6 @@ inline fun Actor.textTooltip(
   this.addListener(tooltip)
   return tooltip
 }
-
-/** See [tooltip]. */
-@Deprecated(
-  message = "This extension method was renamed to `tooltip`.",
-  replaceWith = ReplaceWith("tooltip", imports = ["ktx.scene2d.tooltip"]))
-inline fun Actor.addTooltip(
-  background: String? = null,
-  skin: Skin = Scene2DSkin.defaultSkin,
-  tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
-): Tooltip<KTableWidget> = tooltip(background, skin, tooltipManager, init)
 
 /**
  * Adds a new [Tooltip] to this actor, storing a flexible [Table] widget.

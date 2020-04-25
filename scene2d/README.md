@@ -692,6 +692,7 @@ Instead, you have to call `cell`, `inCell`, `node` or `inNode` outside of their 
 
 `ktx-scene2d` version `1.9.10-b6` has the deprecated root actor factory functions available with annotations
 for automatic replacement. To ease migration to the newer KTX versions, use `1.9.10-b6` to refactor your application.
+Further KTX releases do not contain the deprecated functions.
 
 ### Alternatives
 
