@@ -101,6 +101,18 @@ class CameraUtilitiesTest {
     assertEquals(1, operationCalls)
     verify(camera, times(1)).update()
   }
+
+  @Test
+  fun `should perform camera update operation exactly once`() {
+    val camera = OrthographicCamera()
+    val variable: Int
+
+    camera.update {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
 }
 
 /**

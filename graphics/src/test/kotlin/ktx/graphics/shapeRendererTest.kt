@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 
 class ShapeRendererTest {
@@ -96,8 +96,8 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.rectLine(
-        positionA = Vector2(1f, 2f), positionB = Vector2(3f, 4f), width = 10f,
-        colorA = Color.BLACK, colorB = Color.WHITE
+      positionA = Vector2(1f, 2f), positionB = Vector2(3f, 4f), width = 10f,
+      colorA = Color.BLACK, colorB = Color.WHITE
     )
 
     verify(tested).rectLine(1f, 2f, 3f, 4f, 10f, Color.BLACK, Color.WHITE)
@@ -171,7 +171,7 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.triangle(pointA = Vector2(1f, 2f), pointB = Vector2(3f, 4f), pointC = Vector2(5f, 6f),
-        colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK)
+      colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK)
 
     verify(tested).triangle(1f, 2f, 3f, 4f, 5f, 6f, Color.WHITE, Color.GRAY, Color.BLACK)
   }
@@ -182,9 +182,21 @@ class ShapeRendererTest {
 
     shapeRenderer.use(ShapeType.Filled) {
       verify(shapeRenderer).begin(ShapeType.Filled)
-      Assert.assertSame(shapeRenderer, it)
+      assertSame(shapeRenderer, it)
       verify(shapeRenderer, never()).end()
     }
     verify(shapeRenderer).end()
+  }
+
+  @Test
+  fun `should use ShapeRenderer exactly once`() {
+    val shapeRenderer = mock<ShapeRenderer>()
+    val variable: Int
+
+    shapeRenderer.use(ShapeType.Filled) {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 }

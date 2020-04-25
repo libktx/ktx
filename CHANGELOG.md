@@ -32,6 +32,7 @@ This ensures that the configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-freetype`) Added contracts support to `AssetManager.loadFreeTypeFont`, `freeTypeFontParameters`
 and `FreeTypeFontGenerator.generateFont`. This ensures that the font configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-freetype-async`) Added contracts support to `AssetStorage.loadFreeTypeFont`.
+- **[FEATURE]** (`ktx-graphics`) Added contracts support to `Camera.update`, `Batch.use`, `ShaderProgram.use`, `GLFrameBuffer.use` and `ShapeRenderer.use`.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.

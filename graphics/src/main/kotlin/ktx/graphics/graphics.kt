@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.utils.BufferUtils
 import com.badlogic.gdx.utils.ScreenUtils
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Factory methods for LibGDX [Color] class. Allows to use named parameters.
@@ -39,9 +42,12 @@ fun Color.copy(red: Float? = null, green: Float? = null, blue: Float? = null, al
  * remains unchanged.
  * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> Unit) {
-  if (projectionMatrix != null)
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+  if (projectionMatrix != null) {
     this.projectionMatrix = projectionMatrix
+  }
   begin()
   action(this)
   end()
@@ -52,7 +58,11 @@ inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> U
  * @param camera The camera's [Camera.combined] matrix will be set to the batch's projection matrix before [Batch.begin]
  * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
  */
-inline fun <B : Batch> B.use(camera: Camera, action: (B) -> Unit) = use(camera.combined, action)
+@OptIn(ExperimentalContracts::class)
+inline fun <B : Batch> B.use(camera: Camera, action: (B) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+  use(camera.combined, action)
+}
 
 /**
  * Automatically calls [Batch.begin] with the provided matrix
@@ -73,7 +83,9 @@ fun <B : Batch> B.begin(camera: Camera) = begin(camera.combined)
  * Automatically calls [ShaderProgram.begin] and [ShaderProgram.end].
  * @param action inlined. Executed after [ShaderProgram.begin] and before [ShaderProgram.end].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   begin()
   action(this)
   end()
@@ -83,7 +95,9 @@ inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {
  * Automatically calls [GLFrameBuffer.begin] and [GLFrameBuffer.end].
  * @param action inlined. Executed after [GLFrameBuffer.begin] and before [GLFrameBuffer.end].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <B : GLFrameBuffer<*>> B.use(action: (B) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   begin()
   action(this)
   end()
