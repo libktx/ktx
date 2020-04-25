@@ -37,6 +37,7 @@ and `FreeTypeFontGenerator.generateFont`. This ensures that the font configurati
 - **[FEATURE]** (`ktx-freetype-async`) Added contracts support to `AssetStorage.loadFreeTypeFont`.
 - **[FEATURE]** (`ktx-graphics`) Added contracts support to `Camera.update`, `Batch.use`, `ShaderProgram.use`, `GLFrameBuffer.use` and `ShapeRenderer.use`.
 - **[FEATURE]** (`ktx-inject`) Added contracts support to `Context.register`.
+- **[CHANGE]** (`ktx-log`) Added contracts to logging methods. Logging methods now might need to be imported explicitly.
 - **[FEATURE]** (`ktx-preferences`) Added contracts support to `Preferences.flush`.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  

@@ -148,6 +148,8 @@ open class Logger(
   }
 }
 
+// TODO In Kotlin 1.4, inlined Logger extension methods should be added directly to the Logger class.
+
 /**
  * Logs a message on the debug level.
  * @param message inlined lambda which will be evaluated only if debug logs are currently on. The string result of this
