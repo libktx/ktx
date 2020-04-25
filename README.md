@@ -75,7 +75,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.10-b5'
+  ktxVersion = '1.9.10-b6'
 }
 
 dependencies {
@@ -121,7 +121,7 @@ You do not have to compile the sources manually to use the latest features. The 
 to the `https://oss.sonatype.org/content/repositories/snapshots/` repository. To use them in your application, add
 the following Maven repository and modify the prefix of `ktxVersion` to `-SNAPSHOT`:
 
-```Groovy
+```groovy
 repositories {
   // Include your default repositories here.
   maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -129,9 +129,8 @@ repositories {
 
 ext {
   // Update this version to match the latest LibGDX release:
-  ktxVersion = '1.9.6-SNAPSHOT'
+  ktxVersion = '1.9.10-SNAPSHOT'
 }
-
 ```
 
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
@@ -144,14 +143,16 @@ their extensive test suites.
 
 ### Official guides
 
-Each module contains a `README.md` file with a list of all features or a guide with some code snippets. Browse through
-the directories in the root folder to find out more about each library.
+Each module contains a `README.md` file with a list of all features or a guide with some code snippets.
+Browse through the directories in the root folder to find out more about each library.
 
 ### Source documentation
 
-All public classes and functions are also documented with standard Kotlin _KDocs_. GitHub releases contain archives
-with generated Dokka documentation for each module, although you can go through the documentation by viewing the sources
-directly.
+All public classes and functions are also documented with standard Kotlin _KDocs_. You can access the documentation by:
+
+- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/ktx/).
+- Reading the sources directly.
+- Using the `doc` archive in [GitHub releases](https://github.com/libktx/ktx/releases) with generated Dokka files.
 
 ### Links
 
@@ -181,7 +182,7 @@ and on [the contributors list](.github/CONTRIBUTORS.md).
 
 ### Licensing
 
-Before creating any pull requests, be aware that the code is dedicated to [public domain](LICENSE.txt).
+This project is dedicated to [public domain](LICENSE.txt).
 
 ### Working from sources
 
