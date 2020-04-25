@@ -3,6 +3,9 @@ package ktx.box2d
 import com.badlogic.gdx.physics.box2d.Filter
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Box2D building DSL utility class. [FixtureDef] extension exposing new properties. Note that when using fixture
@@ -51,4 +54,8 @@ fun FixtureDef.filter(filter: Filter): Filter {
  * Inlined utility extension method for setting up of [FixtureDef.filter]. Exposes [Filter] properties under `this`.
  * @param init inlined. Uses [FixtureDef.filter] as `this`.
  */
-inline fun FixtureDef.filter(init: (@Box2DDsl Filter).() -> Unit) = filter.init()
+@OptIn(ExperimentalContracts::class)
+inline fun FixtureDef.filter(init: (@Box2DDsl Filter).() -> Unit) {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  filter.init()
+}

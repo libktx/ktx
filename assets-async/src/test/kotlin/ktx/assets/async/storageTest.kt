@@ -1933,7 +1933,7 @@ class AssetStorageTest : AsyncTest() {
     runBlocking { tasks.joinAll() }
     assertEquals(1, syncLoadingThreads.size)
     assertTrue(renderingThread in syncLoadingThreads)
-    assertEquals(4, asyncLoadingThreads.size)
+    assertTrue(asyncLoadingThreads.size in 2..4)
     assertTrue(asyncLoadingThreads.all { asyncThreadNameSuffix in it.name })
   }
 

@@ -43,7 +43,7 @@ Project contributors listed chronologically.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
   * Author of the [Tiled](../tiled) module.
-  * Contributed [actors](../actors) utilities.
+  * Contributed [actors](../actors) and [ashley](../ashley) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
   * Author of the [preferences](../preferences) module.
   * Tested and reviewed the [assets async](../assets-async) module.

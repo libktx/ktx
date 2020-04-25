@@ -367,8 +367,8 @@ class PreferencesTest {
 
   @Test
   fun `should flush changes after executing passed operations`() {
-    var wasExecuted = false
-    var wasFlushedDuringExecution = true
+    var wasExecuted: Boolean
+    var wasFlushedDuringExecution: Boolean
     preferences.flush {
       wasExecuted = true
       wasFlushedDuringExecution = (preferences as TestPreferences).flushed
@@ -377,5 +377,16 @@ class PreferencesTest {
     assertTrue((preferences as TestPreferences).flushed)
     assertTrue(wasExecuted)
     assertFalse(wasFlushedDuringExecution)
+  }
+
+  @Test
+  fun `should perform operations on flushing exactly once`() {
+    val variable: Int
+
+    preferences.flush {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 }

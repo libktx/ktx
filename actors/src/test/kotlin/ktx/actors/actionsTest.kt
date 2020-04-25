@@ -269,6 +269,21 @@ class ActionsTest {
     assertEquals(RepeatAction.FOREVER, action.count)
   }
 
+  @Test
+  fun `should create actions repeating given amount of times`() {
+    val action = MockAction().repeat(10)
+
+    assertEquals(10, action.count)
+  }
+
+  @Test
+  fun `should prohibit from using negative repetitions count`() {
+    val action = MockAction().repeat(-10)
+
+    // To avoid unexpected unlimited repetitions count, to switch negative numbers to 0.
+    assertEquals(0, action.count)
+  }
+
   /** Action testing utility. */
   class MockAction : Action() {
     private var acted = false

@@ -143,7 +143,6 @@ all of the dependencies (outside of testing scope) up-to-date. Major dependencie
 
 All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 
-
 ### Versioning and uploading
 
 #### Stable release
@@ -177,4 +176,21 @@ match the used LibGDX version followed by the `-SNAPSHOT` suffix.
 
 - Make sure that the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
 that the library was compiled against.
-- Run `gradle build install uploadArchives` to push artifacts to both _Maven Local_ and _Sonatype_ snapshots repository.
+- Run `gradle build install uploadSnapshot` to push artifacts to both _Maven Local_ and _Sonatype_ snapshots repository.
+This task will do nothing if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing
+a stable release.
+
+Note that snapshots are automatically uploaded to Maven Central (Sonatype) snapshots repository after pushing
+to the `develop` branch.
+
+#### Automated tasks
+
+Tasks automated with [GitHub actions](https://github.com/libktx/ktx/actions):
+
+* [build](workflows/build.yml) - compiles and tests all KTX modules. Triggered by pushing and setting up pull requests
+to `master` and `develop` branches.
+* [upload-snapshot](workflows/upload-snapshot.yml) - compiles all KTX modules and uploads a new snapshot release.
+Triggered by pushing to the `develop` branch.
+* [publish-documentation](workflows/publish-documentation.yml) - builds and replaces the Dokka documentation published
+to [the official website](https://libktx.github.io/ktx/). Triggered by pushing to the `master` branch, which is
+generally only done before stable releases.

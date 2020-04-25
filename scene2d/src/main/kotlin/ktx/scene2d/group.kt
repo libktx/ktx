@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -9,6 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Stack] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.stack", imports = ["ktx.scene2d.scene2d"]))
 inline fun stack(
     init: KStack.() -> Unit = {}) = actor(KStack(), init)
 
@@ -16,6 +22,10 @@ inline fun stack(
  * @param init will be invoked on the widget. Inlined.
  * @return a new [HorizontalGroup] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.horizontalGroup", imports = ["ktx.scene2d.scene2d"]))
 inline fun horizontalGroup(
     init: KHorizontalGroup.() -> Unit = {}) = actor(KHorizontalGroup(), init)
 
@@ -23,6 +33,10 @@ inline fun horizontalGroup(
  * @param init will be invoked on the widget. Inlined.
  * @return a new [VerticalGroup] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.verticalGroup", imports = ["ktx.scene2d.scene2d"]))
 inline fun verticalGroup(
     init: KVerticalGroup.() -> Unit = {}) = actor(KVerticalGroup(), init)
 
@@ -30,6 +44,10 @@ inline fun verticalGroup(
  * @param init will be invoked on the widget. Inlined.
  * @return a new [Container] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.container", imports = ["ktx.scene2d.scene2d"]))
 inline fun container(
     init: KContainer<Actor>.() -> Unit = {}) = actor(KContainer(), init)
 
@@ -41,6 +59,10 @@ inline fun container(
  * @param init will be invoked on the widget. Inlined.
  * @return a new [SplitPane] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.splitPane", imports = ["ktx.scene2d.scene2d"]))
 inline fun splitPane(
     vertical: Boolean = false,
     style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
@@ -53,6 +75,10 @@ inline fun splitPane(
  * @param init will be invoked on the widget. Inlined.
  * @return a new [ScrollPane] instance.
  */
+@Scene2dDsl
+@Deprecated(
+  message = "Root widgets should now be created with `scene2d` DSL.",
+  replaceWith = ReplaceWith("scene2d.scrollPane", imports = ["ktx.scene2d.scene2d"]))
 inline fun scrollPane(
     style: String = defaultStyle,
     skin: Skin = Scene2DSkin.defaultSkin,

@@ -246,71 +246,122 @@ class ArraysTest {
   }
 
   @Test
-  fun `should add values with + operator`() {
-    val array = GdxArray<String>()
+  fun `should add elements with += operator`() {
+    val array = GdxArray.with("1")
 
-    array + "1"
+    array += "2"
 
-    assertEquals(gdxArrayOf("1"), array)
+    assertEquals(gdxArrayOf("1", "2"), array)
+  }
 
-    array + "2" + "3"
+  @Test
+  fun `should add Iterable with += operator`() {
+    val array = GdxArray.with("1")
+
+    array += listOf("2", "3") as Iterable<String>
 
     assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
-  fun `should add Iterables with + operator`() {
-    val array = GdxArray<String>()
+  fun `should add Collection with += operator`() {
+    val array = GdxArray.with("1")
 
-    array + listOf("1", "2", "3")
+    array += listOf("2", "3")
 
     assertEquals(gdxArrayOf("1", "2", "3"), array)
   }
 
   @Test
-  fun `should add native Arrays with + operator`() {
-    val array = GdxArray<String>()
+  fun `should add GdxArray with += operator`() {
+    val array = GdxArray.with("1")
 
-    array + arrayOf("1", "2", "3")
+    array += GdxArray.with("2", "3")
 
     assertEquals(gdxArrayOf("1", "2", "3"), array)
+  }
+
+  @Test
+  fun `should add arrays and elements with + operator`() {
+    val array = GdxArray<String>()
+
+    val result = array + "1"
+
+    assertEquals(gdxArrayOf("1"), result)
+    assertEquals(gdxArrayOf<String>(), array)
+
+    val chained = result + "2" + "3"
+
+    assertEquals(gdxArrayOf("1", "2", "3"), chained)
+    assertEquals(gdxArrayOf("1"), result)
+  }
+
+  @Test
+  fun `should add arrays and Iterables with + operator`() {
+    val array = GdxArray.with("0")
+
+    val result = array + listOf("1", "2", "3")
+
+    assertEquals(gdxArrayOf("0", "1", "2", "3"), result)
+    assertEquals(gdxArrayOf("0"), array)
+  }
+
+  @Test
+  fun `should add arrays and native Arrays with + operator`() {
+    val array = GdxArray.with("0")
+
+    val result = array + arrayOf("1", "2", "3")
+
+    assertEquals(gdxArrayOf("0", "1", "2", "3"), result)
+    assertEquals(gdxArrayOf("0"), array)
   }
 
   @Test
   fun `should remove values with - operator`() {
+    var array = GdxArray.with("1", "2", "3", "4", "5", "6")
+
+    var result = array - "1"
+
+    assertEquals(gdxArrayOf("2", "3", "4", "5", "6"), result)
+    assertEquals(gdxArrayOf("1", "2", "3", "4", "5", "6"), array)
+
+    array = result
+    result = array - listOf("2", "3")
+
+    assertEquals(gdxArrayOf("4", "5", "6"), result)
+    assertEquals(gdxArrayOf("2", "3", "4", "5", "6"), array)
+
+    array = result
+    result = array - arrayOf("4", "5")
+
+    assertEquals(gdxArrayOf("6"), result)
+    assertEquals(gdxArrayOf("4", "5", "6"), array)
+  }
+
+  @Test
+  fun `should remove values with -= operator`() {
     val array = GdxArray.with("1", "2", "3", "4", "5", "6")
 
-    array - "1"
+    array -= "1"
 
-    assertEquals(5, array.size)
-    assertFalse("1" in array)
+    assertEquals(gdxArrayOf("2", "3", "4", "5", "6"), array)
 
-    array - "2" - "3"
+    array -= listOf("2", "3")
 
-    assertEquals(3, array.size)
-    assertFalse("2" in array)
-    assertFalse("3" in array)
+    assertEquals(gdxArrayOf("4", "5", "6"), array)
 
-    array - listOf("4", "5")
+    array -= arrayOf("4", "5")
 
-    assertEquals(1, array.size)
-    assertFalse("4" in array)
-    assertFalse("5" in array)
-
-    array - arrayOf("6", "7")
-
-    assertEquals(0, array.size)
-    assertFalse("6" in array)
-    assertFalse("7" in array)
+    assertEquals(gdxArrayOf("6"), array)
   }
 
   @Test
   fun `should chain operators`() {
     val array = GdxArray.with("1", "2", "3", "4")
 
-    array + "5" - "2" + GdxArray.with("7") - GdxArray.with("4", "6")
+    val result = array + "5" - "2" + GdxArray.with("7") - GdxArray.with("4", "6")
 
-    assertEquals(GdxArray.with("1", "3", "5", "7"), array)
+    assertEquals(GdxArray.with("1", "3", "5", "7"), result)
   }
 
   @Test
@@ -449,7 +500,7 @@ class ArraysTest {
   }
 
   @Test
-  fun `should transfer to wider typed array`(){
+  fun `should transfer to wider typed array`() {
     val array = GdxArray.with("ABC", "AB", "ABC")
     val target = GdxArray<CharSequence>()
 

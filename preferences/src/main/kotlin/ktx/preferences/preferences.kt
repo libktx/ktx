@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Json
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Stores a [String] [value] under the given [key] in the [Preferences].
@@ -136,7 +139,9 @@ inline operator fun <reified T> Preferences.get(key: String, defaultValue: T): T
 /**
  * Calls [Preferences.flush] after executing the given [operations].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun Preferences.flush(operations: Preferences.() -> Unit) {
+  contract { callsInPlace(operations, InvocationKind.EXACTLY_ONCE) }
   operations()
   flush()
 }

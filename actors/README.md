@@ -47,11 +47,20 @@ be enough for most use cases.
 
 - Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
-- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a SequenceAction, adds the right action to it so long chains result in a single SequenceAction.
-- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a ParallelAction, adds the right action to it so long chains result in a single ParallelAction.
-- `+` operator can be used to create action sequences (alternative to `then`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `then` function may be preferred to avoid creating multiple nested SequenceActions.
-- `/` operator can be used combine actions in parallel (alternative to `along`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `along` function may be preferred to avoid creating multiple nested ParallelActions.
+- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax.
+Either wraps the two actions in a `SequenceAction`, or if the left action is already a `SequenceAction`,
+adds the right action to it so long chains result in a single `SequenceAction`.
+- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax.
+Either wraps the two actions in a `ParallelAction`, or if the left action is already a `ParallelAction`,
+adds the right action to it so long chains result in a single `ParallelAction`.
+- `+` operator can be used to create action sequences (alternative to `then`).
+The operator is non-mutating, so it wraps the two actions every time.
+For long chains, the `then` function may be preferred to avoid creating multiple nested `SequenceActions`.
+- `/` operator can be used combine actions in parallel (alternative to `along`).
+The operator is non-mutating, so it wraps the two actions every time.
+For long chains, the `along` function may be preferred to avoid creating multiple nested ParallelActions.
 - `+=` operator adds an action to an existing `SequenceAction` or `ParallelAction`.
+- `Action.repeat` and `Action.repeatForever` allow to repeat a chosen action by wrapping it with a `RepeatAction`.
 
 #### Widgets
 

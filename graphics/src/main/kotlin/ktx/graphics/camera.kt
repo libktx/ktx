@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Centers this [Camera] in the middle of the given rectangle. [width] and [height]
@@ -55,7 +58,9 @@ fun Camera.lerpTo(target: Vector2, lerp: Float, x: Float = 0f, y: Float = 0f) {
  * Inlines the [operation], which can update the camera position.
  * Automatically calls [Camera.update] after the [operation] is finished.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun Camera.update(operation: Camera.() -> Unit) {
+  contract { callsInPlace(operation, InvocationKind.EXACTLY_ONCE) }
   operation()
   update()
 }

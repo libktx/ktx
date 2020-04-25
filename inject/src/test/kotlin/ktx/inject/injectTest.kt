@@ -251,6 +251,17 @@ class DependencyInjectionTest {
     assertTrue(context.contains<String>())
   }
 
+  @Test
+  fun `should configure context exactly once`() {
+    val variable: Int
+
+    context.register {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
   @Test(expected = InjectionException::class)
   fun `should throw exception upon injection of missing type`() {
     context.inject<String>()

@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [1.8, 1.11]
+
+    steps:
+    - name: Repository checkout
+      uses: actions/checkout@v2
+    - name: JDK setup
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java-version }}
+    - name: Execution permission for Gradle wrapper
+      run: chmod +x gradlew
+    - name: Build
+      run: ./gradlew assemble install -x dokka -x dokkaZip
+    - name: Tests
+      run: ./gradlew test --continue
+      env:
+        TEST_PROFILE: ci

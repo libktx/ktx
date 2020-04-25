@@ -1,6 +1,7 @@
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Style used by default by most widget constructors. Most factory methods default to this style if a custom one is not
@@ -21,11 +22,11 @@ const val defaultHorizontalStyle = "default-horizontal"
  * alternative skin instance is passed as an alternative.
  */
 object Scene2DSkin {
-  private val listeners = com.badlogic.gdx.utils.Array<(Skin) -> Unit>(4)
+  private val listeners = GdxArray<(Skin) -> Unit>(4)
 
   /**
    * Used by the factory methods by default if no custom skin is passed. Changing this value immediately invokes all
-   * registered listeneres.
+   * registered listeners.
    */
   var defaultSkin = Skin()
     set(value) {

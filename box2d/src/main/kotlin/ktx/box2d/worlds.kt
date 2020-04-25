@@ -5,6 +5,9 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.World
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * [World] factory function.
@@ -23,7 +26,10 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
  * @see BodyDefinition
  * @see FixtureDefinition
  */
+@Box2DDsl
+@OptIn(ExperimentalContracts::class)
 inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit = {}): Body {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val bodyDefinition = BodyDefinition()
   bodyDefinition.type = type
   bodyDefinition.init()
@@ -91,10 +97,12 @@ val earthGravity = Vector2(0f, -9.8f)
  * @see RayCast
  * @see rayCast
  */
-typealias KtxRayCastCallback = (fixture: Fixture,
-                                point: Vector2,
-                                normal: Vector2,
-                                fraction: Float) -> Float
+typealias KtxRayCastCallback = (
+  fixture: Fixture,
+  point: Vector2,
+  normal: Vector2,
+  fraction: Float
+) -> Float
 
 /**
  * Stores constants that can be returned by [KtxRayCastCallback] to control its behavior.
@@ -106,11 +114,13 @@ object RayCast {
    * @see KtxRayCastCallback
    */
   const val IGNORE = -1f
+
   /**
    * Indicates to terminate the ray cast.
    * @see KtxRayCastCallback
    */
   const val TERMINATE = 0f
+
   /**
    * Indicates to not clip the ray and continue.
    * @see KtxRayCastCallback
@@ -129,9 +139,10 @@ object RayCast {
  * @see RayCast
  */
 fun World.rayCast(
-    start: Vector2,
-    end: Vector2,
-    callback: KtxRayCastCallback) {
+  start: Vector2,
+  end: Vector2,
+  callback: KtxRayCastCallback
+) {
   rayCast(callback, start, end)
 }
 
@@ -148,11 +159,12 @@ fun World.rayCast(
  * @see RayCast
  */
 fun World.rayCast(
-    startX: Float,
-    startY: Float,
-    endX: Float,
-    endY: Float,
-    callback: KtxRayCastCallback) {
+  startX: Float,
+  startY: Float,
+  endX: Float,
+  endY: Float,
+  callback: KtxRayCastCallback
+) {
   rayCast(callback, startX, startY, endX, endY)
 }
 
@@ -167,11 +179,12 @@ fun World.rayCast(
  * @see Query
  */
 fun World.query(
-    lowerX: Float,
-    lowerY: Float,
-    upperX: Float,
-    upperY: Float,
-    callback: KtxQueryCallback) {
+  lowerX: Float,
+  lowerY: Float,
+  upperX: Float,
+  upperY: Float,
+  callback: KtxQueryCallback
+) {
   QueryAABB(callback, lowerX, lowerY, upperX, upperY)
 }
 
@@ -185,6 +198,7 @@ object Query {
    * @see KtxQueryCallback
    */
   const val STOP = false
+
   /**
    * Continue querying for the next match.
    * @see KtxQueryCallback

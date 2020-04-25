@@ -17,11 +17,16 @@ builder DSL.
 `ktx-ashley` provides the following extensions and utilities:
 
 - `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating `Entities`.
+- `Engine.getSystem` and `Engine.get` (`[]` operator) ease access to registered `EntitySystem` instances of the engine.
+`Engine.getSystem` throws a `MissingEntitySystemException` in case the system is not part of the `Engine`.
+`Engine.get` returns `null` in such cases.
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
-`with` methods.
+`with` method. It is available when calling `Engine.entity`.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
+- `Entity.addComponent` extension method allows to create and add a `Component` to an existing `Entity`.
+- `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
 
@@ -37,7 +42,7 @@ import ktx.ashley.*
 val engine = PooledEngine()
 
 class Texture: Component
-class Transform(var x:Float = 0f, var y:Float = 0f): Component
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
 val entity = engine.entity {
   with<Texture>()
@@ -57,7 +62,7 @@ import ktx.ashley.*
 
 val engine = PooledEngine()
 
-class Transform(var x:Float = 0f, var y:Float = 0f): Component
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
 fun setupEngine() = engine.add {
   entity {
@@ -75,6 +80,30 @@ fun setupEngine() = engine.add {
 }
 ```
 
+Getting an `EntitySystem` from an `Engine`:
+
+```kotlin
+import com.badlogic.ashley.core.EntitySystem
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.get
+import ktx.ashley.getSystem
+
+class MoveSystem : EntitySystem()
+class RenderSystem : EntitySystem()
+
+val engine = PooledEngine()
+
+fun getSystem() {
+    engine.addSystem(MoveSystem())
+    engine.addSystem(RenderSystem())
+
+    // Non-nullable variant - throws an exception if the system is missing:
+    val moveSystem = engine.getSystem<MoveSystem>()
+    // Nullable variant - returns null if the system is missing:
+    val renderSystem = engine[RenderSystem::class]
+}
+```
+
 Creating a `ComponentMapper`:
 
 ```Kotlin
@@ -84,6 +113,29 @@ import ktx.ashley.mapperFor
 class Transform: Component
 
 val transformMapper = mapperFor<Transform>()
+```
+
+Adding a `Component` to an existing `Entity`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Engine
+import com.badlogic.ashley.core.Entity
+import ktx.ashley.addComponent
+import ktx.ashley.plusAssign
+
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
+
+fun addComponentToEntity(entity: Entity, engine: Engine) {
+  // Creating and adding a component:
+  entity.addComponent<Transform>(engine) {
+    x = 2.5f
+    y = 5f
+  }
+
+  // Or alternatively, if we already have a constructed component:
+  entity += Transform(x = 1f, y = 2f)
+}
 ```
 
 Getting a `Component` from an `Entity`:

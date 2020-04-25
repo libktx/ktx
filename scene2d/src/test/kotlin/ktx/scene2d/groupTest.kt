@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ktx.scene2d
 
 import org.junit.Assert.assertEquals

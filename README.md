@@ -1,5 +1,5 @@
-[![Travis CI](https://travis-ci.org/libktx/ktx.svg?branch=master)](https://travis-ci.org/libktx/ktx)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.71-orange.svg)](http://kotlinlang.org/)
+[![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.3.72-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.10-red.svg)](https://libgdx.badlogicgames.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -53,7 +53,7 @@ Module | Dependency name | Description
 [scene2d](scene2d) | `ktx-scene2d` | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [style](style) | `ktx-style` | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [tiled](tiled) | `ktx-tiled` | Utilities for [Tiled](https://www.mapeditor.org/) maps.
-[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). An _alternative_ to [scene2d](scene2d).
+[vis](vis) | `ktx-vis` | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).
 [vis-style](vis-style) | `ktx-vis-style` | Type-safe Kotlin builders for `VisUI` widget styles.
 
 ### Installation
@@ -75,13 +75,17 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.10-b4'
+  ktxVersion = '1.9.10-b5'
 }
 
 dependencies {
   compile "io.github.libktx:ktx-app:$ktxVersion"
 }
 ```
+
+You can find the latest KTX version on Maven Central:
+
+* [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 As a side note, defining `ktxVersion` as a property in `ext` is not necessary, as versions can be set directly in the
 `dependencies` section. However, extracting the dependencies versions is a good practice, especially if they can be
@@ -104,7 +108,7 @@ and [on GitHub](https://github.com/libktx/ktx/releases).
 Unfortunately, LibGDX does not follow the [semantic versioning](https://semver.org/) guidelines. Both minor and patch
 versions can introduce breaking changes. Please read the LibGDX and [**KTX** change logs](CHANGELOG.md) before updating.
 
-Although **KTX** is still in late beta, the official releases are stable enough for production use.
+Although **KTX** is still in late beta, the official beta releases are stable enough for production use.
 All modules are thoroughly tested with unit tests.
 
 #### Latest changes

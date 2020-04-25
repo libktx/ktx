@@ -23,7 +23,7 @@ object EnginesSpec : Spek({
     }
     describe("creating a component without a no-arg constructor") {
       @Suppress("UNUSED_PARAMETER")
-      class MissingNoArgConstructorComponent(body: String): Component
+      class MissingNoArgConstructorComponent(body: String) : Component
 
       it("should throw an exception if the non-pooled engine was unable to create the component") {
         val nonPooledEngine = Engine()
@@ -122,6 +122,53 @@ object EnginesSpec : Spek({
         val entity = transformEntities.single()
         assertThat(entity.getComponent(Transform::class.java)).isNotNull()
         assertThat(entity.getComponent(Texture::class.java)).isNotNull()
+      }
+    }
+
+    describe("contracts API") {
+      it("should create entity exactly once") {
+        val variable: Int
+        engine.entity {
+          with<Transform> {
+            variable = 42
+          }
+        }
+        assertThat(variable).isEqualTo(42)
+      }
+      it("should create component exactly once") {
+        val variable: Int
+        engine.create<Transform> {
+          variable = 42
+        }
+        assertThat(variable).isEqualTo(42)
+      }
+      it("should add entities exactly once") {
+        val variable: Int
+        engine.add {
+          variable = 42
+        }
+        assertThat(variable).isEqualTo(42)
+      }
+    }
+
+    describe("getSystem function") {
+      it("should add a system and return it") {
+        val system = TestSystem()
+        engine.addSystem(system)
+        assertThat(engine.getSystem<TestSystem>()).isEqualTo(system)
+      }
+      it("should add a system and return it as operator") {
+        val system = TestSystem()
+        engine.addSystem(system)
+        assertThat(engine[TestSystem::class]).isEqualTo(system)
+      }
+      it("should throw an exception if the system is missing in the engine") {
+        assertThatExceptionOfType(MissingEntitySystemException::class.java).isThrownBy {
+          engine.getSystem<TestSystem>()
+        }
+      }
+      it("should return null if the system is missing in the engine") {
+        assertThat(engine[TestSystem::class]).isNull()
       }
     }
   }

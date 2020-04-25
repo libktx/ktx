@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /** See [ShapeRenderer.translate]. Multiplies the current transformation matrix by a translation matrix.
  * @param transform supplies x, y and z parameters. */
@@ -160,7 +163,9 @@ fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2,
  * with [ShapeRenderer.set].
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <SR: ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   begin(type)
   action(this)
   end()

@@ -94,6 +94,18 @@ class GraphicsTest {
   }
 
   @Test
+  fun `should use Batch exactly once`() {
+    val batch = mock<Batch>()
+    val variable: Int
+
+    batch.use {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should set projection matrix if a camera is passed`() {
     val batch = mock<Batch>()
     val camera = OrthographicCamera()
@@ -108,6 +120,18 @@ class GraphicsTest {
   }
 
   @Test
+  fun `should use Batch with camera exactly once`() {
+    val batch = mock<Batch>()
+    val variable: Int
+
+    batch.use(OrthographicCamera()) {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should begin with provided projection matrix`() {
     val batch = mock<Batch>()
     val matrix = Matrix4(FloatArray(16) { it.toFloat() })
@@ -116,6 +140,18 @@ class GraphicsTest {
 
     verify(batch).projectionMatrix = matrix
     verify(batch).begin()
+  }
+
+  @Test
+  fun `should use Batch with projection matrix exactly once`() {
+    val batch = mock<Batch>()
+    val variable: Int
+
+    batch.use(Matrix4()) {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 
   @Test
@@ -142,6 +178,18 @@ class GraphicsTest {
   }
 
   @Test
+  fun `should use ShaderProgram exactly once`() {
+    val shaderProgram = mock<ShaderProgram>()
+    val variable: Int
+
+    shaderProgram.use {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should begin and end FrameBuffer`() {
     val frameBuffer = mock<FrameBuffer>()
 
@@ -151,6 +199,18 @@ class GraphicsTest {
       verify(frameBuffer, never()).end()
     }
     verify(frameBuffer).end()
+  }
+
+  @Test
+  fun `should use FrameBuffer exactly once`() {
+    val frameBuffer = mock<FrameBuffer>()
+    val variable: Int
+
+    frameBuffer.use {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 
   @Test

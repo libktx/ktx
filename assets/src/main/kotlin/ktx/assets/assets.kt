@@ -7,6 +7,9 @@ import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KProperty
 
 /**
@@ -109,8 +112,9 @@ class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor
  * @return [Asset] wrapper which allows to access the asset once it is loaded.
  */
 inline fun <reified Type : Any> AssetManager.load(
-    path: String,
-    parameters: AssetLoaderParameters<Type>? = null): Asset<Type> {
+  path: String,
+  parameters: AssetLoaderParameters<Type>? = null
+): Asset<Type> {
   val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
   this.load(assetDescriptor)
   return ManagedAsset(this, assetDescriptor)
@@ -131,9 +135,10 @@ fun <Type> AssetManager.loadAsset(assetDescriptor: AssetDescriptor<Type>): Asset
  * @return [Asset] wrapper which will eagerly load the asset on first request.
  * @see DelayedAsset
  */
-inline fun <reified Type : Any> AssetManager.loadOnDemand(path: String,
-                                                          parameters: AssetLoaderParameters<Type>? = null): Asset<Type> =
-    DelayedAsset(this, AssetDescriptor(path, Type::class.java, parameters))
+inline fun <reified Type : Any> AssetManager.loadOnDemand(
+  path: String,
+  parameters: AssetLoaderParameters<Type>? = null
+): Asset<Type> = DelayedAsset(this, AssetDescriptor(path, Type::class.java, parameters))
 
 /**
  * @param assetDescriptor contains data necessary to load the asset.
@@ -141,7 +146,7 @@ inline fun <reified Type : Any> AssetManager.loadOnDemand(path: String,
  * @see DelayedAsset
  */
 fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): Asset<Type> =
-    DelayedAsset(this, assetDescriptor)
+  DelayedAsset(this, assetDescriptor)
 
 /**
  * Allows to quickly prepare a typed [AssetDescriptor] instance with more Kotlin-friendly syntax.
@@ -150,7 +155,7 @@ fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): As
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
 inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetLoaderParameters<Type>? = null):
-    AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
+  AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
 
 /**
  * Allows to quickly prepare a typed [AssetDescriptor] instance with more Kotlin-friendly syntax.
@@ -159,7 +164,7 @@ inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetL
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
 inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: AssetLoaderParameters<Type>? = null):
-    AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
+  AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
 
 /**
  * @param path path of the asset. Note that the asset must have been already scheduled for loading and fully loaded for
@@ -167,8 +172,7 @@ inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: As
  * @return requested asset instance.
  * @throws GdxRuntimeException if asset was not loaded yet.
  */
-inline fun <reified Type : Any> AssetManager.getAsset(path: String): Type
-    = this[path, Type::class.java]
+inline fun <reified Type : Any> AssetManager.getAsset(path: String): Type = this[path, Type::class.java]
 
 /**
  * @param path path of a loaded asset. Asset associated with this path will be unloaded. Any thrown exceptions will be
@@ -186,7 +190,9 @@ fun AssetManager.unloadSafely(path: String) {
  * @param path path of a loaded asset. Asset associated with this path will be unloaded.
  * @param onError any thrown exceptions will be passed to this handler.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun AssetManager.unload(path: String, onError: (Exception) -> Unit) {
+  contract { callsInPlace(onError, InvocationKind.AT_MOST_ONCE) }
   try {
     unload(path)
   } catch (exception: Exception) {
@@ -202,7 +208,7 @@ inline fun AssetManager.unload(path: String, onError: (Exception) -> Unit) {
  */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified Type : Any> AssetManager.getLoader(suffix: String? = null): AssetLoader<Type, *>? =
-    getLoader(Type::class.java, suffix) as AssetLoader<Type, *>?
+  getLoader(Type::class.java, suffix) as AssetLoader<Type, *>?
 
 /**
  * @param Type type of the handled asset.
@@ -214,8 +220,8 @@ inline fun <reified Type : Any> AssetManager.getLoader(suffix: String? = null): 
  * @see AssetLoader
  */
 inline fun <reified Type : Any, Parameters : AssetLoaderParameters<Type>> AssetManager.setLoader(
-    assetLoader: AssetLoader<Type, Parameters>,
-    suffix: String? = null) {
+  assetLoader: AssetLoader<Type, Parameters>,
+  suffix: String? = null) {
   setLoader(Type::class.java, suffix, assetLoader)
 }
 
@@ -296,7 +302,7 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * @return an [Asset], registered as a member of this AssetGroup.
    * */
   protected inline fun <reified T : Any> asset(fileName: String, params: AssetLoaderParameters<T>? = null) =
-      manager.load("$filePrefix$fileName", params).also { members.add(it) }
+    manager.load("$filePrefix$fileName", params).also { members.add(it) }
 
   /** Creates a delegate for an asset and registers it as a member of this group. It is not queued for loading. Beware
    * that if the asset property (or delegated property) of the returned [Asset] is accessed before it is queued for
@@ -308,5 +314,5 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * @return an [Asset], registered as a member of this AssetGroup.
    * */
   protected inline fun <reified T : Any> delayedAsset(fileName: String, params: AssetLoaderParameters<T>? = null) =
-      manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
+    manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
 }

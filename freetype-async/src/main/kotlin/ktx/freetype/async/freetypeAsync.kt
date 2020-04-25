@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import ktx.assets.async.AssetStorage
 import ktx.freetype.freeTypeFontParameters
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator]
@@ -49,8 +52,11 @@ fun AssetStorage.registerFreeTypeFontLoaders(
  * Note that you can also call [AssetStorage.loadSync] or [AssetStorage.loadAsync] directly if needed,
  * but you must pass [FreeTypeFontParameter]. See [freeTypeFontParameters] utility.
  */
+@OptIn(ExperimentalContracts::class)
 suspend inline fun AssetStorage.loadFreeTypeFont(
   path: String,
   setup: FreeTypeFontParameter.() -> Unit = {}
-): BitmapFont =
-  load<BitmapFont>(path, parameters = freeTypeFontParameters(path, setup))
+): BitmapFont {
+  contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
+  return load<BitmapFont>(path, parameters = freeTypeFontParameters(path, setup))
+}
