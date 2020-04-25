@@ -1,4 +1,4 @@
-#### 1.9.10-SNAPSHOT
+#### 1.9.10-b6
 
 - **[UPDATE]** Updated to Kotlin 1.3.72.
 - **[UPDATE]** Updated to Dokka 0.10.1.
