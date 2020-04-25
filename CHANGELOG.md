@@ -1,5 +1,6 @@
 #### 1.9.10-SNAPSHOT
 
+- **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
 - **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
 
 #### 1.9.10-b6
