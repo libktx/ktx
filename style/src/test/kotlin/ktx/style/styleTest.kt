@@ -64,6 +64,17 @@ class StyleTest {
   }
 
   @Test
+  fun `should configure skin exactly once`() {
+    val variable: Int
+
+    skin {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should create new skin with TextureAtlas`() {
     val skin = skin(TextureAtlas())
 
@@ -78,6 +89,17 @@ class StyleTest {
 
     skin shouldNotBe null
     skin.get("mock", String::class.java) shouldNotBe null
+  }
+
+  @Test
+  fun `should configure skin with TextureAtlas exactly once`() {
+    val variable: Int
+
+    skin(TextureAtlas()) {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 
   @Test

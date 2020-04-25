@@ -23,6 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
 import kotlin.annotation.AnnotationTarget.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /** Should annotate builder methods of Scene2D [Skin]. */
 @DslMarker
@@ -39,7 +42,9 @@ const val defaultStyle = "default"
  * @return a new instance of [Skin].
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val skin = Skin()
   skin.init(skin)
   return skin
@@ -50,7 +55,9 @@ inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
  * @param init will be applied to the [Skin] instance. Inlined.
  * @return a new instance of [Skin].
  */
+@OptIn(ExperimentalContracts::class)
 inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val skin = Skin(atlas)
   skin.init(skin)
   return skin
@@ -141,7 +148,9 @@ inline fun <reified Resource : Any> Skin.getAll(): ObjectMap<String, Resource>? 
  * @param init will be applied to the style instance. Inlined.
  * @return passed style instance (for chaining).
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <Style> Skin.addStyle(name: String, style: Style, init: Style.() -> Unit = {}): Style {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   style.init()
   this.add(name, style)
   return style
@@ -176,11 +185,15 @@ fun Skin.color(
  * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.button(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ButtonStyle).() -> Unit = {}
-): ButtonStyle = addStyle(name, if (extend == null) ButtonStyle() else ButtonStyle(get(extend)), init)
+): ButtonStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ButtonStyle() else ButtonStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -190,11 +203,15 @@ inline fun Skin.button(
  * @return a new instance of [CheckBoxStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.checkBox(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl CheckBoxStyle).() -> Unit = {}
-): CheckBoxStyle = addStyle(name, if (extend == null) CheckBoxStyle() else CheckBoxStyle(get(extend)), init)
+): CheckBoxStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) CheckBoxStyle() else CheckBoxStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -204,11 +221,15 @@ inline fun Skin.checkBox(
  * @return a new instance of [ImageButtonStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.imageButton(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ImageButtonStyle).() -> Unit = {}
-): ImageButtonStyle = addStyle(name, if (extend == null) ImageButtonStyle() else ImageButtonStyle(get(extend)), init)
+): ImageButtonStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ImageButtonStyle() else ImageButtonStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -218,12 +239,15 @@ inline fun Skin.imageButton(
  * @return a new instance of [ImageTextButtonStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.imageTextButton(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ImageTextButtonStyle).() -> Unit = {}
-): ImageTextButtonStyle =
-  addStyle(name, if (extend == null) ImageTextButtonStyle() else ImageTextButtonStyle(get(extend)), init)
+): ImageTextButtonStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ImageTextButtonStyle() else ImageTextButtonStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -233,11 +257,15 @@ inline fun Skin.imageTextButton(
  * @return a new instance of [LabelStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.label(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl LabelStyle).() -> Unit = {}
-): LabelStyle = addStyle(name, if (extend == null) LabelStyle() else LabelStyle(get(extend)), init)
+): LabelStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) LabelStyle() else LabelStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -247,11 +275,15 @@ inline fun Skin.label(
  * @return a new instance of [ListStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.list(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ListStyle).() -> Unit = {}
-): ListStyle = addStyle(name, if (extend == null) ListStyle() else ListStyle(get(extend)), init)
+): ListStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ListStyle() else ListStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -261,11 +293,15 @@ inline fun Skin.list(
  * @return a new instance of [ProgressBarStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.progressBar(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ProgressBarStyle).() -> Unit = {}
-): ProgressBarStyle = addStyle(name, if (extend == null) ProgressBarStyle() else ProgressBarStyle(get(extend)), init)
+): ProgressBarStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ProgressBarStyle() else ProgressBarStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -275,11 +311,15 @@ inline fun Skin.progressBar(
  * @return a new instance of [ScrollPaneStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.scrollPane(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl ScrollPaneStyle).() -> Unit = {}
-): ScrollPaneStyle = addStyle(name, if (extend == null) ScrollPaneStyle() else ScrollPaneStyle(get(extend)), init)
+): ScrollPaneStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) ScrollPaneStyle() else ScrollPaneStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -289,11 +329,15 @@ inline fun Skin.scrollPane(
  * @return a new instance of [SelectBoxStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.selectBox(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl SelectBoxStyle).() -> Unit = {}
-): SelectBoxStyle = addStyle(name, if (extend == null) SelectBoxStyle() else SelectBoxStyle(get(extend)), init)
+): SelectBoxStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) SelectBoxStyle() else SelectBoxStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -303,11 +347,15 @@ inline fun Skin.selectBox(
  * @return a new instance of [SliderStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.slider(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl SliderStyle).() -> Unit = {}
-): SliderStyle = addStyle(name, if (extend == null) SliderStyle() else SliderStyle(get(extend)), init)
+): SliderStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) SliderStyle() else SliderStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -317,12 +365,15 @@ inline fun Skin.slider(
  * @return a new instance of [SplitPaneStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.splitPane(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl SplitPaneStyle).() -> Unit = {}
-): SplitPaneStyle =
-  addStyle(name, if (extend == null) SplitPaneStyle() else SplitPaneStyle(get<SplitPaneStyle>(extend)), init)
+): SplitPaneStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) SplitPaneStyle() else SplitPaneStyle(get<SplitPaneStyle>(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -332,11 +383,15 @@ inline fun Skin.splitPane(
  * @return a new instance of [ButtonStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.textButton(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl TextButtonStyle).() -> Unit = {}
-): TextButtonStyle = addStyle(name, if (extend == null) TextButtonStyle() else TextButtonStyle(get(extend)), init)
+): TextButtonStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) TextButtonStyle() else TextButtonStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -346,11 +401,15 @@ inline fun Skin.textButton(
  * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.textField(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl TextFieldStyle).() -> Unit = {}
-): TextFieldStyle = addStyle(name, if (extend == null) TextFieldStyle() else TextFieldStyle(get(extend)), init)
+): TextFieldStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) TextFieldStyle() else TextFieldStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -360,11 +419,15 @@ inline fun Skin.textField(
  * @return a new instance of [TextFieldStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.textTooltip(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl TextTooltipStyle).() -> Unit = {}
-): TextTooltipStyle = addStyle(name, if (extend == null) TextTooltipStyle() else TextTooltipStyle(get(extend)), init)
+): TextTooltipStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) TextTooltipStyle() else TextTooltipStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -374,11 +437,15 @@ inline fun Skin.textTooltip(
  * @return a new instance of [TouchpadStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.touchpad(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl TouchpadStyle).() -> Unit = {}
-): TouchpadStyle = addStyle(name, if (extend == null) TouchpadStyle() else TouchpadStyle(get(extend)), init)
+): TouchpadStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) TouchpadStyle() else TouchpadStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -388,11 +455,15 @@ inline fun Skin.touchpad(
  * @return a new instance of [TreeStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.tree(
   name: String = defaultStyle,
   extend: String? = null,
   init: TreeStyle.() -> Unit = {}
-): TreeStyle = addStyle(name, if (extend == null) TreeStyle() else TreeStyle(get(extend)), init)
+): TreeStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) TreeStyle() else TreeStyle(get(extend)), init)
+}
 
 /**
  * @param name name of the style as it will appear in the [Skin] instance.
@@ -402,8 +473,12 @@ inline fun Skin.tree(
  * @return a new instance of [WindowStyle] added to the [Skin] with the selected name.
  */
 @SkinDsl
+@OptIn(ExperimentalContracts::class)
 inline fun Skin.window(
   name: String = defaultStyle,
   extend: String? = null,
   init: (@SkinDsl WindowStyle).() -> Unit = {}
-): WindowStyle = addStyle(name, if (extend == null) WindowStyle() else WindowStyle(get(extend)), init)
+): WindowStyle {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return addStyle(name, if (extend == null) WindowStyle() else WindowStyle(get(extend)), init)
+}
