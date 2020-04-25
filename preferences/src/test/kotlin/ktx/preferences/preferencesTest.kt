@@ -378,4 +378,15 @@ class PreferencesTest {
     assertTrue(wasExecuted)
     assertFalse(wasFlushedDuringExecution)
   }
+
+  @Test
+  fun `should perform operations on flushing exactly once`() {
+    val variable: Int
+
+    preferences.flush {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
 }
