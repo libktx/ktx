@@ -3,12 +3,19 @@ package ktx.actors
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.*
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyDown
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyUp
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchDown
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchUp
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.keyboard
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scroll
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
