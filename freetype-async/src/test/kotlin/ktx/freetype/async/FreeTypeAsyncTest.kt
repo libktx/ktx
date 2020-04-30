@@ -16,7 +16,11 @@ import ktx.assets.async.MissingAssetException
 import ktx.async.AsyncTest
 import ktx.async.newAsyncContext
 import ktx.freetype.freeTypeFontParameters
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -224,7 +228,6 @@ class FreeTypeAsyncTest : AsyncTest() {
     val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
     storage.registerFreeTypeFontLoaders()
 
-
     // When:
     val asset = runBlocking {
       // Note that this method uses "raw" AssetStorage API without font loading utilities.
@@ -268,7 +271,6 @@ class FreeTypeAsyncTest : AsyncTest() {
 
     storage.dispose()
   }
-
 
   @Test
   fun `should load OTF file into FreeTypeFontGenerator`() {
