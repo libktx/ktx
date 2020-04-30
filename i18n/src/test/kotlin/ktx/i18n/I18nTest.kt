@@ -3,24 +3,24 @@ package ktx.i18n
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.I18NBundle
 import io.kotlintest.mock.mock
+import java.io.File
 import ktx.i18n.I18nTest.BundleEnum.key
 import ktx.i18n.I18nTest.BundleEnum.keyWithArgument
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 /**
  * Tests internationalization-related classes and functions stored in *i18n.kt*.
  */
 class I18nTest {
-  val bundleContent = """
+  private val bundleContent = """
 key=Value.
 keyWithArgument=Value with {0} argument.
 """
-  val bundleFile = FileHandle(File.createTempFile("nls", ".properties"))
-  var bundle: I18NBundle = mock()
+  private val bundleFile = FileHandle(File.createTempFile("nls", ".properties"))
+  private var bundle: I18NBundle = mock()
 
   @Before
   fun `create I18NBundle`() {
