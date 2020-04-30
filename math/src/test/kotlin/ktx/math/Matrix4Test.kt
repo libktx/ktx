@@ -2,7 +2,7 @@ package ktx.math
 
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.utils.GdxNativesLoader
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -347,10 +347,22 @@ class Matrix4Test {
 
   private fun assertMatrixEquals(
     matrix: Matrix4,
-    m00: Float, m01: Float, m02: Float, m03: Float,
-    m10: Float, m11: Float, m12: Float, m13: Float,
-    m20: Float, m21: Float, m22: Float, m23: Float,
-    m30: Float, m31: Float, m32: Float, m33: Float,
+    m00: Float,
+    m01: Float,
+    m02: Float,
+    m03: Float,
+    m10: Float,
+    m11: Float,
+    m12: Float,
+    m13: Float,
+    m20: Float,
+    m21: Float,
+    m22: Float,
+    m23: Float,
+    m30: Float,
+    m31: Float,
+    m32: Float,
+    m33: Float,
     tolerance: Float = floatTolerance
   ) {
     val values = matrix.`val`

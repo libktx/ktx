@@ -1,12 +1,20 @@
 package ktx.math
 
-import com.badlogic.gdx.math.*
+`import com.badlogic.gdx.math.Affine2
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Matrix3
+import com.badlogic.gdx.math.Vector2
 import io.kotlintest.forAtLeastOne
-import org.junit.Assert.*
+import java.util.HashSet
+import java.util.Random
+import kotlin.math.sqrt
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
-import java.util.*
-import kotlin.math.sqrt
 
 class ImmutableVector2Test {
 
@@ -851,7 +859,6 @@ class ImmutableVector2Test {
             assertEquals(vector.toMutable().rotate90(1).toImmutable(), vector.withRotation90(1))
         }
     }
-
 
     @Test
     fun `withRotation90 should return rotated vector`() {

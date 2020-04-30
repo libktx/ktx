@@ -2,9 +2,10 @@ package ktx.math
 
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
-import org.junit.Assert.*
-import org.junit.Test
 import kotlin.math.abs
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /**
  * Tests [ClosedRange]-related utilities.

@@ -5,7 +5,7 @@ package ktx.math
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector
-import java.util.*
+import java.util.Random
 import kotlin.math.abs
 import kotlin.math.sqrt
 
