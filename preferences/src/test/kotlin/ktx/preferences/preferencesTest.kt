@@ -3,7 +3,10 @@ package ktx.preferences
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Json
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
