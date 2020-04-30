@@ -22,12 +22,14 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.Logger
 import com.badlogic.gdx.utils.Queue
 import com.badlogic.gdx.utils.UBJsonReader
 import com.badlogic.gdx.utils.async.AsyncExecutor
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -40,8 +42,6 @@ import ktx.assets.TextAssetLoader
 import ktx.async.KtxAsync
 import ktx.async.newSingleThreadAsyncContext
 import ktx.async.onRenderingThread
-import kotlin.coroutines.CoroutineContext
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 
 /**
  * Asynchronous asset loader based on coroutines API. An [AssetManager] alternative.
