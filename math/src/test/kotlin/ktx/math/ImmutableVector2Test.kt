@@ -1,6 +1,6 @@
 package ktx.math
 
-`import com.badlogic.gdx.math.Affine2
+import com.badlogic.gdx.math.Affine2
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Matrix3
@@ -17,10 +17,8 @@ import org.junit.Ignore
 import org.junit.Test
 
 class ImmutableVector2Test {
-
     /** List of vector to use in tests */
     private val vectors = sequenceOf(
-
         // vector zero
         ImmutableVector2.ZERO,
 
