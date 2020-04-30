@@ -190,34 +190,35 @@ class JsonTest {
    * Serializable class included for tests.
    */
   private data class Simple(
-      var int: Int = 0,
-      var bool: Boolean = false,
-      var str: String = ""
+    var int: Int = 0,
+    var bool: Boolean = false,
+    var str: String = ""
   )
 
   /**
    * Serializable class included for tests.
    */
   private data class Complex(
-      var bool: Boolean = false,
-      var simple: Simple = Simple(),
-      var list: List<Int> = emptyList()
+    var bool: Boolean = false,
+    var simple: Simple = Simple(),
+    var list: List<Int> = emptyList()
   )
 
   /**
    * Serializable class with a list of [Simple] objects.
    */
   private data class ListContainer(
-      var list: List<Simple> = emptyList()
+    var list: List<Simple> = emptyList()
   )
 
   /**
    * Class included for tests of custom serialization.
    */
   private data class Custom(
-      var float: Float = 0f,
-      var simple: Simple = Simple(),
-      var list: List<Simple> = emptyList()) : Json.Serializable {
+    var float: Float = 0f,
+    var simple: Simple = Simple(),
+    var list: List<Simple> = emptyList()
+  ) : Json.Serializable {
 
     override fun read(json: Json, jsonData: JsonValue) {
       float = json.readValue(jsonData, "float")
