@@ -17,7 +17,7 @@ the changes. For example:
 > Kotlin version update. #250
 
 - Format your code changes with the `gradle format` task. We are relying on automatic formatting performed with
-[ktlint](https://ktlint.github.io).
+[ktlint](https://ktlint.github.io). Run `gradle linterIdeSetup` to apply formatter changes to your IntelliJ project.
 - Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
 JUnit and [Spek](http://spekframework.org/) can be used to write tests, although JUnit is encouraged for its commonness.
 Use [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
@@ -54,6 +54,7 @@ Some useful Gradle tasks include:
 
 - `build install` - builds the libraries archives and pushes them to _Maven Local_. Useful for local tests.
 - `format` - formats all Kotlin source files.
+- `linterIdeSetup` - modifies local IntelliJ project setup for consistency with `ktlint` formatting.
 - `check` - runs all tests in all projects.
 - `clean` - removes the `build` directories, which forces rebuilds of the modules.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.

@@ -15,6 +15,18 @@ buildscript {
   }
 }
 
+repositories {
+  jcenter()
+}
+
+configurations {
+  linter
+}
+
+dependencies {
+  linter "com.pinterest:ktlint:$ktlintVersion"
+}
+
 apply plugin: 'distribution'
 apply plugin: 'io.codearte.nexus-staging'
 
@@ -254,3 +266,10 @@ ${
   }
 }
 gatherDokkaDocumentation.finalizedBy generateDocumentationIndex
+
+task linterIdeSetup(type: JavaExec) {
+  description = 'Apply Kotlin code style changes to IntelliJ formatter.'
+  main = 'com.pinterest.ktlint.Main'
+  classpath = configurations.linter
+  args 'applyToIDEAProject', '-y'
+}
