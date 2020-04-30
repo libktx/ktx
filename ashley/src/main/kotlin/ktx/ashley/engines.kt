@@ -21,8 +21,8 @@ import kotlin.reflect.KClass
 @AshleyDsl
 class EngineEntity(
   val engine: Engine,
-  val entity: Entity) {
-}
+  val entity: Entity
+)
 
 /**
  * Get or creates an instance of the component [T] and adds it to this [entity][EngineEntity].
