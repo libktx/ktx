@@ -8,8 +8,8 @@ import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.Array as GdxArray
+import com.badlogic.gdx.utils.ObjectMap
 
 /**
  * Stores [AssetLoader] instances mapped by loaded asset type. Internal [AssetStorage] utility.
@@ -159,7 +159,8 @@ internal class ManualLoadingParameters : AssetLoaderParameters<Any>()
 internal object ManualLoader : AssetLoader<Any, ManualLoadingParameters>(AbsoluteFileHandleResolver()) {
   private val emptyDependencies = GdxArray<AssetDescriptor<Any>>(0)
   override fun getDependencies(
-    fileName: String?, file: FileHandle?,
+    fileName: String?,
+    file: FileHandle?,
     parameter: ManualLoadingParameters?
   ): GdxArray<AssetDescriptor<Any>> = emptyDependencies
 }

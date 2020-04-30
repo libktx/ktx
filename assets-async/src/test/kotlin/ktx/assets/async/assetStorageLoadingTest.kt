@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -23,14 +24,23 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Logger
 import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
+import java.util.IdentityHashMap
 import kotlinx.coroutines.runBlocking
 import ktx.assets.TextAssetLoader
 import ktx.async.AsyncTest
-import org.junit.*
-import org.junit.Assert.*
+import org.junit.After
+import org.junit.AfterClass
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestName
-import java.util.*
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 
 /**
  * [AssetStorage] has 3 main variants of asset loading: [AssetStorage.load], [AssetStorage.loadAsync]
@@ -1044,7 +1054,8 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
    */
   private fun checkProgress(
     storage: AssetStorage,
-    loaded: Int = 0, failed: Int = 0,
+    loaded: Int = 0,
+    failed: Int = 0,
     total: Int = loaded + failed,
     warn: Boolean = false
   ) {
@@ -1108,7 +1119,9 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
  */
 class AssetStorageLoadingTestWithAssetDescriptorLoadAsync : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = runBlocking {
     loadAsync(AssetDescriptor(path, type, parameters)).await()
   }
@@ -1119,7 +1132,9 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadAsync : AbstractAssetStorage
  */
 class AssetStorageLoadingTestWithIdentifierLoadAsync : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = runBlocking {
     loadAsync(Identifier(path, type), parameters).await()
   }
@@ -1130,7 +1145,9 @@ class AssetStorageLoadingTestWithIdentifierLoadAsync : AbstractAssetStorageLoadi
  */
 class AssetStorageLoadingTestWithAssetDescriptorLoad : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = runBlocking {
     load(AssetDescriptor(path, type, parameters))
   }
@@ -1141,7 +1158,9 @@ class AssetStorageLoadingTestWithAssetDescriptorLoad : AbstractAssetStorageLoadi
  */
 class AssetStorageLoadingTestWithIdentifierLoad : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = runBlocking {
     load(Identifier(path, type), parameters)
   }
@@ -1152,7 +1171,9 @@ class AssetStorageLoadingTestWithIdentifierLoad : AbstractAssetStorageLoadingTes
  */
 class AssetStorageLoadingTestWithAssetDescriptorLoadSync : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = loadSync(AssetDescriptor(path, type, parameters))
 }
 
@@ -1161,6 +1182,8 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadSync : AbstractAssetStorageL
  */
 class AssetStorageLoadingTestWithIdentifierLoadSync : AbstractAssetStorageLoadingTest() {
   override fun <T> AssetStorage.testLoad(
-    path: String, type: Class<T>, parameters: AssetLoaderParameters<T>?
+    path: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?
   ): T = loadSync(Identifier(path, type), parameters)
 }

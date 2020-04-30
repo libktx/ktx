@@ -6,10 +6,10 @@ import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Logger
 import kotlinx.coroutines.launch
 import ktx.async.KtxAsync
-import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Extends [AssetManager], delegating all of its asset-related method calls to [assetStorage].
@@ -17,8 +17,9 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * DO NOT use directly.
  */
 @Suppress("DEPRECATION")
-internal class AssetManagerWrapper(val assetStorage: AssetStorage)
-  : AssetManager(assetStorage.fileResolver, false) {
+internal class AssetManagerWrapper(
+  val assetStorage: AssetStorage
+) : AssetManager(assetStorage.fileResolver, false) {
   private var initiated = false
 
   init {
@@ -152,7 +153,9 @@ internal class AssetManagerWrapper(val assetStorage: AssetStorage)
     "AssetStorage requires functional providers of loaders rather than singular instances.",
     replaceWith = ReplaceWith("AssetStorage.setLoader"))
   override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(
-    type: Class<T>, suffix: String?, loader: AssetLoader<T, P>
+    type: Class<T>,
+    suffix: String?,
+    loader: AssetLoader<T, P>
   ) {
     logger.error("Not fully supported AssetManagerWrapper.setLoader called by AssetLoader.")
     assetStorage.setLoader(type, suffix) {

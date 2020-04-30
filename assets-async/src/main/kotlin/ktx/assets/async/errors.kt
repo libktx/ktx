@@ -68,8 +68,8 @@ class InvalidLoaderException(loader: Loader<*>) :
  * Thrown by [AssetStorage.load] or [AssetStorage.get] when the asset failed to load
  * due to an unexpected loading exception, usually thrown by the associated [AssetLoader].
  */
-class AssetLoadingException(descriptor: AssetDescriptor<*>, cause: Throwable)
-  : AssetStorageException(message = "Unable to load asset: $descriptor", cause = cause)
+class AssetLoadingException(descriptor: AssetDescriptor<*>, cause: Throwable) :
+  AssetStorageException(message = "Unable to load asset: $descriptor", cause = cause)
 
 /**
  * Thrown when unsupported methods are called on the [AssetManagerWrapper].

@@ -1,8 +1,8 @@
 package ktx.assets.async
 
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Tracks the loading progress of the [AssetStorage].

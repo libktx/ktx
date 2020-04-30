@@ -3,16 +3,39 @@ package ktx.assets.async
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.assets.loaders.*
+import com.badlogic.gdx.assets.loaders.AssetLoader
+import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader
+import com.badlogic.gdx.assets.loaders.CubemapLoader
+import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.assets.loaders.I18NBundleLoader
+import com.badlogic.gdx.assets.loaders.MusicLoader
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader
+import com.badlogic.gdx.assets.loaders.PixmapLoader
+import com.badlogic.gdx.assets.loaders.ShaderProgramLoader
+import com.badlogic.gdx.assets.loaders.SkinLoader
+import com.badlogic.gdx.assets.loaders.SoundLoader
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
+import com.badlogic.gdx.assets.loaders.TextureAtlasLoader
+import com.badlogic.gdx.assets.loaders.TextureLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader
-import com.badlogic.gdx.utils.*
+import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.JsonReader
+import com.badlogic.gdx.utils.Logger
+import com.badlogic.gdx.utils.Queue
+import com.badlogic.gdx.utils.UBJsonReader
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import ktx.assets.TextAssetLoader
 import ktx.async.KtxAsync
 import ktx.async.newSingleThreadAsyncContext
@@ -1276,7 +1299,8 @@ data class Identifier<T>(
    * the parameters and file are only used when calling [AssetStorage.load].
    */
   fun toAssetDescriptor(
-    parameters: AssetLoaderParameters<T>? = null, fileHandle: FileHandle? = null
+    parameters: AssetLoaderParameters<T>? = null,
+    fileHandle: FileHandle? = null
   ): AssetDescriptor<T> =
     AssetDescriptor(path, type, parameters).apply {
       if (fileHandle != null) {

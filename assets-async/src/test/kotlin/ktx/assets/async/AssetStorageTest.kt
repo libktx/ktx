@@ -18,34 +18,56 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Logger
 import com.google.common.collect.Sets
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
-import kotlinx.coroutines.*
-import kotlinx.coroutines.future.asCompletableFuture
-import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
-import ktx.async.*
-import org.junit.AfterClass
-import org.junit.Assert.*
-import org.junit.BeforeClass
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.TestName
 import java.lang.Integer.min
-import java.util.*
+import java.util.IdentityHashMap
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
-import com.badlogic.gdx.utils.Array as GdxArray
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.future.asCompletableFuture
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
+import ktx.async.AsyncTest
+import ktx.async.KtxAsync
+import ktx.async.isOnRenderingThread
+import ktx.async.newAsyncContext
+import ktx.async.newSingleThreadAsyncContext
+import ktx.async.skipFrame
+import org.junit.AfterClass
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
+import org.junit.BeforeClass
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.TestName
 
 /**
  * Tests [AssetStorage]: coroutines-based asset manager.
@@ -99,7 +121,8 @@ class AssetStorageTest : AsyncTest() {
    */
   private fun checkProgress(
     storage: AssetStorage,
-    loaded: Int = 0, failed: Int = 0,
+    loaded: Int = 0,
+    failed: Int = 0,
     total: Int = loaded + failed,
     warn: Boolean = false
   ) {
@@ -1465,18 +1488,26 @@ class AssetStorageTest : AsyncTest() {
     private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with()
   ) : AsynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
     override fun loadAsync(
-      manager: AssetManager, fileName: String?, file: FileHandle?, parameter: FakeParameters?
+      manager: AssetManager,
+      fileName: String?,
+      file: FileHandle?,
+      parameter: FakeParameters?
     ) {
       onAsync(manager)
     }
 
     override fun loadSync(
-      manager: AssetManager, fileName: String?, file: FileHandle?, parameter: FakeParameters?
+      manager: AssetManager,
+      fileName: String?,
+      file: FileHandle?,
+      parameter: FakeParameters?
     ): FakeAsset = FakeAsset().also(onSync)
 
     @Suppress("UNCHECKED_CAST")
     override fun getDependencies(
-      fileName: String?, file: FileHandle?, parameter: FakeParameters?
+      fileName: String?,
+      file: FileHandle?,
+      parameter: FakeParameters?
     ): GdxArray<AssetDescriptor<Any>> = dependencies as GdxArray<AssetDescriptor<Any>>
   }
 
@@ -1487,11 +1518,16 @@ class AssetStorageTest : AsyncTest() {
   ) : SynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
     @Suppress("UNCHECKED_CAST")
     override fun getDependencies(
-      fileName: String?, file: FileHandle?, parameter: FakeParameters?
+      fileName: String?,
+      file: FileHandle?,
+      parameter: FakeParameters?
     ): GdxArray<AssetDescriptor<Any>> = dependencies as GdxArray<AssetDescriptor<Any>>
 
     override fun load(
-      assetManager: AssetManager, fileName: String?, file: FileHandle?, parameter: FakeParameters?
+      assetManager: AssetManager,
+      fileName: String?,
+      file: FileHandle?,
+      parameter: FakeParameters?
     ): FakeAsset = FakeAsset().also(onLoad)
   }
 
@@ -2088,7 +2124,7 @@ class AssetStorageTest : AsyncTest() {
     val loadingStarted = CompletableFuture<Boolean>()
     val loadingFinished = CompletableFuture<Boolean>()
     storage.setLoader {
-      object: FakeSyncLoader(
+      object : FakeSyncLoader(
         dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
         onLoad = {}
       ) {
