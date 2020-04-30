@@ -1,10 +1,24 @@
 package ktx.log
 
-import com.badlogic.gdx.*
-import com.badlogic.gdx.Application.*
+import com.badlogic.gdx.Application
+import com.badlogic.gdx.Application.ApplicationType
 import com.badlogic.gdx.Application.ApplicationType.HeadlessDesktop
+import com.badlogic.gdx.Application.LOG_DEBUG
+import com.badlogic.gdx.Application.LOG_NONE
+import com.badlogic.gdx.ApplicationListener
+import com.badlogic.gdx.ApplicationLogger
+import com.badlogic.gdx.Audio
+import com.badlogic.gdx.Files
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Graphics
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.LifecycleListener
+import com.badlogic.gdx.Net
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.utils.Clipboard
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
@@ -12,7 +26,7 @@ import org.junit.Test
  * Tests LibGDX logging wrappers.
  */
 class LogTest {
-  val application = MockApplication()
+  private val application = MockApplication()
 
   @Before
   fun `clear logs`() {
