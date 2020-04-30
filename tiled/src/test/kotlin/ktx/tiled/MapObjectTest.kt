@@ -1,11 +1,19 @@
 package ktx.tiled
 
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.objects.*
+import com.badlogic.gdx.maps.objects.CircleMapObject
+import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PolygonMapObject
+import com.badlogic.gdx.maps.objects.PolylineMapObject
+import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.objects.TextureMapObject
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Ellipse
 import com.badlogic.gdx.math.Rectangle
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MapObjectTest {

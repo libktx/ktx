@@ -2,8 +2,18 @@ package ktx.tiled
 
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
-import com.badlogic.gdx.maps.objects.*
-import com.badlogic.gdx.math.*
+import com.badlogic.gdx.maps.objects.CircleMapObject
+import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PolygonMapObject
+import com.badlogic.gdx.maps.objects.PolylineMapObject
+import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.objects.TextureMapObject
+import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Ellipse
+import com.badlogic.gdx.math.Polygon
+import com.badlogic.gdx.math.Polyline
+import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Shape2D
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. If the property
