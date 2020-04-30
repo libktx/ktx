@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.PolygonShape
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 
 /**
@@ -13,7 +13,7 @@ import org.junit.BeforeClass
  * compared with standard `equals`.
  */
 abstract class Box2DTest {
-  val floatTolerance = 0.0001f
+  protected val floatTolerance = 0.0001f
 
   protected fun assertChainEquals(vertices: Array<Vector2>, shape: ChainShape) {
     assertEquals("${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
