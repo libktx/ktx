@@ -1,5 +1,6 @@
 #### 1.9.10-SNAPSHOT
 
+- **[MISC]** Added `ktlint` formatting.
 - **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
 - **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
 
@@ -65,7 +66,7 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `tree`
 - **[CHANGE]** (`ktx-scene2d`) `listWidget` and `selectBox` now have a single generic type to improve usability.
 Their building blocks no longer consume `Cell` and `Node` instances.
-- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods was removed.
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods were removed.
 - **[FEATURE]** (`ktx-scene2d`) Added contracts support to widget factory methods and `Stage.actors`.
 This ensures that widget configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-style`) Added contracts support to style factory methods and top-level `skin` functions.

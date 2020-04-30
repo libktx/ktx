@@ -52,6 +52,10 @@ subprojects {
     }
   }
 
+  configurations {
+    linter
+  }
+
   dependencies {
     provided "com.badlogicgames.gdx:gdx:$gdxVersion"
     testCompile "junit:junit:$junitVersion"
@@ -59,6 +63,22 @@ subprojects {
     testCompile "com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    linter "com.pinterest:ktlint:$ktlintVersion"
+  }
+
+  task lint(type: JavaExec, group: 'verification') {
+    description = 'Check Kotlin code style.'
+    main = 'com.pinterest.ktlint.Main'
+    classpath = configurations.linter
+    args 'src/**/*.kt'
+  }
+  check.dependsOn lint
+
+  task format(type: JavaExec, group: 'formatting') {
+    description = 'Fix Kotlin code style.'
+    main = 'com.pinterest.ktlint.Main'
+    classpath = configurations.linter
+    args '-F', 'src/**/*.kt'
   }
 
   tasks.withType(Test) {
