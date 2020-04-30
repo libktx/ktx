@@ -2,9 +2,12 @@ package ktx.collections
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Pool
-import org.junit.Assert.*
-import org.junit.Test
 import java.util.LinkedList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /**
  * Tests utilities for LibGDX custom ArrayList equivalent - Array.

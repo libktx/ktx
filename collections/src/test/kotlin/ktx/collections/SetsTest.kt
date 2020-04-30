@@ -1,9 +1,12 @@
 package ktx.collections
 
 import com.badlogic.gdx.utils.ObjectSet
-import org.junit.Assert.*
-import org.junit.Test
 import java.util.LinkedList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /**
  * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
