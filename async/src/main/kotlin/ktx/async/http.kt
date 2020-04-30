@@ -1,14 +1,17 @@
 package ktx.async
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Net.*
-import kotlinx.coroutines.*
+import com.badlogic.gdx.Net.HttpRequest
+import com.badlogic.gdx.Net.HttpResponse
+import com.badlogic.gdx.Net.HttpResponseListener
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
-import java.util.Arrays
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Executes a HTTP request asynchronously.
@@ -27,15 +30,15 @@ import kotlin.coroutines.resumeWithException
  * @see HttpRequest
  */
 suspend fun httpRequest(
-    url: String,
-    method: String = "GET",
-    headers: Map<String, String> = emptyMap(),
-    timeout: Int = 0,
-    content: String? = null,
-    contentStream: Pair<InputStream, Long>? = null,
-    followRedirects: Boolean = true,
-    includeCredentials: Boolean = false,
-    onCancel: ((HttpRequest) -> Unit)? = null
+  url: String,
+  method: String = "GET",
+  headers: Map<String, String> = emptyMap(),
+  timeout: Int = 0,
+  content: String? = null,
+  contentStream: Pair<InputStream, Long>? = null,
+  followRedirects: Boolean = true,
+  includeCredentials: Boolean = false,
+  onCancel: ((HttpRequest) -> Unit)? = null
 ): HttpRequestResult = coroutineScope {
   suspendCancellableCoroutine<HttpRequestResult> { continuation ->
     val httpRequest = HttpRequest(method).apply {
@@ -67,11 +70,11 @@ suspend fun httpRequest(
  * @param headers HTTP header values of the response. Might be empty.
  */
 class HttpRequestResult(
-    val url: String,
-    val method: String,
-    val statusCode: Int,
-    val content: ByteArray,
-    val headers: Map<String, List<String>>
+  val url: String,
+  val method: String,
+  val statusCode: Int,
+  val content: ByteArray,
+  val headers: Map<String, List<String>>
 ) {
   /** Returns cached representation of the response stored as a string with default encoding.*/
   val contentAsString by lazy { getContentAsString() }
@@ -94,8 +97,11 @@ class HttpRequestResult(
   override fun equals(other: Any?) = when (other) {
     null -> false
     other === this -> true
-    is HttpRequestResult -> url == other.url && method == other.method && statusCode == other.statusCode
-        && Arrays.equals(content, other.content) && headers == other.headers
+    is HttpRequestResult -> url == other.url &&
+      method == other.method &&
+      statusCode == other.statusCode &&
+      content.contentEquals(other.content) &&
+      headers == other.headers
     else -> false
   }
 
@@ -134,9 +140,9 @@ fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResu
  * @param onCancel optional operation executed if the coroutine is cancelled during the HTTP request.
  */
 internal class KtxHttpResponseListener(
-    val httpRequest: HttpRequest,
-    val continuation: CancellableContinuation<HttpRequestResult>,
-    val onCancel: ((HttpRequest) -> Unit)?
+  val httpRequest: HttpRequest,
+  val continuation: CancellableContinuation<HttpRequestResult>,
+  val onCancel: ((HttpRequest) -> Unit)?
 ) : HttpResponseListener {
   @Volatile
   var completed = false

@@ -1,9 +1,11 @@
 package ktx.async
 
-import org.junit.Assert.*
-import org.junit.Test
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /**
  * Tests [com.badlogic.gdx.utils.Timer] extensions.

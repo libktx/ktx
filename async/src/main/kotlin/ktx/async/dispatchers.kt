@@ -5,11 +5,18 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlinx.coroutines.*
-import kotlinx.coroutines.internal.MainDispatcherFactory
 import java.io.Closeable
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.internal.MainDispatcherFactory
 
 /**
  * Base interface of [CoroutineContext] for dispatchers using the LibGDX threading model.
@@ -63,8 +70,10 @@ class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
  *
  * Uses LibGDX [Timer] API to support [delay].
  */
-class AsyncExecutorDispatcher(val executor: AsyncExecutor, val threads: Int = -1)
-  : AbstractKtxDispatcher(), Closeable, Disposable {
+class AsyncExecutorDispatcher(
+  val executor: AsyncExecutor,
+  val threads: Int = -1
+) : AbstractKtxDispatcher(), Closeable, Disposable {
   @InternalCoroutinesApi
   override fun execute(block: Runnable) {
     executor.submit(block::run)

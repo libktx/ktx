@@ -4,11 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.utils.async.AsyncExecutor
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit.SECONDS
 import org.junit.After
 import org.junit.Assert.assertSame
 import org.junit.Before
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit.SECONDS
 
 /**
  * Base class for asynchronous API tests. Initiates a [HeadlessApplication] to handle the rendering loop and execution
