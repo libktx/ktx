@@ -221,7 +221,8 @@ inline fun <reified Type : Any> AssetManager.getLoader(suffix: String? = null): 
  */
 inline fun <reified Type : Any, Parameters : AssetLoaderParameters<Type>> AssetManager.setLoader(
   assetLoader: AssetLoader<Type, Parameters>,
-  suffix: String? = null) {
+  suffix: String? = null
+) {
   setLoader(Type::class.java, suffix, assetLoader)
 }
 

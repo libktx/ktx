@@ -2,9 +2,16 @@ package ktx.assets
 
 import com.badlogic.gdx.Files.FileType
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
-import com.badlogic.gdx.assets.loaders.resolvers.*
+import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver
 import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver.Resolution
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

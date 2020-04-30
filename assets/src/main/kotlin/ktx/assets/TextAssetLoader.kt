@@ -23,25 +23,27 @@ import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
  *    [TextAssetLoader.TextAssetLoaderParameters]. Should match text files encoding. Defaults to UTF-8.
  */
 class TextAssetLoader(
-    fileResolver: FileHandleResolver = InternalFileHandleResolver(),
-    private val charset: String = "UTF-8"
+  fileResolver: FileHandleResolver = InternalFileHandleResolver(),
+  private val charset: String = "UTF-8"
 ) : AsynchronousAssetLoader<String, TextAssetLoaderParameters>(fileResolver) {
   @Volatile
   var fileContent: String? = null
 
   override fun loadAsync(
-      assetManager: AssetManager?,
-      fileName: String?,
-      file: FileHandle,
-      parameter: TextAssetLoaderParameters?) {
+    assetManager: AssetManager?,
+    fileName: String?,
+    file: FileHandle,
+    parameter: TextAssetLoaderParameters?
+  ) {
     fileContent = file.readString(parameter?.charset ?: charset)
   }
 
   override fun loadSync(
-      assetManager: AssetManager?,
-      fileName: String?,
-      file: FileHandle,
-      parameter: TextAssetLoaderParameters?): String = try {
+    assetManager: AssetManager?,
+    fileName: String?,
+    file: FileHandle,
+    parameter: TextAssetLoaderParameters?
+  ): String = try {
     fileContent ?: throw GdxRuntimeException("File $fileName was not loaded asynchronously. Call #loadAsync first.")
   } finally {
     fileContent = null

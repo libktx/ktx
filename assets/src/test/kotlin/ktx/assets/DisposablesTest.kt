@@ -1,11 +1,16 @@
 package ktx.assets
 
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.*
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.fail
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [Disposable] utilities.

@@ -1,9 +1,19 @@
 package ktx.assets
 
 import com.badlogic.gdx.Files.FileType
-import com.badlogic.gdx.Files.FileType.*
+import com.badlogic.gdx.Files.FileType.Absolute
+import com.badlogic.gdx.Files.FileType.Classpath
+import com.badlogic.gdx.Files.FileType.External
+import com.badlogic.gdx.Files.FileType.Internal
+import com.badlogic.gdx.Files.FileType.Local
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
-import com.badlogic.gdx.assets.loaders.resolvers.*
+import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.PrefixFileHandleResolver
+import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver
 import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver.Resolution
 
 /**
@@ -46,4 +56,4 @@ fun FileHandleResolver.forResolutions(vararg resolutions: Resolution) = Resoluti
  * @see Resolution
  * @see ResolutionFileResolver
  */
-fun resolution(width: Int, height: Int, folder: String = "${width}x${height}") = Resolution(width, height, folder)
+fun resolution(width: Int, height: Int, folder: String = "${width}x$height") = Resolution(width, height, folder)

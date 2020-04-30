@@ -1,7 +1,9 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Pool
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
 import org.junit.Test
 
 /**

@@ -13,8 +13,14 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import ktx.assets.MockAssetLoader.MockParameter
-import org.junit.Assert.*
+import ktx.assets.AssetsTest.MockAssetLoader.MockParameter
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
@@ -449,7 +455,7 @@ class AssetsTest {
 
   @Test
   fun `should load and unload members`() {
-    class TestAssetGroup : AssetGroup(assetManager){
+    class TestAssetGroup : AssetGroup(assetManager) {
       val member1 by asset<MockAsset>("member1")
       val member2 by asset<MockAsset>("member2")
     }
@@ -467,16 +473,17 @@ class AssetsTest {
 
   @Test
   fun `should load by update`() {
-    class TestAssetGroup : AssetGroup(assetManager){
+    class TestAssetGroup : AssetGroup(assetManager) {
       val member1 by asset<MockAsset>("member1")
       val member2 by asset<MockAsset>("member2")
       val member3 by asset<MockAsset>("member3")
     }
+
     val nonmember = assetManager.load<MockAsset>("nonmember")
 
     val group = TestAssetGroup()
     nonmember.load()
-    while (true){
+    while (true) {
       if (group.update())
         break
     }
@@ -486,7 +493,7 @@ class AssetsTest {
 
   @Test
   fun `should catch exceptions`() {
-    class TestAssetGroup : AssetGroup(assetManager){
+    class TestAssetGroup : AssetGroup(assetManager) {
       val member1 by asset<MockAsset>("member1")
       val member2 by asset<MockAsset>("member2")
     }
@@ -516,55 +523,63 @@ class AssetsTest {
       loadAll()
       manager.finishLoading()
     }
-    for (i in 1..2)
-      assertTrue(group.manager.isLoaded("prefix/member$i"))
+
+    for (index in 1..2) {
+      assertTrue(group.manager.isLoaded("prefix/member$index"))
+    }
+    assertNotNull(group.member1)
+    assertNotNull(group.member2)
   }
-}
 
-/**
- * Creates an [AssetManager] with registered [MockAssetLoader].
- */
-private fun managerWithMockAssetLoader() = AssetManager().apply {
-  setLoader(MockAssetLoader(fileHandleResolver))
-}
-
-/**
- * Represents a mock-up asset. Implements [Disposable] for testing utility.
- * @param data path of the file.
- * @param additional optional string value passed with [MockParameter].
- */
-class MockAsset(val data: String, val additional: String?) : Disposable {
-  var disposed = false
-  override fun dispose() {
-    require(!disposed) { "Was already disposed!" } // Simulate behavior of some Gdx assets
-    disposed = true
+  /**
+   * Creates an [AssetManager] with registered [MockAssetLoader].
+   */
+  private fun managerWithMockAssetLoader() = AssetManager().apply {
+    setLoader(MockAssetLoader(fileHandleResolver))
   }
-}
 
-/**
- * Mocks asynchronous file loading. Sets [MockAsset.data] as file path. Extracts [MockAsset.additional] from
- * [MockParameter] (if present).
- */
-class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
-    AsynchronousAssetLoader<MockAsset, MockParameter>(fileHandleResolver) {
-  @Volatile private var additional: String? = null
-  override fun loadAsync(manager: AssetManager, fileName: String, file: FileHandle, parameter: MockParameter?) {
-    if (parameter != null) {
-      additional = parameter.additional
+  /**
+   * Represents a mock-up asset. Implements [Disposable] for testing utility.
+   * @param data path of the file.
+   * @param additional optional string value passed with [MockParameter].
+   */
+  class MockAsset(val data: String, val additional: String?) : Disposable {
+    var disposed = false
+    override fun dispose() {
+      require(!disposed) { "Was already disposed!" } // Simulate behavior of some Gdx assets
+      disposed = true
     }
   }
 
-  override fun loadSync(
-    manager: AssetManager, fileName: String, file: FileHandle, parameter: MockParameter?
-  ): MockAsset {
-    val asset = MockAsset(file.path(), additional)
-    additional = null
-    return asset
-  }
+  /**
+   * Mocks asynchronous file loading. Sets [MockAsset.data] as file path. Extracts [MockAsset.additional] from
+   * [MockParameter] (if present).
+   */
+  class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
+    AsynchronousAssetLoader<MockAsset, MockParameter>(fileHandleResolver) {
+    @Volatile
+    private var additional: String? = null
+    override fun loadAsync(manager: AssetManager, fileName: String, file: FileHandle, parameter: MockParameter?) {
+      if (parameter != null) {
+        additional = parameter.additional
+      }
+    }
 
-  override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?):
+    override fun loadSync(
+      manager: AssetManager,
+      fileName: String,
+      file: FileHandle,
+      parameter: MockParameter?
+    ): MockAsset {
+      val asset = MockAsset(file.path(), additional)
+      additional = null
+      return asset
+    }
+
+    override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?):
       Array<AssetDescriptor<Any>>? = null
 
-  /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
-  class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
+    /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
+    class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
+  }
 }
