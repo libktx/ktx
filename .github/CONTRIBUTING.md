@@ -18,6 +18,10 @@ the changes. For example:
 
 - Format your code changes with the `gradle format` task. We are relying on automatic formatting performed with
 [ktlint](https://ktlint.github.io). Run `gradle linterIdeSetup` to apply formatter changes to your IntelliJ project.
+- Follow our file naming convention:
+  - Files with a single class: file name should match class name. E.g. `FileLoader.kt`.
+  - Others: files with extension methods, top-level functions, utilities or multiple classes should use camel case
+  nouns starting with a lower-cased letter. Should generally be in plural form. E.g. `fileLoaders.kt`.
 - Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
 JUnit and [Spek](http://spekframework.org/) can be used to write tests, although JUnit is encouraged for its commonness.
 Use [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
