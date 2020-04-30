@@ -21,7 +21,9 @@ import kotlin.contracts.contract
 fun Camera.center(
   width: Float = Gdx.graphics.width.toFloat(),
   height: Float = Gdx.graphics.height.toFloat(),
-  x: Float = 0f, y: Float = 0f) {
+  x: Float = 0f,
+  y: Float = 0f
+) {
   position.set(x + width / 2f, y + height / 2f, 0f)
 }
 
@@ -90,7 +92,8 @@ inline fun Camera.update(operation: Camera.() -> Unit) {
 class LetterboxingViewport(
   var targetPpiX: Float = defaultTargetPpi,
   var targetPpiY: Float = defaultTargetPpi,
-  var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
+  var aspectRatio: Float = 4f / 3f
+) : ScalingViewport(Scaling.fit, 0f, 0f) {
   /** You can directly modify unit per pixel ratio (bypassing PPI check) by modifying this value.
    * @see updateScale */
   var scaleX = 0f

@@ -2,28 +2,13 @@ package ktx.graphics
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
-import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.utils.Array as GdxArray
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-
-/**
- * Loads the .fnt settings file of the default LibGDX Arial font, but
- * omits loading the textures. For testing purposes.
- */
-class FakeFont : BitmapFont(
-  BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.fnt"), true),
-  GdxArray.with(mock()),
-  true)
-{
-  override fun load(data: BitmapFontData?) {
-    // Do nothing.
-  }
-}
 
 class TextUtilitiesTest {
   @Before
@@ -55,5 +40,19 @@ class TextUtilitiesTest {
   @After
   fun `dispose of files`() {
     Gdx.files = null
+  }
+
+  /**
+   * Loads the .fnt settings file of the default LibGDX Arial font, but
+   * omits loading the textures. For testing purposes.
+   */
+  class FakeFont : BitmapFont(
+    BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.fnt"), true),
+    GdxArray.with(mock()),
+    true
+  ) {
+    override fun load(data: BitmapFontData?) {
+      // Do nothing.
+    }
   }
 }
