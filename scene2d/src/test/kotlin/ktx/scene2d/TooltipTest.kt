@@ -4,13 +4,15 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
  * Tests extension methods that allow to add [Tooltip] instances to all actors.
  */
-class TooltipFactoriesTest : NeedsLibGDX() {
+class TooltipTest : NeedsLibGDX() {
   @Test
   fun `should add TextTooltip`() {
     val actor = Actor()

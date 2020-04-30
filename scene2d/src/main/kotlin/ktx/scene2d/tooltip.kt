@@ -1,7 +1,12 @@
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -20,11 +25,11 @@ import kotlin.contracts.contract
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun Actor.textTooltip(
-    text: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    tooltipManager: TooltipManager = TooltipManager.getInstance(),
-    init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
+  text: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  tooltipManager: TooltipManager = TooltipManager.getInstance(),
+  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
 ): TextTooltip {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
@@ -47,10 +52,10 @@ inline fun Actor.textTooltip(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun Actor.tooltip(
-    background: String? = null,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    tooltipManager: TooltipManager = TooltipManager.getInstance(),
-    init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
+  background: String? = null,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  tooltipManager: TooltipManager = TooltipManager.getInstance(),
+  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
 ): Tooltip<KTableWidget> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val table = KTableWidget(skin)
