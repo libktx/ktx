@@ -22,7 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
-import kotlin.annotation.AnnotationTarget.*
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.TYPE
+import kotlin.annotation.AnnotationTarget.TYPEALIAS
+import kotlin.annotation.AnnotationTarget.TYPE_PARAMETER
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
