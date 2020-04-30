@@ -7,13 +7,43 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Scaling
 import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
 import com.kotcrab.vis.ui.util.adapter.ListAdapter
-import com.kotcrab.vis.ui.widget.*
+import com.kotcrab.vis.ui.widget.BusyBar
+import com.kotcrab.vis.ui.widget.ButtonBar
+import com.kotcrab.vis.ui.widget.CollapsibleWidget
+import com.kotcrab.vis.ui.widget.HighlightTextArea
+import com.kotcrab.vis.ui.widget.HorizontalCollapsibleWidget
+import com.kotcrab.vis.ui.widget.LinkLabel
+import com.kotcrab.vis.ui.widget.ListView
+import com.kotcrab.vis.ui.widget.MultiSplitPane
+import com.kotcrab.vis.ui.widget.ScrollableTextArea
+import com.kotcrab.vis.ui.widget.Separator
+import com.kotcrab.vis.ui.widget.VisCheckBox
+import com.kotcrab.vis.ui.widget.VisDialog
+import com.kotcrab.vis.ui.widget.VisImage
+import com.kotcrab.vis.ui.widget.VisImageButton
+import com.kotcrab.vis.ui.widget.VisImageTextButton
+import com.kotcrab.vis.ui.widget.VisLabel
+import com.kotcrab.vis.ui.widget.VisList
+import com.kotcrab.vis.ui.widget.VisProgressBar
+import com.kotcrab.vis.ui.widget.VisRadioButton
+import com.kotcrab.vis.ui.widget.VisScrollPane
+import com.kotcrab.vis.ui.widget.VisSelectBox
+import com.kotcrab.vis.ui.widget.VisSlider
+import com.kotcrab.vis.ui.widget.VisSplitPane
+import com.kotcrab.vis.ui.widget.VisTable
+import com.kotcrab.vis.ui.widget.VisTextArea
+import com.kotcrab.vis.ui.widget.VisTextButton
+import com.kotcrab.vis.ui.widget.VisTextField
+import com.kotcrab.vis.ui.widget.VisTree
+import com.kotcrab.vis.ui.widget.VisValidatableTextField
+import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
 import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
 import com.kotcrab.vis.ui.widget.spinner.Spinner
@@ -21,11 +51,18 @@ import com.kotcrab.vis.ui.widget.spinner.SpinnerModel
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.toast.Toast
 import com.kotcrab.vis.ui.widget.toast.ToastTable
-import ktx.scene2d.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import com.badlogic.gdx.utils.Array as GdxArray
+import ktx.scene2d.KTable
+import ktx.scene2d.KTree
+import ktx.scene2d.KWidget
+import ktx.scene2d.RootWidget
+import ktx.scene2d.Scene2dDsl
+import ktx.scene2d.actor
+import ktx.scene2d.defaultHorizontalStyle
+import ktx.scene2d.defaultStyle
+import ktx.scene2d.defaultVerticalStyle
 
 /**
  * Constructs a top-level [VisWindow] widget.

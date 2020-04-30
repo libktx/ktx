@@ -9,7 +9,10 @@ import com.kotcrab.vis.ui.widget.PopupMenu
 import ktx.scene2d.NeedsLibGDX
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

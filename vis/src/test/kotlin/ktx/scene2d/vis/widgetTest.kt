@@ -11,8 +11,20 @@ import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
-import ktx.scene2d.*
-import org.junit.Assert.*
+import ktx.scene2d.KNode
+import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.defaultHorizontalStyle
+import ktx.scene2d.defaultStyle
+import ktx.scene2d.defaultVerticalStyle
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.table
+import ktx.scene2d.tree
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /* Tests of customized VisUI parent widgets. */
@@ -332,7 +344,6 @@ class KVisSplitPaneTest : NeedsLibGDX() {
     }
   }
 }
-
 
 /**
  * Tests KTX-adapted widget: [KMultiSplitPane].
