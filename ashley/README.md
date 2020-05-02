@@ -21,11 +21,12 @@ builder DSL.
 `Engine.getSystem` throws a `MissingEntitySystemException` in case the system is not part of the `Engine`.
 `Engine.get` returns `null` in such cases.
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
-`with` method. It is available when calling `Engine.entity`.
+`with` method. It is available when calling `Engine.entity` or `Engine.configureEntity`.
+- `Engine.configureEntity` extension method allows to add components to an existing entity.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
-- `Entity.addComponent` extension method allows to create and add a `Component` to an existing `Entity`.
+- `Entity.addComponent` extension method allows to create and add a single `Component` to an existing `Entity`.
 - `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
@@ -76,6 +77,29 @@ fun setupEngine() = engine.add {
       x = 2f
       y = 2f
     }
+  }
+}
+```
+
+Adding new components to an existing entity with `Engine.configureEntity`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+val engine = PooledEngine()
+val entity = Entity()
+
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
+
+fun extendEntity(){
+  engine.configureEntity(entity) {
+    with<Transform> {
+      x = 1f
+      y = 1f
+    }  
   }
 }
 ```
@@ -133,7 +157,7 @@ fun addComponentToEntity(entity: Entity, engine: Engine) {
     y = 5f
   }
 
-  // Or alternatively, if we already have a constructed component:
+  // Or alternatively, if you already have a constructed component:
   entity += Transform(x = 1f, y = 2f)
 }
 ```

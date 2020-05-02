@@ -2,6 +2,7 @@
 
 - **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
 - **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.configureEntity` extension method that allows to add components to an existing entity.
 - **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
 
 #### 1.9.10-b6

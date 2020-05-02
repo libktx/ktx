@@ -76,8 +76,8 @@ inline fun Engine.add(configure: (@AshleyDsl Engine).() -> Unit) {
 /**
  * Create and add an [Entity] to the [Engine].
  *
- * @param configure inlined function with the created [Entity] as the receiver to allow further configuration of
- * the [Entity]. The [Entity] holds the [Entity] created and the [Engine] that created it.
+ * @param configure inlined function with the created [EngineEntity] as the receiver to allow further configuration of
+ * the [Entity]. The [EngineEntity] holds the created [Entity] and this [Engine].
  * @return the created [Entity].
  */
 @OptIn(ExperimentalContracts::class)
@@ -87,6 +87,19 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
   EngineEntity(this, entity).configure()
   addEntity(entity)
   return entity
+}
+
+/**
+ * Allows to configure an existing [Entity] with this [Engine].
+ *
+ * @param configure inlined function with an [EngineEntity] wrapping passed [Entity] as the receiver to allow further
+ * configuration of the [Entity]. The [EngineEntity] holds the passed [Entity] and this [Engine].
+ * @see with
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun Engine.configureEntity(entity: Entity, configure: EngineEntity.() -> Unit) {
+  contract { callsInPlace(configure, InvocationKind.EXACTLY_ONCE) }
+  EngineEntity(this, entity).configure()
 }
 
 /**
