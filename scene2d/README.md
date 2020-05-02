@@ -31,16 +31,9 @@ val myFirstActor = scene2d.label(text = "Hello World!")
 
 `scene2d` provides factor methods for all official Scene2D actors. These can be divided into the following groups:
 
-* *Child* actors - basic Scene2D widgets that cannot have any children:
-  * `image`
-  * `label`
-  * `listWidget`, `listWidgetOf` (`List`)
-  * `progressBar`
-  * `selectBox`, `selectBoxOf`
-  * `slider`
-  * `textArea`
-  * `textField`
-  * `touchpad`
+* *Root* actors: these actors are usually added directly to a `Stage`:
+  * `dialog`
+  * `window`
 * *Parent* actors - widgets that can have nested children:
   * Parental widgets that were _designed_ to store actors and control their layout:
     * `buttonTable`
@@ -58,9 +51,16 @@ val myFirstActor = scene2d.label(text = "Hello World!")
     * `imageButton`
     * `imageTextButton`
     * `textButton`
-* *Root* actors: these actors usually standalone
-  * `dialog`
-  * `window`
+* *Child* actors - basic Scene2D widgets that cannot have any children:
+  * `image`
+  * `label`
+  * `listWidget`, `listWidgetOf` (`List`)
+  * `progressBar`
+  * `selectBox`, `selectBoxOf`
+  * `slider`
+  * `textArea`
+  * `textField`
+  * `touchpad`
 
 Additionally, `tooltip` and `textTooltip` extension methods were added to all actors to ease creation of tooltips.
 
@@ -118,7 +118,7 @@ val myTable = scene2d.table {
 ```
 
 While certainly less verbose than Java, this DSL would not be very useful without the possibility to customize
-the widgets. Let's consider this example of widgets customization written in Java:
+the widgets. Let's consider this example of widget customization written in Java:
 
 ```java
 public Table createTableWithLabel(Skin skin) {
@@ -134,9 +134,9 @@ public Table createTableWithLabel(Skin skin) {
 }
 ```
 
-Notice how you have to pass the `Skin` instance every time you want to create a new widget with predefined styles.
+Notice how you have to pass the `Skin` instance every time you want to create a new widget with a predefined style.
 The widgets hierarchy is not clear at first glance, which only gets worse as more widgets are added. You have
-to read through the code and find `add` calls to understand widgets hierarchy.
+to read through the code and find `add` calls to understand how the UI is built.
 
 When to it comes to `ktx-scene2d`, widgets can be customized in the following ways:
 
@@ -167,7 +167,7 @@ val myTable = scene2d.table {
 }
 ```
 
-Not only the hierarchy is now clearer - the `label` is clearly a child of the `table` - but also settings are less
+Not only is the hierarchy clearer - the `label` is clearly a child of the `table` - but also the settings are less
 verbose to customize.
 
 Readability and usability comes with extra safety in this case. Actors hierarchy in your code is preserved and reflected
@@ -270,7 +270,15 @@ import ktx.actors.stage
 val stage = stage(batch = SpriteBatch())
 ```
 
-`ktx-scene2d` provides an `actors` extension method that allows to add actors directly to a `Stage`:
+If you are already using a `SpriteBatch` to render your textures, reusing the same instance for `Stage` is recommended.
+
+Make sure to set the `Stage` as the input processor before it is rendered to listen for input events:
+
+```kotlin
+Gdx.input.inputProcessor = stage
+```
+
+`ktx-scene2d` provides a `Stage.actors` extension method that allows to add actors directly to a `Stage`:
 
 ```kotlin
 stage.actors {
@@ -291,6 +299,14 @@ stage.actors {
 ```
 
 Remember that if you **do not** use the `actors` extension, you have to add your actors to the `Stage` with `addActor`.
+For example:
+
+```kotlin
+val myTable = scene2d.table {
+  label("This table will be added to a stage manually.")
+}
+stage.addActor(myTable)
+```
 
 This is a minimal example application that creates and renders a very basic UI:
 
@@ -330,16 +346,8 @@ class Example: ApplicationAdapter() {
 }
 ```
 
-If you are already using a `SpriteBatch` to render your textures, reusing the same instance for `Stage` is recommended.
-
-Make sure to set the `Stage` as the input processor before it is rendered to listen for input events:
-
-```kotlin
-Gdx.input.inputProcessor = stage
-```
-
 Note that [`ktx-app` module](../app) makes it easier to work with input processors and multiple application screens,
-while [`ktx-actors` module](../actors) has some general `Scene2D` utilities including `Stage` factory method.
+while [`ktx-actors` module](../actors) has some general `Scene2D` utilities including `Stage` factory function.
 
 #### `KWidgets`
 
@@ -586,12 +594,21 @@ val labelWithTooltips = scene2d {
 }
 ```
 
-Extending the `ktx-scene2d` DSL with a custom widget:
+Advanced usage example - extending the `ktx-scene2d` DSL with a custom widget:
 
 ```kotlin
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import ktx.scene2d.*
+
+
+// Depending on the class hierarchy, your widget should implement
+// the following ktx-scene2d interface:
+// - Table: ktx.scene2d.KTable
+// - Group: ktx.scene2d.KGroup
+// - Tree: ktx.scene2d.KTree
+// If the actor is not a group and cannot have any children,
+// you do not need to implement any interface.
 
 /** Example of a custom widget that extends LibGDX Table. */
 @Scene2dDsl
@@ -607,17 +624,8 @@ class MyCustomWidget(
   }
 }
 
-// Depending on the class hierarchy, your widget should implement
-// the following ktx-scene2d interface:
-// - Table: ktx.scene2d.KTable
-// - Group: ktx.scene2d.KGroup
-// - Tree: ktx.scene2d.KTree
-// If the actor is not a group and cannot have any children,
-// you do not need to implement any interface.
-
 /** Example of a custom widget style class . */
 data class MyCustomWidgetStyle(val pad: Float = 0f)
-
 
 // Adding a factory method for the custom widget:
 
