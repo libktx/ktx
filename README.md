@@ -9,11 +9,11 @@ _**K**o**t**lin extensions for LibGD**X**._
 
 ## Introduction
 
-**KTX** aims to make [LibGDX](http://libgdx.badlogicgames.com/) as [Kotlin](http://kotlinlang.org/)-friendly as possible
-without completely rewriting the API. It provides modular utilities and extensions for selected parts of LibGDX with
-poor native Kotlin support.
+**KTX** is a Kotlin game framework built on [LibGDX](http://libgdx.badlogicgames.com/). It aims to make LibGDX as
+[Kotlin](http://kotlinlang.org/)-friendly as possible without completely rewriting the API. It provides modular
+utilities and extensions for selected parts of LibGDX with poor native Kotlin support.
 
-Examples of Kotlin language features used to improve usability, performance and readability of LibGDX APIs include:
+Examples of Kotlin language features used to improve usability, performance and readability of LibGDX include:
 
 * *Operator overloads* for collections and mathematical operations.
 * *Extension methods* with sensible *default parameters*.
