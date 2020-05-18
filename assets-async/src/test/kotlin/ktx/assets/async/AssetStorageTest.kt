@@ -892,7 +892,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(dependency))
     assertEquals(100, storage.getReferenceCount<Texture>(dependency))
     assertEquals(1, assets.map { it.asCompletableFuture().join() }.toSet().size)
-    checkProgress(storage, loaded = 2)
+    checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
   }
