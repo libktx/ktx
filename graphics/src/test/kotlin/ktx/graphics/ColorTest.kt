@@ -42,18 +42,6 @@ class ColorTest {
   }
 
   @Test
-  fun `should destruct Color into red, green, blue and alpha components`() {
-    val color = Color(0.1f, 0.2f, 0.3f, 0.4f)
-
-    val (red, green, blue, alpha) = color
-
-    assertEquals(color.r, red)
-    assertEquals(color.g, green)
-    assertEquals(color.b, blue)
-    assertEquals(color.a, alpha)
-  }
-
-  @Test
   fun `should override chosen Color values when copying`() {
     val color = Color(0.4f, 0.5f, 0.6f, 0.7f)
 
@@ -65,5 +53,17 @@ class ColorTest {
     assertEquals(0.45f, copy.b)
     assertEquals(0.55f, copy.a)
     assertNotEquals(color, copy)
+  }
+
+  @Test
+  fun `should destruct Color into red, green, blue and alpha components`() {
+    val color = Color(0.1f, 0.2f, 0.3f, 0.4f)
+
+    val (red, green, blue, alpha) = color
+
+    assertEquals(color.r, red)
+    assertEquals(color.g, green)
+    assertEquals(color.b, blue)
+    assertEquals(color.a, alpha)
   }
 }

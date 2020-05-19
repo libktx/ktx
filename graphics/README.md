@@ -14,9 +14,6 @@ common bugs such as forgetting to start or end batch rendering.
 
 #### Miscellaneous utilities
 
-- `color` factory methods allows to use idiomatic named parameters to construct LibGDX `Color` instances.
-- `copy` extension method added to `Color`. It allows to create a new `Color` with copied color values. Supports values
-overriding with optional, named parameters.
 - `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the 
 `begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
 also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
@@ -24,6 +21,13 @@ also be passed to the `Batch.use` extension function to have it automatically ap
 - `takeScreenshot` allows to easily take a screenshot of current application screen.
 - `BitmapFont.center` extension method allows to calculate center position of text in order to draw it in the middle
 of a chosen object.
+
+#### `Color` utilities
+
+- `color` factory methods allows to use idiomatic named parameters to construct LibGDX `Color` instances.
+- `copy` extension method added to `Color`. It allows to create a new `Color` with copied color values. Supports
+overriding individual color values with optional named parameters.
+- `Color` instances can be destructed into individual color values.
 
 #### `ShapeRenderer`
 
@@ -123,9 +127,9 @@ shaderProgram.use {
 Creating `Color` instances:
 
 ```Kotlin
-import ktx.app.*
+import ktx.graphics.*
 
-val color = color(red = 1f, green = 0.5f, blue = 0.75f, alpha = 0.25f)
+val myColor = color(red = 1f, green = 0.5f, blue = 0.75f, alpha = 0.25f)
 // Fourth parameter - alpha - is optional and defaults to 1f:
 val nonTransparentGray = color(0.8f, 0.8f, 0.8f)
 ```
@@ -133,7 +137,7 @@ val nonTransparentGray = color(0.8f, 0.8f, 0.8f)
 Copying `Color` instances:
 
 ```Kotlin
-import ktx.app.*
+import ktx.graphics.*
 import com.badlogic.gdx.graphics.Color
 
 val blue = Color.BLUE.copy()
@@ -143,16 +147,22 @@ val blue = Color.BLUE.copy()
 val violet = blue.copy(red = 1f)
 ```
 
-`Color` instances can be destructed:
+Destructing `Color` instances:
+
 ```kotlin
-val (red, green, blue, alpha) = color
+import ktx.graphics.*
+import com.badlogic.gdx.graphics.Color
+
+fun destruct(color: Color) {
+  val (red, green, blue, alpha) = color
+}
 ```
 
 Using a `ShapeRenderer`:
 
 ```kotlin
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ktx.graphics.*
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 val shapeRenderer = ShapeRenderer()
 
