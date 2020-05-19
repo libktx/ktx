@@ -143,6 +143,11 @@ val blue = Color.BLUE.copy()
 val violet = blue.copy(red = 1f)
 ```
 
+`Color` instances can be destructed:
+```kotlin
+val (red, green, blue, alpha) = color
+```
+
 Using a `ShapeRenderer`:
 
 ```kotlin
