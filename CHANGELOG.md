@@ -2,6 +2,10 @@
 
 - **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
 - **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
+- **[CHANGE]** (`ktx-actors`) Touch event listeners attached with extension methods now extend `InputListener` rather than `ClickListener`.
+- **[CHANGE]** (`ktx-actors`) `onTouchEvent` parameters renamed from `downListener` and `upListener` to `onDown` and `onUp`.
+- **[CHANGE]** (`ktx-actors`) Event listeners attached with extension methods now consume the `Actor` as `this`.
+Listeners that used to consume actors as regular parameters now should rely on `this` instead.
 - **[FEATURE]** (`ktx-ashley`) Added `Engine.configureEntity` extension method that allows to add components to an existing entity.
 - **[FEATURE]** (`ktx-graphics`) Added support for `Color` destructuring syntax.
 - **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.

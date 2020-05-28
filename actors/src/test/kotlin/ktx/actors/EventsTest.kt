@@ -41,7 +41,7 @@ class EventsTest {
     val actor = Actor()
     var changed = false
 
-    val listener = actor.onChangeEvent { event, widget -> changed = true }
+    val listener = actor.onChangeEvent { event -> changed = true }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -63,7 +63,7 @@ class EventsTest {
   fun `should attach ClickListener consuming InputEvent`() {
     val actor = Actor()
 
-    val listener = actor.onClickEvent { event, widget -> }
+    val listener = actor.onClickEvent { event -> }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -73,14 +73,14 @@ class EventsTest {
   fun `should attach ClickListener consuming InputEvent with local coordinates`() {
     val actor = Actor()
 
-    val listener = actor.onClickEvent { event, widget, x, y -> }
+    val listener = actor.onClickEvent { event, x, y -> }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
   }
 
   @Test
-  fun `should attach ClickListener for touchDown`() {
+  fun `should attach InputListener for touchDown`() {
     val actor = Actor()
 
     val listener = actor.onTouchDown { }
@@ -90,7 +90,7 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener for touchUp`() {
+  fun `should attach InputListener for touchUp`() {
     val actor = Actor()
 
     val listener = actor.onTouchUp { }
@@ -100,12 +100,12 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener consuming InputEvent for touch events`() {
+  fun `should attach InputListener consuming InputEvent for touch events`() {
     val actor = Actor()
 
     val listener = actor.onTouchEvent(
-      downListener = { event, widget -> },
-      upListener = { event, widget -> }
+      onDown = { event -> },
+      onUp = { event -> }
     )
 
     assertNotNull(listener)
@@ -113,12 +113,12 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener consuming InputEvent for touch events with local coordinates`() {
+  fun `should attach InputListener consuming InputEvent for touch events with local coordinates`() {
     val actor = Actor()
 
     val listener = actor.onTouchEvent(
-      downListener = { event, widget, x, y -> },
-      upListener = { event, widget, x, y -> }
+      onDown = { event, x, y -> },
+      onUp = { event, x, y -> }
     )
 
     assertNotNull(listener)
@@ -126,12 +126,12 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener consuming InputEvent for touch events with local coordinates, pointer and button`() {
+  fun `should attach InputListener consuming InputEvent for touch events with local coordinates, pointer and button`() {
     val actor = Actor()
 
     val listener = actor.onTouchEvent(
-      downListener = { event, widget, x, y, pointer, button -> },
-      upListener = { event, widget, x, y, pointer, button -> }
+      onDown = { event, x, y, pointer, button -> },
+      onUp = { event, x, y, pointer, button -> }
     )
 
     assertNotNull(listener)
@@ -139,11 +139,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchDown event`() {
+  fun `should attach InputListener and trigger touchDown event`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget -> result = event.type == touchDown }
+    val listener = actor.onTouchEvent { event -> result = event.type == touchDown }
     listener.touchDown(InputEvent().apply { type = touchDown }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -152,11 +152,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchUp event`() {
+  fun `should attach InputListener and trigger touchUp event`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget -> result = event.type == touchUp }
+    val listener = actor.onTouchEvent { event -> result = event.type == touchUp }
     listener.touchDown(InputEvent().apply { type = touchUp }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -165,11 +165,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchDown event with local coordinates, pointer and button`() {
+  fun `should attach InputListener and trigger touchDown event with local coordinates, pointer and button`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget, x, y, pointer, button -> result = event.type == touchDown }
+    val listener = actor.onTouchEvent { event, x, y, pointer, button -> result = event.type == touchDown }
     listener.touchDown(InputEvent().apply { type = touchDown }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -178,11 +178,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchUp event with local coordinates, pointer and button`() {
+  fun `should attach InputListener and trigger touchUp event with local coordinates, pointer and button`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget, x, y, pointer, button -> result = event.type == touchUp }
+    val listener = actor.onTouchEvent { event, x, y, pointer, button -> result = event.type == touchUp }
     listener.touchDown(InputEvent().apply { type = touchUp }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -191,11 +191,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchDown event with local coordinates`() {
+  fun `should attach InputListener and trigger touchDown event with local coordinates`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget, x, y -> result = event.type == touchDown }
+    val listener = actor.onTouchEvent { event, x, y -> result = event.type == touchDown }
     listener.touchDown(InputEvent().apply { type = touchDown }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -204,11 +204,11 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach ClickListener and trigger touchUp event with local coordinates`() {
+  fun `should attach InputListener and trigger touchUp event with local coordinates`() {
     val actor = Actor()
     var result = false
 
-    val listener = actor.onTouchEvent { event, widget, x, y -> result = event.type == touchUp }
+    val listener = actor.onTouchEvent { event, x, y -> result = event.type == touchUp }
     listener.touchDown(InputEvent().apply { type = touchUp }, 0f, 0f, 0, 0)
 
     assertNotNull(listener)
@@ -238,7 +238,7 @@ class EventsTest {
     val actor = Actor()
     var typed: Char? = null
 
-    val listener = actor.onKeyEvent { event, widget, key -> typed = key }
+    val listener = actor.onKeyEvent { event, key -> typed = key }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -272,7 +272,7 @@ class EventsTest {
     val actor = Actor()
     var pressed: Int? = null
 
-    val listener = actor.onKeyDownEvent { event, widget, keyCode -> pressed = keyCode }
+    val listener = actor.onKeyDownEvent { event, keyCode -> pressed = keyCode }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -307,7 +307,7 @@ class EventsTest {
     val actor = Actor()
     var released: Int? = null
 
-    val listener = actor.onKeyUpEvent { event, widget, keyCode -> released = keyCode }
+    val listener = actor.onKeyUpEvent { event, keyCode -> released = keyCode }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -341,7 +341,7 @@ class EventsTest {
     val actor = Actor()
     var focused = false
 
-    val listener = actor.onScrollFocusEvent { event, widget -> focused = event.isFocused }
+    val listener = actor.onScrollFocusEvent { event -> focused = event.isFocused }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -373,7 +373,7 @@ class EventsTest {
     val actor = Actor()
     var focused = false
 
-    val listener = actor.onKeyboardFocusEvent { event, widget -> focused = event.isFocused }
+    val listener = actor.onKeyboardFocusEvent { event -> focused = event.isFocused }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
