@@ -10,8 +10,8 @@ LibGDX provides an `AssetManager` class for loading and managing assets. Even wi
 `AssetManager` is not fully compatible with Kotlin concurrency model based on coroutines due to thread blocking.
 While it does support asynchronous asset loading, it uses only a single thread for asynchronous operations and
 achieves its thread safety by synchronizing all of its methods. To achieve truly multi-threaded loading with
-multiple threads for asynchronous loading, one must maintain multiple manager instances. Besides, its API relies
-on polling - one must repeatedly update its state until the assets are loaded.
+multiple threads for asynchronous loading, multiple manager instances must be maintained. Besides, its API relies
+on polling - managers have to be repeatedly updated until the assets are loaded.
 
 This **KTX** module brings an `AssetManager` alternative - `AssetStorage`. It leverages Kotlin coroutines
 for asynchronous operations. It ensures thread safety by using a single non-blocking `Mutex` for
@@ -26,7 +26,7 @@ Feature | **KTX** `AssetStorage` | LibGDX `AssetManager`
 *Concurrency* | **Supported.** Multiple asset loading coroutines can be launched in parallel. Coroutine context used for asynchronous loading can have multiple threads that will be used concurrently. | **Limited.** `update()` loads assets one by one. `AsyncExecutor` with only a single thread is used internally by the `AssetManager`. To utilize multiple threads for loading, one must use multiple manager instances.
 *Loading order* | **Controlled by the user.** With suspending `load`, synchronous `loadSync` and `Deferred`-returning `loadAsync`, the user can have full control over asset loading order and parallelization. Selected assets can be loaded one after another within a single coroutine or in parallel with multiple coroutines, depending on the need. | **Unpredictable.** If multiple assets are scheduled at once, it is difficult to reason about their loading order. `finishLoading` has no effect on loading order and instead blocks the thread until the selected asset is loaded.
 *Exceptions* | **Customized.** All expected issues are given separate exception classes with common root type for easier handling. Each loading issue can be handled differently. | **Generic.** Throws either `GdxRuntimeException` or a built-in Java runtime exception. Specific issues are difficult to handle separately.
-*Error handling* | **Build-in language syntax.** A regular try-catch block within coroutine body can be used to handle asynchronous loading errors. Provides a clean way to handle exceptions thrown by each asset separately. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown. Flow of the application is undisturbed, which makes it difficult to handle exceptions of specific assets.
+*Error handling* | **Build-in language syntax.** A regular try-catch block within coroutine body can be used to handle asynchronous loading errors. Provides a clean way to handle exceptions thrown by each asset separately. | **Via listener.** One can register a global error handling listener that will be notified if a loading exception is thrown. Flow of the application is undisturbed, which makes it difficult to handle exceptions of specific assets. If an error listener is not registered, exceptions will be wrapped and rethrown by `update`.
 *File name collisions* | **Multiple assets of different types can be loaded from same path.** For example, you can load both a `Texture` and a `Pixmap` from the same PNG file. | **File paths act as unique identifiers.** `AssetManager` cannot store multiple assets with the same path, even if they have different types.
 *Progress tracking* | **Supported with caveats.** `AssetStorage` does not force the users to schedule loading of all assets up front. To get the exact percent of loaded assets, all assets must be scheduled first (e.g. with `loadAsync`). | **Supported.** Since all loaded assets have to be scheduled up front, `AssetManager` can track total loading progress.
 *Usage* | **Launch coroutine, load assets, use as soon as loaded.** Asynchronous complexity is hidden by the coroutines. | **Schedule loading, update in loop until loaded, extract from manager.** API based on polling _(are you done yet?),_ which might prove tedious during loading phase. Loading callbacks for individual assets are available, but have obscure API and still require constant updating of the manager.
@@ -117,7 +117,7 @@ identifies assets by their paths and types, i.e. you can load multiple assets wi
 classes from the same file.
 
 The key difference between **KTX** storage and LibGDX manager is the threading model:
- `AssetManager` leverages only a single thread for asynchronous loading operations and ensures
+`AssetManager` leverages only a single thread for asynchronous loading operations and ensures
 thread safety by relying on the `synchronized` methods,
 while `AssetStorage` can utilize any chosen number of threads specified by its coroutine
 context and uses non-blocking coroutines to load the assets.
