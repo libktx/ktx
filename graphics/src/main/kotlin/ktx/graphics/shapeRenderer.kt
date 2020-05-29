@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /** See [ShapeRenderer.translate]. Multiplies the current transformation matrix by a translation matrix.
  * @param transform supplies x, y and z parameters. */
@@ -149,8 +152,14 @@ fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2) {
  * @param colorA color of A corner.
  * @param colorB color of B corner.
  * @param colorC color of C corner. */
-fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2,
-                           colorA: Color, colorB: Color, colorC: Color) {
+fun ShapeRenderer.triangle(
+  pointA: Vector2,
+  pointB: Vector2,
+  pointC: Vector2,
+  colorA: Color,
+  colorB: Color,
+  colorC: Color
+) {
   triangle(pointA.x, pointA.y, pointB.x, pointB.y, pointC.x, pointC.y, colorA, colorB, colorC)
 }
 
@@ -160,7 +169,9 @@ fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2,
  * with [ShapeRenderer.set].
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
-inline fun <SR: ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
+@OptIn(ExperimentalContracts::class)
+inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   begin(type)
   action(this)
   end()

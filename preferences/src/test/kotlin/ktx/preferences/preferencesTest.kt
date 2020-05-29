@@ -3,7 +3,10 @@ package ktx.preferences
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Json
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -367,8 +370,8 @@ class PreferencesTest {
 
   @Test
   fun `should flush changes after executing passed operations`() {
-    var wasExecuted = false
-    var wasFlushedDuringExecution = true
+    var wasExecuted: Boolean
+    var wasFlushedDuringExecution: Boolean
     preferences.flush {
       wasExecuted = true
       wasFlushedDuringExecution = (preferences as TestPreferences).flushed
@@ -377,5 +380,16 @@ class PreferencesTest {
     assertTrue((preferences as TestPreferences).flushed)
     assertTrue(wasExecuted)
     assertFalse(wasFlushedDuringExecution)
+  }
+
+  @Test
+  fun `should perform operations on flushing exactly once`() {
+    val variable: Int
+
+    preferences.flush {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 }

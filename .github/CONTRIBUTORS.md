@@ -43,7 +43,7 @@ Project contributors listed chronologically.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
   * Author of the [Tiled](../tiled) module.
-  * Contributed [actors](../actors) utilities.
+  * Contributed [actors](../actors) and [ashley](../ashley) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
   * Author of the [preferences](../preferences) module.
   * Tested and reviewed the [assets async](../assets-async) module.
@@ -66,6 +66,8 @@ Project contributors listed chronologically.
 * [@ImXico](https://github.com/ImXico)
   * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin LibGDX extensions.
   * Utilities for profiling, text rendering, camera updating and taking screenshots were integrated into KTX with **@ImXico** permission.
+* [@heyheyIvan](https://github.com/heyheyIvan)
+  * Contributed utilities to [graphics module](../graphics).
 
 ### Metrics
 

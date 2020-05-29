@@ -17,15 +17,17 @@ builder DSL.
 `ktx-ashley` provides the following extensions and utilities:
 
 - `Engine.add` and `Engine.entity` extension methods provide type-safe building DSL for creating `Entities`.
-- `Engine.getSystem` and `Engine.get` (`[]` operator) to access an `EntitySystem` of the engine.
+- `Engine.getSystem` and `Engine.get` (`[]` operator) ease access to registered `EntitySystem` instances of the engine.
 `Engine.getSystem` throws a `MissingEntitySystemException` in case the system is not part of the `Engine`.
-`Engine.get` returns null in such cases.
+`Engine.get` returns `null` in such cases.
 - `EngineEntity` is an `Entity` wrapper that allows to create `Component` instances using using the `Engine` via
-`with` methods.
+`with` method. It is available when calling `Engine.entity` or `Engine.configureEntity`.
+- `Engine.configureEntity` extension method allows to add components to an existing entity.
 - `mapperFor` factory method allows to create `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
-- `Entity.addComponent` extension to create and add a `Component` to an existing entity.
+- `Entity.addComponent` extension method allows to create and add a single `Component` to an existing `Entity`.
+- `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
 
@@ -41,7 +43,7 @@ import ktx.ashley.*
 val engine = PooledEngine()
 
 class Texture: Component
-class Transform(var x:Float = 0f, var y:Float = 0f): Component
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
 val entity = engine.entity {
   with<Texture>()
@@ -61,7 +63,7 @@ import ktx.ashley.*
 
 val engine = PooledEngine()
 
-class Transform(var x:Float = 0f, var y:Float = 0f): Component
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
 fun setupEngine() = engine.add {
   entity {
@@ -79,6 +81,29 @@ fun setupEngine() = engine.add {
 }
 ```
 
+Adding new components to an existing entity with `Engine.configureEntity`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+val engine = PooledEngine()
+val entity = Entity()
+
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
+
+fun extendEntity(){
+  engine.configureEntity(entity) {
+    with<Transform> {
+      x = 1f
+      y = 1f
+    }  
+  }
+}
+```
+
 Getting an `EntitySystem` from an `Engine`:
 
 ```kotlin
@@ -89,7 +114,6 @@ import ktx.ashley.getSystem
 
 class MoveSystem : EntitySystem()
 class RenderSystem : EntitySystem()
-class DamageSystem : EntitySystem()
 
 val engine = PooledEngine()
 
@@ -97,13 +121,10 @@ fun getSystem() {
     engine.addSystem(MoveSystem())
     engine.addSystem(RenderSystem())
 
+    // Non-nullable variant - throws an exception if the system is missing:
     val moveSystem = engine.getSystem<MoveSystem>()
+    // Nullable variant - returns null if the system is missing:
     val renderSystem = engine[RenderSystem::class]
-    // the next line throws a MissingEntitySystemException
-    engine.getSystem<DamageSystem>()
-
-    val damageSystem = engine[DamageSystem::class]
-    println(damageSystem) // prints null
 }
 ```
 
@@ -118,23 +139,26 @@ class Transform: Component
 val transformMapper = mapperFor<Transform>()
 ```
 
-Adding a `Component` to an `Entity`:
+Adding a `Component` to an existing `Entity`:
 
 ```kotlin
 import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.add
-import ktx.ashley.entity
+import com.badlogic.ashley.core.Engine
+import com.badlogic.ashley.core.Entity
+import ktx.ashley.addComponent
+import ktx.ashley.plusAssign
 
-class Remove(var delay: Float = 0f) : Component
+class Transform(var x: Float = 0f, var y: Float = 0f) : Component
 
-val engine = PooledEngine()
-val entity = engine.entity {}
+fun addComponentToEntity(entity: Entity, engine: Engine) {
+  // Creating and adding a component:
+  entity.addComponent<Transform>(engine) {
+    x = 2.5f
+    y = 5f
+  }
 
-fun addComponent() {
-    entity.addComponent<Remove>(engine) {
-        delay = 2.5f
-    }
+  // Or alternatively, if you already have a constructed component:
+  entity += Transform(x = 1f, y = 2f)
 }
 ```
 

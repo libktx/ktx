@@ -2,6 +2,9 @@ package ktx.inject
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
@@ -112,18 +115,6 @@ open class Context : Disposable {
   inline fun <reified Type : Any> contains(): Boolean = Type::class.java in this
 
   /**
-   * Allows to register new components in the context with builder-like DSL
-   * @param init will be invoked on this context.
-   * @return this context.
-   * @see bind
-   * @see bindSingleton
-   */
-  inline fun register(init: Context.() -> Unit): Context {
-    this.init()
-    return this
-  }
-
-  /**
    * Allows to bind a provider producing instances of the selected type.
    * @param provider will be bind with the selected type. If no type argument is passed, it will be bind to the same
    *    exact class as the object it provides.
@@ -164,8 +155,10 @@ open class Context : Disposable {
    * @param singleton instance of class compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, singleton: Type)
-      = bind(*to, provider = SingletonProvider(singleton))
+  fun <Type : Any> bindSingleton(
+    vararg to: KClass<out Type>,
+    singleton: Type
+  ) = bind(*to, provider = SingletonProvider(singleton))
 
   /**
    * Allows to bind the result of the provider to multiple classes in its hierarchy.
@@ -174,8 +167,10 @@ open class Context : Disposable {
    * @param provider inlined. Immediately invoked a single time. Its result will be registered as a singleton.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  inline fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, provider: () -> Type)
-      = bind(*to, provider = SingletonProvider(provider()))
+  inline fun <Type : Any> bindSingleton(
+    vararg to: KClass<out Type>,
+    provider: () -> Type
+  ) = bind(*to, provider = SingletonProvider(provider()))
 
   /**
    * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and
@@ -209,6 +204,20 @@ open class Context : Disposable {
     }
     clear()
   }
+}
+
+/**
+ * Allows to register new components in the context with builder-like DSL.
+ * @param init will be invoked on this context.
+ * @return this context.
+ * @see Context.bind
+ * @see Context.bindSingleton
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun Context.register(init: Context.() -> Unit): Context {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  this.init()
+  return this
 }
 
 /**

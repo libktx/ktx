@@ -4,6 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Align
 import com.kotcrab.vis.ui.widget.Tooltip
 import com.kotcrab.vis.ui.widget.VisLabel
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.scene2d
@@ -15,11 +18,14 @@ import ktx.scene2d.scene2d
  * @param init will be invoked on the [Tooltip], allowing to customize it.
  * @return a new instance of [Tooltip] added to this [Actor].
  */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 fun Actor.visTooltip(
   content: Actor,
   style: String = defaultStyle,
   init: (@Scene2dDsl Tooltip).() -> Unit = {}
 ): Tooltip {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = Tooltip(style)
   tooltip.content = content
   tooltip.target = this
@@ -35,12 +41,15 @@ fun Actor.visTooltip(
  * @param init will be invoked on the [Tooltip], allowing to customize it.
  * @return a new instance of [Tooltip] added to this [Actor].
  */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
 fun Actor.visTextTooltip(
   text: CharSequence,
   textAlign: Int = Align.center,
   style: String = defaultStyle,
   init: (@Scene2dDsl Tooltip).() -> Unit = {}
 ): Tooltip {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val label = VisLabel(text)
   label.setAlignment(textAlign)
   val tooltip = Tooltip(style)

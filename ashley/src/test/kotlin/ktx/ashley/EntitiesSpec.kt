@@ -86,6 +86,24 @@ object EntitiesSpec : Spek({
       }
     }
 
+    describe("plus assignment operator") {
+      it("should add a component to an entity") {
+        entity.remove<Transform>()
+
+        entity += Transform(1f, 0f)
+
+        assertThat(Transform.mapper in entity).isTrue()
+        assertThat(entity[Transform.mapper]?.x).isEqualTo(1f)
+      }
+
+      it("should replace a component of an entity") {
+        entity += Transform(1f, 0f)
+
+        assertThat(entity[Transform.mapper]?.x).isEqualTo(1f)
+        assertThat(entity[Transform.mapper]).isNotSameAs(transform)
+      }
+    }
+
     describe("add component function") {
       it("should add a component with a configuration and return it") {
         val component = entity.addComponent<Transform>(engine) {
@@ -94,6 +112,13 @@ object EntitiesSpec : Spek({
         assertThat(Transform.mapper in entity).isTrue()
         assertThat(entity[Transform.mapper]).isEqualTo(component)
         assertThat(component.x).isEqualTo(3f)
+      }
+      it("should configure component exactly once") {
+        val variable: Int
+        entity.addComponent<Transform>(engine) {
+          variable = 42
+        }
+        assertThat(variable).isEqualTo(42)
       }
     }
   }

@@ -3,13 +3,13 @@ package ktx.async
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.resume
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 
 /**
  * Main KTX coroutine scope. Executes tasks on the main rendering thread. See [MainDispatcher].
@@ -71,9 +71,8 @@ suspend fun <T> onRenderingThread(block: suspend CoroutineScope.() -> T) = withC
  * Returns true if the coroutine was launched from a rendering thread dispatcher.
  */
 fun CoroutineScope.isOnRenderingThread() =
-  coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher
-    && Thread.currentThread() === MainDispatcher.mainThread
-
+  coroutineContext[ContinuationInterceptor.Key] is RenderingThreadDispatcher &&
+    Thread.currentThread() === MainDispatcher.mainThread
 
 /**
  * Attempts to skip the current frame. Resumes the execution using a task scheduled with [Application.postRunnable].

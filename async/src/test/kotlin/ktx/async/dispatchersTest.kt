@@ -5,16 +5,19 @@ import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.mock.mock
-import kotlinx.coroutines.Runnable
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-import org.junit.Test
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertSame
+import org.junit.Test
 
 /**
  * Base class with coroutine dispatcher tests.

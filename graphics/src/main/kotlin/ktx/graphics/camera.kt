@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Centers this [Camera] in the middle of the given rectangle. [width] and [height]
@@ -18,7 +21,9 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport
 fun Camera.center(
   width: Float = Gdx.graphics.width.toFloat(),
   height: Float = Gdx.graphics.height.toFloat(),
-  x: Float = 0f, y: Float = 0f) {
+  x: Float = 0f,
+  y: Float = 0f
+) {
   position.set(x + width / 2f, y + height / 2f, 0f)
 }
 
@@ -55,7 +60,9 @@ fun Camera.lerpTo(target: Vector2, lerp: Float, x: Float = 0f, y: Float = 0f) {
  * Inlines the [operation], which can update the camera position.
  * Automatically calls [Camera.update] after the [operation] is finished.
  */
+@OptIn(ExperimentalContracts::class)
 inline fun Camera.update(operation: Camera.() -> Unit) {
+  contract { callsInPlace(operation, InvocationKind.EXACTLY_ONCE) }
   operation()
   update()
 }
@@ -85,7 +92,8 @@ inline fun Camera.update(operation: Camera.() -> Unit) {
 class LetterboxingViewport(
   var targetPpiX: Float = defaultTargetPpi,
   var targetPpiY: Float = defaultTargetPpi,
-  var aspectRatio: Float = 4f / 3f) : ScalingViewport(Scaling.fit, 0f, 0f) {
+  var aspectRatio: Float = 4f / 3f
+) : ScalingViewport(Scaling.fit, 0f, 0f) {
   /** You can directly modify unit per pixel ratio (bypassing PPI check) by modifying this value.
    * @see updateScale */
   var scaleX = 0f

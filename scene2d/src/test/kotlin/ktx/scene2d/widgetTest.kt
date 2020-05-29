@@ -2,16 +2,26 @@ package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [scene2d] DSL object.
@@ -44,67 +54,20 @@ class Scene2DTest : NeedsLibGDX() {
   }
 
   @Test
-  fun `should create Window`() {
-    val window = scene2d.window(title = "test")
+  fun `should execute DSL building block exactly once`() {
+    val variable: Int
+    val nestedLabel: Label
 
-    assertNotNull(window)
-    assertEquals(Scene2DSkin.defaultSkin, window.skin)
-    assertEquals("test", window.titleLabel.text.toString())
-  }
-
-  @Test
-  fun `should create Window with init block`() {
-    val window = scene2d.window(title = "test") {
-      height = 100f
+    val table = scene2d {
+      variable = 42
+      table {
+        nestedLabel = label("Test")
+      }
     }
 
-    assertNotNull(window)
-    assertEquals(Scene2DSkin.defaultSkin, window.skin)
-    assertEquals("test", window.titleLabel.text.toString())
-    assertEquals(100f, window.height, TOLERANCE)
-  }
-
-  @Test
-  fun `should create Window with nested children`() {
-    lateinit var label: Label
-
-    val window = scene2d.window(title = "test") {
-      label = label("Test")
-    }
-
-    assertTrue(label in window.children)
-  }
-
-  @Test
-  fun `should create Dialog`() {
-    val dialog = scene2d.dialog(title = "test")
-
-    assertNotNull(dialog)
-    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
-    assertEquals("test", dialog.titleLabel.text.toString())
-  }
-
-  @Test
-  fun `should create Dialog with init block`() {
-    val dialog = scene2d.dialog(title = "test") {
-      height = 100f
-    }
-
-    assertNotNull(dialog)
-    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
-    assertEquals("test", dialog.titleLabel.text.toString())
-    assertEquals(100f, dialog.height, TOLERANCE)
-  }
-
-  @Test
-  fun `should create Dialog with nested children`() {
-    lateinit var label: Label
-
-    val dialog = scene2d.dialog(title = "test") {
-      label = label("Test")
-    }
-
-    assertTrue(label in dialog.children)
+    assertSame(table, nestedLabel.parent)
+    assertEquals("Test", nestedLabel.text.toString())
+    assertEquals(42, variable)
   }
 
   // Factory methods for other actors are tested separately in `factoryTest`.

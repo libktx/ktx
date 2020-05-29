@@ -16,7 +16,12 @@ the changes. For example:
 
 > Kotlin version update. #250
 
-- Use IntelliJ Kotlin [code formatter](../intellij-formatter.xml) included in the root directory.
+- Format your code changes with the `gradle format` task. We are relying on automatic formatting performed with
+[ktlint](https://ktlint.github.io). Run `gradle linterIdeSetup` to apply formatter changes to your IntelliJ project.
+- Follow our file naming convention:
+  - Files with a single class: file name should match class name. E.g. `FileLoader.kt`.
+  - Others: files with extension methods, top-level functions, utilities or multiple classes should use camel case
+  nouns starting with a lower-cased letter. Should generally be in plural form. E.g. `fileLoaders.kt`.
 - Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
 JUnit and [Spek](http://spekframework.org/) can be used to write tests, although JUnit is encouraged for its commonness.
 Use [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
@@ -52,6 +57,8 @@ IntelliJ, so KTX should be relatively easy to import.
 Some useful Gradle tasks include:
 
 - `build install` - builds the libraries archives and pushes them to _Maven Local_. Useful for local tests.
+- `format` - formats all Kotlin source files.
+- `linterIdeSetup` - modifies local IntelliJ project setup for consistency with `ktlint` formatting.
 - `check` - runs all tests in all projects.
 - `clean` - removes the `build` directories, which forces rebuilds of the modules.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
@@ -60,17 +67,6 @@ and _Sonatype_ logging data.
 - `closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
 case of a non-snapshot upload to _Maven Central_. Might fail at times on the promotion task; running `promoteRepository`
 separately usually fixes the issue.
-
-Note that since [Dokka](https://github.com/Kotlin/dokka) is used to generate documentation archives, Java 8 is required
-to fully build the libraries due to a [Dokka bug](https://github.com/Kotlin/dokka/issues/294). If you prefer to develop
-the library using JDK 11 or newer, you can still install JDK 8 alongside your version7 and run specific tasks with Java 8:
-
-```bash
-./gradlew clean test jar
-# Pass the correct path to JDK 8:
-./gradlew -Dorg.gradle.java.home=/usr/lib/jvm/java-1.8.0-openjdk-amd64 dokkaJavadoc
-./gradlew uploadArchives
-```
 
 ### Adding a new KTX module
 

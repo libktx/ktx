@@ -2,6 +2,7 @@ package ktx.scene2d.vis
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -9,10 +10,23 @@ import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
 import com.kotcrab.vis.ui.widget.ButtonBar
+import com.kotcrab.vis.ui.widget.VisDialog
 import com.kotcrab.vis.ui.widget.VisLabel
+import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
-import ktx.scene2d.*
-import org.junit.Assert.*
+import com.kotcrab.vis.ui.widget.toast.ToastTable
+import com.nhaarman.mockitokotlin2.mock
+import ktx.scene2d.KWidget
+import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.TOLERANCE
+import ktx.scene2d.actors
+import ktx.scene2d.scene2d
+import ktx.scene2d.table
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
 
@@ -103,6 +117,33 @@ class TopLevelActorFactoriesTest : NeedsLibGDX() {
       label = visLabel("Test")
     }
 
+    assertTrue(label in table.children)
+  }
+
+  @Test
+  fun `should add top-level actors to Stage`() {
+    val stage = Stage(mock(), mock())
+    lateinit var window: VisWindow
+    lateinit var dialog: VisDialog
+    lateinit var table: ToastTable
+    lateinit var label: VisLabel
+
+    stage.actors {
+      window = visWindow("Test")
+      dialog = visDialog("Test")
+      table = toastTable {
+        label = visLabel("Test")
+      }
+    }
+
+    assertTrue(window in stage.actors)
+    assertTrue(window in stage.root.children)
+    assertTrue(dialog in stage.actors)
+    assertTrue(dialog in stage.root.children)
+    assertTrue(table in stage.actors)
+    assertTrue(table in stage.root.children)
+    assertFalse(label in stage.actors)
+    assertFalse(label in stage.root.children)
     assertTrue(label in table.children)
   }
 }
@@ -447,7 +488,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create VisList`() = test(
     widget = {
-      visList<String, Cell<*>> {
+      visList<String> {
         color = Color.BLUE
         // Adding list items:
         -"one"
@@ -471,7 +512,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create VisSelectBox`() = test(
     widget = {
-      visSelectBox<String, Cell<*>> {
+      visSelectBox<String> {
         color = Color.BLUE
         // Adding select box items:
         -"one"
@@ -485,7 +526,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
 
   @Test
   fun `should create VisSlider`() = test(
-    widget = { visSlider(min = 1f, max = 2f, step = 0.5f){ color = Color.BLUE } },
+    widget = { visSlider(min = 1f, max = 2f, step = 0.5f) { color = Color.BLUE } },
     validate = {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
@@ -494,86 +535,86 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
 
   @Test
   fun `should create VisTextArea`() = test(
-    widget = { visTextArea("Test."){ color = Color.BLUE } },
+    widget = { visTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
     })
 
   @Test
   fun `should create HighlightTextArea`() = test(
-    widget = { highlightTextArea("Test."){ color = Color.BLUE } },
+    widget = { highlightTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
     })
 
   @Test
   fun `should create ScrollableTextArea`() = test(
-    widget = { scrollableTextArea("Test."){ color = Color.BLUE } },
+    widget = { scrollableTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
     })
 
   @Test
   fun `should create VisTextField`() = test(
-    widget = { visTextField("Test."){ color = Color.BLUE } },
+    widget = { visTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
     })
 
   @Test
   fun `should create ValidatableTextField`() = test(
-    widget = { visValidatableTextField("Test."){ color = Color.BLUE } },
+    widget = { visValidatableTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
     })
 
   @Test
-  fun `should create BusyBar`() = test { busyBar{ color = Color.BLUE } }
+  fun `should create BusyBar`() = test { busyBar { color = Color.BLUE } }
 
   @Test
-  fun `should create Separator`() = test { separator{ color = Color.BLUE } }
+  fun `should create Separator`() = test { separator { color = Color.BLUE } }
 
   @Test
   fun `should create VisTextButton`() = test(
-    widget = { visTextButton("Test."){ color = Color.BLUE } },
+    widget = { visTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
     })
 
   @Test
-  fun `should create VisImageButton`() = test { visImageButton{ color = Color.BLUE } }
+  fun `should create VisImageButton`() = test { visImageButton { color = Color.BLUE } }
 
   @Test
   fun `should create VisImageTextButton`() = test(
-    widget = { visImageTextButton("Test."){ color = Color.BLUE } },
+    widget = { visImageTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
     })
 
   @Test
   fun `should create VisCheckBox`() = test(
-    widget = { visCheckBox("Test."){ color = Color.BLUE } },
+    widget = { visCheckBox("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
     })
 
   @Test
   fun `should create VisRadioButton`() = test(
-    widget = { visRadioButton("Test."){ color = Color.BLUE } },
+    widget = { visRadioButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
     })
 
   @Test
-  fun `should create VisTree`() = test { visTree{ color = Color.BLUE } }
+  fun `should create VisTree`() = test { visTree { color = Color.BLUE } }
 
   @Test
   @Ignore("Unable to compile shader in test environment.")
-  fun `should create BasicColorPicker`() = test { basicColorPicker{ color = Color.BLUE } }
+  fun `should create BasicColorPicker`() = test { basicColorPicker { color = Color.BLUE } }
 
   @Test
   @Ignore("Unable to compile shader in test environment.")
-  fun `should create ExtendedColorPicker`() = test { extendedColorPicker{ color = Color.BLUE } }
+  fun `should create ExtendedColorPicker`() = test { extendedColorPicker { color = Color.BLUE } }
 
   @Test
   fun `should create Spinner`() = test(
@@ -587,25 +628,25 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     })
 
   @Test
-  fun `should create VisTable`() = test { visTable{ color = Color.BLUE } }
+  fun `should create VisTable`() = test { visTable { color = Color.BLUE } }
 
   @Test
   fun `should create HorizontalFlowGroup`() = test(
-    widget = { horizontalFlowGroup(spacing = 10f){ color = Color.BLUE } },
+    widget = { horizontalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
     })
 
   @Test
   fun `should create VerticalFlowGroup`() = test(
-    widget = { verticalFlowGroup(spacing = 10f){ color = Color.BLUE } },
+    widget = { verticalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
     })
 
   @Test
   fun `should create GridGroup`() = test(
-    widget = { gridGroup(itemSize = 100f, spacing = 10f){ color = Color.BLUE } },
+    widget = { gridGroup(itemSize = 100f, spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
       assertEquals(100f, it.itemWidth, TOLERANCE)
@@ -613,25 +654,25 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     })
 
   @Test
-  fun `should create FloatingGroup`() = test { floatingGroup{ color = Color.BLUE } }
+  fun `should create FloatingGroup`() = test { floatingGroup { color = Color.BLUE } }
 
   @Test
-  fun `should create DragPane`() = test { dragPane{ color = Color.BLUE } }
+  fun `should create DragPane`() = test { dragPane { color = Color.BLUE } }
 
   @Test
-  fun `should create VisScrollPane`() = test { visScrollPane{ color = Color.BLUE } }
+  fun `should create VisScrollPane`() = test { visScrollPane { color = Color.BLUE } }
 
   @Test
-  fun `should create VisSplitPane`() = test { visSplitPane{ color = Color.BLUE } }
+  fun `should create VisSplitPane`() = test { visSplitPane { color = Color.BLUE } }
 
   @Test
-  fun `should create MultiSplitPane`() = test { multiSplitPane{ color = Color.BLUE } }
+  fun `should create MultiSplitPane`() = test { multiSplitPane { color = Color.BLUE } }
 
   @Test
-  fun `should create CollapsibleWidget`() = test { collapsible{ color = Color.BLUE } }
+  fun `should create CollapsibleWidget`() = test { collapsible { color = Color.BLUE } }
 
   @Test
-  fun `should create HorizontalCollapsibleWidget`() = test { horizontalCollapsible{ color = Color.BLUE } }
+  fun `should create HorizontalCollapsibleWidget`() = test { horizontalCollapsible { color = Color.BLUE } }
 
   @Test
   fun `should create ButtonBar`() {
@@ -651,7 +692,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create ButtonBar with order`() {
     val parent = scene2d.visTable()
 
-    val buttonBar = parent.buttonBar(ButtonBar.LINUX_ORDER){
+    val buttonBar = parent.buttonBar(ButtonBar.LINUX_ORDER) {
       isIgnoreSpacing = true
     }
 

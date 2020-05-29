@@ -1,17 +1,63 @@
 #### 1.9.10-SNAPSHOT
 
+- **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
+- **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
+- **[CHANGE]** (`ktx-actors`) Touch event listeners attached with extension methods now extend `InputListener` rather than `ClickListener`.
+- **[CHANGE]** (`ktx-actors`) `onTouchEvent` parameters renamed from `downListener` and `upListener` to `onDown` and `onUp`.
+- **[CHANGE]** (`ktx-actors`) Event listeners attached with extension methods now consume the `Actor` as `this`.
+Listeners that used to consume actors as regular parameters now should rely on `this` instead.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.configureEntity` extension method that allows to add components to an existing entity.
+- **[FEATURE]** (`ktx-graphics`) Added support for `Color` destructuring syntax.
+- **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
+
+#### 1.9.10-b6
+
 - **[UPDATE]** Updated to Kotlin 1.3.72.
 - **[UPDATE]** Updated to Dokka 0.10.1.
 - **[CHANGE]** Javadocs are no longer generated with Dokka. Since KTX focuses solely on Kotlin support for LibGDX,
 usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
 Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
 Starting from this release, GitHub releases will no longer contain the Javadoc archives.
+- **[FEATURE]** (`ktx-actors`) Added `Action.repeat` extension method that allows to repeat an action for the given amount of times.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access a chosen `EntitySystem`.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` extension method to access a chosen `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
+- **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` extension method to create a `Component` for an existing `Entity`. 
+- **[FEATURE]** (`ktx-ashley`) Added `Entity.plusAssign` (`+=`) operator that allows to add an `Component` to an `Entity`. 
+- **[FEATURE]** (`ktx-ashley`) Added contracts support to `EngineEntity.with`, `Engine.create`, `Engine.add`, `Engine.entity`
+add `Entity.addComponent`. Now their lambda parameters are ensured to be executed exactly once:
+```kotlin
+// Before:
+lateinit var value: Int
+engine.add {
+  value = 42
+}
+
+// Now:
+val value: Int
+engine.add {
+  value = 42
+}
+```
+- **[FEATURE]** (`ktx-assets`) `Iterable.dispose` and `Array.dispose` extension methods consuming an error handler are now inlined.
+- **[FEATURE]** (`ktx-box2d`) Added contracts support to body, fixture and joint factory methods, as well as `FixtureDef.filter`
+This ensures that the configuration lambdas are executed exactly once.
+- **[CHANGE]** (`ktx-collections`) `PooledList` was removed due to concurrent iteration safety issues. Use standard library lists instead.
+- **[CHANGE]** (`ktx-collections`) `-` and `+` operators no longer mutate the collections. Instead, they create a new collection instance and add or removed the selected elements.
+To modify an existing collection, use new mutating `+=` and `-=` operators.
+- **[FEATURE]** (`ktx-freetype`) Added contracts support to `AssetManager.loadFreeTypeFont`, `freeTypeFontParameters`
+and `FreeTypeFontGenerator.generateFont`. This ensures that the font configuration lambdas are executed exactly once.
+- **[FEATURE]** (`ktx-freetype-async`) Added contracts support to `AssetStorage.loadFreeTypeFont`.
+- **[FEATURE]** (`ktx-graphics`) Added contracts support to `Camera.update`, `Batch.use`, `ShaderProgram.use`, `GLFrameBuffer.use` and `ShapeRenderer.use`.
+- **[FEATURE]** (`ktx-inject`) Added contracts support to `Context.register`.
+- **[CHANGE]** (`ktx-log`) Added contracts to logging methods. Logging methods now might need to be imported explicitly.
+- **[FEATURE]** (`ktx-preferences`) Added contracts support to `Preferences.flush`.
 - **[FEATURE]** (`ktx-math`) Added `+=`, `+`, `-=` and `-` operators supporting floats and ints to `Vector2` and `Vector3`.
 - **[CHANGE]** (`ktx-math`) `-`, `!`, `++` and `--` operators no longer mutate vectors and matrices, returning new instances instead.  
 - **[FIX]** (`ktx-math`) Operators documentation regarding mutating of vectors and matrices was updated.
 - **[FEATURE]** (`ktx-scene2d`) `scene2d` object was added. It supports the entire Scene2D DSL and allows to create root-level widgets.
+- **[FEATURE]** (`ktx-scene2d`) `Stage.actors` extension method was added. It allows to define actors with Scene2D DSL and adds all top-level actors to the `Stage`.
 - **[CHANGE]** (`ktx-scene2d`) Root-level `actor` function was deprecated.
-- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix to create these widgets.
+- **[CHANGE]** (`ktx-scene2d`) Root-level widget factory functions were deprecated. Use `scene2d.` prefix or `Stage.actors` to create these widgets.
 Note that the actors can still be created via standard DSL. See the migration guide in README. This includes:
   - `stack`
   - `horizontalGroup`
@@ -24,9 +70,14 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `dialog`
   - `buttonGroup`
   - `tree`
-- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` method was removed.
+- **[CHANGE]** (`ktx-scene2d`) `listWidget` and `selectBox` now have a single generic type to improve usability.
+Their building blocks no longer consume `Cell` and `Node` instances.
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods were removed.
+- **[FEATURE]** (`ktx-scene2d`) Added contracts support to widget factory methods and `Stage.actors`.
+This ensures that widget configuration lambdas are executed exactly once.
+- **[FEATURE]** (`ktx-style`) Added contracts support to style factory methods and top-level `skin` functions.
 - **[CHANGE]** (`ktx-vis`) Overhaul of the module.
-  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of internal APIs are now shared.
+  - `ktx-vis` now includes and extends the `ktx-scene2d` module. The majority of APIs are now shared.
   - All factory methods for VisUI widgets are now inlined, which can improve the performance of GUI building.
   - Factory methods of some VisUI widgets were renamed to avoid clashes with Scene2D methods and better reflect the wrapped widget class names:
     - `label`: `visLabel`
@@ -50,13 +101,19 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
   `multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
   created or can be defined as nested children with the same DSL.
+  - Inlined functions with lambda parameters, such as widget factories with their building block lambdas, now use
+  Kotlin contracts to ensure that they are executed exactly once.
   - `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
   - `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
   - `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
   - The sources documentation was greatly expanded.
- - **[FEATURE]** (`ktx-ashley`) Added `Engine.get` operator to access an `EntitySystem`.
- - **[FEATURE]** (`ktx-ashley`) Added `Engine.getSystem` function to access an `EntitySystem`. Throws `MissingEntitySystemException` in case the system is not added.
- - **[FEATURE]** (`ktx-ashley`) Added `Entity.addComponent` function to create a `Component` for an already existing `Entity`. 
+- **[FEATURE]** (`ktx-vis-style`) Added contracts support to widget style factory methods.
+
+Known issues:
+
+- **[BUG]** (`ktx-box2d`) Due to a Kotlin compiler bug, methods with _vararg_ parameters do not support contracts.
+This includes some `polygon`, `chain` and `loop` factory methods. See [this issue](https://youtrack.jetbrains.com/issue/KT-30497).
+They can still be used and work as expected, but the compiler does not ensure that their lambda parameters are executed exactly once.
 
 #### 1.9.10-b5
 
@@ -555,6 +612,7 @@ collections.
   - Lambda consuming `onChange`, `onClick`, `onKey`, `onScrollFocus` and `onKeyboardFocus` extension methods for `Actor`, allowing to quickly define event listeners.
   - `+` and `-` operator extension methods can be used to add `Action` instances to a `Stage`.
   - `Action.then` infix extension method can be used to chain actions into sequences.
+  - `Action.repeatForever` wraps an action in a `RepeatAction` without a repetitions limit.
 - **[FEATURE]** (`ktx-assets`) Implemented `ktx-assets` module.
   - `Assets.manager` global `AssetManager` instance.
     - `load` function can be used to load assets asynchronously via the global `AssetManager` instance. `loadOnDemand` can be used to load assets immediately in a blocking manner. `unload` can unload the assets.

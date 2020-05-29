@@ -2,10 +2,33 @@ package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox
+import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
+import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.SplitPane
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Array as GdxArray
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
 
@@ -17,11 +40,44 @@ interface KWidget<out Storage> {
   /**
    * Internal utility method for adding actors to the group. Assumes the actor might be stored in a container.
    * @param actor will be added to this group.
-   * @return storage object, wrapping around the [actor] or the [actor] itself if no storage objets are used.
+   * @return storage object, wrapping around the [actor] or the [actor] itself if no storage objects are used.
    * @see Node
    * @see Cell
    */
   fun <T : Actor> storeActor(actor: T): Storage
+}
+
+/**
+ * A specialized interface for widgets that can create top-level root actors.
+ * @see scene2d
+ */
+@Scene2dDsl
+interface RootWidget : KWidget<Actor> {
+  override fun <T : Actor> storeActor(actor: T): T
+}
+
+/**
+ * Root of the Scene2D DSL. Use this object to create new Scene2D actors and widgets without parents.
+ */
+@Scene2dDsl
+@Suppress("ClassName")
+object scene2d : RootWidget {
+  override fun <T : Actor> storeActor(actor: T): T {
+    // Actor is not modified or added to a group.
+    return actor
+  }
+}
+
+/**
+ * Allows to define an actor within a DSL lambda block.
+ * @param dsl will be immediately invoked. Must return an actor.
+ * @return [Actor] returned by [dsl].
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <T : Actor> scene2d(dsl: RootWidget.() -> T): T {
+  contract { callsInPlace(dsl, InvocationKind.EXACTLY_ONCE) }
+  return scene2d.dsl()
 }
 
 /**
@@ -30,6 +86,7 @@ interface KWidget<out Storage> {
 @Scene2dDsl
 interface KTable : KWidget<Cell<*>> {
   /**
+   * Matches [Table.add] API.
    * @param actor will be added to this widget.
    * @return [Cell] instance wrapping around the actor.
    * @see [Table.add]
@@ -165,82 +222,20 @@ interface KTable : KWidget<Cell<*>> {
 }
 
 /**
- * Root of the Scene2D DSL. Use this object to create new Scene2D actors and widgets.
- */
-@Scene2dDsl
-@Suppress("ClassName")
-object scene2d : KWidget<Actor> {
-  override fun <T : Actor> storeActor(actor: T): Actor {
-    // Actor is not modified or added to a group.
-    return actor
-  }
-
-  /**
-   * Allows to define an actor within a DSL lambda block.
-   * @param dsl will be immediately invoked. Must return an actor.
-   * @return [Actor] returned by [dsl].
-   */
-  inline operator fun <T : Actor> invoke(dsl: KWidget<Actor>.() -> T): T = this.dsl()
-
-  /**
-   * Constructs a top-level [Window] widget.
-   * @param title will be displayed as window's title.
-   * @param style name of the widget style. Defaults to [defaultStyle].
-   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
-   * @param init will be invoked on the [Window] widget. Inlined.
-   * @return a new [Window] instance.
-   */
-  @Scene2dDsl
-  inline fun window(
-    title: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KWindow.() -> Unit = {}
-  ): KWindow = KWindow(title, skin, style).apply(init)
-
-  /**
-   * Constructs a top-level [Dialog] widget.
-   * @param title will be displayed as dialog's title.
-   * @param style name of the widget style. Defaults to [defaultStyle].
-   * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
-   * @param init will be invoked on the [Dialog] widget. Inlined.
-   * @return a new [Dialog] instance.
-   */
-  @Scene2dDsl
-  inline fun dialog(
-    title: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    init: KDialog.() -> Unit = {}
-  ): KDialog = KDialog(title, skin, style).apply(init)
-}
-
-/**
  * Common interface applied to widgets that extend [WidgetGroup] or [Group] and keep their children in an internal
- * collection.
+ * collection with no specialized containers such as [Cell] or [Node].
  */
 @Scene2dDsl
 interface KGroup : KWidget<Actor> {
   /**
+   * Matches [Group.addActor] API.
    * @param actor will be added to this group.
    * @see [Group.addActor]
    * @see [WidgetGroup.addActor]
    */
   fun addActor(actor: Actor?)
 
-  /**
-   * Utility method that allows to add actors to the group with fluent API.
-   * @param actor will be added to this group.
-   * @return passed actor instance.
-   * @see [Group.addActor]
-   * @see [WidgetGroup.addActor]
-   */
-  fun <T : Actor> add(actor: T): T {
-    addActor(actor)
-    return actor
-  }
-
-  override fun <T : Actor> storeActor(actor: T) = add(actor)
+  override fun <T : Actor> storeActor(actor: T): T = actor.also { addActor(it) }
 }
 
 /** Common interface applied to widgets that keep their children in [Tree] [Node] instances. */
@@ -271,7 +266,8 @@ interface KTree : KWidget<KNode<*>> {
     icon: Drawable? = null,
     expanded: Boolean? = null,
     selectable: Boolean? = null,
-    userObject: Any? = null): T {
+    userObject: Any? = null
+  ): T {
     val node = inNode
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
@@ -350,7 +346,7 @@ class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButto
 
 /** Extends LibGDX List widget with items building method. */
 @Scene2dDsl
-class KListWidget<T>(skin: Skin, style: String) : com.badlogic.gdx.scenes.scene2d.ui.List<T>(skin, style) {
+class KListWidget<T>(skin: Skin, style: String) : GdxList<T>(skin, style) {
   /**
    * Allows to add items to the list with builder-like syntax.
    */
@@ -377,11 +373,14 @@ class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
     return node
   }
 
+  // TODO As of Kotlin 1.3, contracts are prohibited in operators. Add contracts to `invoke` methods.
+
   /**
    * Allows to inline a function block on a [KNode]. Syntax sugar for nested [Tree] nodes creation.
    * @param init will be invoked on this node.
    * @return this node.
    */
+  @Scene2dDsl
   inline operator fun invoke(init: KNode<T>.() -> Unit): KNode<T> {
     this.init()
     return this
@@ -403,6 +402,7 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
    */
+  @Scene2dDsl
   operator fun T.unaryMinus() {
     items.add(this)
   }
@@ -422,7 +422,9 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
 class KSplitPane(
-  vertical: Boolean, skin: Skin, style: String
+  vertical: Boolean,
+  skin: Skin,
+  style: String
 ) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {

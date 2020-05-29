@@ -61,7 +61,7 @@ inline val GdxBooleanArray?.lastIndex: Int
  * @return a new instance of [Array].
  */
 inline fun <reified Type : Any> gdxArrayOf(ordered: Boolean = true, initialCapacity: Int = defaultArraySize): GdxArray<Type> =
-    GdxArray(ordered, initialCapacity, Type::class.java)
+  GdxArray(ordered, initialCapacity, Type::class.java)
 
 /**
  * @param elements will be initially stored in the array.
@@ -117,40 +117,55 @@ operator fun <Type> GdxArray<Type>.get(index: Int, alternative: Type): Type {
  * @param elements will be iterated over and added to the array.
  */
 fun <Type> GdxArray<Type>.addAll(elements: Iterable<Type>) =
-    elements.forEach { this.add(it) }
+  elements.forEach { this.add(it) }
 
 /**
  * @param elements will be iterated over and removed from the array.
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Iterable<Type>, identity: Boolean = false) =
-    elements.forEach { this.removeValue(it, identity) }
+  elements.forEach { this.removeValue(it, identity) }
 
 /**
  * @param elements will be iterated over and removed from the array.
  * @param identity if true, values will be compared by references. If false, equals method will be invoked.
  */
 fun <Type> GdxArray<Type>.removeAll(elements: Array<out Type>, identity: Boolean = false) =
-    elements.forEach { this.removeValue(it, identity) }
+  elements.forEach { this.removeValue(it, identity) }
 
 /**
- * Allows to append elements to arrays with pleasant, chainable `array + element0 + element1` syntax.
- * @param element will be added to the array.
- * @return this array.
+ * Creates a new [GdxArray] with appended [element].
+ * @param element will be added at the end of the new array.
+ * @return a new [GdxArray] with elements from this array and [element].
  */
 operator fun <Type> GdxArray<Type>.plus(element: Type): GdxArray<Type> {
-  this.add(element)
-  return this
+  val result = GdxArray<Type>(size + 1)
+  result.addAll(this)
+  result.add(element)
+  return result
 }
 
 /**
- * Allows to quickly addAll all elements of another iterable to this array with a pleasant, chainable operator syntax.
- * @param elements will be added to the array.
- * @return this array.
+ * Creates a new [GdxArray] with appended [elements].
+ * @param elements will be added at the end of the new array.
+ * @return a new [GdxArray] with elements from this array and [elements].
  */
 operator fun <Type> GdxArray<Type>.plus(elements: Iterable<Type>): GdxArray<Type> {
-  this.addAll(elements)
-  return this
+  val result = GdxArray<Type>(this)
+  result.addAll(elements)
+  return result
+}
+
+/**
+ * Creates a new [GdxArray] with appended [elements].
+ * @param elements will be added at the end of the new array.
+ * @return a new [GdxArray] with elements from this array and [elements].
+ */
+operator fun <Type> GdxArray<Type>.plus(elements: Collection<Type>): GdxArray<Type> {
+  val result = GdxArray<Type>(size + elements.size)
+  result.addAll(this)
+  result.addAll(elements)
+  return result
 }
 
 /**
@@ -159,38 +174,92 @@ operator fun <Type> GdxArray<Type>.plus(elements: Iterable<Type>): GdxArray<Type
  * @return this array.
  */
 operator fun <Type> GdxArray<Type>.plus(elements: Array<out Type>): GdxArray<Type> {
-  this.addAll(elements, 0, elements.size)
-  return this
+  val result = GdxArray<Type>(size + elements.size)
+  result.addAll(this)
+  result.addAll(elements, 0, elements.size)
+  return result
 }
 
 /**
- * Allows to remove elements from arrays with pleasant, chainable `array - element0 - element1` syntax.
+ * Allows to append elements to arrays with `array += element` syntax.
+ * @param element will be added to the array.
+ */
+operator fun <Type> GdxArray<Type>.plusAssign(element: Type) {
+  add(element)
+}
+
+/**
+ * Allows to quickly add all elements of another iterable to this array with += operator syntax.
+ * @param elements will be added to the array.
+ */
+operator fun <Type> GdxArray<Type>.plusAssign(elements: Iterable<Type>) {
+  addAll(elements)
+}
+
+/**
+ * Allows to quickly add all elements of a native array to this array with += operator syntax.
+ * @param elements will be added to the array.
+ */
+operator fun <Type> GdxArray<Type>.plusAssign(elements: Array<out Type>) {
+  addAll(elements, 0, elements.size)
+}
+
+/**
+ * Allows to remove elements from arrays with `array - element` syntax.
+ * @param element will not be copied to the new array.
+ * @return a new [GdxArray] with removed element.
+ */
+operator fun <Type> GdxArray<Type>.minus(element: Type): GdxArray<Type> {
+  val result = GdxArray(this)
+  result.removeValue(element, false)
+  return result
+}
+
+/**
+ * Allows to quickly remove all elements of another iterable from this array with - operator syntax.
+ * @param elements will not be copied to the new array.
+ * @return a new [GdxArray] with removed elements.
+ */
+operator fun <Type> GdxArray<Type>.minus(elements: Iterable<Type>): GdxArray<Type> {
+  val result = GdxArray(this)
+  result.removeAll(elements)
+  return result
+}
+
+/**
+ * Allows to quickly remove all elements of a native array from this array with -= operator syntax.
+ * @param elements will not be copied to the new array.
+ * @return a new [GdxArray] with removed elements.
+ */
+operator fun <Type> GdxArray<Type>.minus(elements: Array<out Type>): GdxArray<Type> {
+  val result = GdxArray(this)
+  result.removeAll(elements)
+  return result
+}
+
+/**
+ * Allows to remove elements from arrays with `array -= element` syntax.
  * @param element will be removed from the array.
  * @return this array.
  */
-operator fun <Type> GdxArray<Type>.minus(element: Type): GdxArray<Type> {
-  this.removeValue(element, false)
-  return this
+operator fun <Type> GdxArray<Type>.minusAssign(element: Type) {
+  removeValue(element, false)
 }
 
 /**
- * Allows to quickly remove all elements of another iterable from this array with a pleasant, chainable operator syntax.
+ * Allows to quickly remove all elements of another iterable from this array with -= operator syntax.
  * @param elements will be removed from the array.
- * @return this array.
  */
-operator fun <Type> GdxArray<Type>.minus(elements: Iterable<Type>): GdxArray<Type> {
-  this.removeAll(elements)
-  return this
+operator fun <Type> GdxArray<Type>.minusAssign(elements: Iterable<Type>) {
+  removeAll(elements)
 }
 
 /**
- * Allows to quickly remove all elements of a native array from this array with a pleasant, chainable operator syntax.
+ * Allows to quickly remove all elements of a native array from this array with -= operator syntax.
  * @param elements will be removed from the array.
- * @return this array.
  */
-operator fun <Type> GdxArray<Type>.minus(elements: Array<out Type>): GdxArray<Type> {
-  this.removeAll(elements)
-  return this
+operator fun <Type> GdxArray<Type>.minusAssign(elements: Array<out Type>) {
+  removeAll(elements)
 }
 
 /**
@@ -287,7 +356,7 @@ inline fun <Type> GdxArray<Type>.retainAll(pool: Pool<Type>? = null, predicate: 
  * Transfers elements that match the [predicate] into the selected [toArray].
  * The elements will be removed from this array and added [toArray].
  */
-inline fun <Type: T, T> GdxArray<Type>.transfer(toArray: GdxArray<T>, predicate: (Type) -> Boolean) {
+inline fun <Type : T, T> GdxArray<Type>.transfer(toArray: GdxArray<T>, predicate: (Type) -> Boolean) {
   var currentWriteIndex = 0
   for (i in 0 until size) {
     val value = items[i]
@@ -352,8 +421,10 @@ inline fun <Type, R> GdxArray<Type>.flatMap(transform: (Type) -> Iterable<R>): G
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
  * @return values copied from this array stored in a LibGDX set.
  */
-fun <Type : Any> GdxArray<Type>.toGdxSet(initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor):
-    GdxSet<Type> {
+fun <Type : Any> GdxArray<Type>.toGdxSet(
+  initialCapacity: Int = this.size,
+  loadFactor: Float = defaultLoadFactor
+): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
   return set
@@ -365,8 +436,10 @@ fun <Type : Any> GdxArray<Type>.toGdxSet(initialCapacity: Int = this.size, loadF
  * @param initialCapacity initial size of the backing array.
  * @return values copied from this iterable stored in a LibGDX array.
  */
-inline fun <reified Type : Any> Iterable<Type>.toGdxArray(ordered: Boolean = true, initialCapacity: Int = defaultArraySize):
-    GdxArray<Type> {
+inline fun <reified Type : Any> Iterable<Type>.toGdxArray(
+  ordered: Boolean = true,
+  initialCapacity: Int = defaultArraySize
+): GdxArray<Type> {
   val array = GdxArray<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
   return array
@@ -378,8 +451,10 @@ inline fun <reified Type : Any> Iterable<Type>.toGdxArray(ordered: Boolean = tru
  * @param initialCapacity initial size of the backing array. Defaults to this array size.
  * @return values copied from this array stored in a LibGDX array.
  */
-inline fun <reified Type : Any> Array<Type>.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size):
-    GdxArray<Type> {
+inline fun <reified Type : Any> Array<Type>.toGdxArray(
+  ordered: Boolean = true,
+  initialCapacity: Int = this.size
+): GdxArray<Type> {
   val array = GdxArray<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this, 0, this.size)
   return array

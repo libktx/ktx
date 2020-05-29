@@ -11,8 +11,20 @@ import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
-import ktx.scene2d.*
-import org.junit.Assert.*
+import ktx.scene2d.KNode
+import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.defaultHorizontalStyle
+import ktx.scene2d.defaultStyle
+import ktx.scene2d.defaultVerticalStyle
+import ktx.scene2d.label
+import ktx.scene2d.scene2d
+import ktx.scene2d.table
+import ktx.scene2d.tree
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /* Tests of customized VisUI parent widgets. */
@@ -84,8 +96,8 @@ class KVisTreeTest : NeedsLibGDX() {
 class KDragPaneTest : NeedsLibGDX() {
   @Test
   fun `should add actors to its table`() {
-    lateinit var label: Label
-    lateinit var image: Image
+    val label: Label
+    val image: Image
 
     val pane = scene2d.dragPane {
       label = label("Test")
@@ -103,8 +115,8 @@ class KDragPaneTest : NeedsLibGDX() {
 class KTabbedPaneTest : NeedsLibGDX() {
   @Test
   fun `should add tabs`() {
-    lateinit var tab: Tab
-    lateinit var label: Label
+    val tab: Tab
+    val label: Label
 
     val pane = scene2d.tabbedPane {
       tab = tab(title = "Test", savable = true, closeableByUser = true) {
@@ -119,7 +131,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
 
   @Test
   fun `should pass content table when added to group`() {
-    var invoked = false
+    var invoked: Boolean
 
     scene2d.tabbedPane { contentTable ->
       assertSame(this.table, contentTable)
@@ -131,7 +143,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
 
   @Test
   fun `should pass content table cell when added to table`() {
-    var invoked = false
+    var invoked: Boolean
 
     scene2d.table {
       tabbedPane { cell ->
@@ -145,7 +157,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
 
   @Test
   fun `should pass content table node when added to tree`() {
-    var invoked = false
+    var invoked: Boolean
 
     scene2d.tree {
       tabbedPane { node ->
@@ -160,7 +172,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
   @Test
   fun `should allow to add content to Table`() {
     val table = Table()
-    lateinit var tab: Tab
+    val tab: Tab
     val pane = scene2d.tabbedPane {
       addTabContentsTo(table)
       tab("Inactive")
@@ -175,7 +187,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
   @Test
   fun `should allow to add content to Group`() {
     val group = Group()
-    lateinit var tab: Tab
+    val tab: Tab
     val pane = scene2d.tabbedPane {
       addTabContentsTo(group)
       tab("Inactive")
@@ -190,7 +202,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
   @Test
   fun `should allow to add content to Container`() {
     val container = Container<Actor>()
-    lateinit var tab: Tab
+    val tab: Tab
     val pane = scene2d.tabbedPane {
       addTabContentsTo(container)
       tab("Inactive")
@@ -333,7 +345,6 @@ class KVisSplitPaneTest : NeedsLibGDX() {
   }
 }
 
-
 /**
  * Tests KTX-adapted widget: [KMultiSplitPane].
  */
@@ -361,8 +372,8 @@ class KMultiSplitPaneTest : NeedsLibGDX() {
 class KCollapsibleTest : NeedsLibGDX() {
   @Test
   fun `should add actors to its table`() {
-    lateinit var label: Label
-    lateinit var image: Image
+    val label: Label
+    val image: Image
 
     val collapsible = scene2d.collapsible {
       label = label("Test").cell(expand = true)
@@ -380,8 +391,8 @@ class KCollapsibleTest : NeedsLibGDX() {
 class KHorizontalCollapsibleTest : NeedsLibGDX() {
   @Test
   fun `should add actors to its table`() {
-    lateinit var label: Label
-    lateinit var image: Image
+    val label: Label
+    val image: Image
 
     val collapsible = scene2d.horizontalCollapsible {
       label = label("Test").cell(expand = true)
@@ -393,7 +404,6 @@ class KHorizontalCollapsibleTest : NeedsLibGDX() {
   }
 }
 
-
 // Note: other extended VisUI widgets are not tested, as they do not implement any custom logic and simply inherit
 // from KGroup or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
-// implemented - we are basically relying on LibGDX to behave correctly.
+// implemented - we are basically relying on LibGDX and VisUI to behave correctly.

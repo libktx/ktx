@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
+import java.lang.Integer.max
 
 /**
  * Alias for [Stage.addAction] method. Allows to add global actions to the stage with += operator.
@@ -44,7 +45,8 @@ infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, a
  * Adds [action] to this [SequenceAction].
  *
  * @param action will be added to this [SequenceAction]
- * @return [SequenceAction] this [SequenceAction]
+ * @return this [SequenceAction].
+ * @see plus for a non-mutating alternative.
  */
 infix fun SequenceAction.then(action: Action): SequenceAction = apply {
   addAction(action)
@@ -73,15 +75,13 @@ operator fun SequenceAction.plusAssign(action: Action) = addAction(action)
  */
 infix fun Action.along(action: Action): ParallelAction = Actions.parallel(this, action)
 
-@Deprecated("parallelTo has been replaced with along.", ReplaceWith("this along action"), DeprecationLevel.WARNING)
-infix fun Action.parallelTo(action: Action): ParallelAction = along(action)
-
 /**
  * Adds [action] to this [ParallelAction], so long as this isn't a [SequenceAction]. If it is a [SequenceAction],
- * [@see Action.along].
+ * it creates a new [ParallelAction] executing both actions in parallel.
  *
  * @param action will be added to this [ParallelAction].
- * @return [ParallelAction] this [ParallelAction], now containing [action]]
+ * @return this [ParallelAction], now containing [action], or a new [ParallelAction] if this is a [SequenceAction].
+ * @see div for a non-mutating alternative.
  */
 infix fun ParallelAction.along(action: Action): ParallelAction {
   if (this is SequenceAction) {
@@ -91,9 +91,6 @@ infix fun ParallelAction.along(action: Action): ParallelAction {
   addAction(action)
   return this
 }
-
-@Deprecated("parallelTo has been replaced with along.", ReplaceWith("this along action"), DeprecationLevel.WARNING)
-infix fun ParallelAction.parallelTo(action: Action): ParallelAction = along(action)
 
 /**
  * Wraps this action and the passed action with a [ParallelAction].
@@ -116,3 +113,12 @@ operator fun ParallelAction.plusAssign(action: Action) = addAction(action)
  * @see RepeatAction.FOREVER
  */
 fun Action.repeatForever(): RepeatAction = Actions.forever(this)
+
+/**
+ * This action will be wrapped wit ha [RepeatAction] that repeats itself for the given amount of [times].
+ * @param times amount of repetitions to perform. If 0 or negative, the action will not be executed.
+ * @return [RepeatAction] with [times] repetitions limit.
+ * @see RepeatAction
+ * @see repeatForever
+ */
+fun Action.repeat(times: Int): RepeatAction = Actions.repeat(max(0, times), this)

@@ -37,8 +37,8 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
 - `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
 improvements (nullability data).
-- `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent` and
-`onKeyboardFocusEvent` `Actor` extension methods were added. They consume the relevant `Event` instances as lambda
+- `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent`
+and `onKeyboardFocusEvent` `Actor` extension methods were added. They consume the relevant `Event` instances as lambda
 parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
 and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
 be enough for most use cases.
@@ -47,11 +47,20 @@ be enough for most use cases.
 
 - Global actions can be added and removed from `Stage` with `+=` and `-=` operators.
 - Actions can be added and removed to individual `Actor` instances with `+=` and `-=` operators.
-- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a SequenceAction, adds the right action to it so long chains result in a single SequenceAction.
-- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax. Either wraps the two actions in a SequenceAction, or if the left action is already a ParallelAction, adds the right action to it so long chains result in a single ParallelAction.
-- `+` operator can be used to create action sequences (alternative to `then`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `then` function may be preferred to avoid creating multiple nested SequenceActions.
-- `/` operator can be used combine actions in parallel (alternative to `along`). The operator is non-mutating, so it wraps the two actions every time. For long chains, the `along` function may be preferred to avoid creating multiple nested ParallelActions.
+- `Action.then` *infix* extension function allows easy creation of action sequences with pleasant syntax.
+Either wraps the two actions in a `SequenceAction`, or if the left action is already a `SequenceAction`,
+adds the right action to it so long chains result in a single `SequenceAction`.
+- `Action.along` *infix* extension function allows easy creation of parallel actions with pleasant syntax.
+Either wraps the two actions in a `ParallelAction`, or if the left action is already a `ParallelAction`,
+adds the right action to it so long chains result in a single `ParallelAction`.
+- `+` operator can be used to create action sequences (alternative to `then`).
+The operator is non-mutating, so it wraps the two actions every time.
+For long chains, the `then` function may be preferred to avoid creating multiple nested `SequenceActions`.
+- `/` operator can be used combine actions in parallel (alternative to `along`).
+The operator is non-mutating, so it wraps the two actions every time.
+For long chains, the `along` function may be preferred to avoid creating multiple nested ParallelActions.
 - `+=` operator adds an action to an existing `SequenceAction` or `ParallelAction`.
+- `Action.repeat` and `Action.repeatForever` allow to repeat a chosen action by wrapping it with a `RepeatAction`.
 
 #### Widgets
 
@@ -63,14 +72,14 @@ properties cannot overshadow Java methods, property was renamed to still hopeful
 ### Usage examples
 
 Centering actor on a stage:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 window.centerPosition()
 ```
 
 Adding and removing actors with operators:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 table += button
@@ -79,7 +88,7 @@ stage += table
 ```
 
 Checking if actor is on a stage or in a group:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 button in stage
@@ -87,7 +96,7 @@ button in table
 ```
 
 Quickly accessing actor and stage alpha color value:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 label.alpha = 0.5f
@@ -95,7 +104,7 @@ stage.alpha = 0.2f
 ```
 
 Focusing events on actors:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 textField.setKeyboardFocus(true)
@@ -104,114 +113,128 @@ scrollPane.setScrollFocus(false)
 
 Adding a `ChangeListener` to an `Actor`:
 
-```Kotlin
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import ktx.actors.*
 
-button.onChange {
-  println("Button changed!")
+fun attachListener(button: Button) {
+  button.onChange {
+    println("Button changed!")
+  }
+
+  button.onChangeEvent { changeEvent ->
+    // If you need access to the original ChangeEvent, use this expanded method variant.
+    println("$this actor changed by $changeEvent!")
+  }  
 }
 
-button.onChangeEvent { changeEvent, actor ->
-  // If you need access to the original ChangeEvent, use this expanded method variant.
-  println("$actor changed by $changeEvent!")
+```
+
+Adding a `ClickListener` to an `Actor`:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import ktx.actors.*
+
+fun attachClickListener(label: Label) {
+  label.onClick {
+    println("Label clicked!")
+  }
+
+  label.onClickEvent { inputEvent ->
+    // If you need access to the original InputEvent, use this expanded method variant.
+    println("$this actor clicked with $inputEvent!")
+  }
+  label.onClickEvent { inputEvent, x, y ->
+    // If you need access to the local actor click coordinates, use this expanded method variant.
+    println("$this actor clicked with $inputEvent at ($x, $y)!")
+  }
 }
 ```
 
-Adding a `ClickListener` to an Actor:
+Adding an event listener for touch events to an `Actor`:
 
-```Kotlin
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import ktx.actors.*
 
-label.onClick { 
-  println("Label clicked!")
+fun attachTouchListeners(button: Button) {
+  button.onTouchDown {
+    println("Button down!")
+  }
+
+  button.onTouchUp {
+    println("Button up!")
+  }
+
+  button.onTouchEvent(
+    // If you want to define a single shared listener or need access to the original InputEvent,
+    // use this expanded method variant:
+    onDown = { inputEvent -> println("$this actor touched with $inputEvent!") },
+    onUp = { inputEvent -> println("$this actor released with $inputEvent!") }
+  )
+  // ...or with a single lambda.
+  // In this case you can use InputEvent.Type to distinguish between touchDown and touchUp events:
+  button.onTouchEvent { inputEvent  -> println("$this actor ${inputEvent.type} with $inputEvent!") }
+
+  // There are also additional variants with local touch coordinates and mouse/cursor data.
+  // See the documentation or sources for more details.
 }
-
-label.onClickEvent { inputEvent, actor ->
-  // If you need access to the original InputEvent, use this expanded method variant.
-  println("$actor clicked by $inputEvent!")
-}
-label.onClickEvent { inputEvent, actor, x, y ->
-  // If you need access to the local actor click coordinates, use this expanded method variant.
-  println("$actor clicked by $inputEvent at ($x, $y)!")
-}
-
-button.onTouchDown {
-  println("Button down!")
-}
-
-button.onTouchUp {
-  println("Button up!")
-}
-
-button.onTouchEvent(
-  // If you need access to the original InputEvent, use this expanded method variant.
-  downListener = { inputEvent, actor -> println("$actor down by $inputEvent!") },
-  upListener = { inputEvent, actor -> println("$actor up by $inputEvent!") }
-)
-// or with a single lambda. In this case you can use InputEvent.Type to distinguish between touchDown and touchUp
-button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent!") })
-
-button.onTouchEvent(
-  // If you need access to the local actor coordinates, use this expanded method variant.
-  downListener = { inputEvent, actor, x, y -> println("$actor down by $inputEvent at ($x, $y)!") },
-  upListener = { inputEvent, actor, x, y -> println("$actor up by $inputEvent at ($x, $y)!")}
-)
-// or again as single lambda
-button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y)!") })
-
-button.onTouchEvent(
-  // If you need access to the pointer and mouse button, use this expanded method variant.
-  downListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor down by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") },
-  upListener = { inputEvent, actor, x, y, pointer, mouseButton -> println("$actor up by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!")}
-)
-// or again as single lambda
-button.onTouchEvent( { inputEvent, actor -> println("$actor ${inputEvent.type} by $inputEvent at ($x, $y) with pointer $pointer and mouseButton $mouseButton!") })
 ```
 
 Adding an `EventListener` which consumes typed characters:
 
-```Kotlin
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import ktx.actors.*
 
-textField.onKey { key ->
-  println("Typed $key char to text field!")
-}
+fun attachKeyListener(textField: TextField) {
+  textField.onKey { key ->
+    println("Typed $key char to text field!")
+  }
 
-textField.onKeyEvent { inputEvent, actor, key ->
-  // If you need access to the original InputEvent, use this expanded method variant.
-  println("Typed $key char to $actor by $inputEvent!")
+  textField.onKeyEvent { inputEvent, key ->
+    // If you need access to the original InputEvent, use this expanded method variant.
+    println("Typed $key char to $this actor with $inputEvent!")
+  }
 }
 ```
 
-Adding `EventListeners` which listen to `FocusEvents`:
+Adding `EventListeners` which listen to `FocusEvent` instances:
 
-```Kotlin
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.TextField
 import ktx.actors.*
 
-// FocusEvent with scroll type:
-scrollPane.onScrollFocus { focused ->
-  println("Scroll pane is focused: $focused!")
+fun attachScrollFocusListener(scrollPane: ScrollPane) {
+  // FocusEvent with scroll type:
+  scrollPane.onScrollFocus { focused ->
+    println("Scroll pane is focused: $focused!")
+  }
+
+  scrollPane.onScrollFocusEvent { focusEvent ->
+    // If you need access to the original FocusEvent, use this expanded method variant.
+    println("$this actor is focused: ${focusEvent.isFocused}!")
+  }
 }
 
-scrollPane.onScrollFocusEvent { focusEvent, actor ->
-  // If you need access to the original FocusEvent, use this expanded method variant.
-  println("$actor is focused: ${focusEvent.isFocused}!")
-}
+fun attachKeyboardFocusListener(textField: TextField) {
+  // FocusEvent with keyboard type:
+  textField.onKeyboardFocus { focused ->
+    println("Text field is focused: $focused!")
+  }
 
-// FocusEvent with keyboard type:
-textField.onKeyboardFocus { focused ->
-  println("Text field is focused: $focused!")
-}
-
-textField.onKeyboardFocusEvent { focusEvent, actor ->
-  // If you need access to the original FocusEvent, use this expanded method variant.
-  println("$actor is focused: ${focusEvent.isFocused}!")
+  textField.onKeyboardFocusEvent { focusEvent ->
+    // If you need access to the original FocusEvent, use this expanded method variant.
+    println("$this actor is focused: ${focusEvent.isFocused}!")
+  }
 }
 ```
 
 Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function (`ParallelAction` utility):
 
-```Kotlin
+```kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
@@ -224,7 +247,7 @@ actor += parallel
 
 Chaining actions with `+` operator (`SequenceAction` utility) and `/` operator (`ParallelAction` utility):
 
-```Kotlin
+```kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 
@@ -236,7 +259,7 @@ actor += parallel
 ```
 
 Adding and removing actions to stages and actors with operators:
-```Kotlin
+```kotlin
 import ktx.actors.*
 
 button += action
@@ -249,7 +272,7 @@ stage += someAction
 
 Accessing and changing text of `Label` and `TextButton` widgets:
 
-```Kotlin
+```kotlin
 import ktx.actors.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -265,7 +288,7 @@ button.txt = "Drag me!" // Changes TextButton text to "Drag me!".
 
 Extending `KtxInputListener`:
 
-```Kotlin
+```kotlin
 import ktx.actors.KtxInputListener
 
 class MyInputListener : KtxInputListener() {

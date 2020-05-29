@@ -44,5 +44,5 @@ fun Builder.allOf(vararg components: KClass<out Component>): Builder = all(*toJa
  */
 fun Builder.exclude(vararg components: KClass<out Component>): Builder = exclude(*toJavaClassArray(components))
 
-private fun toJavaClassArray(components: Array<out KClass<out Component>>): Array<Class<out Component>>
-    = Array(components.size) { index -> components[index].java }
+private fun toJavaClassArray(components: Array<out KClass<out Component>>): Array<Class<out Component>> =
+    Array(components.size) { index -> components[index].java }

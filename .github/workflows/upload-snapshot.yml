@@ -18,7 +18,7 @@ jobs:
       - name: Execution permission for Gradle wrapper
         run: chmod +x gradlew
       - name: Tests
-        run: ./gradlew test
+        run: ./gradlew check
         env:
           TEST_PROFILE: ci
       - name: Upload snapshot to Maven Central

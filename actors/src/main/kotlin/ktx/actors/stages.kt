@@ -20,8 +20,8 @@ fun stage(batch: Batch = SpriteBatch(), viewport: Viewport = getDefaultViewport(
  * Returns an instance of [Viewport] compatible with the [Stage] default constructor.
  */
 private fun getDefaultViewport() = ScalingViewport(
-    stretch,
-    Gdx.graphics.width.toFloat(),
-    Gdx.graphics.height.toFloat(),
-    OrthographicCamera()
+  stretch,
+  Gdx.graphics.width.toFloat(),
+  Gdx.graphics.height.toFloat(),
+  OrthographicCamera()
 )

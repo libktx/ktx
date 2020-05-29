@@ -6,8 +6,12 @@ import com.badlogic.gdx.math.Affine2
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Matrix3
 import com.badlogic.gdx.math.Vector2
-import java.util.*
-import kotlin.math.*
+import java.util.Random
+import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * Represent an immutable vector 2D
@@ -94,7 +98,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     fun crs(otherX: Float, otherY: Float): Float = x * otherY - y * otherX
 
     /** Returns the angle in radians of this vector relative to the [reference]. Angles are towards the positive y-axis. (typically counter-clockwise) */
-    fun angleRad(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleRad(reference.x, reference.y)
+    fun angleRad(reference: ImmutableVector2 = X): Float = angleRad(reference.x, reference.y)
 
     /** Returns the angle in radians of this vector relative to the ([referenceX], [referenceY]) reference. Angles are towards the positive y-axis. (typically counter-clockwise) */
     fun angleRad(referenceX: Float, referenceY: Float): Float {
@@ -161,13 +165,13 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
             message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
             replaceWith = ReplaceWith("angleDeg(reference)")
     )
-    inline fun angle(reference: ImmutableVector2 = ImmutableVector2.X): Float = angleDeg(reference)
+    inline fun angle(reference: ImmutableVector2 = X): Float = angleDeg(reference)
 
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("withRotationDeg(angle)"), DeprecationLevel.ERROR)
     inline fun rotate(angle: Float): ImmutableVector2 = withRotationDeg(angle)
 
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("ImmutableVector2.ZERO"), DeprecationLevel.ERROR)
-    fun setZero(): ImmutableVector2 = ImmutableVector2.ZERO
+    fun setZero(): ImmutableVector2 = ZERO
 
     @Deprecated(MUTABLE_METHOD_DEPRECATION_MESSAGE, ReplaceWith("this * Affine2().set(matrix)", "com.badlogic.gdx.math.Affine2"), DeprecationLevel.ERROR)
     fun mul(matrix: Matrix3): ImmutableVector2 = this * Affine2().set(matrix)
@@ -176,7 +180,6 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
     fun cpy(): ImmutableVector2 = this
 
     companion object {
-
         /** Vector zero */
         val ZERO = ImmutableVector2(0f, 0f)
 

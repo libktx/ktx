@@ -22,8 +22,9 @@ import com.badlogic.gdx.utils.ObjectMap
  * @see KtxScreen
  */
 open class KtxGame<ScreenType : Screen>(
-    firstScreen: ScreenType? = null,
-    private val clearScreen: Boolean = true) : KtxApplicationAdapter {
+  firstScreen: ScreenType? = null,
+  private val clearScreen: Boolean = true
+) : KtxApplicationAdapter {
   /** Holds references to all screens registered with [addScreen]. Allows to get a reference of the screen instance
    * knowing only its type. */
   protected val screens: ObjectMap<Class<out ScreenType>, ScreenType> = ObjectMap()
@@ -137,8 +138,8 @@ open class KtxGame<ScreenType : Screen>(
    * @see addScreen
    */
   @Suppress("UNCHECKED_CAST")
-  open fun <Type : ScreenType> getScreen(type: Class<Type>): Type
-      = screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
+  open fun <Type : ScreenType> getScreen(type: Class<Type>): Type =
+      screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
 
   /**
    * Removes cached instance of [Screen] of the selected type. Note that this method does not dispose of the screen and

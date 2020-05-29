@@ -6,14 +6,17 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
-import org.junit.Assert.*
-import org.junit.Test
 import java.io.File
-import com.badlogic.gdx.utils.Array as GdxArray
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Test
 
 /**
  * Tests [AssetLoaderStorage] - manager of [AssetLoader] instances used by an [AssetStorage] to load assets.

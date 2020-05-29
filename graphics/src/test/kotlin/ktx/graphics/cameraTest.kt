@@ -5,7 +5,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -100,6 +105,18 @@ class CameraUtilitiesTest {
 
     assertEquals(1, operationCalls)
     verify(camera, times(1)).update()
+  }
+
+  @Test
+  fun `should perform camera update operation exactly once`() {
+    val camera = OrthographicCamera()
+    val variable: Int
+
+    camera.update {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 }
 

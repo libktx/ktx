@@ -5,10 +5,82 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
-import com.kotcrab.vis.ui.VisUI
-import org.junit.Assert.*
-import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
+import com.kotcrab.vis.ui.VisUI
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+/**
+ * Tests [RootWidget] factory methods for actors that are usually added directly to a stage.
+ * Leverages [scene2d], as it implements [RootWidget] and does not modify the created actors.
+ */
+class RootActorFactoriesTest : NeedsLibGDX() {
+  @Test
+  fun `should create Window`() {
+    val window = scene2d.window(title = "test")
+
+    assertNotNull(window)
+    assertEquals(Scene2DSkin.defaultSkin, window.skin)
+    assertEquals("test", window.titleLabel.text.toString())
+  }
+
+  @Test
+  fun `should create Window with init block`() {
+    val window = scene2d.window(title = "test") {
+      height = 100f
+    }
+
+    assertNotNull(window)
+    assertEquals(Scene2DSkin.defaultSkin, window.skin)
+    assertEquals("test", window.titleLabel.text.toString())
+    assertEquals(100f, window.height, TOLERANCE)
+  }
+
+  @Test
+  fun `should create Window with nested children`() {
+    val label: Label
+
+    val window = scene2d.window(title = "test") {
+      label = label("Test")
+    }
+
+    assertTrue(label in window.children)
+  }
+
+  @Test
+  fun `should create Dialog`() {
+    val dialog = scene2d.dialog(title = "test")
+
+    assertNotNull(dialog)
+    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
+    assertEquals("test", dialog.titleLabel.text.toString())
+  }
+
+  @Test
+  fun `should create Dialog with init block`() {
+    val dialog = scene2d.dialog(title = "test") {
+      height = 100f
+    }
+
+    assertNotNull(dialog)
+    assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
+    assertEquals("test", dialog.titleLabel.text.toString())
+    assertEquals(100f, dialog.height, TOLERANCE)
+  }
+
+  @Test
+  fun `should create Dialog with nested children`() {
+    val label: Label
+
+    val dialog = scene2d.dialog(title = "test") {
+      label = label("Test")
+    }
+
+    assertTrue(label in dialog.children)
+  }
+}
 
 /**
  * Tests factory methods without init blocks.
@@ -288,7 +360,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create List`() = test(
     widget = {
-      listWidget<String, Cell<*>> {
+      listWidget<String> {
         color = Color.BLUE
         // Adding list items:
         -"one"
@@ -323,7 +395,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create SelectBox`() = test(
     widget = {
-      selectBox<String, Cell<*>> {
+      selectBox<String> {
         color = Color.BLUE
         // Adding select box items:
         -"one"

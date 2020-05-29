@@ -4,6 +4,9 @@ import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Gets the specified [Component] from the [Entity] with a [ComponentMapper].
@@ -68,13 +71,24 @@ operator fun <T : Component> Entity.contains(mapper: ComponentMapper<T>): Boolea
 inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class.java) as? T
 
 /**
- * Adds a [Component] to this [Entity]. If a [Component] of the same type already exists, it'll be replaced.
+ * Adds a constructed [Component] to this [Entity]. If a [Component] of the same type exists, it will be replaced.
+ * @param component will be added to this [Entity].
+ */
+operator fun Entity.plusAssign(component: Component) {
+  add(component)
+}
+
+/**
+ * Adds a [Component] to this [Entity]. If a [Component] of the same type already exists, it will be replaced.
  *
- * @return a [Component] instance of the given type.
+ * @param T type of component to add. Must have a no-argument constructor.
+ * @return a [Component] instance of the chosen type.
  * @throws [CreateComponentException] if the engine was unable to create the component.
  * @see Entity.add
  */
+@OptIn(ExperimentalContracts::class)
 inline fun <reified T : Component> Entity.addComponent(engine: Engine, configure: (@AshleyDsl T).() -> Unit = {}): T {
+  contract { callsInPlace(configure, InvocationKind.EXACTLY_ONCE) }
   val component = engine.create<T>()
   component.configure()
   add(component)
