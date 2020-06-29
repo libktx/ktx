@@ -1,6 +1,7 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.ObjectSet
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -97,4 +98,98 @@ inline fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Un
  */
 @Suppress("unused", "NOTHING_TO_INLINE")
 inline fun Throwable?.ignore() {
+}
+
+/**
+ * Interface describing a container for [Disposable]s that provides functions for disposing all
+ * its registered items. An implementing class's Disposable declarations can be tagged with
+ * [.alsoRegister()][alsoRegister] to conveniently register them as they are instantiated and assigned.
+ *
+ * The existing implementation [DisposableContainer] can be attached to a class as a delegate to
+ * attach these convenience functions to any class.
+ * */
+interface DisposableRegistry {
+  /**
+   * Registers [disposable] with this registry.
+   * @return true if the item was successfully registered or false if it was already registered.
+   */
+  fun registerDisposable(disposable: Disposable): Boolean
+
+  /**
+   * Removes [disposable] from this registry.
+   * @return true if the item was successfully removed or false if it was not in the registry.
+   */
+  fun deregisterDisposable(disposable: Disposable): Boolean
+
+  /**
+   * Calls [Disposable.dispose] on all [Disposable]s in the registry.
+   * @param deregisterAll If true, the registry is also cleared after disposing all items. Default true.
+   * @return True if any items were in the registry.
+   */
+  fun disposeRegistered(deregisterAll: Boolean = true): Boolean
+
+  /**
+   * Calls [Disposable.disposeSafely] on all [Disposable]s in the registry.
+   * @param deregisterAll If true, the registry is also cleared after disposing all items. Default true.
+   * @return True if any items were in the registry.
+   */
+  fun disposeRegisteredSafely(deregisterAll: Boolean = true): Boolean
+
+  /**
+   * Removes all disposables from the registry without disposing them.
+   * @return True if any items were in the registry.
+   */
+  fun deregisterAllDisposables(): Boolean
+
+  /**
+   * Register this [Disposable] with the [DisposableRegistry].
+   * @return this same object
+   * */
+  fun <T : Disposable> T.alsoRegister(): T {
+    registerDisposable(this)
+    return this
+  }
+
+  /**
+   * Remove this [Disposable] from the [DisposableRegistry] if it is already registered.
+   * @return this same object
+   * */
+  fun <T : Disposable> T.alsoDeregister(): T {
+    deregisterDisposable(this)
+    return this
+  }
+}
+
+/**
+ * An implementation of [DisposableRegistry] that can be subclassed or attached as a delegate to
+ * extend DisposableRegistry's convenience functions to [Disposable] declarations within the class.
+ */
+open class DisposableContainer : DisposableRegistry {
+  private var registry = ObjectSet<Disposable>()
+
+  override fun registerDisposable(disposable: Disposable): Boolean {
+    return registry.add(disposable)
+  }
+
+  override fun deregisterDisposable(disposable: Disposable): Boolean {
+    return registry.remove(disposable)
+  }
+
+  override fun disposeRegistered(deregisterAll: Boolean): Boolean {
+    val hadItems = !registry.isEmpty
+    registry.forEach(Disposable::dispose)
+    if (deregisterAll) registry.clear()
+    return hadItems
+  }
+
+  override fun disposeRegisteredSafely(deregisterAll: Boolean): Boolean {
+    val hadItems = !registry.isEmpty
+    registry.forEach(Disposable::disposeSafely)
+    if (deregisterAll) registry.clear()
+    return hadItems
+  }
+
+  override fun deregisterAllDisposables(): Boolean {
+    return !registry.isEmpty.also { registry.clear() }
+  }
 }
