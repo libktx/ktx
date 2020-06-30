@@ -2,12 +2,16 @@ package ktx.app
 
 import com.badlogic.gdx.ApplicationListener
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.utils.Disposable
 
 /**
  * Wrapping interface around [com.badlogic.gdx.ApplicationListener]. Provides no-op implementations of all methods,
  * making them optional to implement.
+ *
+ * Explicitly extends the [Disposable] interface, matching the [ApplicationListener.dispose] method,
+ * which allows to leverage [Disposable] utilities.
  */
-interface KtxApplicationAdapter : ApplicationListener {
+interface KtxApplicationAdapter : ApplicationListener, Disposable {
   override fun resize(width: Int, height: Int) = Unit
   override fun create() = Unit
   override fun render() = Unit

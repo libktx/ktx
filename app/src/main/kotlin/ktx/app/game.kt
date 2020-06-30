@@ -2,6 +2,7 @@ package ktx.app
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
 
@@ -201,9 +202,12 @@ open class KtxGame<ScreenType : Screen>(
 
 /**
  * Provides empty implementations of all [Screen] methods, making them optional to override.
+ *
+ * Explicitly extends the [Disposable] interface, matching the [Screen.dispose] method,
+ * which allows to leverage [Disposable] utilities.
  * @see KtxGame
  */
-interface KtxScreen : Screen {
+interface KtxScreen : Screen, Disposable {
   override fun show() = Unit
   override fun render(delta: Float) = Unit
   override fun resize(width: Int, height: Int) = Unit
