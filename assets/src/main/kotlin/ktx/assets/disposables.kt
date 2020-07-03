@@ -1,9 +1,8 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
-import com.badlogic.gdx.utils.IdentityMap
-import com.badlogic.gdx.utils.ObjectSet
-import java.util.*
+import java.util.Collections
+import java.util.IdentityHashMap
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -175,8 +174,11 @@ open class DisposableContainer : DisposableRegistry {
 
   override fun deregister(disposable: Disposable): Boolean = registry.remove(disposable)
 
-  override fun deregisterAll(): Boolean = registry.isNotEmpty().also { registry.clear() }
+  override fun deregisterAll(): Boolean {
+    val hadItems = registry.isNotEmpty()
+    registry.clear()
+    return hadItems
+  }
 
   override fun dispose() = registry.forEach(Disposable::dispose)
-
 }

@@ -3,8 +3,17 @@ package ktx.assets
 import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.*
+import com.nhaarman.mockitokotlin2.doThrow
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 
 /**
@@ -177,10 +186,7 @@ class DisposablesTest {
     }
 
     val instance = Parent()
-    val disposables = listOf(instance.disposableA, instance.disposableB)
-    val registered = instance.registeredDisposables
-    assertTrue(registered.containsAll(disposables))
-    assertTrue(registered.size == 2)
+    assertEquals(instance.registeredDisposables, setOf(instance.disposableA, instance.disposableB))
 
     val repeatedSuccess = instance.register(instance.disposableA)
     assertFalse(repeatedSuccess)
@@ -249,5 +255,4 @@ class DisposablesTest {
     instance.disposeSafely() // Should not throw any exceptions.
     verify(instance.disposable).dispose()
   }
-
 }
