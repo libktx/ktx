@@ -165,14 +165,17 @@ class DisposablesTest {
 
   @Test
   fun `should register disposables`() {
-    class Parent: DisposableRegistry by DisposableContainer() {
+    class Parent : DisposableRegistry by DisposableContainer() {
       val disposableA = mock<Disposable>()
+
       init {
         val initialSuccess = register(disposableA)
         assertTrue(initialSuccess)
       }
+
       val disposableB = mock<Disposable>().alsoRegister()
     }
+
     val instance = Parent()
     val disposables = listOf(instance.disposableA, instance.disposableB)
     val registered = instance.registeredDisposables
@@ -185,11 +188,12 @@ class DisposablesTest {
 
   @Test
   fun `should deregister disposables`() {
-    class Parent: DisposableRegistry by DisposableContainer() {
+    class Parent : DisposableRegistry by DisposableContainer() {
       val disposableA = mock<Disposable>().alsoRegister()
       val disposableB = mock<Disposable>().alsoRegister()
       fun deregisterB() = disposableB.alsoDeregister()
     }
+
     val instance = Parent()
     val initialSuccess = instance.deregister(instance.disposableA)
     assertTrue(initialSuccess)
@@ -204,10 +208,11 @@ class DisposablesTest {
 
   @Test
   fun `should deregister all disposables`() {
-    class Parent: DisposableRegistry by DisposableContainer() {
+    class Parent : DisposableRegistry by DisposableContainer() {
       val disposableA = mock<Disposable>().alsoRegister()
       val disposableB = mock<Disposable>().alsoRegister()
     }
+
     val instance = Parent()
     val initialSuccess = instance.deregisterAll()
     assertTrue(initialSuccess)
@@ -221,10 +226,11 @@ class DisposablesTest {
 
   @Test
   fun `should dispose registered disposables`() {
-    class Parent: DisposableRegistry by DisposableContainer() {
+    class Parent : DisposableRegistry by DisposableContainer() {
       val disposableA = mock<Disposable>().alsoRegister()
       val disposableB = mock<Disposable>().alsoRegister()
     }
+
     val instance = Parent()
     instance.dispose()
     verify(instance.disposableA).dispose()
@@ -233,11 +239,12 @@ class DisposablesTest {
 
   @Test
   fun `should safely dispose registered disposables`() {
-    class Parent: DisposableRegistry by DisposableContainer() {
+    class Parent : DisposableRegistry by DisposableContainer() {
       val disposable = mock<Disposable> {
         on(it.dispose()) doThrow GdxRuntimeException("Expected.")
       }.alsoRegister()
     }
+
     val instance = Parent()
     instance.disposeSafely() // Should not throw any exceptions.
     verify(instance.disposable).dispose()

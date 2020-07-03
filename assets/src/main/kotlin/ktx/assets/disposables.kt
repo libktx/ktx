@@ -112,7 +112,7 @@ inline fun Throwable?.ignore() {
  * The existing implementation [DisposableContainer] can be attached to a class as a delegate to
  * attach these convenience functions to any class.
  */
-interface DisposableRegistry: Disposable {
+interface DisposableRegistry : Disposable {
 
   /**
    * A copy of the of the registered Disposables.
