@@ -114,9 +114,9 @@ inline fun Throwable?.ignore() {
 interface DisposableRegistry : Disposable {
 
   /**
-   * A copy of the of the registered Disposables.
+   * A copy of the registered Disposables. The order does not necessarily represent the registration order.
    */
-  val registeredDisposables: Set<Disposable>
+  val registeredDisposables: List<Disposable>
 
   /**
    * Registers [disposable] with this registry.
@@ -168,7 +168,7 @@ open class DisposableContainer : DisposableRegistry {
 
   private val registry: MutableSet<Disposable> = Collections.newSetFromMap(IdentityHashMap())
 
-  override val registeredDisposables: Set<Disposable> get() = registry.toSet()
+  override val registeredDisposables: List<Disposable> get() = registry.toList()
 
   override fun register(disposable: Disposable): Boolean = registry.add(disposable)
 

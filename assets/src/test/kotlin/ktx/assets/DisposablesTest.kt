@@ -186,7 +186,10 @@ class DisposablesTest {
     }
 
     val instance = Parent()
-    assertEquals(instance.registeredDisposables, setOf(instance.disposableA, instance.disposableB))
+    val children = listOf(instance.disposableA, instance.disposableB)
+    val registered = instance.registeredDisposables
+    assertTrue(registered.containsAll(children))
+    assertEquals(children.size, registered.size)
 
     val repeatedSuccess = instance.register(instance.disposableA)
     assertFalse(repeatedSuccess)
@@ -254,5 +257,34 @@ class DisposablesTest {
     val instance = Parent()
     instance.disposeSafely() // Should not throw any exceptions.
     verify(instance.disposable).dispose()
+  }
+
+  @Test
+  fun `should register disposables by identity`() {
+    class Asset : Disposable {
+      var disposed = false
+
+      override fun dispose() {
+        disposed = true
+      }
+
+      override fun equals(other: Any?): Boolean = true
+
+      override fun hashCode(): Int = 1
+    }
+
+    class Parent : DisposableRegistry by DisposableContainer() {
+      val disposableA = Asset().alsoRegister()
+      val disposableB = Asset().alsoRegister()
+      val disposableC = Asset().alsoRegister()
+    }
+
+    val instance = Parent()
+    instance.dispose()
+    val children = with(instance) { listOf(disposableA, disposableB, disposableC) }
+    val registered = instance.registeredDisposables
+    assertTrue(children.all(Asset::disposed))
+    assertTrue(registered.containsAll(children))
+    assertEquals(children.size, registered.size)
   }
 }

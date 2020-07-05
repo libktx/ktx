@@ -82,7 +82,7 @@ needed. See `Throwable.ignore()` documentation for further details.
 
 #### `DisposableContainer`
 
-- `DisposableContainer` is a `Disposable` that references a set of `Disposable` instances to be disposed all at once.
+- `DisposableContainer` is a `Disposable` that stores a set of `Disposable` instances to be disposed all at once.
 When subclassed or used as a delegate via its `DisposableRegistry` interface, it provides an `alsoRegister` extension 
 which allows easily adding items to the container when instantiating them so they'll automatically be disposed when
 the containing class is.
@@ -175,22 +175,35 @@ class MyScreen: Screen, DisposableRegistry by DisposableContainer() {
 }
 ```
 
-Disposing registered `Disposable`s in a class with its own non-abstract `dispose()` method:
-```Kotlin
+Manually disposing registered `Disposable`s for custom disposal handling or because the superclass hides access to the 
+registry delegate's `dispose` method:
+```
 import ktx.assets.*
 
-class MyScreen: ScreenAdapter, DisposableRegistry by DisposableContainer() {
-  val assetManager = AssetManager().alsoRegister()
-  val spriteBatch = SpriteBatch().alsoRegister()
-
+class MyScreen: ScreenAdapter(), DisposableRegistry by DisposableContainer() {
+  // ...
   override fun dispose() {
-    // ScreenAdapter's dispose() hides DisposableRegistry.dispose(), so registry
-    // disposal should be done manually.
-    registeredDisposables.dispose()
+    registeredDisposables.dispose() { exception ->
+      Gdx.app.error("MyScreen.dispose()", exception.message)
+    }
   }
 }
 ```
 
+Passing a `DisposableContainer` as a primary constructor parameter so its `dispose` method can be accessed in a class
+whose superclass hides the delegate's `dispose` method:
+```
+import ktx.assets.*
+
+class MyScreen(
+  private val registry: DisposableRegistry = DisposableContainer()
+): ScreenAdapter(), DisposableRegistry by registry() {
+  // ...
+  override fun dispose() {
+    registry.dispose()
+  }
+}
+```
 Scheduling assets loading by an `AssetManager`:
 ```Kotlin
 import ktx.assets.*
