@@ -82,10 +82,11 @@ needed. See `Throwable.ignore()` documentation for further details.
 
 #### `DisposableContainer`
 
-- `DisposableContainer` is a `Disposable` that stores a set of `Disposable` instances to be disposed all at once.
-When subclassed or used as a delegate via its `DisposableRegistry` interface, it provides an `alsoRegister` extension 
-which allows easily adding items to the container when instantiating them so they'll automatically be disposed when
-the containing class is.
+`DisposableContainer` is a `Disposable` implementation that stores a set of `Disposable` instances to be disposed
+all at once.
+
+When subclassed or used as a delegate via its `DisposableRegistry` interface, it provides an `alsoRegister` extension, 
+which allows to easily add items to the container so that they will be automatically disposed when the containing class is.
 
 #### `Pool`
 
@@ -164,46 +165,57 @@ textures.disposeSafely() // Ignores exceptions.
 textures.dispose { exception -> } // Allows to handle exceptions.
 ```
 
-Registering `Disposable`s for disposal when the containing class is disposed:
+Registering `Disposable` instances for disposal when the containing class is disposed:
 ```Kotlin
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import ktx.assets.*
 
 class MyScreen: Screen, DisposableRegistry by DisposableContainer() {
   val assetManager = AssetManager().alsoRegister()
   val spriteBatch = SpriteBatch().alsoRegister()
-  // ...
 }
 ```
 
-Manually disposing registered `Disposable`s for custom disposal handling or because the superclass hides access to the 
-registry delegate's `dispose` method:
-```
+Manually disposing registered `Disposable` instances with custom error handling:
+```Kotlin
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import ktx.assets.*
 
 class MyScreen: ScreenAdapter(), DisposableRegistry by DisposableContainer() {
-  // ...
+  val spriteBatch = SpriteBatch().alsoRegister()
+
   override fun dispose() {
-    registeredDisposables.dispose() { exception ->
+    // DisposableRegistry offers registeredDisposables list
+    // that can be accessed to perform custom disposal:
+    registeredDisposables.dispose { exception ->
       Gdx.app.error("MyScreen.dispose()", exception.message)
     }
   }
 }
 ```
 
-Passing a `DisposableContainer` as a primary constructor parameter so its `dispose` method can be accessed in a class
-whose superclass hides the delegate's `dispose` method:
-```
+Resolving ambiguity given multiple `dispose` implementations - storing a reference to `DisposableContainer` to
+call its `dispose` method explicitly:
+```Kotlin
+import com.badlogic.gdx.ScreenAdapter
 import ktx.assets.*
 
 class MyScreen(
   private val registry: DisposableRegistry = DisposableContainer()
-): ScreenAdapter(), DisposableRegistry by registry() {
-  // ...
+): ScreenAdapter(), DisposableRegistry by registry {
+  // `dispose` has to be overridden, as it is provided by both
+  // DisposableRegistry and ScreenAdapter:
   override fun dispose() {
+    // Calling registry explicitly:
     registry.dispose()
   }
 }
 ```
+
 Scheduling assets loading by an `AssetManager`:
 ```Kotlin
 import ktx.assets.*

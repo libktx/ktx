@@ -106,13 +106,15 @@ inline fun Throwable?.ignore() {
  * its registered items. An implementing class's Disposable declarations can be tagged with
  * [.alsoRegister()][alsoRegister] to conveniently register them as they are instantiated and assigned.
  *
- * Calling [dispose] on the registry will call [dispose] on all its registered members.
+ * Calling [dispose] on the registry will call [Disposable.dispose] on all its registered members.
  *
- * The existing implementation [DisposableContainer] can be attached to a class as a delegate to
- * attach these convenience functions to any class.
+ * The existing implementation [DisposableContainer] can be extended or used as a delegate to implement
+ * this interface.
+ *
+ * Note that since [DisposableRegistry] implements [Disposable], registries can be stacked within each other -
+ * a registry might contain other registries, keeping track of nested assets.
  */
 interface DisposableRegistry : Disposable {
-
   /**
    * A copy of the registered Disposables. The order does not necessarily represent the registration order.
    */
@@ -137,13 +139,17 @@ interface DisposableRegistry : Disposable {
   fun deregisterAll(): Boolean
 
   /**
-   * Calls [dispose][Disposable.dispose] on each registered Disposable.
+   * Calls [dispose][Disposable.dispose] on each registered [Disposable].
+   * Might throw an exception if the assets were already disposed. To prevent that and clear the registry,
+   * use [deregisterAll].
+   *
+   * @see Disposable.dispose
    */
   override fun dispose()
 
   /**
    * Register this [Disposable] with the [DisposableRegistry].
-   * @return this same object
+   * @return this object.
    */
   fun <T : Disposable> T.alsoRegister(): T {
     register(this)
@@ -152,7 +158,7 @@ interface DisposableRegistry : Disposable {
 
   /**
    * Remove this [Disposable] from the [DisposableRegistry] if it is already registered.
-   * @return this same object
+   * @return this object.
    */
   fun <T : Disposable> T.alsoDeregister(): T {
     deregister(this)
@@ -161,17 +167,16 @@ interface DisposableRegistry : Disposable {
 }
 
 /**
- * An implementation of [DisposableRegistry] that can be subclassed or attached as a delegate to
- * extend DisposableRegistry's convenience functions to [Disposable] declarations within the class.
+ * An implementation of [DisposableRegistry] that can be subclassed or used as a delegate.
+ * Allows to store and dispose of multiple [Disposable] instances.
+ *
+ * @see DisposableRegistry
  */
 open class DisposableContainer : DisposableRegistry {
-
   private val registry: MutableSet<Disposable> = Collections.newSetFromMap(IdentityHashMap())
-
   override val registeredDisposables: List<Disposable> get() = registry.toList()
 
   override fun register(disposable: Disposable): Boolean = registry.add(disposable)
-
   override fun deregister(disposable: Disposable): Boolean = registry.remove(disposable)
 
   override fun deregisterAll(): Boolean {
@@ -180,5 +185,7 @@ open class DisposableContainer : DisposableRegistry {
     return hadItems
   }
 
-  override fun dispose() = registry.forEach(Disposable::dispose)
+  override fun dispose() {
+    registry.dispose()
+  }
 }

@@ -9,6 +9,7 @@ Listeners that used to consume actors as regular parameters now should rely on `
 - **[FEATURE]** (`ktx-actors`) `KtxApplicationAdapter`, `KtxGame` and `KtxScreen` now explicitly implement the `Disposable` interface,
 matching the `dispose` method from `ApplicationListener` and `Screen` respectively. This allows to leverage existing `Disposable` utilities.
 - **[FEATURE]** (`ktx-ashley`) Added `Engine.configureEntity` extension method that allows to add components to an existing entity.
+- **[FEATURE]** (`ktx-assets`) Added `DisposableRegistry` and `DisposableContainer` for management of multiple `Disposable` instances.
 - **[FEATURE]** (`ktx-graphics`) Added support for `Color` destructuring syntax.
 - **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
 
