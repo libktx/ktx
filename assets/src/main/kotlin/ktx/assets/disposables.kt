@@ -1,6 +1,8 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Disposable
+import java.util.Collections
+import java.util.IdentityHashMap
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -97,4 +99,86 @@ inline fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Un
  */
 @Suppress("unused", "NOTHING_TO_INLINE")
 inline fun Throwable?.ignore() {
+}
+
+/**
+ * Interface describing a container for [Disposable]s that provides functions for disposing all
+ * its registered items. An implementing class's Disposable declarations can be tagged with
+ * [.alsoRegister()][alsoRegister] to conveniently register them as they are instantiated and assigned.
+ *
+ * Calling [dispose] on the registry will call [dispose] on all its registered members.
+ *
+ * The existing implementation [DisposableContainer] can be attached to a class as a delegate to
+ * attach these convenience functions to any class.
+ */
+interface DisposableRegistry : Disposable {
+
+  /**
+   * A copy of the registered Disposables. The order does not necessarily represent the registration order.
+   */
+  val registeredDisposables: List<Disposable>
+
+  /**
+   * Registers [disposable] with this registry.
+   * @return true if the item was successfully registered or false if it was already registered.
+   */
+  fun register(disposable: Disposable): Boolean
+
+  /**
+   * Removes [disposable] from this registry.
+   * @return true if the item was successfully removed or false if it was not in the registry.
+   */
+  fun deregister(disposable: Disposable): Boolean
+
+  /**
+   * Removes all disposables from the registry without disposing them.
+   * @return true if any items were in the registry.
+   */
+  fun deregisterAll(): Boolean
+
+  /**
+   * Calls [dispose][Disposable.dispose] on each registered Disposable.
+   */
+  override fun dispose()
+
+  /**
+   * Register this [Disposable] with the [DisposableRegistry].
+   * @return this same object
+   */
+  fun <T : Disposable> T.alsoRegister(): T {
+    register(this)
+    return this
+  }
+
+  /**
+   * Remove this [Disposable] from the [DisposableRegistry] if it is already registered.
+   * @return this same object
+   */
+  fun <T : Disposable> T.alsoDeregister(): T {
+    deregister(this)
+    return this
+  }
+}
+
+/**
+ * An implementation of [DisposableRegistry] that can be subclassed or attached as a delegate to
+ * extend DisposableRegistry's convenience functions to [Disposable] declarations within the class.
+ */
+open class DisposableContainer : DisposableRegistry {
+
+  private val registry: MutableSet<Disposable> = Collections.newSetFromMap(IdentityHashMap())
+
+  override val registeredDisposables: List<Disposable> get() = registry.toList()
+
+  override fun register(disposable: Disposable): Boolean = registry.add(disposable)
+
+  override fun deregister(disposable: Disposable): Boolean = registry.remove(disposable)
+
+  override fun deregisterAll(): Boolean {
+    val hadItems = registry.isNotEmpty()
+    registry.clear()
+    return hadItems
+  }
+
+  override fun dispose() = registry.forEach(Disposable::dispose)
 }
