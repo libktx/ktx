@@ -284,7 +284,7 @@ class DisposablesTest {
     val children = with(instance) { listOf(disposableA, disposableB, disposableC) }
     val registered = instance.registeredDisposables
     assertTrue(children.all(Asset::disposed))
-    assertTrue(registered.containsAll(children))
+    assertTrue(children.all { child -> registered.find { it === child } != null })
     assertEquals(children.size, registered.size)
   }
 }
