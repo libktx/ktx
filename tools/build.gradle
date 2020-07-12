@@ -1,0 +1,17 @@
+
+plugins {
+  id 'java-gradle-plugin'
+}
+
+dependencies {
+  implementation "commons-io:commons-io:2.4"
+}
+
+gradlePlugin {
+  plugins {
+    simplePlugin {
+      id = 'io.github.libktx.tools'
+      implementationClass = 'ktx.tools.KtxToolsPlugin'
+    }
+  }
+}

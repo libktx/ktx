@@ -19,6 +19,7 @@ include(
     'scene2d',
     'style',
     'tiled',
+    'tools',
     'vis',
     'vis-style',
 )
