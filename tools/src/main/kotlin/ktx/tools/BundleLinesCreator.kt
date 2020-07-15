@@ -14,11 +14,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter
  * */
 open class BundleLinesCreator {
 
-  companion object : BundleLinesCreator()
+  companion object Default : BundleLinesCreator()
 
   /**
    * Executes creation of enum source files.
-   * @param targetPackage The package created enums will be placed in.
+   * @param targetPackage The package of the generated enums.
    * @param explicitBundlesDirectory Path directory that is searched for properties file, relative to [pathPrefix]. If
    * null (the default), a directory is searched for as described by [findFallbackAssetDirectory].
    * @param searchSubdirectories Whether to search subdirectories of the parent directory. Default true.
@@ -39,32 +39,24 @@ open class BundleLinesCreator {
     codeIndent: String = "    ",
     pathPrefix: String = ""
   ) {
-    try {
-      require(codeIndent.all(Char::isWhitespace)) { "codeIntent must consist entirely of whitespace." }
-      val parentDirectory = explicitBundlesDirectory?.let { File(pathPrefix + it) }
-        ?: findFallbackAssetDirectory(pathPrefix)
-      if (parentDirectory == null) {
-        printlnRed("Failed to find asset directory. No files will be created.")
-        return
-      }
-      val baseFiles = findBasePropertiesFiles(parentDirectory, searchSubdirectories)
-      val enumNamesToEntryNames = collectEnums(baseFiles, enumClassName)
-      val outDir = File("$pathPrefix$targetSourceDirectory/${targetPackage.replace(".", "/")}")
-        .apply { mkdirs() }
-      for ((enumName, entryNames) in enumNamesToEntryNames) {
-        val outFile = File(outDir, "$enumName.kt")
-        val sourceCode = generateKtFileContent(targetPackage, enumName, entryNames, codeIndent)
-        outFile.writeText(sourceCode)
-      }
-      println(
-        "Created BundleLine enum class(es) for bundles in directory $parentDirectory:\n" +
-          enumNamesToEntryNames.keys.joinToString(separator = ",\n") { "  $it" } +
-          "\nin package $targetPackage in source directory $pathPrefix$targetSourceDirectory."
-      )
-    } catch (e: Exception) {
-      printlnRed("An error was encountered while executing BundleLinesCreator.")
-      throw e
+    require(codeIndent.all(Char::isWhitespace)) { "codeIntent must consist entirely of whitespace." }
+    val parentDirectory = explicitBundlesDirectory?.let { File(pathPrefix + it) }
+      ?: findFallbackAssetDirectory(pathPrefix)
+    requireNotNull(parentDirectory) { "Failed to find asset directory." }
+    val baseFiles = findBasePropertiesFiles(parentDirectory, searchSubdirectories)
+    val enumNamesToEntryNames = collectEnums(baseFiles, enumClassName)
+    val outDir = File("$pathPrefix$targetSourceDirectory/${targetPackage.replace(".", "/")}")
+      .apply { mkdirs() }
+    for ((enumName, entryNames) in enumNamesToEntryNames) {
+      val outFile = File(outDir, "$enumName.kt")
+      val sourceCode = generateKtFileContent(targetPackage, enumName, entryNames, codeIndent)
+      outFile.writeText(sourceCode)
     }
+    println(
+      "Created BundleLine enum class(es) for bundles in directory $parentDirectory:\n" +
+        enumNamesToEntryNames.keys.joinToString(separator = ",\n") { "  $it" } +
+        "\nin package $targetPackage in source directory $pathPrefix$targetSourceDirectory."
+    )
   }
 
   /**
@@ -123,13 +115,10 @@ open class BundleLinesCreator {
       println("The provided enumClassName $commonEnumName was changed to $sanitizedCommonBaseName.")
     for (file in propertiesFiles) {
       val enumName = sanitizedCommonBaseName ?: convertToEnumName(file.nameWithoutExtension)
-      val propertyNames = Properties().run {
+      val enumNames = Properties().run {
         load(file.inputStream())
-        stringPropertyNames()
+        stringPropertyNames().mapNotNull { convertToEntryName(it) }
       }
-      val enumNames = propertyNames.mapNotNull { convertToEntryName(it) }
-      if (propertyNames.size > enumNames.size)
-        printlnRed("Warning: Properties file ${file.name} contains at least one empty key, which will be omitted.")
       outMap.getOrPut(enumName, ::mutableSetOf)
         .addAll(enumNames)
     }
@@ -152,14 +141,20 @@ open class BundleLinesCreator {
   }
 
   /**
-   * Converts the name of a properties entry into a valid enum entry name. By default, empty names are converted to
-   * `null`, valid names are unchanged, and invalid names are wrapped in back-ticks.
+   * Converts the name of a properties entry into a valid enum entry name.
    * @param name The input name, retrieved from a properties file.
-   * @return A name based on [name] that is a valid enum entry name, or null if the input name is empty.
+   * @return A name based on [name] that is a valid enum entry name, or null if the input name cannot be used as a valid
+   * enum entry.
    * */
   protected open fun convertToEntryName(name: String): String? {
-    if (name.isEmpty())
+    if (name.isEmpty()) {
+      println("A blank property name was encountered and will be omitted.")
       return null
+    }
+    if ('`' in name) {
+      println("The property name \u001B[0;31m${name}\u001B[0m cannot be converted into a usable enum entry and will be skipped.")
+      return null
+    }
     if (name[0].isDigit() || !name.all { it.isLetterOrDigit() || it == '_' })
       return "`$name`"
     return name

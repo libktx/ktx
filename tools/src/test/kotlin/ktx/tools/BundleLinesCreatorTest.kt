@@ -116,7 +116,7 @@ thirdKey=valueB
     val bundleLinesCreator = object : BundleLinesCreator() {
       public override fun convertToEntryName(name: String) = super.convertToEntryName(name)
     }
-    val input = listOf("key", "%&weird\\u0020key", "怪异的钥匙", "", " ", "\t")
+    val input = listOf("key", "%&weird\\u0020key", "怪异的钥匙", "", " ", "\t", "backtick`key")
     val output = input.mapNotNull(bundleLinesCreator::convertToEntryName)
     assertTrue(output.all(String::isNotEmpty))
     assertTrue(output.all { string ->

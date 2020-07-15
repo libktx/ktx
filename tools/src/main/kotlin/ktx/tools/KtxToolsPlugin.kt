@@ -7,37 +7,38 @@ import org.gradle.api.Project
 
 private const val EXTENSION_NAME = "ktxTools"
 
+/**
+ * The Gradle plugin that sets up all tasks of ktx-tools.
+ */
 class KtxToolsPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     val ktxToolsExtension = project.extensions.create(EXTENSION_NAME, KtxToolsPluginExtension::class.java)
 
     project.tasks.create("createBundleLines") { task ->
       task.doLast {
-        val ext = ktxToolsExtension.createBundleLines
-        val targetPackage = ext.targetPackage
-        if (targetPackage == null) {
-          printlnRed("Cannot create BundleLines if target package is not set. This can be set in the gradle build file, e.g.:")
-          printlnRed(
-            "\n    $EXTENSION_NAME.${KtxToolsPluginExtension::createBundleLines.name}" +
-              ".${CreateBundleLinesParams::targetPackage.name} = \"com.mycompany.mygame\"\n"
+        with (ktxToolsExtension.createBundleLines) {
+          BundleLinesCreator.execute(
+            targetPackage = requireNotNull(targetPackage) {
+              "Cannot create BundleLines if target package is not set. This can be set in the gradle build file, e.g.:" +
+                "\n    $EXTENSION_NAME.${KtxToolsPluginExtension::createBundleLines.name}" +
+                ".${CreateBundleLinesParams::targetPackage.name} = \"com.mycompany.mygame\"\n"
+            },
+            explicitBundlesDirectory = bundlesDirectory,
+            searchSubdirectories = searchSubDirectories,
+            targetSourceDirectory = targetSourceDirectory,
+            enumClassName = enumClassName,
+            codeIndent = codeIndent
           )
-          return@doLast
         }
-
-        BundleLinesCreator.execute(
-          targetPackage = targetPackage,
-          explicitBundlesDirectory = ext.bundlesDirectory,
-          searchSubdirectories = ext.searchSubDirectories,
-          targetSourceDirectory = ext.targetSourceDirectory,
-          enumClassName = ext.enumClassName,
-          codeIndent = ext.codeIndent
-        )
       }
       task.group = "ktx tools"
     }
   }
 }
 
+/**
+ * Container for all ktx-tools task parameters.
+ */
 open class KtxToolsPluginExtension {
   /**
    * Parameters for the `createBundleLines` task.
@@ -81,5 +82,3 @@ open class CreateBundleLinesParams {
    */
   var codeIndent: String = "    "
 }
-
-internal fun printlnRed(message: String) = println("\u001B[0;31m${message}\u001B[0m")

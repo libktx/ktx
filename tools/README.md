@@ -8,7 +8,7 @@ Like the LibGDX `gdx-tools` library, this library contains tools for development
 
 ### Guide
 
-This module contains tools that should be not be included in the core module. It can be imported as a `buildscipt` 
+This module contains tools that should be not be included in the core module. It can be imported as a `buildscript` 
 `classpath` dependency so its Gradle plugin can be used. The plugin adds Gradle tasks to the project in the `ktx tools` 
 group. It can be used by adding this to the `build.gradle` file:
 
