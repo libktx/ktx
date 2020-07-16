@@ -16,6 +16,19 @@ open class BundleLinesCreator {
 
   companion object Default : BundleLinesCreator()
 
+  internal fun execute(params: BundleLinesCreatorParams) {
+    with(params) {
+      execute(
+        targetPackage = requireTargetPackage(),
+        explicitBundlesDirectory = bundlesDirectory,
+        searchSubdirectories = searchSubDirectories,
+        targetSourceDirectory = targetSourceDirectory,
+        enumClassName = enumClassName,
+        codeIndent = codeIndent
+      )
+    }
+  }
+
   /**
    * Executes creation of enum source files.
    * @param targetPackage The package of the generated enums.
@@ -53,9 +66,9 @@ open class BundleLinesCreator {
       outFile.writeText(sourceCode)
     }
     println(
-      "Created BundleLine enum class(es) for bundles in directory $parentDirectory:\n" +
+      "Created BundleLine enum class(es) for bundles in directory \"$parentDirectory\":\n" +
         enumNamesToEntryNames.keys.joinToString(separator = ",\n") { "  $it" } +
-        "\nin package $targetPackage in source directory $pathPrefix$targetSourceDirectory."
+        "\nin package $targetPackage in source directory \"$pathPrefix$targetSourceDirectory\"."
     )
   }
 
@@ -152,7 +165,7 @@ open class BundleLinesCreator {
       return null
     }
     if ('`' in name) {
-      println("The property name \u001B[0;31m${name}\u001B[0m cannot be converted into a usable enum entry and will be skipped.")
+      println("The property name \u001B[0;31m${name}\u001B[0m cannot be converted into a usable enum entry and will be omitted.")
       return null
     }
     if (name[0].isDigit() || !name.all { it.isLetterOrDigit() || it == '_' })
@@ -195,4 +208,50 @@ open class BundleLinesCreator {
       append('}')
     }
   }
+}
+
+/**
+ * Parameters for running [BundleLinesCreator], intended for the `createBundleLines` Gradle task.
+ * */
+open class BundleLinesCreatorParams {
+  /**
+   * The package created enums will be placed in. Must be set, or the `createBundleLines` task cannot be used.
+   * */
+  lateinit var targetPackage: String
+
+  internal fun requireTargetPackage(): String {
+    require(::targetPackage.isInitialized) {
+      "Cannot create BundleLines if target package is not set. This can be set in the gradle build file, e.g.:" +
+        "\n    $PROJECT_EXTENSION.${KtxToolsPluginExtension::createBundleLines.name}" +
+        ".${BundleLinesCreatorParams::targetPackage.name} = \"com.mycompany.mygame\"\n"
+    }
+    return targetPackage
+  }
+
+  /** Directory that is searched for properties files. If null (the default), the first non-null and existing directory
+   * in descending precedence of `android/assets/i18n`, `android/assets/nls`, `android/assets`, `core/assets/i18n`,
+   * `core/assets/nls`, and `core/assets` is used.
+   * */
+  var bundlesDirectory: String? = null
+
+  /**
+   * Whether to search subdirectories of the parent directory. Default true.
+   * */
+  var searchSubDirectories: Boolean = true
+
+  /**
+   * The directory enum source files will be placed in. Default `"core/src"`.
+   * */
+  var targetSourceDirectory: String = "core/src"
+
+  /**
+   * The name of the generated enum class. If non-null, a single enum class is created for all bundles found. If null,
+   * each unique base bundle's name will be used for a distinct enum class. Default `"Nls"`.
+   * */
+  var enumClassName: String? = "Nls"
+
+  /**
+   * The whitespace String used as an indent in the generated code. Default four space characters.
+   */
+  var codeIndent: String = "    "
 }
