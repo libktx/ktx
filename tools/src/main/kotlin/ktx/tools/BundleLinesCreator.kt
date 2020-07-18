@@ -190,18 +190,18 @@ open class BundleLinesCreator {
     indent: String
   ): String {
     return buildString {
-      append("@file:Suppress(\"EnumEntryName\")\n\n")
       append("package $packageName\n\n")
       append("import ktx.i18n.BundleLine\n")
-      append("import com.badlogic.gdx.utils.I18NBundle\n")
-      append("\nenum class $enumClassName: BundleLine {\n")
+      append("import com.badlogic.gdx.utils.I18NBundle\n\n")
+      append("@Suppress(\"EnumEntryName\")\n\n")
+      append("enum class $enumClassName : BundleLine {\n")
       for ((index, key) in entryNames.withIndex()) {
-        val lineEnding = if (index < entryNames.size - 1) ',' else ';'
+        val lineEnding = if (index < entryNames.size - 1) "," else ";\n"
         append("${indent}$key$lineEnding\n")
       }
-      append("\n${indent}override val bundle: I18NBundle\n")
-      append("${indent}${indent}get() = i18nBundle\n")
-      append("\n${indent}companion object {\n")
+      append("${indent}override val bundle: I18NBundle\n")
+      append("${indent}${indent}get() = i18nBundle\n\n")
+      append("${indent}companion object {\n")
       append("${indent}$indent/** The bundle used for [BundleLine.nls] and [BundleLine.invoke] for this enum's values. */\n")
       append("${indent}${indent}lateinit var i18nBundle: I18NBundle\n")
       append("$indent}\n")

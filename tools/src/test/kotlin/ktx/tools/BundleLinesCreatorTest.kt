@@ -126,6 +126,72 @@ thirdKey=valueB
   }
 
   @Test
+  fun `should produce expected code`() {
+    val bundleLinesCreator = object : BundleLinesCreator() {
+      public override fun generateKtFileContent(
+        packageName: String,
+        enumClassName: String,
+        entryNames: Set<String>,
+        indent: String
+      ): String {
+        return super.generateKtFileContent(packageName, enumClassName, entryNames, indent)
+      }
+    }
+    val packageName = "com.packagename"
+    val className = "Nls"
+    val indent = "\t"
+    val entryNames = setOf("key", "secondKey", "`%&weird key`")
+    val code = bundleLinesCreator.generateKtFileContent(packageName, className, entryNames, indent)
+
+    val packageDeclaration = Regex("""^package\s.*""").find(code)?.value?.trim()
+    assertEquals("package $packageName", packageDeclaration)
+
+    val importDeclarations = Regex("""\nimport\s.*""").findAll(code)
+      .map { it.value.trim() }
+      .toList()
+    val requiredDeclarations = setOf(
+      "import ktx.i18n.BundleLine",
+      "import com.badlogic.gdx.utils.I18NBundle"
+    )
+    assertTrue(
+      "Must include proper BundleLine and I18NBundle imports, but the imports were $importDeclarations.",
+      importDeclarations.containsAll(requiredDeclarations)
+    )
+
+    val enumDeclaration = Regex("""enum\s.*(?=\{)""").find(code)?.value?.trim()
+      ?.replace(Regex("""\b\s*:\s*\b"""), ":") // trim unnecessary inner whitespace
+    assertEquals("enum class $className:BundleLine", enumDeclaration)
+
+    val generatedEntryNames = Regex("""(?<=\{)[\s\S]*(?=;)""").find(code)
+      ?.value?.trim()
+      ?.split(Regex("""\s*,\s*"""))
+      ?.toSet()
+    assertEquals(entryNames, generatedEntryNames)
+
+    fun checkBrackets(open: Char, close: Char): Boolean {
+      var openCount = 0
+      for (c in code) when (c) {
+        open -> ++openCount
+        close -> if (--openCount < 0) return false
+      }
+      return openCount == 0
+    }
+
+    assertTrue(
+      "Improperly matched parentheses in generated code:\n$code",
+      checkBrackets('(', ')')
+    )
+    assertTrue(
+      "Improperly matched curly braces in generated code:\n$code",
+      checkBrackets('{', '}')
+    )
+    assertTrue(
+      "Improperly matched square brackets in generated code:\n$code",
+      checkBrackets('[', ']')
+    )
+  }
+
+  @Test
   fun `should create source code file`() {
     BundleLinesCreator.execute(
       targetPackage = "com.test",
