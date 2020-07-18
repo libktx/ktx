@@ -193,7 +193,7 @@ open class BundleLinesCreator {
       append("package $packageName\n\n")
       append("import ktx.i18n.BundleLine\n")
       append("import com.badlogic.gdx.utils.I18NBundle\n\n")
-      append("@Suppress(\"EnumEntryName\")\n\n")
+      append("@Suppress(\"EnumEntryName\")\n")
       append("enum class $enumClassName : BundleLine {\n")
       for ((index, key) in entryNames.withIndex()) {
         val lineEnding = if (index < entryNames.size - 1) "," else ";\n"
