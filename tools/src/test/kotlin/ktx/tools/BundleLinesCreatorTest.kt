@@ -34,22 +34,26 @@ thirdKey=valueB
 
   private lateinit var workingDir: File
   private lateinit var assetsDir: File
+  private lateinit var i18nAssetsDir: File
   private lateinit var basePropertiesFiles: List<File>
+  private lateinit var orphanPropertiesFile: File
   private lateinit var srcDir: File
   private lateinit var pathPrefix: String
 
   @Before
   fun `create properties files`() {
     workingDir = Files.createTempDirectory("working").toFile()
-    assetsDir = File(workingDir, "android/assets/i18n").apply { mkdirs() }
+    assetsDir = File(workingDir, "android/assets").apply { mkdirs() }
+    i18nAssetsDir = File(assetsDir, "i18n").apply { mkdirs() }
     srcDir = File(workingDir, "core/src").apply { mkdirs() }
     val allPropertiesFiles = listOf(
       bundleContentA to "menu.properties",
       bundleContentAEs to "menu_ES.properties",
       bundleContentB to "stage strings.properties"
     ).map { (content, fileName) ->
-      File(assetsDir, fileName).apply { writeText(content) }
+      File(i18nAssetsDir, fileName).apply { writeText(content) }
     }
+    orphanPropertiesFile = File(assetsDir, "empty.properties").apply { writeText("") }
     basePropertiesFiles = listOf(allPropertiesFiles[0], allPropertiesFiles[2])
     pathPrefix = workingDir.absolutePath + "/"
   }
@@ -69,8 +73,10 @@ thirdKey=valueB
       public override fun findBasePropertiesFiles(parentDirectory: File, searchSubdirectories: Boolean) =
         super.findBasePropertiesFiles(parentDirectory, searchSubdirectories)
     }
-    val files = bundleLinesCreator.findBasePropertiesFiles(assetsDir, false)
-    assertEquals(basePropertiesFiles.toSet(), files.toSet())
+    val topLevelFiles = bundleLinesCreator.findBasePropertiesFiles(assetsDir, false)
+    assertEquals(setOf(orphanPropertiesFile), topLevelFiles.toSet())
+    val allFiles = bundleLinesCreator.findBasePropertiesFiles(assetsDir, true)
+    assertEquals((basePropertiesFiles + orphanPropertiesFile).toSet(), allFiles.toSet())
   }
 
   @Test
@@ -142,53 +148,29 @@ thirdKey=valueB
     val indent = "\t"
     val entryNames = setOf("key", "secondKey", "`%&weird key`")
     val code = bundleLinesCreator.generateKtFileContent(packageName, className, entryNames, indent)
+    val expected = """package com.packagename
 
-    val packageDeclaration = Regex("""^package\s.*""").find(code)?.value?.trim()
-    assertEquals("package $packageName", packageDeclaration)
+import ktx.i18n.BundleLine
+import com.badlogic.gdx.utils.I18NBundle
 
-    val importDeclarations = Regex("""\nimport\s.*""").findAll(code)
-      .map { it.value.trim() }
-      .toList()
-    val requiredDeclarations = setOf(
-      "import ktx.i18n.BundleLine",
-      "import com.badlogic.gdx.utils.I18NBundle"
-    )
-    assertTrue(
-      "Must include proper BundleLine and I18NBundle imports, but the imports were $importDeclarations.",
-      importDeclarations.containsAll(requiredDeclarations)
-    )
+@Suppress("EnumEntryName")
+enum class Nls : BundleLine {
+	key,
+	secondKey,
+	`%&weird key`;
 
-    val enumDeclaration = Regex("""enum\s.*(?=\{)""").find(code)?.value?.trim()
-      ?.replace(Regex("""\b\s*:\s*\b"""), ":") // trim unnecessary inner whitespace
-    assertEquals("enum class $className:BundleLine", enumDeclaration)
+	override val bundle: I18NBundle
+		get() = i18nBundle
 
-    val generatedEntryNames = Regex("""(?<=\{)[\s\S]*(?=;)""").find(code)
-      ?.value?.trim()
-      ?.split(Regex("""\s*,\s*"""))
-      ?.toSet()
-    assertEquals(entryNames, generatedEntryNames)
-
-    fun checkBrackets(open: Char, close: Char): Boolean {
-      var openCount = 0
-      for (c in code) when (c) {
-        open -> ++openCount
-        close -> if (--openCount < 0) return false
-      }
-      return openCount == 0
-    }
-
-    assertTrue(
-      "Improperly matched parentheses in generated code:\n$code",
-      checkBrackets('(', ')')
-    )
-    assertTrue(
-      "Improperly matched curly braces in generated code:\n$code",
-      checkBrackets('{', '}')
-    )
-    assertTrue(
-      "Improperly matched square brackets in generated code:\n$code",
-      checkBrackets('[', ']')
-    )
+	companion object {
+		/**
+		 * The bundle used for [BundleLine.nls] and [BundleLine.invoke] for this enum's values. Must
+		 * be set explicitly before extracting the translated texts.
+		 * */
+		lateinit var i18nBundle: I18NBundle
+	}
+}"""
+    assertEquals(expected, code)
   }
 
   @Test

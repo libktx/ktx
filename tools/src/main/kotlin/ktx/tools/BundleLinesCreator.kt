@@ -1,12 +1,12 @@
 package ktx.tools
 
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.Properties
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.filefilter.AbstractFileFilter
-import org.apache.commons.io.filefilter.FileFilterUtils
-import org.apache.commons.io.filefilter.SuffixFileFilter
-import org.apache.commons.io.filefilter.TrueFileFilter
+import kotlin.streams.toList
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 
 /**
  * Searches for properties files and generates Ktx BundleLine class files for them when executed. The companion object
@@ -16,10 +16,21 @@ open class BundleLinesCreator {
 
   companion object Default : BundleLinesCreator()
 
+  /**
+   * The logging implementation used when executed.
+   *
+   * Must be a Gradle API Logger. Use [org.slf4j.Logger.toGradleLogger] to wrap any SLF4J logger as a Gradle API Logger.
+   * */
+  var logger: Logger = Logging.getLogger(this::class.java)
+
   internal fun execute(params: BundleLinesCreatorParams) {
     with(params) {
       execute(
-        targetPackage = requireTargetPackage(),
+        targetPackage = requireNotNull(targetPackage) {
+          "Cannot create BundleLines if target package is not set. This can be set in the gradle build file, e.g.:" +
+            "\n    $PROJECT_EXTENSION.${KtxToolsPluginExtension::createBundleLines.name}" +
+            ".${BundleLinesCreatorParams::targetPackage.name} = \"com.mycompany.mygame\"\n"
+        },
         explicitBundlesDirectory = bundlesDirectory,
         searchSubdirectories = searchSubDirectories,
         targetSourceDirectory = targetSourceDirectory,
@@ -47,7 +58,7 @@ open class BundleLinesCreator {
     targetPackage: String,
     explicitBundlesDirectory: String? = null,
     searchSubdirectories: Boolean = true,
-    targetSourceDirectory: String = "core/src",
+    targetSourceDirectory: String = "core${File.separator}src",
     enumClassName: String? = "Nls",
     codeIndent: String = "    ",
     pathPrefix: String = ""
@@ -58,14 +69,15 @@ open class BundleLinesCreator {
     requireNotNull(parentDirectory) { "Failed to find asset directory." }
     val baseFiles = findBasePropertiesFiles(parentDirectory, searchSubdirectories)
     val enumNamesToEntryNames = collectEnums(baseFiles, enumClassName)
-    val outDir = File("$pathPrefix$targetSourceDirectory/${targetPackage.replace(".", "/")}")
-      .apply { mkdirs() }
+    val outDir = File(
+      "$pathPrefix$targetSourceDirectory${File.separator}${targetPackage.replace(".", File.separator)}"
+    ).apply { mkdirs() }
     for ((enumName, entryNames) in enumNamesToEntryNames) {
       val outFile = File(outDir, "$enumName.kt")
       val sourceCode = generateKtFileContent(targetPackage, enumName, entryNames, codeIndent)
       outFile.writeText(sourceCode)
     }
-    println(
+    logger.lifecycle(
       "Created BundleLine enum class(es) for bundles in directory \"$parentDirectory\":\n" +
         enumNamesToEntryNames.keys.joinToString(separator = ",\n") { "  $it" } +
         "\nin package $targetPackage in source directory \"$pathPrefix$targetSourceDirectory\"."
@@ -76,6 +88,7 @@ open class BundleLinesCreator {
    * Finds the assets directory to be searched for properties files if no explicit directory was provided. The default
    * implementation finds the first existing directory in descending precedence of `android/assets/i18n`,
    * `android/assets/nls`, `android/assets`, `core/assets/i18n`, `core/assets/nls`, and `core/assets`.
+   * @param pathPrefix A prefix that should be applied to all paths.
    * @return The parent directory, or null if none exists.
    */
   protected open fun findFallbackAssetDirectory(pathPrefix: String): File? {
@@ -98,15 +111,18 @@ open class BundleLinesCreator {
    * @param searchSubdirectories Whether to include sub-directories of the parent directory in the search.
    * @return A list of all applicable properties files found.
    */
-  protected open fun findBasePropertiesFiles(parentDirectory: File, searchSubdirectories: Boolean): Collection<File> {
-    val noUnderscoresFilter = object : AbstractFileFilter() {
-      override fun accept(dir: File, name: String) = '_' !in name
-    }
-    return FileUtils.listFiles(
-      parentDirectory,
-      FileFilterUtils.and(SuffixFileFilter("properties"), noUnderscoresFilter),
-      if (searchSubdirectories) TrueFileFilter.INSTANCE else null
-    )
+  protected open fun findBasePropertiesFiles(
+    parentDirectory: File,
+    searchSubdirectories: Boolean
+  ): Collection<File> {
+    return Files.walk(parentDirectory.absoluteFile.toPath(), if (searchSubdirectories) Int.MAX_VALUE else 1)
+      .filter { path ->
+        path.fileName.toString().let { fileName ->
+          fileName.endsWith(".properties") && '_' !in fileName
+        }
+      }
+      .map(Path::toFile)
+      .toList()
   }
 
   /**
@@ -125,7 +141,7 @@ open class BundleLinesCreator {
     val outMap = mutableMapOf<String, MutableSet<String>>()
     val sanitizedCommonBaseName = commonEnumName?.let { convertToEnumName(it) }
     if (sanitizedCommonBaseName != commonEnumName)
-      println("The provided enumClassName $commonEnumName was changed to $sanitizedCommonBaseName.")
+      logger.warn("The provided enumClassName $commonEnumName was changed to $sanitizedCommonBaseName.")
     for (file in propertiesFiles) {
       val enumName = sanitizedCommonBaseName ?: convertToEnumName(file.nameWithoutExtension)
       val enumNames = Properties().run {
@@ -141,7 +157,7 @@ open class BundleLinesCreator {
   /**
    * Converts the name of a properties file (without suffix) into an appropriate name for a Kotlin enum class. The
    * default behavior is to trim leading invalid characters (anything besides letters and underscores) and remove
-   * remaining whitespace by converting to PascalCase. *
+   * remaining whitespace by converting to PascalCase.
    * @param name The input name, retrieved from a `.properties` file's name, or the `enumClassName` parameter of
    * [execute].
    * @return A name based on [name] that can be used as an enum class name.
@@ -161,11 +177,11 @@ open class BundleLinesCreator {
    * */
   protected open fun convertToEntryName(name: String): String? {
     if (name.isEmpty()) {
-      println("A blank property name was encountered and will be omitted.")
+      logger.warn("A blank property name was encountered and will be omitted.")
       return null
     }
     if ('`' in name) {
-      println("The property name \u001B[0;31m${name}\u001B[0m cannot be converted into a usable enum entry and will be omitted.")
+      logger.warn("The property name '$name' cannot be converted into a usable enum entry and will be omitted.")
       return null
     }
     if (name[0].isDigit() || !name.all { it.isLetterOrDigit() || it == '_' })
@@ -202,7 +218,10 @@ open class BundleLinesCreator {
       append("${indent}override val bundle: I18NBundle\n")
       append("${indent}${indent}get() = i18nBundle\n\n")
       append("${indent}companion object {\n")
-      append("${indent}$indent/** The bundle used for [BundleLine.nls] and [BundleLine.invoke] for this enum's values. */\n")
+      append("${indent}$indent/**\n")
+      append("${indent}$indent * The bundle used for [BundleLine.nls] and [BundleLine.invoke] for this enum's values. Must\n")
+      append("${indent}$indent * be set explicitly before extracting the translated texts.\n")
+      append("${indent}$indent * */\n")
       append("${indent}${indent}lateinit var i18nBundle: I18NBundle\n")
       append("$indent}\n")
       append('}')
@@ -217,16 +236,7 @@ open class BundleLinesCreatorParams {
   /**
    * The package created enums will be placed in. Must be set, or the `createBundleLines` task cannot be used.
    * */
-  lateinit var targetPackage: String
-
-  internal fun requireTargetPackage(): String {
-    require(::targetPackage.isInitialized) {
-      "Cannot create BundleLines if target package is not set. This can be set in the gradle build file, e.g.:" +
-        "\n    $PROJECT_EXTENSION.${KtxToolsPluginExtension::createBundleLines.name}" +
-        ".${BundleLinesCreatorParams::targetPackage.name} = \"com.mycompany.mygame\"\n"
-    }
-    return targetPackage
-  }
+  var targetPackage: String? = null
 
   /** Directory that is searched for properties files. If null (the default), the first non-null and existing directory
    * in descending precedence of `android/assets/i18n`, `android/assets/nls`, `android/assets`, `core/assets/i18n`,
@@ -242,7 +252,7 @@ open class BundleLinesCreatorParams {
   /**
    * The directory enum source files will be placed in. Default `"core/src"`.
    * */
-  var targetSourceDirectory: String = "core/src"
+  var targetSourceDirectory: String = "core${File.separator}src"
 
   /**
    * The name of the generated enum class. If non-null, a single enum class is created for all bundles found. If null,
