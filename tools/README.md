@@ -17,7 +17,8 @@ tasks to the project in the `ktx` group. It can be used by adding this to the `b
     
 The KTX tools can also be used within scripts, libraries or other separate development applications. In this case, you 
 can import this library as a regular dependency of a JVM module. However, make sure this library is not included in your 
-game modules (such as `core`), as it will unnecessarily increase the application size.
+game modules (such as `core`), as it will unnecessarily increase the application size. Unlike the other KTX modules,
+this one requires JDK8 and `kotlin-stdlib-jdk8` or higher.
 
 #### BundleLineCreator
 

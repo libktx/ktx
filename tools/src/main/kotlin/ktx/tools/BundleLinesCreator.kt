@@ -1,12 +1,12 @@
 package ktx.tools
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Properties
 import kotlin.streams.toList
-import org.gradle.api.logging.Logger
-import org.gradle.api.logging.Logging
 
 /**
  * Searches for properties files and generates Ktx BundleLine class files for them when executed. The companion object
@@ -18,10 +18,8 @@ open class BundleLinesCreator {
 
   /**
    * The logging implementation used when executed.
-   *
-   * Must be a Gradle API Logger. Use [org.slf4j.Logger.toGradleLogger] to wrap any SLF4J logger as a Gradle API Logger.
    * */
-  var logger: Logger = Logging.getLogger(this::class.java)
+  var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
   internal fun execute(params: BundleLinesCreatorParams) {
     with(params) {
@@ -77,7 +75,7 @@ open class BundleLinesCreator {
       val sourceCode = generateKtFileContent(targetPackage, enumName, entryNames, codeIndent)
       outFile.writeText(sourceCode)
     }
-    logger.lifecycle(
+    logger.info(
       "Created BundleLine enum class(es) for bundles in directory \"$parentDirectory\":\n" +
         enumNamesToEntryNames.keys.joinToString(separator = ",\n") { "  $it" } +
         "\nin package $targetPackage in source directory \"$pathPrefix$targetSourceDirectory\"."
