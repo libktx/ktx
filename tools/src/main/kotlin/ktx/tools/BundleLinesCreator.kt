@@ -1,12 +1,12 @@
 package ktx.tools
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Properties
 import kotlin.streams.toList
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Searches for properties files and generates Ktx BundleLine class files for them when executed. The companion object
