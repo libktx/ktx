@@ -65,9 +65,8 @@ fun <B : Batch> B.begin(camera: Camera) = begin(camera.combined)
 @OptIn(ExperimentalContracts::class)
 inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
-  begin()
+  bind()
   action(this)
-  end()
 }
 
 /**
