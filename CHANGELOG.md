@@ -1,6 +1,7 @@
 #### 1.9.11-SNAPSHOT
 
 - **[UPDATE]** Updated to LibGDX 1.9.11.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.6.
 
 #### 1.9.10-b7
 
