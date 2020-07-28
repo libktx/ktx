@@ -1,3 +1,5 @@
+#### 1.9.10-SNAPSHOT
+
 #### 1.9.10-b7
 
 - **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
