@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
 import com.kotcrab.vis.ui.widget.ButtonBar
@@ -15,11 +16,19 @@ import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import com.kotcrab.vis.ui.widget.toast.ToastTable
 import com.nhaarman.mockitokotlin2.mock
-import ktx.scene2d.*
-import org.junit.Assert.*
+import ktx.scene2d.KWidget
+import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.TOLERANCE
+import ktx.scene2d.actors
+import ktx.scene2d.scene2d
+import ktx.scene2d.table
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
-import com.badlogic.gdx.utils.Array as GdxArray
 
 class TopLevelActorFactoriesTest : NeedsLibGDX() {
   @Test

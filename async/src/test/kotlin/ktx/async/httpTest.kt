@@ -1,7 +1,9 @@
 package ktx.async
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Net.*
+import com.badlogic.gdx.Net.HttpRequest
+import com.badlogic.gdx.Net.HttpResponse
+import com.badlogic.gdx.Net.HttpResponseListener
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglNet
 import com.badlogic.gdx.net.HttpStatus
@@ -10,14 +12,26 @@ import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.alexpanov.net.FreePortFinder
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -136,15 +150,15 @@ class HttpTest {
   }
 
   private fun httpRequestResponse(
-      url: String = "https://example.com",
-      method: String = "GET",
-      content: ByteArray = ByteArray(0),
-      status: Int = 200,
-      headers: Map<String, List<String>> = emptyMap()
+    url: String = "https://example.com",
+    method: String = "GET",
+    content: ByteArray = ByteArray(0),
+    status: Int = 200,
+    headers: Map<String, List<String>> = emptyMap()
   ) = HttpRequestResult(url, method, status, content, headers)
 }
 
-abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration): AsyncTest() {
+abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration) : AsyncTest() {
   private val port = FreePortFinder.findFreeLocalPort()
   @get:Rule
   val wireMock = WireMockRule(port)
@@ -206,7 +220,7 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
 
     // When:
     runBlocking {
-      val request = async { httpRequest(url = "http://localhost:$port/test", method = "GET")  }
+      val request = async { httpRequest(url = "http://localhost:$port/test", method = "GET") }
       launch {
         delay(50L)
         request.cancel()
@@ -219,7 +233,6 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
     verify(Gdx.net).cancelHttpRequest(any())
   }
 }
-
 
 /**
  * Tests [httpRequest] API with a single-threaded [LwjglNet].
@@ -288,7 +301,6 @@ class KtxHttpResponseListenerTest {
     // Then:
     verify(coroutine, times(1)).resumeWith(Result.success(response.toHttpRequestResult(request)))
   }
-
 
   @Test
   fun `should allow to complete HTTP request once`() {

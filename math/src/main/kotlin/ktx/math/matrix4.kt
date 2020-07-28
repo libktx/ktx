@@ -24,10 +24,24 @@ import com.badlogic.gdx.math.Vector3
  * @param m33 forth row, forth column.
  * @return a new instance of [Matrix4].
  */
-fun mat4(m00: Float = 0f, m01: Float = 0f, m02: Float = 0f, m03: Float = 0f,
-         m10: Float = 0f, m11: Float = 0f, m12: Float = 0f, m13: Float = 0f,
-         m20: Float = 0f, m21: Float = 0f, m22: Float = 0f, m23: Float = 0f,
-         m30: Float = 0f, m31: Float = 0f, m32: Float = 0f, m33: Float = 0f): Matrix4 {
+fun mat4(
+  m00: Float = 0f,
+  m01: Float = 0f,
+  m02: Float = 0f,
+  m03: Float = 0f,
+  m10: Float = 0f,
+  m11: Float = 0f,
+  m12: Float = 0f,
+  m13: Float = 0f,
+  m20: Float = 0f,
+  m21: Float = 0f,
+  m22: Float = 0f,
+  m23: Float = 0f,
+  m30: Float = 0f,
+  m31: Float = 0f,
+  m32: Float = 0f,
+  m33: Float = 0f
+): Matrix4 {
   val matrix = Matrix4()
   val values = matrix.`val`
   values[Matrix4.M00] = m00

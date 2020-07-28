@@ -2,7 +2,11 @@ package ktx.assets
 
 import com.badlogic.gdx.Files
 import com.badlogic.gdx.Files.FileType
-import com.badlogic.gdx.Files.FileType.*
+import com.badlogic.gdx.Files.FileType.Absolute
+import com.badlogic.gdx.Files.FileType.Classpath
+import com.badlogic.gdx.Files.FileType.External
+import com.badlogic.gdx.Files.FileType.Internal
+import com.badlogic.gdx.Files.FileType.Local
 import com.badlogic.gdx.files.FileHandle
 import java.io.File
 

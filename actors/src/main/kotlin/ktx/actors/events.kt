@@ -1,7 +1,12 @@
 package ktx.actors
 
-import com.badlogic.gdx.scenes.scene2d.*
-import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.*
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.EventListener
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyDown
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
+import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyUp
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -11,448 +16,484 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scrol
 
 /**
  * Attaches a [ChangeListener] to this actor.
- * @param listener invoked each time a [ChangeEvent] is fired for this actor.
+ * @param listener invoked each time a [ChangeEvent] is fired for this actor. Consumes the [Actor] as `this`.
  * @return [ChangeListener] instance.
  */
-inline fun Actor.onChange(crossinline listener: () -> Unit): ChangeListener {
+inline fun <T : Actor> T.onChange(crossinline listener: T.() -> Unit): ChangeListener {
   val changeListener = object : ChangeListener() {
     override fun changed(event: ChangeEvent, actor: Actor) = listener()
   }
-  this.addListener(changeListener)
+  addListener(changeListener)
   return changeListener
 }
 
 /**
  * Attaches a [ChangeListener] to this actor.
  * @param listener invoked each time a [ChangeEvent] is fired for this actor. Consumes the triggered [ChangeEvent] and
- * the [Actor] that the listener was originally attached to.
+ * the [Actor] that the listener was originally attached to as `this`.
  * @return [ChangeListener] instance.
  */
-inline fun <Widget : Actor> Widget.onChangeEvent(
-    crossinline listener: (event: ChangeEvent, actor: Widget) -> Unit): ChangeListener {
+inline fun <T : Actor> T.onChangeEvent(
+  crossinline listener: T.(event: ChangeEvent) -> Unit
+): ChangeListener {
   val changeListener = object : ChangeListener() {
-    override fun changed(event: ChangeEvent, actor: Actor) = listener(event, this@onChangeEvent)
+    override fun changed(event: ChangeEvent, actor: Actor) = listener(event)
   }
-  this.addListener(changeListener)
+  addListener(changeListener)
   return changeListener
 }
 
 /**
  * Attaches a [ClickListener] to this actor.
- * @param listener invoked each time this actor is clicked.
+ * @param listener invoked each time this [Actor] is clicked. Consumes the [Actor] as `this`.
  * @return [ClickListener] instance.
  */
-inline fun Actor.onClick(crossinline listener: () -> Unit): ClickListener {
+inline fun <T : Actor> T.onClick(crossinline listener: T.() -> Unit): ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener()
   }
-  this.addListener(clickListener)
+  addListener(clickListener)
   return clickListener
 }
 
 /**
  * Attaches a [ClickListener] to this actor.
  * @param listener invoked each time this actor is clicked. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to.
+ * the listener was originally attached to as `this`.
  * @return [ClickListener] instance.
  */
-inline fun <Widget : Actor> Widget.onClickEvent(
-    crossinline listener: (event: InputEvent, actor: Widget) -> Unit): ClickListener {
+inline fun <T : Actor> T.onClickEvent(
+  crossinline listener: T.(event: InputEvent) -> Unit
+): ClickListener {
   val clickListener = object : ClickListener() {
-    override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, this@onClickEvent)
+    override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event)
   }
-  this.addListener(clickListener)
+  addListener(clickListener)
   return clickListener
 }
 
 /**
  * Attaches a [ClickListener] to this actor.
  * @param listener invoked each time this actor is clicked. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. The received floats are local X and Y coordinates of the actor.
+ * the listener was originally attached to as `this`. The received floats are local X and Y coordinates of the actor.
  * @return [ClickListener] instance.
  */
-inline fun <Widget : Actor> Widget.onClickEvent(
-    crossinline listener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit): ClickListener {
+inline fun <T : Actor> T.onClickEvent(
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+): ClickListener {
   val clickListener = object : ClickListener() {
-    override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, this@onClickEvent, x, y)
+    override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, x, y)
   }
-  this.addListener(clickListener)
+  addListener(clickListener)
   return clickListener
 }
 
 /**
- * Attaches a [ClickListener] to this actor.
- * @param listener invoked each time this actor is touched.
- * @return [ClickListener] instance.
+ * Attaches an [InputListener] to this actor.
+ * @param listener invoked each time this actor is touched. Consumes the [Actor] as `this`.
+ * @return [InputListener] instance.
  */
-inline fun Actor.onTouchDown(crossinline listener: () -> Unit): ClickListener {
-  val clickListener = object : ClickListener() {
+inline fun <T : Actor> T.onTouchDown(crossinline listener: T.() -> Unit): InputListener {
+  val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
       listener()
       return true
     }
   }
-  this.addListener(clickListener)
-  return clickListener
+  addListener(inputListener)
+  return inputListener
 }
 
 /**
- * Attaches a [ClickListener] to this actor.
- * @param listener invoked each time the touch of the actor is released.
- * @return [ClickListener] instance.
+ * Attaches an [InputListener] to this actor.
+ * @param listener invoked each time the touch of the actor is released. Consumes the [Actor] as `this`.
+ * @return [InputListener] instance.
  */
-inline fun Actor.onTouchUp(crossinline listener: () -> Unit): ClickListener {
-  val clickListener = object : ClickListener() {
+inline fun <T : Actor> T.onTouchUp(crossinline listener: T.() -> Unit): InputListener {
+  val inputListener = object : KtxInputListener() {
     override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = listener()
   }
-  this.addListener(clickListener)
-  return clickListener
+  addListener(inputListener)
+  return inputListener
 }
 
 /**
- * Attaches a [ClickListener] to this actor.
- * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
+ * Attaches an [InputListener] to this actor.
+ * @param onDown invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
+ * the listener was originally attached to as `this`.
+ * @param onUp invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the
+ * [Actor] that the listener was originally attached to as `this`.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
  */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline downListener: (event: InputEvent, actor: Widget) -> Unit,
-  crossinline upListener: (event: InputEvent, actor: Widget) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline onDown: T.(event: InputEvent) -> Unit,
+  crossinline onUp: T.(event: InputEvent) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      downListener(event, this@onTouchEvent)
+      onDown(event)
+      return true
+    }
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = onUp(event)
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+/**
+ * Attaches an [InputListener] to this actor. Retrieve the [InputEvent.type] to distinguish between
+ * [touchDown][InputEvent.Type.touchDown] and [touchUp][InputEvent.Type.touchUp] events.
+ * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent]
+ * and the [Actor] that the listener was originally attached to as `this`.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
+ */
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline listener: T.(event: InputEvent) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+      listener(event)
+      return true
+    }
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = listener(event)
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+/**
+ * Attaches an [InputListener] to this actor.
+ * @param onDown invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
+ * the listener was originally attached to as `this`. Float parameters are local actor coordinates of the event.
+ * @param onUp invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor]
+ * that the listener was originally attached to as `this`. Float parameters are local actor coordinates of the event.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
+ */
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline onDown: T.(event: InputEvent, x: Float, y: Float) -> Unit,
+  crossinline onUp: T.(event: InputEvent, x: Float, y: Float) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+      onDown(event, x, y)
+      return true
+    }
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = onUp(event, x, y)
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+/**
+ * Attaches an [InputListener] to this actor. Retrieve the [InputEvent.type] to distinguish between
+ * [touchDown][InputEvent.Type.touchDown] and [touchUp][InputEvent.Type.touchUp] events.
+ * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent]
+ * and the [Actor] that the listener was originally attached to as `this`. Float parameters are local actor coordinates
+ * of the event.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
+ */
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+      listener(event, x, y)
+      return true
+    }
+
+    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = listener(event, x, y)
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+/**
+ * Attaches an [InputListener] to this actor.
+ * @param onDown invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
+ * the listener was originally attached to as `this`. Refer to [InputListener.touchDown] parameters documentation.
+ * @param onUp invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor]
+ * that the listener was originally attached to as `this`. Refer to [InputListener.touchUp] parameters documentation.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
+ */
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline onDown: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit,
+  crossinline onUp: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
+    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+      onDown(event, x, y, pointer, button)
       return true
     }
 
     override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      upListener(event, this@onTouchEvent)
+      onUp(event, x, y, pointer, button)
   }
-  this.addListener(clickListener)
-  return clickListener
+  addListener(inputListener)
+  return inputListener
 }
 
 /**
- * Attaches a [ClickListener] to this actor. Retrieve the [InputEvent.type] to distinguish between [touchDown][InputEvent.Type.touchDown]
- * and [touchUp][InputEvent.Type.touchUp] events.
- * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] and [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
+ * Attaches a [InputListener] to this actor. Retrieve the [InputEvent.type] to distinguish between
+ * [touchDown][InputEvent.Type.touchDown] and [touchUp][InputEvent.Type.touchUp] events.
+ * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent]
+ * and the [Actor] that the listener was originally attached to as `this`. Refer to [InputListener.touchDown] and
+ * [InputListener.touchUp] for parameter details.
+ * @return [InputListener] instance.
+ * @see InputListener.touchDown
+ * @see InputListener.touchUp
  */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline listener: (event: InputEvent, actor: Widget) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
+inline fun <T : Actor> T.onTouchEvent(
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit
+): InputListener {
+  val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      listener(event, this@onTouchEvent)
+      listener(event, x, y, pointer, button)
       return true
     }
 
     override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      listener(event, this@onTouchEvent)
+      listener(event, x, y, pointer, button)
   }
-  this.addListener(clickListener)
-  return clickListener
+  addListener(inputListener)
+  return inputListener
 }
 
 /**
- * Attaches a [ClickListener] to this actor.
- * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
- */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline downListener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit,
-  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      downListener(event, this@onTouchEvent, x, y)
-      return true
-    }
-
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      upListener(event, this@onTouchEvent, x, y)
-  }
-  this.addListener(clickListener)
-  return clickListener
-}
-
-/**
- * Attaches a [ClickListener] to this actor. Retrieve the [InputEvent.type] to distinguish between [touchDown][InputEvent.Type.touchDown]
- * and [touchUp][InputEvent.Type.touchUp] events.
- * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] and [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
- */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline listener: (event: InputEvent, actor: Widget, x: Float, y: Float) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      listener(event, this@onTouchEvent, x, y)
-      return true
-    }
-
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      listener(event, this@onTouchEvent, x, y)
-  }
-  this.addListener(clickListener)
-  return clickListener
-}
-
-/**
- * Attaches a [ClickListener] to this actor.
- * @param downListener invoked each time this actor is touched. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] for parameter details.
- * @param upListener invoked each time the touch of the actor is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
- */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline downListener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Unit,
-  crossinline upListener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      downListener(event, this@onTouchEvent, x, y, pointer, button)
-      return true
-    }
-
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      upListener(event, this@onTouchEvent, x, y, pointer, button)
-  }
-  this.addListener(clickListener)
-  return clickListener
-}
-
-/**
- * Attaches a [ClickListener] to this actor. Retrieve the [InputEvent.type] to distinguish between [touchDown][InputEvent.Type.touchDown]
- * and [touchUp][InputEvent.Type.touchUp] events.
- * @param listener invoked each time this actor is touched or the touch is released. Consumes the triggered [InputEvent] and the [Actor] that
- * the listener was originally attached to. Refer to [ClickListener.touchDown] and [ClickListener.touchUp] for parameter details.
- * @return [ClickListener] instance.
- */
-inline fun <Widget : Actor> Widget.onTouchEvent(
-  crossinline listener: (event: InputEvent, actor: Widget, x: Float, y: Float, pointer: Int, button: Int) -> Unit
-): ClickListener {
-  val clickListener = object : ClickListener() {
-    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-      listener(event, this@onTouchEvent, x, y, pointer, button)
-      return true
-    }
-
-    override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) =
-      listener(event, this@onTouchEvent, x, y, pointer, button)
-  }
-  this.addListener(clickListener)
-  return clickListener
-}
-
-/**
- * Attaches an [EventListener] optimized to listen for key type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener invoked each time this actor is keyboard-focused and a key is typed. Consumes the typed character.
+ * Attaches an [EventListener] optimized to listen for `keyTyped` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener invoked each time this actor is keyboard-focused and a key is typed. Consumes the typed character
+ * and the [Actor] as `this`.
  * @return [EventListener] instance.
  */
-inline fun Actor.onKey(
-    catchEvent: Boolean = false,
-    crossinline listener: (character: Char) -> Unit): EventListener {
+inline fun <T : Actor> T.onKey(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(character: Char) -> Unit
+): EventListener {
   val keyListener = EventListener { event ->
     if (event is InputEvent && event.type === keyTyped) {
       listener(event.character)
       catchEvent
     } else false
   }
-  this.addListener(keyListener)
+  addListener(keyListener)
   return keyListener
 }
 
 /**
- * Attaches an [EventListener] optimized to listen for key type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * Attaches an [EventListener] optimized to listen for `keyTyped` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
  * @param listener invoked each time this actor is keyboard-focused and a key is typed. Consumes the triggered
- * [InputEvent], the [Actor] that the listener was originally attached to and the typed character.
+ * [InputEvent], the typed character, and the [Actor] that the listener was originally attached to as `this`.
  * @return [EventListener] instance.
  */
-inline fun <Widget : Actor> Widget.onKeyEvent(
-    catchEvent: Boolean = false,
-    crossinline listener: (event: InputEvent, actor: Widget, character: Char) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyEvent(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(event: InputEvent, character: Char) -> Unit
+): EventListener {
   val keyListener = EventListener { event ->
     if (event is InputEvent && event.type === keyTyped) {
-      listener(event, this@onKeyEvent, event.character)
+      listener(event, event.character)
       catchEvent
     } else false
   }
-  this.addListener(keyListener)
+  addListener(keyListener)
   return keyListener
 }
 
 /**
- * Attaches an [EventListener] optimized to listen for keyDown type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener invoked each time this actor is keyboard-focused and a key is pressed. Consumes the pressed key code.
+ * Attaches an [EventListener] optimized to listen for `keyDown` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener invoked each time this actor is keyboard-focused and a key is pressed. Consumes the pressed key code
+ * and the [Actor] as `this`.
  * @return [EventListener] instance.
  * @see com.badlogic.gdx.Input.Keys
  */
-inline fun Actor.onKeyDown(
-    catchEvent: Boolean = false,
-    crossinline listener: (keyCode: Int) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyDown(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(keyCode: Int) -> Unit
+): EventListener {
   val keyDownListener = EventListener { event ->
     if (event is InputEvent && event.type === keyDown) {
       listener(event.keyCode)
       catchEvent
     } else false
   }
-  this.addListener(keyDownListener)
+  addListener(keyDownListener)
   return keyDownListener
 }
 
 /**
- * Attaches an [EventListener] optimized to listen for keyDown type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * Attaches an [EventListener] optimized to listen for `keyDown` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
  * @param listener invoked each time this actor is keyboard-focused and a key is pressed. Consumes the triggered
- * [InputEvent], the [Actor] that the listener was originally attached to and the pressed key code.
+ * [InputEvent], the pressed key code, and the [Actor] that the listener was originally attached to as `this`.
  * @return [EventListener] instance.
  * @see com.badlogic.gdx.Input.Keys
  */
-inline fun <Widget : Actor> Widget.onKeyDownEvent(
-    catchEvent: Boolean = false,
-    crossinline listener: (event: InputEvent, actor: Widget, keyCode: Int) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyDownEvent(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit
+): EventListener {
   val keyDownListener = EventListener { event ->
     if (event is InputEvent && event.type === keyDown) {
-      listener(event, this@onKeyDownEvent, event.keyCode)
+      listener(event, event.keyCode)
       catchEvent
     } else false
   }
-  this.addListener(keyDownListener)
+  addListener(keyDownListener)
   return keyDownListener
 }
 
 /**
- * Attaches an [EventListener] optimized to listen for keyUp type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener invoked each time this actor is keyboard-focused and a key is released. Consumes the released key code.
+ * Attaches an [EventListener] optimized to listen for `keyUp` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener invoked each time this actor is keyboard-focused and a key is released.Consumes the released key code
+ * and the [Actor] as `this`.
  * @return [EventListener] instance.
  * @see com.badlogic.gdx.Input.Keys
  */
-inline fun Actor.onKeyUp(
-    catchEvent: Boolean = false,
-    crossinline listener: (keyCode: Int) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyUp(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(keyCode: Int) -> Unit
+): EventListener {
   val keyUpListener = EventListener { event ->
     if (event is InputEvent && event.type === keyUp) {
       listener(event.keyCode)
       catchEvent
     } else false
   }
-  this.addListener(keyUpListener)
+  addListener(keyUpListener)
   return keyUpListener
 }
 
 /**
- * Attaches an [EventListener] optimized to listen for keyUp type events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * Attaches an [EventListener] optimized to listen for `keyUp` type events fired for this actor.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
  * @param listener invoked each time this actor is keyboard-focused and a key is released. Consumes the triggered
- * [InputEvent], the [Actor] that the listener was originally attached to and the released key code.
+ * [InputEvent], the released key code, and the [Actor] that the listener was originally attached to as `this`.
  * @return [EventListener] instance.
  * @see com.badlogic.gdx.Input.Keys
  */
-inline fun <Widget : Actor> Widget.onKeyUpEvent(
-    catchEvent: Boolean = false,
-    crossinline listener: (event: InputEvent, actor: Widget, keyCode: Int) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyUpEvent(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit
+): EventListener {
   val keyUpListener = EventListener { event ->
     if (event is InputEvent && event.type === keyUp) {
-      listener(event, this@onKeyUpEvent, event.keyCode)
+      listener(event, event.keyCode)
       catchEvent
     } else false
   }
-  this.addListener(keyUpListener)
+  addListener(keyUpListener)
   return keyUpListener
 }
 
 /**
  * Attaches an [EventListener] optimized to listen for scroll focus events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
  * @param listener will be invoked each time scroll focus status changes on this actor. Consumes a flag marking whether
- * the actor is currently focused.
+ * the actor is currently focused and the [Actor] as `this`.
  * @return [EventListener] instance.
  */
-inline fun Actor.onScrollFocus(
-    catchEvent: Boolean = false,
-    crossinline listener: (focused: Boolean) -> Unit): EventListener {
+inline fun <T : Actor> T.onScrollFocus(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(focused: Boolean) -> Unit
+): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === scroll) {
       listener(event.isFocused)
       catchEvent
     } else false
   }
-  this.addListener(focusListener)
+  addListener(focusListener)
   return focusListener
 }
 
 /**
  * Attaches an [EventListener] optimized to listen for scroll focus events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener will be invoked each time scroll focus status changes on this actor. [FocusEvent.isFocused] can be used
- * to determine current status. Consumes the triggered [FocusEvent] and the [Actor] that the listener was originally
- * attached to.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener will be invoked each time scroll focus status changes on this actor. [FocusEvent.isFocused] can be
+ * used to the determine current status. Consumes the triggered [FocusEvent] and the [Actor] that the listener was
+ * originally attached to as `this`.
  * @return [EventListener] instance.
  */
-inline fun <Widget : Actor> Widget.onScrollFocusEvent(
-    catchEvent: Boolean = false,
-    crossinline listener: (event: FocusEvent, actor: Widget) -> Unit): EventListener {
+inline fun <T : Actor> T.onScrollFocusEvent(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(event: FocusEvent) -> Unit
+): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === scroll) {
-      listener(event, this@onScrollFocusEvent)
+      listener(event)
       catchEvent
     } else false
   }
-  this.addListener(focusListener)
+  addListener(focusListener)
   return focusListener
 }
 
 /**
  * Attaches an [EventListener] optimized to listen for keyboard focus events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener will be invoked each time keyboard focus status changes on this actor. Consumes a flag marking whether
- * the actor is currently focused.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener will be invoked each time keyboard focus status changes on this actor. Consumes a flag marking
+ * whether the actor is currently focused and the [Actor] as `this`.
  * @return [EventListener] instance.
  */
-inline fun Actor.onKeyboardFocus(
-    catchEvent: Boolean = false,
-    crossinline listener: (focused: Boolean) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyboardFocus(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(focused: Boolean) -> Unit
+): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === keyboard) {
       listener(event.isFocused)
       catchEvent
     } else false
   }
-  this.addListener(focusListener)
+  addListener(focusListener)
   return focusListener
 }
 
 /**
  * Attaches an [EventListener] optimized to listen for keyboard focus events fired for this actor.
- * @param catchEvent if true, the event will not be passed further after it is handled by this listener. Defaults to false.
- * @param listener will be invoked each time keyboard focus status changes on this actor. [FocusEvent.isFocused] can be used
- * to determine current status. Consumes the triggered [FocusEvent] and the [Actor] that the listener was originally
- * attached to.
+ * @param catchEvent if true, the event will not be passed further after it is handled by this listener.
+ * Defaults to `false`.
+ * @param listener will be invoked each time keyboard focus status changes on this actor. [FocusEvent.isFocused] can be
+ * used to determine the current status. Consumes the triggered [FocusEvent] and the [Actor] that the listener was
+ * originally attached to as `this`.
  * @return [EventListener] instance.
  */
-inline fun <Widget : Actor> Widget.onKeyboardFocusEvent(
-    catchEvent: Boolean = false,
-    crossinline listener: (event: FocusEvent, actor: Widget) -> Unit): EventListener {
+inline fun <T : Actor> T.onKeyboardFocusEvent(
+  catchEvent: Boolean = false,
+  crossinline listener: T.(event: FocusEvent) -> Unit
+): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === keyboard) {
-      listener(event, this@onKeyboardFocusEvent)
+      listener(event)
       catchEvent
     } else false
   }
-  this.addListener(focusListener)
+  addListener(focusListener)
   return focusListener
 }
 

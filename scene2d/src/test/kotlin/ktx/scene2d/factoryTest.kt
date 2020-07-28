@@ -5,10 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
-import com.kotcrab.vis.ui.VisUI
-import org.junit.Assert.*
-import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
+import com.kotcrab.vis.ui.VisUI
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 /**
  * Tests [RootWidget] factory methods for actors that are usually added directly to a stage.

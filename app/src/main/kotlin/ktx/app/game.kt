@@ -2,6 +2,7 @@ package ktx.app
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.ObjectMap
 
@@ -22,8 +23,9 @@ import com.badlogic.gdx.utils.ObjectMap
  * @see KtxScreen
  */
 open class KtxGame<ScreenType : Screen>(
-    firstScreen: ScreenType? = null,
-    private val clearScreen: Boolean = true) : KtxApplicationAdapter {
+  firstScreen: ScreenType? = null,
+  private val clearScreen: Boolean = true
+) : KtxApplicationAdapter {
   /** Holds references to all screens registered with [addScreen]. Allows to get a reference of the screen instance
    * knowing only its type. */
   protected val screens: ObjectMap<Class<out ScreenType>, ScreenType> = ObjectMap()
@@ -137,8 +139,8 @@ open class KtxGame<ScreenType : Screen>(
    * @see addScreen
    */
   @Suppress("UNCHECKED_CAST")
-  open fun <Type : ScreenType> getScreen(type: Class<Type>): Type
-      = screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
+  open fun <Type : ScreenType> getScreen(type: Class<Type>): Type =
+      screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
 
   /**
    * Removes cached instance of [Screen] of the selected type. Note that this method does not dispose of the screen and
@@ -200,9 +202,12 @@ open class KtxGame<ScreenType : Screen>(
 
 /**
  * Provides empty implementations of all [Screen] methods, making them optional to override.
+ *
+ * Explicitly extends the [Disposable] interface, matching the [Screen.dispose] method,
+ * which allows to leverage [Disposable] utilities.
  * @see KtxGame
  */
-interface KtxScreen : Screen {
+interface KtxScreen : Screen, Disposable {
   override fun show() = Unit
   override fun render(delta: Float) = Unit
   override fun resize(width: Int, height: Int) = Unit

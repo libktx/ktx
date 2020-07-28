@@ -2,14 +2,33 @@ package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Cell
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox
+import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
+import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.SplitPane
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
+import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.utils.Array as GdxArray
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
-import com.badlogic.gdx.utils.Array as GdxArray
 
 /* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
 
@@ -34,7 +53,7 @@ interface KWidget<out Storage> {
  */
 @Scene2dDsl
 interface RootWidget : KWidget<Actor> {
-  override fun <T : Actor> storeActor(actor: T) : T
+  override fun <T : Actor> storeActor(actor: T): T
 }
 
 /**
@@ -247,7 +266,8 @@ interface KTree : KWidget<KNode<*>> {
     icon: Drawable? = null,
     expanded: Boolean? = null,
     selectable: Boolean? = null,
-    userObject: Any? = null): T {
+    userObject: Any? = null
+  ): T {
     val node = inNode
     icon?.let { node.icon = icon }
     expanded?.let { node.isExpanded = expanded }
@@ -402,7 +422,9 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
 class KSplitPane(
-  vertical: Boolean, skin: Skin, style: String
+  vertical: Boolean,
+  skin: Skin,
+  style: String
 ) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {

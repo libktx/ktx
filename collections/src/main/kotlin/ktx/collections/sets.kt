@@ -33,7 +33,9 @@ fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = d
  * @return a new [ObjectSet].
  */
 inline fun <Type> gdxSetOf(
-  vararg elements: Type, initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor
+  vararg elements: Type,
+  initialCapacity: Int = defaultSetSize,
+  loadFactor: Float = defaultLoadFactor
 ): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(*elements)
@@ -252,7 +254,8 @@ inline fun <Type, R> GdxSet<Type>.flatMap(transform: (Type) -> Iterable<R>): Gdx
  * @return values copied from this set stored in a LibGDX array.
  */
 inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(
-  ordered: Boolean = true, initialCapacity: Int = this.size
+  ordered: Boolean = true,
+  initialCapacity: Int = this.size
 ): GdxArray<Type> {
   val array = com.badlogic.gdx.utils.Array<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
@@ -265,7 +268,8 @@ inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(
  * @return values copied from this iterable stored in a LibGDX set.
  */
 fun <Type> Iterable<Type>.toGdxSet(
-  initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor
+  initialCapacity: Int = defaultSetSize,
+  loadFactor: Float = defaultLoadFactor
 ): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
@@ -278,7 +282,8 @@ fun <Type> Iterable<Type>.toGdxSet(
  * @return values copied from this iterable stored in a LibGDX set.
  */
 fun <Type> Array<Type>.toGdxSet(
-  initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor
+  initialCapacity: Int = this.size,
+  loadFactor: Float = defaultLoadFactor
 ): GdxSet<Type> = gdxSetOf(*this, initialCapacity = initialCapacity, loadFactor = loadFactor)
 
 /**

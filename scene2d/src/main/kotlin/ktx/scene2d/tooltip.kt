@@ -1,23 +1,15 @@
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-
-
-/** See [textTooltip]. */
-@Deprecated(
-  message = "This extension method was renamed to `textTooltip`.",
-  replaceWith = ReplaceWith("textTooltip", imports = ["ktx.scene2d.textTooltip"]))
-inline fun Actor.addTextTooltip(
-  text: String,
-  style: String = defaultStyle,
-  skin: Skin = Scene2DSkin.defaultSkin,
-  tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
-): TextTooltip = textTooltip(text, style, skin, tooltipManager, init)
 
 /**
  * Adds a new [TextTooltip] to this actor.
@@ -33,11 +25,11 @@ inline fun Actor.addTextTooltip(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun Actor.textTooltip(
-    text: String,
-    style: String = defaultStyle,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    tooltipManager: TooltipManager = TooltipManager.getInstance(),
-    init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
+  text: String,
+  style: String = defaultStyle,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  tooltipManager: TooltipManager = TooltipManager.getInstance(),
+  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
 ): TextTooltip {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
@@ -45,17 +37,6 @@ inline fun Actor.textTooltip(
   this.addListener(tooltip)
   return tooltip
 }
-
-/** See [tooltip]. */
-@Deprecated(
-  message = "This extension method was renamed to `tooltip`.",
-  replaceWith = ReplaceWith("tooltip", imports = ["ktx.scene2d.tooltip"]))
-inline fun Actor.addTooltip(
-  background: String? = null,
-  skin: Skin = Scene2DSkin.defaultSkin,
-  tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
-): Tooltip<KTableWidget> = tooltip(background, skin, tooltipManager, init)
 
 /**
  * Adds a new [Tooltip] to this actor, storing a flexible [Table] widget.
@@ -71,10 +52,10 @@ inline fun Actor.addTooltip(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun Actor.tooltip(
-    background: String? = null,
-    skin: Skin = Scene2DSkin.defaultSkin,
-    tooltipManager: TooltipManager = TooltipManager.getInstance(),
-    init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
+  background: String? = null,
+  skin: Skin = Scene2DSkin.defaultSkin,
+  tooltipManager: TooltipManager = TooltipManager.getInstance(),
+  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
 ): Tooltip<KTableWidget> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val table = KTableWidget(skin)

@@ -2,8 +2,15 @@
 
 package ktx.collections
 
-import com.badlogic.gdx.utils.*
+import com.badlogic.gdx.utils.IdentityMap
+import com.badlogic.gdx.utils.IntFloatMap
+import com.badlogic.gdx.utils.IntIntMap
+import com.badlogic.gdx.utils.IntMap
+import com.badlogic.gdx.utils.LongMap
+import com.badlogic.gdx.utils.ObjectIntMap
+import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectMap.Entry
+import com.badlogic.gdx.utils.ObjectSet
 
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
@@ -27,9 +34,11 @@ fun <Key, Value> gdxMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Flo
  * @param loadFactor decides under what load the map is resized.
  * @return a new [ObjectMap].
  */
-inline fun <Key, Value> gdxMapOf(vararg keysToValues: Pair<Key, Value>,
-                                 initialCapacity: Int = defaultMapSize,
-                                 loadFactor: Float = defaultLoadFactor): GdxMap<Key, Value> {
+inline fun <Key, Value> gdxMapOf(
+  vararg keysToValues: Pair<Key, Value>,
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor
+): GdxMap<Key, Value> {
   val map = GdxMap<Key, Value>(initialCapacity, loadFactor)
   keysToValues.forEach { map[it.first] = it.second }
   return map
@@ -89,8 +98,11 @@ fun <Key> GdxMap<Key, *>.toGdxSet(): ObjectSet<Key> = this.keys().toGdxSet()
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
  * @return values copied from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
  */
-inline fun <Key, Value> Iterable<Value>.toGdxMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor,
-                                                 keyProvider: (Value) -> Key): GdxMap<Key, Value> {
+inline fun <Key, Value> Iterable<Value>.toGdxMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+  keyProvider: (Value) -> Key
+): GdxMap<Key, Value> {
   val map = GdxMap<Key, Value>(initialCapacity, loadFactor)
   this.forEach { map[keyProvider(it)] = it }
   return map
@@ -103,10 +115,12 @@ inline fun <Key, Value> Iterable<Value>.toGdxMap(initialCapacity: Int = defaultM
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
  * @return values converted from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
  */
-inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(initialCapacity: Int = defaultMapSize,
-                                                      loadFactor: Float = defaultLoadFactor,
-                                                      valueProvider: (Type) -> Value,
-                                                      keyProvider: (Type) -> Key): GdxMap<Key, Value> {
+inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+  valueProvider: (Type) -> Value,
+  keyProvider: (Type) -> Key
+): GdxMap<Key, Value> {
   val map = GdxMap<Key, Value>(initialCapacity, loadFactor)
   this.forEach { map[keyProvider(it)] = valueProvider(it) }
   return map
@@ -118,8 +132,11 @@ inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(initialCapacity: Int = def
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
  * @return values copied from this array stored in a LibGDX map, mapped to the keys returned by the provider.
  */
-inline fun <Key, Value> Array<Value>.toGdxMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor,
-                                              keyProvider: (Value) -> Key): GdxMap<Key, Value> {
+inline fun <Key, Value> Array<Value>.toGdxMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+  keyProvider: (Value) -> Key
+): GdxMap<Key, Value> {
   val map = GdxMap<Key, Value>(initialCapacity, loadFactor)
   this.forEach { map[keyProvider(it)] = it }
   return map
@@ -132,10 +149,12 @@ inline fun <Key, Value> Array<Value>.toGdxMap(initialCapacity: Int = defaultMapS
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
  * @return values converted from this array stored in a LibGDX map, mapped to the keys returned by the provider.
  */
-inline fun <Type, Key, Value> Array<Type>.toGdxMap(initialCapacity: Int = defaultMapSize,
-                                                   loadFactor: Float = defaultLoadFactor,
-                                                   valueProvider: (Type) -> Value,
-                                                   keyProvider: (Type) -> Key): GdxMap<Key, Value> {
+inline fun <Type, Key, Value> Array<Type>.toGdxMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+  valueProvider: (Type) -> Value,
+  keyProvider: (Type) -> Key
+): GdxMap<Key, Value> {
   val map = GdxMap<Key, Value>(initialCapacity, loadFactor)
   this.forEach { map[keyProvider(it)] = valueProvider(it) }
   return map
@@ -158,9 +177,11 @@ fun <Key, Value> gdxIdentityMapOf(initialCapacity: Int = defaultMapSize, loadFac
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IdentityMap], which compares keys by references.
  */
-inline fun <Key, Value> gdxIdentityMapOf(vararg keysToValues: Pair<Key, Value>,
-                                         initialCapacity: Int = defaultMapSize,
-                                         loadFactor: Float = defaultLoadFactor): IdentityMap<Key, Value> {
+inline fun <Key, Value> gdxIdentityMapOf(
+  vararg keysToValues: Pair<Key, Value>,
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor
+): IdentityMap<Key, Value> {
   val map = IdentityMap<Key, Value>(initialCapacity, loadFactor)
   keysToValues.forEach { map[it.first] = it.second }
   return map
@@ -200,8 +221,8 @@ inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, Mut
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntIntMap] with primitive int keys and values.
  */
-fun gdxIntIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntIntMap
-    = IntIntMap(initialCapacity, loadFactor)
+fun gdxIntIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntIntMap =
+    IntIntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -228,8 +249,8 @@ operator fun IntIntMap.get(key: Int): Int = this.get(key, 0)
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntFloatMap] with primitive int keys and primitive float values.
  */
-fun gdxIntFloatMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntFloatMap
-    = IntFloatMap(initialCapacity, loadFactor)
+fun gdxIntFloatMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntFloatMap =
+    IntFloatMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -256,8 +277,8 @@ operator fun IntFloatMap.get(key: Int): Float = this.get(key, 0f)
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntMap] with primitive int keys.
  */
-fun <Value> gdxIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntMap<Value>
-    = IntMap(initialCapacity, loadFactor)
+fun <Value> gdxIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntMap<Value> =
+    IntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.

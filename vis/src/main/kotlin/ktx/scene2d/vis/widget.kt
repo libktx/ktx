@@ -8,8 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.kotcrab.vis.ui.VisUI
-import com.kotcrab.vis.ui.layout.*
-import com.kotcrab.vis.ui.widget.*
+import com.kotcrab.vis.ui.layout.DragPane
+import com.kotcrab.vis.ui.layout.FloatingGroup
+import com.kotcrab.vis.ui.layout.GridGroup
+import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
+import com.kotcrab.vis.ui.layout.VerticalFlowGroup
+import com.kotcrab.vis.ui.widget.CollapsibleWidget
+import com.kotcrab.vis.ui.widget.HorizontalCollapsibleWidget
+import com.kotcrab.vis.ui.widget.MultiSplitPane
+import com.kotcrab.vis.ui.widget.VisCheckBox
+import com.kotcrab.vis.ui.widget.VisDialog
+import com.kotcrab.vis.ui.widget.VisImageButton
+import com.kotcrab.vis.ui.widget.VisImageTextButton
+import com.kotcrab.vis.ui.widget.VisList
+import com.kotcrab.vis.ui.widget.VisRadioButton
+import com.kotcrab.vis.ui.widget.VisScrollPane
+import com.kotcrab.vis.ui.widget.VisSelectBox
+import com.kotcrab.vis.ui.widget.VisSplitPane
+import com.kotcrab.vis.ui.widget.VisTable
+import com.kotcrab.vis.ui.widget.VisTextButton
+import com.kotcrab.vis.ui.widget.VisTree
+import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker
 import com.kotcrab.vis.ui.widget.color.ExtendedColorPicker
 import com.kotcrab.vis.ui.widget.spinner.Spinner
@@ -18,10 +37,14 @@ import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneAdapter
 import com.kotcrab.vis.ui.widget.toast.ToastTable
-import ktx.scene2d.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import ktx.scene2d.KGroup
+import ktx.scene2d.KNode
+import ktx.scene2d.KTable
+import ktx.scene2d.KTree
+import ktx.scene2d.Scene2dDsl
 
 /** Extends [VisTable] with type-safe widget builders. */
 @Scene2dDsl
@@ -46,7 +69,8 @@ class KVisCheckBox(text: String, styleName: String) : VisCheckBox(text, styleNam
 /** Extends [VisRadioButton] with type-safe widget builders. */
 @Scene2dDsl
 class KVisRadioButton(
-  text: String, styleName: String
+  text: String,
+  styleName: String
 ) : VisRadioButton(text, VisUI.getSkin()[styleName, VisCheckBoxStyle::class.java]), KTable
 
 /** Extends [VisTextButton] with type-safe widget builders. */
@@ -113,7 +137,7 @@ class KTabbedPane(styleName: String) : TabbedPane(styleName)
 
 /**
  * Begins creation of new [Tab] using type-safe builder. Newly created tab will be added to tabbed pane automatically
- * so there is no need to call [add] manually.
+ * so there is no need to call [TabbedPane.add] manually.
  * @param title title of the [Tab].
  * @param savable see [Tab.savable].
  * @param closeableByUser see [Tab.closeableByUser].
@@ -232,7 +256,8 @@ class KVisSelectBox<T>(style: String) : VisSelectBox<T>(style) {
  * with [setFirstWidget] or [setSecondWidget]. */
 @Scene2dDsl
 class KVisSplitPane(
-  vertical: Boolean, style: String
+  vertical: Boolean,
+  style: String
 ) : VisSplitPane(null, null, vertical, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {

@@ -17,9 +17,17 @@ import com.badlogic.gdx.math.Vector3
  * @param m22 third row, third column.
  * @return a new instance of [Matrix3].
  */
-fun mat3(m00: Float = 0f, m01: Float = 0f, m02: Float = 0f,
-         m10: Float = 0f, m11: Float = 0f, m12: Float = 0f,
-         m20: Float = 0f, m21: Float = 0f, m22: Float = 0f): Matrix3 {
+fun mat3(
+  m00: Float = 0f,
+  m01: Float = 0f,
+  m02: Float = 0f,
+  m10: Float = 0f,
+  m11: Float = 0f,
+  m12: Float = 0f,
+  m20: Float = 0f,
+  m21: Float = 0f,
+  m22: Float = 0f
+): Matrix3 {
   val matrix = Matrix3()
   val values = matrix.`val`
   values[Matrix3.M00] = m00

@@ -155,8 +155,10 @@ open class Context : Disposable {
    * @param singleton instance of class compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, singleton: Type)
-      = bind(*to, provider = SingletonProvider(singleton))
+  fun <Type : Any> bindSingleton(
+    vararg to: KClass<out Type>,
+    singleton: Type
+  ) = bind(*to, provider = SingletonProvider(singleton))
 
   /**
    * Allows to bind the result of the provider to multiple classes in its hierarchy.
@@ -165,8 +167,10 @@ open class Context : Disposable {
    * @param provider inlined. Immediately invoked a single time. Its result will be registered as a singleton.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  inline fun <Type : Any> bindSingleton(vararg to: KClass<out Type>, provider: () -> Type)
-      = bind(*to, provider = SingletonProvider(provider()))
+  inline fun <Type : Any> bindSingleton(
+    vararg to: KClass<out Type>,
+    provider: () -> Type
+  ) = bind(*to, provider = SingletonProvider(provider()))
 
   /**
    * Removes all user-defined providers and singletons from the context. [Context] itselfs will still be present and
@@ -201,7 +205,6 @@ open class Context : Disposable {
     clear()
   }
 }
-
 
 /**
  * Allows to register new components in the context with builder-like DSL.

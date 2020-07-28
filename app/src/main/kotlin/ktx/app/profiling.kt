@@ -1,6 +1,6 @@
 package ktx.app
 
-import com.badlogic.gdx.*
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.PerformanceCounter
 
 /**
@@ -16,7 +16,9 @@ import com.badlogic.gdx.utils.PerformanceCounter
  * [PerformanceCounter.reset] should be called.
  */
 inline fun profile(
-  name: String = "Profiler", repeats: Int = 10, printResults: Boolean = true,
+  name: String = "Profiler",
+  repeats: Int = 10,
+  printResults: Boolean = true,
   operation: () -> Unit
 ): PerformanceCounter {
   val performanceCounter = PerformanceCounter(name, repeats)
@@ -36,7 +38,7 @@ inline fun profile(
  * operation, [PerformanceCounter.reset] should be called.
  */
 inline fun PerformanceCounter.profile(
-  repeats: Int = if(time.mean != null) time.mean.windowSize else 10,
+  repeats: Int = if (time.mean != null) time.mean.windowSize else 10,
   printResults: Boolean = true,
   operation: () -> Unit
 ) {
@@ -76,4 +78,3 @@ fun PerformanceCounter.prettyPrint(decimalFormat: String = "%.6fs") {
   Gdx.app.log(name, "Maximum OP time: ${decimalFormat.format(maximum)}")
   Gdx.app.log(name, "--------------------------------------------")
 }
-

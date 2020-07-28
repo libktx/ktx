@@ -1,3 +1,18 @@
+#### 1.9.10-b7
+
+- **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
+- **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.
+- **[CHANGE]** (`ktx-actors`) Touch event listeners attached with extension methods now extend `InputListener` rather than `ClickListener`.
+- **[CHANGE]** (`ktx-actors`) `onTouchEvent` parameters renamed from `downListener` and `upListener` to `onDown` and `onUp`.
+- **[CHANGE]** (`ktx-actors`) Event listeners attached with extension methods now consume the `Actor` as `this`.
+Listeners that used to consume actors as regular parameters now should rely on `this` instead.
+- **[FEATURE]** (`ktx-actors`) `KtxApplicationAdapter`, `KtxGame` and `KtxScreen` now explicitly implement the `Disposable` interface,
+matching the `dispose` method from `ApplicationListener` and `Screen` respectively. This allows to leverage existing `Disposable` utilities.
+- **[FEATURE]** (`ktx-ashley`) Added `Engine.configureEntity` extension method that allows to add components to an existing entity.
+- **[FEATURE]** (`ktx-assets`) Added `DisposableRegistry` and `DisposableContainer` for management of multiple `Disposable` instances.
+- **[FEATURE]** (`ktx-graphics`) Added support for `Color` destructuring syntax.
+- **[CHANGE]** (`ktx-scene2d`) Deprecated top-level widget factory methods and tooltip utilities were removed.
+
 #### 1.9.10-b6
 
 - **[UPDATE]** Updated to Kotlin 1.3.72.
@@ -60,7 +75,7 @@ Note that the actors can still be created via standard DSL. See the migration gu
   - `tree`
 - **[CHANGE]** (`ktx-scene2d`) `listWidget` and `selectBox` now have a single generic type to improve usability.
 Their building blocks no longer consume `Cell` and `Node` instances.
-- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods was removed.
+- **[CHANGE]** (`ktx-scene2d`) Internal `KWidget.appendActor` and `KGroup.add` methods were removed.
 - **[FEATURE]** (`ktx-scene2d`) Added contracts support to widget factory methods and `Stage.actors`.
 This ensures that widget configuration lambdas are executed exactly once.
 - **[FEATURE]** (`ktx-style`) Added contracts support to style factory methods and top-level `skin` functions.

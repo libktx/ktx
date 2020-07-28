@@ -56,8 +56,8 @@ Project contributors listed chronologically.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
-  * Contributed to numerous utilities in [actors](../actors), [async](../async), [collections](../collections),
-  [graphics](../graphics) and [math](../math) modules.
+  * Contributed to numerous utilities in [actors](../actors), [assets](../assets), [async](../async),
+  [collections](../collections), [graphics](../graphics) and [math](../math) modules.
   * Added `AssetGroup` API to [assets](../assets).
 * [@jakewilson](https://github.com/jakewilson)
   * Added utilities to [graphics module](../graphics).
@@ -66,6 +66,8 @@ Project contributors listed chronologically.
 * [@ImXico](https://github.com/ImXico)
   * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin LibGDX extensions.
   * Utilities for profiling, text rendering, camera updating and taking screenshots were integrated into KTX with **@ImXico** permission.
+* [@heyheyIvan](https://github.com/heyheyIvan)
+  * Contributed utilities to [graphics module](../graphics).
 
 ### Metrics
 
