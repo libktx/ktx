@@ -1,4 +1,6 @@
-#### 1.9.10-SNAPSHOT
+#### 1.9.11-SNAPSHOT
+
+- **[UPDATE]** Updated to LibGDX 1.9.11.
 
 #### 1.9.10-b7
 
