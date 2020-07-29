@@ -56,7 +56,9 @@ the way `BundleLine` implementations extract lines from `I18NBundle`, override `
 
 #### Automatic `BundleLine` enum generation
 
-You can use the following Gradle Groovy script to generate a Kotlin enum implementing `BundleLine` according to an
+The `ktx-tools` package includes a utility for generating a `BundleLine` enum from `.properties` files in the `assets` directory.
+
+Alternatively, you can use the following Gradle Groovy script to generate a Kotlin enum implementing `BundleLine` according to an
 existing `.properties` bundle:
 
 ```Groovy

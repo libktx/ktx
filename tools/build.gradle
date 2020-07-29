@@ -1,0 +1,18 @@
+
+plugins {
+  id 'java-gradle-plugin'
+}
+
+dependencies {
+  implementation "org.slf4j:slf4j-api:$slf4jVersion"
+  implementation "org.slf4j:slf4j-simple:$slf4jVersion"
+}
+
+gradlePlugin {
+  plugins {
+    simplePlugin {
+      id = 'io.github.libktx.tools'
+      implementationClass = 'ktx.tools.KtxToolsPlugin'
+    }
+  }
+}
