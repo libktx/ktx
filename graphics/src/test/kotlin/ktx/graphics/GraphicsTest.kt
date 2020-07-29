@@ -123,15 +123,13 @@ class GraphicsTest {
   }
 
   @Test
-  fun `should begin and end ShaderProgram`() {
+  fun `should bind ShaderProgram`() {
     val shaderProgram = mock<ShaderProgram>()
 
     shaderProgram.use {
-      verify(shaderProgram).begin()
+      verify(shaderProgram).bind()
       assertSame(shaderProgram, it)
-      verify(shaderProgram, never()).end()
     }
-    verify(shaderProgram).end()
   }
 
   @Test

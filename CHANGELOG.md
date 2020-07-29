@@ -1,4 +1,11 @@
-#### 1.9.10-SNAPSHOT
+_See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
+
+#### 1.9.11-SNAPSHOT
+
+- **[UPDATE]** Updated to LibGDX 1.9.11.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.3.6.
+
+#### 1.9.10-b7
 
 - **[MISC]** Added `ktlint` formatting. Contributors are asked to run `format` Gradle task before committing files.
 - **[CHANGE]** (`ktx-actors`) Deprecated `Action.parallelTo` and `ParallelAction.parallelTo` extension methods were removed. Use `along` instead.

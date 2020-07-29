@@ -7,7 +7,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio
+import com.badlogic.gdx.backends.lwjgl.audio.OpenALLwjglAudio
 import com.badlogic.gdx.graphics.Cubemap
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
@@ -1103,14 +1103,14 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   override fun `setup LibGDX application`() {
     super.`setup LibGDX application`()
     if (System.getenv("TEST_PROFILE") != "ci") {
-      Gdx.audio = OpenALAudio()
+      Gdx.audio = OpenALLwjglAudio()
     }
   }
 
   @After
   override fun `exit LibGDX application`() {
     super.`exit LibGDX application`()
-    (Gdx.audio as? OpenALAudio)?.dispose()
+    (Gdx.audio as? OpenALLwjglAudio)?.dispose()
   }
 }
 
