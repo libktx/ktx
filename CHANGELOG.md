@@ -4,6 +4,8 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to LibGDX 1.9.11.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.6.
+- **[FEATURE]** (`ktx-tools`) Added a new KTX module: tools for use in development
+  - Gradle task `createBundleLines` and associated class `BundleLinesCreator` generate the `BundleLine` enum class(es) for source properties assets for use with `ktx-i18n`.
 
 #### 1.9.10-b7
 
