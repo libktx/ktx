@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.kotcrab.vis.ui.VisUI
@@ -87,7 +88,7 @@ class KVisImageTextButton(text: String, styleName: String) : VisImageTextButton(
 
 /** Extends [VisTree] with type-safe widget builders. */
 @Scene2dDsl
-class KVisTree(styleName: String) : VisTree(styleName), KTree {
+class KVisTree(styleName: String) : VisTree<Tree.Node<*, *, *>, Any?>(styleName), KTree {
   override fun <T : Actor> add(actor: T): KNode<T> {
     val node = KNode(actor)
     add(node)
