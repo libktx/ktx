@@ -283,13 +283,39 @@ class KButtonTableTest : NeedsLibGDX() {
  */
 class KContainerTest {
   @Test
+  fun `should create container with an actor`() {
+    val actor = Actor()
+
+    val container = KContainer(actor)
+
+    assertSame(actor, container.actor)
+    assertTrue(actor in container.children)
+  }
+
+  @Test
+  fun `should create container without an actor`() {
+    val actor: Actor? = null
+
+    val container = KContainer(actor)
+
+    assertNull(container.actor)
+  }
+
+  @Test
+  fun `should create container without an actor by default`() {
+    val container = KContainer<Actor>()
+
+    assertNull(container.actor)
+  }
+
+  @Test
   fun `should store child`() {
     val container = KContainer<Actor>()
     val actor = Actor()
 
     container.addActor(actor)
 
-    assertEquals(actor, container.actor)
+    assertSame(actor, container.actor)
     assertTrue(actor in container.children)
   }
 

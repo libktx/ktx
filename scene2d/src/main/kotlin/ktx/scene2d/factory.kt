@@ -169,6 +169,25 @@ inline fun <S> KWidget<S>.container(
 }
 
 /**
+ * Use this [container] method variant for customly built actors that you want to keep in a [Container].
+ * @param actor will be added to the container.
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined. Since [Container] can store only a single child and it is passed as [actor], this [init] block must not
+ * create any new actors added to this group.
+ * @return a [Container] instance added to this group. Note that this actor might store only a single child.
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S, A : Actor> KWidget<S>.container(
+  actor: A,
+  init: KContainer<A>.(S) -> Unit = {}
+): KContainer<A> {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(KContainer(actor), init)
+}
+
+/**
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  * Inlined.
