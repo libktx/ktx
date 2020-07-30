@@ -75,7 +75,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.10-b6'
+  ktxVersion = '1.9.11-b1'
 }
 
 dependencies {
