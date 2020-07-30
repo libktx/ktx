@@ -124,8 +124,8 @@ Dependencies versions are stored in the [gradle.properties](../gradle.properties
 all of the dependencies (outside of testing scope) up-to-date. Major dependencies updating:
 
 - **LibGDX**: update `gdxVersion` in the properties file and LibGDX version in the tag on the top of the 
-[README.md](../README.md) file. Note that updating LibGDX also affects the KTX version, so make sure to update
-[version.txt](../version.txt) as well.
+[README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
+to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
 - **Kotlin**: update the `kotlinVersion` property and the Kotlin tag in the [README.md](../README.md).
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` property and the tag in the
 `ktx-async` [README.md](../async/README.md).

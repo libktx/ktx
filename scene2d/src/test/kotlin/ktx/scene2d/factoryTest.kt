@@ -273,8 +273,10 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     // Ensuring the child is not null and owned by the parent:
     assertNotNull(child)
     assertTrue(child in parent.children)
-    assertEquals("For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
-      Color.BLUE, child!!.color)
+    assertEquals(
+      "For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
+      Color.BLUE, child!!.color
+    )
     validate(child) // Performing widget-specific validation.
   }
 
@@ -309,6 +311,19 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       color = Color.BLUE
     }
   }
+
+  @Test
+  fun `should create Container with a custom actor`() = test(
+    widget = {
+      container(scene2d.label("Test.")) {
+        color = Color.BLUE
+      }
+    },
+    validate = {
+      assertTrue(it.actor is Label)
+      val label = it.actor as Label
+      assertEquals("Test.", label.text.toString())
+    })
 
   @Test
   fun `should create HorizontalGroup`() = test {
