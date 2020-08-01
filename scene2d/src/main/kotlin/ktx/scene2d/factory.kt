@@ -1,5 +1,8 @@
 package ktx.scene2d
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup
@@ -28,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Array as GdxArray
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -203,7 +207,7 @@ inline fun <S> KWidget<S>.horizontalGroup(
 }
 
 /**
- * @param drawable name of a drawable stored in the chosen skin.
+ * @param drawableName name of a drawable stored in the chosen skin.
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
@@ -213,12 +217,52 @@ inline fun <S> KWidget<S>.horizontalGroup(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
-  drawable: String,
+  drawableName: String,
   skin: Skin = Scene2DSkin.defaultSkin,
   init: (@Scene2dDsl Image).(S) -> Unit = {}
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  return actor(Image(skin.getDrawable(drawable)), init)
+  return actor(Image(skin.getDrawable(drawableName)), init)
+}
+
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.image(
+  ninePatch: NinePatch,
+  init: (@Scene2dDsl Image).(S) -> Unit = {}
+): Image {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(Image(ninePatch), init)
+}
+
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.image(
+  textureRegion: TextureRegion,
+  init: (@Scene2dDsl Image).(S) -> Unit = {}
+): Image {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(Image(textureRegion), init)
+}
+
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.image(
+  texture: Texture,
+  init: (@Scene2dDsl Image).(S) -> Unit = {}
+): Image {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(Image(texture), init)
+}
+
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.image(
+  drawable: Drawable,
+  init: (@Scene2dDsl Image).(S) -> Unit = {}
+): Image {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(Image(drawable), init)
 }
 
 /**
