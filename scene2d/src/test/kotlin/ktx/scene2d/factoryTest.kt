@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -119,10 +120,26 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create HorizontalGroup`() = test { horizontalGroup() }
 
   @Test
-  fun `should create Image`() = test(
-    widget = { image(drawable = "button") },
+  fun `should create Image with drawable name`() = test(
+    widget = { image(drawableName = "button") },
     validate = {
       assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
+    })
+
+  @Test
+  fun `should create Image with nine patch`() = test { image(VisUI.getSkin().getPatch("button")) }
+
+  @Test
+  fun `should create Image with texture region`() = test { image(VisUI.getSkin().getRegion("button")) }
+
+  @Test
+  fun `should create Image with texture`() = test { image(VisUI.getSkin().getRegion("button").texture) }
+
+  @Test
+  fun `should create Image with drawable`() = test(
+    widget = { image(VisUI.getSkin().getDrawable("button")) },
+    validate = {
+      Assert.assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
     })
 
   @Test
@@ -335,7 +352,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   @Test
   fun `should create Image`() = test(
     widget = {
-      image(drawable = "button") {
+      image(drawableName = "button") {
         color = Color.BLUE
       }
     },

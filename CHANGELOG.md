@@ -8,6 +8,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.6.
 - **[UPDATE]** Updated VisUI to 1.4.6.
 - **[FEATURE]** (`ktx-scene2d`) Added a generic `container` factory method that supports adding a custom actor.
+- **[FEATURE]** (`ktx-scene2d`) Added `image` builders for NinePatch, TextureRegion, Texture and Drawable
 
 #### 1.9.10-b7
 
