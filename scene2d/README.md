@@ -603,17 +603,20 @@ val labelWithTooltips = scene2d {
 }
 ```
 
-Different ways to use `image` builder:
+Creating images with various asset types:
 
 ```kotlin
-import ktx.scene2d.image
+import ktx.scene2d.*
 
 scene2d.table {
-    image("button") // uses Drawable from Skin
-    image(Drawable(...)) // uses Drawable passed directly 
-    image(NinePatch(...))
-    image(TextureRegion(...))
-    image(Texture(...))
+  // Extract a named asset from a Skin:
+  image("button") 
+
+  // Or use the assets directly: 
+  image(Drawable(...)) 
+  image(NinePatch(...))
+  image(TextureRegion(...))
+  image(Texture(...))
 }
 ```
 

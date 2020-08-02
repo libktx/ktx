@@ -67,7 +67,9 @@ Project contributors listed chronologically.
   * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin LibGDX extensions.
   * Utilities for profiling, text rendering, camera updating and taking screenshots were integrated into KTX with **@ImXico** permission.
 * [@heyheyIvan](https://github.com/heyheyIvan)
-  * Contributed utilities to [graphics module](../graphics).
+  * Contributed utilities to the [graphics module](../graphics).
+* [@Divelix](https://github.com/Divelix)
+  * Contributed utilities to the [Scene2D module](../scene2d).
 
 ### Metrics
 

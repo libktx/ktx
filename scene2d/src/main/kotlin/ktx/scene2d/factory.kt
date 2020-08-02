@@ -225,6 +225,13 @@ inline fun <S> KWidget<S>.image(
   return actor(Image(skin.getDrawable(drawableName)), init)
 }
 
+/**
+ * @param ninePatch will be drawn by the [Image].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [Image] instance added to this group.
+ */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
@@ -235,6 +242,13 @@ inline fun <S> KWidget<S>.image(
   return actor(Image(ninePatch), init)
 }
 
+/**
+ * @param textureRegion will be drawn by the [Image].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [Image] instance added to this group.
+ */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
@@ -245,6 +259,13 @@ inline fun <S> KWidget<S>.image(
   return actor(Image(textureRegion), init)
 }
 
+/**
+ * @param texture will be drawn by the [Image].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [Image] instance added to this group.
+ */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
@@ -255,6 +276,13 @@ inline fun <S> KWidget<S>.image(
   return actor(Image(texture), init)
 }
 
+/**
+ * @param drawable will be drawn by the [Image].
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [Image] instance added to this group.
+ */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
