@@ -620,6 +620,32 @@ scene2d.table {
 }
 ```
 
+Using the DSL in a custom actor class:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import ktx.scene2d.KTable
+
+// Note the KTable interface:
+class MyTable: Table(), KTable {
+  init {
+    table {
+      label("You can use KTX DSL as long as you implement the interface!")
+    }
+    row()
+    textButton("Click me!")
+  }
+}
+
+/*
+Widget interfaces:
+- KTable: for actors that extend Table
+- KGroup: for basic group actors such as HorizontalGroup
+- KTree: for tree-based actors such as Tree
+- KWidget: a generic interface that allows to fully customize actor storage
+*/
+```
+
 Advanced usage example - extending the `ktx-scene2d` DSL with a custom widget:
 
 ```kotlin
