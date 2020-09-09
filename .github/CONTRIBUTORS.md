@@ -70,6 +70,8 @@ Project contributors listed chronologically.
   * Contributed utilities to the [graphics module](../graphics).
 * [@Divelix](https://github.com/Divelix)
   * Contributed utilities to the [Scene2D module](../scene2d).
+* [@Rinat-Suleimanov](https://github.com/Rinat-Suleimanov)
+  * Contributed utilities to the [collections module](../collections).
 
 ### Metrics
 
