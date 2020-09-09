@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.ObjectSet
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
 
+/** Alias for [com.badlogic.gdx.utils.IdentityMap]. Added for consistency with other collections and factory methods. */
+typealias GdxIdentityMap<Key, Value> = IdentityMap<Key, Value>
+
 /** Alias for [com.badlogic.gdx.utils.ArrayMap]. Added for consistency with other collections and factory methods. */
 typealias GdxArrayMap<Key, Value> = ArrayMap<Key, Value>
 
@@ -173,7 +176,7 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
  * @return a new [IdentityMap], which compares keys by references.
  */
 fun <Key, Value> gdxIdentityMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor):
-    IdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
+    GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -185,7 +188,7 @@ inline fun <Key, Value> gdxIdentityMapOf(
   vararg keysToValues: Pair<Key, Value>,
   initialCapacity: Int = defaultMapSize,
   loadFactor: Float = defaultLoadFactor
-): IdentityMap<Key, Value> {
+): GdxIdentityMap<Key, Value> {
   val map = IdentityMap<Key, Value>(initialCapacity, loadFactor)
   keysToValues.forEach { map[it.first] = it.second }
   return map
