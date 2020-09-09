@@ -380,4 +380,17 @@ class MapsTest {
 
     assertEquals(GdxArray.with(1, 2, 2, 3, 3, 3), result)
   }
+
+  @Test
+  fun `should add new entry to the GdxArrayMap using square brackets assignment`() {
+    val gdxArrayMap = GdxArrayMap<Int, String>()
+    gdxArrayMap[1] = "One"
+    gdxArrayMap[2] = "Two"
+    gdxArrayMap.put(3, "Three")
+    gdxArrayMap.put(4, "Four")
+    assertEquals("One", gdxArrayMap[1])
+    assertEquals("Two", gdxArrayMap[2])
+    assertEquals("Three", gdxArrayMap[3])
+    assertEquals("Four", gdxArrayMap[4])
+  }
 }
