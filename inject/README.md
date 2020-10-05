@@ -135,6 +135,46 @@ Removing all components from the `Context` and disposing of all `Disposable` sin
 context.dispose()
 ```
 
+#### Adding `this` to the `Context`
+
+Be careful when adding a disposable context container class as `this` to the `Context`. Consider this example:
+
+```kotlin
+class Container: Disposable {
+  val context = Context()
+
+  init {
+    context.bindSingleton(this)
+  }
+
+  override fun dispose() {
+    context.dispose()
+  }
+}
+```
+
+As soon as `Container.dispose` is called, it will cause a `StackOverflowError`, as `Context` will try to dispose of the
+`Container`, which will attempt to dispose of the `Context`, and so on. This can be a issue, if you keep a `Context`
+in extensions of classes such as `KtxGame` or `KtxScreen` from [`ktx-app`](../app). To fix this problem, remove the
+container class from the `Context` before attempting to dispose of it:
+
+```diff
+class Container: Disposable {
+  val context = Context()
+
+  init {
+    context.bindSingleton(this)
+  }
+
+  override fun dispose() {
++   context.remove<Container>() 
+    context.dispose()
+  }
+}
+```
+
+This will ensure that the `Context` itself will not attempt to dispose of the `Container`.
+
 ### Notes on implementation and design choices
 
 > How does it work?
