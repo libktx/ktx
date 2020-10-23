@@ -1,5 +1,0 @@
-dependencies {
-  provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-  testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-  testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-}
