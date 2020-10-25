@@ -12,11 +12,9 @@ buildscript {
   val dokkaVersion: String by project
   val kotlinVersion: String by project
   val junitPlatformVersion: String by project
-  val configurationsPluginVersion: String by project
 
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    classpath("com.netflix.nebula:gradle-extra-configurations-plugin:$configurationsPluginVersion")
     classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
   }
@@ -53,7 +51,6 @@ subprojects {
   apply(plugin = "signing")
   apply(plugin = "org.jetbrains.dokka")
   apply(plugin = "jacoco")
-  apply(plugin = "nebula.provided-base")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
 
@@ -62,6 +59,10 @@ subprojects {
     jcenter()
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+  }
+
+  configurations {
+    testImplementation.get().extendsFrom(compileOnly.get())
   }
 
   group = libGroup
@@ -84,8 +85,8 @@ subprojects {
   dependencies {
     val kotlinVersion: String by project
 
-    "provided"("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    "provided"("com.badlogicgames.gdx:gdx:$gdxVersion")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    compileOnly("com.badlogicgames.gdx:gdx:$gdxVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")
@@ -202,6 +203,7 @@ subprojects {
           packaging = "jar"
           name.set(projectName)
           description.set(projectDesc)
+          from(components["kotlin"])
 
           url.set("https://libktx.github.io/")
 

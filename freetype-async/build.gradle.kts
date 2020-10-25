@@ -3,7 +3,7 @@ import ktx.*
 dependencies {
   api(project(":assets-async"))
   api(project(":freetype"))
-  provided("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
+  compileOnly("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
 
   testImplementation(project(":async").dependencyProject.sourceSets.test.get().output)
   testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutinesVersion")
