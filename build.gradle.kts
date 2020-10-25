@@ -10,13 +10,11 @@ buildscript {
 
   val dokkaVersion: String by project
   val kotlinVersion: String by project
-  val nexusPluginVersion: String by project
   val junitPlatformVersion: String by project
   val configurationsPluginVersion: String by project
 
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    classpath("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusPluginVersion")
     classpath("com.netflix.nebula:gradle-extra-configurations-plugin:$configurationsPluginVersion")
     classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
@@ -55,7 +53,7 @@ allprojects {
 }
 
 subprojects {
-  apply(plugin = "maven")
+  apply(plugin = "maven-publish")
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "signing")
@@ -172,7 +170,7 @@ subprojects {
     afterEvaluate {
       rootProject.distributions {
         main {
-          baseName = libVersion
+          distributionBaseName.set(libVersion)
           contents {
             into("lib").from(tasks.jar)
             into("src").from(tasks["sourcesJar"])
@@ -183,11 +181,7 @@ subprojects {
     }
   }
 
-  tasks.withType<Sign> {
-    onlyIf { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives")}
-  }
-
-  the<SigningExtension>().sign(configurations.archives.get())
+  tasks.withType<Sign> { onlyIf { isReleaseVersion } }
 
   val uploadSnapshot by tasks.registering
 
@@ -195,53 +189,55 @@ subprojects {
     uploadSnapshot.configure { finalizedBy(tasks["uploadArchives"]) }
   }
 
-  tasks.named<Upload>("uploadArchives") {
-    repositories.withConvention(MavenRepositoryHandlerConvention::class) {
-      mavenDeployer {
-        beforeDeployment { the<SigningExtension>().signPom(this) }
+  configure<PublishingExtension> {
+    repositories {
+      maven {
+        val releasesRepoUrl = uri("$buildDir/repos/releases")
+        val snapshotsRepoUrl = uri("$buildDir/repos/snapshots")
+        url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
 
-        withGroovyBuilder {
-          "repository"("url" to "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-            "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
-          }
-
-          "snapshotRepository"("url" to "https://oss.sonatype.org/content/repositories/snapshots/") {
-            "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
-          }
+        credentials {
+          username = ossrhUsername
+          password = ossrhPassword
         }
+      }
+    }
 
+    publications {
+      create<MavenPublication>("mavenKtx") {
         pom {
           packaging = "jar"
-          name = project.name
-          description = project.description.orEmpty()
+          name.set(project.name)
+          description.set(project.description)
 
-          withGroovyBuilder {
-            "project" {
-              "url" to "https://libktx.github.io/"
+          url.set("https://libktx.github.io/")
 
-              "licenses" {
-                "license"(
-                  "name" to "CC0-1.0",
-                  "url" to "https://creativecommons.org/publicdomain/zero/1.0/"
-                )
-              }
+          licenses {
+            license {
+              name.set("CC0-1.0")
+              url.set("https://creativecommons.org/publicdomain/zero/1.0/")
+            }
+          }
 
-              "scm" {
-                "connection"("scm:git:git@github.com:libktx/ktx.git")
-                "developerConnection"("scm:git:git@github.com:libktx/ktx.git")
-                "url"("https://github.com/libktx/ktx/")
-              }
+          scm {
+            connection.set("scm:git:git@github.com:libktx/ktx.git")
+            developerConnection.set("scm:git:git@github.com:libktx/ktx.git")
+            url.set("https://github.com/libktx/ktx/")
+          }
 
-              "developers" {
-                "developer" {
-                  "id"("mj")
-                  "name"("MJ")
-                }
-              }
+          developers {
+            developer {
+              id.set("mj")
+              name.set("MJ")
             }
           }
         }
       }
+    }
+
+    configure<SigningExtension> {
+      setRequired { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+      sign(the<PublishingExtension>().publications["mavenKtx"])
     }
   }
 }
