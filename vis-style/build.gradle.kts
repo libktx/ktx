@@ -1,6 +1,6 @@
 val visUiVersion: String by rootProject
 
 dependencies {
-  "compile"(project(":style"))
-  "compile"("com.kotcrab.vis:vis-ui:$visUiVersion")
+  implementation(project(":style"))
+  implementation("com.kotcrab.vis:vis-ui:$visUiVersion")
 }

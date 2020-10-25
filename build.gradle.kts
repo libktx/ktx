@@ -71,9 +71,9 @@ subprojects {
   version = libVersion
   val archivesBaseName = project.name
 
-  tasks.withType<JavaCompile> {
-    sourceCompatibility = "1.6"
-    targetCompatibility = "1.6"
+  java {
+    sourceCompatibility = JavaVersion.VERSION_1_6
+    targetCompatibility = JavaVersion.VERSION_1_6
   }
 
   tasks.withType<KotlinCompile> {
@@ -85,28 +85,28 @@ subprojects {
 
   val gdxVersion: String by project
   val junitVersion: String by project
+  val kotlinVersion: String by project
   val kotlinTestVersion: String by project
   val kotlinMockitoVersion: String by project
-  val kotlinVersion: String by project
 
   dependencies {
-    "compileOnly"("com.badlogicgames.gdx:gdx:$gdxVersion")
-    "testCompile"("junit:junit:$junitVersion")
-    "testCompile"("io.kotlintest:kotlintest:$kotlinTestVersion")
-    "testCompile"("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")
-    "testCompile"("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    "testCompile"("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    compileOnly("com.badlogicgames.gdx:gdx:$gdxVersion")
+    testImplementation("junit:junit:$junitVersion")
+    testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
   }
 
-  val lint by tasks.registering(JavaExec::class) {
+  tasks.register("lint", JavaExec::class) {
     description = "Check Kotlin code style."
     group = "verification"
     main = "com.pinterest.ktlint.Main"
     classpath = configurations["linter"]
     args = listOf("src/**/*.kt")
-  }
 
-  tasks["check"].dependsOn(lint)
+    tasks["check"].dependsOn(this)
+  }
 
   tasks.register("format", JavaExec::class) {
     description = "Fix Kotlin code style."
@@ -148,7 +148,7 @@ subprojects {
 
   val dokka by tasks.getting
 
-  tasks.register("dokkaZip", Zip::class) {
+  tasks.register<Zip>("dokkaZip") {
     from("$buildDir/dokka")
     dependsOn(dokka)
   }
@@ -170,13 +170,12 @@ subprojects {
   }
 
   tasks.withType<Sign> {
-    onlyIf { isReleaseVersion }
+    onlyIf { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives")}
   }
 
-//  configure<SigningExtension> {
-//    isRequired = isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives")
-//    sign(configurations.archives.get())
-//  }
+  configure<SigningExtension> {
+    sign(configurations.archives.get())
+  }
 
   val uploadSnapshot by tasks.registering
 
@@ -184,48 +183,57 @@ subprojects {
     uploadSnapshot.configure { finalizedBy(tasks["uploadArchives"]) }
   }
 
-//  uploadArchives {
-//    repositories {
-//      mavenDeployer {
-//        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//
-//        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//          authentication(userName: ossrhUsername, password: ossrhPassword)
-//        }
-//
-//        snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//          authentication(userName: ossrhUsername, password: ossrhPassword)
-//        }
-//
-//        pom.project {
-//          name = projectName
-//          packaging "jar"
-//          description = projectDesc
-//          url "https://libktx.github.io/"
-//
-//          licenses {
-//            license {
-//              name "CC0-1.0"
-//              url "https://creativecommons.org/publicdomain/zero/1.0/"
-//            }
-//          }
-//
-//          scm {
-//            connection "scm:git:git@github.com:libktx/ktx.git"
-//            developerConnection "scm:git:git@github.com:libktx/ktx.git"
-//            url "https://github.com/libktx/ktx/"
-//          }
-//
-//          developers {
-//            developer {
-//              id "mj"
-//              name "MJ"
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
+  tasks.named<Upload>("uploadArchives") {
+    repositories {
+      withConvention(MavenRepositoryHandlerConvention::class) {
+        mavenDeployer {
+          beforeDeployment { the<SigningExtension>().signPom(this) }
+
+          withGroovyBuilder {
+            "repository"("url" to "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+              "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
+            }
+
+            "snapshotRepository"("url" to "https://oss.sonatype.org/content/repositories/snapshots/") {
+              "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
+            }
+          }
+
+          pom {
+            packaging = "jar"
+            name = project.name
+            description = project.description.orEmpty()
+
+            withGroovyBuilder {
+              "project" {
+                "url" to "https://libktx.github.io/"
+
+                "licenses" {
+                  "license"(
+                    "name" to "CC0-1.0",
+                    "url" to "https://creativecommons.org/publicdomain/zero/1.0/"
+                  )
+                }
+
+                "scm" {
+                  "connection"("scm:git:git@github.com:libktx/ktx.git")
+                  "developerConnection"("scm:git:git@github.com:libktx/ktx.git")
+                  "url"("https://github.com/libktx/ktx/")
+                }
+
+                "developers" {
+                  "developer" {
+                    "id"("mj")
+                    "name"("MJ")
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 nexusStaging {
@@ -245,16 +253,6 @@ distributions {
       }
     }
   }
-}
-
-val gatherDokkaDocumentation by tasks.registering(Copy::class) {
-  subprojects.forEach { subproject ->
-    from(subproject.buildDir)
-    include("dokka/${subproject.name}/**")
-    include("dokka/style.css")
-  }
-
-  into(buildDir)
 }
 
 val generateDocumentationIndex by tasks.registering {
@@ -282,9 +280,18 @@ val generateDocumentationIndex by tasks.registering {
   }
 }
 
-gatherDokkaDocumentation.configure { finalizedBy(generateDocumentationIndex) }
+tasks.register<Copy>("gatherDokkaDocumentation") {
+  subprojects.forEach { subproject ->
+    from(subproject.buildDir)
+    include("dokka/${subproject.name}/**")
+    include("dokka/style.css")
+  }
 
-val linterIdeSetup by tasks.registering(JavaExec::class) {
+  into(buildDir)
+  finalizedBy(generateDocumentationIndex)
+}
+
+tasks.register<JavaExec>("linterIdeSetup") {
   description = "Apply Kotlin code style changes to IntelliJ formatter."
   main = "com.pinterest.ktlint.Main"
   classpath = configurations["linter"]
