@@ -9,8 +9,8 @@ dependencies {
   testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion")
 
-  "testRuntime"("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-  "testRuntime"("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+  testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
 tasks.withType<Test> {

@@ -90,7 +90,7 @@ subprojects {
   val kotlinMockitoVersion: String by project
 
   dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     compileOnly("com.badlogicgames.gdx:gdx:$gdxVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
@@ -141,11 +141,6 @@ subprojects {
     }
   }
 
-  tasks.named<Jar>("jar") {
-//    from(the<SourceSetContainer>()["main"].output)
-    archiveBaseName.set(archivesBaseName)
-  }
-
   val dokka by tasks.getting
 
   tasks.register<Zip>("dokkaZip") {
@@ -159,23 +154,41 @@ subprojects {
     dependsOn(dokka)
   }
 
-  val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-//    from(the<SourceSetContainer>()["main"].allSource)
-  }
+  afterEvaluate {
+    tasks.named<Jar>("jar") {
+      from(sourceSets.main.get().output)
+      archiveBaseName.set(archivesBaseName)
+    }
 
-  artifacts {
-    archives(javadocJar)
-    archives(sourcesJar)
+    val sourcesJar by tasks.registering(Jar::class) {
+      from(sourceSets.main.get().allSource)
+      archiveClassifier.set("sources")
+    }
+
+    artifacts {
+      archives(javadocJar)
+      archives(sourcesJar)
+    }
+
+    afterEvaluate {
+      rootProject.distributions {
+        main {
+          baseName = libVersion
+          contents {
+            into("lib").from(tasks.jar)
+            into("src").from(tasks["sourcesJar"])
+            into("doc").from(tasks["dokkaZip"])
+          }
+        }
+      }
+    }
   }
 
   tasks.withType<Sign> {
     onlyIf { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives")}
   }
 
-  configure<SigningExtension> {
-    sign(configurations.archives.get())
-  }
+  the<SigningExtension>().sign(configurations.archives.get())
 
   val uploadSnapshot by tasks.registering
 
@@ -184,48 +197,46 @@ subprojects {
   }
 
   tasks.named<Upload>("uploadArchives") {
-    repositories {
-      withConvention(MavenRepositoryHandlerConvention::class) {
-        mavenDeployer {
-          beforeDeployment { the<SigningExtension>().signPom(this) }
+    repositories.withConvention(MavenRepositoryHandlerConvention::class) {
+      mavenDeployer {
+        beforeDeployment { the<SigningExtension>().signPom(this) }
 
-          withGroovyBuilder {
-            "repository"("url" to "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-              "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
-            }
-
-            "snapshotRepository"("url" to "https://oss.sonatype.org/content/repositories/snapshots/") {
-              "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
-            }
+        withGroovyBuilder {
+          "repository"("url" to "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
           }
 
-          pom {
-            packaging = "jar"
-            name = project.name
-            description = project.description.orEmpty()
+          "snapshotRepository"("url" to "https://oss.sonatype.org/content/repositories/snapshots/") {
+            "authentication"("userName" to ossrhUsername, "password" to ossrhPassword)
+          }
+        }
 
-            withGroovyBuilder {
-              "project" {
-                "url" to "https://libktx.github.io/"
+        pom {
+          packaging = "jar"
+          name = project.name
+          description = project.description.orEmpty()
 
-                "licenses" {
-                  "license"(
-                    "name" to "CC0-1.0",
-                    "url" to "https://creativecommons.org/publicdomain/zero/1.0/"
-                  )
-                }
+          withGroovyBuilder {
+            "project" {
+              "url" to "https://libktx.github.io/"
 
-                "scm" {
-                  "connection"("scm:git:git@github.com:libktx/ktx.git")
-                  "developerConnection"("scm:git:git@github.com:libktx/ktx.git")
-                  "url"("https://github.com/libktx/ktx/")
-                }
+              "licenses" {
+                "license"(
+                  "name" to "CC0-1.0",
+                  "url" to "https://creativecommons.org/publicdomain/zero/1.0/"
+                )
+              }
 
-                "developers" {
-                  "developer" {
-                    "id"("mj")
-                    "name"("MJ")
-                  }
+              "scm" {
+                "connection"("scm:git:git@github.com:libktx/ktx.git")
+                "developerConnection"("scm:git:git@github.com:libktx/ktx.git")
+                "url"("https://github.com/libktx/ktx/")
+              }
+
+              "developers" {
+                "developer" {
+                  "id"("mj")
+                  "name"("MJ")
                 }
               }
             }
@@ -240,19 +251,6 @@ nexusStaging {
   packageGroup = libGroup
   username = ossrhUsername
   password = ossrhPassword
-}
-
-distributions {
-  main {
-    baseName = libVersion
-    contents {
-      project.subprojects.forEach { sub ->
-        into("lib").from(sub.tasks["jar"])
-        into("src").from(sub.tasks["sourcesJar"])
-        into("doc").from(sub.tasks["dokkaZip"])
-      }
-    }
-  }
 }
 
 val generateDocumentationIndex by tasks.registering {
