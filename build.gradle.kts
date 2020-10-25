@@ -45,10 +45,10 @@ repositories {
 val libVersion = file("version.txt").readText()
 
 allprojects {
-  configurations.create("linter")
+  val linter = configurations.create("linter")
 
   dependencies {
-    "linter"("com.pinterest:ktlint:$ktlintVersion")
+    linter("com.pinterest:ktlint:$ktlintVersion")
   }
 }
 
@@ -67,12 +67,13 @@ subprojects {
     mavenLocal()
     jcenter()
     mavenCentral()
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
   }
 
   group = libGroup
   version = libVersion
-  val archivesBaseName = project.name
+  val projectName = name
+  val projectDescription = description
 
   java {
     sourceCompatibility = JavaVersion.VERSION_1_6
@@ -138,6 +139,11 @@ subprojects {
     }
   }
 
+  tasks.named<Jar>("jar") {
+    from(sourceSets.main.get().output)
+    archiveBaseName.set(projectName)
+  }
+
   val dokka by tasks.getting
 
   tasks.register<Zip>("dokkaZip") {
@@ -152,10 +158,6 @@ subprojects {
   }
 
   afterEvaluate {
-    tasks.named<Jar>("jar") {
-      from(sourceSets.main.get().output)
-      archiveBaseName.set(archivesBaseName)
-    }
 
     val sourcesJar by tasks.registering(Jar::class) {
       from(sourceSets.main.get().allSource)
@@ -183,6 +185,11 @@ subprojects {
 
   tasks.withType<Sign> { onlyIf { isReleaseVersion } }
 
+  configure<SigningExtension> {
+    setRequired { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign(configurations.archives.get())
+  }
+
   val uploadSnapshot by tasks.registering
 
   if (!isReleaseVersion) {
@@ -207,8 +214,8 @@ subprojects {
       create<MavenPublication>("mavenKtx") {
         pom {
           packaging = "jar"
-          name.set(project.name)
-          description.set(project.description)
+          name.set(projectName)
+          description.set(projectDescription)
 
           url.set("https://libktx.github.io/")
 
@@ -233,11 +240,6 @@ subprojects {
           }
         }
       }
-    }
-
-    configure<SigningExtension> {
-      setRequired { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-      sign(the<PublishingExtension>().publications["mavenKtx"])
     }
   }
 }
