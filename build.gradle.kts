@@ -42,7 +42,7 @@ repositories {
   jcenter()
 }
 
-val libVersion = file("version.txt").readLines().first()
+val libVersion = file("version.txt").readText().trim()
 
 allprojects {
   val linter = configurations.create("linter")
