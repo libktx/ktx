@@ -42,7 +42,7 @@ repositories {
   jcenter()
 }
 
-val libVersion = file("version.txt").readText()
+val libVersion = file("version.txt").readLines().first()
 
 allprojects {
   val linter = configurations.create("linter")
@@ -72,8 +72,8 @@ subprojects {
 
   group = libGroup
   version = libVersion
-  val projectName = name
-  val projectDescription = description
+  val projectName: String by project
+  val projectDesc: String by project
 
   java {
     sourceCompatibility = JavaVersion.VERSION_1_6
@@ -158,7 +158,6 @@ subprojects {
   }
 
   afterEvaluate {
-
     val sourcesJar by tasks.registering(Jar::class) {
       from(sourceSets.main.get().allSource)
       archiveClassifier.set("sources")
@@ -215,7 +214,7 @@ subprojects {
         pom {
           packaging = "jar"
           name.set(projectName)
-          description.set(projectDescription)
+          description.set(projectDesc)
 
           url.set("https://libktx.github.io/")
 
