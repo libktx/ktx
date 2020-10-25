@@ -1,4 +1,4 @@
-val visUiVersion: String by rootProject
+import ktx.*
 
 dependencies {
   api(project(":style"))

@@ -1,4 +1,4 @@
-val gdxVersion: String by rootProject
+import ktx.*
 
 dependencies {
   api(project(":assets"))

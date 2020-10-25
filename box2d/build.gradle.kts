@@ -1,4 +1,4 @@
-val gdxVersion: String by rootProject
+import ktx.*
 
 dependencies {
   provided("com.badlogicgames.gdx:gdx-box2d:$gdxVersion")

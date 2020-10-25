@@ -1,7 +1,6 @@
-val ashleyVersion: String by rootProject
-val spekVersion: String by rootProject
-val assertjVersion: String by rootProject
-val junitPlatformVersion: String by rootProject
+import ktx.*
+
+val junitPlatformVersion: String by project
 
 dependencies {
   provided("com.badlogicgames.ashley:ashley:$ashleyVersion")

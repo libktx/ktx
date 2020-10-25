@@ -1,9 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-val kotlinCoroutinesVersion: String by rootProject
-val wireMockVersion: String by rootProject
-val gdxVersion: String by rootProject
-val slf4jVersion: String by rootProject
+import ktx.*
 
 tasks.withType<KotlinCompile> {
   kotlinOptions {

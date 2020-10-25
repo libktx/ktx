@@ -1,5 +1,6 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
+import ktx.*
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import org.gradle.api.tasks.testing.logging.TestLogEvent.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -24,13 +25,6 @@ buildscript {
 val libGroup: String by project
 val ossrhUsername: String by project
 val ossrhPassword: String by project
-
-val gdxVersion: String by project
-val junitVersion: String by project
-val ktlintVersion: String by project
-val kotlinVersion: String by project
-val kotlinTestVersion: String by project
-val kotlinMockitoVersion: String by project
 
 plugins {
   java
@@ -57,9 +51,9 @@ subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "signing")
-  apply(plugin = "nebula.provided-base")
   apply(plugin = "org.jetbrains.dokka")
   apply(plugin = "jacoco")
+  apply(plugin = "nebula.provided-base")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
 
@@ -88,6 +82,8 @@ subprojects {
   }
 
   dependencies {
+    val kotlinVersion: String by project
+
     "provided"("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     "provided"("com.badlogicgames.gdx:gdx:$gdxVersion")
     testImplementation("junit:junit:$junitVersion")
@@ -116,22 +112,15 @@ subprojects {
 
   tasks.withType<Test> {
     testLogging {
-      events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT)
-      exceptionFormat = TestExceptionFormat.FULL
+      events = setOf(FAILED, SKIPPED, STANDARD_OUT)
+      exceptionFormat = FULL
       showExceptions = true
       showCauses = true
       showStackTraces = true
 
       debug {
-        events = setOf(
-          TestLogEvent.STARTED,
-          TestLogEvent.FAILED,
-          TestLogEvent.PASSED,
-          TestLogEvent.SKIPPED,
-          TestLogEvent.STANDARD_ERROR,
-          TestLogEvent.STANDARD_OUT
-        )
-        exceptionFormat = TestExceptionFormat.FULL
+        events = setOf(STARTED, FAILED, PASSED, SKIPPED, STANDARD_ERROR, STANDARD_OUT)
+        exceptionFormat = FULL
       }
 
       info.events = debug.events
@@ -189,17 +178,15 @@ subprojects {
     sign(configurations.archives.get())
   }
 
-  val uploadSnapshot by tasks.registering
-
-  if (!isReleaseVersion) {
-    uploadSnapshot.configure { finalizedBy(tasks["uploadArchives"]) }
+  tasks.register("uploadSnapshot") {
+    if (!isReleaseVersion) finalizedBy(tasks["publishAllPublicationsToMavenRepository"])
   }
 
   configure<PublishingExtension> {
     repositories {
       maven {
-        val releasesRepoUrl = uri("$buildDir/repos/releases")
-        val snapshotsRepoUrl = uri("$buildDir/repos/snapshots")
+        val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+        val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
         url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
 
         credentials {

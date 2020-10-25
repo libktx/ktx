@@ -1,9 +1,8 @@
-val kotlinCoroutinesVersion: String by rootProject
-val gdxVersion: String by rootProject
+import ktx.*
+
 val async = project(":async")
 
 dependencies {
-
   api(project(":assets"))
   api(async)
 

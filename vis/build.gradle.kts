@@ -1,5 +1,4 @@
-val visUiVersion: String by rootProject
-val gdxVersion: String by rootProject
+import ktx.*
 
 dependencies {
   api(project(":scene2d"))
