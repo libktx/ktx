@@ -23,11 +23,16 @@ buildscript {
   }
 }
 
-val ktlintVersion: String by project
-
 val libGroup: String by project
 val ossrhUsername: String by project
 val ossrhPassword: String by project
+
+val gdxVersion: String by project
+val junitVersion: String by project
+val ktlintVersion: String by project
+val kotlinVersion: String by project
+val kotlinTestVersion: String by project
+val kotlinMockitoVersion: String by project
 
 plugins {
   java
@@ -83,15 +88,9 @@ subprojects {
     }
   }
 
-  val gdxVersion: String by project
-  val junitVersion: String by project
-  val kotlinVersion: String by project
-  val kotlinTestVersion: String by project
-  val kotlinMockitoVersion: String by project
-
   dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    compileOnly("com.badlogicgames.gdx:gdx:$gdxVersion")
+    "provided"("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    "provided"("com.badlogicgames.gdx:gdx:$gdxVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")

@@ -4,7 +4,7 @@ val assertjVersion: String by rootProject
 val junitPlatformVersion: String by rootProject
 
 dependencies {
-  compileOnly("com.badlogicgames.ashley:ashley:$ashleyVersion")
+  provided("com.badlogicgames.ashley:ashley:$ashleyVersion")
 
   testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion")
