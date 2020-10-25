@@ -1,8 +1,0 @@
-dependencies {
-  compile project(':assets')
-  provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-  provided "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-  testCompile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-  testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-  testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-}
