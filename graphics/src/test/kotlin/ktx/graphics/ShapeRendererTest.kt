@@ -3,6 +3,7 @@ package ktx.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.nhaarman.mockitokotlin2.mock
@@ -184,6 +185,20 @@ class ShapeRendererTest {
     val shapeRenderer = mock<ShapeRenderer>()
 
     shapeRenderer.use(ShapeType.Filled) {
+      verify(shapeRenderer).begin(ShapeType.Filled)
+      assertSame(shapeRenderer, it)
+      verify(shapeRenderer, never()).end()
+    }
+    verify(shapeRenderer).end()
+  }
+
+  @Test
+  fun `should set projection matrix`() {
+    val shapeRenderer = mock<ShapeRenderer>()
+    val matrix = Matrix4((0..15).map { it.toFloat() }.toFloatArray())
+
+    shapeRenderer.use(ShapeType.Filled, matrix) {
+      verify(shapeRenderer).projectionMatrix = matrix
       verify(shapeRenderer).begin(ShapeType.Filled)
       assertSame(shapeRenderer, it)
       verify(shapeRenderer, never()).end()
