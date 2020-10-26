@@ -165,6 +165,7 @@ subprojects {
     afterEvaluate {
       rootProject.distributions {
         main {
+          distributionBaseName.set(libVersion)
           contents {
             into("lib").from(tasks.jar)
             into("src").from(tasks["sourcesJar"])
@@ -203,8 +204,9 @@ subprojects {
     publications {
       create<MavenPublication>("mavenKtx") {
         pom {
-          packaging = "jar"
           name.set(projectName)
+          artifactId = tasks.jar.get().archiveBaseName.get()
+          packaging = "jar"
           description.set(projectDesc)
           from(components["kotlin"])
 

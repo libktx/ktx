@@ -51,7 +51,7 @@ git checkout develop
 ### Gradle
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
-Gradle installation - scripts should be compatible with Gradle `5.+`. Gradle projects are handled out of the box by
+Gradle installation - scripts should be compatible with Gradle `6.+`. Gradle projects are handled out of the box by
 IntelliJ, so KTX should be relatively easy to import.
 
 Some useful Gradle tasks include:
@@ -72,7 +72,7 @@ separately usually fixes the issue.
 
 - Create folder matching module name in root of the repository. Modules should generally be named with a single word.
 When multiple words are necessary, use a single dash (`-`) as the word separator.
-- Add folder name to `settings.gradle` file. This will also serve as the project identifier that you use in
+- Add folder name to `settings.gradle.kts` file. This will also serve as the project identifier that you use in
 `build.gradle` scripts and to run individual Gradle tasks (e.g. `gradle actors:test`).
 - Create `src/main/kotlin` and `src/test/kotlin` directories in your module folder. They will be automatically marked
 as source thanks to Gradle. You should also create package structure matching `ktx/your/module` in each source folder.
@@ -83,8 +83,9 @@ projectName=ktx-your-module
 projectDesc=Description of your module as it will appear in Maven Central.
 ```
 
-- Add a `build.gradle` file. It should contain dependencies specific to your module. If there are none, you can leave it
-empty.
+- Add a `build.gradle.kts` file. It should contain dependencies specific to your module. If there are none, you can
+leave it empty. By adding `import ktx.*` at the top of this file, you will be able to access the versions of major
+dependencies of the modules as defined in the [`buildSrc`](../buildSrc) directory.
 - Add a `README.md` file describing your module. Refer to other `README.md` files for guidelines. `README.md` files
 should generally consist of the following sections:
   - _General description_ - in a single sentence, what problem does the module solve?
@@ -109,7 +110,7 @@ should generally consist of the following sections:
       - yourModule.kt
     > test/kotlin/ktx/your/module/
       - yourModuleTest.kt
-  - build.gradle
+  - build.gradle.kts
   - gradle.properties
   - README.md
 ```
@@ -120,10 +121,11 @@ The following sections are for the maintainers of the repository.
 
 ### Updating dependencies
 
-Dependencies versions are stored in the [gradle.properties](../gradle.properties) file. Snapshot releases should keep
-all of the dependencies (outside of testing scope) up-to-date. Major dependencies updating:
+Plugin versions are stored in the [gradle.properties](../gradle.properties) file, while module dependencies versions
+are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases should keep
+all of the dependencies (outside of testing scope) up-to-date. Major dependencies include:
 
-- **LibGDX**: update `gdxVersion` in the properties file and LibGDX version in the tag on the top of the 
+- **LibGDX**: update `gdxVersion` in the versions file and LibGDX version in the tag on the top of the 
 [README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
 to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
 - **Kotlin**: update the `kotlinVersion` property and the Kotlin tag in the [README.md](../README.md).
