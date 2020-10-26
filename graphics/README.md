@@ -178,6 +178,31 @@ shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
 */
 ```
 
+
+Using a `ShapeRenderer` with a `Camera`:
+
+```kotlin
+import ktx.graphics.*
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+
+val camera = OrthographicCamera()
+val shapeRenderer = ShapeRenderer()
+
+// Projection matrix will be copied from the camera:
+shapeRenderer.use(ShapeRenderer.ShapeType.Filled, camera) {
+  // Operate on shapeRenderer instance
+}
+
+/* Equivalent to:
+
+  shapeRenderer.projectionMatrix = camera.combined
+  shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
+  // Operate on shapeRenderer instance
+  shapeRenderer.end()
+*/
+```
+
 Using `ShapeRenderer` with vectors: 
 
 ```Kotlin

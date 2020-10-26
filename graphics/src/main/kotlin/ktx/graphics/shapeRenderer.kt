@@ -1,8 +1,10 @@
 package ktx.graphics
 
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
+import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import kotlin.contracts.ExperimentalContracts
@@ -167,12 +169,30 @@ fun ShapeRenderer.triangle(
  * Automatically calls [ShapeRenderer.begin] and [ShapeRenderer.end].
  * @param type specified shape type used to draw the shapes in the [action] block. Can be changed during the rendering
  * with [ShapeRenderer.set].
+ * @param projectionMatrix A projection matrix to set on the ShapeRenderer before [ShapeRenderer.begin]. If null, the ShapeRenderer's matrix
+ * remains unchanged.
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, action: (SR) -> Unit) {
+inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, projectionMatrix: Matrix4? = null, action: (SR) -> Unit) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+  if (projectionMatrix != null) {
+    this.projectionMatrix = projectionMatrix
+  }
   begin(type)
   action(this)
   end()
+}
+
+/**
+ * Automatically calls [ShapeRenderer.begin] and [ShapeRenderer.end].
+ * @param type specified shape type used to draw the shapes in the [action] block. Can be changed during the rendering
+ * with [ShapeRenderer.set].
+ * @param camera The camera's [Camera.combined] matrix will be set to the ShapeRenderer's projection matrix before [ShapeRenderer.begin]
+ * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, camera: Camera, action: (SR) -> Unit) {
+  contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
+  use(type, camera.combined, action)
 }
