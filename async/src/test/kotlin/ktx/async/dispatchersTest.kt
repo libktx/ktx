@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -88,7 +89,7 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
     // When:
     tested.invokeOnTimeout(50L, Runnable {
       executionTime.set(System.currentTimeMillis() - start)
-    })
+    }, GlobalScope.coroutineContext)
 
     // Then:
     delay(100L)
@@ -97,13 +98,13 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
 
   @Test
   fun `should support timeout task cancellation`() {
-    // Note: normally you'd use withTimeout in coroutine scope to execute tasks with timout.
+    // Note: normally you'd use withTimeout in coroutine scope to execute tasks with timeout.
     // This tests the internal invokeOnTimeout API.
 
     // Given:
     val tested = tested
     val executed = AtomicBoolean()
-    val handle = tested.invokeOnTimeout(50L, Runnable { executed.set(true) })
+    val handle = tested.invokeOnTimeout(50L, Runnable { executed.set(true) }, GlobalScope.coroutineContext)
 
     // When:
     handle.dispose()
