@@ -4,6 +4,8 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 ``
 - **[UPDATE]** Updated to Kotlin 1.4.0.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.9.
+- **[UPDATE]** Updated to Gradle 6.7.
+- **[MISC]** Groovy Gradle scripts and configuration files migrated to Kotlin.
 - **[FEATURE]** (`ktx-collections`) Added `GdxIdentityMap` and `GdxArrayMap` aliases for LibGDX `IdentityMap` and `ArrayMap` collections.
 - **[FEATURE]** (`ktx-collections`) Added `set` operator extension method to `ArrayMap` to support square brackets assignment.
 - **[FEATURE]** (`ktx-scene2d`) Added `image` builders for `NinePatch`, `TextureRegion`, `Texture` and `Drawable`.

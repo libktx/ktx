@@ -70,6 +70,10 @@ subprojects {
   val projectName: String by project
   val projectDesc: String by project
 
+  base {
+    archivesBaseName = projectName
+  }
+
   java {
     sourceCompatibility = JavaVersion.VERSION_1_6
     targetCompatibility = JavaVersion.VERSION_1_6
@@ -161,7 +165,6 @@ subprojects {
     afterEvaluate {
       rootProject.distributions {
         main {
-          distributionBaseName.set(libVersion)
           contents {
             into("lib").from(tasks.jar)
             into("src").from(tasks["sourcesJar"])

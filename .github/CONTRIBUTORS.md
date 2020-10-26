@@ -72,6 +72,9 @@ Project contributors listed chronologically.
   * Contributed utilities to the [Scene2D module](../scene2d).
 * [@Rinat-Suleimanov](https://github.com/Rinat-Suleimanov)
   * Contributed utilities to the [collections module](../collections).
+* [@Megamiun](https://github.com/Megamiun)
+  * Migrated Groovy Gradle configuration files to Kotlin.
+  * Updated the project from Gradle 5 to Gradle 6.
 
 ### Metrics
 
