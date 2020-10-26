@@ -121,22 +121,22 @@ The following sections are for the maintainers of the repository.
 
 ### Updating dependencies
 
-Plugin versions are stored in the [gradle.properties](../gradle.properties) file, while module dependencies versions
-are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases should keep
-all of the dependencies (outside of testing scope) up-to-date. Major dependencies include:
+Kotlin and plugin versions are stored in the [gradle.properties](../gradle.properties) file, while module dependencies
+versions are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases
+should keep all of the dependencies (outside of testing scope) up-to-date. Major dependencies include:
 
 - **LibGDX**: update `gdxVersion` in the versions file and LibGDX version in the tag on the top of the 
 [README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
 to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
-- **Kotlin**: update the `kotlinVersion` property and the Kotlin tag in the [README.md](../README.md).
-- **Kotlin Coroutines**: update `kotlinCoroutinesVersion` property and the tag in the
+- **Kotlin**: update the `kotlinVersion` in the properties file and the Kotlin tag in the [README.md](../README.md).
+- **Kotlin Coroutines**: update `kotlinCoroutinesVersion` in the versions file and the tag in the
 `ktx-async` [README.md](../async/README.md).
 - **Gradle**: run `gradle wrapper` in the root project folder. Make sure that the
 [Gradle wrapper properties file](../gradle/wrapper/gradle-wrapper.properties) points the `all` Gradle release under
 `distributionUrl` rather than just the binaries (`bin`).
-- **VisUI**: update `visUiVersion` in the properties file and VisUI version in the tag on the top of the 
+- **VisUI**: update `visUiVersion` in the versions file and VisUI version in the tag on the top of the 
 [vis/README.md](../vis/README.md) file.
-- **Ashley**: update `ashleyVersion` in the properties file and Ashely version in the tag on the top of the 
+- **Ashley**: update `ashleyVersion` in the versions file and Ashely version in the tag on the top of the 
 [ashley/README.md](../ashley/README.md) file.
 
 All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
