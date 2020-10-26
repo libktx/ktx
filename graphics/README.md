@@ -15,8 +15,8 @@ common bugs such as forgetting to start or end batch rendering.
 #### Miscellaneous utilities
 
 - `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the 
-`begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or projection matrix can
-also be passed to the `Batch.use` extension function to have it automatically applied to the batch's projection matrix.
+`begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or a matrix can also
+be passed to selected extension methods to have it automatically applied as the projection matrix.
 - `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
 - `takeScreenshot` allows to easily take a screenshot of current application screen.
 - `BitmapFont.center` extension method allows to calculate center position of text in order to draw it in the middle
