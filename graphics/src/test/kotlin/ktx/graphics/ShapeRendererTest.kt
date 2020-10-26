@@ -1,6 +1,7 @@
 package ktx.graphics
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Matrix4
@@ -216,5 +217,19 @@ class ShapeRendererTest {
     }
 
     assertEquals(42, variable)
+  }
+
+  @Test
+  fun `should set projection matrix if a camera is passed`() {
+    val shapeRenderer = mock<ShapeRenderer>()
+    val camera = OrthographicCamera()
+
+    shapeRenderer.use(ShapeType.Filled, camera) {
+      verify(shapeRenderer).projectionMatrix = camera.combined
+      verify(shapeRenderer).begin(ShapeType.Filled)
+      assertSame(shapeRenderer, it)
+      verify(shapeRenderer, never()).end()
+    }
+    verify(shapeRenderer).end()
   }
 }
