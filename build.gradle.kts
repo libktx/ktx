@@ -9,13 +9,11 @@ buildscript {
     mavenCentral()
   }
 
-  val dokkaVersion: String by project
   val kotlinVersion: String by project
   val junitPlatformVersion: String by project
 
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
   }
 }
@@ -27,6 +25,7 @@ val ossrhPassword: String by project
 plugins {
   java
   distribution
+  id("org.jetbrains.dokka") version "1.4.10.2"
   id("io.codearte.nexus-staging") version "0.22.0"
 }
 
@@ -49,7 +48,6 @@ subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "signing")
-  apply(plugin = "org.jetbrains.dokka")
   apply(plugin = "jacoco")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
@@ -138,17 +136,8 @@ subprojects {
     archiveBaseName.set(projectName)
   }
 
-  val dokka by tasks.getting
-
-  tasks.register<Zip>("dokkaZip") {
-    from("$buildDir/dokka")
-    dependsOn(dokka)
-  }
-
   val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from("$buildDir/dokka")
-    dependsOn(dokka)
   }
 
   afterEvaluate {
@@ -169,7 +158,6 @@ subprojects {
           contents {
             into("lib").from(tasks.jar)
             into("src").from(tasks["sourcesJar"])
-            into("doc").from(tasks["dokkaZip"])
           }
         }
       }
@@ -266,17 +254,6 @@ val generateDocumentationIndex by tasks.registering {
       </html>
       """.trimIndent())
   }
-}
-
-tasks.register<Copy>("gatherDokkaDocumentation") {
-  subprojects.forEach { subproject ->
-    from(subproject.buildDir)
-    include("dokka/${subproject.name}/**")
-    include("dokka/style.css")
-  }
-
-  into(buildDir)
-  finalizedBy(generateDocumentationIndex)
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {

@@ -18,9 +18,7 @@ jobs:
       - name: Execution permission for Gradle wrapper
         run: chmod +x gradlew
       - name: Dokka
-        run: ./gradlew dokka
-      - name: Gather modules documentation
-        run: ./gradlew gatherDokkaDocumentation
+        run: ./gradlew dokkaHtml
       - name: Publish GitHub pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
