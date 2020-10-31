@@ -248,20 +248,24 @@ tasks.create<Copy>("dokkaHtmlAddIndex") {
   tasks["dokkaHtmlCollector"].finalizedBy(this)
 
   doLast {
-    val index = file("build/dokka/htmlCollector/index.html")
-
-    val indexContent = index.readText()
-      .replace("../", "")
-      .replace("""(href=")(.*)(/index.html)""".toRegex(), """$1ktx/$2$3""")
-
-    index.writeText(indexContent)
-
-    val navigation = file("build/dokka/htmlCollector/navigation.html")
-
-    val navigationContent = navigation.readText()
-      .replace("ktx/index.html", "index.html")
-
-    navigation.writeText(navigationContent)
+    file("build/dokka/htmlCollector/index.html").writeText(
+      """
+        <!DOCTYPE HTML>
+        <html lang="en-US">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="refresh" content="0; url=ktx/index.html">
+                <script type="text/javascript">
+                    window.location.href = "ktx/index.html"
+                </script>
+                <title>KTX documentation</title>
+            </head>
+            <body>
+                If you are not redirected automatically, follow <a href="ktx/index.html">this link</a>.
+            </body>
+        </html>
+      """.trimIndent()
+    )
   }
 }
 
