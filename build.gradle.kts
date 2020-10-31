@@ -142,13 +142,13 @@ subprojects {
   val dokkaHtml by tasks.getting
 
   tasks.register<Zip>("dokkaZip") {
-    from("$buildDir/dokka")
+    from("$buildDir/dokka/html")
     dependsOn(dokkaHtml)
   }
 
   val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from("$buildDir/dokka")
+    from("$buildDir/dokka/html")
     dependsOn(dokkaHtml)
   }
 
