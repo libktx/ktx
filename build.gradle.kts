@@ -238,6 +238,34 @@ subprojects {
   }
 }
 
+tasks.create<Copy>("dokkaHtmlAddIndex") {
+  outputs.upToDateWhen { false }
+
+  group = "documentation"
+  from(file("$buildDir/dokka/htmlCollector/ktx/index.html"))
+  into(file("$buildDir/dokka/htmlCollector/"))
+
+  tasks["dokkaHtmlCollector"].finalizedBy(this)
+
+  doLast {
+    val index = file("build/dokka/htmlCollector/index.html")
+
+    val indexContent = index.readText()
+      .replace("../", "")
+      .replace("""(href=")(.*)(/index.html)""".toRegex(), """$1ktx/$2$3""")
+
+    index.writeText(indexContent)
+
+    val navigation = file("build/dokka/htmlCollector/navigation.html")
+
+    val navigationContent = navigation.readText()
+      .replace("ktx/index.html", "index.html")
+
+    navigation.writeText(navigationContent)
+  }
+}
+
+
 nexusStaging {
   packageGroup = libGroup
   username = ossrhUsername
