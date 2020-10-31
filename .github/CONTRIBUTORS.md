@@ -75,6 +75,7 @@ Project contributors listed chronologically.
 * [@Megamiun](https://github.com/Megamiun)
   * Migrated Groovy Gradle configuration files to Kotlin.
   * Updated the project from Gradle 5 to Gradle 6.
+  * Updated the sources documentation generator to Dokka 1.4.
 * [@deveth0](https://github.com/deveth0)
   * Contributed utilities to the [graphics module](../graphics).
 
