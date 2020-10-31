@@ -152,36 +152,27 @@ subprojects {
     dependsOn(dokkaHtml)
   }
 
+  val sourcesJar by tasks.registering(Jar::class) {
+    from(sourceSets.main.get().allSource)
+    archiveClassifier.set("sources")
+  }
+
+  artifacts {
+    archives(javadocJar)
+    archives(sourcesJar)
+  }
+
   afterEvaluate {
-    val sourcesJar by tasks.registering(Jar::class) {
-      from(sourceSets.main.get().allSource)
-      archiveClassifier.set("sources")
-    }
-
-    artifacts {
-      archives(javadocJar)
-      archives(sourcesJar)
-    }
-
-    afterEvaluate {
-      rootProject.distributions {
-        main {
-          distributionBaseName.set(libVersion)
-          contents {
-            into("lib").from(tasks.jar)
-            into("src").from(tasks["sourcesJar"])
-            into("doc").from(tasks["dokkaZip"])
-          }
+    rootProject.distributions {
+      main {
+        distributionBaseName.set(libVersion)
+        contents {
+          into("lib").from(tasks.jar)
+          into("src").from(tasks["sourcesJar"])
+          into("doc").from(tasks["dokkaZip"])
         }
       }
     }
-  }
-
-  tasks.withType<Sign> { onlyIf { isReleaseVersion } }
-
-  configure<SigningExtension> {
-    setRequired { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-    sign(configurations.archives.get())
   }
 
   tasks.register("uploadSnapshot") {
@@ -206,10 +197,15 @@ subprojects {
       create<MavenPublication>("mavenKtx") {
         pom {
           name.set(projectName)
-          artifactId = tasks.jar.get().archiveBaseName.get()
           packaging = "jar"
           description.set(projectDesc)
+          afterEvaluate {
+            artifactId = tasks.jar.get().archiveBaseName.get()
+          }
+
           from(components["kotlin"])
+          artifact(sourcesJar)
+          artifact(javadocJar)
 
           url.set("https://libktx.github.io/")
 
@@ -235,6 +231,13 @@ subprojects {
         }
       }
     }
+  }
+
+  tasks.withType<Sign> { onlyIf { isReleaseVersion } }
+
+  configure<SigningExtension> {
+    setRequired { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+    sign(extensions.getByType<PublishingExtension>().publications["mavenKtx"])
   }
 }
 

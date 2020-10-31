@@ -153,9 +153,9 @@ Apply `dev` label and milestone corresponding to the LibGDX version. An example 
 - Create a pull request from the `develop` branch to the `master` branch. Review and merge the changes to the `master`
 branch.
 - Checkout the `master` branch. Fetch the latest changes.
-- Run `gradle build install uploadArchives closeAndPromoteRepository` to push artifacts to both _Maven Local_ and
-_Maven Central_. Note that the Maven plugin has its issues and you might need to run `gradle promoteRepository` after
-the previous task sequence (if it fails on the `closeAndPromoteRepository` task).
+- Run `gradle build publish closeAndReleaseRepository` to push artifacts to _Maven Central_. Note that the Maven plugin
+has its issues and might fail with an error, but usually the release will be successful. You can check if the staging
+repository was properly close, promoted and released at [Nexus Repository Manager](https://oss.sonatype.org/).
 - Run `gradle distZip` to prepare an archive with KTX sources, compiled binary and documentation.
 - Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. The tag should be made from the
 `master` branch and its name should match the released version. Name of the release should match `KTX $libVersion`.
@@ -174,9 +174,8 @@ match the used LibGDX version followed by the `-SNAPSHOT` suffix.
 
 - Make sure that the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
 that the library was compiled against.
-- Run `gradle build install uploadSnapshot` to push artifacts to both _Maven Local_ and _Sonatype_ snapshots repository.
-This task will do nothing if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing
-a stable release.
+- Run `gradle build uploadSnapshot` to push artifacts to _Sonatype_ snapshots repository. This task will do nothing
+if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.
 
 Note that snapshots are automatically uploaded to Maven Central (Sonatype) snapshots repository after pushing
 to the `develop` branch.
