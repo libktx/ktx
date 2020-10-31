@@ -49,6 +49,7 @@ subprojects {
   apply(plugin = "kotlin")
   apply(plugin = "signing")
   apply(plugin = "jacoco")
+  apply(plugin = "org.jetbrains.dokka")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
 
@@ -229,31 +230,6 @@ nexusStaging {
   packageGroup = libGroup
   username = ossrhUsername
   password = ossrhPassword
-}
-
-val generateDocumentationIndex by tasks.registering {
-  doLast {
-    val indexFile = file("$buildDir/dokka/index.html")
-    delete(indexFile)
-    indexFile.appendText("""
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>KTX Sources Documentation</title>
-        <link rel="stylesheet" href="style.css">
-      </head>
-      <body>
-      <ul>
-        <h1>KTX Documentation</h1>
-        <p>This page contains documentation generated via Dokka from KTX sources.</p>
-        <p>To see the official KTX website, follow <a href="https://libktx.github.io/">this link</a>.</p>
-        <h2>Modules</h2>
-      ${subprojects.joinToString("\n") { "  <li><a href=\"${it.name}/\">ktx-${it.name}</a></li>" }}
-      </ul>
-      </body>
-      </html>
-      """.trimIndent())
-  }
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {
