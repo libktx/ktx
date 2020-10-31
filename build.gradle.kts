@@ -9,11 +9,13 @@ buildscript {
     mavenCentral()
   }
 
+  val dokkaVersion: String by project
   val kotlinVersion: String by project
   val junitPlatformVersion: String by project
 
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
   }
 }
@@ -25,7 +27,6 @@ val ossrhPassword: String by project
 plugins {
   java
   distribution
-  id("org.jetbrains.dokka") version "1.4.10.2"
   id("io.codearte.nexus-staging") version "0.22.0"
 }
 
@@ -36,6 +37,8 @@ repositories {
 val libVersion = file("version.txt").readText().trim()
 
 allprojects {
+  apply(plugin = "org.jetbrains.dokka")
+
   val linter = configurations.create("linter")
 
   dependencies {
@@ -137,8 +140,17 @@ subprojects {
     archiveBaseName.set(projectName)
   }
 
+  val dokkaHtml by tasks.getting
+
+  tasks.register<Zip>("dokkaZip") {
+    from("$buildDir/dokka")
+    dependsOn(dokkaHtml)
+  }
+
   val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
+    from("$buildDir/dokka")
+    dependsOn(dokkaHtml)
   }
 
   afterEvaluate {
@@ -159,6 +171,7 @@ subprojects {
           contents {
             into("lib").from(tasks.jar)
             into("src").from(tasks["sourcesJar"])
+            into("doc").from(tasks["dokkaZip"])
           }
         }
       }
