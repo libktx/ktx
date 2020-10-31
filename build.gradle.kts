@@ -238,37 +238,32 @@ subprojects {
   }
 }
 
-tasks.create<Copy>("dokkaHtmlAddIndex") {
-  outputs.upToDateWhen { false }
-
+tasks.create("dokkaHtmlAddIndex") {
   group = "documentation"
-  from(file("$buildDir/dokka/htmlCollector/ktx/index.html"))
-  into(file("$buildDir/dokka/htmlCollector/"))
-
-  tasks["dokkaHtmlCollector"].finalizedBy(this)
 
   doLast {
     file("build/dokka/htmlCollector/index.html").writeText(
       """
-        <!DOCTYPE HTML>
-        <html lang="en-US">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="refresh" content="0; url=ktx/index.html">
-                <script type="text/javascript">
-                    window.location.href = "ktx/index.html"
-                </script>
-                <title>KTX documentation</title>
-            </head>
-            <body>
-                If you are not redirected automatically, follow <a href="ktx/index.html">this link</a>.
-            </body>
-        </html>
-      """.trimIndent()
+      <!DOCTYPE HTML>
+      <html lang="en-US">
+          <head>
+              <meta charset="UTF-8">
+              <meta http-equiv="refresh" content="0; url=ktx/index.html">
+              <script type="text/javascript">
+                  window.location.href = "ktx/index.html"
+              </script>
+              <title>KTX documentation</title>
+          </head>
+          <body>
+              If you are not redirected automatically, follow <a href="ktx/index.html">this link</a>.
+          </body>
+      </html>
+    """.trimIndent()
     )
   }
-}
 
+  tasks["dokkaHtmlCollector"].finalizedBy(this)
+}
 
 nexusStaging {
   packageGroup = libGroup
