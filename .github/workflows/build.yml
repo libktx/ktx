@@ -23,7 +23,7 @@ jobs:
     - name: Execution permission for Gradle wrapper
       run: chmod +x gradlew
     - name: Build
-      run: ./gradlew assemble install -x dokka -x dokkaZip
+      run: ./gradlew assemble install -x dokkaHtml -x dokkaZip
     - name: Tests
       run: ./gradlew check --continue
       env:

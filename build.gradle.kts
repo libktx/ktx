@@ -37,6 +37,8 @@ repositories {
 val libVersion = file("version.txt").readText().trim()
 
 allprojects {
+  apply(plugin = "org.jetbrains.dokka")
+
   val linter = configurations.create("linter")
 
   dependencies {
@@ -49,7 +51,6 @@ subprojects {
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "signing")
-  apply(plugin = "org.jetbrains.dokka")
   apply(plugin = "jacoco")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
@@ -138,17 +139,17 @@ subprojects {
     archiveBaseName.set(projectName)
   }
 
-  val dokka by tasks.getting
+  val dokkaHtml by tasks.getting
 
   tasks.register<Zip>("dokkaZip") {
-    from("$buildDir/dokka")
-    dependsOn(dokka)
+    from("$buildDir/dokka/html")
+    dependsOn(dokkaHtml)
   }
 
   val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from("$buildDir/dokka")
-    dependsOn(dokka)
+    from("$buildDir/dokka/html")
+    dependsOn(dokkaHtml)
   }
 
   afterEvaluate {
@@ -237,46 +238,37 @@ subprojects {
   }
 }
 
+tasks.create("dokkaHtmlAddIndex") {
+  group = "documentation"
+
+  doLast {
+    file("build/dokka/htmlCollector/index.html").writeText(
+      """
+      <!DOCTYPE HTML>
+      <html lang="en-US">
+          <head>
+              <meta charset="UTF-8">
+              <meta http-equiv="refresh" content="0; url=ktx/index.html">
+              <script type="text/javascript">
+                  window.location.href = "ktx/index.html"
+              </script>
+              <title>KTX documentation</title>
+          </head>
+          <body>
+              If you are not redirected automatically, follow <a href="ktx/index.html">this link</a>.
+          </body>
+      </html>
+    """.trimIndent()
+    )
+  }
+
+  tasks["dokkaHtmlCollector"].finalizedBy(this)
+}
+
 nexusStaging {
   packageGroup = libGroup
   username = ossrhUsername
   password = ossrhPassword
-}
-
-val generateDocumentationIndex by tasks.registering {
-  doLast {
-    val indexFile = file("$buildDir/dokka/index.html")
-    delete(indexFile)
-    indexFile.appendText("""
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>KTX Sources Documentation</title>
-        <link rel="stylesheet" href="style.css">
-      </head>
-      <body>
-      <ul>
-        <h1>KTX Documentation</h1>
-        <p>This page contains documentation generated via Dokka from KTX sources.</p>
-        <p>To see the official KTX website, follow <a href="https://libktx.github.io/">this link</a>.</p>
-        <h2>Modules</h2>
-      ${subprojects.joinToString("\n") { "  <li><a href=\"${it.name}/\">ktx-${it.name}</a></li>" }}
-      </ul>
-      </body>
-      </html>
-      """.trimIndent())
-  }
-}
-
-tasks.register<Copy>("gatherDokkaDocumentation") {
-  subprojects.forEach { subproject ->
-    from(subproject.buildDir)
-    include("dokka/${subproject.name}/**")
-    include("dokka/style.css")
-  }
-
-  into(buildDir)
-  finalizedBy(generateDocumentationIndex)
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {
