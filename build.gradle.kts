@@ -52,7 +52,6 @@ subprojects {
   apply(plugin = "kotlin")
   apply(plugin = "signing")
   apply(plugin = "jacoco")
-  apply(plugin = "org.jetbrains.dokka")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
 
