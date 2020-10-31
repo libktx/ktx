@@ -248,14 +248,14 @@ tasks.create("dokkaHtmlAddIndex") {
       <html lang="en-US">
           <head>
               <meta charset="UTF-8">
-              <meta http-equiv="refresh" content="0; url=ktx/index.html">
+              <meta http-equiv="refresh" content="0; url=ktx/">
               <script type="text/javascript">
-                  window.location.href = "ktx/index.html"
+                  window.location.href = "ktx/"
               </script>
               <title>KTX documentation</title>
           </head>
           <body>
-              If you are not redirected automatically, follow <a href="ktx/index.html">this link</a>.
+              If you are not redirected automatically, follow <a href="ktx/">this link</a>.
           </body>
       </html>
     """.trimIndent()
