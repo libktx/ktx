@@ -1,9 +1,0 @@
-dependencies {
-  compile project(':assets')
-  compile project(':async')
-  testCompile project(':async').sourceSets.test.output
-  testCompile "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutinesVersion"
-  testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-  testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-  testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-}

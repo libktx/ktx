@@ -67,7 +67,17 @@ Project contributors listed chronologically.
   * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin LibGDX extensions.
   * Utilities for profiling, text rendering, camera updating and taking screenshots were integrated into KTX with **@ImXico** permission.
 * [@heyheyIvan](https://github.com/heyheyIvan)
-  * Contributed utilities to [graphics module](../graphics).
+  * Contributed utilities to the [graphics module](../graphics).
+* [@Divelix](https://github.com/Divelix)
+  * Contributed utilities to the [Scene2D module](../scene2d).
+* [@Rinat-Suleimanov](https://github.com/Rinat-Suleimanov)
+  * Contributed utilities to the [collections module](../collections).
+* [@Megamiun](https://github.com/Megamiun)
+  * Migrated Groovy Gradle configuration files to Kotlin.
+  * Updated the project from Gradle 5 to Gradle 6.
+  * Updated the sources documentation generator to Dokka 1.4.
+* [@deveth0](https://github.com/deveth0)
+  * Contributed utilities to the [graphics module](../graphics).
 
 ### Metrics
 

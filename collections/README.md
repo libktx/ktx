@@ -90,8 +90,12 @@ remove elements from the map.
 - Keys stored in the map can be quickly converted to an `ObjectSet` using `toGdxSet` method.
 - Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
 has to be provided - since the method is inlined, no new lambda object will be created at runtime.
-- Type alias added for consistency with other collections: `GdxMap` - `com.badlogic.gdx.utils.ObjectMap`.
-- All LibGDX maps now feature `component1()` and `component2()` operator extension methods, so they can be destructed.
+- Type aliases were added for consistency with other collections:
+  - `GdxMap`: `com.badlogic.gdx.utils.ObjectMap`
+  - `GdxIdentityMap`: `com.badlogic.gdx.utils.IdentityMap`
+  - `GdxArrayMap`: `com.badlogic.gdx.utils.ArrayMap`
+- All LibGDX map entries now feature `component1()` and `component2()` operator extension methods, so they can be
+destructed into a key and a value.
 
 #### Note
 

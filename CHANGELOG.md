@@ -1,5 +1,18 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.9.11-SNAPSHOT
+
+- **[UPDATE]** Updated to Kotlin 1.4.10.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.4.0.
+- **[UPDATE]** Updated to Gradle 6.7.
+- **[UPDATE]** Updated to Dokka 1.4.10-2.
+- **[MISC]** Groovy Gradle scripts and configuration files migrated to Kotlin.
+- **[MISC]** The generated sources documentation is vastly improved and moved to a new URL.
+- **[FEATURE]** (`ktx-collections`) Added `GdxIdentityMap` and `GdxArrayMap` aliases for LibGDX `IdentityMap` and `ArrayMap` collections.
+- **[FEATURE]** (`ktx-collections`) Added `set` operator extension method to `ArrayMap` to support square brackets assignment.
+- **[FEATURE]** (`ktx-graphics`) Added optional `Camera` and projection matrix parameters to `ShapeRenderer.use`.
+- **[FEATURE]** (`ktx-scene2d`) Added `image` builders for `NinePatch`, `TextureRegion`, `Texture` and `Drawable`.
+
 #### 1.9.11-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.11.

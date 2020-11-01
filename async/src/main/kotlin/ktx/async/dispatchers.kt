@@ -33,7 +33,7 @@ interface KtxDispatcher : CoroutineContext, Delay {
     schedule(delaySeconds = timeMillis.toSeconds()) { continuation.resume(Unit) }
   }
 
-  override fun invokeOnTimeout(timeMillis: Long, block: Runnable): DisposableHandle {
+  override fun invokeOnTimeout(timeMillis: Long, block: Runnable, context: CoroutineContext): DisposableHandle {
     val task = schedule(delaySeconds = timeMillis.toSeconds()) { execute(block) }
     return DisposableTimerTask(task)
   }

@@ -1,5 +1,5 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.3.72-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.4.10-orange.svg)](http://kotlinlang.org/)
 [![LibGDX](https://img.shields.io/badge/libgdx-1.9.11-red.svg)](https://libgdx.badlogicgames.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -75,7 +75,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.11-b1'
+  ktxVersion = '1.9.11-b2'
 }
 
 dependencies {
@@ -129,7 +129,7 @@ repositories {
 
 ext {
   // Update this version to match the latest LibGDX release:
-  ktxVersion = '1.9.10-SNAPSHOT'
+  ktxVersion = '1.9.11-SNAPSHOT'
 }
 ```
 

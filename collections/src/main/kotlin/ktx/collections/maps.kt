@@ -2,6 +2,7 @@
 
 package ktx.collections
 
+import com.badlogic.gdx.utils.ArrayMap
 import com.badlogic.gdx.utils.IdentityMap
 import com.badlogic.gdx.utils.IntFloatMap
 import com.badlogic.gdx.utils.IntIntMap
@@ -14,6 +15,12 @@ import com.badlogic.gdx.utils.ObjectSet
 
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
+
+/** Alias for [com.badlogic.gdx.utils.IdentityMap]. Added for consistency with other collections and factory methods. */
+typealias GdxIdentityMap<Key, Value> = IdentityMap<Key, Value>
+
+/** Alias for [com.badlogic.gdx.utils.ArrayMap]. Added for consistency with other collections and factory methods. */
+typealias GdxArrayMap<Key, Value> = ArrayMap<Key, Value>
 
 /**
  * Default LibGDX map size used by most constructors.
@@ -169,7 +176,7 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
  * @return a new [IdentityMap], which compares keys by references.
  */
 fun <Key, Value> gdxIdentityMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor):
-    IdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
+    GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -181,7 +188,7 @@ inline fun <Key, Value> gdxIdentityMapOf(
   vararg keysToValues: Pair<Key, Value>,
   initialCapacity: Int = defaultMapSize,
   loadFactor: Float = defaultLoadFactor
-): IdentityMap<Key, Value> {
+): GdxIdentityMap<Key, Value> {
   val map = IdentityMap<Key, Value>(initialCapacity, loadFactor)
   keysToValues.forEach { map[it.first] = it.second }
   return map
@@ -292,6 +299,13 @@ operator fun IntMap<*>.contains(key: Int): Boolean = this.containsKey(key)
  * @return old value associated with the key or null if none.
  */
 operator fun <Value> IntMap<Value>.set(key: Int, value: Value): Value? = this.put(key, value)
+
+/**
+ * @param key the passed value will be linked with this key.
+ * @param value will be stored in the map, accessible by the passed key.
+ * @return index of the key and value in the underlying arrays.
+ */
+operator fun <Key, Value> GdxArrayMap<Key, Value>.set(key: Key, value: Value): Int = this.put(key, value)
 
 /**
  * Allows to destruct [ObjectMap.Entry] into key and value components.
