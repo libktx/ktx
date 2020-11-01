@@ -167,9 +167,15 @@ subprojects {
       main {
         distributionBaseName.set(libVersion)
         contents {
-          into("lib").from(tasks.jar)
-          into("src").from(tasks["sourcesJar"])
-          into("doc").from(tasks["dokkaZip"])
+          into("lib") {
+            from(tasks.jar)
+          }
+          into("doc") {
+            from(tasks["dokkaZip"])
+          }
+          into("src") {
+            from(tasks["sourcesJar"])
+          }
         }
       }
     }
