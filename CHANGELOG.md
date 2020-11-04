@@ -1,6 +1,8 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.9.11-SNAPSHOT
+#### 1.9.12-SNAPSHOT
+
+- **[UPDATE]** Updated to LibGDX 1.9.12.
 
 #### 1.9.11-b2
 
