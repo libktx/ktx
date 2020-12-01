@@ -509,7 +509,7 @@ open class KtxInputListener : InputListener() {
   override fun keyTyped(event: InputEvent, character: Char) = false
   override fun keyUp(event: InputEvent, keycode: Int) = false
   override fun mouseMoved(event: InputEvent, x: Float, y: Float) = false
-  override fun scrolled(event: InputEvent, x: Float, y: Float, amount: Int) = false
+  override fun scrolled(event: InputEvent, x: Float, y: Float, amountX: Float, amountY: Float) = false
   override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = false
   override fun touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) = Unit
   override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) = Unit

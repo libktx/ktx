@@ -30,7 +30,7 @@ interface KtxInputAdapter : InputProcessor {
   override fun keyTyped(character: Char) = false
   override fun keyUp(keycode: Int) = false
   override fun mouseMoved(screenX: Int, screenY: Int) = false
-  override fun scrolled(amount: Int) = false
+  override fun scrolled(amountX: Float, amountY: Float) = false
   override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
   override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
 }
