@@ -68,6 +68,17 @@ inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}):
 }
 
 /**
+ * Allows to create new UI component styles with the KTX DSL. This method is very similar
+ * to the [apply] extension method from the standard library, but supports the DSL annotation.
+ * @param styles will be applied to this [Skin] instance. Inlined.
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun Skin.register(styles: (@SkinDsl Skin).(Skin) -> Unit) {
+  contract { callsInPlace(styles, InvocationKind.EXACTLY_ONCE) }
+  styles(this)
+}
+
+/**
  * Utility function that makes it easier to access [Skin] assets.
  * @param name name of the requested resource. Defaults to [defaultStyle].
  * @return resource of the specified type with the selected name.

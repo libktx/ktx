@@ -92,6 +92,8 @@ Currently supported extension methods include:
 `tree` | `com.badlogic.gdx.scenes.scene2d.ui.Tree.TreeStyle`
 `window` | `com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle`
 
+To use the DSL on an existing `Skin` instance, use the `Skin.register` extension method.
+
 ### Usage examples
 
 Creating a new empty `Skin`:
@@ -123,14 +125,15 @@ import ktx.style.*
 
 val skin = Skin()
 
-// All style builders are regular extension methods,
+// All style builders are standard extension methods,
 // so they can be used directly on a `Skin` instance:
 skin.label {
   // Define your label style here.
 }
 
-// Style definitions can also be wrapped in a block such as apply:
-skin.apply {
+// Style definitions can also be wrapped in a block
+// such as apply or register:
+skin.register {
   button {
     // Define your button style here.
   }

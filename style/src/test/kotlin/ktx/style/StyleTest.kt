@@ -103,6 +103,29 @@ class StyleTest {
   }
 
   @Test
+  fun `should register assets`() {
+    val skin = Skin()
+
+    skin.register {
+      add("mock", "Test.")
+    }
+
+    skin.get("mock", String::class.java) shouldNotBe null
+  }
+
+  @Test
+  fun `should register assets exactly once`() {
+    val skin = Skin()
+    val variable: Int
+
+    skin.register {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
+  }
+
+  @Test
   fun `should extract resource with explicit reified type`() {
     val skin = Skin()
     skin.add("mock", "Test.")
