@@ -1,7 +1,8 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.9.12-SNAPSHOT
+#### 1.9.13-SNAPSHOT
 
+- **[UPDATE]** Updated to LibGDX 1.9.13.
 - **[FEATURE]** (`ktx-style`) Added `Skin.register` extension method that allows to register widget styles with the DSL.
 
 #### 1.9.12-b1
