@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION") // Deprecated imports.
+
 package ktx.scene2d.vis
 
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -11,6 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.layout.DragPane
 import com.kotcrab.vis.ui.layout.FloatingGroup
+import com.kotcrab.vis.ui.layout.FlowGroup
 import com.kotcrab.vis.ui.layout.GridGroup
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup
@@ -110,11 +113,17 @@ class KSpinner(styleName: String, name: String, model: SpinnerModel) : Spinner(s
 
 /** Extends [HorizontalFlowGroup] with type-safe widget builders. */
 @Scene2dDsl
+@Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("KFlowGroup"))
 class KHorizontalFlowGroup(spacing: Float) : HorizontalFlowGroup(spacing), KGroup
 
 /** Extends [VerticalFlowGroup] with type-safe widget builders. */
 @Scene2dDsl
+@Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("KFlowGroup"))
 class KVerticalFlowGroup(spacing: Float) : VerticalFlowGroup(spacing), KGroup
+
+/** Extends [FlowGroup] with type-safe widget builders. */
+@Scene2dDsl
+class KFlowGroup(vertical: Boolean, spacing: Float) : FlowGroup(vertical, spacing), KGroup
 
 /** Extends [GridGroup] with type-safe widget builders. */
 @Scene2dDsl

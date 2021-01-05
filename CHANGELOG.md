@@ -4,7 +4,10 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to LibGDX 1.9.13.
 - **[UPDATE]** Updated to Kotlin 1.4.21-2.
+- **[UPDATE]** Updated to VisUI 1.4.8.
 - **[FEATURE]** (`ktx-style`) Added `Skin.register` extension method that allows to register widget styles with the DSL.
+- **[FEATURE]** (`ktx-vis`) Added `flowGroup` factory method that allows to construct `FlowGroup` actors.
+- **[CHANGE]** (`ktx-vis`) `horizontalFlowGroup` and `verticalFlowGroup` are now deprecated. Use `flowGroup` instead.
 
 #### 1.9.12-b1
 
