@@ -18,7 +18,7 @@ const val TOLERANCE = 0.0001f
  * Tests that require mocked libGDX environment should inherit from this class.
  */
 abstract class NeedsLibGDX {
-  private companion object {
+  companion object {
     @JvmStatic
     @BeforeClass
     fun `initiate LibGDX context`() {

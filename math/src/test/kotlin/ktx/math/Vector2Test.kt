@@ -101,7 +101,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors with *= operator`() {
+  fun `should multiply vectors with timesAssign operator`() {
     val vector = Vector2(10f, 10f)
 
     vector *= Vector2(3f, -1f)
@@ -121,7 +121,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors by int scalars with *= operator`() {
+  fun `should multiply vectors by int scalars with timesAssign operator`() {
     val vector = Vector2(10f, 10f)
 
     vector *= 2
@@ -141,7 +141,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors by float scalars with *= operator`() {
+  fun `should multiply vectors by float scalars with timesAssign operator`() {
     val vector = Vector2(10f, 10f)
 
     vector *= 2.5f
@@ -221,7 +221,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors with * operator`() {
+  fun `should multiply vectors with times operator`() {
     val vector = Vector2(10f, 10f)
 
     val result = vector * Vector2(3f, -1f)
@@ -231,7 +231,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors by float scalars with * operator`() {
+  fun `should multiply vectors by float scalars with times operator`() {
     val vector = Vector2(10f, 10f)
 
     val result = vector * 2.5f
@@ -241,7 +241,7 @@ class Vector2Test {
   }
 
   @Test
-  fun `should multiply vectors by int scalars with * operator`() {
+  fun `should multiply vectors by int scalars with times operator`() {
     val vector = Vector2(10f, 10f)
 
     val result = vector * 2

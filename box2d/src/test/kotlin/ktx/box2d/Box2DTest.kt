@@ -47,7 +47,7 @@ abstract class Box2DTest {
     assertEquals(to, vertex)
   }
 
-  private companion object {
+  companion object {
     @JvmStatic
     @BeforeClass
     fun `initiate Box2D`() {

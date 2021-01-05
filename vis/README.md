@@ -1,4 +1,4 @@
-[![VisUI](https://img.shields.io/badge/vis--ui-1.4.6-blue.svg)](https://github.com/kotcrab/vis-ui)
+[![VisUI](https://img.shields.io/badge/vis--ui-1.4.8-blue.svg)](https://github.com/kotcrab/vis-ui)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-vis.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-vis)
 
 # KTX: VisUI type-safe builders
@@ -24,10 +24,9 @@ This modules extends [`ktx-scene2d`](../scene2d), providing additional factory m
   * _Designed_ to store actors and control their layout:
     * `visTable`
     * `visTree`
-    * `horizontalFlowGroup`
-    * `verticalFlowGroup`
     * `gridGroup`
     * `floatingGroup`
+    * `flowGroup`
     * `dragPane`
     * `visScrollPane`
     * `visSplitPane`
@@ -358,6 +357,9 @@ created or can be defined as nested children with the same DSL.
 Since `ktx-vis` required a complete rewrite and had to match `ktx-scene2d` API, there is no intermediate version with
 deprecated methods. All legacy APIs were removed in `1.9.10-b6`. Please refer to the [change log](../CHANGELOG.md)
 for a complete list of changes.
+
+On top of that, `HorizontalFlowGroup` and `VerticalFlowGroup` are now deprecated in VisUI. While `ktx-vis` still
+provides factory methods for these, they are deprecated - `flowGroup` with appropriate settings should be used instead.
 
 ### Alternatives
 

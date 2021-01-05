@@ -10,9 +10,8 @@ import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Scaling
 import com.kotcrab.vis.ui.layout.FloatingGroup
+import com.kotcrab.vis.ui.layout.FlowGroup
 import com.kotcrab.vis.ui.layout.GridGroup
-import com.kotcrab.vis.ui.layout.HorizontalFlowGroup
-import com.kotcrab.vis.ui.layout.VerticalFlowGroup
 import com.kotcrab.vis.ui.util.adapter.ListAdapter
 import com.kotcrab.vis.ui.widget.BusyBar
 import com.kotcrab.vis.ui.widget.ButtonBar
@@ -689,14 +688,17 @@ inline fun <S> KWidget<S>.visTable(
 }
 
 /**
+ * Deprecated. Use [flowGroup] instead.
  * @param spacing item spacing of this group.
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  * Inlined.
- * @return a [HorizontalFlowGroup] instance added to this group.
+ * @return a [KHorizontalFlowGroup] instance added to this group.
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
+@Suppress("DEPRECATION")
+@Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("flowGroup"))
 inline fun <S> KWidget<S>.horizontalFlowGroup(
   spacing: Float = 0f,
   init: KHorizontalFlowGroup.(S) -> Unit = {}
@@ -706,20 +708,42 @@ inline fun <S> KWidget<S>.horizontalFlowGroup(
 }
 
 /**
+ * Deprecated. Use [flowGroup] instead.
  * @param spacing item spacing of this group.
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  * Inlined.
- * @return a [VerticalFlowGroup] instance added to this group.
+ * @return a [KVerticalFlowGroup] instance added to this group.
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
+@Suppress("DEPRECATION")
+@Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("flowGroup"))
 inline fun <S> KWidget<S>.verticalFlowGroup(
   spacing: Float = 0f,
   init: KVerticalFlowGroup.(S) -> Unit = {}
 ): KVerticalFlowGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KVerticalFlowGroup(spacing), init)
+}
+
+/**
+ * @param vertical if true, child actors will be stacked vertically. If false, they will be placed horizontally.
+ * @param spacing item spacing of this group.
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [FlowGroup] instance added to this group.
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.flowGroup(
+  vertical: Boolean = false,
+  spacing: Float = 0f,
+  init: KFlowGroup.(S) -> Unit = {}
+): KFlowGroup {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(KFlowGroup(vertical, spacing), init)
 }
 
 /**

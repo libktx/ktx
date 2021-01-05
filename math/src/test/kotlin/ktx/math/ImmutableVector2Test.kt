@@ -13,7 +13,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 
 class ImmutableVector2Test {
@@ -601,35 +600,13 @@ class ImmutableVector2Test {
     }
 
     @Test
-    @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
-    fun `angleDeg should return same value as Vector2`() {
-        vectors.forEach { v1 ->
-            vectors.forEach { v2 ->
-                assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2))
-                assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2.x, v2.y))
-            }
-        }
-    }
-
-    @Test
-    @Ignore("LibGDX Vector2 has a bug for angles see https://github.com/libgdx/libgdx/issues/5385")
-    fun `angleRad should return same value as Vector2`() {
-        vectors.forEach { v1 ->
-            vectors.forEach { v2 ->
-                assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2))
-                assertEquals(v1.toMutable().angle(v2.toMutable()), v1.angleDeg(v2.x, v2.y))
-            }
-        }
-    }
-
-    @Test
     fun `zero vector should have undefined direction`() {
         assertEquals(Float.NaN, ImmutableVector2.ZERO.angleDeg())
         assertEquals(Float.NaN, ImmutableVector2.ZERO.angleRad())
     }
 
     @Test
-    fun `angleDeg should return correct angles between axises`() {
+    fun `angleDeg should return correct angles between axes`() {
         assertEquals(90f, (ImmutableVector2.Y).angleDeg(ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
         assertEquals(90f, (-ImmutableVector2.X).angleDeg(ImmutableVector2.Y), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
         assertEquals(90f, (-ImmutableVector2.Y).angleDeg(-ImmutableVector2.X), MathUtils.FLOAT_ROUNDING_ERROR * MathUtils.radiansToDegrees)
@@ -778,7 +755,7 @@ class ImmutableVector2Test {
     fun `withAngle should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toMutable().setAngle(angle).toImmutable(), vector.withAngleDeg(angle))
+                assertEquals(vector.toMutable().setAngleDeg(angle).toImmutable(), vector.withAngleDeg(angle))
             }
         }
     }
@@ -812,7 +789,7 @@ class ImmutableVector2Test {
     fun `withRotationDeg should return same value as Vector2`() {
         scalars.forEach { angle ->
             vectors.forEach { vector ->
-                assertEquals(vector.toMutable().rotate(angle).toImmutable(), vector.withRotationDeg(angle))
+                assertEquals(vector.toMutable().rotateDeg(angle).toImmutable(), vector.withRotationDeg(angle))
             }
         }
     }

@@ -62,15 +62,15 @@ Some useful Gradle tasks include:
 - `check` - runs all tests in all projects.
 - `clean` - removes the `build` directories, which forces rebuilds of the modules.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
-- `uploadArchives` - pushes the archives to _Maven Central_. Requires proper `gradle.properties` with archive signing
-and _Sonatype_ logging data.
-- `closeAndPromoteRepository` - closes and promotes Nexus repository. Should be run after `uploadArchives` in
-case of a non-snapshot upload to _Maven Central_. Might fail at times on the promotion task; running `promoteRepository`
-separately usually fixes the issue.
+- `publish` - pushes the archives to _Maven Central_ or the snapshot repository, depending on the
+[version](../version.txt). Requires complete `gradle.properties` with archive signing and _Sonatype_ logging data.
+- `closeAndReleaseRepository` - closes and releases the Nexus repository. Should be run after `publish` in case of
+a non-snapshot upload to _Maven Central_. Might fail at times on the release task; running `releaseRepository`
+separately should fix the issue.
 
 ### Adding a new KTX module
 
-- Create folder matching module name in root of the repository. Modules should generally be named with a single word.
+- Create a folder matching module name in root of the repository. Modules should generally be named with a single word.
 When multiple words are necessary, use a single dash (`-`) as the word separator.
 - Add folder name to `settings.gradle.kts` file. This will also serve as the project identifier that you use in
 `build.gradle` scripts and to run individual Gradle tasks (e.g. `gradle actors:test`).
@@ -123,7 +123,7 @@ The following sections are for the maintainers of the repository.
 
 Kotlin and plugin versions are stored in the [gradle.properties](../gradle.properties) file, while module dependencies
 versions are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases
-should keep all of the dependencies (outside of testing scope) up-to-date. Major dependencies include:
+should keep all the dependencies (outside of testing scope) up-to-date. Major dependencies include:
 
 - **LibGDX**: update `gdxVersion` in the versions file and LibGDX version in the tag on the top of the 
 [README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
@@ -139,7 +139,7 @@ to update the [version.txt](../version.txt) and [milestones](https://github.com/
 - **Ashley**: update `ashleyVersion` in the versions file and Ashely version in the tag on the top of the 
 [ashley/README.md](../ashley/README.md) file.
 
-All of the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
+All the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 
 ### Versioning and uploading
 
@@ -172,12 +172,12 @@ match the used LibGDX version followed by the `-SNAPSHOT` suffix.
 
 #### Snapshot release
 
-- Make sure that the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
+- Make sure the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
 that the library was compiled against.
 - Run `gradle build uploadSnapshot` to push artifacts to _Sonatype_ snapshots repository. This task will do nothing
 if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.
 
-Note that snapshots are automatically uploaded to Maven Central (Sonatype) snapshots repository after pushing
+Note that snapshots are automatically uploaded to Maven Central (OSS Sonatype) snapshots repository after pushing
 to the `develop` branch.
 
 #### Automated tasks

@@ -1,5 +1,14 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.9.13-b1
+
+- **[UPDATE]** Updated to LibGDX 1.9.13.
+- **[UPDATE]** Updated to Kotlin 1.4.21-2.
+- **[UPDATE]** Updated to VisUI 1.4.8.
+- **[FEATURE]** (`ktx-style`) Added `Skin.register` extension method that allows to register widget styles with the DSL.
+- **[FEATURE]** (`ktx-vis`) Added `flowGroup` factory method that allows to construct `FlowGroup` actors.
+- **[CHANGE]** (`ktx-vis`) `horizontalFlowGroup` and `verticalFlowGroup` are now deprecated. Use `flowGroup` instead.
+
 #### 1.9.12-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.12.
@@ -421,8 +430,6 @@ parameters instead of `Class`, so now you can use `YourType::class` instead of m
 - **[FEATURE]** (`ktx-vis-style`) Initiation blocks of VisUI actor styles are now optional.
 - **[FEATURE]** (`ktx-box2d`) Initiation blocks of fixtures and joints are now optional thanks to default lambda
 parameters in inlined functions.
-- **[FEATURE]** (`ktx-inject`) Add higher-order function parameters for `bindSingleton` to allow the use of lambda
-expressions.
 
 ```kotlin
 fun createCircle(body: Body) {
@@ -433,6 +440,9 @@ fun createCircle(body: Body) {
     body.circle(radius = 2f)
 }
 ```
+
+- **[FEATURE]** (`ktx-inject`) Add higher-order function parameters for `bindSingleton` to allow the use of lambda
+expressions.
 - **[FEATURE]** (`ktx-freetype`) Implemented `ktx-freetype` module.
   - `AssetManager.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetManager.loadFreeTypeFont` provides Kotlin DSL for loading of FreeType fonts.

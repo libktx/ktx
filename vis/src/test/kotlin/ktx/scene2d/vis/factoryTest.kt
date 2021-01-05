@@ -335,6 +335,7 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create VisTable`() = test { visTable() }
 
   @Test
+  @Suppress("DEPRECATION")
   fun `should create HorizontalFlowGroup`() = test(
     widget = { horizontalFlowGroup(spacing = 10f) },
     validate = {
@@ -342,9 +343,18 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     })
 
   @Test
+  @Suppress("DEPRECATION")
   fun `should create VerticalFlowGroup`() = test(
     widget = { verticalFlowGroup(spacing = 10f) },
     validate = {
+      assertEquals(10f, it.spacing, TOLERANCE)
+    })
+
+  @Test
+  fun `should create FlowGroup`() = test(
+    widget = { flowGroup(vertical = true, spacing = 10f) },
+    validate = {
+      assertTrue(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
     })
 
@@ -631,6 +641,7 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
   fun `should create VisTable`() = test { visTable { color = Color.BLUE } }
 
   @Test
+  @Suppress("DEPRECATION")
   fun `should create HorizontalFlowGroup`() = test(
     widget = { horizontalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
@@ -638,9 +649,18 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     })
 
   @Test
+  @Suppress("DEPRECATION")
   fun `should create VerticalFlowGroup`() = test(
     widget = { verticalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
+      assertEquals(10f, it.spacing, TOLERANCE)
+    })
+
+  @Test
+  fun `should create FlowGroup`() = test(
+    widget = { flowGroup(vertical = false, spacing = 10f) { color = Color.BLUE } },
+    validate = {
+      assertFalse(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
     })
 
