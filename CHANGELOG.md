@@ -1,8 +1,11 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.9.13-SNAPSHOT
+#### 1.9.14-SNAPSHOT
 
+- **[UPDATE]** Updated to LibGDX 1.9.14.
 - **[UPDATE]** Updated to Kotlin 1.4.30.
+- **[FEATURE]** (`ktx-app`) `clearScreen` now accepts additional `clearDepth` boolean parameter that controls whether 
+the `GL_DEPTH_BUFFER_BIT` is added to the mask.
 
 #### 1.9.13-b1
 
