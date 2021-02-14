@@ -1205,15 +1205,27 @@ class AssetStorage(
    */
   suspend fun takeSnapshotAsync(): AssetStorageSnapshot {
     lock.withLock {
+      // Creating a safe copy of all assets without unfinished internal completable deferred instances:
+      val assetsCopy = assets.mapValues {
+        @Suppress("UNCHECKED_CAST") val asset: Asset<Any> = it.value as Asset<Any>
+        val reference: CompletableDeferred<Any> = if (asset.reference.isCompleted || asset.reference.isCancelled) {
+          asset.reference
+        } else {
+          CompletableDeferred()
+        }
+        asset.copy(reference = reference)
+      }
+      // Replacing dependencies with safe copies:
       return AssetStorageSnapshot(
-        assets = assets.mapValues {
-          @Suppress("UNCHECKED_CAST") val asset: Asset<Any> = it.value as Asset<Any>
-          val reference: CompletableDeferred<Any> = if (asset.reference.isCompleted || asset.reference.isCancelled) {
-            asset.reference
+        assets = assetsCopy.mapValues {
+          val asset = it.value
+          if (asset.dependencies.isEmpty()) {
+            asset
           } else {
-            CompletableDeferred()
+            asset.copy(dependencies = asset.dependencies.mapNotNull { dependency ->
+              assetsCopy[dependency.identifier]
+            })
           }
-          asset.copy(reference = reference)
         }
       )
     }
@@ -1286,7 +1298,7 @@ class AssetStorage(
   }
 
   override fun toString(): String = "AssetStorage(assets=${
-  assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
+    assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
   })"
 }
 
@@ -1375,21 +1387,23 @@ data class AssetStorageSnapshot(
    */
   fun prettyPrint(): String {
     return """[
-${assets.values
-      .sortedBy { it.identifier.type.name }
-      .sortedBy { it.identifier.path }
-      .joinToString(separator = "\n") {
-    """  "${it.identifier.path}" (${it.identifier.type.name}) {
+${
+      assets.values
+        .sortedBy { it.identifier.type.name }
+        .sortedBy { it.identifier.path }
+        .joinToString(separator = "\n") {
+          """  "${it.identifier.path}" (${it.identifier.type.name}) {
     references=${it.referenceCount},
     dependencies=${
-      it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
-        "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
-      }
-    },
+            it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
+              "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
+            }
+          },
     loaded=${it.reference.isCompleted || it.reference.isCancelled},
     loader=${it.loader.javaClass.name},
   },"""
-}}
+        }
+    }
 ]"""
   }
 }
