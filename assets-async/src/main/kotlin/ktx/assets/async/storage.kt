@@ -1195,6 +1195,46 @@ class AssetStorage(
   }
 
   /**
+   * Creates a deep copy of the internal assets storage. Returns an [AssetStorageSnapshot]
+   * with the current storage state. For debugging purposes.
+   *
+   * Note that the [CompletableDeferred] that store references to assets are preserved only
+   * when completed, otherwise new instances of [CompletableDeferred] are returned. Even if
+   * the [CompletableDeferred] instances are completed manually, they will not affect the
+   * internal state of the storage.
+   */
+  suspend fun takeSnapshotAsync(): AssetStorageSnapshot {
+    lock.withLock {
+      return AssetStorageSnapshot(
+        assets = assets.mapValues {
+          @Suppress("UNCHECKED_CAST") val asset: Asset<Any> = it.value as Asset<Any>
+          val reference: CompletableDeferred<Any> = if (asset.reference.isCompleted || asset.reference.isCancelled) {
+            asset.reference
+          } else {
+            CompletableDeferred()
+          }
+          asset.copy(reference = reference)
+        }
+      )
+    }
+  }
+
+  /**
+   * Creates a deep copy of the internal assets storage. Returns an [AssetStorageSnapshot]
+   * with the current storage state. Blocks the current thread until the snapshot is complete.
+   * If assets are currently being loaded, avoid calling this method from within the rendering
+   * thread. For debugging purposes.
+   *
+   * Note that the [CompletableDeferred] that store references to assets are preserved only
+   * when completed, otherwise new instances of [CompletableDeferred] are returned. Even if
+   * the [CompletableDeferred] instances are completed manually, they will not affect the
+   * internal state of the storage.
+   */
+  fun takeSnapshot(): AssetStorageSnapshot {
+    return runBlocking { takeSnapshotAsync() }
+  }
+
+  /**
    * Unloads all assets. Blocks current thread until are assets are unloaded.
    * Logs all disposing exceptions.
    *
@@ -1253,7 +1293,7 @@ class AssetStorage(
 /**
  * Container for a single asset of type [T] managed by [AssetStorage].
  */
-internal data class Asset<T>(
+data class Asset<T>(
   /** Stores asset loading data. */
   val descriptor: AssetDescriptor<T>,
   /** Unique identifier of the asset. */
@@ -1322,3 +1362,34 @@ data class Identifier<T>(
  * is required, use [AssetDescriptor] for loading instead.
  */
 fun <T> AssetDescriptor<T>.toIdentifier(): Identifier<T> = Identifier(fileName, type)
+
+/**
+ * Stores a copy of state of an [AssetStorage]. For debugging purposes.
+ */
+data class AssetStorageSnapshot(
+  val assets: Map<Identifier<*>, Asset<*>>
+) {
+  /**
+   * Prints [AssetStorage] state for debugging. Lists registered assets with their dependencies
+   * and reference counts.
+   */
+  fun prettyPrint(): String {
+    return """[
+${assets.values
+      .sortedBy { it.identifier.type.name }
+      .sortedBy { it.identifier.path }
+      .joinToString(separator = "\n") {
+    """  "${it.identifier.path}" (${it.identifier.type.name}) {
+    references=${it.referenceCount},
+    dependencies=${
+      it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
+        "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
+      }
+    },
+    loaded=${it.reference.isCompleted || it.reference.isCancelled},
+    loader=${it.loader.javaClass.name},
+  },"""
+}}
+]"""
+  }
+}

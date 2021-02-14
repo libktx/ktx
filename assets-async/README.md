@@ -901,6 +901,7 @@ Closest equivalents in `AssetManager` and `AssetStorage` APIs:
 `finishLoading()` | N/A | `AssetStorage` does not provide methods that block the thread until all assets are loaded. Rely on `progress.isFinished` instead. 
 `addAsset(String, Class<T>, T)` | `add<T>(String, T)` |
 `contains(String)` | `contains<T>(String)`, `contains(Identifier)` | `AssetStorage` requires asset type, so the methods are generic.
+`getDiagnostics` | `takeSnapshot`, `takeSnapshotAsync` | Returns a copy of the internal state. Returned `AssetStorageSnapshot` instance provides a `prettyPrint` method with formatted output.
 `setErrorHandler` | N/A, `try-catch` | With `AssetStorage` you can handle loading errors immediately with regular built-in `try-catch` syntax. Error listener is not required.
 `clear()` | `dispose()` | `AssetStorage.dispose` will not kill `AssetStorage` threads and can be safely used multiple times like `AssetManager.clear`.
 `dispose()` | `dispose()` | `AssetStorage` also provides a suspending variant with custom error handling.
