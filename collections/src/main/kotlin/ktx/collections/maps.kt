@@ -2,16 +2,8 @@
 
 package ktx.collections
 
-import com.badlogic.gdx.utils.ArrayMap
-import com.badlogic.gdx.utils.IdentityMap
-import com.badlogic.gdx.utils.IntFloatMap
-import com.badlogic.gdx.utils.IntIntMap
-import com.badlogic.gdx.utils.IntMap
-import com.badlogic.gdx.utils.LongMap
-import com.badlogic.gdx.utils.ObjectIntMap
-import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.ObjectMap.Entry
-import com.badlogic.gdx.utils.ObjectSet
 
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
@@ -32,8 +24,11 @@ const val defaultMapSize = 51
  * @param loadFactor decides under what load the map is resized.
  * @return a new [ObjectMap].
  */
-fun <Key, Value> gdxMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): GdxMap<Key, Value> =
-    GdxMap(initialCapacity, loadFactor)
+fun <Key, Value> gdxMapOf(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor
+): GdxMap<Key, Value> =
+  GdxMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -176,7 +171,7 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
  * @return a new [IdentityMap], which compares keys by references.
  */
 fun <Key, Value> gdxIdentityMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor):
-    GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
+  GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -229,7 +224,7 @@ inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, Mut
  * @return a new [IntIntMap] with primitive int keys and values.
  */
 fun gdxIntIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntIntMap =
-    IntIntMap(initialCapacity, loadFactor)
+  IntIntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -257,7 +252,7 @@ operator fun IntIntMap.get(key: Int): Int = this.get(key, 0)
  * @return a new [IntFloatMap] with primitive int keys and primitive float values.
  */
 fun gdxIntFloatMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntFloatMap =
-    IntFloatMap(initialCapacity, loadFactor)
+  IntFloatMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -285,7 +280,7 @@ operator fun IntFloatMap.get(key: Int): Float = this.get(key, 0f)
  * @return a new [IntMap] with primitive int keys.
  */
 fun <Value> gdxIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntMap<Value> =
-    IntMap(initialCapacity, loadFactor)
+  IntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -421,4 +416,64 @@ inline fun <Key, Type, Value : Iterable<Type>> GdxMap<Key, out Value>.flatten():
  */
 inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Value>) -> Iterable<R>): GdxArray<R> {
   return this.map(transform).flatten()
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Value> IntMap<Value>.getOrPut(key: Int, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
 }

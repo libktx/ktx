@@ -1,20 +1,10 @@
 package ktx.collections
 
+import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.Array
-import com.badlogic.gdx.utils.IdentityMap
-import com.badlogic.gdx.utils.IntFloatMap
-import com.badlogic.gdx.utils.IntIntMap
-import com.badlogic.gdx.utils.IntMap
-import com.badlogic.gdx.utils.LongMap
-import com.badlogic.gdx.utils.ObjectIntMap
-import com.badlogic.gdx.utils.ObjectMap
-import com.badlogic.gdx.utils.ObjectSet
-import java.util.LinkedList
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
+import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -392,5 +382,83 @@ class MapsTest {
     assertEquals("Two", gdxArrayMap[2])
     assertEquals("Three", gdxArrayMap[3])
     assertEquals("Four", gdxArrayMap[4])
+  }
+
+  @Test
+  fun `should return existing value for GdxMap when key exists`() {
+    val map = gdxMapOf("42" to 42)
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(42, actual)
+  }
+
+  @Test
+  fun `should return and put default value to GdxMap when key does not exist`() {
+    val map = gdxMapOf<String, Int>()
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(43, actual)
+    assertTrue("42" in map)
+  }
+
+  @Test
+  fun `should return existing value for GdxIdentityMap when key exists`() {
+    val map = gdxIdentityMapOf("42" to 42)
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(42, actual)
+  }
+
+  @Test
+  fun `should return and put default value to GdxIdentityMap when key does not exist`() {
+    val map = gdxIdentityMapOf<String, Int>()
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(43, actual)
+    assertTrue("42" in map)
+  }
+
+  @Test
+  fun `should return existing value for GdxArrayMap when key exists`() {
+    val map = GdxArrayMap<String, Int>()
+    map["42"] = 42
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(42, actual)
+  }
+
+  @Test
+  fun `should return and put default value to GdxArrayMap when key does not exist`() {
+    val map = GdxArrayMap<String, Int>()
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertEquals(43, actual)
+    assertTrue(map.containsKey("42"))
+  }
+
+  @Test
+  fun `should return existing value for IntMap when key exists`() {
+    val map = IntMap<String>()
+    map[42] = "42"
+
+    val actual = map.getOrPut(42) { "43" }
+
+    assertEquals("42", actual)
+  }
+
+  @Test
+  fun `should return and put default value to IntMap when key does not exist`() {
+    val map = IntMap<String>()
+
+    val actual = map.getOrPut(42) { "43" }
+
+    assertEquals("43", actual)
+    assertTrue(42 in map)
   }
 }
