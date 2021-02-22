@@ -428,14 +428,13 @@ inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Val
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
 inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
-  var value = this[key]
-
-  if (value == null) {
-    value = defaultValue()
-    this[key] = value
+  return if (key in this) {
+    this[key]
+  } else {
+    val newValue = defaultValue()
+    this[key] = newValue
+    newValue
   }
-
-  return value
 }
 
 /**
@@ -443,14 +442,13 @@ inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
 inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
-  var value = this[key]
-
-  if (value == null) {
-    value = defaultValue()
-    this[key] = value
+  return if (key in this) {
+    this[key]
+  } else {
+    val newValue = defaultValue()
+    this[key] = newValue
+    newValue
   }
-
-  return value
 }
 
 /**
@@ -458,14 +456,13 @@ inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultVal
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
 inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
-  var value = this[key]
-
-  if (value == null) {
-    value = defaultValue()
-    this[key] = value
+  return if (this.containsKey(key)) {
+    this[key]
+  } else {
+    val newValue = defaultValue()
+    this[key] = newValue
+    newValue
   }
-
-  return value
 }
 
 /**
@@ -473,12 +470,11 @@ inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue:
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
 inline fun <Value> IntMap<Value>.getOrPut(key: Int, defaultValue: () -> Value): Value {
-  var value = this[key]
-
-  if (value == null) {
-    value = defaultValue()
-    this[key] = value
+  return if (key in this) {
+    this[key]
+  } else {
+    val newValue = defaultValue()
+    this[key] = newValue
+    newValue
   }
-
-  return value
 }

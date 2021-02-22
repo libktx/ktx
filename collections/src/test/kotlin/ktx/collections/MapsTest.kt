@@ -13,6 +13,7 @@ import java.util.LinkedList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -401,6 +402,7 @@ class MapsTest {
     val actual = map.getOrPut("42") { 43 }
 
     assertEquals(42, actual)
+    assertEquals(42, map["42"])
   }
 
   @Test
@@ -411,6 +413,17 @@ class MapsTest {
 
     assertEquals(43, actual)
     assertTrue("42" in map)
+    assertEquals(43, map["42"])
+  }
+
+  @Test
+  fun `should return null for GdxMap when null is stored for given key`() {
+    val map = gdxMapOf<String, Int?>("42" to null)
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertNull(actual)
+    assertEquals(null, map["42"])
   }
 
   @Test
@@ -420,6 +433,7 @@ class MapsTest {
     val actual = map.getOrPut("42") { 43 }
 
     assertEquals(42, actual)
+    assertEquals(42, map["42"])
   }
 
   @Test
@@ -430,6 +444,17 @@ class MapsTest {
 
     assertEquals(43, actual)
     assertTrue("42" in map)
+    assertEquals(43, map["42"])
+  }
+
+  @Test
+  fun `should return null for GdxIdentityMap when null is stored for given key`() {
+    val map = gdxIdentityMapOf<String, Int?>("42" to null)
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertNull(actual)
+    assertEquals(null, map["42"])
   }
 
   @Test
@@ -440,6 +465,7 @@ class MapsTest {
     val actual = map.getOrPut("42") { 43 }
 
     assertEquals(42, actual)
+    assertEquals(42, map["42"])
   }
 
   @Test
@@ -450,6 +476,18 @@ class MapsTest {
 
     assertEquals(43, actual)
     assertTrue(map.containsKey("42"))
+    assertEquals(43, map["42"])
+  }
+
+  @Test
+  fun `should return null for GdxArrayMap when null is stored for given key`() {
+    val map = GdxArrayMap<String, Int?>()
+    map["42"] = null
+
+    val actual = map.getOrPut("42") { 43 }
+
+    assertNull(actual)
+    assertEquals(null, map["42"])
   }
 
   @Test
@@ -460,6 +498,7 @@ class MapsTest {
     val actual = map.getOrPut(42) { "43" }
 
     assertEquals("42", actual)
+    assertEquals("42", map[42])
   }
 
   @Test
@@ -470,5 +509,17 @@ class MapsTest {
 
     assertEquals("43", actual)
     assertTrue(42 in map)
+    assertEquals("43", map[42])
+  }
+
+  @Test
+  fun `should return null for IntMap when null is stored for given key`() {
+    val map = IntMap<String>()
+    map.put(42, null)
+
+    val actual = map.getOrPut(42) { "43" }
+
+    assertNull(actual)
+    assertEquals(null, map[42])
   }
 }
