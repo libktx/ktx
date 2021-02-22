@@ -1,10 +1,20 @@
 package ktx.collections
 
-import com.badlogic.gdx.utils.*
 import com.badlogic.gdx.utils.Array
-import org.junit.Assert.*
+import com.badlogic.gdx.utils.IdentityMap
+import com.badlogic.gdx.utils.IntFloatMap
+import com.badlogic.gdx.utils.IntIntMap
+import com.badlogic.gdx.utils.IntMap
+import com.badlogic.gdx.utils.LongMap
+import com.badlogic.gdx.utils.ObjectIntMap
+import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.ObjectSet
+import java.util.LinkedList
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
