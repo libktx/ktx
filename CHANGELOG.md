@@ -4,7 +4,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to LibGDX 1.9.14.
 - **[UPDATE]** Updated to Kotlin 1.4.30.
-- **[UPDATE]** Updated to VisUI 1.4.10.
+- **[UPDATE]** Updated to VisUI 1.4.11.
 - **[FEATURE]** (`ktx-app`) `clearScreen` now accepts additional `clearDepth` boolean parameter that controls whether 
 the `GL_DEPTH_BUFFER_BIT` is added to the mask.
 - **[FEATURE]** (`ktx-assets-async`) Added `AssetStorageSnapshot` class that stores a copy of `AssetStorage` state
