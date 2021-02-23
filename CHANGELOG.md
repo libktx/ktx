@@ -1,5 +1,19 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.9.14-b1
+
+- **[UPDATE]** Updated to LibGDX 1.9.14.
+- **[UPDATE]** Updated to Kotlin 1.4.30.
+- **[UPDATE]** Updated to VisUI 1.4.11.
+- **[FEATURE]** (`ktx-app`) `clearScreen` now accepts additional `clearDepth` boolean parameter that controls whether 
+the `GL_DEPTH_BUFFER_BIT` is added to the mask.
+- **[FEATURE]** (`ktx-assets-async`) Added `AssetStorageSnapshot` class that stores a copy of `AssetStorage` state
+for debugging purposes. Supports formatted string output with `prettyFormat`.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now includes `takeSnapshot` and `takeSnapshotAsync` methods that
+allow to copy and inspect the internal state of the storage for debugging purposes.
+- **[FEATURE]** (`ktx-collections`) Added `getOrPut` extension function for LibGDX map collections including
+`ObjectMap`, `IdentityMap`, `ArrayMap` and `IntMap`.
+
 #### 1.9.13-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.13.

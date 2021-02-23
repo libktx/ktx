@@ -493,7 +493,7 @@ class KTreeWidgetTest : NeedsLibGDX() {
     assertSame(actor, node.actor)
     assertSame(tree, node.tree)
     assertSame(tree, node.actor.parent)
-    assertSame(node, tree.nodes.first())
+    assertSame(node, tree.rootNodes.first())
   }
 }
 

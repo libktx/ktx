@@ -338,7 +338,7 @@ fun loadAssets() {
   val assetStorage = AssetStorage(asyncContext = newAsyncContext(threads = 2))
 
   // Instead of using Kotlin's built-in `async`, you can also use
-  // the `loadAsync` method of AssetStorage with is a shortcut for
+  // the `loadAsync` method of AssetStorage which is a shortcut for
   // `async(assetStorage.asyncContext) { assetStorage.load }`:
   val texture = assetStorage.loadAsync<Texture>("images/logo.png")
   val font = assetStorage.loadAsync<BitmapFont>("fonts/font.fnt")
@@ -589,7 +589,7 @@ fun createCustomAssetStorage(): AssetStorage {
 It is completely safe to call `load` and `loadAsync` multiple times with the same asset data, even just to obtain
 asset instances. In that sense, they can be used as an alternative to `getAsync` inside coroutines.
 
-Instead of loading the same asset multiple times, `AssetStorage` will just increase the reference count
+Instead of loading the same asset multiple times, `AssetStorage` will just increase the count of references
 to the asset and return the same instance on each request. This also works concurrently - the storage will
 always load just _one_ asset instance, regardless of how many different threads and coroutines called `load`
 in parallel.
@@ -883,8 +883,8 @@ Closest equivalents in `AssetManager` and `AssetStorage` APIs:
 
 `AssetManager` | `AssetStorage` | Note
 :---: | :---: | ---
-`get<T>(String)` | `get<T>(String)` |
-`get(String, Class<T>)` | `get(Identifier<T>)` |
+`get<T>(String)` | `get<T>(String)` | `AssetStorage` uses reified types to prevent from runtime class cast exceptions.
+`get(String, Class<T>)` | `get(Identifier<T>)` | `Identifier` pairs file path and asset type to identify an asset.
 `get(AssetDescriptor<T>)` | `get(AssetDescriptor<T>)` |
 `load(String, Class<T>)` | `loadAsync<T>(String)` | `load<T>(String)` can also be used as an alternative within coroutines.
 `load(String, Class<T>, AssetLoaderParameters<T>)` | `loadAsync<T>(String, AssetLoaderParameters<T>)` | `load<T>(String, AssetLoaderParameters<T>)` can also be used as an alternative within coroutines.
@@ -901,6 +901,7 @@ Closest equivalents in `AssetManager` and `AssetStorage` APIs:
 `finishLoading()` | N/A | `AssetStorage` does not provide methods that block the thread until all assets are loaded. Rely on `progress.isFinished` instead. 
 `addAsset(String, Class<T>, T)` | `add<T>(String, T)` |
 `contains(String)` | `contains<T>(String)`, `contains(Identifier)` | `AssetStorage` requires asset type, so the methods are generic.
+`getDiagnostics` | `takeSnapshot`, `takeSnapshotAsync` | Returns a copy of the internal state. Returned `AssetStorageSnapshot` instance provides a `prettyPrint` method with formatted output.
 `setErrorHandler` | N/A, `try-catch` | With `AssetStorage` you can handle loading errors immediately with regular built-in `try-catch` syntax. Error listener is not required.
 `clear()` | `dispose()` | `AssetStorage.dispose` will not kill `AssetStorage` threads and can be safely used multiple times like `AssetManager.clear`.
 `dispose()` | `dispose()` | `AssetStorage` also provides a suspending variant with custom error handling.
@@ -908,8 +909,8 @@ Closest equivalents in `AssetManager` and `AssetStorage` APIs:
 ##### Integration with LibGDX and known unsupported features
 
 `AssetStorage` does its best to integrate with LibGDX APIs - including the `AssetLoader` implementations, which were
-designed for the `AssetManager`. [A dedicated wrapper](src/main/kotlin/ktx/assets/async/wrapper.kt) extends and
-overrides `AssetManager`, delegating a subset of supported methods to `AssetStorage`. The official `AssetLoader`
+designed for the `AssetManager`. [A dedicated wrapper](src/main/kotlin/ktx/assets/async/AssetManagerWrapper.kt) extends
+and overrides `AssetManager`, delegating a subset of supported methods to `AssetStorage`. The official `AssetLoader`
 implementations use supported methods such as `get`, but please note that some third-party loaders might not
 work out of the box with `AssetStorage`. Exceptions related to broken loaders include `UnsupportedMethodException`
 and `MissingDependencyException`.

@@ -96,6 +96,8 @@ has to be provided - since the method is inlined, no new lambda object will be c
   - `GdxArrayMap`: `com.badlogic.gdx.utils.ArrayMap`
 - All LibGDX map entries now feature `component1()` and `component2()` operator extension methods, so they can be
 destructed into a key and a value.
+- `getOrPut` for `ObjectMap`, `IdentityMap`, `ArrayMap` and `IntMap` method to get an existing value to a given key
+or if it does not exist, create a default value, add it to the map and return it.
 
 #### Note
 

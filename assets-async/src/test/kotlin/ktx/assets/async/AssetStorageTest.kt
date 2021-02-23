@@ -1513,7 +1513,7 @@ class AssetStorageTest : AsyncTest() {
 
   /** For loaders testing. */
   open class FakeSyncLoader(
-    private val onLoad: (asset: FakeAsset) -> Unit,
+    private val onLoad: (asset: FakeAsset) -> Unit = {},
     private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with()
   ) : SynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
     @Suppress("UNCHECKED_CAST")
@@ -2164,5 +2164,131 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<FakeAsset>(dependency))
     // Should still count the reference, since load was called:
     assertEquals(2, storage.getReferenceCount<FakeAsset>(dependency))
+  }
+
+  @Test
+  fun `should return empty snapshot of the storage state`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+
+    // When:
+    val snapshot = storage.takeSnapshot()
+
+    // Then:
+    assertEquals(AssetStorageSnapshot(mapOf()), snapshot)
+  }
+
+  @Test
+  fun `should return empty snapshot of the storage state asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+
+    // When:
+    val snapshot = runBlocking { storage.takeSnapshotAsync() }
+
+    // Then:
+    assertEquals(AssetStorageSnapshot(mapOf()), snapshot)
+  }
+
+  @Test
+  fun `should take snapshot of the storage state`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false)
+    val path = "fake path"
+    val id = storage.getIdentifier<FakeAsset>(path)
+    val loadingStarted = CompletableFuture<Boolean>()
+    val loadingFinished = CompletableFuture<Boolean>()
+    storage.setLoader {
+      FakeSyncLoader(
+        onLoad = {
+          loadingStarted.complete(true)
+          loadingFinished.join()
+        }
+      )
+    }
+    val reference = storage.loadAsync<FakeAsset>(path)
+    loadingStarted.join()
+
+    // When: asset is not loaded yet:
+    var snapshot = storage.takeSnapshot()
+
+    // Then:
+    assertFalse(storage.isLoaded<FakeAsset>(path))
+    @Suppress("UNCHECKED_CAST") val asset: Asset<FakeAsset> = snapshot.assets[id] as Asset<FakeAsset>
+    assertEquals(id, asset.identifier)
+    assertFalse(asset.reference.isCompleted)
+    assertFalse(asset.reference.isCancelled)
+    assertEquals(1, asset.referenceCount)
+    assertEquals(listOf<Asset<*>>(), asset.dependencies)
+
+    // When: modifying asset loading manually:
+    asset.reference.complete(FakeAsset())
+    asset.referenceCount = 10
+
+    // Then: internal state should be unmodified:
+    assertFalse(storage.isLoaded<FakeAsset>(path))
+    assertEquals(1, storage.getReferenceCount(id))
+
+    // When: asset is loaded:
+    loadingFinished.complete(true)
+    val instance = runBlocking { reference.await() }
+    snapshot = storage.takeSnapshot()
+
+    // Then:
+    assertTrue(storage.isLoaded<FakeAsset>(path))
+    val loadedAsset = snapshot.assets[id]!!
+    assertEquals(id, loadedAsset.identifier)
+    assertTrue(loadedAsset.reference.isCompleted)
+    assertSame(instance, runBlocking { loadedAsset.reference.await() })
+    assertEquals(1, loadedAsset.referenceCount)
+    assertEquals(listOf<Asset<*>>(), loadedAsset.dependencies)
+  }
+
+  @Test
+  fun `should pretty print snapshot`() {
+    // Given:
+    val firstId = Identifier("first.file", String::class.java)
+    @Suppress("UNCHECKED_CAST") val first = Asset(
+      descriptor = firstId.toAssetDescriptor(),
+      identifier = firstId,
+      reference = CompletableDeferred("test"),
+      dependencies = listOf(),
+      loader = FakeSyncLoader() as Loader<String>,
+      referenceCount = 2
+    )
+    val secondId = Identifier("second.file", Int::class.java)
+    @Suppress("UNCHECKED_CAST") val second = Asset(
+      descriptor = secondId.toAssetDescriptor(),
+      identifier = secondId,
+      reference = CompletableDeferred(),
+      dependencies = listOf(first),
+      loader = FakeSyncLoader() as Loader<Int>,
+      referenceCount = 1
+    )
+    val snapshot = AssetStorageSnapshot(
+      assets = mapOf(
+        firstId to first,
+        secondId to second
+      )
+    )
+
+    // When:
+    val output = snapshot.prettyPrint()
+
+    // Then:
+    assertEquals("""[
+  "first.file" (java.lang.String) {
+    references=2,
+    dependencies=[],
+    loaded=true,
+    loader=ktx.assets.async.AssetStorageTest${"$"}FakeSyncLoader,
+  },
+  "second.file" (int) {
+    references=1,
+    dependencies=["first.file" (java.lang.String)],
+    loaded=false,
+    loader=ktx.assets.async.AssetStorageTest${"$"}FakeSyncLoader,
+  },
+]""", output)
   }
 }

@@ -943,8 +943,6 @@ inline fun <S> KWidget<S>.tabbedPane(
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val pane = KTabbedPane(style)
   val table = pane.table
-  var storage: S? = null
-  actor(table, { storage = it })
-  pane.init(storage!!)
+  actor(table, { pane.init(it) })
   return pane
 }

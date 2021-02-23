@@ -1,6 +1,6 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.4.21--2-orange.svg)](http://kotlinlang.org/)
-[![LibGDX](https://img.shields.io/badge/libgdx-1.9.13-red.svg)](https://libgdx.badlogicgames.com/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.4.30-orange.svg)](http://kotlinlang.org/)
+[![LibGDX](https://img.shields.io/badge/libgdx-1.9.14-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -75,7 +75,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.9.13-b1'
+  ktxVersion = '1.9.14-b1'
 }
 
 dependencies {
@@ -129,7 +129,7 @@ repositories {
 
 ext {
   // Update this version to match the latest LibGDX release:
-  ktxVersion = '1.9.13-SNAPSHOT'
+  ktxVersion = '1.9.14-SNAPSHOT'
 }
 ```
 
@@ -150,7 +150,7 @@ Browse through the directories in the root folder to find out more about each li
 
 All public classes and functions are also documented with standard Kotlin _KDocs_. You can access the documentation by:
 
-- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/ktx/).
+- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/docs/).
 - Reading the sources directly.
 - Using the `doc` archive in [GitHub releases](https://github.com/libktx/ktx/releases) with generated Dokka files.
 
