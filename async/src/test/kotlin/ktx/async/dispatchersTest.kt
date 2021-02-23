@@ -18,6 +18,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -68,7 +69,7 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
     }
 
     // Then:
-    assert(executionTime.get() in 50L..70L)
+    assertTrue("${executionTime.get()} must be around 50 millis.", executionTime.get() in 45L..75L)
     assertSame(initialThread.get(), finalThread.get())
     assertNotSame(Thread.currentThread(), finalThread.get())
     if (!isConcurrent) {
@@ -93,7 +94,8 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
 
     // Then:
     delay(100L)
-    assert(executionTime.get() in 50L..150L)
+    // Increased tolerance for the testing environment:
+    assertTrue("${executionTime.get()} must be around 50 millis.", executionTime.get() in 45L..75L)
   }
 
   @Test
