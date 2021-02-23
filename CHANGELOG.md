@@ -11,6 +11,7 @@ the `GL_DEPTH_BUFFER_BIT` is added to the mask.
 for debugging purposes. Supports formatted string output with `prettyFormat`.
 - **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now includes `takeSnapshot` and `takeSnapshotAsync` methods that
 allow to copy and inspect the internal state of the storage for debugging purposes.
+- **[FEATURE]** (`ktx-collections`) Added `getOrPut` extension function for `maps`
 
 #### 1.9.13-b1
 

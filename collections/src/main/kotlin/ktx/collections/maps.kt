@@ -422,3 +422,67 @@ inline fun <Key, Type, Value : Iterable<Type>> GdxMap<Key, out Value>.flatten():
 inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Value>) -> Iterable<R>): GdxArray<R> {
   return this.map(transform).flatten()
 }
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ *
+ * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
+ */
+inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null && key !in this) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ *
+ * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
+ */
+inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null && key !in this) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null && !this.containsKey(key)) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
+
+/**
+ * Returns the value for the given [key]. If the [key] is not found in the map,
+ * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ */
+inline fun <Value> IntMap<Value>.getOrPut(key: Int, defaultValue: () -> Value): Value {
+  var value = this[key]
+
+  if (value == null && key !in this) {
+    value = defaultValue()
+    this[key] = value
+  }
+
+  return value
+}
