@@ -122,7 +122,7 @@ class ClassWithLazyInjectedValue(context: Context) {
 Removing a registered provider:
 ```Kotlin
 context.remove<Random>()
-// Note that this method work for both singletons and providers.
+// Note that this method works for both singletons and providers.
 ```
 
 Removing all components from the `Context`:
@@ -175,6 +175,9 @@ class Container: Disposable {
 
 This will ensure that the `Context` itself will not attempt to dispose of the `Container`.
 
+Note that this also applies to extensions of `KtxApplicationAdapter` and `KtxGame`, both of which
+are `Disposable`.
+
 ### Notes on implementation and design choices
 
 > How does it work?
@@ -185,40 +188,38 @@ framework to extract the actual `Class` object from generic argument - and used 
 Singletons are implemented as providers that always return the same instance of the selected type on each call. It _is_
 dead simple and aims to introduce as little runtime overhead as possible.
 
-> No scopes? Huh?
+> Are scopes supported?
 
-How often do you need these in simple games, anyway? More complex projects might benefit from features of mature
-projects like [Koin](https://insert-koin.io/), but in most simple games you just end up needing some glue between
-the components. Sometimes simplicity is something you aim for.
+No. More complex projects might benefit from features of mature projects like [Koin](https://insert-koin.io/),
+but in most simple games you just end up needing some glue between the components. Sometimes simplicity is something
+you aim for.
 
-As for testing scope, it should be obvious that you can just register different components during testing. Don't worry,
-classes using `ktx-inject` are usually trivial to test.
+As for testing scope, you can just register different components during testing. Classes using `ktx-inject` are usually
+easy to test.
 
-> Not even any named providers?
+> Are named providers supported?
 
 Nope. Providers are mapped to the class of instances that they return - and that's it. Criteria systems - which are a
 sensible alternative to simple string names - are somewhat easy to use when your system is based on annotations, but we
 don't have much to work with when the goal is simplicity.
 
-> Kodein-style single-parameter factories, anyone?
+> What about Kodein-style single-parameter factories?
 
 It seems that Kodein keeps all its "providers" as single-parameter functions. To avoid wrapping all no-arg providers
 (which seem to be the most common by far) in `null`-consuming functions, factories are not implemented in `ktx-inject`
-at all. Honestly, it's hard to get it right - single-parameter factories might not be enough in many situations and
-type-safe multi-argument factories might look _really_ awkward_ in code thanks to a ton of generics. If you need
-specialized providers, just create a simple class with `invoke` operator.
+at all. If you need specialized providers, create a simple class with `invoke` operator.
 
 > Is this framework for me?
 
 This dependency injection system is as trivial as it gets. It will help you with platform-specific classes and gluing
-your application together, but don't expect wonders. This library might be great if you're just starting with dependency
-injection - all you need to learn is using a few simple functions. It's also hard to imagine a more lightweight
-solution: getting a provider is a single call to a map.
+your application together, but don't expect much more. This library might be great if you're just starting with
+dependency  injection - all you need to learn is using a few simple functions. It is also very lightweight: getting
+a provider is a single call to a map.
 
 If you never end up needing more features, you might consider sticking with `ktx-inject` altogether, but just so you
-know - there _are_ other Kotlin dependency injection and they work _great_ with LibGDX. There was no point in creating
-another _complex_ dependency injection framework, and we were fully aware of that. Simplicity and little-to-none runtime
-overhead - this pretty much sums up the strong sides of `ktx-inject`.
+know - there _are_ other Kotlin dependency injection frameworks and they work well with LibGDX. There was no point in
+creating another _complex_ dependency injection framework, and we were fully aware of that. Simplicity and
+little-to-none runtime overhead is what sums up the strong sides of `ktx-inject`.
 
 ### Alternatives
 
