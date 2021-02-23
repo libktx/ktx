@@ -150,7 +150,7 @@ Browse through the directories in the root folder to find out more about each li
 
 All public classes and functions are also documented with standard Kotlin _KDocs_. You can access the documentation by:
 
-- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/ktx/).
+- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/docs/).
 - Reading the sources directly.
 - Using the `doc` archive in [GitHub releases](https://github.com/libktx/ktx/releases) with generated Dokka files.
 
