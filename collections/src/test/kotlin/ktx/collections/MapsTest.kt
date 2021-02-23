@@ -16,6 +16,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.lang.IllegalArgumentException
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -426,6 +427,12 @@ class MapsTest {
     assertEquals(null, map["42"])
   }
 
+  @Test(expected = IllegalArgumentException::class)
+  fun `should throw an IllegalArgumentException when getOrPut is called with null key for GdxMap`() {
+    val map = gdxMapOf<String?, String?>()
+    map.getOrPut(null) { "42" }
+  }
+
   @Test
   fun `should return existing value for GdxIdentityMap when key exists`() {
     val map = gdxIdentityMapOf("42" to 42)
@@ -455,6 +462,12 @@ class MapsTest {
 
     assertNull(actual)
     assertEquals(null, map["42"])
+  }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun `should throw an IllegalArgumentException when getOrPut is called with null key for GdxIdentityMap`() {
+    val map = gdxIdentityMapOf<String?, String?>()
+    map.getOrPut(null) { "42" }
   }
 
   @Test
@@ -488,6 +501,16 @@ class MapsTest {
 
     assertNull(actual)
     assertEquals(null, map["42"])
+  }
+
+  @Test
+  fun `should return and put default value to GdxArrayMap when key is null`() {
+    val map = GdxArrayMap<String?, String?>()
+
+    val actual = map.getOrPut(null) { "42" }
+
+    assertEquals("42", actual)
+    assertEquals("42", map[null])
   }
 
   @Test

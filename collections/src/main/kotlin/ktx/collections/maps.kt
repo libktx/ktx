@@ -426,6 +426,8 @@ inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Val
 /**
  * Returns the value for the given [key]. If the [key] is not found in the map,
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ *
+ * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
  */
 inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
   var value = this[key]
@@ -441,6 +443,8 @@ inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -
 /**
  * Returns the value for the given [key]. If the [key] is not found in the map,
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
+ *
+ * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
  */
 inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
   var value = this[key]
