@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.LongMap
 import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
+import io.kotlintest.matchers.shouldThrow
+import java.lang.IllegalArgumentException
 import java.util.LinkedList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -16,7 +18,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.lang.IllegalArgumentException
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -427,10 +428,13 @@ class MapsTest {
     assertEquals(null, map["42"])
   }
 
-  @Test(expected = IllegalArgumentException::class)
+  @Test
   fun `should throw an IllegalArgumentException when getOrPut is called with null key for GdxMap`() {
     val map = gdxMapOf<String?, String?>()
-    map.getOrPut(null) { "42" }
+
+    shouldThrow<IllegalArgumentException> {
+      map.getOrPut(null) { "42" }
+    }
   }
 
   @Test
@@ -464,10 +468,13 @@ class MapsTest {
     assertEquals(null, map["42"])
   }
 
-  @Test(expected = IllegalArgumentException::class)
+  @Test
   fun `should throw an IllegalArgumentException when getOrPut is called with null key for GdxIdentityMap`() {
     val map = gdxIdentityMapOf<String?, String?>()
-    map.getOrPut(null) { "42" }
+
+    shouldThrow<IllegalArgumentException> {
+      map.getOrPut(null) { "42" }
+    }
   }
 
   @Test
