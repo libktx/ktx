@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMap]. If the property
@@ -151,5 +152,20 @@ fun TiledMap.layer(layerName: String) = layers[layerName]
 inline fun TiledMap.forEachMapObject(layerName: String, action: (MapObject) -> Unit) {
   layers[layerName]?.objects?.forEach {
     action(it)
+  }
+}
+
+/**
+ * Extension method to run a [lambda] on a specific type of [layers][MapLayer] of the [TiledMap]. The lambda
+ * takes the matching [MapLayer] as a parameter.
+ *
+ * The class matching is an exact match meaning that a given subclass like [TiledMapTileLayer] will not match
+ * for the argument [MapLayer].
+ */
+inline fun <reified T : MapLayer> TiledMap.forEachLayer(lambda: (T) -> Unit) {
+  this.layers.forEach {
+    if (it::class == T::class) {
+      lambda(it as T)
+    }
   }
 }

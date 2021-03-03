@@ -73,8 +73,15 @@ the following extensions were added:
 - `contains(layerName: String)`: works as the `in` operator.
 - `layer(layerName: String)`: returns the layer or throws a `MissingLayerException` in case the layer does not exist.
 
-Inlined `forEachMapObject` extension methods allows to iterate over all `MapObject` instances present on the chosen
+Inlined `forEachMapObject` extension method allows to iterate over all `MapObject` instances present on the chosen
 map layer.
+
+Inlined `forEachLayer` extension method allows to iterate over all `MapLayer` instances of a specific type to execute
+a certain function on them.
+
+### `MapLayers` and `MapObjects`
+
+`isEmpty` and `isNotEmpty` extension method to check if the specific collection is empty or not.
 
 ### Usage examples
 
@@ -212,6 +219,44 @@ val map: TiledMap = getTiledMap()
 // Creates collision bodies for every map object of the collision layer:
 map.forEachMapObject("collision") { mapObj ->
     createStaticBox2DCollisionBody(mapObj.x, mapObj.y, mapObj.shape)
+}
+```
+
+Iterating over a specific type of layers of a map:
+
+```kotlin
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+val map: TiledMap = getTiledMap()
+
+// Iterate over all object layers and parse them.
+// Note that parseObjectLayer is only called for layers of exact type MapLayer.
+// TiledMapTileLayer which is a subclass of MapLayer will not match.
+map.forEachLayer<MapLayer> { layer ->
+    parseObjectLayer(layer)
+}
+```
+
+Check if a `MapLayers` or `MapObjects` collection is empty:
+
+```kotlin
+import com.badlogic.gdx.maps.MapObjects
+import com.badlogic.gdx.maps.MapLayers
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+val map: TiledMap = getTiledMap()
+
+if(tiledMap.layers.isNotEmpty()) {
+    tiledMap.layers.forEach { layer ->
+        if(layer.objects.isEmpty()) {
+            // nothing to do if there are no objects
+            return@forEach
+        }
+        
+        parseObjects(layer.objects)
+    }
 }
 ```
 
