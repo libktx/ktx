@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.util.adapter.SimpleListAdapter
 import com.kotcrab.vis.ui.widget.ButtonBar
@@ -29,6 +28,7 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
+import com.badlogic.gdx.utils.Array as GdxArray
 
 class TopLevelActorFactoriesTest : NeedsLibGDX() {
   @Test
@@ -170,7 +170,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visLabel("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create LinkLabel`() = test(
@@ -178,21 +179,24 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     validate = {
       assertEquals("Text.", it.text.toString())
       assertEquals("URL", it.url)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with drawable`() = test(
     widget = { visImage(VisUI.getSkin().getDrawable("button")) },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with drawable name`() = test(
     widget = { visImage("button") },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with nine patch`() = test { visImage(VisUI.getSkin().getPatch("button")) }
@@ -211,7 +215,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visListOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    })
+    }
+  )
 
   @Test
   fun `should create VisProgressBar`() = test(
@@ -220,7 +225,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create VisSelectBox`() = test { visSelectBoxOf<String>() }
@@ -230,7 +236,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visSelectBoxOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    })
+    }
+  )
 
   @Test
   fun `should create VisSlider`() = test(
@@ -239,42 +246,48 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create VisTextArea`() = test(
     widget = { visTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create HighlightTextArea`() = test(
     widget = { highlightTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create ScrollableTextArea`() = test(
     widget = { scrollableTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create VisTextField`() = test(
     widget = { visTextField("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create ValidatableTextField`() = test(
     widget = { visValidatableTextField("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create BusyBar`() = test { busyBar() }
@@ -287,7 +300,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visTextButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisImageButton`() = test { visImageButton() }
@@ -297,21 +311,24 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visImageTextButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisCheckBox`() = test(
     widget = { visCheckBox("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisRadioButton`() = test(
     widget = { visRadioButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisTree`() = test { visTree() }
@@ -329,7 +346,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { spinner("Name", IntSpinnerModel(0, 0, 10)) },
     validate = {
       assertEquals("Name", (it.children[0] as Label).text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisTable`() = test { visTable() }
@@ -340,7 +358,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { horizontalFlowGroup(spacing = 10f) },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   @Suppress("DEPRECATION")
@@ -348,7 +367,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { verticalFlowGroup(spacing = 10f) },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create FlowGroup`() = test(
@@ -356,7 +376,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
     validate = {
       assertTrue(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create GridGroup`() = test(
@@ -365,7 +386,8 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(10f, it.spacing, TOLERANCE)
       assertEquals(100f, it.itemWidth, TOLERANCE)
       assertEquals(100f, it.itemHeight, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create FloatingGroup`() = test { floatingGroup() }
@@ -446,8 +468,10 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     // Ensuring the child is not null and owned by the parent:
     assertNotNull(child)
     assertTrue(child in parent.children)
-    assertEquals("For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
-      Color.BLUE, child!!.color)
+    assertEquals(
+      "For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
+      Color.BLUE, child!!.color
+    )
     validate(child) // Performing widget-specific validation.
   }
 
@@ -456,7 +480,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visLabel("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create LinkLabel`() = test(
@@ -464,21 +489,24 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     validate = {
       assertEquals("Text.", it.text.toString())
       assertEquals("URL", it.url)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with drawable`() = test(
     widget = { visImage(VisUI.getSkin().getDrawable("button")) { color = Color.BLUE } },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with drawable name`() = test(
     widget = { visImage("button") { color = Color.BLUE } },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    })
+    }
+  )
 
   @Test
   fun `should create VisImage with nine patch`() = test {
@@ -508,7 +536,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    })
+    }
+  )
 
   @Test
   fun `should create VisProgressBar`() = test(
@@ -517,7 +546,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create VisSelectBox`() = test(
@@ -532,7 +562,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    })
+    }
+  )
 
   @Test
   fun `should create VisSlider`() = test(
@@ -541,42 +572,48 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create VisTextArea`() = test(
     widget = { visTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create HighlightTextArea`() = test(
     widget = { highlightTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create ScrollableTextArea`() = test(
     widget = { scrollableTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create VisTextField`() = test(
     widget = { visTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create ValidatableTextField`() = test(
     widget = { visValidatableTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    })
+    }
+  )
 
   @Test
   fun `should create BusyBar`() = test { busyBar { color = Color.BLUE } }
@@ -589,7 +626,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisImageButton`() = test { visImageButton { color = Color.BLUE } }
@@ -599,21 +637,24 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { visImageTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisCheckBox`() = test(
     widget = { visCheckBox("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisRadioButton`() = test(
     widget = { visRadioButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisTree`() = test { visTree { color = Color.BLUE } }
@@ -635,7 +676,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     },
     validate = {
       assertEquals("Name", (it.children[0] as Label).text.toString())
-    })
+    }
+  )
 
   @Test
   fun `should create VisTable`() = test { visTable { color = Color.BLUE } }
@@ -646,7 +688,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { horizontalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   @Suppress("DEPRECATION")
@@ -654,7 +697,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     widget = { verticalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create FlowGroup`() = test(
@@ -662,7 +706,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     validate = {
       assertFalse(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create GridGroup`() = test(
@@ -671,7 +716,8 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
       assertEquals(10f, it.spacing, TOLERANCE)
       assertEquals(100f, it.itemWidth, TOLERANCE)
       assertEquals(100f, it.itemHeight, TOLERANCE)
-    })
+    }
+  )
 
   @Test
   fun `should create FloatingGroup`() = test { floatingGroup { color = Color.BLUE } }

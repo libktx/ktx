@@ -127,10 +127,14 @@ inline fun Body.distanceJointWith(body: Body, init: (@Box2DDsl DistanceJointDef)
 @OptIn(ExperimentalContracts::class)
 inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() -> Unit = {}): PulleyJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  return jointWith(body, PulleyJointDef().apply {
-    localAnchorA.set(0f, 0f)
-    localAnchorB.set(0f, 0f)
-  }, init) as PulleyJoint
+  return jointWith(
+    body,
+    PulleyJointDef().apply {
+      localAnchorA.set(0f, 0f)
+      localAnchorB.set(0f, 0f)
+    },
+    init
+  ) as PulleyJoint
 }
 
 /**
@@ -232,12 +236,16 @@ inline fun Body.frictionJointWith(body: Body, init: (@Box2DDsl FrictionJointDef)
 @OptIn(ExperimentalContracts::class)
 inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> Unit = {}): RopeJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  return jointWith(body, RopeJointDef().apply {
-    // Rope joint anchors are initiated with unexpected defaults (might be incompatible with user's Box2D world scale).
-    // Clearing LibGDX defaults:
-    localAnchorA.set(0f, 0f)
-    localAnchorB.set(0f, 0f)
-  }, init) as RopeJoint
+  return jointWith(
+    body,
+    RopeJointDef().apply {
+      // Rope joint anchors are initiated with unexpected defaults (might be incompatible with user's Box2D world scale).
+      // Clearing LibGDX defaults:
+      localAnchorA.set(0f, 0f)
+      localAnchorB.set(0f, 0f)
+    },
+    init
+  ) as RopeJoint
 }
 
 /**

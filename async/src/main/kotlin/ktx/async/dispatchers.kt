@@ -5,9 +5,6 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import java.io.Closeable
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Delay
@@ -17,6 +14,9 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.internal.MainDispatcherFactory
+import java.io.Closeable
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
 
 /**
  * Base interface of [CoroutineContext] for dispatchers using the LibGDX threading model.

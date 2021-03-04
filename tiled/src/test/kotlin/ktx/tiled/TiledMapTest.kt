@@ -24,17 +24,21 @@ class TiledMapTest {
       put("staggeraxis", "Y")
       put("staggerindex", "Odd")
     }
-    layers.add(MapLayer().apply {
-      name = "layer-1"
-      objects.apply {
-        add(MapObject())
-        add(MapObject())
-        add(MapObject())
+    layers.add(
+      MapLayer().apply {
+        name = "layer-1"
+        objects.apply {
+          add(MapObject())
+          add(MapObject())
+          add(MapObject())
+        }
       }
-    })
-    layers.add(MapLayer().apply {
-      name = "layer-2"
-    })
+    )
+    layers.add(
+      MapLayer().apply {
+        name = "layer-2"
+      }
+    )
   }
 
   @Test

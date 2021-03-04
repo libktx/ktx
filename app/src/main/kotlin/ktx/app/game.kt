@@ -140,7 +140,7 @@ open class KtxGame<ScreenType : Screen>(
    */
   @Suppress("UNCHECKED_CAST")
   open fun <Type : ScreenType> getScreen(type: Class<Type>): Type =
-      screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
+    screens[type] as Type? ?: throw GdxRuntimeException("Missing screen instance of type: $type.")
 
   /**
    * Removes cached instance of [Screen] of the selected type. Note that this method does not dispose of the screen and

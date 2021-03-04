@@ -1,6 +1,5 @@
 package ktx.assets
 
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.nhaarman.mockitokotlin2.doThrow
@@ -15,6 +14,7 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [Disposable] utilities.
@@ -92,9 +92,12 @@ class DisposablesTest {
 
   @Test
   fun shouldSafelyDisposeIterablesOfAssets() {
-    val disposables = GdxArray.with(mock<Disposable>(), null, mock {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    })
+    val disposables = GdxArray.with(
+      mock<Disposable>(), null,
+      mock {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
+    )
 
     disposables.disposeSafely()
 
@@ -113,9 +116,12 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of iterables of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = GdxArray.with(mock<Disposable>(), null, mock {
-      on(it.dispose()) doThrow exception
-    })
+    val disposables = GdxArray.with(
+      mock<Disposable>(), null,
+      mock {
+        on(it.dispose()) doThrow exception
+      }
+    )
 
     disposables.dispose { assertSame(exception, it) }
 
@@ -133,9 +139,12 @@ class DisposablesTest {
 
   @Test
   fun `should safely dispose arrays of assets`() {
-    val disposables = arrayOf(mock<Disposable>(), mock(), mock {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    })
+    val disposables = arrayOf(
+      mock<Disposable>(), mock(),
+      mock {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
+    )
 
     disposables.disposeSafely()
 
@@ -154,9 +163,12 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of arrays of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = arrayOf(mock<Disposable>(), mock(), mock {
-      on(it.dispose()) doThrow exception
-    })
+    val disposables = arrayOf(
+      mock<Disposable>(), mock(),
+      mock {
+        on(it.dispose()) doThrow exception
+      }
+    )
 
     disposables.dispose { assertSame(exception, it) }
 

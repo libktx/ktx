@@ -18,11 +18,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.I18NBundle
@@ -35,12 +33,6 @@ import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
-import java.lang.Integer.min
-import java.util.IdentityHashMap
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ThreadLocalRandom
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.math.max
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -68,6 +60,14 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
+import java.lang.Integer.min
+import java.util.IdentityHashMap
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.max
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [AssetStorage]: coroutines-based asset manager.
@@ -129,14 +129,16 @@ class AssetStorageTest : AsyncTest() {
     if (warn) {
       val progress = storage.progress
       if (total != progress.total || loaded != progress.loaded || failed != progress.failed) {
-        System.err.println("""
+        System.err.println(
+          """
           Warning: mismatch in progress value in `${testName.methodName}`.
           Value  | Expected | Actual
           total  | ${"%8d".format(total)} | ${progress.total}
           loaded | ${"%8d".format(loaded)} | ${progress.loaded}
           failed | ${"%8d".format(failed)} | ${progress.failed}
           If this warning is repeated consistently, there might be a related bug in progress reporting.
-        """.trimIndent())
+          """.trimIndent()
+        )
       }
     } else {
       assertEquals(total, storage.progress.total)
@@ -2276,7 +2278,8 @@ class AssetStorageTest : AsyncTest() {
     val output = snapshot.prettyPrint()
 
     // Then:
-    assertEquals("""[
+    assertEquals(
+      """[
   "first.file" (java.lang.String) {
     references=2,
     dependencies=[],
@@ -2289,6 +2292,8 @@ class AssetStorageTest : AsyncTest() {
     loaded=false,
     loader=ktx.assets.async.AssetStorageTest${"$"}FakeSyncLoader,
   },
-]""", output)
+]""",
+      output
+    )
   }
 }

@@ -167,17 +167,22 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
   fun `should perform asynchronous HTTP request`() {
     // Given:
     Gdx.net = LwjglNet(configuration)
-    wireMock.stubFor(get("/test").willReturn(aResponse()
-        .withStatus(200)
-        .withHeader("Content-Type", "text/plain")
-        .withBody("Test HTTP request.")))
+    wireMock.stubFor(
+      get("/test").willReturn(
+        aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "text/plain")
+          .withBody("Test HTTP request.")
+      )
+    )
 
     // When:
     val response = runBlocking {
       httpRequest(
-          url = "http://localhost:$port/test",
-          method = "GET",
-          headers = mapOf("Accept" to "text/plain"))
+        url = "http://localhost:$port/test",
+        method = "GET",
+        headers = mapOf("Accept" to "text/plain")
+      )
     }
 
     // Then:
@@ -212,11 +217,15 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
   fun `should cancel HTTP request`() {
     // Given:
     Gdx.net = spy(LwjglNet(configuration))
-    wireMock.stubFor(get("/test").willReturn(aResponse()
-        .withStatus(200)
-        .withHeader("Content-Type", "text/plain")
-        .withBody("Test HTTP request.")
-        .withFixedDelay(1000)))
+    wireMock.stubFor(
+      get("/test").willReturn(
+        aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "text/plain")
+          .withBody("Test HTTP request.")
+          .withFixedDelay(1000)
+      )
+    )
 
     // When:
     runBlocking {
@@ -237,9 +246,11 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
 /**
  * Tests [httpRequest] API with a single-threaded [LwjglNet].
  */
-class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(LwjglApplicationConfiguration().apply {
-  maxNetThreads = 1
-})
+class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(
+  LwjglApplicationConfiguration().apply {
+    maxNetThreads = 1
+  }
+)
 
 /**
  * Tests [httpRequest] API with a multithreaded [LwjglNet].

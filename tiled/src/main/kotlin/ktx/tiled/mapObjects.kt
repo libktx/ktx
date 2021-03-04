@@ -24,7 +24,7 @@ import com.badlogic.gdx.math.Shape2D
  * @throws MissingPropertyException If the property is not defined.
  */
 inline fun <reified T> MapObject.property(key: String): T = properties[key, T::class.java]
-    ?: throw MissingPropertyException("Property $key does not exist for object $name")
+  ?: throw MissingPropertyException("Property $key does not exist for object $name")
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. The type is automatically
