@@ -41,14 +41,14 @@ import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneAdapter
 import com.kotcrab.vis.ui.widget.toast.ToastTable
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import ktx.scene2d.KGroup
 import ktx.scene2d.KNode
 import ktx.scene2d.KTable
 import ktx.scene2d.KTree
 import ktx.scene2d.Scene2dDsl
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /** Extends [VisTable] with type-safe widget builders. */
 @Scene2dDsl
@@ -306,7 +306,8 @@ class KCollapsible(val table: KVisTable) : CollapsibleWidget(table), KTable {
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
-    replaceWith = ReplaceWith("Nothing"))
+    replaceWith = ReplaceWith("Nothing")
+  )
   override fun setTable(table: Table?) {
     throw GdxRuntimeException("Use default table instead.")
   }
@@ -319,7 +320,8 @@ class KHorizontalCollapsible(val table: KVisTable) : HorizontalCollapsibleWidget
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
-    replaceWith = ReplaceWith("Nothing"))
+    replaceWith = ReplaceWith("Nothing")
+  )
   override fun setTable(table: Table?) {
     throw GdxRuntimeException("Use default table instead.")
   }

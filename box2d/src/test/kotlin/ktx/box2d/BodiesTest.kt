@@ -117,18 +117,23 @@ class BodiesTest : Box2DTest() {
     val bodyDefinition = BodyDefinition()
 
     val fixtureDef = bodyDefinition.box(
-        width = 2f,
-        height = 2f,
-        position = Vector2(1f, 1f),
-        angle = 90f * MathUtils.degreesToRadians)
+      width = 2f,
+      height = 2f,
+      position = Vector2(1f, 1f),
+      angle = 90f * MathUtils.degreesToRadians
+    )
 
     assertTrue(fixtureDef.shape is PolygonShape)
     val shape = fixtureDef.shape as PolygonShape
-    assertPolygonEquals(arrayOf(
+    assertPolygonEquals(
+      arrayOf(
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)), shape)
+        Vector2(0f, 0f)
+      ),
+      shape
+    )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
   }
@@ -139,21 +144,26 @@ class BodiesTest : Box2DTest() {
     val variable: Int
 
     val fixtureDef = bodyDefinition.box(
-        width = 2f,
-        height = 2f,
-        position = Vector2(1f, 1f),
-        angle = 90f * MathUtils.degreesToRadians) {
+      width = 2f,
+      height = 2f,
+      position = Vector2(1f, 1f),
+      angle = 90f * MathUtils.degreesToRadians
+    ) {
       density = 0.5f
       variable = 42
     }
 
     assertTrue(fixtureDef.shape is PolygonShape)
     val shape = fixtureDef.shape as PolygonShape
-    assertPolygonEquals(arrayOf(
+    assertPolygonEquals(
+      arrayOf(
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)), shape)
+        Vector2(0f, 0f)
+      ),
+      shape
+    )
     assertEquals(0.5f, fixtureDef.density)
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
@@ -320,11 +330,15 @@ class BodiesTest : Box2DTest() {
     val shape = fixtureDef.shape as ChainShape
     assertTrue(shape.isLooped)
     // Loop adds another vertex closing the chain:
-    assertChainEquals(arrayOf(
+    assertChainEquals(
+      arrayOf(
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)), shape)
+        Vector2(1f, 1f)
+      ),
+      shape
+    )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -341,11 +355,15 @@ class BodiesTest : Box2DTest() {
     val shape = fixtureDef.shape as ChainShape
     assertTrue(shape.isLooped)
     // Loop adds another vertex closing the chain:
-    assertChainEquals(arrayOf(
+    assertChainEquals(
+      arrayOf(
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)), shape)
+        Vector2(1f, 1f)
+      ),
+      shape
+    )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
   }
@@ -362,11 +380,15 @@ class BodiesTest : Box2DTest() {
     val shape = fixtureDef.shape as ChainShape
     assertTrue(shape.isLooped)
     // Loop adds another vertex closing the chain:
-    assertChainEquals(arrayOf(
+    assertChainEquals(
+      arrayOf(
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)), shape)
+        Vector2(1f, 1f)
+      ),
+      shape
+    )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -535,18 +557,23 @@ class BodiesTest : Box2DTest() {
     val body = createBody()
 
     val fixture = body.box(
-        width = 2f,
-        height = 2f,
-        position = Vector2(1f, 1f),
-        angle = 90f * MathUtils.degreesToRadians)
+      width = 2f,
+      height = 2f,
+      position = Vector2(1f, 1f),
+      angle = 90f * MathUtils.degreesToRadians
+    )
 
     assertTrue(fixture.shape is PolygonShape)
     val shape = fixture.shape as PolygonShape
-    assertPolygonEquals(arrayOf(
+    assertPolygonEquals(
+      arrayOf(
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)), shape)
+        Vector2(0f, 0f)
+      ),
+      shape
+    )
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
   }
@@ -557,21 +584,26 @@ class BodiesTest : Box2DTest() {
     val variable: Int
 
     val fixture = body.box(
-        width = 2f,
-        height = 2f,
-        position = Vector2(1f, 1f),
-        angle = 90f * MathUtils.degreesToRadians) {
+      width = 2f,
+      height = 2f,
+      position = Vector2(1f, 1f),
+      angle = 90f * MathUtils.degreesToRadians
+    ) {
       density = 0.5f
       variable = 42
     }
 
     assertTrue(fixture.shape is PolygonShape)
     val shape = fixture.shape as PolygonShape
-    assertPolygonEquals(arrayOf(
+    assertPolygonEquals(
+      arrayOf(
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)), shape)
+        Vector2(0f, 0f)
+      ),
+      shape
+    )
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)

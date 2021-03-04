@@ -40,7 +40,8 @@ operator fun Preferences.set(key: String, value: Float): Preferences = putFloat(
 @Deprecated(
   message = "Doubles are not supported by LibGDX Preferences. " +
     "Value will be stored as Float instead. Please add explicit cast.",
-  replaceWith = ReplaceWith("set(key, value.toFloat()"))
+  replaceWith = ReplaceWith("set(key, value.toFloat()")
+)
 operator fun Preferences.set(key: String, value: Double): Preferences = putFloat(key, value.asFloat())
 
 private fun Double.asFloat(): Float {

@@ -50,7 +50,7 @@ class TextAssetLoader(
   }
 
   override fun getDependencies(fileName: String?, file: FileHandle?, parameter: TextAssetLoaderParameters?):
-      Array<AssetDescriptor<Any>>? = null
+    Array<AssetDescriptor<Any>>? = null
 
   /**
    * Optional parameters used to load text files.

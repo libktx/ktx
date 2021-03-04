@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Net.HttpRequest
 import com.badlogic.gdx.Net.HttpResponse
 import com.badlogic.gdx.Net.HttpResponseListener
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlinx.coroutines.CancellableContinuation
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Executes a HTTP request asynchronously.
@@ -97,11 +97,12 @@ class HttpRequestResult(
   override fun equals(other: Any?) = when (other) {
     null -> false
     other === this -> true
-    is HttpRequestResult -> url == other.url &&
-      method == other.method &&
-      statusCode == other.statusCode &&
-      content.contentEquals(other.content) &&
-      headers == other.headers
+    is HttpRequestResult ->
+      url == other.url &&
+        method == other.method &&
+        statusCode == other.statusCode &&
+        content.contentEquals(other.content) &&
+        headers == other.headers
     else -> false
   }
 
@@ -126,11 +127,11 @@ class HttpRequestResult(
  * @return a new [HttpRequestResult] storing [HttpResponse] content.
  */
 fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResult(
-    url = requestData.url,
-    method = requestData.method,
-    statusCode = this.status?.statusCode ?: -1, // -1 matches LibGDX default behaviour on unknown status.
-    content = this.result ?: ByteArray(0),
-    headers = this.headers ?: emptyMap()
+  url = requestData.url,
+  method = requestData.method,
+  statusCode = this.status?.statusCode ?: -1, // -1 matches LibGDX default behaviour on unknown status.
+  content = this.result ?: ByteArray(0),
+  headers = this.headers ?: emptyMap()
 )
 
 /**

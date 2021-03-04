@@ -18,17 +18,19 @@ class JsonTest {
     val json = Json()
 
     // When:
-    val simple = json.fromJson<Simple>("""{
+    val simple = json.fromJson<Simple>(
+      """{
       "int": 10,
       "bool": true,
       "str": "Hello world"
-    }""")
+    }"""
+    )
 
     // Then:
     simple shouldEqual Simple(
-        int = 10,
-        bool = true,
-        str = "Hello world"
+      int = 10,
+      bool = true,
+      str = "Hello world"
     )
   }
 
@@ -38,7 +40,8 @@ class JsonTest {
     val json = Json()
 
     // When:
-    val complex = json.fromJson<Complex>("""{
+    val complex = json.fromJson<Complex>(
+      """{
       "bool": true,
       "simple": {
         "int": 31,
@@ -46,17 +49,18 @@ class JsonTest {
         "str": "a"
       },
       "list": [1, 1, 2, 3, 5, 8, 13]
-    }""")
+    }"""
+    )
 
     // Then:
     complex shouldEqual Complex(
+      bool = true,
+      simple = Simple(
+        int = 31,
         bool = true,
-        simple = Simple(
-            int = 31,
-            bool = true,
-            str = "a"
-        ),
-        list = listOf(1, 1, 2, 3, 5, 8, 13)
+        str = "a"
+      ),
+      list = listOf(1, 1, 2, 3, 5, 8, 13)
     )
   }
 
@@ -71,9 +75,9 @@ class JsonTest {
 
     // Then:
     simple shouldEqual Simple(
-        int = 10,
-        bool = true,
-        str = "test"
+      int = 10,
+      bool = true,
+      str = "test"
     )
   }
 
@@ -156,7 +160,7 @@ class JsonTest {
     // Expect:
     json.readValue<String>(JsonReader().parse("str")) shouldEqual "str"
     json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldEqual arrayListOf(
-        1, 2, 3, 4, 5, 6
+      1, 2, 3, 4, 5, 6
     )
   }
 
@@ -167,7 +171,8 @@ class JsonTest {
     json.setElementType<ListContainer, Simple>("list")
 
     // When:
-    val container = json.fromJson<ListContainer>("""{
+    val container = json.fromJson<ListContainer>(
+      """{
       "list": [
         {
           "bool": true,
@@ -177,13 +182,16 @@ class JsonTest {
           "str": "yes"
         }
       ]
-    }""")
+    }"""
+    )
 
     // Then:
-    container shouldEqual ListContainer(listOf(
+    container shouldEqual ListContainer(
+      listOf(
         Simple(bool = true, int = 42),
         Simple(str = "yes")
-    ))
+      )
+    )
   }
 
   /**

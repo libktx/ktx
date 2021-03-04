@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.Scaling
 import com.kotcrab.vis.ui.layout.FloatingGroup
 import com.kotcrab.vis.ui.layout.FlowGroup
@@ -50,9 +49,6 @@ import com.kotcrab.vis.ui.widget.spinner.SpinnerModel
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane
 import com.kotcrab.vis.ui.widget.toast.Toast
 import com.kotcrab.vis.ui.widget.toast.ToastTable
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import ktx.scene2d.KTable
 import ktx.scene2d.KTree
 import ktx.scene2d.KWidget
@@ -62,6 +58,10 @@ import ktx.scene2d.actor
 import ktx.scene2d.defaultHorizontalStyle
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.defaultVerticalStyle
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Constructs a top-level [VisWindow] widget.

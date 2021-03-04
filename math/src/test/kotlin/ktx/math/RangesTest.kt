@@ -2,10 +2,10 @@ package ktx.math
 
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
-import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.math.abs
 
 /**
  * Tests [ClosedRange]-related utilities.
@@ -175,7 +175,8 @@ class RangesTest {
     val resultsToExpected = listOf(
       withinRange.toFloat() / count to 0.9973f,
       withinFourSigma.toFloat() / count to 0.9545f,
-      withinTwoSigma.toFloat() / count to 0.6827f)
+      withinTwoSigma.toFloat() / count to 0.6827f
+    )
     for ((result, expected) in resultsToExpected) {
       assertTrue(abs(result - expected) / expected <= allowableError)
     }

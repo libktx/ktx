@@ -3,13 +3,13 @@ package ktx.async
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlin.coroutines.ContinuationInterceptor
-import kotlin.coroutines.resume
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.ContinuationInterceptor
+import kotlin.coroutines.resume
 
 /**
  * Main KTX coroutine scope. Executes tasks on the main rendering thread. See [MainDispatcher].

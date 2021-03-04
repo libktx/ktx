@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -24,7 +23,6 @@ import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Logger
 import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
-import java.util.IdentityHashMap
 import kotlinx.coroutines.runBlocking
 import ktx.assets.TextAssetLoader
 import ktx.async.AsyncTest
@@ -41,6 +39,8 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
+import java.util.IdentityHashMap
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 
 /**
  * [AssetStorage] has 3 main variants of asset loading: [AssetStorage.load], [AssetStorage.loadAsync]
@@ -1062,14 +1062,16 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     if (warn) {
       val progress = storage.progress
       if (total != progress.total || loaded != progress.loaded || failed != progress.failed) {
-        System.err.println("""
+        System.err.println(
+          """
           Warning: mismatch in progress value in `${testName.methodName}`.
           Value  | Expected | Actual
           total  | ${"%8d".format(total)} | ${progress.total}
           loaded | ${"%8d".format(loaded)} | ${progress.loaded}
           failed | ${"%8d".format(failed)} | ${progress.failed}
           If this warning is repeated consistently, there might be a related bug in progress reporting.
-        """.trimIndent())
+          """.trimIndent()
+        )
       }
     } else {
       assertEquals(total, storage.progress.total)

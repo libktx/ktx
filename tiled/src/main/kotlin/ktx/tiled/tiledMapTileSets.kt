@@ -11,7 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet
  * @throws MissingPropertyException If the property is not defined.
  */
 inline fun <reified T> TiledMapTileSet.property(key: String): T = properties[key, T::class.java]
-    ?: throw MissingPropertyException("Property $key does not exist for tile set $name")
+  ?: throw MissingPropertyException("Property $key does not exist for tile set $name")
 
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMapTileSet]. The type is automatically

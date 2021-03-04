@@ -5,10 +5,6 @@ import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.mock.mock
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.async
@@ -20,6 +16,10 @@ import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Base class with coroutine dispatcher tests.
@@ -89,9 +89,13 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
     val executionTime = AtomicLong()
 
     // When:
-    tested.invokeOnTimeout(50L, Runnable {
-      executionTime.set(System.currentTimeMillis() - start)
-    }, GlobalScope.coroutineContext)
+    tested.invokeOnTimeout(
+      50L,
+      Runnable {
+        executionTime.set(System.currentTimeMillis() - start)
+      },
+      GlobalScope.coroutineContext
+    )
 
     // Then:
     delay(100L)

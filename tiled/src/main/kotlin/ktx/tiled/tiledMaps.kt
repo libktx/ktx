@@ -13,7 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
  * @throws MissingPropertyException If the property is not defined.
  */
 inline fun <reified T> TiledMap.property(key: String): T = properties[key, T::class.java]
-    ?: throw MissingPropertyException("Property $key does not exist.")
+  ?: throw MissingPropertyException("Property $key does not exist.")
 
 /**
  * Extension method to directly access the [MapProperties] of a [TiledMap]. The type is automatically
@@ -139,7 +139,7 @@ operator fun TiledMap.contains(layerName: String) = layers[layerName] != null
  * @throws MissingLayerException If the layer does not exist
  */
 fun TiledMap.layer(layerName: String) = layers[layerName]
-    ?: throw MissingLayerException("Layer $layerName does not exist for map")
+  ?: throw MissingLayerException("Layer $layerName does not exist for map")
 
 /**
  * Extension method to easily execute an action per [MapObject] of a given [MapLayer].

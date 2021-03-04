@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.kotcrab.vis.ui.VisUI
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
@@ -22,6 +21,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Tests [scene2d] DSL object.

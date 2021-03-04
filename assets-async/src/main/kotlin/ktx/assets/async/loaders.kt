@@ -8,8 +8,8 @@ import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.utils.Array as GdxArray
 import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Stores [AssetLoader] instances mapped by loaded asset type. Internal [AssetStorage] utility.
@@ -116,9 +116,9 @@ private val <Asset> AssetDescriptor<Asset>.parameters: AssetLoaderParameters<Ass
  * with [AssetDescriptor] instances. Null if here are no dependencies.
  */
 fun Loader<*>.getDependencies(assetDescriptor: AssetDescriptor<*>): GdxArray<AssetDescriptor<*>> =
-    @Suppress("UNCHECKED_CAST")
-    (this as AssetLoader<*, AssetLoaderParameters<*>>)
-        .getDependencies(assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters) ?: GdxArray(0)
+  @Suppress("UNCHECKED_CAST")
+  (this as AssetLoader<*, AssetLoaderParameters<*>>)
+    .getDependencies(assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters) ?: GdxArray(0)
 
 /**
  * Allows to use [SynchronousAssetLoader.load] method with [AssetDescriptor].
@@ -126,9 +126,9 @@ fun Loader<*>.getDependencies(assetDescriptor: AssetDescriptor<*>): GdxArray<Ass
  * [assetDescriptor] contains asset data. Returns fully loaded [Asset] instance.
  */
 fun <Asset> SynchronousLoader<Asset>.load(assetManager: AssetManager, assetDescriptor: AssetDescriptor<Asset>): Asset =
-    @Suppress("UNCHECKED_CAST")
-    (this as SynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
-        .load(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
+  @Suppress("UNCHECKED_CAST")
+  (this as SynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
+    .load(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
 
 /**
  * Allows to use [AsynchronousAssetLoader.loadAsync] method with [AssetDescriptor].
@@ -137,9 +137,9 @@ fun <Asset> SynchronousLoader<Asset>.load(assetManager: AssetManager, assetDescr
  * [assetDescriptor] contains asset data.
  */
 fun <Asset> AsynchronousLoader<Asset>.loadAsync(assetManager: AssetManager, assetDescriptor: AssetDescriptor<Asset>) =
-    @Suppress("UNCHECKED_CAST")
-    (this as AsynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
-        .loadAsync(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
+  @Suppress("UNCHECKED_CAST")
+  (this as AsynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
+    .loadAsync(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
 
 /**
  * Allows to use [AsynchronousAssetLoader.loadSync] method with [AssetDescriptor].
@@ -148,9 +148,9 @@ fun <Asset> AsynchronousLoader<Asset>.loadAsync(assetManager: AssetManager, asse
  * [assetDescriptor] contains asset data. Returns fully loaded [Asset] instance.
  */
 fun <Asset> AsynchronousLoader<Asset>.loadSync(assetManager: AssetManager, assetDescriptor: AssetDescriptor<Asset>): Asset =
-    @Suppress("UNCHECKED_CAST")
-    (this as AsynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
-        .loadSync(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
+  @Suppress("UNCHECKED_CAST")
+  (this as AsynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
+    .loadSync(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
 
 /** Required for [ManualLoader] by LibGDX API. */
 internal class ManualLoadingParameters : AssetLoaderParameters<Any>()
