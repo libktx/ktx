@@ -62,6 +62,15 @@ class MapLayerTest {
   }
 
   @Test
+  fun `should return true when MapLayers becomes empty`() {
+    val actual = MapLayers()
+    actual.add(MapLayer())
+    actual.remove(0)
+
+    assertTrue(actual.isEmpty())
+  }
+
+  @Test
   fun `should return true when MapLayers is not empty`() {
     val actual = MapLayers()
     actual.add(MapLayer())

@@ -103,11 +103,11 @@ val map: TiledMap = getMap()
 val myFloatProp: Float = mapObj.property("myFloatProperty")
 
 // Retrieves String property with a default value:
-val myProp: String = mapObj.property("myProperty", defaultValue="")
+val myProp: String = mapObj.property("myProperty", defaultValue = "")
 
 // The explicit type can be omitted as it is automatically derived from the type of the default value.
 // myProp2 is of type Float
-val myProp2 = mapLayer.property("myProperty2", defaultValue=1f)
+val myProp2 = mapLayer.property("myProperty2", defaultValue = 1f)
 
 // Retrieves Int property or null if the property does not exist.
 val myOtherProp: Int? = map.propertyOrNull("myOtherProperty")
@@ -200,8 +200,8 @@ if(map.contains("enemyLayer")) {
 }
 
 // or with the "in" syntax
-if("collision" in map) {
-    val collisionLayer = map.layer("collision")    
+if ("collision" in map) {
+    val collisionLayer = map.layer("collision")
 }
 
 // the next line will throw a MissingLayerException if the layer does not exist
@@ -232,7 +232,8 @@ val map: TiledMap = getTiledMap()
 
 // Iterate over all object layers and parse them.
 // Note that parseObjectLayer is only called for layers of exact type MapLayer.
-// TiledMapTileLayer which is a subclass of MapLayer will not match.
+// For example, TiledMapTileLayer - which is a subclass of MapLayer - does not 
+// have this exact type and will not match.
 map.forEachLayer<MapLayer> { layer ->
     parseObjectLayer(layer)
 }
@@ -242,19 +243,18 @@ Check if a `MapLayers` or `MapObjects` collection is empty:
 
 ```kotlin
 import com.badlogic.gdx.maps.MapObjects
-import com.badlogic.gdx.maps.MapLayers
 import com.badlogic.gdx.maps.tiled.TiledMap
 import ktx.tiled.*
 
-val map: TiledMap = getTiledMap()
+val map: TiledMap = TiledMap()
 
-if(tiledMap.layers.isNotEmpty()) {
-    tiledMap.layers.forEach { layer ->
-        if(layer.objects.isEmpty()) {
+if (map.layers.isNotEmpty()) {
+    map.layers.forEach { layer ->
+        if (layer.objects.isEmpty()) {
             // nothing to do if there are no objects
             return@forEach
         }
-        
+
         parseObjects(layer.objects)
     }
 }

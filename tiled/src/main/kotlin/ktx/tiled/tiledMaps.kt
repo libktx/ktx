@@ -156,16 +156,16 @@ inline fun TiledMap.forEachMapObject(layerName: String, action: (MapObject) -> U
 }
 
 /**
- * Extension method to run a [lambda] on a specific type of [layers][MapLayer] of the [TiledMap]. The lambda
+ * Extension method to run an [action] on a specific type of [layers][MapLayer] of the [TiledMap]. The lambda
  * takes the matching [MapLayer] as a parameter.
  *
  * The class matching is an exact match meaning that a given subclass like [TiledMapTileLayer] will not match
  * for the argument [MapLayer].
  */
-inline fun <reified T : MapLayer> TiledMap.forEachLayer(lambda: (T) -> Unit) {
+inline fun <reified T : MapLayer> TiledMap.forEachLayer(action: (T) -> Unit) {
   this.layers.forEach {
     if (it::class == T::class) {
-      lambda(it as T)
+      action(it as T)
     }
   }
 }
