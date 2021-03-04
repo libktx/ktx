@@ -1,6 +1,7 @@
 package ktx.tiled
 
 import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapLayers
 import com.badlogic.gdx.maps.MapProperties
 
 /**
@@ -38,3 +39,13 @@ inline fun <reified T> MapLayer.propertyOrNull(key: String): T? = properties[key
  * @return true if the property exists. Otherwise false.
  */
 fun MapLayer.containsProperty(key: String) = properties.containsKey(key)
+
+/**
+ * Returns **true** if and only if the [MapLayers] collection is empty.
+ */
+fun MapLayers.isEmpty() = this.count <= 0
+
+/**
+ * Returns **true** if and only if the [MapLayers] collection is not empty.
+ */
+fun MapLayers.isNotEmpty() = this.count > 0

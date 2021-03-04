@@ -3,6 +3,9 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.9.14-SNAPSHOT
 - **[UPDATE]** Updated to Kotlin 1.4.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.4.3.
+- **[FEATURE]** (`ktx-tiled`) Added `isEmpty` and `isNotEmpty` extension function for `MapLayers` and `MapObjects` collections.
+- **[FEATURE]** (`ktx-tiled`) Added `forEachLayer` extension function for `TiledMap` to iterate over an exact type 
+  of `MapLayer` instances of a specific map
 
 #### 1.9.14-b1
 

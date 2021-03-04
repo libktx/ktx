@@ -3,6 +3,7 @@ package ktx.tiled
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -127,5 +128,25 @@ class TiledMapTest {
     tiledMap.forEachMapObject("non-existing") {
       fail()
     }
+  }
+
+  @Test
+  fun `should not execute lambda when there is no layer for the given type`() {
+    tiledMap.forEachLayer<TiledMapTileLayer> {
+      fail()
+    }
+  }
+
+  @Test
+  fun `should execute lambda when there is a layer for the given type`() {
+    var counter = 0
+
+    tiledMap.forEachLayer<MapLayer> {
+      it.isVisible = false
+      ++counter
+    }
+
+    assertEquals(2, counter)
+    assertTrue(tiledMap.layers.all { !it.isVisible })
   }
 }

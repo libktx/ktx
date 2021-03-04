@@ -1,6 +1,7 @@
 package ktx.tiled
 
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
@@ -118,5 +119,35 @@ class MapObjectTest {
     val textureObject = TextureMapObject()
 
     textureObject.shape
+  }
+
+  @Test
+  fun `should return true when MapObjects is empty`() {
+    val actual = MapObjects()
+
+    assertTrue(actual.isEmpty())
+  }
+
+  @Test
+  fun `should return false when MapObjects is not empty`() {
+    val actual = MapObjects()
+    actual.add(MapObject())
+
+    assertFalse(actual.isEmpty())
+  }
+
+  @Test
+  fun `should return true when MapObjects is not empty`() {
+    val actual = MapObjects()
+    actual.add(MapObject())
+
+    assertTrue(actual.isNotEmpty())
+  }
+
+  @Test
+  fun `should return false when MapObjects is empty`() {
+    val actual = MapObjects()
+
+    assertFalse(actual.isNotEmpty())
   }
 }
