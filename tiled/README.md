@@ -194,17 +194,17 @@ import ktx.tiled.*
 
 val map: TiledMap = getTiledMap()
 
-// contains can either be used with the normal syntax
-if(map.contains("enemyLayer")) {
+// Contains can be used either with the regular method call syntax:
+if (map.contains("enemyLayer")) {
     val enemyLayer = map.layer("enemyLayer")
 }
 
-// or with the "in" syntax
+// Or with the "in" operator:
 if ("collision" in map) {
     val collisionLayer = map.layer("collision")
 }
 
-// the next line will throw a MissingLayerException if the layer does not exist
+// This will throw a MissingLayerException if the layer does not exist:
 val layer = map.layer("myMapLayer")
 ```
 
@@ -231,15 +231,15 @@ import ktx.tiled.*
 val map: TiledMap = getTiledMap()
 
 // Iterate over all object layers and parse them.
-// Note that parseObjectLayer is only called for layers of exact type MapLayer.
+// Note that println is only called with layers of the exact MapLayer type.
 // For example, TiledMapTileLayer - which is a subclass of MapLayer - does not 
-// have this exact type and will not match.
+// have this exact class and will not be matched.
 map.forEachLayer<MapLayer> { layer ->
-    parseObjectLayer(layer)
+  println(layer)
 }
 ```
 
-Check if a `MapLayers` or `MapObjects` collection is empty:
+Checking if `MapLayers` and `MapObjects` collections are empty:
 
 ```kotlin
 import com.badlogic.gdx.maps.MapObjects
@@ -249,14 +249,13 @@ import ktx.tiled.*
 val map: TiledMap = TiledMap()
 
 if (map.layers.isNotEmpty()) {
-    map.layers.forEach { layer ->
-        if (layer.objects.isEmpty()) {
-            // nothing to do if there are no objects
-            return@forEach
-        }
-
-        parseObjects(layer.objects)
+  map.layers.forEach { layer ->
+    if (layer.objects.isEmpty()) {
+      // nothing to do if there are no objects
+      return@forEach 
     }
+    parseObjects(layer.objects)
+  }
 }
 ```
 
