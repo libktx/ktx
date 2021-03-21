@@ -1,4 +1,4 @@
-[![Ashley](https://img.shields.io/badge/ashley-1.7.3-red.svg)](https://libgdx.badlogicgames.com/)
+[![Ashley](https://img.shields.io/badge/ashley-1.7.4-red.svg)](https://github.com/libgdx/ashley)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-ashley.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-ashley)
 
 # KTX: `Ashley` entity component system utilities

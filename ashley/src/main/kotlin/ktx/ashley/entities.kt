@@ -68,7 +68,7 @@ operator fun <T : Component> Entity.contains(mapper: ComponentMapper<T>): Boolea
  * @return the removed [Component] instance (if was present and matched the specified type) or null.
  * @see Entity.remove
  */
-inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class.java) as? T
+inline fun <reified T : Component> Entity.remove(): Component? = remove(T::class.java)
 
 /**
  * Adds a constructed [Component] to this [Entity]. If a [Component] of the same type exists, it will be replaced.
