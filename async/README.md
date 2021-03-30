@@ -38,6 +38,14 @@ kotlin {
 
 If you are using a recent version of Kotlin and `ktx-async`, this declaration is no longer required.
 
+##### Known issues
+
+You might have trouble running Kotlin coroutines with the recent versions of RoboVM on iOS. Using any
+coroutines-related classes might result in a `java.lang.NoClassDefFoundError` exception, regardless of whether
+`ktx-async` is used or not. If you encounter this issue, you can try downgrading the RoboVM, Kotlin or coroutines
+versions. See issues [#350](https://github.com/libktx/ktx/issues/350) and
+[robovm#572](https://github.com/MobiVM/robovm/issues/572) for more details.
+
 #### Coroutines
 
 _Please refer to Kotlin coroutines documentation or tutorials if you are having trouble with this section._

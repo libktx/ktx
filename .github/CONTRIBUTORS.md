@@ -78,6 +78,8 @@ Project contributors listed chronologically.
   * Updated the sources documentation generator to Dokka 1.4.
 * [@deveth0](https://github.com/deveth0)
   * Contributed utilities to the [graphics module](../graphics).
+* [@auraxangelic](https://github.com/auraxangelic)
+  * Tested KTX on iOS and documented RoboVM issue with Kotlin coroutines.
 
 ### Metrics
 
