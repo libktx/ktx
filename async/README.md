@@ -42,8 +42,11 @@ If you are using a recent version of Kotlin and `ktx-async`, this declaration is
 
 If using any coroutines-related classes results in a `java.lang.NoClassDefFoundError` exception, make sure that
 the backend module correctly picks up transitive dependencies of the core module. In particular, this error can be
-seen on iOS when using RoboVM if the core dependencies are not correctly included by the iOS backend module.
-`ktx-async` was tested on desktop, Android and iOS, and should work on every major platform.
+seen on iOS with RoboVM if `kotlinx-coroutines-core` or `ktx-async` are included as `implementation` dependencies
+in the core Gradle module instead of `api`.
+
+`ktx-async` was tested on desktop, Android and iOS, and should work on every major platform. If you encounter
+any issues with launching the coroutines, do not hesitate to create an [issue](https://github.com/libktx/ktx/issues).
 
 #### Coroutines
 
