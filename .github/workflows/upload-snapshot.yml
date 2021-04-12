@@ -22,7 +22,7 @@ jobs:
         env:
           TEST_PROFILE: ci
       - name: Upload snapshot to Maven Central
-        run: ./gradlew build uploadSnapshot
+        run: ./gradlew build uploadSnapshot -x dokkaHtml
         env:
           ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.ossrhUsername }}
           ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.ossrhPassword }}
