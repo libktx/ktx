@@ -806,7 +806,7 @@ inline fun <S> KWidget<S>.dragPane(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.visScrollPane(
   style: String = defaultStyle,
-  init: (@Scene2dDsl VisScrollPane).(S) -> Unit = {}
+  init: (@Scene2dDsl KVisScrollPane).(S) -> Unit = {}
 ): KVisScrollPane {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KVisScrollPane(style), init)
@@ -826,7 +826,7 @@ inline fun <S> KWidget<S>.visScrollPane(
 inline fun <S> KWidget<S>.visSplitPane(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
-  init: (@Scene2dDsl VisSplitPane).(S) -> Unit = {}
+  init: (@Scene2dDsl KVisSplitPane).(S) -> Unit = {}
 ): KVisSplitPane {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KVisSplitPane(vertical, style), init)
