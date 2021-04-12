@@ -73,8 +73,15 @@ the following extensions were added:
 - `contains(layerName: String)`: works as the `in` operator.
 - `layer(layerName: String)`: returns the layer or throws a `MissingLayerException` in case the layer does not exist.
 
-Inlined `forEachMapObject` extension methods allows to iterate over all `MapObject` instances present on the chosen
+Inlined `forEachMapObject` extension method allows to iterate over all `MapObject` instances present on the chosen
 map layer.
+
+Inlined `forEachLayer` extension method allows to iterate over all `MapLayer` instances of a specific type to execute
+a certain function on them.
+
+### `MapLayers` and `MapObjects`
+
+`isEmpty` and `isNotEmpty` extension method to check if the specific collection is empty or not.
 
 ### Usage examples
 
@@ -96,11 +103,11 @@ val map: TiledMap = getMap()
 val myFloatProp: Float = mapObj.property("myFloatProperty")
 
 // Retrieves String property with a default value:
-val myProp: String = mapObj.property("myProperty", defaultValue="")
+val myProp: String = mapObj.property("myProperty", defaultValue = "")
 
 // The explicit type can be omitted as it is automatically derived from the type of the default value.
 // myProp2 is of type Float
-val myProp2 = mapLayer.property("myProperty2", defaultValue=1f)
+val myProp2 = mapLayer.property("myProperty2", defaultValue = 1f)
 
 // Retrieves Int property or null if the property does not exist.
 val myOtherProp: Int? = map.propertyOrNull("myOtherProperty")
@@ -187,17 +194,17 @@ import ktx.tiled.*
 
 val map: TiledMap = getTiledMap()
 
-// contains can either be used with the normal syntax
-if(map.contains("enemyLayer")) {
+// Contains can be used either with the regular method call syntax:
+if (map.contains("enemyLayer")) {
     val enemyLayer = map.layer("enemyLayer")
 }
 
-// or with the "in" syntax
-if("collision" in map) {
-    val collisionLayer = map.layer("collision")    
+// Or with the "in" operator:
+if ("collision" in map) {
+    val collisionLayer = map.layer("collision")
 }
 
-// the next line will throw a MissingLayerException if the layer does not exist
+// This will throw a MissingLayerException if the layer does not exist:
 val layer = map.layer("myMapLayer")
 ```
 
@@ -212,6 +219,43 @@ val map: TiledMap = getTiledMap()
 // Creates collision bodies for every map object of the collision layer:
 map.forEachMapObject("collision") { mapObj ->
     createStaticBox2DCollisionBody(mapObj.x, mapObj.y, mapObj.shape)
+}
+```
+
+Iterating over a specific type of layers of a map:
+
+```kotlin
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+val map: TiledMap = getTiledMap()
+
+// Iterate over all object layers and parse them.
+// Note that println is only called with layers of the exact MapLayer type.
+// For example, TiledMapTileLayer - which is a subclass of MapLayer - does not 
+// have this exact class and will not be matched.
+map.forEachLayer<MapLayer> { layer ->
+  println(layer)
+}
+```
+
+Checking if `MapLayers` and `MapObjects` collections are empty:
+
+```kotlin
+import com.badlogic.gdx.maps.MapObjects
+import com.badlogic.gdx.maps.tiled.TiledMap
+import ktx.tiled.*
+
+val map: TiledMap = TiledMap()
+
+if (map.layers.isNotEmpty()) {
+  map.layers.forEach { layer ->
+    if (layer.objects.isEmpty()) {
+      // nothing to do if there are no objects
+      return@forEach 
+    }
+    parseObjects(layer.objects)
+  }
 }
 ```
 

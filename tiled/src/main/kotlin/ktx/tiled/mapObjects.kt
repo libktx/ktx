@@ -1,6 +1,7 @@
 package ktx.tiled
 
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
@@ -23,7 +24,7 @@ import com.badlogic.gdx.math.Shape2D
  * @throws MissingPropertyException If the property is not defined.
  */
 inline fun <reified T> MapObject.property(key: String): T = properties[key, T::class.java]
-    ?: throw MissingPropertyException("Property $key does not exist for object $name")
+  ?: throw MissingPropertyException("Property $key does not exist for object $name")
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. The type is automatically
@@ -120,3 +121,13 @@ val MapObject.shape: Shape2D
     is RectangleMapObject -> rectangle
     else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape.")
   }
+
+/**
+ * Returns **true** if and only if the [MapObjects] collection is empty.
+ */
+fun MapObjects.isEmpty() = this.count <= 0
+
+/**
+ * Returns **true** if and only if the [MapObjects] collection is not empty.
+ */
+fun MapObjects.isNotEmpty() = this.count > 0

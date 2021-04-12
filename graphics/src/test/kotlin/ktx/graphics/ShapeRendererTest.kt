@@ -175,8 +175,10 @@ class ShapeRendererTest {
   fun `should render triangle with colored corners`() {
     val tested = mock<ShapeRenderer>()
 
-    tested.triangle(pointA = Vector2(1f, 2f), pointB = Vector2(3f, 4f), pointC = Vector2(5f, 6f),
-      colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK)
+    tested.triangle(
+      pointA = Vector2(1f, 2f), pointB = Vector2(3f, 4f), pointC = Vector2(5f, 6f),
+      colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK
+    )
 
     verify(tested).triangle(1f, 2f, 3f, 4f, 5f, 6f, Color.WHITE, Color.GRAY, Color.BLACK)
   }

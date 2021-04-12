@@ -25,6 +25,6 @@ operator fun <Type> Pool<Type>.invoke(free: Type) = this.free(free)
  * @return a new [Pool] instance, creating the object with the passed provider.
  */
 inline fun <Type> pool(initialCapacity: Int = 16, max: Int = Int.MAX_VALUE, crossinline provider: () -> Type): Pool<Type> =
-    object : Pool<Type>(initialCapacity, max) {
-      override fun newObject(): Type = provider()
-    }
+  object : Pool<Type>(initialCapacity, max) {
+    override fun newObject(): Type = provider()
+  }

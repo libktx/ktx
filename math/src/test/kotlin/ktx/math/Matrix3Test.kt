@@ -15,12 +15,15 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
   }
 
   @Test
@@ -28,18 +31,23 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = -matrix
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       -1f, -2f, -3f,
       -4f, -5f, -6f,
-      -7f, -8f, -9f)
-    assertMatrixEquals(matrix,
+      -7f, -8f, -9f
+    )
+    assertMatrixEquals(
+      matrix,
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
   }
 
   @Test
@@ -47,18 +55,23 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 1f,
       0f, 1f, 1f,
-      0f, 0f, 1f)
+      0f, 0f, 1f
+    )
 
     val result = !matrix
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       +1f, -2f, +1f,
       +0f, +1f, -1f,
-      +0f, +0f, +1f)
-    assertMatrixEquals(matrix,
+      +0f, +0f, +1f
+    )
+    assertMatrixEquals(
+      matrix,
       1f, 2f, 1f,
       0f, 1f, 1f,
-      0f, 0f, 1f)
+      0f, 0f, 1f
+    )
   }
 
   @Test
@@ -66,17 +79,21 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix += mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       +2f, +4f, +6f,
       +8f, 10f, 12f,
-      14f, 16f, 18f)
+      14f, 16f, 18f
+    )
   }
 
   @Test
@@ -84,17 +101,21 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix -= mat3(
       9f, 8f, 7f,
       6f, 5f, 4f,
-      3f, 2f, 1f)
+      3f, 2f, 1f
+    )
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       -8f, -6f, -4f,
       -2f, +0f, +2f,
-      +4f, +6f, +8f)
+      +4f, +6f, +8f
+    )
   }
 
   @Test
@@ -102,14 +123,17 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix *= mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       1f * 1f + 2f * 4f + 3f * 7f,
       1f * 2f + 2f * 5f + 3f * 8f,
       1f * 3f + 2f * 6f + 3f * 9f,
@@ -120,7 +144,8 @@ class Matrix3Test {
 
       7f * 1f + 8f * 4f + 9f * 7f,
       7f * 2f + 8f * 5f + 9f * 8f,
-      7f * 3f + 8f * 6f + 9f * 9f)
+      7f * 3f + 8f * 6f + 9f * 9f
+    )
   }
 
   @Test
@@ -128,14 +153,17 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix *= 3f
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       3f, +2f, 3f,
       4f, 15f, 6f,
-      7f, +8f, 9f)
+      7f, +8f, 9f
+    )
   }
 
   @Test
@@ -143,14 +171,17 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix *= vec2(3f, 2f / 5f)
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       3f, 2f, 3f,
       4f, 2f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
   }
 
   @Test
@@ -158,14 +189,17 @@ class Matrix3Test {
     val matrix = mat3(
       3f, 2f, 3f,
       4f, 2f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     matrix *= vec3(3f, 2f, 0f) // Last value is ignored.
 
-    assertMatrixEquals(matrix,
+    assertMatrixEquals(
+      matrix,
       9f, 2f, 3f,
       4f, 4f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
   }
 
   @Test
@@ -175,7 +209,8 @@ class Matrix3Test {
     vector *= mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     assertEquals(1f * 1f + 2f * 2f + 1f * 3f, vector.x, floatTolerance)
     assertEquals(1f * 4f + 2f * 5f + 1f * 6f, vector.y, floatTolerance)
@@ -186,17 +221,21 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = matrix + mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       +2f, +4f, +6f,
       +8f, 10f, 12f,
-      14f, 16f, 18f)
+      14f, 16f, 18f
+    )
   }
 
   @Test
@@ -204,17 +243,21 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = matrix - mat3(
       9f, 8f, 7f,
       6f, 5f, 4f,
-      3f, 2f, 1f)
+      3f, 2f, 1f
+    )
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       -8f, -6f, -4f,
       -2f, +0f, +2f,
-      +4f, +6f, +8f)
+      +4f, +6f, +8f
+    )
   }
 
   @Test
@@ -222,14 +265,17 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = matrix * mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       1f * 1f + 2f * 4f + 3f * 7f,
       1f * 2f + 2f * 5f + 3f * 8f,
       1f * 3f + 2f * 6f + 3f * 9f,
@@ -240,7 +286,8 @@ class Matrix3Test {
 
       7f * 1f + 8f * 4f + 9f * 7f,
       7f * 2f + 8f * 5f + 9f * 8f,
-      7f * 3f + 8f * 6f + 9f * 9f)
+      7f * 3f + 8f * 6f + 9f * 9f
+    )
   }
 
   @Test
@@ -248,14 +295,17 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = matrix * 3f
 
-    assertMatrixEquals(result,
+    assertMatrixEquals(
+      result,
       3f, +2f, 3f,
       4f, 15f, 6f,
-      7f, +8f, 9f)
+      7f, +8f, 9f
+    )
   }
 
   @Test
@@ -263,7 +313,8 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
     val result = matrix * vec2(3f, 2f)
 
@@ -276,11 +327,14 @@ class Matrix3Test {
     val matrix = mat3(
       1f, 2f, 3f,
       4f, 5f, 6f,
-      7f, 8f, 9f)
+      7f, 8f, 9f
+    )
 
-    val (x0y0, x0y1, x0y2,
+    val (
+      x0y0, x0y1, x0y2,
       x1y0, x1y1, x1y2,
-      x2y0, x2y1, x2y2) = matrix
+      x2y0, x2y1, x2y2
+    ) = matrix
 
     assertEquals(1f, x0y0, floatTolerance)
     assertEquals(2f, x0y1, floatTolerance)

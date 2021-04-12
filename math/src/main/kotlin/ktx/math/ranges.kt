@@ -126,7 +126,8 @@ fun ClosedRange<Float>.randomTriangular() = MathUtils.randomTriangular(start, en
  * there is no error checking.
  */
 fun ClosedRange<Float>.randomTriangular(normalizedMode: Float): Float =
-  MathUtils.randomTriangular(start, endInclusive,
+  MathUtils.randomTriangular(
+    start, endInclusive,
     normalizedMode * (endInclusive - start) + start
   )
 

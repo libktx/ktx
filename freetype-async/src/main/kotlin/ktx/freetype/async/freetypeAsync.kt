@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
+import ktx.assets.async.AssetStorage
+import ktx.freetype.freeTypeFontParameters
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import ktx.assets.async.AssetStorage
-import ktx.freetype.freeTypeFontParameters
 
 /**
  * Registers all loaders necessary to load [BitmapFont] and [FreeTypeFontGenerator]

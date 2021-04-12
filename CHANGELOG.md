@@ -1,5 +1,19 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.9.14-b2
+
+- **[UPDATE]** Updated to Ashley 1.7.4.
+- **[UPDATE]** Updated to Kotlin 1.4.32.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.4.3.
+- **[UPDATE]** Updated to Gradle 6.8.3.
+- **[UPDATE]** Updated to Dokka 1.4.30.
+- **[MISC]** Due to the newly added support for multimodule projects in Dokka, published documentation URLs will change.
+- **[FEATURE]** (`ktx-tiled`) Added `isEmpty` and `isNotEmpty` extension function for `MapLayers` and `MapObjects` collections.
+- **[FEATURE]** (`ktx-tiled`) Added `forEachLayer` extension function for `TiledMap` to iterate over an exact type 
+of `MapLayer` instances of a specific map.
+- **[FIX]** (`ktx-vis`) `visScrollPane` and `visSplitPane` now define the correct types for `this` in theis `init` lambdas,
+adding support for Scene2D and VisUI DSL.
+
 #### 1.9.14-b1
 
 - **[UPDATE]** Updated to LibGDX 1.9.14.

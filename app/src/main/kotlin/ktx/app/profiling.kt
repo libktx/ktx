@@ -65,8 +65,11 @@ fun PerformanceCounter.prettyPrint(decimalFormat: String = "%.6fs") {
   val minimum: Float
   val maximum: Float
   if (mean != null && mean.hasEnoughData()) {
-    Gdx.app.log(name, "Average OP time: ${decimalFormat.format(mean.mean)} " +
-      "± ${decimalFormat.format(mean.standardDeviation())}")
+    Gdx.app.log(
+      name,
+      "Average OP time: ${decimalFormat.format(mean.mean)} " +
+        "± ${decimalFormat.format(mean.standardDeviation())}"
+    )
     minimum = mean.lowest
     maximum = mean.highest
   } else {

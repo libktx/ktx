@@ -1,6 +1,7 @@
 package ktx.tiled
 
 import com.badlogic.gdx.maps.MapLayer
+import com.badlogic.gdx.maps.MapLayers
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -43,5 +44,44 @@ class MapLayerTest {
   @Test(expected = MissingPropertyException::class)
   fun `should not retrieve non-existing property from MapLayer`() {
     mapLayer.property<String>("non-existing")
+  }
+
+  @Test
+  fun `should return true when MapLayers is empty`() {
+    val actual = MapLayers()
+
+    assertTrue(actual.isEmpty())
+  }
+
+  @Test
+  fun `should return false when MapLayers is not empty`() {
+    val actual = MapLayers()
+    actual.add(MapLayer())
+
+    assertFalse(actual.isEmpty())
+  }
+
+  @Test
+  fun `should return true when MapLayers becomes empty`() {
+    val actual = MapLayers()
+    actual.add(MapLayer())
+    actual.remove(0)
+
+    assertTrue(actual.isEmpty())
+  }
+
+  @Test
+  fun `should return true when MapLayers is not empty`() {
+    val actual = MapLayers()
+    actual.add(MapLayer())
+
+    assertTrue(actual.isNotEmpty())
+  }
+
+  @Test
+  fun `should return false when MapLayers is empty`() {
+    val actual = MapLayers()
+
+    assertFalse(actual.isNotEmpty())
   }
 }

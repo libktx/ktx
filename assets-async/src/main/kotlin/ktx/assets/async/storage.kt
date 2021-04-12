@@ -22,14 +22,12 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.Logger
 import com.badlogic.gdx.utils.Queue
 import com.badlogic.gdx.utils.UBJsonReader
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -42,6 +40,8 @@ import ktx.assets.TextAssetLoader
 import ktx.async.KtxAsync
 import ktx.async.newSingleThreadAsyncContext
 import ktx.async.onRenderingThread
+import kotlin.coroutines.CoroutineContext
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 
 /**
  * Asynchronous asset loader based on coroutines API. An [AssetManager] alternative.
@@ -1222,9 +1222,11 @@ class AssetStorage(
           if (asset.dependencies.isEmpty()) {
             asset
           } else {
-            asset.copy(dependencies = asset.dependencies.mapNotNull { dependency ->
-              assetsCopy[dependency.identifier]
-            })
+            asset.copy(
+              dependencies = asset.dependencies.mapNotNull { dependency ->
+                assetsCopy[dependency.identifier]
+              }
+            )
           }
         }
       )
@@ -1298,7 +1300,7 @@ class AssetStorage(
   }
 
   override fun toString(): String = "AssetStorage(assets=${
-    assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
+  assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
   })"
 }
 
@@ -1388,21 +1390,21 @@ data class AssetStorageSnapshot(
   fun prettyPrint(): String {
     return """[
 ${
-      assets.values
-        .sortedBy { it.identifier.type.name }
-        .sortedBy { it.identifier.path }
-        .joinToString(separator = "\n") {
-          """  "${it.identifier.path}" (${it.identifier.type.name}) {
+    assets.values
+      .sortedBy { it.identifier.type.name }
+      .sortedBy { it.identifier.path }
+      .joinToString(separator = "\n") {
+        """  "${it.identifier.path}" (${it.identifier.type.name}) {
     references=${it.referenceCount},
     dependencies=${
-            it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
-              "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
-            }
-          },
+        it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
+          "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
+        }
+        },
     loaded=${it.reference.isCompleted || it.reference.isCancelled},
     loader=${it.loader.javaClass.name},
   },"""
-        }
+      }
     }
 ]"""
   }

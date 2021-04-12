@@ -10,14 +10,14 @@ import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectSet
 import io.kotlintest.matchers.shouldThrow
-import java.lang.IllegalArgumentException
-import java.util.LinkedList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.lang.IllegalArgumentException
+import java.util.LinkedList
 
 /**
  * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
@@ -155,8 +155,8 @@ class MapsTest {
   @Test
   fun `should convert Iterables to GdxMap`() {
     val map = listOf("1", "2", "3").toGdxMap(
-        keyProvider = { it.toInt() },
-        valueProvider = { it + it }
+      keyProvider = { it.toInt() },
+      valueProvider = { it + it }
     )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
@@ -165,8 +165,8 @@ class MapsTest {
   @Test
   fun `should convert customized Arrays to GdxMap`() {
     val map = arrayOf("1", "2", "3").toGdxMap(
-        keyProvider = { it.toInt() },
-        valueProvider = { it + it }
+      keyProvider = { it.toInt() },
+      valueProvider = { it + it }
     )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)

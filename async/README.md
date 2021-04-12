@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin--coroutines-1.4.2-orange.svg)](http://kotlinlang.org/)
+[![Kotlin Coroutines](https://img.shields.io/badge/kotlin--coroutines-1.4.3-orange.svg)](http://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
 
 # KTX: coroutines support and threading utilities
@@ -37,6 +37,16 @@ kotlin {
 ```
 
 If you are using a recent version of Kotlin and `ktx-async`, this declaration is no longer required.
+
+##### Troubleshooting
+
+If using any coroutines-related classes results in a `java.lang.NoClassDefFoundError` exception, make sure that
+the backend module correctly picks up transitive dependencies of the core module. In particular, this error can be
+seen on iOS with RoboVM if `kotlinx-coroutines-core` or `ktx-async` are included as `implementation` dependencies
+in the core Gradle module instead of `api`.
+
+`ktx-async` was tested on desktop, Android and iOS, and should work on every major platform. If you encounter
+any issues with launching the coroutines, do not hesitate to create an [issue](https://github.com/libktx/ktx/issues).
 
 #### Coroutines
 
