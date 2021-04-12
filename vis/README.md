@@ -64,6 +64,18 @@ This modules extends [`ktx-scene2d`](../scene2d), providing additional factory m
 
 Please refer to [`ktx-scene2d`](../scene2d) documentation for general info about GUI builders.
 
+#### Using default VisUI skin
+
+Before using the VisUI widgets, make sure that the VisUI skin is initiated and set as the default skin used by the DSL
+factory methods:
+
+```kotlin
+VisUI.load()
+Scene2DSkin.defaultSkin = VisUI.getSkin()
+```
+
+See the VisUI documentation for the skin loading options.
+
 #### Tooltips
 
 `ktx-vis` provides extension methods for creating VisUI tooltips:
