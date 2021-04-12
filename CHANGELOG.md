@@ -5,6 +5,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Ashley 1.7.4.
 - **[UPDATE]** Updated to Kotlin 1.4.32.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.4.3.
+- **[UPDATE]** Updated to Gradle 6.8.3.
 - **[UPDATE]** Updated to Dokka 1.4.30.
 - **[MISC]** Due to the newly added support for multimodule projects in Dokka, published documentation URLs will change.
 - **[FEATURE]** (`ktx-tiled`) Added `isEmpty` and `isNotEmpty` extension function for `MapLayers` and `MapObjects` collections.
