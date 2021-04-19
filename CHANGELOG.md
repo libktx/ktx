@@ -1,6 +1,6 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.10.0-SNAPSHOT
+#### 1.10.0-b1
 
 - **[UPDATE]** Updated to LibGDX 1.10.0.
 - **[CHANGE]** The Java source compatibility and JVM target version of the **KTX** modules was changed from 1.6 to 1.7.
