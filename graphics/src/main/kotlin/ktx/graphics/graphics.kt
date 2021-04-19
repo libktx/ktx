@@ -59,8 +59,8 @@ fun <B : Batch> B.begin(projectionMatrix: Matrix4) {
 fun <B : Batch> B.begin(camera: Camera) = begin(camera.combined)
 
 /**
- * Automatically calls [ShaderProgram.begin] and [ShaderProgram.end].
- * @param action inlined. Executed after [ShaderProgram.begin] and before [ShaderProgram.end].
+ * Automatically calls [ShaderProgram.bind].
+ * @param action inlined. Executed after [ShaderProgram.bind].
  */
 @OptIn(ExperimentalContracts::class)
 inline fun <S : ShaderProgram> S.use(action: (S) -> Unit) {

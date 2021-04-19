@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
   repositories {
-    jcenter()
+    gradlePluginPortal()
     mavenCentral()
   }
 
@@ -57,7 +57,7 @@ subprojects {
 
   repositories {
     mavenLocal()
-    jcenter()
+    gradlePluginPortal()
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
   }
@@ -76,13 +76,13 @@ subprojects {
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_1_6
-    targetCompatibility = JavaVersion.VERSION_1_6
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
   }
 
   tasks.withType<KotlinCompile> {
     kotlinOptions {
-      jvmTarget = "1.6"
+      jvmTarget = "1.6" // 1.7 is unsupported.
       freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
   }

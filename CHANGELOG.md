@@ -1,5 +1,10 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.10.0-b1
+
+- **[UPDATE]** Updated to LibGDX 1.10.0.
+- **[CHANGE]** The Java source compatibility and JVM target version of the **KTX** modules was changed from 1.6 to 1.7.
+
 #### 1.9.14-b2
 
 - **[UPDATE]** Updated to Ashley 1.7.4.
@@ -11,7 +16,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[FEATURE]** (`ktx-tiled`) Added `isEmpty` and `isNotEmpty` extension function for `MapLayers` and `MapObjects` collections.
 - **[FEATURE]** (`ktx-tiled`) Added `forEachLayer` extension function for `TiledMap` to iterate over an exact type 
 of `MapLayer` instances of a specific map.
-- **[FIX]** (`ktx-vis`) `visScrollPane` and `visSplitPane` now define the correct types for `this` in theis `init` lambdas,
+- **[FIX]** (`ktx-vis`) `visScrollPane` and `visSplitPane` now define the correct types for `this` in the `init` lambdas,
 adding support for Scene2D and VisUI DSL.
 
 #### 1.9.14-b1
