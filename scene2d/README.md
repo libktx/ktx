@@ -55,6 +55,7 @@ val myFirstActor = scene2d.label(text = "Hello World!")
   * `image`
   * `label`
   * `listWidget`, `listWidgetOf`
+  * `particleEffect`
   * `progressBar`
   * `selectBox`, `selectBoxOf`
   * `slider`

@@ -2,6 +2,8 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-scene2d`) Added support for `ParticleEffectActor` in Scene2D DSL via `particleEffect` factory method.
+
 #### 1.10.0-b1
 
 - **[UPDATE]** Updated to LibGDX 1.10.0.
