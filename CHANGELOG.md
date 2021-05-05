@@ -2,6 +2,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.5.0.
 - **[FEATURE]** (`ktx-assets`) Added `discard` lambda parameter to the `pool` factory method that is invoked after 
 an object is rejected from the created `Pool`.
 - **[FEATURE]** (`ktx-scene2d`) Added support for `ParticleEffectActor` in Scene2D DSL via `particleEffect` factory method.
