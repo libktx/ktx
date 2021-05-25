@@ -76,13 +76,13 @@ subprojects {
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_7 // For RoboVM compatibility.
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 
   tasks.withType<KotlinCompile> {
     kotlinOptions {
-      jvmTarget = "1.6" // 1.7 is unsupported.
+      jvmTarget = "1.8"
       freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
   }
