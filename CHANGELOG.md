@@ -13,6 +13,7 @@ an object is rejected from the created `Pool`.
 
 #### 1.10.0-b1
 
+- **[UPDATE]** Updated to Gradle 7.0.2.
 - **[UPDATE]** Updated to LibGDX 1.10.0.
 - **[CHANGE]** The Java source compatibility and JVM target version of the **KTX** modules was changed from 1.6 to 1.7.
 
