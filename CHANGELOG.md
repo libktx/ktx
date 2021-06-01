@@ -2,6 +2,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Gradle 7.0.2.
 - **[UPDATE]** Updated to Kotlin 1.5.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.0.
 - **[UPDATE]** Updated to VisUI 1.5.0.
