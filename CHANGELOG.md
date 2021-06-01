@@ -2,6 +2,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Gradle 7.0.2.
 - **[UPDATE]** Updated to Kotlin 1.5.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.0.
 - **[UPDATE]** Updated to VisUI 1.5.0.
@@ -13,7 +14,6 @@ an object is rejected from the created `Pool`.
 
 #### 1.10.0-b1
 
-- **[UPDATE]** Updated to Gradle 7.0.2.
 - **[UPDATE]** Updated to LibGDX 1.10.0.
 - **[CHANGE]** The Java source compatibility and JVM target version of the **KTX** modules was changed from 1.6 to 1.7.
 
