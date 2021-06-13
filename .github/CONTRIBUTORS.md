@@ -80,6 +80,8 @@ Project contributors listed chronologically.
   * Contributed utilities to the [graphics module](../graphics).
 * [@auraxangelic](https://github.com/auraxangelic)
   * Tested KTX on iOS and documented RoboVM issue with Kotlin coroutines.
+* [@RedGrapefruit09](https://github.com/RedGrapefruit09)
+  * Updated the project from Gradle 6 to Gradle 7.
 
 ### Metrics
 
