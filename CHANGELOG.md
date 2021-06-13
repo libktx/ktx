@@ -11,6 +11,14 @@ and is incompatible with the latest coroutines library. Note that source compati
 - **[FEATURE]** (`ktx-assets`) Added `discard` lambda parameter to the `pool` factory method that is invoked after 
 an object is rejected from the created `Pool`.
 - **[FEATURE]** (`ktx-scene2d`) Added support for `ParticleEffectActor` in Scene2D DSL via `particleEffect` factory method.
+- **[FEATURE]** (`ktx-log`) Added `DEBUG`, `INFO` and `ERROR` constants with default logger tags.
+- **[CHANGE]** (`ktx-log`) Default tags are no longer wrapped in square brackets. This caused a change of the logs structure.
+- **[CHANGE]** (`ktx-log`) `Logger.tag` variable was renamed to `Logger.name`.
+- **[CHANGE]** (`ktx-log`) Log prefix variables from `Logger` were removed. Message tags are now configurable directly through the constructor.
+- **[CHANGE]** (`ktx-log`) Logger name is no longer a part of the message tag. Instead, it is now prepended to the message.
+This causes a change of the logs structure.
+- **[FEATURE]** (`ktx-log`) Added `Logger.buildMessage` method that allows to modify logged message structure. This method
+can be overridden when extending the `Logger` class, simplifying the usage of custom message formats.
 
 #### 1.10.0-b1
 

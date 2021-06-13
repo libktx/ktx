@@ -9,25 +9,25 @@ Minimal overhead logging for LibGDX applications.
 Many Java logging frameworks provide string templates to avoid creation of unnecessary `String` objects and (potentially
 costly) `toString()` calls. Most Java programmers should recognize the syntax immediately:
 `log.info("Message: {}, from: {}, at: {}", message, user, date)`. Still, *vararg* methods used in the process create
-new object arrays for each logging call - even if the logging level is turned off and the message is never formatted
+new object arrays for each logging call - even if the logging level is turned off, and the message is never formatted
 and logged. Formatting itself also features some small overhead - every message has to be processed and built.
 
 While LibGDX does address the problem of cross-platform logging, but does not provide *any* mechanism for handling logs
-with multiple custom parameters. (Maybe because of the *vararg* method call overhead.) Even its `Logger` utility class
-provides no methods consuming optional lazy-evaluated arguments - nor does it log class name and current time.
+with multiple custom parameters. (Possibly because of the *vararg* method call overhead.) Even its `Logger` utility
+class  provides no methods consuming optional lazy-evaluated arguments - nor does it log class name and current time.
 
-The most efficient way of logging with the default LibGDX mechanisms seems to look somewhat like this:
+The most efficient way of logging with the default LibGDX mechanisms would look somewhat like this:
 ```Kotlin
-if (Gdx.app.logLevel >= Application.LOG_DEBUG) Gdx.app.debug("someTag", "My message: " + someObject);
+if (Gdx.app.logLevel >= Application.LOG_DEBUG) Gdx.app.debug("someTag", "My message: $someObject");
 ```
 
 In the example above, no new strings (or argument arrays) are created in the process if debug logs are turned off.
-A smart JVM would probably notice that log level will never change and completely remove the calls at runtime.
-Needless to say, this is a pretty verbose way of logging. Fortunately, Kotlin fights verbosity with `inline` functions.
+A smart JVM would likely notice that log level never changes and completely remove the calls at runtime. However,
+this is a pretty verbose way of logging. Fortunately, Kotlin allows us to avoid verbosity with `inline` functions.
 
 ### Guide
 
-`ktx-log` introduces methods with inlined lambdas to address the unnecessary string building and *vararg* calls problems.
+`ktx-log` introduces methods with inlined lambdas to address the problems of unnecessary string building and *vararg* calls.
 They expect a simple function returning a `String` instance - the function will be inlined during the compilation (a new
 function object is *never* created) and proceeded with a check of current logging level. If the logging level is turned
 off, the string will never be built.
@@ -35,18 +35,18 @@ off, the string will never be built.
 #### Global logging methods
 
 `debug`, `info` and `error` methods can be used to log messages in LibGDX applications. If no tag is given, they will
-log the exception under `"[DEBUG]"`, `"[INFO] "` or `"[ERROR]"` tag (matching their logging level). Every method
-supports exception parameters, which are used to print the stack traces.
+log the exception under `"DEBUG"`, `"INFO"` or `"ERROR"` tags (matching their logging level). Every method supports
+an exception parameter, which is used to print the stack traces.
 
 #### `Logger`
 
 `Logger` class is a thin wrapper over the usual LibGDX logging API. It remembers its tag and is usually more convenient
-to use than global logging methods, as you know the exact source of the logs. It has 2 operator `invoke` methods (one
-with and one without exceptions) allow for pleasant `logger { "Message." }` syntax as a synonym for info logging. With
-the `logger` factory method, you can create logger instances as easily as `logger<MyClass>()`.
+to use than global logging methods, as you know the exact source of the logs. It has 2 operator `invoke` methods - one
+with and one without an exception parameter - which allows for `logger { "Message." }` syntax as a synonym for info logging.
+With  the `logger` factory method, you can create logger instances as easily as `logger<MyClass>()`.
 
 Note that `Logger` instances are not cached. While its relatively cheap to create new loggers, you should keep in mind
-that it's best to store them in companion objects ("static" variable equivalent).
+that it is best to store them in companion objects ("static" variable equivalent).
 
 ### Usage examples
 
@@ -65,12 +65,12 @@ Global message logging with custom logging tags:
 ```Kotlin
 import ktx.log.*
 
-debug("[TRACE]") { "Example." }
-info("[WARN] ") { "Example." }
-error("[FATAL]") { "Example." }
+debug("TRACE") { "Example." }
+info("WARN") { "Example." }
+error("FATAL") { "Example." }
 ```
 
-Global message logging with parameters (`String` built *only* if logging level is turned on):
+Global message logging with parameters (`String` built *only* if the respective logging level is turned on):
 
 ```Kotlin
 import ktx.log.*
@@ -90,10 +90,6 @@ try {
   debug(exception) { "Error!" }
   info(exception) { "Error!" }
   error(exception) { "Error!" }
-  
-  debug(tag = "[TRACE]", cause = exception) { "Error!" }
-  info(tag = "[WARN] ", cause = exception) { "Error!" }
-  error(tag = "[FATAL]", cause = exception) { "Error!" }
 }
 ```
 
@@ -119,7 +115,7 @@ class MyClass {
 }
 ```
 
-Logging with a logger:
+Logging messages with a logger:
 ```Kotlin
 import ktx.log.*
 
@@ -134,26 +130,29 @@ try {
 }
 ```
 
-Extending `Logger` implementation with a custom tag format:
+Extending `Logger` implementation with a custom message format - prepending date to logged messages:
 ```Kotlin
+import java.util.Date
 import ktx.log.Logger
 
-/** Logs current date additionally to the log message. */
-class TimeLogger(tag: String) : Logger(tag) {
-  override val debugTag: String
-    get() = "[DEBUG] ${Date()} $tag"
-  override val infoTag: String
-    get() = "[INFO]  ${Date()} $tag"
-  override val errorTag: String
-    get() = "[ERROR] ${Date()} $tag"
+/** Logs current date additionally to the log message.
+ * Uses "FATAL" tag for error messages. */
+class TimeLogger(name: String) : Logger(name, errorTag = "FATAL") {
+  // Logger message format: Logger name [current date] Original message.
+  override fun buildMessage(message: String): String = "$name [${Date()}] $message"
 }
 
 /** Creates loggers that include current time in logs. */
 inline fun <reified T : Any> myLogger(): Logger = TimeLogger(T::class.java.name)
 
 // Usage:
-val logger = myLogger<MyClass>()
-logger.info { "Works like the usual logger." }
+class MyClass {
+  val logger = myLogger<MyClass>()
+
+  fun example() {
+    logger.info { "Works like the usual logger." }
+  }
+}
 ```
 
 ### Alternatives
@@ -171,4 +170,3 @@ to *SLF4J*, it uses string templates to avoid creation of new strings (unless ne
 #### Additional documentation
 
 - [LibGDX logging article.](https://github.com/libgdx/libgdx/wiki/Logging)
-
