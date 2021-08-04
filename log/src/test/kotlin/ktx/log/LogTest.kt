@@ -41,29 +41,29 @@ class LogTest {
   fun `should log debug logs`() {
     debug { "Test." }
 
-    assertEquals("[DEBUG]: Test.", application.logs[0])
+    assertEquals("[DEBUG] Test.", application.logs[0])
   }
 
   @Test
   fun `should log debug logs with custom tag`() {
-    debug("[TRACE]") { "Test." }
+    debug("TRACE") { "Test." }
 
-    assertEquals("[TRACE]: Test.", application.logs[0])
+    assertEquals("[TRACE] Test.", application.logs[0])
   }
 
   @Test
   fun `should log debug logs with exception`() {
     debug(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[DEBUG]: Test.", application.logs[0])
+    assertEquals("[DEBUG] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
   @Test
   fun `should log debug logs with custom tag and exception`() {
-    debug(RuntimeException("Error."), "[TRACE]") { "Test." }
+    debug(RuntimeException("Error."), "TRACE") { "Test." }
 
-    assertEquals("[TRACE]: Test.", application.logs[0])
+    assertEquals("[TRACE] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -95,29 +95,29 @@ class LogTest {
   fun `should log info logs`() {
     info { "Test." }
 
-    assertEquals("[INFO] : Test.", application.logs[0])
+    assertEquals("[INFO] Test.", application.logs[0])
   }
 
   @Test
   fun `should log info logs with custom tag`() {
-    info("[WARN] ") { "Test." }
+    info("WARN") { "Test." }
 
-    assertEquals("[WARN] : Test.", application.logs[0])
+    assertEquals("[WARN] Test.", application.logs[0])
   }
 
   @Test
   fun `should log info logs with exception`() {
     info(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[INFO] : Test.", application.logs[0])
+    assertEquals("[INFO] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
   @Test
   fun `should log info logs with custom tag and exception`() {
-    info(RuntimeException("Error."), "[WARN] ") { "Test." }
+    info(RuntimeException("Error."), "WARN") { "Test." }
 
-    assertEquals("[WARN] : Test.", application.logs[0])
+    assertEquals("[WARN] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -149,29 +149,29 @@ class LogTest {
   fun `should log error logs`() {
     error { "Test." }
 
-    assertEquals("[ERROR]: Test.", application.logs[0])
+    assertEquals("[ERROR] Test.", application.logs[0])
   }
 
   @Test
   fun `should log error logs with custom tag`() {
-    error("[FATAL]") { "Test." }
+    error("FATAL") { "Test." }
 
-    assertEquals("[FATAL]: Test.", application.logs[0])
+    assertEquals("[FATAL] Test.", application.logs[0])
   }
 
   @Test
   fun `should log error logs with exception`() {
     error(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[ERROR]: Test.", application.logs[0])
+    assertEquals("[ERROR] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
   @Test
   fun `should log error logs with custom tag and exception`() {
-    error(RuntimeException("Error."), "[FATAL]") { "Test." }
+    error(RuntimeException("Error."), "FATAL") { "Test." }
 
-    assertEquals("[FATAL]: Test.", application.logs[0])
+    assertEquals("[FATAL] Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -208,10 +208,10 @@ class LogTest {
   fun `should create logger for class`() {
     val logger = logger<MockClass>()
 
-    assertEquals(MockClass::class.java.name, logger.tag)
-    assertEquals("[DEBUG] ${MockClass::class.java.name}", logger.debugTag)
-    assertEquals("[INFO]  ${MockClass::class.java.name}", logger.infoTag)
-    assertEquals("[ERROR] ${MockClass::class.java.name}", logger.errorTag)
+    assertEquals(MockClass::class.java.name, logger.name)
+    assertEquals("DEBUG", logger.debugTag)
+    assertEquals("INFO", logger.infoTag)
+    assertEquals("ERROR", logger.errorTag)
   }
 
   @Test
@@ -220,7 +220,7 @@ class LogTest {
 
     logger.debug { "Test." }
 
-    assertEquals("[DEBUG] ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[DEBUG] ${MockClass::class.java.name} - Test.", application.logs[0])
   }
 
   @Test
@@ -229,7 +229,7 @@ class LogTest {
 
     logger.debug(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[DEBUG] ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[DEBUG] ${MockClass::class.java.name} - Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -265,7 +265,7 @@ class LogTest {
 
     logger.info { "Test." }
 
-    assertEquals("[INFO]  ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[INFO] ${MockClass::class.java.name} - Test.", application.logs[0])
   }
 
   @Test
@@ -274,7 +274,7 @@ class LogTest {
 
     logger.info(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[INFO]  ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[INFO] ${MockClass::class.java.name} - Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -310,7 +310,7 @@ class LogTest {
 
     logger.error { "Test." }
 
-    assertEquals("[ERROR] ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[ERROR] ${MockClass::class.java.name} - Test.", application.logs[0])
   }
 
   @Test
@@ -319,7 +319,7 @@ class LogTest {
 
     logger.error(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[ERROR] ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[ERROR] ${MockClass::class.java.name} - Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -355,7 +355,7 @@ class LogTest {
 
     logger { "Test." }
 
-    assertEquals("[INFO]  ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[INFO] ${MockClass::class.java.name} - Test.", application.logs[0])
   }
 
   @Test
@@ -364,7 +364,7 @@ class LogTest {
 
     logger(RuntimeException("Error.")) { "Test." }
 
-    assertEquals("[INFO]  ${MockClass::class.java.name}: Test.", application.logs[0])
+    assertEquals("[INFO] ${MockClass::class.java.name} - Test.", application.logs[0])
     assertEquals("Error.", application.logs[1])
   }
 
@@ -394,6 +394,23 @@ class LogTest {
     assertTrue(application.logs.isEmpty())
   }
 
+  @Test
+  fun `should create custom logger with modified message format`() {
+    class CustomLogger(name: String) : Logger(name, debugTag = "D", infoTag = "I", errorTag = "E") {
+      override fun buildMessage(message: String): String = "$name ||| $message"
+    }
+
+    val logger = CustomLogger("LoggerName")
+
+    logger.debug { "Test debug log." }
+    logger.info { "Test info log." }
+    logger.error { "Test error log." }
+
+    assertEquals("[D] LoggerName ||| Test debug log.", application.logs[0])
+    assertEquals("[I] LoggerName ||| Test info log.", application.logs[1])
+    assertEquals("[E] LoggerName ||| Test error log.", application.logs[2])
+  }
+
   /**
    * Mocks a desktop application. Stores logs in [logs] list.
    */
@@ -411,29 +428,29 @@ class LogTest {
     }
 
     override fun debug(tag: String?, message: String?) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
     }
 
     override fun debug(tag: String?, message: String?, exception: Throwable) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
       logs.add(exception.message!!)
     }
 
     override fun log(tag: String?, message: String?) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
     }
 
     override fun log(tag: String?, message: String?, exception: Throwable) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
       logs.add(exception.message!!)
     }
 
     override fun error(tag: String?, message: String?) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
     }
 
     override fun error(tag: String?, message: String?, exception: Throwable) {
-      logs.add("$tag: $message")
+      logs.add("[$tag] $message")
       logs.add(exception.message!!)
     }
 

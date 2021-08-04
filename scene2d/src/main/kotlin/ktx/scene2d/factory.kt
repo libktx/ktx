@@ -2,6 +2,7 @@ package ktx.scene2d
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.graphics.g2d.ParticleEffect
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ParticleEffectActor
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
@@ -397,6 +399,27 @@ inline fun <I> KWidget<*>.listWidget(
   list.init()
   list.refreshItems()
   return list
+}
+
+/**
+ * @param particleEffect a loaded [ParticleEffect] that will be rendered by this actor.
+ * @param resetOnStart if true, this actor will call [ParticleEffect.reset] on [ParticleEffectActor.start] call.
+ * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
+ * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
+ * Inlined.
+ * @return a [ParticleEffectActor] instance added to this group. It does not have to be disposed.
+ * @see ParticleEffectActor
+ * @see ParticleEffect
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S> KWidget<S>.particleEffect(
+  particleEffect: ParticleEffect,
+  resetOnStart: Boolean = true,
+  init: (@Scene2dDsl ParticleEffectActor).(S) -> Unit = {}
+): ParticleEffectActor {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  return actor(ParticleEffectActor(particleEffect, resetOnStart), init)
 }
 
 /**

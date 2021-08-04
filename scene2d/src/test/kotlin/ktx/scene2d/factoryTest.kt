@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -419,6 +420,18 @@ class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
+    }
+  )
+
+  @Test
+  fun `should create ParticleEffectActor`() = test(
+    widget = {
+      particleEffect(mock(), resetOnStart = true) {
+        color = Color.BLUE
+      }
+    },
+    validate = {
+      assertTrue(it.isResetOnStart)
     }
   )
 

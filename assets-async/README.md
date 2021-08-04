@@ -699,8 +699,8 @@ class App : ApplicationAdapter() {
 ```
 
 As a rule of thumb, you should use suspending `AssetStorage` methods only from non-blocking coroutines, e.g. those
-launched with `KtxAsync.launch` or `GlobalScope.launch`. If you change `runBlocking` to a proper coroutine launch
-in either of the examples, you will notice that the deadlocks no longer occur.
+launched with `KtxAsync.launch`. If you change `runBlocking` to a proper coroutine launch in either of the examples,
+you will notice that the deadlocks no longer occur.
 
 It does not mean that `runBlocking` will always cause a deadlock, however. You can safely use `runBlocking`:
 

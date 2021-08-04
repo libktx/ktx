@@ -42,7 +42,7 @@ val myFirstActor = scene2d.label(text = "Hello World!")
     * `scrollPane`
     * `splitPane`
     * `stack`
-    * `table`,
+    * `table`
     * `tree`
     * `verticalGroup`
   * Parental widgets that _can_ store actors due to their type hierarchy, but do not have to:
@@ -55,6 +55,7 @@ val myFirstActor = scene2d.label(text = "Hello World!")
   * `image`
   * `label`
   * `listWidget`, `listWidgetOf`
+  * `particleEffect`
   * `progressBar`
   * `selectBox`, `selectBoxOf`
   * `slider`

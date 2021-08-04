@@ -1,6 +1,7 @@
 package ktx.async
 
 import com.badlogic.gdx.Gdx
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.cancel
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 
+@OptIn(DelicateCoroutinesApi::class)
 class KtxAsyncTest : AsyncTest() {
   @Test
   fun `should execute tasks on the main rendering thread when launched via KtxAsync`() {
