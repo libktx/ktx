@@ -1,5 +1,7 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.10.0-SNAPSHOT
+
 #### 1.10.0-b2
 
 - **[UPDATE]** Updated to Gradle 7.0.2.
