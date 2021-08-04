@@ -3,8 +3,8 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.10.0-SNAPSHOT
 
 - **[UPDATE]** Updated to Gradle 7.0.2.
-- **[UPDATE]** Updated to Kotlin 1.5.10.
-- **[UPDATE]** Updated to Kotlin Coroutines 1.5.0.
+- **[UPDATE]** Updated to Kotlin 1.5.21.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.5.1.
 - **[UPDATE]** Updated to VisUI 1.5.0.
 - **[CHANGE]** The JVM target compatibility of all modules was set to `1.8`, since Java `1.6` target was deprecated
 and is incompatible with the latest coroutines library. Note that source compatibility level is still set to `1.7`.

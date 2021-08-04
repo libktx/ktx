@@ -1,5 +1,6 @@
 package ktx.assets.async
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -229,6 +230,7 @@ class LoadingProgressTest {
   }
 
   @Test
+  @OptIn(DelicateCoroutinesApi::class)
   fun `should handle concurrent updates`() {
     // Given:
     val progress = LoadingProgress()
@@ -253,6 +255,7 @@ class LoadingProgressTest {
   }
 
   @Test
+  @OptIn(DelicateCoroutinesApi::class)
   fun `should handle concurrent registration and removal`() {
     // Given:
     val progress = LoadingProgress()
@@ -277,8 +280,8 @@ class LoadingProgressTest {
 
     // Then:
     runBlocking { jobs.joinAll() }
-    assertEquals(900 - 600, progress.total)
-    assertEquals(500 - 200, progress.loaded)
-    assertEquals(250 - 200, progress.failed)
+    assertEquals((900 - 600), progress.total)
+    assertEquals((500 - 200), progress.loaded)
+    assertEquals((250 - 200), progress.failed)
   }
 }
