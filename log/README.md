@@ -14,7 +14,7 @@ and logged. Formatting itself also features some small overhead - every message 
 
 While LibGDX does address the problem of cross-platform logging, but does not provide *any* mechanism for handling logs
 with multiple custom parameters. (Possibly because of the *vararg* method call overhead.) Even its `Logger` utility
-class  provides no methods consuming optional lazy-evaluated arguments - nor does it log class name and current time.
+class provides no methods consuming optional lazy-evaluated arguments - nor does it log class name and current time.
 
 The most efficient way of logging with the default LibGDX mechanisms would look somewhat like this:
 ```Kotlin

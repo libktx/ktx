@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicLong
 /**
  * Base class with coroutine dispatcher tests.
  */
-@DelicateCoroutinesApi
+@OptIn(DelicateCoroutinesApi::class)
 abstract class CoroutineDispatcherTest : AsyncTest() {
   abstract val tested: KtxDispatcher
   abstract fun getExecutorThread(): Thread
@@ -152,7 +152,6 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
   }
 }
 
-@DelicateCoroutinesApi
 class AsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   override val tested = AsyncExecutorDispatcher(AsyncExecutor(1), threads = 1)
   override fun getExecutorThread(): Thread = getExecutionThread(tested.executor)
@@ -178,7 +177,6 @@ class AsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   }
 }
 
-@DelicateCoroutinesApi
 class ConcurrentAsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   override val tested = AsyncExecutorDispatcher(AsyncExecutor(4), threads = 4)
   override fun getExecutorThread(): Thread = getExecutionThread(tested.executor)
@@ -203,7 +201,6 @@ class ConcurrentAsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   }
 }
 
-@DelicateCoroutinesApi
 class RenderingThreadDispatcherTest : CoroutineDispatcherTest() {
   override val tested = MainDispatcher
   override fun getExecutorThread(): Thread = getMainRenderingThread()
