@@ -84,6 +84,8 @@ Project contributors listed chronologically.
   * Updated the project from Gradle 6 to Gradle 7.
 * [@vrudas](https://github.com/vrudas)
   * Updated Kotlin dependencies.
+* [@runt9](https://github.com/runt9)
+  * Contributed an initial implementation of reflection-based component binding for the [inject module](../inject).
 
 ### Metrics
 

@@ -4,6 +4,10 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to Kotlin 1.5.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
+- **[FEATURE]** (`ktx-inject`) New reflection-based `Context` methods with automatic dependency injection:
+  - `newInstanceOf`: constructs an instance of the selected class. Injects constructor dependencies from the `Context`.
+  - `bind<Type>`: registers a provider that creates a new instance of selected class via reflection each time it is requested.
+  - `bindSingleton<Type>`: creates, registers, and returns a singleton of selected class using reflection.
 - **[FEATURE]** (`ktx-reflect`) Added a new module with reflection utilities.
   - `Reflection` annotation, which requires opt-in, allows marking functionalities that rely on reflection.
   - `ReflectedClass` is an inlined wrapper for `Class` that allows to easily use LibGDX reflection API.
