@@ -645,4 +645,15 @@ class ArraysTest {
     assertTrue(GdxLongArray() is com.badlogic.gdx.utils.LongArray)
     assertTrue(GdxShortArray() is com.badlogic.gdx.utils.ShortArray)
   }
+
+  @Test
+  fun `should create gdx arrays from vararg elements`() {
+    assertEquals(GdxBooleanArray.with(true, false), gdxBooleanArrayOf(true, false))
+    assertEquals(GdxByteArray.with(0, 1), gdxByteArrayOf(0, 1))
+    assertEquals(GdxCharArray.with('0', '1'), gdxCharArrayOf('0', '1'))
+    assertEquals(GdxShortArray.with(0, 1), gdxShortArrayOf(0, 1))
+    assertEquals(GdxIntArray.with(0, 1), gdxIntArrayOf(0, 1))
+    assertEquals(GdxLongArray.with(0L, 1L), gdxLongArrayOf(0L, 1L))
+    assertEquals(GdxFloatArray.with(0.1F, 0.2F), gdxFloatArrayOf(0.1F, 0.2F))
+  }
 }
