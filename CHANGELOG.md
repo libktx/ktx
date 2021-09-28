@@ -2,9 +2,16 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
-- **[FEATURE]** Implemented factory methods for LibGDX arrays of primitives
 - **[UPDATE]** Updated to Kotlin 1.5.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
+- **[FEATURE]** (`ktx-collections`) Factory methods for LibGDX arrays of primitives:
+  - `gdxBooleanArrayOf`
+  - `gdxByteArrayOf`
+  - `gdxCharArrayOf`
+  - `gdxShortArrayOf`
+  - `gdxIntArrayOf`
+  - `gdxLongArrayOf`
+  - `gdxFloatArrayOf`
 - **[FEATURE]** (`ktx-inject`) New reflection-based `Context` methods with automatic dependency injection:
   - `newInstanceOf`: constructs an instance of the selected class. Injects constructor dependencies from the `Context`.
   - `bind<Type>`: registers a provider that creates a new instance of selected class via reflection each time it is requested.

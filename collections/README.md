@@ -51,6 +51,15 @@ optionally be passed to automatically free the removed items.
   - `GdxCharArray`: `com.badlogic.gdx.utils.CharArray`
   - `GdxLongArray`: `com.badlogic.gdx.utils.LongArray`
   - `GdxShortArray`: `com.badlogic.gdx.utils.ShortArray`
+  - `GdxByteArray`: `com.badlogic.gdx.utils.ByteArray`
+- Factory methods for LibGDX arrays storing primitives:
+  - `gdxBooleanArrayOf`
+  - `gdxByteArrayOf`
+  - `gdxCharArrayOf`
+  - `gdxShortArrayOf`
+  - `gdxIntArrayOf`
+  - `gdxLongArrayOf`
+  - `gdxFloatArrayOf`
 
 #### Sets
 
@@ -112,7 +121,7 @@ IntelliJ allows to mark packages for automatic wildcard import at `Settings > Ed
 ### Usage examples
 
 Working with LibGDX `Array`:
-```Kotlin
+```kotlin
 import ktx.collections.*
 
 val array = gdxArrayOf("zero", "one", "two")
@@ -124,11 +133,11 @@ array += arrayOf("three", "four") // array[3] == "three", array[4] = "four"
   
 val empty = gdxArrayOf<String>()
 
-val typedArray = gdxIntArrayOf(1, 2, 3)
+val arrayOfPrimitives = gdxIntArrayOf(1, 2, 3)
 ```
 
 Working with LibGDX `ObjectSet`:
-```Kotlin
+```kotlin
 import ktx.collections.*
 
 val set = gdxSetOf("zero", "one", "two")
@@ -141,7 +150,7 @@ val empty = gdxSetOf<String>()
 ```
 
 Working with LibGDX `ObjectMap`:
-```Kotlin
+```kotlin
 import ktx.collections.*
 
 val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
@@ -153,7 +162,7 @@ val empty = gdxMapOf<Int, String>()
 ```
 
 Iterating over LibGDX maps with destructing syntax:
-```Kotlin
+```kotlin
 import ktx.collections.*
 
 val map = gdxMapOf(0 to "zero", 1 to "one", 2 to "two")
