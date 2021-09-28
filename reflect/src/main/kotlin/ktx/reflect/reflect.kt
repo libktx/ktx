@@ -12,11 +12,19 @@ import kotlin.Annotation as JavaAnnotation
 
 @RequiresOptIn(
   message = """This functionality uses reflection.
+    
+APIs annotated with @Reflection rely on reflection and can throw 
+com.badlogic.gdx.utils.reflect.ReflectionException when unable to
+complete an action. Reflection usage requires opt-in with
+@OptIn(Reflection::class) or propagating the warnings further
+with a @Reflection annotation.
+
 Note that reflection might not be fully supported by all platforms,
 especially third-party LibGDX backends. Some platforms might require
 additional setup. For example, all classes that are instantiated
 solely by reflection must be listed in the robovm.xml file within
 the ForceLinkClasses section in order to work on iOS.
+
 Further reading:
 * https://github.com/libgdx/libgdx/wiki/Reflection
 * https://kotlinlang.org/docs/opt-in-requirements.html
@@ -159,6 +167,7 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
   /**
    * Attempts to create a new instance of the [javaClass] with the no-arg constructor.
    * @return a new instance of [T].
+   * @throws ReflectionException when unable to create an instance.
    */
   fun newInstance(): T = ClassReflection.newInstance(javaClass)
 
@@ -166,6 +175,7 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * Creates a new array instance with the given [size] with the [javaClass] as component type.
    * @param size [size] of the array to create. Must not be negative.
    * @return a new array of [T] instance with the given [size].
+   * @throws ReflectionException when unable to create an array instance.
    */
   @Suppress("UNCHECKED_CAST")
   fun newArrayInstance(size: Int): Array<T> = try {
@@ -282,14 +292,16 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @param annotationType class of the annotation to check.
    * @return true if [javaClass] is annotated with [T].
    */
-  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: KClass<T>): Boolean = isAnnotationPresent(annotationType.java)
+  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: KClass<T>): Boolean =
+    isAnnotationPresent(annotationType.java)
 
   /**
    * Checks if [javaClass] is annotated with [T] annotation.
    * @param annotationType class of the annotation to check.
    * @return true if [javaClass] is annotated with [T].
    */
-  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: Class<T>): Boolean = ClassReflection.isAnnotationPresent(javaClass, annotationType)
+  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: Class<T>): Boolean =
+    ClassReflection.isAnnotationPresent(javaClass, annotationType)
 
   /**
    * Finds an [Annotation] of the selected [T] type.
