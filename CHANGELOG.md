@@ -2,6 +2,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[FEATURE]** Implemented factory methods for LibGDX arrays of primitives
 - **[UPDATE]** Updated to Kotlin 1.5.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
 - **[FEATURE]** (`ktx-inject`) New reflection-based `Context` methods with automatic dependency injection:

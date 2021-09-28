@@ -123,6 +123,8 @@ array -= "three" // "three" in array == false; array.size == 3
 array += arrayOf("three", "four") // array[3] == "three", array[4] = "four"
   
 val empty = gdxArrayOf<String>()
+
+val typedArray = gdxIntArrayOf(1, 2, 3)
 ```
 
 Working with LibGDX `ObjectSet`:
