@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
  * Extends [AssetManager], delegating all of its asset-related method calls to [assetStorage].
- * Allows to use classic [AssetLoader] implementations with [AssetStorage]. Internal API,
+ * Allows using classic [AssetLoader] implementations with [AssetStorage]. Internal API,
  * DO NOT use directly.
  */
 @Suppress("DEPRECATION")
@@ -33,6 +33,10 @@ internal class AssetManagerWrapper(
     initiated = true
   }
 
+  @Deprecated(
+    "This operation is non-blocking. Assets might still be loaded after this call.",
+    replaceWith = ReplaceWith("AssetStorage.dispose")
+  )
   override fun clear() = dispose()
 
   @Deprecated(
@@ -54,7 +58,10 @@ internal class AssetManagerWrapper(
     "Not supported by AssetStorage.",
     replaceWith = ReplaceWith("contains(fileName, type)")
   )
-  override fun contains(fileName: String): Boolean = false
+  override fun contains(fileName: String): Boolean = false.also {
+    logger.error("Not supported AssetManagerWrapper.contains called by AssetLoader.")
+  }
+
   override fun contains(fileName: String, type: Class<*>?): Boolean =
     assetStorage.contains(AssetDescriptor(fileName, type))
 
@@ -75,7 +82,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun setErrorListener(listener: AssetErrorListener?) {
-    logger.error("Not fully supported AssetManagerWrapper.setErrorListener called by AssetLoader.")
+    logger.error("Not supported AssetManagerWrapper.setErrorListener called by AssetLoader.")
   }
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
@@ -150,7 +157,7 @@ internal class AssetManagerWrapper(
     load(AssetDescriptor(fileName, type, parameters))
 
   override fun load(descriptor: AssetDescriptor<*>) {
-    KtxAsync.launch {
+    KtxAsync.launch(assetStorage.asyncContext) {
       assetStorage.load(descriptor)
     }
   }

@@ -4,6 +4,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to Kotlin 1.5.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now supports loading `PolygonRegion` assets out of the box if the default loaders are registered.
 - **[FEATURE]** (`ktx-collections`) Factory methods for LibGDX arrays of primitives:
   - `gdxBooleanArrayOf`
   - `gdxByteArrayOf`

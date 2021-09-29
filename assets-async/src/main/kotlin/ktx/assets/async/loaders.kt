@@ -5,9 +5,14 @@ import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
+import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.PolygonRegion
+import com.badlogic.gdx.graphics.g2d.PolygonRegionLoader
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -163,4 +168,24 @@ internal object ManualLoader : AssetLoader<Any, ManualLoadingParameters>(Absolut
     file: FileHandle?,
     parameter: ManualLoadingParameters?
   ): GdxArray<AssetDescriptor<Any>> = emptyDependencies
+}
+
+/**
+ * Specialized [PolygonRegionLoader] extension compatible with [AssetStorage].
+ * Tested via the [AssetStorage] test suite.
+ */
+internal class AssetStoragePolygonRegionLoader(
+  fileHandleResolver: FileHandleResolver
+) : PolygonRegionLoader(fileHandleResolver) {
+  override fun load(
+    manager: AssetManager,
+    fileName: String,
+    file: FileHandle,
+    parameter: PolygonRegionParameters?
+  ): PolygonRegion {
+    val assetStorage = (manager as AssetManagerWrapper).assetStorage
+    val texturePath = assetStorage.getDependencies<PolygonRegion>(fileName).first().path
+    val texture = assetStorage.get<Texture>(texturePath)
+    return load(TextureRegion(texture), file)
+  }
 }
