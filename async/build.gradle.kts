@@ -1,14 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import ktx.*
-
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs += listOf(
-      "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-      "-Xuse-experimental=kotlinx.coroutines.InternalCoroutinesApi"
-    )
-  }
-}
 
 dependencies {
   compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion")

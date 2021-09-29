@@ -1,3 +1,5 @@
+@file:OptIn(InternalCoroutinesApi::class)
+
 package ktx.async
 
 import com.badlogic.gdx.Gdx
@@ -9,7 +11,6 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Delay
 import kotlinx.coroutines.DisposableHandle
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.Runnable
@@ -26,7 +27,6 @@ interface KtxDispatcher : CoroutineContext, Delay {
   /**
    * Immediately executes or schedules execution of the passed [block].
    */
-  @InternalCoroutinesApi
   fun execute(block: Runnable)
 
   override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) {
@@ -74,7 +74,6 @@ class AsyncExecutorDispatcher(
   val executor: AsyncExecutor,
   val threads: Int = -1
 ) : AbstractKtxDispatcher(), Closeable, Disposable {
-  @InternalCoroutinesApi
   override fun execute(block: Runnable) {
     executor.submit(block::run)
   }
@@ -98,7 +97,6 @@ class AsyncExecutorDispatcher(
  * on the main rendering thread. Uses LibGDX [Timer] API to support [delay].
  */
 sealed class RenderingThreadDispatcher : MainCoroutineDispatcher(), KtxDispatcher, Delay {
-  @InternalCoroutinesApi
   override fun execute(block: Runnable) {
     Gdx.app.postRunnable(block)
   }
@@ -122,7 +120,6 @@ class RenderingThreadDispatcherFactory : MainDispatcherFactory {
  * Executes tasks on the main rendering thread. See [RenderingThreadDispatcher].
  */
 object MainDispatcher : RenderingThreadDispatcher() {
-  @ExperimentalCoroutinesApi
   override val immediate = this
   lateinit var mainThread: Thread
 

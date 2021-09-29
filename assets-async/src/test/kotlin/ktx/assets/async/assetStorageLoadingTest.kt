@@ -45,7 +45,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3
 
 /**
  * [AssetStorage] has 3 main variants of asset loading: [AssetStorage.load], [AssetStorage.loadAsync]
- * and [AssetStorage.loadSync]. To test each and every one, a common abstract test suite is provided.
+ * and [AssetStorage.loadSync]. To test each one, a common abstract test suite is provided.
  *
  * This test suite ensures that each method supports loading of every default asset type
  * and performs basic asset loading logic tests.

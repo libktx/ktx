@@ -5,6 +5,10 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin 1.5.31.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
 - **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now supports loading `PolygonRegion` assets out of the box if the default loaders are registered.
+- **[FEATURE]** (`ktx-assets-async`) `AsyncAssetManager` is a new `AssetManager` extension with basic support for Kotlin coroutines.
+  - `AsyncAssetManager.loadAsync` allows to schedule an asset for loading, returning a `Deferred` asset reference.
+  - `AsyncAssetManager.getDefaultParameters` allows to create a default instance of `AssetLoaderParameters` for a selected asset.
+  - `AsyncAssetManager.setLoaderParameterSupplier` has to be called for each custom asset loader in order to enable asynchronous loading without explicitly passing loader parameters.
 - **[FEATURE]** (`ktx-collections`) Factory methods for LibGDX arrays of primitives:
   - `gdxBooleanArrayOf`
   - `gdxByteArrayOf`
