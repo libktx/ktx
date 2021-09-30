@@ -1,5 +1,6 @@
 package ktx.assets.async
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetLoaderParameters
@@ -229,6 +230,7 @@ class AsyncAssetManager(
     val fileName = asset.fileName
     val callback = synchronized(this) { callbacks.remove(fileName) }
     if (callback != null) {
+      Gdx.app?.error("KTX", "Unable to load asset: $asset", exception)
       handled = callback.completeExceptionally(exception)
       cancelLoading(fileName)
     }
@@ -237,6 +239,11 @@ class AsyncAssetManager(
       callbacks.entries.removeIf { (path, callback) ->
         val dependencies = gatherDependencies(path)
         if (fileName in dependencies) {
+          Gdx.app?.error(
+            "KTX",
+            "Unable to load $path asset with $dependencies dependencies due to $asset exception",
+            exception
+          )
           val error = DependencyLoadingException(path, asset.fileName, exception)
           handled = callback.completeExceptionally(error) || handled
           cancelLoading(path)
