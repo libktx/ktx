@@ -77,7 +77,7 @@ in your `build.gradle` file:
 ```Groovy
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.10.0-b2'
+  ktxVersion = '1.10.0-b3'
 }
 
 dependencies {
@@ -150,11 +150,11 @@ Browse through the directories in the root folder to find out more about each li
 
 ### Source documentation
 
-All public classes and functions are also documented with standard Kotlin _KDocs_. You can access the documentation by:
+All functionalities are documented with Kotlin _KDocs_. You can access the source documentation by:
 
-- Viewing the generated Dokka files hosted on the the [project website](https://libktx.github.io/docs/).
+- Viewing the generated Dokka files hosted on the [project website](https://libktx.github.io/docs/).
+- Using the `doc` folder with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
 - Reading the sources directly.
-- Using the `doc` archive in [GitHub releases](https://github.com/libktx/ktx/releases) with generated Dokka files.
 
 ### Links
 
