@@ -2,9 +2,9 @@
 
 ## Issues
 
-- Before submitting a bug-related issue, make sure that its source is not the LibGDX itself.
-- Feel free to create issues with feature requests and questions about the libraries. Issues are among the fastest way
-to contact the developers.
+- Before submitting a bug, make sure that its source is not the libGDX framework itself.
+- Feel free to create issues or start discussions with feature requests and questions about the libraries.
+Issues and discussions are among the fastest way to contact the developers.
 
 ## Pull requests
 
@@ -27,7 +27,7 @@ JUnit and [Spek](http://spekframework.org/) can be used to write tests, although
 Use [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
 - If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue or create
 an issue with your proposal first. Major API changes or new modules have to be discussed with the maintainers first.
-Skipping the issue will not get your pull request rejected outright, but note that undiscussed major changes might
+Skipping the issue will not get your pull request rejected outright, but note that major changes without approval might
 require a rewrite.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
@@ -36,8 +36,8 @@ require a rewrite.
   - **[FIX]** - a bug fix.
   - **[MISC]** - other changes (e.g. related to documentation or the project itself).
 - Most libraries list _all_ features in the `README.md` files to ease their usage. When adding a new feature,
-please check the  `README.md` file of the module and add description of your change when appropriate. Any major feature
-should include a usage example in the module guide. Make sure to add all of the necessary imports in the usage examples
+please check the  `README.md` file of the module, and add description of your change when appropriate. Any major feature
+should include a usage example in the module guide. Make sure to add all the necessary imports in the usage examples
 in `README.md` files to make it easier to try them out.
 
 ## Working from sources
@@ -51,8 +51,8 @@ git checkout develop
 ### Gradle
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
-Gradle installation - scripts should be compatible with Gradle `6.+`. Gradle projects are handled out of the box by
-IntelliJ, so KTX should be relatively easy to import.
+Gradle installation - scripts should be compatible with Gradle `7.+`. Gradle projects are handled out of the box by
+IntelliJ, so KTX should be easy to import.
 
 Some useful Gradle tasks include:
 
@@ -86,7 +86,7 @@ projectDesc=Description of your module as it will appear in Maven Central.
 - Add a `build.gradle.kts` file. It should contain dependencies specific to your module. If there are none, you can
 leave it empty. By adding `import ktx.*` at the top of this file, you will be able to access the versions of major
 dependencies of the modules as defined in the [`buildSrc`](../buildSrc) directory.
-- Add a `README.md` file describing your module. Refer to other `README.md` files for guidelines. `README.md` files
+- Add a `README.md` file describing your module. Refer to other `README.md` files for examples. `README.md` files
 should generally consist of the following sections:
   - _General description_ - in a single sentence, what problem does the module solve?
   - _Motivation_ - why was the module created?
@@ -177,7 +177,8 @@ that the library was compiled against.
 - Run `gradle build uploadSnapshot` to push artifacts to _Sonatype_ snapshots repository. This task will do nothing
 if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.
 
-Note that snapshots are automatically uploaded to Maven Central (OSS Sonatype) snapshots repository after pushing
+Note that snapshots are automatically uploaded to Maven Central (OSS Sonatype)
+[snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/io/github/libktx/) after pushing
 to the `develop` branch.
 
 #### Automated tasks
