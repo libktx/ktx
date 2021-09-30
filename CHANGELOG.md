@@ -61,8 +61,10 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
       - `constructor` property allows to extract the only class constructor if it is available.
       - `newArrayInstance` method allows to create a type array of the given size using `ArrayReflection`.
       - `KClass` constructor allows creating `ReflectedClass` from a `KClass`.
-  - `reflect<Type>()` method allows to wrap a selected class with `ReflectedClass`.
-  - `reflect(String)` method allows to find a selected class by qualified name and wrap it with `ReflectedClass`.
+  - `reflect<Type>()` function allows to wrap a selected class with `ReflectedClass`.
+  - `reflect(KClass<Type>)` function allows to wrap a selected `KClass` with `ReflectedClass`.
+  - `reflect(Class<Type>)` function allows to wrap a selected `Class` with `ReflectedClass`.
+  - `reflect(String)` function allows to find a selected class by qualified name and wrap it with `ReflectedClass`.
   - `Annotation.get` extension method with a reified type allowing to get an instance of the annotation.
 
 #### 1.10.0-b2

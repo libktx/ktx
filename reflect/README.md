@@ -61,8 +61,12 @@ or by `reflect<Type>` and `reflect(String)` top-level functions.
 Additional `ReflectedClass` utilities include:
 - `constructor` property allows to extract the only class constructor if it is available.
 - `newArrayInstance` method allows to create a type array of the given size using `ArrayReflection`.
-- `reflect<Type>()` top-level method allows to wrap a selected class with `ReflectedClass`.
-- `reflect(String)` top-level method allows to find a selected class by qualified name and wrap it with
+
+`ReflectedClass` factory methods:
+- `reflect<Type>()` top-level function allows to wrap a selected class with a `ReflectedClass`.
+- `reflect(KClass<Type>)` top-level function allows to wrap a selected Kotlin class with a `ReflectedClass`.
+- `reflect(Class<Type>)` top-level function allows to wrap a selected Java class with a `ReflectedClass`.
+- `reflect(String)` top-level function allows to find a selected class by qualified name and wrap it with
 a `ReflectedClass`.
 
 Other utilities include:
@@ -83,6 +87,21 @@ class MyClass
 @OptIn(Reflection::class)
 fun getWrappedClass(): ReflectedClass<MyClass> {
   return reflect<MyClass>()
+}
+```
+
+Obtaining a class wrapper for a Java `Class`:
+
+```kotlin
+import ktx.reflect.ReflectedClass
+import ktx.reflect.Reflection
+import ktx.reflect.reflect
+
+class MyClass
+
+@OptIn(Reflection::class)
+fun getWrappedClass(): ReflectedClass<MyClass> {
+  return reflect(MyClass::class.java) // or ReflectedClass(MyClass::class.java)
 }
 ```
 

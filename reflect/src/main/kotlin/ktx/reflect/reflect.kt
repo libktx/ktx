@@ -357,6 +357,22 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
 inline fun <reified T : Any> reflect(): ReflectedClass<T> = ReflectedClass(T::class.java)
 
 /**
+ * Extracts [Class] from the given [KClass] and wraps it with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * @param kotlinClass [KClass] representing [Class] to be wrapped.
+ * @return [ReflectedClass] wrapping the selected [kotlinClass].
+ */
+@Reflection
+fun <T : Any> reflect(kotlinClass: KClass<T>): ReflectedClass<T> = ReflectedClass(kotlinClass.java)
+
+/**
+ * Wraps the selected [Class] with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * @param javaClass [Class] to be wrapped.
+ * @return [ReflectedClass] wrapping the selected [javaClass].
+ */
+@Reflection
+fun <T : Any> reflect(javaClass: Class<T>): ReflectedClass<T> = ReflectedClass(javaClass)
+
+/**
  * Wraps the selected class with inlined [ReflectedClass] exposing LibGDX reflection API.
  * @param name qualified name of the class to wrap.
  * @return [ReflectedClass] wrapping the selected class.

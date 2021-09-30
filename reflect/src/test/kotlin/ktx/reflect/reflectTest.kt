@@ -37,7 +37,16 @@ class ReflectTest {
   @Test
   fun `should wrap selected Kotlin class`() {
     // When:
-    val reflectedClass = ReflectedClass(Tested::class)
+    val reflectedClass = reflect(Tested::class)
+
+    // Then:
+    assertSame(Tested::class.java, reflectedClass.javaClass)
+  }
+
+  @Test
+  fun `should wrap selected Java class`() {
+    // When:
+    val reflectedClass = reflect(Tested::class.java)
 
     // Then:
     assertSame(Tested::class.java, reflectedClass.javaClass)
@@ -47,6 +56,15 @@ class ReflectTest {
   fun `should wrap selected class by name`() {
     // When:
     val reflectedClass = reflect("ktx.reflect.Tested")
+
+    // Then:
+    assertSame(Tested::class.java, reflectedClass.javaClass)
+  }
+
+  @Test
+  fun `should wrap selected Kotlin class via constructor`() {
+    // When:
+    val reflectedClass = ReflectedClass(Tested::class)
 
     // Then:
     assertSame(Tested::class.java, reflectedClass.javaClass)
