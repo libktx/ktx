@@ -134,8 +134,7 @@ inline operator fun <reified T> Preferences.get(key: String): T? =
  * and converted to [Double]. Consider using a JSON-serializable object if you need to store [Double] values
  * with high precision.
  */
-inline operator fun <reified T> Preferences.get(key: String, defaultValue: T): T =
-  if (key in this) this[key]!! else defaultValue
+inline operator fun <reified T> Preferences.get(key: String, defaultValue: T): T = this[key] ?: defaultValue
 
 /**
  * Calls [Preferences.flush] after executing the given [operations].
