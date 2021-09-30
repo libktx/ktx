@@ -82,6 +82,11 @@ Project contributors listed chronologically.
   * Tested KTX on iOS and documented RoboVM issue with Kotlin coroutines.
 * [@RedGrapefruit09](https://github.com/RedGrapefruit09)
   * Updated the project from Gradle 6 to Gradle 7.
+* [@vrudas](https://github.com/vrudas)
+  * Updated Kotlin dependencies.
+  * Contributed utilities to the [collections module](../collections).
+* [@runt9](https://github.com/runt9)
+  * Contributed an initial implementation of reflection-based component binding for the [inject module](../inject).
 
 ### Metrics
 

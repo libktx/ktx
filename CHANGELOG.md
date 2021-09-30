@@ -1,5 +1,72 @@
 _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.10.0-b3
+
+- **[UPDATE]** Updated to Kotlin 1.5.31.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.5.2.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now supports loading `PolygonRegion` assets out of the box if the default loaders are registered.
+- **[FEATURE]** (`ktx-assets-async`) `AsyncAssetManager` is a new `AssetManager` extension with basic support for Kotlin coroutines.
+  - `AsyncAssetManager.loadAsync` allows to schedule an asset for loading, returning a `Deferred` asset reference.
+  - `AsyncAssetManager.getDefaultParameters` allows to create a default instance of `AssetLoaderParameters` for a selected asset.
+  - `AsyncAssetManager.setLoaderParameterSupplier` has to be called for each custom asset loader in order to enable asynchronous loading without explicitly passing loader parameters.
+- **[FEATURE]** (`ktx-collections`) Factory methods for LibGDX arrays of primitives:
+  - `gdxBooleanArrayOf`
+  - `gdxByteArrayOf`
+  - `gdxCharArrayOf`
+  - `gdxShortArrayOf`
+  - `gdxIntArrayOf`
+  - `gdxLongArrayOf`
+  - `gdxFloatArrayOf`
+- **[FEATURE]** (`ktx-inject`) New reflection-based `Context` methods with automatic dependency injection:
+  - `newInstanceOf`: constructs an instance of the selected class. Injects constructor dependencies from the `Context`.
+  - `bind<Type>`: registers a provider that creates a new instance of selected class via reflection each time it is requested.
+  - `bindSingleton<Type>`: creates, registers, and returns a singleton of selected class using reflection.
+- **[FEATURE]** (`ktx-reflect`) Added a new module with reflection utilities.
+  - `Reflection` annotation, which requires opt-in, allows marking functionalities that rely on reflection.
+  - `ReflectedClass` is an inlined wrapper for `Class` that allows to easily use LibGDX reflection API.
+    - `ClassReflection` methods exposed as `ReflectedClass` read-only properties:
+      - `simpleName`
+      - `isMemberClass`
+      - `isStatic`
+      - `isArray`
+      - `isPrimitive`
+      - `isEnum`
+      - `isAnnotation`
+      - `isInterface`
+      - `isAbstract`
+      - `componentType`
+      - `constructors`
+      - `methods`
+      - `declaredMethods`
+      - `fields`
+      - `declaredFields`
+      - `annotations`
+      - `declaredAnnotations`
+      - `interfaces`
+      - `enumConstants`
+    - `ClassReflection` methods exposed as `ReflectedClass` methods with improved Kotlin class handling:
+      - `isInstance`
+      - `isAssignableFrom`
+      - `newInstance`
+      - `getConstructor`
+      - `getDeclaredConstructor`
+      - `getMethod`
+      - `getDeclaredMethod`
+      - `getField`
+      - `getDeclaredField`
+      - `isAnnotationPresent`
+      - `getAnnotation`
+      - `getDeclaredAnnotation`
+    - Additional `ReflectedClass` utilities:
+      - `constructor` property allows to extract the only class constructor if it is available.
+      - `newArrayInstance` method allows to create a type array of the given size using `ArrayReflection`.
+      - `KClass` constructor allows creating `ReflectedClass` from a `KClass`.
+  - `reflect<Type>()` function allows to wrap a selected class with `ReflectedClass`.
+  - `reflect(KClass<Type>)` function allows to wrap a selected `KClass` with `ReflectedClass`.
+  - `reflect(Class<Type>)` function allows to wrap a selected `Class` with `ReflectedClass`.
+  - `reflect(String)` function allows to find a selected class by qualified name and wrap it with `ReflectedClass`.
+  - `Annotation.get` extension method with a reified type allowing to get an instance of the annotation.
+
 #### 1.10.0-b2
 
 - **[UPDATE]** Updated to Gradle 7.0.2.

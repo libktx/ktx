@@ -1,7 +1,7 @@
 package ktx
 
 const val gdxVersion = "1.10.0"
-const val kotlinCoroutinesVersion = "1.5.1"
+const val kotlinCoroutinesVersion = "1.5.2"
 
 const val ashleyVersion = "1.7.4"
 const val visUiVersion = "1.5.0"
@@ -13,4 +13,4 @@ const val assertjVersion = "3.11.1"
 const val junitVersion = "4.12"
 const val slf4jVersion = "1.7.26"
 const val wireMockVersion = "2.24.0"
-const val ktlintVersion = "0.40.0"
+const val ktlintVersion = "0.42.1"

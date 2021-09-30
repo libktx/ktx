@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.UBJsonReader
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -72,7 +73,7 @@ class AssetStorage(
   private val assets = mutableMapOf<Identifier<*>, Asset<*>>()
 
   /**
-   * Allows to track progress of the loaded assets.
+   * Allows tracking progress of the loaded assets.
    *
    * The values stored by the [LoadingProgress] are _eventually consistent._
    * The progress can go slightly out of sync of the actual amounts of loaded assets,
@@ -106,6 +107,7 @@ class AssetStorage(
       setLoader { SkinLoader(fileResolver) }
       setLoader { ParticleEffectLoader(fileResolver) }
       setLoader { ParticleEffect3dLoader(fileResolver) }
+      setLoader { AssetStoragePolygonRegionLoader(fileResolver) }
       setLoader { I18NBundleLoader(fileResolver) }
       setLoader(suffix = ".g3dj") { G3dModelLoader(JsonReader(), fileResolver) }
       setLoader(suffix = ".g3db") { G3dModelLoader(UBJsonReader(), fileResolver) }
@@ -215,8 +217,8 @@ class AssetStorage(
 
   private fun <T> getOrThrow(asset: Asset<T>): T = getOrThrow(asset.identifier, asset.reference)
 
+  @OptIn(ExperimentalCoroutinesApi::class) // Avoids runBlocking call.
   private fun <T> getOrThrow(identifier: Identifier<T>, reference: Deferred<T>): T =
-    @Suppress("EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.
     if (reference.isCompleted) reference.getCompleted() else throw MissingAssetException(identifier)
 
   /**
@@ -675,7 +677,7 @@ class AssetStorage(
         }
       }
     }
-    // Awaiting for our asset to load:
+    // Awaiting until the asset is loaded:
     return asset.reference.await()
   }
 
@@ -693,6 +695,7 @@ class AssetStorage(
     }
   }
 
+  /** Must be called with [lock]. */
   private suspend fun <T> createNewAsset(descriptor: AssetDescriptor<T>): Asset<T> =
     withContext(asyncContext) {
       resolveFileHandle(descriptor)
@@ -1066,7 +1069,7 @@ class AssetStorage(
     }
   }
 
-  @Suppress("EXPERIMENTAL_API_USAGE") // Allows to dispose of assets without suspending calls.
+  @OptIn(ExperimentalCoroutinesApi::class) // Allows disposing of assets without suspending calls.
   private fun disposeOf(asset: Asset<*>) {
     if (!asset.reference.isCompleted) {
       val exception = UnloadedAssetException(asset.identifier)

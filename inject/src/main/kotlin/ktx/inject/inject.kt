@@ -2,13 +2,15 @@ package ktx.inject
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
+import ktx.reflect.Reflection
+import ktx.reflect.reflect
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Handles dependency injection mechanism. Allows to bind selected classes with their providers.
+ * Handles dependency injection mechanism. Allows binding selected classes with their providers.
  *
  * Note that [Context] instances are not considered fully thread-safe - while it is _usually_ safe to access a fully
  * built context from within multiple threads, you should override [createProvidersMap] method and return a thread-safe
@@ -136,6 +138,42 @@ open class Context : Disposable {
    * @throws InjectionException if provider for the selected type is already defined.
    */
   inline fun <reified Type : Any> bindSingleton(provider: () -> Type) = bind(SingletonProvider(provider()))
+
+  /**
+   * Automatically registers a provider for [Type] that will use reflection to create a new instance each
+   * time it is requested. All required constructor parameters will be extracted from [Context]. Note that
+   * the provider might throw [InjectionException] if any of the dependencies are missing, or
+   * [com.badlogic.gdx.utils.reflect.ReflectionException] when unable to construct an instance.
+   * @param Type reified type of the provided instances. This class must have a single constructor.
+   */
+  @Reflection
+  inline fun <reified Type : Any> bind() = bind<Type> { newInstanceOf() }
+
+  /**
+   * Automatically creates and registers an instance of [Type] with reflection. All required constructor parameters
+   * will be extracted from [Context] and must be present before calling this method.
+   * @param Type reified type of the provided instance. This class must have a single constructor.
+   * @return the constructed [Type] instance with injected dependencies.
+   * @throws InjectionException if any of the dependencies are missing.
+   * @throws com.badlogic.gdx.utils.reflect.ReflectionException when unable to construct an instance.
+   */
+  @Reflection
+  inline fun <reified Type : Any> bindSingleton(): Type = newInstanceOf<Type>().apply(::bindSingleton)
+
+  /**
+   * Constructs an instance of [Type] using reflection. All required constructor parameters will be extracted from
+   * [Context] and must be present before calling this method.
+   * @param Type reified type of the constructed instance. This class must have a single constructor.
+   * @return a new instance of [Type] with injected dependencies.
+   * @throws InjectionException if any of the dependencies are missing.
+   * @throws com.badlogic.gdx.utils.reflect.ReflectionException when unable to construct an instance.
+   */
+  @Reflection
+  inline fun <reified Type : Any> newInstanceOf(): Type {
+    val constructor = reflect<Type>().constructor
+    val parameters = constructor.parameterTypes.map { getProvider(it).invoke() }.toTypedArray()
+    return constructor.newInstance(*parameters) as Type
+  }
 
   /**
    * Allows to bind a provider to multiple classes in hierarchy of the provided instances class.

@@ -2,7 +2,7 @@
 
 # KTX: dependency injection
 
-A tiny, lightweight dependency injection system with simple syntax and no reflection usage.
+A tiny, lightweight dependency injection system with simple syntax that does not rely on reflection.
 
 ### Why?
 
@@ -18,7 +18,7 @@ Java dependency injection mechanisms usually rely on annotations and compile-tim
 its inline functions, allows to omit the reflection and annotations usage altogether, while still providing a pleasant
 DSL.
 
-Why not use an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting of a single source file with a few
+Why not an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting of a single source file with a few
 hundred lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage
 at runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
 simplicity and nearly zero overhead at runtime.
@@ -45,16 +45,23 @@ all registered singletons and providers. `dispose()`, additionally to clearing t
 singletons and providers that implement the `Disposable` interface and logs all errors on the LibGDX error logging
 level. Use `clear()` instead of `dispose()` if you want to fully control assets lifecycle.
 
+Additional `bind<Type>()`, `bindSingleton<Type>()`, and `newInstanceOf<Type>()` methods allow constructing objects
+with reflection taking the constructor parameters directly from the `Context`. These methods are annotated with
+`@Reflection` from [`ktx-reflect`](../reflect) and require opt-in to prevent from accidental usage. Reflection usage
+is entirely optional, although it does simplify registering components with multiple constructor parameters.
+Note that the classes constructed via reflection must have a single public constructor, otherwise an exception
+will be thrown.
+
 ### Usage examples
 
 Creating a new `Context`:
 
-```Kotlin
+```kotlin
 val context = Context()
 ```
 
 Registering a provider:
-```Kotlin
+```kotlin
 import ktx.inject.*
 import java.util.Random
 
@@ -65,7 +72,7 @@ context.register {
 ```
 
 Registering a singleton:
-```Kotlin
+```kotlin
 import ktx.inject.*
 import java.util.Random
 
@@ -76,7 +83,7 @@ context.register {
 ```
 
 Registering a singleton via an init block:
-```Kotlin
+```kotlin
 import ktx.inject.*
 
 context.register {
@@ -92,14 +99,14 @@ context.register {
 ```
 
 Injecting an instance:
-```Kotlin
+```kotlin
 import java.util.Random
 
 val random: Random = context.inject()
 ```
 
 Injecting a provider:
-```Kotlin
+```kotlin
 import java.util.Random
 
 val randomProvider = context.provider<Random>()
@@ -110,7 +117,7 @@ val random = randomProvider()
 ```
 
 Injection on demand (_lazy_ injection):
-```Kotlin
+```kotlin
 import ktx.inject.*
 
 class ClassWithLazyInjectedValue(context: Context) {
@@ -120,19 +127,44 @@ class ClassWithLazyInjectedValue(context: Context) {
 ```
 
 Removing a registered provider:
-```Kotlin
+```kotlin
 context.remove<Random>()
 // Note that this method works for both singletons and providers.
 ```
 
 Removing all components from the `Context`:
-```Kotlin
+```kotlin
 context.clear()
 ```
 
 Removing all components from the `Context` and disposing of all `Disposable` singletons and providers:
-```Kotlin
+```kotlin
 context.dispose()
+```
+
+Using reflection to automatically create components with injected dependencies:
+```kotlin
+import ktx.inject.Context
+import ktx.inject.register
+import ktx.reflect.Reflection
+
+class MyDependency
+class MyClass(val myDependency: MyDependency)
+
+// Note that reflection usage requires explicit opt-in:
+@OptIn(Reflection::class)
+fun create() {
+  val context = Context()
+  context.register {
+    // Will construct a new instance of MyDependency with reflection
+    // each time it is requested:
+    bind<MyDependency>()
+    
+    // Will construct a single instance of MyClass with MyDependency
+    // taken from Context:
+    bindSingleton<MyClass>()
+  }
+}
 ```
 
 #### Adding `this` to the `Context`
@@ -217,7 +249,7 @@ dependency  injection - all you need to learn is using a few simple functions. I
 a provider is a single call to a map.
 
 If you never end up needing more features, you might consider sticking with `ktx-inject` altogether, but just so you
-know - there _are_ other Kotlin dependency injection frameworks and they work well with LibGDX. There was no point in
+know - there _are_ other Kotlin dependency injection frameworks, and they work well with LibGDX. There was no point in
 creating another _complex_ dependency injection framework, and we were fully aware of that. Simplicity and
 little-to-none runtime overhead is what sums up the strong sides of `ktx-inject`.
 
@@ -238,3 +270,7 @@ might be an overkill.
 injection library with automatic component scan for LibGDX written in Java. It works even on GWT (although Kotlin does
 not work well with GWT in the first place). Reflection overhead is generally small, but hacky Kotlin-based solutions are
 obviously expected to be more efficient.
+
+#### Additional documentation
+
+- [Official reflection article.](https://github.com/libgdx/libgdx/wiki/Reflection)

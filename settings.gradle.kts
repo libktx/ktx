@@ -2,7 +2,6 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -24,6 +23,7 @@ include(
   "log",
   "math",
   "preferences",
+  "reflect",
   "scene2d",
   "style",
   "tiled",

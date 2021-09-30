@@ -9,7 +9,7 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
-import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Cubemap
 import com.badlogic.gdx.graphics.Pixmap
@@ -92,7 +92,7 @@ class AssetStorageTest : AsyncTest() {
     @BeforeClass
     fun `load LibGDX statics`() {
       // Necessary for LibGDX asset loaders to work.
-      LwjglNativesLoader.load()
+      Lwjgl3NativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()
       Gdx.gl = Gdx.gl20

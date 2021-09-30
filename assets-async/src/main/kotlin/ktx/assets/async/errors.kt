@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.AsynchronousAssetLoader
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.utils.GdxRuntimeException
+import kotlinx.coroutines.Deferred
 
 /**
  * Thrown by [AssetStorage] and related services.
@@ -120,5 +121,16 @@ class MissingDependencyException(identifier: Identifier<*>, cause: Throwable? = 
     message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
       "This asset was either not listed in dependencies, loaded with exception, is not loaded yet " +
       "or was unloaded asynchronously.",
+    cause = cause
+  )
+
+/**
+ * This exception can be thrown when accessing [Deferred] instances returned by [AsyncAssetManager].
+ * It occurs when an asset scheduled for asynchronous loading cannot be loaded due to the [cause]
+ * exception thrown during a dependency loading.
+ */
+class DependencyLoadingException(path: String, dependency: String, cause: Throwable) :
+  AssetStorageException(
+    message = "The asset at path $path cannot be loaded due to the $dependency dependency loading exception.",
     cause = cause
   )

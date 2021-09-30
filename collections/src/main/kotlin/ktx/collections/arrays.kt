@@ -25,6 +25,9 @@ typealias GdxLongArray = com.badlogic.gdx.utils.LongArray
 /** Alias for [com.badlogic.gdx.utils.ShortArray] avoiding name collision with the standard library. */
 typealias GdxShortArray = com.badlogic.gdx.utils.ShortArray
 
+/** Alias for [com.badlogic.gdx.utils.ByteArray] avoiding name collision with the standard library. */
+typealias GdxByteArray = com.badlogic.gdx.utils.ByteArray
+
 /**
  * Default LibGDX array size used by most constructors.
  */
@@ -495,3 +498,45 @@ fun BooleanArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this
   array.addAll(this, 0, this.size)
   return array
 }
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxBooleanArray].
+ */
+fun gdxBooleanArrayOf(vararg elements: Boolean): GdxBooleanArray = GdxBooleanArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxByteArray].
+ */
+fun gdxByteArrayOf(vararg elements: Byte): GdxByteArray = GdxByteArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxCharArray].
+ */
+fun gdxCharArrayOf(vararg elements: Char): GdxCharArray = GdxCharArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxShortArray].
+ */
+fun gdxShortArrayOf(vararg elements: Short): GdxShortArray = GdxShortArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxIntArray].
+ */
+fun gdxIntArrayOf(vararg elements: Int): GdxIntArray = GdxIntArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxLongArray].
+ */
+fun gdxLongArrayOf(vararg elements: Long): GdxLongArray = GdxLongArray(elements)
+
+/**
+ * @param elements will be initially stored in the array.
+ * @return a new instance of [GdxFloatArray].
+ */
+fun gdxFloatArrayOf(vararg elements: Float): GdxFloatArray = GdxFloatArray(elements)

@@ -6,13 +6,14 @@ import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
-import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
-import com.badlogic.gdx.backends.lwjgl.audio.OpenALLwjglAudio
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader
+import com.badlogic.gdx.backends.lwjgl3.audio.OpenALLwjgl3Audio
 import com.badlogic.gdx.graphics.Cubemap
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.ParticleEffect
+import com.badlogic.gdx.graphics.g2d.PolygonRegion
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g3d.Model
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
@@ -44,7 +45,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3
 
 /**
  * [AssetStorage] has 3 main variants of asset loading: [AssetStorage.load], [AssetStorage.loadAsync]
- * and [AssetStorage.loadSync]. To test each and every one, a common abstract test suite is provided.
+ * and [AssetStorage.loadSync]. To test each one, a common abstract test suite is provided.
  *
  * This test suite ensures that each method supports loading of every default asset type
  * and performs basic asset loading logic tests.
@@ -500,6 +501,47 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   }
 
   @Test
+  fun `should load PolygonRegion assets`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/polygon.psh"
+    val dependency = "ktx/assets/async/polygon.png"
+
+    // When:
+    val asset = storage.testLoad<PolygonRegion>(path)
+
+    // Then:
+    assertTrue(storage.isLoaded<PolygonRegion>(path))
+    assertSame(asset, storage.get<PolygonRegion>(path))
+    assertEquals(1, storage.getReferenceCount<PolygonRegion>(path))
+    assertEquals(listOf(storage.getIdentifier<Texture>(dependency)), storage.getDependencies<PolygonRegion>(path))
+    // Polygon region dependencies:
+    assertTrue(storage.isLoaded<Texture>(dependency))
+    assertSame(asset.region.texture, storage.get<Texture>(dependency))
+    assertEquals(1, storage.getReferenceCount<Texture>(dependency))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should unload PolygonRegion assets with dependencies`() {
+    // Given:
+    val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
+    val path = "ktx/assets/async/polygon.psh"
+    val dependency = "ktx/assets/async/polygon.png"
+    storage.testLoad<PolygonRegion>(path)
+
+    // When:
+    runBlocking { storage.unload<PolygonRegion>(path) }
+
+    // Then:
+    assertFalse(storage.isLoaded<PolygonRegion>(path))
+    assertEquals(0, storage.getReferenceCount<PolygonRegion>(path))
+    assertFalse(storage.isLoaded<Texture>(dependency))
+    assertEquals(0, storage.getReferenceCount<Texture>(dependency))
+  }
+
+  @Test
   fun `should load OBJ Model assets`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
@@ -683,6 +725,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
       storage.getIdentifier<I18NBundle>("ktx/assets/async/i18n"),
       storage.getIdentifier<ParticleEffect>("ktx/assets/async/particle.p2d"),
       storage.getIdentifier<ParticleEffect3D>("ktx/assets/async/particle.p3d"),
+      storage.getIdentifier<PolygonRegion>("ktx/assets/async/polygon.psh"),
       storage.getIdentifier<Model>("ktx/assets/async/model.obj"),
       storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
       storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
@@ -1085,7 +1128,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     @BeforeClass
     fun `load LibGDX statics`() {
       // Necessary for LibGDX asset loaders to work.
-      LwjglNativesLoader.load()
+      Lwjgl3NativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()
       Gdx.gl = Gdx.gl20
@@ -1105,14 +1148,14 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   override fun `setup LibGDX application`() {
     super.`setup LibGDX application`()
     if (System.getenv("TEST_PROFILE") != "ci") {
-      Gdx.audio = OpenALLwjglAudio()
+      Gdx.audio = OpenALLwjgl3Audio()
     }
   }
 
   @After
   override fun `exit LibGDX application`() {
     super.`exit LibGDX application`()
-    (Gdx.audio as? OpenALLwjglAudio)?.dispose()
+    (Gdx.audio as? OpenALLwjgl3Audio)?.dispose()
   }
 }
 
