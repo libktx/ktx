@@ -662,8 +662,8 @@ class AssetStorage(
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
   suspend fun <T> load(descriptor: AssetDescriptor<T>): T {
-    lateinit var newAssets: List<Asset<*>>
-    lateinit var asset: Asset<T>
+    val newAssets: List<Asset<*>>
+    val asset: Asset<T>
     lock.withLock {
       asset = obtainAsset(descriptor)
       newAssets = updateReferences(asset)
@@ -913,7 +913,7 @@ class AssetStorage(
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
   fun <T> loadSync(descriptor: AssetDescriptor<T>): T = runBlocking {
-    lateinit var asset: Asset<T>
+    val asset: Asset<T>
     val newAssets = lock.withLock {
       asset = obtainAsset(descriptor)
       updateReferences(asset)

@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class, InternalCoroutinesApi::class)
+
 package ktx.async
 
 import com.badlogic.gdx.Gdx
@@ -7,6 +9,7 @@ import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.mock.mock
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -25,7 +28,6 @@ import java.util.concurrent.atomic.AtomicLong
 /**
  * Base class with coroutine dispatcher tests.
  */
-@OptIn(DelicateCoroutinesApi::class)
 abstract class CoroutineDispatcherTest : AsyncTest() {
   abstract val tested: KtxDispatcher
   abstract fun getExecutorThread(): Thread
