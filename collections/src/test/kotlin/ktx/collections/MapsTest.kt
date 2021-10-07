@@ -83,10 +83,34 @@ class MapsTest {
   }
 
   @Test
+  fun `should verify empty status contract`() {
+    fun getMap(): GdxMap<Any, Any>? {
+      return gdxMapOf(1 to "1")
+    }
+
+    val map = getMap()
+    if (!map.isEmpty()) {
+      assertTrue(map.size == 1)
+    }
+  }
+
+  @Test
   fun `should report non empty status`() {
     assertTrue(gdxMapOf(1 to "1", 2 to "2", 3 to "3").isNotEmpty())
     assertFalse(ObjectMap<Any, Any>().isNotEmpty())
     assertFalse((null as ObjectMap<Any, Any>?).isNotEmpty())
+  }
+
+  @Test
+  fun `should verify non empty status contract`() {
+    fun getMap(): GdxMap<Any, Any>? {
+      return gdxMapOf(1 to "1")
+    }
+
+    val map = getMap()
+    if (map.isNotEmpty()) {
+      assertTrue(map.size == 1)
+    }
   }
 
   @Test

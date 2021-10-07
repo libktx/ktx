@@ -111,10 +111,34 @@ class ArraysTest {
   }
 
   @Test
+  fun `should verify empty status contract`() {
+    fun getArray(): GdxArray<Any>? {
+      return GdxArray.with("1")
+    }
+
+    val array = getArray()
+    if (!array.isEmpty()) {
+      assertTrue(array.size == 1)
+    }
+  }
+
+  @Test
   fun `should report non empty status`() {
     assertTrue(GdxArray.with("1", "2", "3").isNotEmpty())
     assertFalse(GdxArray<Any>().isNotEmpty())
     assertFalse((null as GdxArray<Any>?).isNotEmpty())
+  }
+
+  @Test
+  fun `should verify non empty status contract`() {
+    fun getArray(): GdxArray<Any>? {
+      return GdxArray.with("1")
+    }
+
+    val array = getArray()
+    if (array.isNotEmpty()) {
+      assertTrue(array.size == 1)
+    }
   }
 
   @Test

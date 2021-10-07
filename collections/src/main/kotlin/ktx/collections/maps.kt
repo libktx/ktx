@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectMap.Entry
 import com.badlogic.gdx.utils.ObjectSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
@@ -60,12 +62,24 @@ inline fun GdxMap<*, *>?.size(): Int = this?.size ?: 0
 /**
  * @return true if the map is null or has no elements.
  */
-inline fun GdxMap<*, *>?.isEmpty(): Boolean = this == null || this.size == 0
+@OptIn(ExperimentalContracts::class)
+inline fun GdxMap<*, *>?.isEmpty(): Boolean {
+  contract {
+    returns(false) implies (this@isEmpty != null)
+  }
+  return this == null || this.size == 0
+}
 
 /**
  * @return true if the map is not null and contains at least one element.
  */
-inline fun GdxMap<*, *>?.isNotEmpty(): Boolean = this != null && this.size > 0
+@OptIn(ExperimentalContracts::class)
+inline fun GdxMap<*, *>?.isNotEmpty(): Boolean {
+  contract {
+    returns(true) implies (this@isNotEmpty != null)
+  }
+  return this != null && this.size > 0
+}
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
