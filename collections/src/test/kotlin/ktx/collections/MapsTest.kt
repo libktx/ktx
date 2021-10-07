@@ -84,6 +84,7 @@ class MapsTest {
 
   @Test
   fun `should verify empty status contract`() {
+    @Suppress("RedundantNullableReturnType")
     fun getMap(): GdxMap<Any, Any>? {
       return gdxMapOf(1 to "1")
     }
@@ -103,6 +104,7 @@ class MapsTest {
 
   @Test
   fun `should verify non empty status contract`() {
+    @Suppress("RedundantNullableReturnType")
     fun getMap(): GdxMap<Any, Any>? {
       return gdxMapOf(1 to "1")
     }

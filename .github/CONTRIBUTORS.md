@@ -87,6 +87,8 @@ Project contributors listed chronologically.
   * Contributed utilities to the [collections module](../collections).
 * [@runt9](https://github.com/runt9)
   * Contributed an initial implementation of reflection-based component binding for the [inject module](../inject).
+* [@fejd](https://github.com/fejd)
+  * Contributed utilities to the [collections module](../collections).
 
 ### Metrics
 

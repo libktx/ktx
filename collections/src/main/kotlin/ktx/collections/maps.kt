@@ -181,9 +181,6 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
   return map
 }
 
-// Sadly, IdentityMap does NOT extend ObjectMap. It feels like it would require up to 2 overridden methods to set it up,
-// but NO. The utilities that apply to ObjectMaps will not work on IdentityMaps, and since its a lot of extra work (and
-// boilerplate) for such a pretty obscure class, only some basic functions are added - like factory methods and operators.
 /**
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides under what load the map is resized.
@@ -208,34 +205,7 @@ inline fun <Key, Value> gdxIdentityMapOf(
   return map
 }
 
-/**
- * @param key a value might be assigned to this key and stored in the map.
- * @return true if a value is associated with passed key. False otherwise.
- */
-operator fun <Key> IdentityMap<Key, *>.contains(key: Key): Boolean = this.containsKey(key)
-
-/**
- * @param key the passed value will be linked with this key.
- * @param value will be stored in the map, accessible by the passed key.
- * @return old value associated with the key or null if none.
- */
-operator fun <Key, Value> IdentityMap<Key, Value>.set(key: Key, value: Value): Value? = this.put(key, value)
-
-/**
- * Allows to iterate over the map with Kotlin lambda syntax and direct access to [MutableIterator], which can remove elements
- * during iteration.
- * @param action will be invoked on each key and value pair. Passed iterator is ensured to be the same instance throughout
- *    the iteration. It can be used to remove elements.
- */
-inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, MutableIterator<Entry<Key, Value>>) -> Unit) {
-  val iterator = this.iterator()
-  while (iterator.hasNext()) {
-    val next = iterator.next()
-    action(next.key, next.value, iterator)
-  }
-}
-
-// Some basic support is also provided for optimized LibGDX maps with primitive keys. Again, no common superclass hurts.
+// Basic support for optimized libGDX maps with primitive keys. Sadly, they do not share a common superclass.
 
 /**
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.

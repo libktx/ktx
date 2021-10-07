@@ -86,19 +86,19 @@ used to easily remove collection elements during iteration.
 LibGDX features `ObjectMap` class, which works similarly to `HashMap`, but it reuses its iterators.
 
 - `ObjectMap` instances can be constructed with `gdxMapOf` methods, similarly to how you create `java.util` maps in Kotlin.
-- `IdentityMap` instances can be constructed with `gdxIdentityMapOf` methods. Added some basic support for LibGDX
-`IdentityMap` and optimized primitive `IntIntMap`, `IntFloatMap` and `IntMap` collections.
+- `IdentityMap` instances can be constructed with `gdxIdentityMapOf` methods. 
+- Basic support for optimized primitive `IntIntMap`, `IntFloatMap` and `IntMap` collections.
 - Null-safe `isEmpty()`, `isNotEmpty()` and `size()` methods where added. They allow you to inspect the collection even
 if the variable is a possible null.
 - `in` operator can be used to check if a particular key is stored in the map.
 - Square bracket syntax can be used to add new elements to the maps: `map[key] = value` is an equivalent to
 `map.put(key, value)`.
-- `iterate` method allows to iterate over map elements with a reference to `MutableIterator`. Can be used to easily
+- `iterate` method allows iterating over map elements with a reference to `MutableIterator`. Can be used to easily
 remove elements from the map.
 - `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxMap` and `GdxArray`.
 - Keys stored in the map can be quickly converted to an `ObjectSet` using `toGdxSet` method.
-- Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to keys
-has to be provided - since the method is inlined, no new lambda object will be created at runtime.
+- Every iterable and array can be converted to `ObjectMap` using `toGdxMap` method. A lambda that converts values to
+keys has to be provided - since the method is inlined, no new lambda object will be created at runtime.
 - Type aliases were added for consistency with other collections:
   - `GdxMap`: `com.badlogic.gdx.utils.ObjectMap`
   - `GdxIdentityMap`: `com.badlogic.gdx.utils.IdentityMap`
@@ -116,7 +116,7 @@ whole collection to remove an element, which would be highly inefficient in case
 a wildcard import of all **KTX** utilities, you can make sure that you're using the correct extension method
 implementations.
 
-IntelliJ allows to mark packages for automatic wildcard import at `Settings > Editor > Code Style > Kotlin > Imports`.
+IntelliJ allows marking packages for automatic wildcard import at `Settings > Editor > Code Style > Kotlin > Imports`.
 
 ### Usage examples
 
