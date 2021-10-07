@@ -4,6 +4,8 @@ package ktx.collections
 
 import com.badlogic.gdx.utils.IntSet
 import com.badlogic.gdx.utils.ObjectSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /** Alias for [com.badlogic.gdx.utils.ObjectSet]. Added for consistency with other collections and factory methods. */
 typealias GdxSet<Element> = ObjectSet<Element>
@@ -51,12 +53,24 @@ inline fun <Type> GdxSet<Type>?.size(): Int = this?.size ?: 0
 /**
  * @return true if the set is null or has no elements.
  */
-inline fun <Type> GdxSet<Type>?.isEmpty(): Boolean = this == null || this.size == 0
+@OptIn(ExperimentalContracts::class)
+inline fun <Type> GdxSet<Type>?.isEmpty(): Boolean {
+  contract {
+    returns(false) implies (this@isEmpty != null)
+  }
+  return this == null || this.size == 0
+}
 
 /**
  * @return true if the set is not null and contains at least one element.
  */
-inline fun <Type> GdxSet<Type>?.isNotEmpty(): Boolean = this != null && this.size > 0
+@OptIn(ExperimentalContracts::class)
+inline fun <Type> GdxSet<Type>?.isNotEmpty(): Boolean {
+  contract {
+    returns(true) implies (this@isNotEmpty != null)
+  }
+  return this != null && this.size > 0
+}
 
 /**
  * @param elements will be iterated over and added to the set.

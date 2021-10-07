@@ -3,6 +3,8 @@
 package ktx.collections
 
 import com.badlogic.gdx.utils.Pool
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /** Alias for [com.badlogic.gdx.utils.Array] avoiding name collision with the standard library. */
 typealias GdxArray<Element> = com.badlogic.gdx.utils.Array<Element>
@@ -99,12 +101,24 @@ inline fun GdxBooleanArray?.size(): Int = this?.size ?: 0
 /**
  * @return true if the array is null or has no elements.
  */
-inline fun <Type> GdxArray<Type>?.isEmpty(): Boolean = this == null || this.size == 0
+@OptIn(ExperimentalContracts::class)
+inline fun <Type> GdxArray<Type>?.isEmpty(): Boolean {
+  contract {
+    returns(false) implies (this@isEmpty != null)
+  }
+  return this == null || this.size == 0
+}
 
 /**
  * @return true if the array is not null and contains at least one element.
  */
-inline fun <Type> GdxArray<Type>?.isNotEmpty(): Boolean = this != null && this.size > 0
+@OptIn(ExperimentalContracts::class)
+inline fun <Type> GdxArray<Type>?.isNotEmpty(): Boolean {
+  contract {
+    returns(true) implies (this@isNotEmpty != null)
+  }
+  return this != null && this.size > 0
+}
 
 /**
  * @param index index of the element in the array.
