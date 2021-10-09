@@ -3,6 +3,8 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.10.0-SNAPSHOT
 
 - **[UPDATE]** Updated to Dokka 1.5.30.
+- **[FEATURE]** (`ktx-ashley`) `Mapper` abstract class designed for `companion object`s of `Component`s.
+Allows to easily obtain instances of a `ComponentMapper` corresponding to the enclosing `Component` class.
 - **[FEATURE]** (`ktx-collections`) `isEmpty` and `isNotEmpty` extension methods of LibGDX collections now support
 Kotlin contracts. If they return `true`, the collection is implied not to be null.
 - **[CHANGE]** (`ktx-collections`) As `IdentityMap` now extends `ObjectMap`, some redundant utilities specific to
