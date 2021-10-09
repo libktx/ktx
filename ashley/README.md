@@ -242,7 +242,7 @@ import ktx.ashley.*
 // to tie the mapper with a specific component class:
 class Transform: Component {
   companion object {
-    val ID = mapperFor<A>()
+    val ID = mapperFor<Transform>()
   }
 }
 
@@ -282,7 +282,7 @@ class B: Component {
 
 // Not nested inside the class:
 class C: Component
-// Will throw an exception!
+// Will throw exceptions!
 object CMapper: Mapper<C>()
 ```
 
