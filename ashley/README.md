@@ -23,14 +23,17 @@ builder DSL.
 - `EngineEntity` is an `Entity` wrapper that allows creating `Component` instances using the `Engine` via
 `with` method. It is available when calling `Engine.entity` or `Engine.configureEntity`.
 - `Engine.configureEntity` extension method allows adding components to an existing entity.
-- `mapperFor` factory method allows creating `ComponentMapper` instances.
-- `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
 - Accessors for `Entity` objects using `ComponentMappers`: `get` (`[]` operator), `has`, `hasNot`,
 `contains` (`in` operator), `remove`.
 - `Entity.addComponent` extension method allows creating and adding a single `Component` to an existing `Entity`.
 - `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
+- `mapperFor` factory method allows creating `ComponentMapper` instances.
+- `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
+
+> Note that `Mapper` relies on reflection API unsupported by LibGDX `ClassReflection`. While it should be safe to use
+> on the officially supported platforms, it might not work correctly with the third-party backends.
 
 ### Usage examples
 
