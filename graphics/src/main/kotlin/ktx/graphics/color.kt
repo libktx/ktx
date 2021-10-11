@@ -3,7 +3,7 @@ package ktx.graphics
 import com.badlogic.gdx.graphics.Color
 
 /**
- * Factory methods for LibGDX [Color] class. Allows to use named parameters.
+ * Factory methods for libGDX [Color] class. Allows using named parameters.
  * @param red red color value.
  * @param green green color value.
  * @param blue blue color value.
@@ -24,7 +24,7 @@ fun Color.copy(red: Float? = null, green: Float? = null, blue: Float? = null, al
 
 /**
  * Returns the red component of the color.
- * Allows to use destructuring declarations when working with LibGDX [Color] class, for example:
+ * Allows using destructuring declarations when working with libGDX [Color] class, for example:
  * ```
  * val (red, green, blue) = myColor
  * ```
@@ -35,7 +35,7 @@ inline operator fun Color.component1() = r
 
 /**
  * Returns the green component of the color.
- * Allows to use destructuring declarations when working with LibGDX [Color] class, for example:
+ * Allows using destructuring declarations when working with libGDX [Color] class, for example:
  * ```
  * val (red, green, blue) = myColor
  * ```
@@ -46,7 +46,7 @@ inline operator fun Color.component2() = g
 
 /**
  * Returns the blue component of the color.
- * Allows to use destructuring declarations when working with LibGDX [Color] class, for example:
+ * Allows using destructuring declarations when working with libGDX [Color] class, for example:
  * ```
  * val (red, green, blue) = myColor
  * ```
@@ -57,7 +57,7 @@ inline operator fun Color.component3() = b
 
 /**
  * Returns the alpha component of the color.
- * Allows to use destructuring declarations when working with LibGDX [Color] class, for example:
+ * Allows using destructuring declarations when working with libGDX [Color] class, for example:
  * ```
  * val (red, green, blue, alpha) = myColor
  * ```

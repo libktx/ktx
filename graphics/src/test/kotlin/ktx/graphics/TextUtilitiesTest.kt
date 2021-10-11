@@ -43,7 +43,7 @@ class TextUtilitiesTest {
   }
 
   /**
-   * Loads the .fnt settings file of the default LibGDX Arial font, but
+   * Loads the .fnt settings file of the default libGDX Arial font, but
    * omits loading the textures. For testing purposes.
    */
   class FakeFont : BitmapFont(

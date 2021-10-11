@@ -57,7 +57,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleE
  * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
  * internal files.
  *
- * If `useDefaultLoaders` is true (which is the default), all default LibGDX [AssetLoader] implementations
+ * If `useDefaultLoaders` is true (which is the default), all default libGDX [AssetLoader] implementations
  * will be registered.
  */
 class AssetStorage(
@@ -88,7 +88,7 @@ class AssetStorage(
    */
   val progress = LoadingProgress()
 
-  /** LibGDX [Logger] used internally, usually to report issues. */
+  /** libGDX [Logger] used internally, usually to report issues. */
   var logger: Logger
     get() = asAssetManager.logger
     set(value) {
@@ -816,7 +816,7 @@ class AssetStorage(
       // The asset was correctly loaded and assigned.
       progress.registerLoadedAsset()
       try {
-        // Notifying the LibGDX loading callback to support AssetManager behavior:
+        // Notifying the libGDX loading callback to support AssetManager behavior:
         asset.descriptor.params?.loadedCallback?.finishedLoading(
           asAssetManager, asset.identifier.path, asset.identifier.type
         )

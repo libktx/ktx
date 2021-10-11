@@ -1,14 +1,14 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-math.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-math)
 
-# KTX: math utilities
+# KTX: Math utilities
 
-Math extensions and operator overloads for LibGDX math API and Kotlin ranges.
+Math extensions and operator overloads for libGDX math API and Kotlin ranges.
 
 ### Why?
 
 Java does not feature operator overloading, which leads to weird constructs like `vector.add(a).sub(b)`. Kotlin brings
 the possibility to use a much more readable and natural syntax with its operators overloading: `vector + a - b`. However,
-LibGDX API does not match Kotlin naming conventions (necessary for operators to work), which means extension functions
+libGDX API does not match Kotlin naming conventions (necessary for operators to work), which means extension functions
 are necessary to make it work like that.
 
 Kotlin also provides convenient syntax for ranges, which can be used for clearly describing criteria for selecting random
@@ -45,12 +45,12 @@ call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or do
 
 - `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionality of `Vector2`, but
 mutation methods return new vectors instead of mutate the reference.
-- Note that one may want to create type aliases to makes the usage more concise: `typealias Vect2 = ImmutableVector2`
+- Note that one may want to create type aliases to make the usage more concise: `typealias Vect2 = ImmutableVector2`
 - `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length.
 - Instances can be destructed: `val (x, y) = vector2`.
 - `Vector2.toImmutable()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
-- `ImmutableVector2.toVector2()` Returns an mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
-- Most of the functions of `Vector2` which mutate the vector are provided but deprecated. This allow smooth migration from
+- `ImmutableVector2.toVector2()` Returns a mutable vector with same `x` and `y` attributes than this `ImmutableVector2`
+- Most of the functions of `Vector2` which mutate the vector are provided but deprecated. This allows smooth migration from
 `Vector2`.
 - Notable differences with `Vector2`:
   - `+`, `-`, `*`, `/` are available and replace `add`, `sub` and `scl`.
@@ -59,7 +59,7 @@ mutation methods return new vectors instead of mutate the reference.
   - `withRandomRotation` replace `setToRandomRotation` and return a new vector of same length and a random rotation.
   - `withAngleDeg()` and `withAngleRad` replace `setAngle` and `setAngleRad` and return a new vector of same length and
   the given angle to x-axis.
-  - `cpy` is deprecated and is not necessary. Immutable vectors can be safely shared. However since `ImmutableVector` is
+  - `cpy` is deprecated and is not necessary. Immutable vectors can be safely shared. However, since `ImmutableVector` is
   a `data class`, there is a `copy(x, y)` method available allowing to easily create new vectors based on existing ones. 
   - `set(x, y)` and `setZero()` are not provided.   
   - Functions dealing with angles in degree are suffixed with `Deg` and all returns values between `-180` and `+180`.
@@ -80,7 +80,7 @@ val v2 = ImmutableVector2.X.withRotationDeg(30f) // unit vector of given angle
 val v3 = -ImmutableVector2.X // inverse of a vector
 ```
 
-Converting from LibGDX `Vector2` to `ImmutableVector2` (and vice versa):
+Converting from libGDX `Vector2` to `ImmutableVector2` (and vice versa):
 
 ```kotlin
 import ktx.math.*
@@ -175,7 +175,7 @@ definition is a convenient way to think about a range from which random values w
 of ranges in code, which can be useful for code clarity when defining a range for random number selection, or for 
 rapidly iterating a design.
 - `IntRange.random(random: java.util.Random)` allows using a Java Random to select a number from the range, and is 
-provided in case there is a need to use the `MathUtils.random` instance or an instance of LibGDX's fast RandomXS128.
+provided in case there is a need to use the `MathUtils.random` instance or an instance of libGDX's fast RandomXS128.
 - `ClosedRange<Float>.random()` allows a evenly distributed random number to be selected from a range (but treating
 the `endInclusive` as exclusive for simplicity).
 - `ClosedRange<Float>.randomGaussian()` selects a normally distributed value to be selected from the range, scaled so the
@@ -188,7 +188,7 @@ a `normalizedMode` can be passed for asymmetrical distributions.
 
 ##### Usage examples
 
-Suppose there is a class that has a random behavior. Its can be constructed by passing several ranges to its constructor.
+Suppose there is a class that has a random behavior. It can be constructed by passing several ranges to its constructor.
 
 ```kotlin
 class CreatureSpawner(val spawnIntervalRange: ClosedRange<Float>) {
@@ -225,14 +225,15 @@ val spawners = listOf(
 
 ### Alternatives
 
-You can use LibGDX APIs directly or rely on third-party math libraries:
+You can use libGDX APIs directly or rely on third-party math libraries:
 
 - [Kotlin Statistics](https://github.com/thomasnield/kotlin-statistics) contains idiomatic Kotlin wrappers over
 [Apache Commons Math](http://commons.apache.org/proper/commons-math/userguide/stat.html). Its extension functions might
 prove useful during game development.
-- [Jvm Glm](https://github.com/kotlin-graphics/glm) is the kotlin port of the famous [glm](https://github.com/g-truc/glm) lib by g-truc.
+- [Jvm Glm](https://github.com/kotlin-graphics/glm) is a Kotlin port of the [glm](https://github.com/g-truc/glm)
+lib by `g-truc`.
 
 #### Additional documentation
 
-- [LibGDX math utilities article.](https://github.com/libgdx/libgdx/wiki/Math-utilities)
+- [Official libGDX math utilities article.](https://github.com/libgdx/libgdx/wiki/Math-utilities)
 - [`Vectors` and `Matrices` article.](https://github.com/libgdx/libgdx/wiki/Vectors%2C-matrices%2C-quaternions)

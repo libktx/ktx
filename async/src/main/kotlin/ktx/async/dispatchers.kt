@@ -20,8 +20,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 
 /**
- * Base interface of [CoroutineContext] for dispatchers using the LibGDX threading model.
- * Uses LibGDX [Timer] API to support [delay].
+ * Base interface of [CoroutineContext] for dispatchers using the libGDX threading model.
+ * Uses libGDX [Timer] API to support [delay].
  */
 interface KtxDispatcher : CoroutineContext, Delay {
   /**
@@ -43,8 +43,8 @@ interface KtxDispatcher : CoroutineContext, Delay {
 }
 
 /**
- * Base extension of [CoroutineDispatcher] for dispatchers using the LibGDX threading model.
- * Uses LibGDX [Timer] API to support [delay].
+ * Base extension of [CoroutineDispatcher] for dispatchers using the libGDX threading model.
+ * Uses libGDX [Timer] API to support [delay].
  */
 abstract class AbstractKtxDispatcher : CoroutineDispatcher(), KtxDispatcher {
   override fun dispatch(context: CoroutineContext, block: Runnable) {
@@ -53,7 +53,7 @@ abstract class AbstractKtxDispatcher : CoroutineDispatcher(), KtxDispatcher {
 }
 
 /**
- * Wraps around LibGDX [Timer.Task] to make it possible to cancel scheduled tasks. Holds a reference to the original
+ * Wraps around libGDX [Timer.Task] to make it possible to cancel scheduled tasks. Holds a reference to the original
  * scheduled [task].
  */
 class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
@@ -63,12 +63,12 @@ class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
 }
 
 /**
- * A [CoroutineDispatcher] that wraps around LibGDX [AsyncExecutor] instance (available via [executor] property)
+ * A [CoroutineDispatcher] that wraps around libGDX [AsyncExecutor] instance (available via [executor] property)
  * to execute tasks asynchronously. [threads] property is purely informational and cannot be verified, since
  * [AsyncExecutor] does not expose the amount of threads it uses internally; provide a valid [threads] amount during
  * initiation or use the official factory methods to prevent from mismatches with the actual max threads amount.
  *
- * Uses LibGDX [Timer] API to support [delay].
+ * Uses libGDX [Timer] API to support [delay].
  */
 class AsyncExecutorDispatcher(
   val executor: AsyncExecutor,
@@ -93,8 +93,8 @@ class AsyncExecutorDispatcher(
 }
 
 /**
- * A [CoroutineDispatcher] that wraps around LibGDX runnable execution API to execute tasks
- * on the main rendering thread. Uses LibGDX [Timer] API to support [delay].
+ * A [CoroutineDispatcher] that wraps around libGDX runnable execution API to execute tasks
+ * on the main rendering thread. Uses libGDX [Timer] API to support [delay].
  */
 sealed class RenderingThreadDispatcher : MainCoroutineDispatcher(), KtxDispatcher, Delay {
   override fun execute(block: Runnable) {

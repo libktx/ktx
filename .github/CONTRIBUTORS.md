@@ -7,11 +7,11 @@ Project contributors listed chronologically.
 * [@kotcrab](https://github.com/kotcrab)
   * Author of the [`VisUI` extension](../vis).
 * [@MrPlow442](https://github.com/MrPlow442)
-  * Contributed LibGDX [collections](../collections) utilities.
+  * Contributed libGDX [collections](../collections) utilities.
 * [@sreich](https://github.com/sreich)
   * Contributed various utilities from the [Ore Infinium](https://github.com/sreich/ore-infinium) project.
 * [@yhlai-code](https://github.com/yhlai-code) (_raincole_)
-  * Contributed LibGDX [collections](../collections) utilities.
+  * Contributed libGDX [collections](../collections) utilities.
   * Provided insightful review of the [`Async`](../async) module.
 * [@Jkly](https://github.com/Jkly)
   * Author of the [`Ashley` module](../ashley).
@@ -26,7 +26,7 @@ Project contributors listed chronologically.
   * Contributed significant improvements to the [math module](../math).
 * [@dwursteisen](https://github.com/dwursteisen)
   * Started the [graphics module](../graphics).
-  * Presented a [talk about Kotlin and LibGDX](https://www.youtube.com/watch?v=kDxerDYelLs) on the _KotlinConf2018_.
+  * Presented a [talk about Kotlin and libGDX](https://www.youtube.com/watch?v=kDxerDYelLs) on the _KotlinConf2018_.
 * [@nukesz](https://github.com/nukesz)
   * Refactored legacy tests of the [collections module](../collections).
 * [@DavidPartouche](https://github.com/DavidPartouche)
@@ -44,7 +44,7 @@ Project contributors listed chronologically.
 * [@Quillraven](https://github.com/Quillraven)
   * Author of the [Tiled](../tiled) module.
   * Contributed [actors](../actors), [ashley](../ashley) and [collections](../collections) utilities.
-  * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original LibGDX introduction.
+  * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original libGDX introduction.
   * Author of the [preferences](../preferences) module.
   * Tested and reviewed the [assets async](../assets-async) module.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
@@ -52,7 +52,7 @@ Project contributors listed chronologically.
 * [@maltaisn](https://github.com/maltaisn)
   * Added utilities to [style module](../style).
   * Contributed [JSON serialization](../json) utilities.
-  * Updated the project to LibGDX 1.9.10.
+  * Updated the project to libGDX 1.9.10.
 * [@kvonspiczak](https://github.com/kvonspiczak)
   * Contributed documentation fix.
 * [@cypherdare](https://github.com/cypherdare)
@@ -64,7 +64,7 @@ Project contributors listed chronologically.
 * [@rhutsaliuk](https://github.com/rhutsaliuk)
   * Contributed [json](../json) serializers utilities.
 * [@ImXico](https://github.com/ImXico)
-  * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin LibGDX extensions.
+  * Author of the [Cyberpunk](https://github.com/ImXico/Cyberpunk) framework, which is another set of Kotlin libGDX extensions.
   * Utilities for profiling, text rendering, camera updating and taking screenshots were integrated into KTX with **@ImXico** permission.
 * [@heyheyIvan](https://github.com/heyheyIvan)
   * Contributed utilities to the [graphics module](../graphics).

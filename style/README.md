@@ -1,17 +1,17 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-style.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-style)
 
-# KTX: style builders
+# KTX: Style builders
 
 Type-safe builders of official Scene2D widget styles.
 
 ### Why?
 
-While creating widget styles in Java is possible, it usually turns out to be too verbose. LibGDX provides an alternative -
+While creating widget styles in Java is possible, it usually turns out to be too verbose. libGDX provides an alternative -
 `Skin` class and its JSON loader. Thanks to reflection, you can define your styles in a single concise JSON file and load
 them at runtime. This is fine most of the time, but this approach does have its issues: the two obvious ones being
-reflection usage and no validation during writing. You basically find out about your typos at runtime, as there seems
-to be no schema that the JSON could be validated against and no official editors with code completion. JSON format also
-suffers from no extension mechanism, which leads to data duplication.
+reflection usage and no validation or code completion during writing. You basically find out about your typos at runtime,
+as there seems to be no schema that the JSON could be validated against and no official editors with code completion.
+JSON format also suffers from no extension mechanism, which leads to data duplication.
 
 Kotlin type-safe builders can make style definitions less verbose than usual, as easily readable as JSON and basically
 as fast to parse as hand-written Java code thanks to inlined functions and no reflection usage. By converting your JSON
@@ -69,7 +69,7 @@ Signature of every extension method is pretty much the same - they consume 3 par
 `"default"`), optional name of extended style and an init block, which is usually passed as a Kotlin lambda. If a name
 of existing style name is given as the `extend` parameter, the new style will copy its properties.
 
-Currently supported extension methods include:
+Currently, the supported extension methods include:
 
 `Skin` method | Style class
 :---: | ---
@@ -352,15 +352,15 @@ of `Skin` assets including `Textures` and `TextureAtlases`.
 
 ### Alternatives
 
-- Default LibGDX JSON skin loading mechanism allows to customize `Skin` instances thanks to reflection. Apart from the
+- Default libGDX JSON skin loading mechanism allows customizing `Skin` instances thanks to reflection. Apart from the
 issues listed in the introduction, it does have an advantage over type-safe builders: skins can be reloaded without
 recompilation of the application, allowing for GUI tweaks without restarting. While a certainly useful feature during
 prototyping phase, it also requires the developer to prepare `Skin` reloading and GUI rebuilding code to make it work.
-- [USL](https://github.com/kotcrab/VisEditor/wiki/USL) is a DSL that compiles to LibGDX JSON skin files. While similar
+- [USL](https://github.com/kotcrab/VisEditor/wiki/USL) is a DSL that compiles to libGDX JSON skin files. While similar
 to JSON in structure, it adds some more features like packages handling and style inheritance. Furthermore, it features
 no runtime overhead, as it is translated to plain skin JSON data. Its style inheritance mechanism might prove more
 flexible than `ktx-style`, as you can extend styles even if they do not share the same class. However, since it relies
-on LibGDX JSON skin loading (based on reflection) and currently contains no editor capable of code completion, it still
+on libGDX JSON skin loading (based on reflection) and currently contains no editor capable of code completion, it still
 suffers from the same issues as regular skin JSON.
 
 #### Additional documentation

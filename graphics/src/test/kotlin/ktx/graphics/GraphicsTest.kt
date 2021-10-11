@@ -20,7 +20,7 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Tests general utilities related to LibGDX graphics API.
+ * Tests general utilities related to libGDX graphics API.
  */
 class GraphicsTest {
   @Test

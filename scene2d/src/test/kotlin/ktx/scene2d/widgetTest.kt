@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
 /**
  * Tests [scene2d] DSL object.
  */
-class Scene2DTest : NeedsLibGDX() {
+class Scene2DTest : ApplicationTest() {
   @Test
   fun `should not add an actor to a group`() {
     val actor = Actor()
@@ -94,7 +94,7 @@ class KGroupTest {
 /**
  * Tests [KTable] interface: base for all Table-based parental actors.
  */
-class KTableTest : NeedsLibGDX() {
+class KTableTest : ApplicationTest() {
   @Test
   fun `should add widget to group and return its cell`() {
     val group = TestTable()
@@ -191,7 +191,7 @@ class KTableTest : NeedsLibGDX() {
 /**
  * Tests [KTree] interface: base for all parental actors operating on tree nodes.
  */
-class KTreeTest : NeedsLibGDX() {
+class KTreeTest : ApplicationTest() {
   @Test
   fun `should add widget to group and return its node`() {
     val group = TestTree()
@@ -247,7 +247,7 @@ class KTreeTest : NeedsLibGDX() {
 /**
  * Tests KTX custom actor: [KButtonTable].
  */
-class KButtonTableTest : NeedsLibGDX() {
+class KButtonTableTest : ApplicationTest() {
   @Test
   fun `should add Buttons to ButtonGroup`() {
     val buttonTable = KButtonTable(1, 2, Skin())
@@ -334,7 +334,7 @@ class KContainerTest {
 /**
  * Testing KTX-adapted widget: [KListWidget].
  */
-class KListWidgetTest : NeedsLibGDX() {
+class KListWidgetTest : ApplicationTest() {
   @Test
   fun `should add items`() {
     val list = KListWidget<String>(VisUI.getSkin(), defaultStyle)
@@ -388,7 +388,7 @@ class KNodeTest {
 /**
  * Testing KTX-adapted widget: [KScrollPane].
  */
-class KScrollPaneTest : NeedsLibGDX() {
+class KScrollPaneTest : ApplicationTest() {
   @Test
   fun `should store child`() {
     val scrollPane = KScrollPane(VisUI.getSkin(), defaultStyle)
@@ -415,7 +415,7 @@ class KScrollPaneTest : NeedsLibGDX() {
 /**
  * Testing KTX-adapted widget: [KSelectBox].
  */
-class KSelectBoxTest : NeedsLibGDX() {
+class KSelectBoxTest : ApplicationTest() {
   @Test
   fun `should add items`() {
     val selectBox = KSelectBox<String>(VisUI.getSkin(), defaultStyle)
@@ -451,7 +451,7 @@ class KSelectBoxTest : NeedsLibGDX() {
 /**
  * Testing KTX-adapted widget: [KSplitPane].
  */
-class KSplitPaneTest : NeedsLibGDX() {
+class KSplitPaneTest : ApplicationTest() {
   @Test
   fun `should store two children`() {
     val splitPane = KSplitPane(false, VisUI.getSkin(), defaultHorizontalStyle)
@@ -482,7 +482,7 @@ class KSplitPaneTest : NeedsLibGDX() {
 /**
  * Testing KTX-adapted widget: [KTreeWidget].
  */
-class KTreeWidgetTest : NeedsLibGDX() {
+class KTreeWidgetTest : ApplicationTest() {
   @Test
   fun `should spawn nodes`() {
     val tree = KTreeWidget(VisUI.getSkin(), defaultStyle)
@@ -499,4 +499,4 @@ class KTreeWidgetTest : NeedsLibGDX() {
 
 // Note: other extended Scene2D widgets are not tested, as they do not implement any custom logic and simply inherit
 // from KGroup or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
-// implemented - we are basically relying on LibGDX to behave correctly.
+// implemented - we are basically relying on libGDX to behave correctly.

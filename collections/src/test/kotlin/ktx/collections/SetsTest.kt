@@ -9,7 +9,7 @@ import org.junit.Test
 import java.util.LinkedList
 
 /**
- * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
+ * Tests utilities for libGDX custom HashSet equivalent - [ObjectSet].
  */
 class SetsTest {
   @Test
@@ -356,7 +356,7 @@ class SetsTest {
   }
 
   @Test
-  fun `should provide alias for compatibility with other LibGDX collections`() {
+  fun `should provide alias for compatibility with other libGDX collections`() {
     @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxSet<Any>() is ObjectSet<Any>)
   }

@@ -15,7 +15,7 @@ interface JsonSerializer<T> : Json.Serializer<T> {
 /**
  * Wrapping interface around [com.badlogic.gdx.utils.Json.Serializer]. Provides null-safety
  * and convenient interface for serializer that is only able to [read].
- * Unlike LibGDX [com.badlogic.gdx.utils.Json.ReadOnlySerializer], the default implementation of
+ * Unlike libGDX [com.badlogic.gdx.utils.Json.ReadOnlySerializer], the default implementation of
  * the [write] method throws [UnsupportedOperationException].
  */
 interface ReadOnlyJsonSerializer<T> : JsonSerializer<T> {

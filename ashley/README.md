@@ -1,9 +1,9 @@
 [![Ashley](https://img.shields.io/badge/ashley-1.7.4-red.svg)](https://github.com/libgdx/ashley)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-ashley.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-ashley)
 
-# KTX: `Ashley` entity component system utilities
+# KTX: `Ashley` ECS utilities
 
-Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashley) entity component system.
+Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashley) entity-component-system.
 
 ### Why?
 
@@ -32,7 +32,7 @@ builder DSL.
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
 
-> Note that `Mapper` relies on reflection API unsupported by LibGDX `ClassReflection`. While it should be safe to use
+> Note that `Mapper` relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe to use
 > on the officially supported platforms, it might not work correctly with the third-party backends.
 
 ### Usage examples

@@ -125,8 +125,8 @@ Kotlin and plugin versions are stored in the [gradle.properties](../gradle.prope
 versions are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases
 should keep all the dependencies (outside of testing scope) up-to-date. Major dependencies include:
 
-- **LibGDX**: update `gdxVersion` in the versions file and LibGDX version in the tag on the top of the 
-[README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
+- **libGDX**: update `gdxVersion` in the versions file and libGDX version in the tag on the top of the 
+[README.md](../README.md) file. Note that updating libGDX also affects the KTX version and milestones, so make sure
 to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
 - **Kotlin**: update the `kotlinVersion` in the properties file and the Kotlin tag in the [README.md](../README.md).
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` in the versions file and the tag in the
@@ -146,10 +146,10 @@ All the major dependencies updates should be added to the [changelog](../CHANGEL
 #### Stable release
 
 - Create a new issue on GitHub. Include the number of the issue in commit messages of all commits related to the release.
-Apply `dev` label and milestone corresponding to the LibGDX version. An example can be found
+Apply `dev` label and milestone corresponding to the libGDX version. An example can be found
 [here](https://github.com/libktx/ktx/issues/191).
-- Change `libVersion` setting in the [`version.txt`](../version.txt). KTX uses the same versioning schema as LibGDX
-(mimicking the LibGDX version that it was compiled against) with a suffix depending on the version status.
+- Change `libVersion` setting in the [`version.txt`](../version.txt). KTX uses the same versioning schema as libGDX
+(mimicking the libGDX version that it was compiled against) with a suffix depending on the version status.
 - Create a pull request from the `develop` branch to the `master` branch. Review and merge the changes to the `master`
 branch.
 - Checkout the `master` branch. Fetch the latest changes.
@@ -168,11 +168,11 @@ with the following labels:
   - **[REMOVAL]** - temporary or permanent removal of a major feature (e.g. disabling a module for a single release).
 - Checkout the `develop` branch.
 - Change `libVersion` setting in the [`version.txt`](../version.txt) to the next snapshot release. The name should
-match the used LibGDX version followed by the `-SNAPSHOT` suffix.
+match the used libGDX version followed by the `-SNAPSHOT` suffix.
 
 #### Snapshot release
 
-- Make sure the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
+- Make sure the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the libGDX version
 that the library was compiled against.
 - Run `gradle build uploadSnapshot` to push artifacts to _Sonatype_ snapshots repository. This task will do nothing
 if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.

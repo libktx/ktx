@@ -205,4 +205,4 @@ fun <T : ImmutableVector<T>> T.hasSameDirection(other: T): Boolean =
 fun <T : ImmutableVector<T>> T.hasOppositeDirection(other: T): Boolean =
   dot(other) < 0f
 
-internal const val MUTABLE_METHOD_DEPRECATION_MESSAGE = "Unlike its equivalent in LibGDX, this function does not change the internal state of the vector and returns a new instance instead. This might break existing code designed with mutable vectors in mind."
+internal const val MUTABLE_METHOD_DEPRECATION_MESSAGE = "Unlike its equivalent in libGDX, this function does not change the internal state of the vector and returns a new instance instead. This might break existing code designed with mutable vectors in mind."

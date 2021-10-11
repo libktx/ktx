@@ -6,7 +6,7 @@ import com.kotcrab.vis.ui.widget.Menu
 import com.kotcrab.vis.ui.widget.MenuBar
 import com.kotcrab.vis.ui.widget.MenuItem
 import com.kotcrab.vis.ui.widget.PopupMenu
-import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.ApplicationTest
 import ktx.scene2d.scene2d
 import ktx.scene2d.table
 import org.junit.Assert.assertEquals
@@ -18,7 +18,7 @@ import org.junit.Test
 /**
  * Tests menu extensions.
  */
-class MenusTest : NeedsLibGDX() {
+class MenusTest : ApplicationTest() {
   @Test
   fun `should create PopupMenu`() {
     var initInvoked: Boolean

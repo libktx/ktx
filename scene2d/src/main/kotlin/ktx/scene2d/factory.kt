@@ -357,7 +357,7 @@ inline fun <S> KWidget<S>.label(
 }
 
 /**
- * @param items optional LibGDX array of list widget items. Defaults to null.
+ * @param items optional libGDX array of list widget items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @return a List widget instance added to this group.
@@ -470,7 +470,7 @@ inline fun <S> KWidget<S>.scrollPane(
 }
 
 /**
- * @param items optional LibGDX array of the [SelectBox] items. Defaults to null.
+ * @param items optional libGDX array of the [SelectBox] items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @return a [SelectBox] instance added to this group.

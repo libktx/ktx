@@ -1,12 +1,12 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-preferences.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-preferences)
 
-# KTX: preference utilities
+# KTX: Preference utilities
 
-Utilities and extension function for LibGDX preferences.
+Utilities and extension function for libGDX preferences.
 
 ### Why?
 
-LibGDX [`Preferences`](https://github.com/libgdx/libgdx/wiki/Preferences) do not provide a consistent
+Unfortunately, libGDX [`Preferences`](https://github.com/libgdx/libgdx/wiki/Preferences) do not provide a consistent
 API for setting and getting values, and they do not support Kotlin operators either. Since in principle
 `Preferences` work very similarly to a `Map`, ideally they should support a similar syntax -
 especially since in Kotlin you can take advantage of the square bracket operators.
@@ -18,7 +18,7 @@ It is no longer necessary to call type specific methods like `putString` or `get
 each type separately. `set` and `get` support objects of any type. If the type is not of `String`, `Boolean`,
 `Int`, `Float`, `Double` or `Long` type, the value is stored and retrieved using 
 [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization.
-  - Note that `Double` type is not supported by LibGDX `Preferences` and converted to `Float`
+  - Note that `Double` type is not supported by libGDX `Preferences` and converted to `Float`
   instead. Use explicit casts (`toFloat()`) or wrap the value with a JSON-serializable object
   when storing numbers that do not fit in a `Float`.
 - Preferences can now be set with a `Pair<String, Any>` parameter. Keys and values can be paired using
@@ -162,5 +162,5 @@ fun addPreferencesUsingKotlinPairs(preferences: Preferences) {
 
 ### Additional documentation
 
-- [Official LibGDX `Preferences` article](https://github.com/libgdx/libgdx/wiki/Preferences).
-- [Official LibGDX `Json` article](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON).
+- [Official libGDX `Preferences` article](https://github.com/libgdx/libgdx/wiki/Preferences).
+- [Official libGDX `Json` article](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON).

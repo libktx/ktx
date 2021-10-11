@@ -6,18 +6,18 @@ Reflection utilities for Kotlin applications.
 
 ### Why?
 
-LibGDX provides its own cross-platform reflection API via static `ClassReflection` and `ArrayReflection`.
-While standard Java and Kotlin reflection APIs work on most platforms, LibGDX API ensures compatibility
+libGDX provides its own cross-platform reflection API via static `ClassReflection` and `ArrayReflection`.
+While standard Java and Kotlin reflection APIs work on most platforms, libGDX API ensures compatibility
 with backends such as HTML/WebGL and other third-party backends. However, with their frequent `Class`
 parameter usage, the provided static methods are inconvenient to use from within Kotlin. Additionally, due to
-Kotlin's unchecked exceptions, LibGDX by itself does not warn the users about reflection API usage, which can
+Kotlin's unchecked exceptions, libGDX by itself does not warn the users about reflection API usage, which can
 cause various runtime issues.
 
 ### Guide
 
 Instead of relying on static methods, `ktx-reflect` provides an inlined `ReflectedClass` wrapper that
 allows to invoke `ClassReflection` and `ArrayReflection` methods with improved API. Since `ReflectedClass`
-is an inlined value class, the overhead is very similar to using LibGDX reflection APIs directly.
+is an inlined value class, the overhead is very similar to using libGDX reflection APIs directly.
 
 `ReflectedClass` can be created either by using one of its constructors with `Class` or `KClass` parameters,
 or by `reflect<Type>` and `reflect(String)` top-level functions. 
@@ -164,7 +164,7 @@ class MyClass(val a: String)
 
 @OptIn(Reflection::class)
 fun createNewInstance(): MyClass {
-  // Note that a class cast is necessary, as LibGDX wrappers strip types:
+  // Note that a class cast is necessary, as libGDX wrappers strip types:
   return reflect<MyClass>().getConstructor(String::class).newInstance("a") as MyClass
 }
 ```
@@ -199,7 +199,7 @@ class MyClass
 
 @OptIn(Reflection::class)
 fun getAnnotation(): MyAnnotation? {
-  // The `get()` call unwraps the annotation from the LibGDX wrapper.
+  // The `get()` call unwraps the annotation from the libGDX wrapper.
   return reflect<MyClass>().getAnnotation<MyAnnotation>()?.get()
 }
 ```
@@ -223,7 +223,7 @@ fun isAbstract(): Boolean {
 }
 ```
 
-Refer to the LibGDX documentation for more reflection usage examples.
+Refer to the libGDX documentation for more reflection usage examples.
 
 ### Alternatives
 

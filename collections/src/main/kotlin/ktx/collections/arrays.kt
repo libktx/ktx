@@ -31,7 +31,7 @@ typealias GdxShortArray = com.badlogic.gdx.utils.ShortArray
 typealias GdxByteArray = com.badlogic.gdx.utils.ByteArray
 
 /**
- * Default LibGDX array size used by most constructors.
+ * Default libGDX array size used by most constructors.
  */
 const val defaultArraySize = 16
 
@@ -436,7 +436,7 @@ inline fun <Type, R> GdxArray<Type>.flatMap(transform: (Type) -> Iterable<R>): G
 /**
  * @param initialCapacity initial capacity of the set. Will be resized if necessary. Defaults to array size.
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
- * @return values copied from this array stored in a LibGDX set.
+ * @return values copied from this array stored in a libGDX set.
  */
 fun <Type : Any> GdxArray<Type>.toGdxSet(
   initialCapacity: Int = this.size,
@@ -451,7 +451,7 @@ fun <Type : Any> GdxArray<Type>.toGdxSet(
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array.
- * @return values copied from this iterable stored in a LibGDX array.
+ * @return values copied from this iterable stored in a libGDX array.
  */
 inline fun <reified Type : Any> Iterable<Type>.toGdxArray(
   ordered: Boolean = true,
@@ -466,7 +466,7 @@ inline fun <reified Type : Any> Iterable<Type>.toGdxArray(
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array. Defaults to this array size.
- * @return values copied from this array stored in a LibGDX array.
+ * @return values copied from this array stored in a libGDX array.
  */
 inline fun <reified Type : Any> Array<Type>.toGdxArray(
   ordered: Boolean = true,
@@ -481,7 +481,7 @@ inline fun <reified Type : Any> Array<Type>.toGdxArray(
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array. Defaults to this array size.
- * @return values copied from this array stored in an optimized LibGDX int array.
+ * @return values copied from this array stored in an optimized libGDX int array.
  */
 fun IntArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size): GdxIntArray {
   val array = GdxIntArray(ordered, initialCapacity)
@@ -493,7 +493,7 @@ fun IntArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.siz
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array. Defaults to this array size.
- * @return values copied from this array stored in an optimized LibGDX float array.
+ * @return values copied from this array stored in an optimized libGDX float array.
  */
 fun FloatArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size): GdxFloatArray {
   val array = GdxFloatArray(ordered, initialCapacity)
@@ -505,7 +505,7 @@ fun FloatArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.s
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
  *      which avoids a memory copy.
  * @param initialCapacity initial size of the backing array. Defaults to this array size.
- * @return values copied from this array stored in an optimized LibGDX boolean array.
+ * @return values copied from this array stored in an optimized libGDX boolean array.
  */
 fun BooleanArray.toGdxArray(ordered: Boolean = true, initialCapacity: Int = this.size): GdxBooleanArray {
   val array = GdxBooleanArray(ordered, initialCapacity)

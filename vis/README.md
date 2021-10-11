@@ -7,14 +7,14 @@ Utilities for creating [VisUI](https://github.com/kotcrab/vis-ui) widgets using 
 
 ### Why?
 
-While LibGDX layout managers are simple enough to use directly in Kotlin or Java, their usage usually leads to overly
+While libGDX layout managers are simple enough to use directly in Kotlin or Java, their usage usually leads to overly
 verbose code. GUI layouts presented in HTML, XML and other readable markup languages are easier to reason about than
 cluttered Java code. Fortunately, Kotlin [type-safe builders](https://Kotlinlang.org/docs/reference/type-safe-builders.html)
-allow to write DSL that is both as readable as markup languages and as powerful as Java.
+allow writing a DSL that is both as readable as a markup language and as powerful as a programming language.
 
 ### Guide
 
-This modules extends [`ktx-scene2d`](../scene2d), providing additional factory methods for the following VisUI widgets:
+This module extends [`ktx-scene2d`](../scene2d), providing additional factory methods for the following VisUI widgets:
 
 * *Root* actors:
   * `visDialog`
@@ -376,9 +376,9 @@ provides factory methods for these, they are deprecated - `flowGroup` with appro
 ### Alternatives
 
 - Creating layouts with [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) directly in Kotlin or Java.
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
-HTML-like syntax. It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However,
-it lacks first-class Kotlin support and the flexibility of a powerful programming language.
+- [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) allows building `Scene2D` views using HTML-like syntax.
+It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However, it lacks
+first-class Kotlin support and the flexibility of a programming language.
 
 #### Additional documentation
 

@@ -22,7 +22,7 @@ import java.nio.IntBuffer
 
 class StagesTest {
   @Before
-  fun `mock LibGDX statics`() {
+  fun `mock libGDX statics`() {
     LwjglNativesLoader.load()
     Gdx.app = mock()
     Gdx.gl = mock {
@@ -106,7 +106,7 @@ class StagesTest {
   }
 
   @After
-  fun `remove LibGDX statics`() {
+  fun `remove libGDX statics`() {
     Gdx.gl = null
     Gdx.app = null
     Gdx.gl20 = null

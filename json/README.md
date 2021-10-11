@@ -2,20 +2,20 @@
 
 # KTX: JSON serialization utilities
 
-Extension methods for LibGDX JSON serialization API.
+Extension methods for libGDX JSON serialization API.
 
 ### Why?
 
-The LibGDX JSON reader and writer methods often consume `Class` parameters, which forces the
+The libGDX JSON reader and writer methods often consume `Class` parameters, which forces the
 `Type::class.java` syntax on Kotlin users. Fortunately, Kotlin brings reified generics which effectively
 allow passing a `Class` parameter through a generic type. This module mostly offers extension methods 
 with reified generics to avoid using `::class.java` in your code, as well as to allow type inference
-and better type safety. Additionally it provides couple of classes to facilitate creation of custom
+and better type safety. Additionally, it provides a couple of classes to facilitate creation of custom
 serializers.
 
 ### Guide
 
-KTX brings the following additions to LibGDX `Json` API:
+KTX brings the following additions to libGDX `Json` API:
 - Extension methods and functions:
     - `fromJson`
     - `addClassTag`
@@ -43,7 +43,7 @@ class MyClass
 fun deserialize(file: FileHandle): MyClass {
   val json = Json()
 
-  // Using LibGDX API designed for Java:
+  // Using libGDX API designed for Java:
   return json.fromJson(MyClass::class.java, file)
 
   // Using KTX Kotlin extensions:
@@ -173,13 +173,13 @@ val player: Player = json.fromJson("""{
 
 ### Alternatives
 
-LibGDX JSON is quite limited, verbose and poorly tested compared to some other JSON
+libGDX JSON is quite limited, verbose and poorly tested compared to some other JSON
 serialization libraries. It also accepts and produces corrupted JSON files by default,
 since it omits quotation marks, which might be problematic when integrating with external
 services.
 
 However, if your project is simple enough and you want to avoid including additional JSON 
-serialization libraries in your game, official LibGDX `Json` can be enough. In most other
+serialization libraries in your game, official libGDX `Json` can be enough. In most other
 cases, you should probably look into other popular serialization libraries:
 
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) provides

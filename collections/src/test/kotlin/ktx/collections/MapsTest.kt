@@ -20,7 +20,7 @@ import java.lang.IllegalArgumentException
 import java.util.LinkedList
 
 /**
- * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
+ * Tests utilities for libGDX custom HashMap equivalent - [ObjectMap].
  */
 class MapsTest {
   @Test
@@ -295,7 +295,7 @@ class MapsTest {
   }
 
   @Test
-  fun `should provide alias for compatibility with other LibGDX collections`() {
+  fun `should provide alias for compatibility with other libGDX collections`() {
     @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxMap<Any, Any>() is ObjectMap<Any, Any>)
   }

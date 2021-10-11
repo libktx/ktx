@@ -4,13 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Align
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.kotcrab.vis.ui.widget.VisTable
-import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.ApplicationTest
 import ktx.scene2d.TOLERANCE
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class TooltipsTest : NeedsLibGDX() {
+class TooltipsTest : ApplicationTest() {
   @Test
   fun `should create Tooltip`() {
     val actor = Actor()

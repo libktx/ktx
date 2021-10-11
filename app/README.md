@@ -1,16 +1,15 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-app)
 
-# KTX: basic application utilities
+# KTX: Basic application utilities
 
-Basic `ApplicationListener` implementations and general LibGDX utilities.
+Basic `ApplicationListener` implementations and general libGDX utilities.
 
 ### Why?
 
-LibGDX offers some basic `ApplicationListener` implementations in form of `ApplicationAdapter` and `Game`, but both are
+While libGDX offers some basic `ApplicationListener` implementations including `ApplicationAdapter` and `Game`, both are
 pretty bare-bones. They do not handle screen clearing or manage views list, both of which often have to be set up
-manually in LibGDX applications. This module aims to provide a simple base for your custom `ApplicationListener`: if you
-do not have your favorite setup implemented just yet, it might be a good idea to base it on abstract classes provided
-by `ktx-app`.
+manually in libGDX applications. This module aims to provide a simple base for your custom `ApplicationListener`
+implementations.
 
 ### Guide
 
@@ -21,7 +20,7 @@ methods, without being an abstract class like `com.badlogic.gdx.ApplicationAdapt
 - `KtxGame` is a bit more opinionated `Game` equivalent that not only delegates all game events to the current `Screen`
 instance, but also ensures non-nullability of screens, manages screen clearing, and maintains screens collection, which
 allows switching screens while knowing only their concrete class.
-*`KtxScreen` is an interface extending `Screen` that provides no-op method implementations, making all methods optional
+- `KtxScreen` is an interface extending `Screen` that provides no-op method implementations, making all methods optional
 to override.
 
 #### `InputProcessor` implementations
@@ -37,7 +36,7 @@ color.
 
 #### Profiling
 
-- `profile` inlined function allows to measure performance of the chosen operation with LibGDX `PerformanceCounter`.
+- `profile` inlined function allows measuring performance of the chosen operation with libGDX `PerformanceCounter`.
 - `PerformanceCounter.profile` inlined extension method eases direct usage of the `PerformanceCounter` class.
 - `PerformanceCounter.prettyPrint` extension method allows to quickly log basic performance metrics.
 
@@ -45,7 +44,7 @@ color.
 
 Implementing `KtxApplicationAdapter`:
 
-```Kotlin
+```kotlin
 import ktx.app.KtxApplicationAdapter
 
 class MyApplicationListener : KtxApplicationAdapter {
@@ -62,7 +61,7 @@ class MyApplicationListener : KtxApplicationAdapter {
 
 Implementing `KtxGame` with one screen that displays text with `Batch` utilities from `ktx-graphics`: 
 
-```Kotlin
+```kotlin
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -73,7 +72,7 @@ import ktx.graphics.use
 
 class ExampleScreen : KtxScreen {
   // Notice no `lateinit var` - ExampleScreen has no create()
-  // method and is constructed after LibGDX is fully initiated
+  // method and is constructed after libGDX is fully initiated
   // in ExampleGame.create method.
   val font = BitmapFont()
   val batch = SpriteBatch().apply {
@@ -108,7 +107,7 @@ class ExampleGame : KtxGame<Screen>() {
 
 Implementing `KtxInputAdapter`:
 
-```Kotlin
+```kotlin
 import ktx.app.KtxInputAdapter
 
 class MyInputListener : KtxInputAdapter {
@@ -123,7 +122,7 @@ class MyInputListener : KtxInputAdapter {
 
 Profiling an operation:
 
-```Kotlin
+```kotlin
 import ktx.app.profile
 
 fun profileThreadSleep() {
@@ -136,7 +135,7 @@ fun profileThreadSleep() {
 
 Profiling an operation with an existing `PerformanceCounter`:
 
-```Kotlin
+```kotlin
 import com.badlogic.gdx.utils.PerformanceCounter
 import ktx.app.prettyPrint
 import ktx.app.profile
@@ -158,15 +157,14 @@ fun profileThreadSleep() {
 
 ### Alternatives
 
-There are some general purpose LibGDX utility libraries out there, but most lack first-class Kotlin support.
+There are some general purpose libGDX utility libraries out there, but most lack first-class Kotlin support.
 
-- [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
+- [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired libGDX Java utilities
 library with some classes similar to `ktx-app`.
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
-HTML-like syntax. It also features a custom `ApplicationListener` implementation, which helps with managing `Scene2D`
-screens.
+- [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) allows building `Scene2D` views using HTML-like syntax.
+It also features a custom `ApplicationListener` implementation, which helps with managing `Scene2D` screens.
 - [Autumn MVC](https://github.com/czyzby/gdx-lml/tree/master/mvc) is a [Spring](https://spring.io/) inspired
-model-view-controller framework built on top of LibGDX. It features its own `ApplicationListener` implementation, which
+model-view-controller framework built on top of libGDX. It features its own `ApplicationListener` implementation, which
 initiates and handles annotated view instances.
 
 #### Additional documentation

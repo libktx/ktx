@@ -19,7 +19,7 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
 
 /**
  * Type-safe [Body] building DSL.
- * @param type [BodyType] of the constructed [Body]. Matches LibGDX default of [BodyType.StaticBody].
+ * @param type [BodyType] of the constructed [Body]. Matches libGDX default of [BodyType.StaticBody].
  * @param init inlined. Invoked on a [BodyDefinition] instance, which provides access to [Body] properties, as well as
  *    fixture building DSL. Defaults to no-op.
  * @return a fully constructed [Body] instance with all defined fixtures.

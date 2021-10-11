@@ -10,7 +10,7 @@ import org.junit.Test
 
 class ProfilingTest {
   @Before
-  fun `initiate LibGDX`() {
+  fun `initiate libGDX`() {
     Gdx.app = mock()
   }
 
@@ -47,7 +47,7 @@ class ProfilingTest {
   }
 
   @After
-  fun `destroy LibGDX`() {
+  fun `destroy libGDX`() {
     Gdx.app = null
   }
 }

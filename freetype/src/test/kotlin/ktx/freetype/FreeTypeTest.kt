@@ -147,7 +147,7 @@ class FreeTypeTest {
 
   @Test
   fun `should use FreeType loader to load OTF file into BitmapFont`() {
-    // Note that this tests uses "raw" LibGDX AssetManager API without font loading utilities.
+    // Note that this tests uses "raw" libGDX AssetManager API without font loading utilities.
     val assetManager = assetManager()
     assetManager.registerFreeTypeFontLoaders()
     assetManager.load(otfFile, BitmapFont::class.java, freeTypeFontParameters(otfFile))
@@ -161,7 +161,7 @@ class FreeTypeTest {
 
   @Test
   fun `should use FreeType loader to load TTF file into BitmapFont`() {
-    // Note that this tests uses "raw" LibGDX AssetManager API without font loading utilities.
+    // Note that this tests uses "raw" libGDX AssetManager API without font loading utilities.
     val assetManager = assetManager()
     assetManager.registerFreeTypeFontLoaders()
     assetManager.load(ttfFile, BitmapFont::class.java, freeTypeFontParameters(ttfFile))
@@ -246,7 +246,7 @@ class FreeTypeTest {
   }
 
   @Before
-  fun `setup LibGDX`() {
+  fun `setup libGDX`() {
     LwjglNativesLoader.load()
     Gdx.gl = mock()
     Gdx.gl20 = Gdx.gl
@@ -255,7 +255,7 @@ class FreeTypeTest {
   }
 
   @After
-  fun `cleanup LibGDX`() {
+  fun `cleanup libGDX`() {
     Gdx.gl = null
     Gdx.gl20 = null
     Gdx.files = null

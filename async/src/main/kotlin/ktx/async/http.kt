@@ -64,7 +64,7 @@ suspend fun httpRequest(
  * Stores result of a [HttpRequest]. A safer alternative to [HttpResponse].
  * @param url URL of the queried resource.
  * @param method HTTP method of the request.
- * @param statusCode HTTP status code of the response. Might be set to -1 by internal LibGDX implementation or if the
+ * @param statusCode HTTP status code of the response. Might be set to -1 by internal libGDX implementation or if the
  *    status could not be determined.
  * @param content response body stored as raw bytes.
  * @param headers HTTP header values of the response. Might be empty.
@@ -115,7 +115,7 @@ class HttpRequestResult(
     return result
   }
 
-  // Implementation note: LibGDX HttpRequestResult implementation can _quietly_ ignore closed input streams, which might
+  // Implementation note: libGDX HttpRequestResult implementation can _quietly_ ignore closed input streams, which might
   // result in empty responses in multithreaded environments. We read the whole response into a byte array and return
   // this data object to avoid response content loss.
 }
@@ -129,7 +129,7 @@ class HttpRequestResult(
 fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResult(
   url = requestData.url,
   method = requestData.method,
-  statusCode = this.status?.statusCode ?: -1, // -1 matches LibGDX default behaviour on unknown status.
+  statusCode = this.status?.statusCode ?: -1, // -1 matches libGDX default behaviour on unknown status.
   content = this.result ?: ByteArray(0),
   headers = this.headers ?: emptyMap()
 )

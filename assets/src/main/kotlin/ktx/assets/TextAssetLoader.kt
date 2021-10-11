@@ -12,10 +12,10 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 
 /**
- * Allows to read text files with an [AssetManager]. Must be registered via [setLoader].
+ * Allows reading text files with an [AssetManager]. Must be registered via [setLoader].
  *
  * Note that [loadAsync] _must_ be called before [loadSync], as usual in case of [AsynchronousAssetLoader]
- * implementations. Similarly to standard LibGDX loaders, this loader is not considered thread-safe and assumes that
+ * implementations. Similarly to standard libGDX loaders, this loader is not considered thread-safe and assumes that
  * a single file is loaded at a time.
  *
  * @param fileResolver not used, required by the superclass.

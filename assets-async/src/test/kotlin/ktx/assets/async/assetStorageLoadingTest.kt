@@ -1126,8 +1126,8 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   companion object {
     @JvmStatic
     @BeforeClass
-    fun `load LibGDX statics`() {
-      // Necessary for LibGDX asset loaders to work.
+    fun `load libGDX statics`() {
+      // Necessary for libGDX asset loaders to work.
       Lwjgl3NativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()
@@ -1136,7 +1136,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
 
     @JvmStatic
     @AfterClass
-    fun `dispose of LibGDX statics`() {
+    fun `dispose of libGDX statics`() {
       Gdx.graphics = null
       Gdx.audio = null
       Gdx.gl20 = null
@@ -1145,16 +1145,16 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   }
 
   @Before
-  override fun `setup LibGDX application`() {
-    super.`setup LibGDX application`()
+  override fun `setup libGDX application`() {
+    super.`setup libGDX application`()
     if (System.getenv("TEST_PROFILE") != "ci") {
       Gdx.audio = OpenALLwjgl3Audio()
     }
   }
 
   @After
-  override fun `exit LibGDX application`() {
-    super.`exit LibGDX application`()
+  override fun `exit libGDX application`() {
+    super.`exit libGDX application`()
     (Gdx.audio as? OpenALLwjgl3Audio)?.dispose()
   }
 }

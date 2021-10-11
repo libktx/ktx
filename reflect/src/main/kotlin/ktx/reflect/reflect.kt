@@ -20,7 +20,7 @@ complete an action. Reflection usage requires opt-in with
 with a @Reflection annotation.
 
 Note that reflection might not be fully supported by all platforms,
-especially third-party LibGDX backends. Some platforms might require
+especially third-party libGDX backends. Some platforms might require
 additional setup. For example, all classes that are instantiated
 solely by reflection must be listed in the robovm.xml file within
 the ForceLinkClasses section in order to work on iOS.
@@ -35,9 +35,9 @@ Further reading:
 annotation class Reflection
 
 /**
- * Inlined wrapper for a [Class] providing reflection API using LibGDX reflection utilities.
+ * Inlined wrapper for a [Class] providing reflection API using libGDX reflection utilities.
  *
- * To ensure cross-platform compatibility, LibGDX reflection API should be used over direct
+ * To ensure cross-platform compatibility, libGDX reflection API should be used over direct
  * [Class] and [KClass] usage.
  */
 @JvmInline
@@ -88,7 +88,7 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
     get() = ClassReflection.getConstructors(javaClass)
 
   /**
-   * Accesses constructor of the class using LibGDX reflection API.
+   * Accesses constructor of the class using libGDX reflection API.
    * @throws ReflectionException when unable to read constructors, when no constructors are
    * found, or when more than 1 constructor is found.
    */
@@ -350,14 +350,14 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
 }
 
 /**
- * Wraps the selected [T] class with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * Wraps the selected [T] class with inlined [ReflectedClass] exposing libGDX reflection API.
  * @return [ReflectedClass] wrapping [T].
  */
 @Reflection
 inline fun <reified T : Any> reflect(): ReflectedClass<T> = ReflectedClass(T::class.java)
 
 /**
- * Extracts [Class] from the given [KClass] and wraps it with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * Extracts [Class] from the given [KClass] and wraps it with inlined [ReflectedClass] exposing libGDX reflection API.
  * @param kotlinClass [KClass] representing [Class] to be wrapped.
  * @return [ReflectedClass] wrapping the selected [kotlinClass].
  */
@@ -365,7 +365,7 @@ inline fun <reified T : Any> reflect(): ReflectedClass<T> = ReflectedClass(T::cl
 fun <T : Any> reflect(kotlinClass: KClass<T>): ReflectedClass<T> = ReflectedClass(kotlinClass.java)
 
 /**
- * Wraps the selected [Class] with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * Wraps the selected [Class] with inlined [ReflectedClass] exposing libGDX reflection API.
  * @param javaClass [Class] to be wrapped.
  * @return [ReflectedClass] wrapping the selected [javaClass].
  */
@@ -373,7 +373,7 @@ fun <T : Any> reflect(kotlinClass: KClass<T>): ReflectedClass<T> = ReflectedClas
 fun <T : Any> reflect(javaClass: Class<T>): ReflectedClass<T> = ReflectedClass(javaClass)
 
 /**
- * Wraps the selected class with inlined [ReflectedClass] exposing LibGDX reflection API.
+ * Wraps the selected class with inlined [ReflectedClass] exposing libGDX reflection API.
  * @param name qualified name of the class to wrap.
  * @return [ReflectedClass] wrapping the selected class.
  * @throws ReflectionException when unable to find the class.

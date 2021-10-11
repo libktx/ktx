@@ -1,13 +1,13 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-i18n.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-i18n)
 
-# KTX: internationalization utilities
+# KTX: Internationalization and localization utilities
 
-`I18NBundle` utilities.
+Utilities for the libGDX `I18NBundle`.
 
 ### Why?
 
 As useful as `I18NBundle` is, it is often overlooked in pure Java applications due to sheer amount of work that it
-requires when compared to the "lazy" approach of plain strings usage. This module provides a thin layer of syntax sugar
+requires to set up and use consistently throughout the project. This module provides a thin layer of syntax sugar
 that makes it easier to work with `I18NBundle` instances and provide some useful code completion.
 
 ### Guide
@@ -28,7 +28,7 @@ key2=Value with {0} argument.
 
 ...you can create an enum similar to this:
 
-```Kotlin
+```kotlin
 package ktx.i18n.example
 
 import ktx.i18n.BundleLine
@@ -41,7 +41,7 @@ enum class Nls : BundleLine {
 
 This allows you to access bundle lines via enum instances:
 
-```Kotlin
+```kotlin
 import ktx.i18n.get
 import ktx.i18n.example.Nls
 
@@ -59,7 +59,7 @@ the way `BundleLine` implementations extract lines from `I18NBundle`, override `
 You can use the following Gradle Groovy script to generate a Kotlin enum implementing `BundleLine` according to an
 existing `.properties` bundle:
 
-```Groovy
+```groovy
 task nls << {
   def project = 'core'             // Will contain generated enum class. 
   def source = 'src/main/kotlin'   // Kotlin source path of the project.
@@ -124,7 +124,7 @@ keyWithArguments=Accepts {0} arguments. {1}!
 
 Using `I18NBundle` with strings as IDs:
 
-```Kotlin
+```kotlin
 import ktx.i18n.*
 import com.badlogic.gdx.utils.I18NBundle
 
@@ -135,7 +135,7 @@ bundle["keyWithArguments", 2, "Hello"] // Accepts 2 arguments. Hello!
 
 Using `I18NBundle` with `BundleLine` enum instances as IDs:
 
-```Kotlin
+```kotlin
 package example
 
 import example.Nls.*
@@ -155,7 +155,7 @@ bundle[keyWithArguments, 2, "Hello"] // Accepts 2 arguments. Hello!
 
 Using `BundleLine` enum with assigned `I18NBundle` instance:
 
-```Kotlin
+```kotlin
 package example
 
 import example.Nls.*
@@ -188,9 +188,8 @@ keyWithArguments(2, "Hello") // Accepts 2 arguments. Hello!
 
 ### Alternatives
 
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) features simple and powerful support for
-internationalization of `Scene2D` widgets (internally using LibGDX `I18NBundle` API). However, it requires you to create
-views with HTML-like syntax rather than with Java (or Kotlin) code.
+- [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) supports translations of `Scene2D` widgets internally using
+libGDX `I18NBundle` API. However, it requires creating views with HTML-like templates rather Java (or Kotlin) code.
 
 #### Additional documentation
 

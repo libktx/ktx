@@ -90,8 +90,8 @@ class AssetStorageTest : AsyncTest() {
   companion object {
     @JvmStatic
     @BeforeClass
-    fun `load LibGDX statics`() {
-      // Necessary for LibGDX asset loaders to work.
+    fun `load libGDX statics`() {
+      // Necessary for libGDX asset loaders to work.
       Lwjgl3NativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()
@@ -100,7 +100,7 @@ class AssetStorageTest : AsyncTest() {
 
     @JvmStatic
     @AfterClass
-    fun `dispose of LibGDX statics`() {
+    fun `dispose of libGDX statics`() {
       Gdx.graphics = null
       Gdx.audio = null
       Gdx.gl20 = null

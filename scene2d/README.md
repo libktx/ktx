@@ -193,7 +193,7 @@ scene2d.table {
 }
 ```
 
-In the building blocks you have a full access to the Scene2D widgets API - type-safe Kotlin builders are just
+In the building blocks you have full access to the Scene2D widgets API - type-safe Kotlin builders are just
 providing some syntax sugar. Keep in mind that Scene2D was written in Java, so while some properties are Kotlin-compatible
 (`color = Color.RED`), most are not (`setWrap(true)`). This is because we wanted to create a thin wrapper over Scene2D,
 and we opted against duplicating its entire API. It is still pretty straightforward to configure most actors.
@@ -255,7 +255,7 @@ When constructing `Skin` instances and defining styles for your UI, [`ktx-style`
 
 #### `Stage`
 
-`Stage` is a crucial part of the `Scene2D` API. It contains the root actor that is the parent of all of the displayed
+`Stage` is a crucial part of the `Scene2D` API. It contains the root actor that is the parent of all the displayed
 widgets. It handles input processing, rendering and resizing. If you are unfamiliar with `Stage` API, try reading
 the resources listed at the bottom of the page.
 
@@ -361,7 +361,7 @@ while [`ktx-actors` module](../actors) has some general `Scene2D` utilities incl
 
 #### `KWidgets`
 
-_This section is about details of the implementation of the DSL._
+> This section describes the internal implementation of the DSL.
 
 To avoid method collisions and ease the implementation of type-safe builders, most so-called "parental" widgets (extending
 `Group` class) were extended with `K` prefix. `Table`-extending widgets in `ktx-scene2d` now implement the `KTable`
@@ -374,7 +374,7 @@ The only exceptions from the naming scheme are the `KTableWidget`, `KTreeWidget`
 of `list` or `listOf` to avoid collisions with Kotlin standard library.
 
 You generally do not have to worry about the `KWidgets`: you can still reference these by their original extended class.
-This is basically just an internal representation: we choose not to create entirely new class hierarchy for the builders
+This is basically just an internal representation: we chose not to create entirely new class hierarchy for the builders
 (as opposed to simply extending existing `Scene2D` classes) as it would basically require to rewrite the entirety of
 `Scene2D` module.
 
@@ -533,7 +533,7 @@ val tree = scene2d.tree {
 ![Tree](img/03.png)
 
 Accessing `Node` instances of `Tree` children outside of building blocks (note that `KNode` is **KTX** custom wrapper
-of LibGDX `Tree.Node` with additional building API support):
+of libGDX `Tree.Node` with additional building API support):
 
 ```kotlin
 import ktx.scene2d.*
@@ -571,7 +571,7 @@ val table = scene2d.table {
     -"Second"
     -"Third"
     // Note that these building blocks have no cell or node parameters.
-    // You can access table cells and tree nodes outside of the lambdas:
+    // You can access table cells and tree nodes outside the lambdas:
   }.cell(row = true)
 }
 
@@ -662,7 +662,7 @@ import ktx.scene2d.*
 // If the actor is not a group and cannot have any children,
 // you do not need to implement any interface.
 
-/** Example of a custom widget that extends LibGDX Table. */
+/** Example of a custom widget that extends libGDX Table. */
 @Scene2dDsl
 class MyCustomWidget(
   styleName: String, skin: Skin
@@ -759,9 +759,9 @@ Further KTX releases do not contain the deprecated functions.
 - Creating layouts with [Scene2D](https://github.com/libgdx/libgdx/wiki/Scene2d) directly in Kotlin or Java.
 - [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) greatly extends
 [Scene2D](https://github.com/libgdx/libgdx/wiki/Scene2d.ui) API, but lacks first-class Kotlin support.
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) allows to build `Scene2D` views using
-HTML-like syntax. It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However,
-it lacks first-class Kotlin support and the flexibility of a powerful programming language.
+- [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) allows building `Scene2D` views using HTML-like syntax.
+It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However, it lacks
+first-class Kotlin support and the flexibility of a programming language.
 - [`ktx-vis`](../vis) extends `ktx-scene2d` with type-safe builders of
 [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widgets.
 

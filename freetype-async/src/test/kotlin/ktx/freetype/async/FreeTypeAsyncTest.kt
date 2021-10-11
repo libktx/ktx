@@ -40,7 +40,7 @@ class FreeTypeAsyncTest : AsyncTest() {
   companion object {
     @JvmStatic
     @BeforeClass
-    fun `initiate LibGDX`() {
+    fun `initiate libGDX`() {
       LwjglNativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()

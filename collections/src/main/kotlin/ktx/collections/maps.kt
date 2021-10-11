@@ -25,7 +25,7 @@ typealias GdxIdentityMap<Key, Value> = IdentityMap<Key, Value>
 typealias GdxArrayMap<Key, Value> = ArrayMap<Key, Value>
 
 /**
- * Default LibGDX map size used by most constructors.
+ * Default libGDX map size used by most constructors.
  */
 const val defaultMapSize = 51
 
@@ -117,7 +117,7 @@ fun <Key> GdxMap<Key, *>.toGdxSet(): ObjectSet<Key> = this.keys().toGdxSet()
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values copied from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values copied from this iterable stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Key, Value> Iterable<Value>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -134,7 +134,7 @@ inline fun <Key, Value> Iterable<Value>.toGdxMap(
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param valueProvider will consume each value in this iterable. The results will be treated as map values.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values converted from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values converted from this iterable stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -151,7 +151,7 @@ inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values copied from this array stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values copied from this array stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Key, Value> Array<Value>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -168,7 +168,7 @@ inline fun <Key, Value> Array<Value>.toGdxMap(
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param valueProvider will consume each value in this iterable. The results will be treated as map values.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values converted from this array stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values converted from this array stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Type, Key, Value> Array<Type>.toGdxMap(
   initialCapacity: Int = defaultMapSize,

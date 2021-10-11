@@ -6,7 +6,7 @@
 
 ### Why?
 
-LibGDX brings its own set of Tiled map utilities, including loading and handling of maps exported from the editor.
+libGDX brings its own set of Tiled map utilities, including loading and handling of maps exported from the editor.
 However, the API contains many wrapped non-standard collections, which makes accessing the loaded maps cumbersome.
 With Kotlin's reified types and extension methods, the Tiled API can be significantly improved.
 
@@ -15,7 +15,7 @@ With Kotlin's reified types and extension methods, the Tiled API can be signific
 #### `MapProperties`
 
 In many maps that you create with Tiled you will need to access the properties defined in the editor.
-They are either defined on map, layer, object, tileset or tile level. The original LibGDX `MapProperties`
+They are either defined on map, layer, object, tileset or tile level. The original libGDX `MapProperties`
 class returns untyped `Object` (or Kotlin's `Any!`) whenever retrieving a property and is therefore not ideal
 and unsafe.
 
@@ -73,10 +73,10 @@ the following extensions were added:
 - `contains(layerName: String)`: works as the `in` operator.
 - `layer(layerName: String)`: returns the layer or throws a `MissingLayerException` in case the layer does not exist.
 
-Inlined `forEachMapObject` extension method allows to iterate over all `MapObject` instances present on the chosen
+Inlined `forEachMapObject` extension method iterates over all `MapObject` instances present on the chosen
 map layer.
 
-Inlined `forEachLayer` extension method allows to iterate over all `MapLayer` instances of a specific type to execute
+Inlined `forEachLayer` extension method iterates over all `MapLayer` instances of a specific type to execute
 a certain function on them.
 
 ### `MapLayers` and `MapObjects`
@@ -262,5 +262,5 @@ if (map.layers.isNotEmpty()) {
 #### Additional documentation
 
 - [Official Tiled website.](https://www.mapeditor.org/)
-- [LibGDX wiki article on tile maps.](https://github.com/libgdx/libgdx/wiki/Tile-maps)
+- [Official libGDX tile maps article.](https://github.com/libgdx/libgdx/wiki/Tile-maps)
 - [Official Tiled documentation.](https://doc.mapeditor.org/en/stable/)

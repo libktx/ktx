@@ -8,8 +8,8 @@ library along with the coroutines-based `AssetStorage` from [`ktx-assets-async`]
 ### Why?
 
 `gdx-freetype` requires quite a bit of setup before it can be fully integrated with `AssetManager` or `AssetStorage`
-due to how LibGDX `AssetManager` loaders are implemented. This module aims to limit the boilerplate necessary to load
-FreeType fonts in LibGDX applications with the asynchronous **KTX** `AssetStorage`.
+due to how libGDX `AssetManager` loaders are implemented. This module aims to limit the boilerplate necessary to load
+FreeType fonts in libGDX applications with the asynchronous **KTX** `AssetStorage`.
 
 See also: [`ktx-freetype`](../freetype).
 
@@ -26,8 +26,10 @@ Since it depends on the [`ktx-freetype`](../freetype) module, it also comes with
 prove useful even when using `AssetStorage`:
 
 * `ktx.freetype.freeTypeFontParameters` function is a Kotlin DSL for customizing font loading parameters.
-* `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` instances using a
+* `FreeTypeFontGenerator.generateFont` extension function generates `BitmapFont` instances using a
 `FreeTypeFontGenerator` with Kotlin DSL.
+
+In order to use this module, `com.badlogicgames.gdx:gdx-freetype` dependency has to be added to the `core` project.
 
 ### Usage examples
 
@@ -131,7 +133,7 @@ fun getFontParameters(): FreeTypeFontLoaderParameter = freeTypeFontParameters("f
 }
 ```
 
-Generating a new `BitmapFont` using LibGDX `FreeTypeFontGenerator`:
+Generating a new `BitmapFont` using libGDX `FreeTypeFontGenerator`:
 
 ```kotlin
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
@@ -150,7 +152,7 @@ val fontB = generator.generateFont {
 
 FreeType font loaders can be registered manually. See
 [this article](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler).
-`setLoader` method can be used to add new LibGDX loaders to an `AssetStorage`.
+`setLoader` method can be used to add new libGDX loaders to an `AssetStorage`.
 
 #### Additional documentation
 

@@ -229,7 +229,7 @@ class KtxGameTest {
   }
 
   @After
-  fun `clear static LibGDX variables`() {
+  fun `clear static libGDX variables`() {
     Gdx.graphics = null
     Gdx.gl = null
     Gdx.gl20 = null
