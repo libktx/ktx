@@ -12,7 +12,7 @@ import kotlin.math.sqrt
 /**
  * Represent an immutable vector.
  *
- * This is the root interface of immutable alternatives to the default mutable vectors provided by LibDGX
+ * This is the root interface of immutable alternatives to the default mutable vectors provided by libGDX.
  */
 interface ImmutableVector<T : ImmutableVector<T>> : Comparable<T> {
 
