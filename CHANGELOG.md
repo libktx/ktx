@@ -14,6 +14,7 @@ utilities.
 - **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontAsync` was added, mimicking `loadAsync` behavior.
 - **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontSync` was added, mimicking `loadSync` behavior.
 - **[FEATURE]** (`ktx-freetype-async`) `AsyncAssetManager.loadFreeTypeFontAsync` was added, returning a `Deferred<BitmapFont>` instance.
+- **[CHANGE]** (`ktx-scene2d`) `Scene2DSkin.defaultSkin` now throws `IllegalStateException` when accessed before overriding.
 
 #### 1.10.0-b3
 

@@ -29,6 +29,17 @@ import ktx.scene2d.*
 val myFirstActor = scene2d.label(text = "Hello World!")
 ```
 
+To avoid passing a custom `Skin` instance to create the actors, make sure to set the default `Skin` before building UIs:
+
+```kotlin
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import ktx.scene2d.*
+
+fun setDefaultSkin() {
+  Scene2DSkin.defaultSkin = Skin()
+}
+```
+
 `scene2d` provides factory methods for all official Scene2D actors. These can be divided into the following groups:
 
 * *Root* actors: these actors are usually added directly to a `Stage`:
@@ -218,6 +229,9 @@ fun createSkin() {
   Scene2DSkin.defaultSkin = mySkin
 }
 ```
+
+If the default `Skin` is not set, any attempt to create a widget that requires a style will end with an exception unless
+a custom `Skin` instance is passed to the factory method.
 
 `Scene2DSkin` class includes support for listeners that will be invoked each time you reload your skin. For example, you
 can introduce different GUI skins in your application and add a listener that recreates the GUI each time the theme is

@@ -22,15 +22,21 @@ const val defaultHorizontalStyle = "default-horizontal"
  * alternative skin instance is passed as an alternative.
  */
 object Scene2DSkin {
+  private var skin: Skin? = null
   private val listeners = GdxArray<(Skin) -> Unit>(4)
 
   /**
-   * Used by the factory methods by default if no custom skin is passed. Changing this value immediately invokes all
-   * registered listeners.
+   * Used by the factory methods by default if no custom [Skin] is passed. Changing this value immediately invokes all
+   * registered listeners. Throws [IllegalStateException] when accessed before overriding.
    */
-  var defaultSkin = Skin()
+  var defaultSkin: Skin
+    get() = skin ?: throw IllegalStateException(
+      "Default Scene2D Skin was accessed before initiation. In order to avoid this exception, " +
+        "import ktx.scene2d.Scene2DSkin and override its defaultSkin property. For example: " +
+        "Scene2DSkin.defaultSkin = Skin(); Scene2DSkin.defaultSkin = VisUI.getSkin()"
+    )
     set(value) {
-      field = value
+      skin = value
       for (listener in listeners) {
         listener(value)
       }
