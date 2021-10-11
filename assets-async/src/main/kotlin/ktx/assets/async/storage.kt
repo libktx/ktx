@@ -858,7 +858,8 @@ class AssetStorage(
    * immediately if it is loaded, or throw [MissingAssetException] if it is unloaded. In either case, it will
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
-  inline fun <reified T> loadSync(path: String): T = loadSync(getAssetDescriptor(path))
+  inline fun <reified T> loadSync(path: String, parameters: AssetLoaderParameters<T>? = null): T =
+    loadSync(getAssetDescriptor(path, parameters))
 
   /**
    * Blocks the current thread until the asset with [T] type is loaded with data specified by the [identifier]

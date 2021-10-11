@@ -41,7 +41,7 @@ fun AssetManager.registerFreeTypeFontLoaders(
 }
 
 /**
- * Allows to customize parameters of a loaded FreeType font.
+ * Allows customizing parameters of a loaded FreeType font.
  * @param file path to the FreeType font file.
  * @param setup should specify font parameters. Will be invoked on a new instance of [FreeTypeFontParameter]. Inlined.
  * @return [Asset] wrapper which allows to access the font once it is loaded.
@@ -73,7 +73,7 @@ inline fun freeTypeFontParameters(
 }
 
 /**
- * Syntax sugar for [FreeTypeFontGenerator.generateFont]. Allows to use Kotlin DSL to initiate font parameters.
+ * Syntax sugar for [FreeTypeFontGenerator.generateFont]. Allows using Kotlin DSL to initiate font parameters.
  * @param setup will be applied to newly constructed [FreeTypeFontParameter]. Inlined. If not given, will create a font
  * with default parameters.
  */

@@ -224,7 +224,7 @@ import ktx.assets.*
 assetManager.load<Texture>("image.png")
 ```
 
-Using field delegate which will eventually point to a `Texture` (after its fully loaded by an `AssetManager`):
+Using field delegate which will eventually point to a `Texture` (after it's fully loaded by an `AssetManager`):
 ```kotlin
 import ktx.assets.*
 import com.badlogic.gdx.assets.AssetManager

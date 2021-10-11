@@ -5,11 +5,15 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Dokka 1.5.30.
 - **[FEATURE]** (`ktx-ashley`) `Mapper` abstract class designed for `companion object`s of `Component`s.
 Allows to easily obtain instances of a `ComponentMapper` corresponding to the enclosing `Component` class.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage.loadSync(String)` now supports optional loading parameters.
 - **[FEATURE]** (`ktx-collections`) `isEmpty` and `isNotEmpty` extension methods of libGDX collections now support
 Kotlin contracts. If they return `true`, the collection is implied not to be null.
 - **[CHANGE]** (`ktx-collections`) As `IdentityMap` now extends `ObjectMap`, some redundant utilities specific to
 `IdentityMap` were removed. From the user point of view, all additional functionalities are covered by the `ObjectMap`
 utilities.
+- **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontAsync` was added, mimicking `loadAsync` behavior.
+- **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontSync` was added, mimicking `loadSync` behavior.
+- **[FEATURE]** (`ktx-freetype-async`) `AsyncAssetManager.loadFreeTypeFontAsync` was added, returning a `Deferred<BitmapFont>` instance.
 
 #### 1.10.0-b3
 

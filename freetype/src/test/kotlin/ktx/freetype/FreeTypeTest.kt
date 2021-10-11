@@ -20,12 +20,15 @@ import org.junit.Before
 import org.junit.Test
 
 /**
- * Tests FreeType font loading utilities. Uses Hack font for testing. See https://github.com/source-foundry/Hack for
- * font details.
+ * Tests FreeType font loading utilities.
+ *
+ * Uses Hack font for testing. See https://github.com/source-foundry/Hack for details.
  */
-class FreeTypeTest {
-  private val ttfFile = "ktx/freetype/hack.ttf"
-  private val otfFile = "ktx/freetype/hack.otf"
+open class FreeTypeTest {
+  protected open val ttfFile = "ktx/freetype/hack.ttf"
+  protected open val otfFile = "ktx/freetype/hack.otf"
+
+  protected open fun assetManager() = AssetManager(ClasspathFileHandleResolver())
 
   @Test
   fun `should initiate font loading parameters`() {
@@ -261,6 +264,4 @@ class FreeTypeTest {
     Gdx.files = null
     Gdx.graphics = null
   }
-
-  private fun assetManager() = AssetManager(ClasspathFileHandleResolver())
 }
