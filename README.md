@@ -25,7 +25,7 @@ Examples of Kotlin language features used to improve usability, performance, and
 * *Coroutines context* providing concurrency utilities and non-blocking asset loading.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
-See the [_Choosing KTX_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
+See the [_Choosing **KTX**_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
 
 ## Modules
 
@@ -85,7 +85,7 @@ dependencies {
 }
 ```
 
-You can find the latest KTX version on Maven Central:
+You can find the latest **KTX** version on Maven Central:
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -93,7 +93,7 @@ You can find the latest KTX version on Maven Central:
 
 > As a side note, defining `ktxVersion` as a property in `ext` is not necessary, as versions can be set directly in the
 `dependencies` section. However, extracting the dependencies versions is a good practice, especially if they can be
-reused throughout the build files. This will speed up updating of your project if you include multiple KTX modules.
+reused throughout the build files. This will speed up updating of your project if you include multiple **KTX** modules.
 
 #### Versioning
 
@@ -138,8 +138,8 @@ ext {
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
 branch.
 
-Even the snapshots should be rather stable, as the libraries are not pushed to _Maven Central_ unless they pass
-their extensive test suites.
+Even the snapshots are rather stable, as the libraries are not pushed to _Maven Central_ unless they pass their
+extensive test suites. However, the public APIs in snapshot releases might be changed prior to a stable release.
 
 ## Documentation
 
@@ -153,7 +153,7 @@ Browse through the directories in the root folder to find out more about each li
 All functionalities are documented with Kotlin _KDocs_. You can access the source documentation by:
 
 - Viewing the generated Dokka files hosted on the [project website](https://libktx.github.io/docs/).
-- Using the `doc` folder with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
+- Extracting the `doc` folders with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
 - Reading the sources directly.
 
 ### Links
