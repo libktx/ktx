@@ -34,6 +34,27 @@ being a class like `com.badlogic.gdx.InputAdapter`.
 color.
 - `emptyScreen` provides no-op implementations of `Screen`.
 
+#### Platform-specific utilities
+
+- `Platform` is an object that exposes various utilities for platform-specific code.
+  - `Platform.currentPlatform` returns current `ApplicationType` or throws `GdxRuntimeException` if unable to determine.
+  - `Platform.version` returns the current version of the platform (e.g., Android API version, iOS major OS version).
+  - Convenient checks that allow to determine current platform:
+    - `Platform.isAndroid` checks if the current platform is Android.
+    - `Platform.isDesktop` checks if the current platform is desktop with graphical application.
+    - `Platform.isHeadless` checks if the current platform is desktop without graphical application.
+    - `Platform.isiOS` checks if the current platform is iOS.
+    - `Platform.isMobile` checks if the current platform is Android or iOS.
+    - `Platform.isWeb` checks if the current platform is HTML/WebGL.
+  - Inlined methods that allow to execute code on specific platforms:
+    - `Platform.runOnAndroid` executes an action if the current platform is Android. Returns action result or null.
+    - `Platform.runOnDesktop` executes an action if the current platform is desktop. Returns action result or null.
+    - `Platform.runOnHeadless` executes an action if the current platform is headless desktop. Returns action result or null.
+    - `Platform.runOniOS` executes an action if the current platform is iOS. Returns action result or null.
+    - `Platform.runOnMobile` executes an action if the current platform is Android or iOS. Returns action result or null.
+    - `Platform.runOnWeb` executes an action if the current platform is HTML/WebGL. Returns action result or null.
+  - Inlined `runOnVersion` executes an action if the current platform version is within minimum and maximum values.
+
 #### Profiling
 
 - `profile` inlined function allows measuring performance of the chosen operation with libGDX `PerformanceCounter`.
@@ -116,6 +137,77 @@ class MyInputListener : KtxInputAdapter {
   override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
     // Handle mouse click...
     return true
+  }
+}
+```
+
+Obtaining the current platform type:
+
+```kotlin
+import com.badlogic.gdx.Application.ApplicationType
+import ktx.app.Platform
+
+fun getCurrentPlatform(): ApplicationType {
+  return Platform.currentPlatform
+}
+```
+
+Verifying the current platform:
+
+```kotlin
+import ktx.app.Platform
+
+fun checkPlatform() {
+  if (Platform.isDesktop || Platform.isHeadless) {
+    println("Will print only on desktop platforms!")
+  }
+}
+```
+
+Executing platform-specific code:
+
+```kotlin
+import ktx.app.Platform
+
+fun runOnPlatform() {
+  Platform.runOnMobile { 
+    println("Will print only on mobile platforms!")
+  }
+}
+```
+
+Executing platform-specific code with a return type:
+
+```kotlin
+import ktx.app.Platform
+
+fun getForPlatform(): String {
+  return Platform.runOnAndroid { "Android" } ?: "Not Android"
+}
+```
+
+Executing code starting from a specific API version:
+
+```kotlin
+import com.badlogic.gdx.Application.ApplicationType
+import ktx.app.Platform
+
+fun executeOnSpecificVersion() {
+  Platform.runOnVersion(minVersion = 8, platform = ApplicationType.iOS) {
+    println("Will run only on iOS devices starting from 8 OS version.")
+  }
+}
+```
+
+Executing code on a specific API version range:
+
+```kotlin
+import com.badlogic.gdx.Application.ApplicationType
+import ktx.app.Platform
+
+fun executeOnSpecificVersion() {
+  Platform.runOnVersion(minVersion = 20, maxVersion = 25, platform = ApplicationType.Android) {
+    println("Will run only on specific Android devices.")
   }
 }
 ```

@@ -3,6 +3,24 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.10.0-SNAPSHOT
 
 - **[UPDATE]** Updated to Dokka 1.5.30.
+- **[FEATURE]** (`ktx-app`) Added `Platform` object that exposes various utilities for platform-specific code.
+  - `Platform.currentPlatform` returns current `ApplicationType` or throws `GdxRuntimeException` if unable to determine.
+  - `Platform.version` returns the current version of the platform (e.g., Android API version, iOS major OS version).
+  - Boolean properties that allow to determine current platform:
+    - `Platform.isAndroid` checks if the current platform is Android.
+    - `Platform.isDesktop` checks if the current platform is desktop with graphical application.
+    - `Platform.isHeadless` checks if the current platform is desktop without graphical application.
+    - `Platform.isiOS` checks if the current platform is iOS.
+    - `Platform.isMobile` checks if the current platform is Android or iOS.
+    - `Platform.isWeb` checks if the current platform is HTML/WebGL.
+  - Inlined methods that allow to execute code on specific platforms:
+    - `Platform.runOnAndroid` executes an action if the current platform is Android. Returns action result or null.
+    - `Platform.runOnDesktop` executes an action if the current platform is desktop. Returns action result or null.
+    - `Platform.runOnHeadless` executes an action if the current platform is headless desktop. Returns action result or null.
+    - `Platform.runOniOS` executes an action if the current platform is iOS. Returns action result or null.
+    - `Platform.runOnMobile` executes an action if the current platform is Android or iOS. Returns action result or null.
+    - `Platform.runOnWeb` executes an action if the current platform is HTML/WebGL. Returns action result or null.
+  - Inlined `runOnVersion` executes an action if the current platform version is within minimum and maximum values.
 - **[FEATURE]** (`ktx-ashley`) `Mapper` abstract class designed for `companion object`s of `Component`s.
 Allows to easily obtain instances of a `ComponentMapper` corresponding to the enclosing `Component` class.
 - **[FEATURE]** (`ktx-assets-async`) `AssetStorage.loadSync(String)` now supports optional loading parameters.
