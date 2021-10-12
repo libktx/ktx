@@ -35,10 +35,10 @@ operator fun Preferences.set(key: String, value: Float): Preferences = putFloat(
 
 /**
  * Stores a [Double] [value] as [Float] under the given [key] in the [Preferences].
- * Throws [GdxRuntimeException] if [value] is outside of the [Float] range.
+ * Throws [GdxRuntimeException] if [value] is outside the [Float] range.
  */
 @Deprecated(
-  message = "Doubles are not supported by LibGDX Preferences. " +
+  message = "Doubles are not supported by libGDX Preferences. " +
     "Value will be stored as Float instead. Please add explicit cast.",
   replaceWith = ReplaceWith("set(key, value.toFloat()")
 )

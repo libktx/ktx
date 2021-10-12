@@ -1,11 +1,11 @@
 package ktx.scene2d.vis
 
-import ktx.scene2d.NeedsLibGDX
+import ktx.scene2d.ApplicationTest
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class ValidationTest : NeedsLibGDX() {
+class ValidationTest : ApplicationTest() {
   @Test
   fun `should create FormValidator`() {
     var invoked: Boolean

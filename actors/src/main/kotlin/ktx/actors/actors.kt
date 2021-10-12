@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 
 /**
- * Min value of alpha in LibGDX Color instances.
+ * Min value of alpha in libGDX Color instances.
  */
 const val MIN_ALPHA = 0f
 /**
- * Max value of alpha in LibGDX Color instances.
+ * Max value of alpha in libGDX Color instances.
  */
 const val MAX_ALPHA = 1f
 

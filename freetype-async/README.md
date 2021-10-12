@@ -8,8 +8,8 @@ library along with the coroutines-based `AssetStorage` from [`ktx-assets-async`]
 ### Why?
 
 `gdx-freetype` requires quite a bit of setup before it can be fully integrated with `AssetManager` or `AssetStorage`
-due to how LibGDX `AssetManager` loaders are implemented. This module aims to limit the boilerplate necessary to load
-FreeType fonts in LibGDX applications with the asynchronous **KTX** `AssetStorage`.
+due to how libGDX `AssetManager` loaders are implemented. This module aims to limit the boilerplate necessary to load
+FreeType fonts in libGDX applications with the asynchronous **KTX** `AssetStorage`.
 
 See also: [`ktx-freetype`](../freetype).
 
@@ -19,15 +19,23 @@ This module consists of the following utilities:
 
 * Extension method `AssetStorage.registerFreeTypeFontLoaders` allows to register all loaders required to load FreeType
 font assets. It should be called right after constructing a `AssetStorage` instance and before loading any assets.
-* Extension method `AssetStorage.loadFreeTypeFont` allows to easily configure loaded `BitmapFont` instances with Kotlin
-DSL.
+* Extension methods that allow to easily configure loaded `BitmapFont` instances with Kotlin DSL:
+  * `AssetStorage.loadFreeTypeFont`: suspending loading method that works similarly to `AssetStorage.load`.
+  * `AssetStorage.loadFreeTypeFontAsync`: loading method that returns `Deferred<BitmapFont>` similarly to `AssetStorage.loadAsync`.
+  * `AssetStorage.loadFreeTypeFontSync`: blocking loading method that works similarly to `AssetStorage.loadSync`.
 
 Since it depends on the [`ktx-freetype`](../freetype) module, it also comes with the following utilities that might
 prove useful even when using `AssetStorage`:
 
 * `ktx.freetype.freeTypeFontParameters` function is a Kotlin DSL for customizing font loading parameters.
-* `FreeTypeFontGenerator.generateFont` extension function allows to generate `BitmapFont` instances using a
+* `FreeTypeFontGenerator.generateFont` extension function generates `BitmapFont` instances using a
 `FreeTypeFontGenerator` with Kotlin DSL.
+
+The module also provides `AsyncAssetManager.loadFreeTypeFontAsync` that works similarly to the
+`AssetManager.loadFreeTypeFont` extension from [`ktx-freetype`](../freetype), but returns a `Deferred<BitmapFont>`
+instance instead.
+
+In order to use this module, `com.badlogicgames.gdx:gdx-freetype` dependency has to be added to the `core` project.
 
 ### Usage examples
 
@@ -87,13 +95,49 @@ fun loadFont(assetStorage: AssetStorage) {
 }
 ```
 
+Loading a FreeType font asynchronously using `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import kotlinx.coroutines.launch
+import ktx.assets.async.AssetStorage
+import ktx.async.KtxAsync
+import ktx.freetype.async.loadFreeTypeFontAsync
+
+fun loadFont(assetStorage: AssetStorage) {
+  // Scheduling font loading:
+  val deferred = assetStorage.loadFreeTypeFontAsync("font.ttf")
+  // Launching a coroutine:
+  KtxAsync.launch {
+    // Waiting until the font is loaded:
+    val font: BitmapFont = deferred.await()
+    // Font is now ready to use.
+  } 
+}
+```
+
+Loading a FreeType font synchronously using `AssetStorage`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import ktx.assets.async.AssetStorage
+import ktx.freetype.async.loadFreeTypeFontSync
+
+fun loadFont(assetStorage: AssetStorage) {
+  // Blocking the current thread until the font is loaded:
+  val font: BitmapFont = assetStorage.loadFreeTypeFontSync("font.ttf")
+  // Since this is a blocking method, it should be used cautiously,
+  // e.g. only to load assets necessary to display the loading screen.
+}
+```
+
 Loading a FreeType font with custom parameters using `AssetStorage`:
 
 ```kotlin
 import com.badlogic.gdx.graphics.Color
-import ktx.freetype.async.*
+import ktx.freetype.async.loadFreeTypeFontAsync
 
-val font = assetStorage.loadFreeTypeFont("font.ttf") {
+val font = assetStorage.loadFreeTypeFontAsync("font.ttf") {
   size = 14
   borderWidth = 1.5f
   color = Color.ORANGE
@@ -101,7 +145,7 @@ val font = assetStorage.loadFreeTypeFont("font.ttf") {
 }
 ```
 
-Accessing a fully loaded font:
+Accessing a fully loaded font in a coroutine:
 
 ```kotlin
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -131,7 +175,7 @@ fun getFontParameters(): FreeTypeFontLoaderParameter = freeTypeFontParameters("f
 }
 ```
 
-Generating a new `BitmapFont` using LibGDX `FreeTypeFontGenerator`:
+Generating a new `BitmapFont` using libGDX `FreeTypeFontGenerator`:
 
 ```kotlin
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
@@ -146,11 +190,36 @@ val fontB = generator.generateFont {
 }
 ```
 
+Loading a font asynchronously with `AsyncAssetManager`:
+
+```kotlin
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import kotlinx.coroutines.launch
+import ktx.assets.async.AsyncAssetManager
+import ktx.async.KtxAsync
+import ktx.freetype.async.loadFreeTypeFontAsync
+
+fun loadFont(assetManager: AsyncAssetManager) {
+  // Schedule font loading:
+  val deferred = assetManager.loadFreeTypeFontAsync("font.ttf")
+
+  // In the meanwhile, the assetManager should be updated on
+  // the rendering thread with assetManager.update() calls.
+
+  // Launching a coroutine:
+  KtxAsync.launch { 
+    // Awaiting until the font is loaded:
+    val font: BitmapFont = deferred.await()
+    // Now the font is loaded and can be used.
+  }
+}
+```
+
 ### Alternatives
 
 FreeType font loaders can be registered manually. See
 [this article](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler).
-`setLoader` method can be used to add new LibGDX loaders to an `AssetStorage`.
+`setLoader` method can be used to add new libGDX loaders to an `AssetStorage`.
 
 #### Additional documentation
 

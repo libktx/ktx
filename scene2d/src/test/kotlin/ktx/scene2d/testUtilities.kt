@@ -17,11 +17,11 @@ const val TOLERANCE = 0.0001f
 /**
  * Tests that require mocked libGDX environment should inherit from this class.
  */
-abstract class NeedsLibGDX {
+abstract class ApplicationTest {
   companion object {
     @JvmStatic
     @BeforeClass
-    fun `initiate LibGDX context`() {
+    fun `initiate libGDX context`() {
       LwjglNativesLoader.load()
 
       Gdx.files = LwjglFiles()
@@ -36,7 +36,7 @@ abstract class NeedsLibGDX {
 
     @JvmStatic
     @AfterClass
-    fun `destroy LibGDX context`() {
+    fun `destroy libGDX context`() {
       Gdx.graphics = null
       Gdx.files = null
       Gdx.gl20 = null

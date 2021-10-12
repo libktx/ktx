@@ -43,7 +43,7 @@ class StyleTest {
 
     resource shouldNotBe null
     resource shouldBe "Mock resource."
-    // If this test fails, LibGDX changed name of default resources or removed the unnamed resource getter.
+    // If this test fails, libGDX changed name of default resources or removed the unnamed resource getter.
   }
 
   @Test

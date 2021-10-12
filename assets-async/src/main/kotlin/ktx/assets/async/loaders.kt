@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.Array as GdxArray
 /**
  * Stores [AssetLoader] instances mapped by loaded asset type. Internal [AssetStorage] utility.
  *
- * Implementation note: LibGDX loaders are not thread-safe. Instead, they assume that only a single asset is loaded
- * at a time and use internal, unsynchronized fields to store temporary variables like the dependencies. To avoid
+ * Implementation note: libGDX loaders are not thread-safe. Instead, they assume that only a single asset is loaded
+ * at a time and use internal, non-synchronized fields to store temporary variables like the dependencies. To avoid
  * threading issues, we use a separate loader for each loaded asset instead of singleton instances - hence
  * the functional loader providers.
  */
@@ -98,7 +98,7 @@ internal class AssetLoaderStorage {
   }
 }
 
-// Workarounds for LibGDX generics API.
+// Workarounds for libGDX generics API.
 
 /** [AssetLoader] with improved generics. */
 typealias Loader<Asset> = AssetLoader<Asset, out AssetLoaderParameters<Asset>>
@@ -157,7 +157,7 @@ fun <Asset> AsynchronousLoader<Asset>.loadSync(assetManager: AssetManager, asset
   (this as AsynchronousAssetLoader<Asset, AssetLoaderParameters<Asset>>)
     .loadSync(assetManager, assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
 
-/** Required for [ManualLoader] by LibGDX API. */
+/** Required for [ManualLoader] by libGDX API. */
 internal class ManualLoadingParameters : AssetLoaderParameters<Any>()
 
 /** Mocks [AssetLoader] API for assets manually added to the [AssetStorage]. See [AssetStorage.add]. */

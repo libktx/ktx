@@ -2,12 +2,12 @@
 
 # KTX: `Box2D` physics engine utilities
 
-Utilities and type-safe builders for the default LibGDX 2D physics engine: *Box2D*.
+Utilities and type-safe builders for the default libGDX 2D physics engine: *Box2D*.
 
 ### Why?
 
 *Box2D* API, being a direct port from C++, can be difficult to work with - especially for beginners. Bodies and fixtures
-construction code readability could certainly be improved. Kotlin type-safe builing DSL can help with that.
+construction code readability could certainly be improved. Kotlin type-safe building DSL can help with that.
 
 ### Guide
 
@@ -46,7 +46,7 @@ with the following shapes:
 
 Creating a new Box2D `World` without gravity:
 
-```Kotlin
+```kotlin
 import ktx.box2d.createWorld
 
 val world = createWorld()
@@ -54,7 +54,7 @@ val world = createWorld()
 
 Creating a new Box2D `World` with a custom gravity:
 
-```Kotlin
+```kotlin
 import ktx.box2d.createWorld
 import ktx.box2d.earthGravity
 import com.badlogic.gdx.math.Vector2
@@ -66,7 +66,7 @@ val earth = createWorld(gravity = earthGravity)
 
 Creating a `Body` with a `PolygonShape` box `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 
 
@@ -88,7 +88,7 @@ val fixture = body.box(width = 2f, height = 1f) {
 
 Creating a `Body` with a customized `PolygonShape` `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
@@ -109,7 +109,7 @@ val fixture = body.polygon(Vector2(-1f, -1f), Vector2(0f, 1f), Vector2(1f, -1f))
 
 Creating a `Body` with a `CircleShape` `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 
 // Building body from scratch:
@@ -129,7 +129,7 @@ val fixture = body.circle(radius = 1f) {
 
 Creating a `Body` with a `ChainShape` `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
@@ -150,7 +150,7 @@ val fixture = body.chain(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), 
 
 Creating a `Body` with a looped `ChainShape` `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
@@ -171,7 +171,7 @@ val fixture = body.loop(Vector2(-1f, -1f), Vector2(-1f, 1f), Vector2(1f, -1f), V
 
 Creating a `Body` with an `EdgeShape` `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.body
 import com.badlogic.gdx.math.Vector2
 
@@ -192,7 +192,7 @@ val fixture = body.edge(from = Vector2(-1f, -1f), to = Vector2(1f, 1f)) {
 
 Creating a dynamic `Body` with multiple `Fixture` instances:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody
@@ -219,7 +219,7 @@ val body = world.body {
 
 Customizing `Shape` of a `Fixture`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 
 val body = world.body {
@@ -237,7 +237,7 @@ val body = world.body {
 
 Creating two `Body` instances joined with a `DistanceJoint`:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 
 val bodyA = world.body {
@@ -258,7 +258,7 @@ val joint = bodyA.distanceJointWith(bodyB) {
 
 Adding callbacks invoked after creation of `Body` and `Fixture` instances:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 
 val body = world.body {
@@ -278,7 +278,7 @@ val body = world.body {
 
 Creating ray-casts:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 
 fun createRayCast() {
@@ -291,7 +291,7 @@ fun createRayCast() {
 
 Querying the world for fixtures overlapping an AABB:
 
-```Kotlin
+```kotlin
 import ktx.box2d.*
 
 fun createQuery() {
@@ -315,5 +315,5 @@ that originally inspired `ktx-box2d`.
 
 #### Additional documentation
 
-- [LibGDX *Box2D* article.](https://github.com/libgdx/libgdx/wiki/Box2d)
+- [Official libGDX *Box2D* article.](https://github.com/libgdx/libgdx/wiki/Box2d)
 - [Official *Box2D* website.](http://box2d.org/)

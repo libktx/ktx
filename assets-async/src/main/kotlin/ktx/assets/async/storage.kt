@@ -57,7 +57,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleE
  * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
  * internal files.
  *
- * If `useDefaultLoaders` is true (which is the default), all default LibGDX [AssetLoader] implementations
+ * If `useDefaultLoaders` is true (which is the default), all default libGDX [AssetLoader] implementations
  * will be registered.
  */
 class AssetStorage(
@@ -88,7 +88,7 @@ class AssetStorage(
    */
   val progress = LoadingProgress()
 
-  /** LibGDX [Logger] used internally, usually to report issues. */
+  /** libGDX [Logger] used internally, usually to report issues. */
   var logger: Logger
     get() = asAssetManager.logger
     set(value) {
@@ -662,8 +662,8 @@ class AssetStorage(
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
   suspend fun <T> load(descriptor: AssetDescriptor<T>): T {
-    lateinit var newAssets: List<Asset<*>>
-    lateinit var asset: Asset<T>
+    val newAssets: List<Asset<*>>
+    val asset: Asset<T>
     lock.withLock {
       asset = obtainAsset(descriptor)
       newAssets = updateReferences(asset)
@@ -816,7 +816,7 @@ class AssetStorage(
       // The asset was correctly loaded and assigned.
       progress.registerLoadedAsset()
       try {
-        // Notifying the LibGDX loading callback to support AssetManager behavior:
+        // Notifying the libGDX loading callback to support AssetManager behavior:
         asset.descriptor.params?.loadedCallback?.finishedLoading(
           asAssetManager, asset.identifier.path, asset.identifier.type
         )
@@ -858,7 +858,8 @@ class AssetStorage(
    * immediately if it is loaded, or throw [MissingAssetException] if it is unloaded. In either case, it will
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
-  inline fun <reified T> loadSync(path: String): T = loadSync(getAssetDescriptor(path))
+  inline fun <reified T> loadSync(path: String, parameters: AssetLoaderParameters<T>? = null): T =
+    loadSync(getAssetDescriptor(path, parameters))
 
   /**
    * Blocks the current thread until the asset with [T] type is loaded with data specified by the [identifier]
@@ -913,7 +914,7 @@ class AssetStorage(
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
   fun <T> loadSync(descriptor: AssetDescriptor<T>): T = runBlocking {
-    lateinit var asset: Asset<T>
+    val asset: Asset<T>
     val newAssets = lock.withLock {
       asset = obtainAsset(descriptor)
       updateReferences(asset)

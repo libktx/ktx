@@ -1,6 +1,6 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.5.31-orange.svg)](http://kotlinlang.org/)
-[![LibGDX](https://img.shields.io/badge/libgdx-1.10.0-red.svg)](https://libgdx.com/)
+[![libGDX](https://img.shields.io/badge/libgdx-1.10.0-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -25,7 +25,7 @@ Examples of Kotlin language features used to improve usability, performance, and
 * *Coroutines context* providing concurrency utilities and non-blocking asset loading.
 * *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
-See the [_Choosing KTX_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
+See the [_Choosing **KTX**_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
 
 ## Modules
 
@@ -39,19 +39,19 @@ Module | Description
 [`ktx-ashley`](ashley) | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.
 [`ktx-assets`](assets) | Resources management utilities.
 [`ktx-assets-async`](assets-async) | Non-blocking asset loading using coroutines.
-[`ktx-async`](async) | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on LibGDX threading model.
+[`ktx-async`](async) | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on libGDX threading model.
 [`ktx-box2d`](box2d) | [`Box2D`](https://github.com/libgdx/libgdx/wiki/Box2d) physics engine utilities.
-[`ktx-collections`](collections) | Extensions for LibGDX custom collections.
+[`ktx-collections`](collections) | Extensions for libGDX custom collections.
 [`ktx-freetype`](freetype) | `FreeType` fonts loading utilities.
 [`ktx-freetype-async`](freetype-async) | Non-blocking `FreeType` fonts loading using coroutines.
 [`ktx-graphics`](graphics) | Utilities related to rendering tools and graphics.
 [`ktx-i18n`](i18n) | Internationalization API utilities.
 [`ktx-inject`](inject) | A dependency injection system with low overhead and no reflection usage.
-[`ktx-json`](json) | Utilities for LibGDX [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization API.
+[`ktx-json`](json) | Utilities for libGDX [JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization API.
 [`ktx-log`](log) | Minimal runtime overhead cross-platform logging using inlined functions.
-[`ktx-math`](math) | Operator functions for LibGDX math API and general math utilities.
+[`ktx-math`](math) | Operator functions for libGDX math API and general math utilities.
 [`ktx-preferences`](preferences) | Improved API for accessing and saving [preferences](https://github.com/libgdx/libgdx/wiki/Preferences).
-[`ktx-reflect`](reflect) | Utilities for LibGDX [reflection API](https://github.com/libgdx/libgdx/wiki/Reflection).
+[`ktx-reflect`](reflect) | Utilities for libGDX [reflection API](https://github.com/libgdx/libgdx/wiki/Reflection).
 [`ktx-scene2d`](scene2d) | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
 [`ktx-style`](style) | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [`ktx-tiled`](tiled) | Utilities for [Tiled](https://www.mapeditor.org/) maps.
@@ -65,8 +65,8 @@ in libGDX projects by default.
 
 All libraries follow the same naming schema:
 
-```Groovy
-compile "io.github.libktx:$module:$ktxVersion"
+```groovy
+api "io.github.libktx:$module:$ktxVersion"
 ```
 
 Replace `$module` with the name of the selected **KTX** library (see the table above).
@@ -74,37 +74,49 @@ Replace `$module` with the name of the selected **KTX** library (see the table a
 For example, including the [app](app) module with the `ktx-app` identifier would require the following changes
 in your `build.gradle` file:
 
-```Groovy
+```groovy
+// Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.10.0-b3'
+  ktxVersion = '1.10.0-b4'
 }
 
 dependencies {
-  compile "io.github.libktx:ktx-app:$ktxVersion"
+  api group: 'io.github.libktx', name: 'ktx-app', version: ktxVersion
 }
 ```
 
-You can find the latest KTX version on Maven Central:
+```kotlin
+// Kotlin DSL:
+
+// Update this version to match the latest KTX release:
+val ktxVersion = "1.10.0-b4"
+
+dependencies {
+  api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
+}
+```
+
+You can find the latest **KTX** version on Maven Central:
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-app.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
-**KTX** modules should generally be added to the dependencies of the shared `core` module of your LibGDX application.
+**KTX** modules should generally be added to the dependencies of the shared `core` module of your libGDX application.
 
 > As a side note, defining `ktxVersion` as a property in `ext` is not necessary, as versions can be set directly in the
 `dependencies` section. However, extracting the dependencies versions is a good practice, especially if they can be
-reused throughout the build files. This will speed up updating of your project if you include multiple KTX modules.
+reused throughout the build files. This will speed up updating of your project if you include multiple **KTX** modules.
 
 #### Versioning
 
-**KTX** versions match the LibGDX versions that they were compiled against. `$ktxVersion` will usually match your libGDX
+**KTX** versions match the libGDX versions that they were compiled against. `$ktxVersion` will usually match your libGDX
 version, but it might end with `-b` postfix if it is a beta release, or `-SNAPSHOT` if you are using the development
 branch.
 
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 and [on GitHub](https://github.com/libktx/ktx/releases).
 
-Unfortunately, LibGDX does not follow the [semantic versioning](https://semver.org/) guidelines. Both minor and patch
+Unfortunately, libGDX does not follow the [semantic versioning](https://semver.org/) guidelines. Both minor and patch
 versions can introduce breaking changes. Please read the [libGDX](https://github.com/libgdx/libgdx/blob/master/CHANGES)
 and [**KTX** change logs](CHANGELOG.md) before updating.
 
@@ -124,22 +136,34 @@ to the `https://oss.sonatype.org/content/repositories/snapshots/` repository. To
 the following Maven repository, and modify the prefix of `ktxVersion` to `-SNAPSHOT`:
 
 ```groovy
+// Groovy DSL:
 repositories {
   // Include your other repositories here.
   maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 ext {
-  // Update this version to match the latest LibGDX release:
+  // Update this version to match the latest libGDX release:
   ktxVersion = '1.10.0-SNAPSHOT'
 }
+```
+
+```kotlin
+// Kotlin DSL:
+repositories {
+  // Include your other repositories here.
+  maven("https://oss.sonatype.org/content/repositories/snapshots/")
+}
+
+// Update this version to match the latest libGDX release:
+val ktxVersion = "1.10.0-SNAPSHOT"
 ```
 
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
 branch.
 
-Even the snapshots should be rather stable, as the libraries are not pushed to _Maven Central_ unless they pass
-their extensive test suites.
+Even the snapshots are rather stable, as the libraries are not pushed to _Maven Central_ unless they pass their
+extensive test suites. However, the public APIs in snapshot releases might be changed prior to a stable release.
 
 ## Documentation
 
@@ -153,7 +177,7 @@ Browse through the directories in the root folder to find out more about each li
 All functionalities are documented with Kotlin _KDocs_. You can access the source documentation by:
 
 - Viewing the generated Dokka files hosted on the [project website](https://libktx.github.io/docs/).
-- Using the `doc` folder with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
+- Extracting the `doc` folders with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
 - Reading the sources directly.
 
 ### Links
@@ -161,8 +185,8 @@ All functionalities are documented with Kotlin _KDocs_. You can access the sourc
 [**KTX** wiki](https://github.com/libktx/ktx/wiki) lists some useful resources that can help you get started.
 
 Most official guides and code examples in this repository assume that the reader is at least a bit familiar with
-the LibGDX API. If you are just getting to know the framework, it might be helpful to go through
-[the official LibGDX wiki](https://github.com/libgdx/libgdx/wiki), and convert some Java examples to Kotlin.
+the libGDX API. If you are just getting to know the framework, it might be helpful to go through
+[the official libGDX wiki](https://github.com/libgdx/libgdx/wiki), and convert some Java examples to Kotlin.
 
 ## [Contribution](.github/CONTRIBUTING.md)
 

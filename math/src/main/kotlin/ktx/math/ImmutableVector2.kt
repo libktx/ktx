@@ -162,7 +162,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
   override fun toString(): String = "($x,$y)"
 
   @Deprecated(
-    message = "This function doesn't behave like its equivalent in LibGDX and return an angle between -180 and 180 (some LibGDX functions return between -180 and 180 and some other between 0 and 360)",
+    message = "This function doesn't behave like its equivalent in libGDX and return an angle between -180 and 180 (some libGDX functions return between -180 and 180 and some other between 0 and 360)",
     replaceWith = ReplaceWith("angleDeg(reference)")
   )
   inline fun angle(reference: ImmutableVector2 = X): Float = angleDeg(reference)

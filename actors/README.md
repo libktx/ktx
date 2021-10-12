@@ -1,6 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-actors.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-actors)
 
-# KTX: general `Scene2D` utilities
+# KTX: General `Scene2D` utilities
 
 Extensions and utilities for stages, actors, actions and event listeners.
 
@@ -27,14 +27,14 @@ a `Group` with `actor in group` syntax.
 
 #### Event listeners
 
-- Lambda-compatible `Actor.onChange` method was added. Allows to listen to `ChangeEvents`.
+- Lambda-compatible `Actor.onChange` method was added. Allows listening to `ChangeEvents`.
 - Lambda-compatible `Actor.onClick` method was added. Attaches `ClickListeners`.
 - Lambda-compatible `Actor.onTouchDown` and `Actor.onTouchUp` methods were added. Attaches `ClickListeners`. 
-- Lambda-compatible `Actor.onKey` method was added. Allows to listen to `InputEvents` with `keyTyped` type.
-- Lambda-compatible `Actor.onKeyDown` and `Actor.onKeyUp` methods were added. They allow to listen to `InputEvents`
-with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see LibGDX `Keys` class).
-- Lambda-compatible `Actor.onScrollFocus` method was added. Allows to listen to `FocusEvents` with `scroll` type.
-- Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows to listen to `FocusEvents` with `keyboard` type.
+- Lambda-compatible `Actor.onKey` method was added. Allows listening to `InputEvents` with `keyTyped` type.
+- Lambda-compatible `Actor.onKeyDown` and `Actor.onKeyUp` methods were added. They allow listening to `InputEvents`
+with `keyDown` and `keyUp` type, consuming key code of the pressed or released key (see libGDX `Keys` class).
+- Lambda-compatible `Actor.onScrollFocus` method was added. Allows listening to `FocusEvents` with `scroll` type.
+- Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows listening to `FocusEvents` with `keyboard` type.
 - `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
 improvements (nullability data).
 - `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent`
@@ -65,9 +65,9 @@ For long chains, the `along` function may be preferred to avoid creating multipl
 #### Widgets
 
 - `txt` inlined extension properties added to `Label` and `TextButton` widgets. Since types of `getText` and `setText`
-methods in both of this widgets are not compatible (get returns `StringBuilder`, set consumes a `CharSequence`), an
-extension was necessary to let these widgets fully benefit from idiomatic Kotlin properties syntax. Since Kotlin
-properties cannot overshadow Java methods, property was renamed to still hopefully readable `txt`.
+methods in both of these widgets are not compatible (`get` returns `StringBuilder`, `set` consumes a `CharSequence`),
+an extension was necessary to let these widgets fully benefit from idiomatic Kotlin properties syntax. Since Kotlin
+properties cannot overshadow Java methods, property was renamed to `txt`.
 
 ### Usage examples
 
@@ -232,7 +232,8 @@ fun attachKeyboardFocusListener(textField: TextField) {
 }
 ```
 
-Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function (`ParallelAction` utility):
+Chaining actions with infix `then` function (`SequenceAction` utility) and infix `along` function
+(`ParallelAction` utility):
 
 ```kotlin
 import ktx.actors.*
@@ -303,11 +304,11 @@ class MyInputListener : KtxInputListener() {
 ### Alternatives
 
 - [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) includes some `Scene2D` utilities, as well as some extended
-widgets to address some of the LibGDX API problems. It is written in Java, though.
-- [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired LibGDX Java utilities
+widgets to address some libGDX API problems. It is written in Java, though.
+- [Kiwi](https://github.com/czyzby/gdx-lml/tree/master/kiwi) is a general purpose Guava-inspired libGDX Java utilities
 library, which contain some `Scene2D` helpers.
-- [LibGDX Markup Language](https://github.com/czyzby/gdx-lml/tree/master/lml) makes it easier to build `Scene2D` views
-thanks to its HTML-inspired syntax.
+- [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) makes it easier to build `Scene2D` views thanks to its
+HTML-inspired syntax.
 
 #### Additional documentation
 

@@ -145,7 +145,7 @@ class HttpTest {
     assertEquals(url, result.url)
     assertEquals(method, result.method)
     assertTrue(result.content.isEmpty())
-    assertEquals(-1, result.statusCode) // Matches LibGDX unknown status.
+    assertEquals(-1, result.statusCode) // Matches libGDX unknown status.
     assertTrue(result.headers.isEmpty())
   }
 

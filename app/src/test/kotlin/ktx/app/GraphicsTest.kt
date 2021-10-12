@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
 
 /**
- * Tests general utilities related to LibGDX graphics API.
+ * Tests general utilities related to libGDX graphics API.
  */
 class GraphicsTest {
   @Test

@@ -16,7 +16,7 @@ import org.junit.Test
 
 class WidgetsTest {
   @Before
-  fun `initiate LibGDX`() {
+  fun `initiate libGDX`() {
     // Mocking BitmapFont is tedious, if not next to impossible, because of direct fields usage in related classes
     // constructors. Label will not successfully construct an instance without a BitmapFont.
     LwjglNativesLoader.load()

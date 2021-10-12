@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.ObjectMap.Entry
 import com.badlogic.gdx.utils.ObjectSet
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /** Alias for [com.badlogic.gdx.utils.ObjectMap]. Added for consistency with other collections and factory methods. */
 typealias GdxMap<Key, Value> = ObjectMap<Key, Value>
@@ -23,7 +25,7 @@ typealias GdxIdentityMap<Key, Value> = IdentityMap<Key, Value>
 typealias GdxArrayMap<Key, Value> = ArrayMap<Key, Value>
 
 /**
- * Default LibGDX map size used by most constructors.
+ * Default libGDX map size used by most constructors.
  */
 const val defaultMapSize = 51
 
@@ -60,12 +62,24 @@ inline fun GdxMap<*, *>?.size(): Int = this?.size ?: 0
 /**
  * @return true if the map is null or has no elements.
  */
-inline fun GdxMap<*, *>?.isEmpty(): Boolean = this == null || this.size == 0
+@OptIn(ExperimentalContracts::class)
+inline fun GdxMap<*, *>?.isEmpty(): Boolean {
+  contract {
+    returns(false) implies (this@isEmpty != null)
+  }
+  return this == null || this.size == 0
+}
 
 /**
  * @return true if the map is not null and contains at least one element.
  */
-inline fun GdxMap<*, *>?.isNotEmpty(): Boolean = this != null && this.size > 0
+@OptIn(ExperimentalContracts::class)
+inline fun GdxMap<*, *>?.isNotEmpty(): Boolean {
+  contract {
+    returns(true) implies (this@isNotEmpty != null)
+  }
+  return this != null && this.size > 0
+}
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -103,7 +117,7 @@ fun <Key> GdxMap<Key, *>.toGdxSet(): ObjectSet<Key> = this.keys().toGdxSet()
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values copied from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values copied from this iterable stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Key, Value> Iterable<Value>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -120,7 +134,7 @@ inline fun <Key, Value> Iterable<Value>.toGdxMap(
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param valueProvider will consume each value in this iterable. The results will be treated as map values.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values converted from this iterable stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values converted from this iterable stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -137,7 +151,7 @@ inline fun <Type, Key, Value> Iterable<Type>.toGdxMap(
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values copied from this array stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values copied from this array stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Key, Value> Array<Value>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -154,7 +168,7 @@ inline fun <Key, Value> Array<Value>.toGdxMap(
  * @param loadFactor decides how many elements the map might contain in relation to its total capacity before it is resized.
  * @param valueProvider will consume each value in this iterable. The results will be treated as map values.
  * @param keyProvider will consume each value in this iterable. The results will be treated as map keys for the values.
- * @return values converted from this array stored in a LibGDX map, mapped to the keys returned by the provider.
+ * @return values converted from this array stored in a libGDX map, mapped to the keys returned by the provider.
  */
 inline fun <Type, Key, Value> Array<Type>.toGdxMap(
   initialCapacity: Int = defaultMapSize,
@@ -167,9 +181,6 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
   return map
 }
 
-// Sadly, IdentityMap does NOT extend ObjectMap. It feels like it would require up to 2 overridden methods to set it up,
-// but NO. The utilities that apply to ObjectMaps will not work on IdentityMaps, and since its a lot of extra work (and
-// boilerplate) for such a pretty obscure class, only some basic functions are added - like factory methods and operators.
 /**
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.
  * @param loadFactor decides under what load the map is resized.
@@ -194,34 +205,7 @@ inline fun <Key, Value> gdxIdentityMapOf(
   return map
 }
 
-/**
- * @param key a value might be assigned to this key and stored in the map.
- * @return true if a value is associated with passed key. False otherwise.
- */
-operator fun <Key> IdentityMap<Key, *>.contains(key: Key): Boolean = this.containsKey(key)
-
-/**
- * @param key the passed value will be linked with this key.
- * @param value will be stored in the map, accessible by the passed key.
- * @return old value associated with the key or null if none.
- */
-operator fun <Key, Value> IdentityMap<Key, Value>.set(key: Key, value: Value): Value? = this.put(key, value)
-
-/**
- * Allows to iterate over the map with Kotlin lambda syntax and direct access to [MutableIterator], which can remove elements
- * during iteration.
- * @param action will be invoked on each key and value pair. Passed iterator is ensured to be the same instance throughout
- *    the iteration. It can be used to remove elements.
- */
-inline fun <Key, Value> IdentityMap<Key, Value>.iterate(action: (Key, Value, MutableIterator<Entry<Key, Value>>) -> Unit) {
-  val iterator = this.iterator()
-  while (iterator.hasNext()) {
-    val next = iterator.next()
-    action(next.key, next.value, iterator)
-  }
-}
-
-// Some basic support is also provided for optimized LibGDX maps with primitive keys. Again, no common superclass hurts.
+// Basic support for optimized libGDX maps with primitive keys. Sadly, they do not share a common superclass.
 
 /**
  * @param initialCapacity initial capacity of the map. Will be resized if necessary.

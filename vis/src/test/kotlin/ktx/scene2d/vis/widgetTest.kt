@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Array
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.mock.mock
+import ktx.scene2d.ApplicationTest
 import ktx.scene2d.KNode
-import ktx.scene2d.NeedsLibGDX
 import ktx.scene2d.defaultHorizontalStyle
 import ktx.scene2d.defaultStyle
 import ktx.scene2d.defaultVerticalStyle
@@ -32,7 +32,7 @@ import org.junit.Test
 /**
  * Tests KTX-adapted widget: [KVisTree].
  */
-class KVisTreeTest : NeedsLibGDX() {
+class KVisTreeTest : ApplicationTest() {
   @Test
   fun `should add widget to group and return its node`() {
     val tree = scene2d.visTree()
@@ -93,7 +93,7 @@ class KVisTreeTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KDragPane].
  */
-class KDragPaneTest : NeedsLibGDX() {
+class KDragPaneTest : ApplicationTest() {
   @Test
   fun `should add actors to its table`() {
     val label: Label
@@ -112,7 +112,7 @@ class KDragPaneTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KTabbedPane].
  */
-class KTabbedPaneTest : NeedsLibGDX() {
+class KTabbedPaneTest : ApplicationTest() {
   @Test
   fun `should add tabs`() {
     val tab: Tab
@@ -218,7 +218,7 @@ class KTabbedPaneTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KVisList].
  */
-class KVisListTest : NeedsLibGDX() {
+class KVisListTest : ApplicationTest() {
   @Test
   fun `should add items`() {
     val list = KVisList<String>(defaultStyle)
@@ -254,7 +254,7 @@ class KVisListTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KVisScrollPane].
  */
-class KVisScrollPaneTest : NeedsLibGDX() {
+class KVisScrollPaneTest : ApplicationTest() {
   @Test
   fun `should store child`() {
     val scrollPane = KVisScrollPane(defaultStyle)
@@ -281,7 +281,7 @@ class KVisScrollPaneTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KVisSelectBox].
  */
-class KSelectBoxTest : NeedsLibGDX() {
+class KSelectBoxTest : ApplicationTest() {
   @Test
   fun `should add items`() {
     val selectBox = KVisSelectBox<String>(defaultStyle)
@@ -317,7 +317,7 @@ class KSelectBoxTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KVisSplitPane].
  */
-class KVisSplitPaneTest : NeedsLibGDX() {
+class KVisSplitPaneTest : ApplicationTest() {
   @Test
   fun `should store two children`() {
     val splitPane = KVisSplitPane(false, defaultHorizontalStyle)
@@ -348,7 +348,7 @@ class KVisSplitPaneTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KMultiSplitPane].
  */
-class KMultiSplitPaneTest : NeedsLibGDX() {
+class KMultiSplitPaneTest : ApplicationTest() {
   @Test
   fun `should store multiple children`() {
     val splitPane = KMultiSplitPane(false, defaultHorizontalStyle)
@@ -369,7 +369,7 @@ class KMultiSplitPaneTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KCollapsible].
  */
-class KCollapsibleTest : NeedsLibGDX() {
+class KCollapsibleTest : ApplicationTest() {
   @Test
   fun `should add actors to its table`() {
     val label: Label
@@ -388,7 +388,7 @@ class KCollapsibleTest : NeedsLibGDX() {
 /**
  * Tests KTX-adapted widget: [KHorizontalCollapsible].
  */
-class KHorizontalCollapsibleTest : NeedsLibGDX() {
+class KHorizontalCollapsibleTest : ApplicationTest() {
   @Test
   fun `should add actors to its table`() {
     val label: Label
@@ -406,4 +406,4 @@ class KHorizontalCollapsibleTest : NeedsLibGDX() {
 
 // Note: other extended VisUI widgets are not tested, as they do not implement any custom logic and simply inherit
 // from KGroup or KTable, both of which are already tested. It is assumed that their addActor/add methods are properly
-// implemented - we are basically relying on LibGDX and VisUI to behave correctly.
+// implemented - we are basically relying on libGDX and VisUI to behave correctly.

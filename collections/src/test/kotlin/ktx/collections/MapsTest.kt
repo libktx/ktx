@@ -20,7 +20,7 @@ import java.lang.IllegalArgumentException
 import java.util.LinkedList
 
 /**
- * Tests utilities for LibGDX custom HashMap equivalent - [ObjectMap].
+ * Tests utilities for libGDX custom HashMap equivalent - [ObjectMap].
  */
 class MapsTest {
   @Test
@@ -83,10 +83,36 @@ class MapsTest {
   }
 
   @Test
+  fun `should verify empty status contract`() {
+    @Suppress("RedundantNullableReturnType")
+    fun getMap(): GdxMap<Any, Any>? {
+      return gdxMapOf(1 to "1")
+    }
+
+    val map = getMap()
+    if (!map.isEmpty()) {
+      assertTrue(map.size == 1)
+    }
+  }
+
+  @Test
   fun `should report non empty status`() {
     assertTrue(gdxMapOf(1 to "1", 2 to "2", 3 to "3").isNotEmpty())
     assertFalse(ObjectMap<Any, Any>().isNotEmpty())
     assertFalse((null as ObjectMap<Any, Any>?).isNotEmpty())
+  }
+
+  @Test
+  fun `should verify non empty status contract`() {
+    @Suppress("RedundantNullableReturnType")
+    fun getMap(): GdxMap<Any, Any>? {
+      return gdxMapOf(1 to "1")
+    }
+
+    val map = getMap()
+    if (map.isNotEmpty()) {
+      assertTrue(map.size == 1)
+    }
   }
 
   @Test
@@ -269,7 +295,7 @@ class MapsTest {
   }
 
   @Test
-  fun `should provide alias for compatibility with other LibGDX collections`() {
+  fun `should provide alias for compatibility with other libGDX collections`() {
     @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxMap<Any, Any>() is ObjectMap<Any, Any>)
   }

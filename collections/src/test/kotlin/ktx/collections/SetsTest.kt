@@ -9,7 +9,7 @@ import org.junit.Test
 import java.util.LinkedList
 
 /**
- * Tests utilities for LibGDX custom HashSet equivalent - [ObjectSet].
+ * Tests utilities for libGDX custom HashSet equivalent - [ObjectSet].
  */
 class SetsTest {
   @Test
@@ -64,10 +64,34 @@ class SetsTest {
   }
 
   @Test
+  fun `should verify empty status contract`() {
+    fun getSet(): GdxSet<Any>? {
+      return ObjectSet.with("1")
+    }
+
+    val set = getSet()
+    if (!set.isEmpty()) {
+      assertTrue(set.size == 1)
+    }
+  }
+
+  @Test
   fun `should report non empty status`() {
     assertTrue(ObjectSet.with("1", "2", "3").isNotEmpty())
     assertFalse(ObjectSet<Any>().isNotEmpty())
     assertFalse((null as ObjectSet<Any>?).isNotEmpty())
+  }
+
+  @Test
+  fun `should verify non empty status contract`() {
+    fun getSet(): GdxSet<Any>? {
+      return ObjectSet.with("1")
+    }
+
+    val set = getSet()
+    if (set.isNotEmpty()) {
+      assertTrue(set.size == 1)
+    }
   }
 
   @Test
@@ -332,7 +356,7 @@ class SetsTest {
   }
 
   @Test
-  fun `should provide alias for compatibility with other LibGDX collections`() {
+  fun `should provide alias for compatibility with other libGDX collections`() {
     @Suppress("USELESS_IS_CHECK")
     assertTrue(GdxSet<Any>() is ObjectSet<Any>)
   }

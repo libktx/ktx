@@ -15,8 +15,8 @@ import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import com.kotcrab.vis.ui.widget.toast.ToastTable
 import com.nhaarman.mockitokotlin2.mock
+import ktx.scene2d.ApplicationTest
 import ktx.scene2d.KWidget
-import ktx.scene2d.NeedsLibGDX
 import ktx.scene2d.TOLERANCE
 import ktx.scene2d.actors
 import ktx.scene2d.scene2d
@@ -30,7 +30,7 @@ import org.junit.Ignore
 import org.junit.Test
 import com.badlogic.gdx.utils.Array as GdxArray
 
-class TopLevelActorFactoriesTest : NeedsLibGDX() {
+class TopLevelActorFactoriesTest : ApplicationTest() {
   @Test
   fun `should create VisWindow`() {
     val window = scene2d.visWindow(title = "test")
@@ -151,7 +151,7 @@ class TopLevelActorFactoriesTest : NeedsLibGDX() {
 /**
  * Tests factory methods without init blocks.
  */
-class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
+class NoInitBlockActorFactoriesTest : ApplicationTest() {
   private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<*>.() -> T?) {
     // Using a parental widget that allows to use invoke actors' factory methods:
     val parent = scene2d.visTable()
@@ -457,7 +457,7 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
 /**
  * Tests inlined factory methods with init blocks.
  */
-class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
+class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
   private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<Cell<*>>.() -> T?) {
     // Creating builder context that allows to use actors factory methods:
     val parent = scene2d.table()

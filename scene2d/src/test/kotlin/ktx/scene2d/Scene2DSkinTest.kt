@@ -1,10 +1,27 @@
 package ktx.scene2d
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import io.kotlintest.matchers.shouldThrow
 import org.junit.Assert
 import org.junit.Test
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.javaField
 
 class Scene2DSkinTest {
+  @Test
+  fun `should throw exception if defaultSkin is not initialized`() {
+    // Resetting Scene2DSkin with reflection to ensure that `skin` is null:
+    Scene2DSkin::class.declaredMemberProperties
+      .filter { it.name == "skin" }
+      .map { it.javaField!! }
+      .onEach { it.isAccessible = true }
+      .forEach { it.set(Scene2DSkin, null) }
+
+    shouldThrow<IllegalStateException> {
+      Scene2DSkin.defaultSkin
+    }
+  }
+
   @Test
   fun `should invoke skin reload listeners`() {
     var invoked = false

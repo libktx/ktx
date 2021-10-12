@@ -12,12 +12,16 @@ import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import ktx.assets.async.AssetStorage
+import ktx.assets.async.AsyncAssetManager
 import ktx.assets.async.MissingAssetException
 import ktx.async.AsyncTest
 import ktx.async.newAsyncContext
+import ktx.freetype.FreeTypeTest
 import ktx.freetype.freeTypeFontParameters
+import ktx.freetype.registerFreeTypeFontLoaders
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
@@ -25,7 +29,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 /**
- * Tests FreeType font loading utilities.
+ * Tests FreeType font loading utilities for [AssetStorage].
  *
  * Uses Hack font for testing. See https://github.com/source-foundry/Hack for font details.
  *
@@ -33,14 +37,14 @@ import org.junit.Test
  * a blocking operation and might permanently block your rendering thread. In an actual
  * application, prefer [ktx.async.KtxAsync].launch to run your coroutines.
  */
-class FreeTypeAsyncTest : AsyncTest() {
+class AssetStorageFreeTypeTest : AsyncTest() {
   private val ttfFile = "ktx/freetype/async/hack.ttf"
   private val otfFile = "ktx/freetype/async/hack.otf"
 
   companion object {
     @JvmStatic
     @BeforeClass
-    fun `initiate LibGDX`() {
+    fun `initiate libGDX`() {
       LwjglNativesLoader.load()
       Gdx.graphics = mock()
       Gdx.gl20 = mock()
@@ -118,6 +122,52 @@ class FreeTypeAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should load OTF file into BitmapFont asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = runBlocking { storage.loadFreeTypeFontAsync(otfFile).await() }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(otfFile))
+    assertSame(asset, storage.get<BitmapFont>(otfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(otfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
+      storage.getDependencies<BitmapFont>(otfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should load OTF file into BitmapFont synchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = storage.loadFreeTypeFontSync(otfFile)
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(otfFile))
+    assertSame(asset, storage.get<BitmapFont>(otfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(otfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
+      storage.getDependencies<BitmapFont>(otfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
   fun `should load OTF file into BitmapFont with custom params`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
@@ -146,11 +196,65 @@ class FreeTypeAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should load OTF file into BitmapFont with custom params asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = runBlocking {
+      storage.loadFreeTypeFontAsync(otfFile) {
+        size = 12
+        borderWidth = 1f
+      }.await()
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(otfFile))
+    assertSame(asset, storage.get<BitmapFont>(otfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(otfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
+      storage.getDependencies<BitmapFont>(otfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should load OTF file into BitmapFont with custom params synchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = storage.loadFreeTypeFontSync(otfFile) {
+      size = 12
+      borderWidth = 1f
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(otfFile))
+    assertSame(asset, storage.get<BitmapFont>(otfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(otfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
+      storage.getDependencies<BitmapFont>(otfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
   fun `should unload BitmapFont assets loaded from OTF file`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
     storage.registerFreeTypeFontLoaders()
-    runBlocking { storage.loadFreeTypeFont(otfFile) }
+    storage.loadFreeTypeFontSync(otfFile)
 
     // When:
     runBlocking { storage.unload<BitmapFont>(otfFile) }
@@ -170,6 +274,52 @@ class FreeTypeAsyncTest : AsyncTest() {
 
     // When:
     val asset = runBlocking { storage.loadFreeTypeFont(ttfFile) }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
+    assertSame(asset, storage.get<BitmapFont>(ttfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(ttfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
+      storage.getDependencies<BitmapFont>(ttfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should load TTF file into BitmapFont asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = runBlocking { storage.loadFreeTypeFontAsync(ttfFile).await() }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
+    assertSame(asset, storage.get<BitmapFont>(ttfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(ttfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
+      storage.getDependencies<BitmapFont>(ttfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should load TTF file into BitmapFont synchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = storage.loadFreeTypeFontSync(ttfFile)
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
@@ -214,11 +364,65 @@ class FreeTypeAsyncTest : AsyncTest() {
   }
 
   @Test
+  fun `should load TTF file into BitmapFont with custom params asynchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = runBlocking {
+      storage.loadFreeTypeFontAsync(ttfFile) {
+        size = 12
+        borderWidth = 1f
+      }.await()
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
+    assertSame(asset, storage.get<BitmapFont>(ttfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(ttfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
+      storage.getDependencies<BitmapFont>(ttfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
+  fun `should load TTF file into BitmapFont with custom params synchronously`() {
+    // Given:
+    val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
+    storage.registerFreeTypeFontLoaders()
+
+    // When:
+    val asset = storage.loadFreeTypeFontSync(ttfFile) {
+      size = 12
+      borderWidth = 1f
+    }
+
+    // Then:
+    assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
+    assertSame(asset, storage.get<BitmapFont>(ttfFile))
+    assertEquals(1, storage.getReferenceCount<BitmapFont>(ttfFile))
+    // Automatically loads a generator for the font:
+    assertEquals(
+      listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
+      storage.getDependencies<BitmapFont>(ttfFile)
+    )
+    assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
+
+    storage.dispose()
+  }
+
+  @Test
   fun `should unload BitmapFont assets loaded from TTF file`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
     storage.registerFreeTypeFontLoaders()
-    runBlocking { storage.loadFreeTypeFont(ttfFile) }
+    storage.loadFreeTypeFontSync(ttfFile)
 
     // When:
     runBlocking { storage.unload<BitmapFont>(ttfFile) }
@@ -407,5 +611,106 @@ class FreeTypeAsyncTest : AsyncTest() {
         storage[it]
       }
     }
+  }
+}
+
+/**
+ * Tests FreeType font loading utilities for [AsyncAssetManager].
+ *
+ * Uses Hack font for testing. See https://github.com/source-foundry/Hack for font details.
+ *
+ * Implementation note: tests use [runBlocking] to simplify the implementation. This is
+ * a blocking operation and might permanently block your rendering thread. In an actual
+ * application, prefer [ktx.async.KtxAsync].launch to run your coroutines and obtain
+ * [kotlinx.coroutines.Deferred] instances via await.
+ */
+class AsyncAssetManagerFreeTypeTest : FreeTypeTest() {
+  override val ttfFile = "ktx/freetype/async/hack.ttf"
+  override val otfFile = "ktx/freetype/async/hack.otf"
+
+  override fun assetManager(): AsyncAssetManager = AsyncAssetManager(ClasspathFileHandleResolver())
+
+  @Test
+  fun `should load OTF file into BitmapFont asynchronously`() {
+    // Given:
+    val assetManager = assetManager()
+    assetManager.registerFreeTypeFontLoaders()
+
+    // When:
+    val reference = assetManager.loadFreeTypeFontAsync(otfFile)
+
+    // Then:
+    assetManager.finishLoading()
+    val asset = runBlocking { reference.await() }
+    val font = assetManager.get<BitmapFont>(otfFile)
+    assertNotNull(font)
+    assertTrue(font is BitmapFont)
+    assertSame(asset, font)
+  }
+
+  @Test
+  fun `should load OTF file into BitmapFont with custom parameters asynchronously`() {
+    // Given:
+    val assetManager = assetManager()
+    assetManager.registerFreeTypeFontLoaders()
+    val variable: Int
+
+    // When:
+    val reference = assetManager.loadFreeTypeFontAsync(otfFile) {
+      size = 12
+      borderWidth = 1f
+      variable = 42
+    }
+
+    // Then:
+    assetManager.finishLoading()
+    val asset = runBlocking { reference.await() }
+    val font = assetManager.get<BitmapFont>(otfFile)
+    assertNotNull(font)
+    assertTrue(font is BitmapFont)
+    assertSame(asset, font)
+    assertEquals(42, variable)
+  }
+
+  @Test
+  fun `should load TTF file into BitmapFont asynchronously`() {
+    // Given:
+    val assetManager = assetManager()
+    assetManager.registerFreeTypeFontLoaders()
+
+    // When:
+    val reference = assetManager.loadFreeTypeFontAsync(ttfFile)
+
+    // Then:
+    assetManager.finishLoading()
+    val asset = runBlocking { reference.await() }
+    val font = assetManager.get<BitmapFont>(ttfFile)
+    assertNotNull(font)
+    assertTrue(font is BitmapFont)
+    assertSame(asset, font)
+  }
+
+  @Test
+  fun `should load TTF file into BitmapFont with custom parameters asynchronously`() {
+    // Given:
+    val assetManager = assetManager()
+    assetManager.registerFreeTypeFontLoaders()
+    val variable: Int
+
+    // When:
+    val reference = assetManager.loadFreeTypeFontAsync(ttfFile) {
+      size = 12
+      borderWidth = 1f
+      variable = 42
+    }
+
+    // Then:
+    assetManager.finishLoading()
+    val asset = runBlocking { reference.await() }
+    val font = assetManager.get<BitmapFont>(ttfFile)
+    assertNotNull(font)
+    assertTrue(font is BitmapFont)
+    assertSame(asset, font)
+    assertEquals(42, variable)
   }
 }

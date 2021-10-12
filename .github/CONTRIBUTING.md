@@ -52,7 +52,7 @@ git checkout develop
 
 The project itself is managed by [Gradle](http://gradle.org/). Gradle wrapper is included, but you can use a local
 Gradle installation - scripts should be compatible with Gradle `7.+`. Gradle projects are handled out of the box by
-IntelliJ, so KTX should be easy to import.
+IntelliJ, so **KTX** should be easy to import.
 
 Some useful Gradle tasks include:
 
@@ -92,7 +92,7 @@ should generally consist of the following sections:
   - _Motivation_ - why was the module created?
   - _Guide_ - what features does the module provide? Does it require additional setup?
   - _Usage examples_ - how to use the module?
-  - _Synergy_ - is the module complemented by any other KTX libraries?
+  - _Synergy_ - is the module complemented by any other **KTX** libraries?
   - _Alternatives_ - are there any other libraries or modules that can be used instead?
   - _Additional documentation_ - are there any other guides or articles on the topic?
 - Add _Maven Central_ badge to the top of the `README.md` to ease inclusion of the library:
@@ -125,8 +125,8 @@ Kotlin and plugin versions are stored in the [gradle.properties](../gradle.prope
 versions are stored with the [`Versions.kt`](../buildSrc/src/main/kotlin/ktx/Versions.kt) file. Snapshot releases
 should keep all the dependencies (outside of testing scope) up-to-date. Major dependencies include:
 
-- **LibGDX**: update `gdxVersion` in the versions file and LibGDX version in the tag on the top of the 
-[README.md](../README.md) file. Note that updating LibGDX also affects the KTX version and milestones, so make sure
+- **libGDX**: update `gdxVersion` in the versions file and libGDX version in the tag on the top of the 
+[README.md](../README.md) file. Note that updating libGDX also affects the **KTX** version and milestones, so make sure
 to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
 - **Kotlin**: update the `kotlinVersion` in the properties file and the Kotlin tag in the [README.md](../README.md).
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` in the versions file and the tag in the
@@ -146,17 +146,17 @@ All the major dependencies updates should be added to the [changelog](../CHANGEL
 #### Stable release
 
 - Create a new issue on GitHub. Include the number of the issue in commit messages of all commits related to the release.
-Apply `dev` label and milestone corresponding to the LibGDX version. An example can be found
+Apply `dev` label and milestone corresponding to the libGDX version. An example can be found
 [here](https://github.com/libktx/ktx/issues/191).
-- Change `libVersion` setting in the [`version.txt`](../version.txt). KTX uses the same versioning schema as LibGDX
-(mimicking the LibGDX version that it was compiled against) with a suffix depending on the version status.
+- Change `libVersion` setting in the [`version.txt`](../version.txt). **KTX** uses the same versioning schema as libGDX
+(mimicking the libGDX version that it was compiled against) with a suffix depending on the version status.
 - Create a pull request from the `develop` branch to the `master` branch. Review and merge the changes to the `master`
 branch.
 - Checkout the `master` branch. Fetch the latest changes.
 - Run `gradle build publish closeAndReleaseRepository` to push artifacts to _Maven Central_. Note that the Maven plugin
 has its issues and might fail with an error, but usually the release will be successful. You can check if the staging
 repository was properly close, promoted and released at [Nexus Repository Manager](https://oss.sonatype.org/).
-- Run `gradle distZip` to prepare an archive with KTX sources, compiled binary and documentation.
+- Run `gradle distZip` to prepare an archive with **KTX** sources, compiled binary and documentation.
 - Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. The tag should be made from the
 `master` branch and its name should match the released version. Name of the release should match `KTX $libVersion`.
 Add a short release summary and copy the latest [changelog](../CHANGELOG.md) entries to the release description.
@@ -168,11 +168,11 @@ with the following labels:
   - **[REMOVAL]** - temporary or permanent removal of a major feature (e.g. disabling a module for a single release).
 - Checkout the `develop` branch.
 - Change `libVersion` setting in the [`version.txt`](../version.txt) to the next snapshot release. The name should
-match the used LibGDX version followed by the `-SNAPSHOT` suffix.
+match the used libGDX version followed by the `-SNAPSHOT` suffix.
 
 #### Snapshot release
 
-- Make sure the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the LibGDX version
+- Make sure the [`version.txt`](../version.txt) ends with the `-SNAPSHOT` suffix and matches the libGDX version
 that the library was compiled against.
 - Run `gradle build uploadSnapshot` to push artifacts to _Sonatype_ snapshots repository. This task will do nothing
 if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.
@@ -185,9 +185,9 @@ to the `develop` branch.
 
 Tasks automated with [GitHub actions](https://github.com/libktx/ktx/actions):
 
-* [build](workflows/build.yml) - compiles and tests all KTX modules. Triggered by pushing and setting up pull requests
+* [build](workflows/build.yml) - compiles and tests all **KTX** modules. Triggered by pushing and setting up pull requests
 to `master` and `develop` branches.
-* [upload-snapshot](workflows/upload-snapshot.yml) - compiles all KTX modules and uploads a new snapshot release.
+* [upload-snapshot](workflows/upload-snapshot.yml) - compiles all **KTX** modules and uploads a new snapshot release.
 Triggered by pushing to the `develop` branch.
 * [publish-documentation](workflows/publish-documentation.yml) - builds and replaces the Dokka documentation published
 to [the official website](https://libktx.github.io/ktx/). Triggered by pushing to the `master` branch, which is

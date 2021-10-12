@@ -348,7 +348,7 @@ class KImageButton(skin: Skin, style: String) : ImageButton(skin, style), KTable
 @Scene2dDsl
 class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButton(text, skin, style), KTable
 
-/** Extends LibGDX List widget with items building method. */
+/** Extends libGDX List widget with items building method. */
 @Scene2dDsl
 class KListWidget<T>(skin: Skin, style: String) : GdxList<T>(skin, style) {
   /**

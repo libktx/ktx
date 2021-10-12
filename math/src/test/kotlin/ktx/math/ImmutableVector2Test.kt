@@ -670,7 +670,7 @@ class ImmutableVector2Test {
 
   @Test
   fun `angleRad to x-axis should return same value as Vector2`() {
-    // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
+    // libGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
     vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
       assertEquals("$v1", v1.toMutable().angleRad(), v1.angleRad())
     }
@@ -744,8 +744,7 @@ class ImmutableVector2Test {
 
   @Test
   fun `angleRad with x axis should return same value as Vector2`() {
-
-    // LibGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
+    // libGDX returns an arbitrary (incorrect) angle when using zero vector. (vector zero's angle is undefined)
     vectors.filterNot { it.isZero(0f) }.forEach {
       assertEquals(it.toMutable().angleRad(), it.angleRad())
     }
@@ -1003,8 +1002,7 @@ class ImmutableVector2Test {
 
   @Test
   fun `isOnLine should return same than Vector2`() {
-
-    // LibGDX returns false (incorrect) when compared with vector zero.
+    // libGDX returns false (incorrect) when compared with vector zero.
     vectors.filterNot { it.isZero(0f) }.forEach { v1 ->
       vectors.filterNot { it.isZero(0f) }.forEach { v2 ->
         assertEquals(v1.toMutable().isOnLine(v2.toMutable()), v1.isOnLine(v2))

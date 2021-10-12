@@ -23,7 +23,7 @@ import org.junit.Before
 import org.junit.Test
 
 /**
- * Tests LibGDX logging wrappers.
+ * Tests libGDX logging wrappers.
  */
 class LogTest {
   private val application = MockApplication()

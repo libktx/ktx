@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit.SECONDS
  */
 abstract class AsyncTest {
   @Before
-  open fun `setup LibGDX application`() {
+  open fun `setup libGDX application`() {
     Gdx.app = HeadlessApplication(object : ApplicationAdapter() {})
     val initTask = CompletableFuture<Unit>()
     Gdx.app.postRunnable {
@@ -72,7 +72,7 @@ abstract class AsyncTest {
   }
 
   @After
-  open fun `exit LibGDX application`() {
+  open fun `exit libGDX application`() {
     Gdx.app.exit()
   }
 }

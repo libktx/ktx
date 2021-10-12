@@ -1,27 +1,28 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-inject.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-inject)
 
-# KTX: dependency injection
+# KTX: Dependency injection
 
 A tiny, lightweight dependency injection system with simple syntax that does not rely on reflection.
 
 ### Why?
 
-Games *beg* for dependency injection. There are a lot of components from different worlds that need to work together.
+Games can be vastly simplified with dependency injection. There are a lot of components that need to work together.
 Assets, physics renderers, input listeners, game logic services - as much as we would like to separate them from each
-other, some interaction between them is inevitable. You can create `XxxManager` classes, maintain huge constructors or
-use a bunch of global variables, but that is not exactly the most portable, comfortable or modular solution. After all,
-you want your code to be readable and reusable, right? It is much easier to inject a different instance to class
-depending on the current application setup than refactor sources with a ton of static calls.
+other, some interaction between them is inevitable. You can create manager classes, maintain huge constructors or
+use a bunch of global variables, but that is often not the most portable, comfortable or modular solution. It is much
+easier to inject a different instance depending on the current application setup than refactor sources with a ton of
+static calls.
 
 Java dependency injection mechanisms usually rely on annotations and compile-time code generation (like
 [Dagger](http://google.github.io/dagger/)) or runtime class analysis (like [Spring](https://spring.io/)). Kotlin, with
 its inline functions, allows to omit the reflection and annotations usage altogether, while still providing a pleasant
 DSL.
 
-Why not an existing Kotlin DI library? `ktx-inject` is a tiny extension consisting of a single source file with a few
-hundred lines, most of which are the documentation. Being as lightweight as possible and generating little to no garbage
-at runtime, it aims to be a viable choice for even the slowest devices out there. It sacrifices extra features for
-simplicity and nearly zero overhead at runtime.
+It should be noted that there are other Kotlin DI libraries with more features. `ktx-inject` is a tiny extension
+consisting of a single source file with a few hundred lines, most of which are the documentation. Being as lightweight
+as possible and generating little to no garbage at runtime, it aims to be a viable choice for even the slowest mobile
+devices out there. It sacrifices extra features for simplicity, quick startup and zero overhead at runtime when
+the objects are constructed.
 
 ### Guide
 
@@ -42,7 +43,7 @@ Instead of passing `Context` around, inject appropriate providers to your compon
 
 `clear()` and `dispose()` methods can be used after you no longer need the `Context`. `clear()` removes references to
 all registered singletons and providers. `dispose()`, additionally to clearing the context, attempts to dispose all
-singletons and providers that implement the `Disposable` interface and logs all errors on the LibGDX error logging
+singletons and providers that implement the `Disposable` interface and logs all errors on the libGDX error logging
 level. Use `clear()` instead of `dispose()` if you want to fully control assets lifecycle.
 
 Additional `bind<Type>()`, `bindSingleton<Type>()`, and `newInstanceOf<Type>()` methods allow constructing objects
@@ -207,18 +208,17 @@ class Container: Disposable {
 
 This will ensure that the `Context` itself will not attempt to dispose of the `Container`.
 
-Note that this also applies to extensions of `KtxApplicationAdapter` and `KtxGame`, both of which
-are `Disposable`.
+Note that this also applies to extensions of `KtxApplicationAdapter` and `KtxGame`, both of which are `Disposable`.
 
 ### Notes on implementation and design choices
 
 > How does it work?
 
-You can think of the `Context` as a simple, huge map with `Class<T>` instances as keys and `() -> T` (so-called providers)
+You can think of the `Context` as a map with `Class<T>` instances as keys and `() -> T` (so-called providers)
 as values. When you call a method like `inject<YourClass>()`, it is inlined at compile-time - hence allowing the
 framework to extract the actual `Class` object from generic argument - and used to find a provider for `YourClass`.
-Singletons are implemented as providers that always return the same instance of the selected type on each call. It _is_
-dead simple and aims to introduce as little runtime overhead as possible.
+Singletons are implemented as providers that always return the same instance of the selected type on each call. Other
+than using `Class` instances at keys, it does not rely on reflection.
 
 > Are scopes supported?
 
@@ -227,31 +227,28 @@ but in most simple games you just end up needing some glue between the component
 you aim for.
 
 As for testing scope, you can just register different components during testing. Classes using `ktx-inject` are usually
-easy to test.
+easy to test. If necessary, you can also use multiple contexts.
 
 > Are named providers supported?
 
-Nope. Providers are mapped to the class of instances that they return - and that's it. Criteria systems - which are a
-sensible alternative to simple string names - are somewhat easy to use when your system is based on annotations, but we
-don't have much to work with when the goal is simplicity.
+No. Providers are mapped only to the class of instances that they return.
 
 > What about Kodein-style single-parameter factories?
 
 It seems that Kodein keeps all its "providers" as single-parameter functions. To avoid wrapping all no-arg providers
 (which seem to be the most common by far) in `null`-consuming functions, factories are not implemented in `ktx-inject`
-at all. If you need specialized providers, create a simple class with `invoke` operator.
+at all. If you need specialized providers, create a simple class with `invoke` operator that consumes the necessary
+parameters.
 
 > Is this framework for me?
 
 This dependency injection system is as trivial as it gets. It will help you with platform-specific classes and gluing
 your application together, but don't expect much more. This library might be great if you're just starting with
-dependency  injection - all you need to learn is using a few simple functions. It is also very lightweight: getting
-a provider is a single call to a map.
+dependency injection, as it does not introduce many complex concepts. The main advantages of `ktx-inject` include
+simplicity, quick startup, and compatibility with all libGDX desktop and mobile backends.
 
-If you never end up needing more features, you might consider sticking with `ktx-inject` altogether, but just so you
-know - there _are_ other Kotlin dependency injection frameworks, and they work well with LibGDX. There was no point in
-creating another _complex_ dependency injection framework, and we were fully aware of that. Simplicity and
-little-to-none runtime overhead is what sums up the strong sides of `ktx-inject`.
+If you end up needing more features, there are other Kotlin dependency injection frameworks, and they mostly work well
+with libGDX.
 
 ### Alternatives
 
@@ -263,11 +260,11 @@ code generation. It generates human-readable POJO classes, which makes it both e
 the usual reflection-based solutions. However, it is harder to set up and Kotlin solutions usually offer better syntax.
 - [Spring](https://spring.io/) is a powerful dependency injection framework with automatic component scan. It relies on
 runtime class analysis with reflection, which generally makes it less efficient than Dagger or most Kotlin solutions.
-Thanks to its huge ecosystem and useful extensions, it might be a good solution for complex desktop games. Otherwise it
+Thanks to its huge ecosystem and useful extensions, it might be a good solution for complex desktop games. Otherwise, it
 might be an overkill.
 - [Guice](https://github.com/google/guice) is another commonly used reflection-based dependency injection mechanism.
 - [Autumn](https://github.com/czyzby/gdx-lml/tree/master/autumn) is a multi-platform reflection-based dependency
-injection library with automatic component scan for LibGDX written in Java. It works even on GWT (although Kotlin does
+injection library with automatic component scan for libGDX written in Java. It works even on GWT (although Kotlin does
 not work well with GWT in the first place). Reflection overhead is generally small, but hacky Kotlin-based solutions are
 obviously expected to be more efficient.
 

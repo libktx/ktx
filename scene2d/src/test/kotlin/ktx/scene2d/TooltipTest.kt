@@ -12,7 +12,7 @@ import org.junit.Test
 /**
  * Tests extension methods that allow to add [Tooltip] instances to all actors.
  */
-class TooltipTest : NeedsLibGDX() {
+class TooltipTest : ApplicationTest() {
   @Test
   fun `should add TextTooltip`() {
     val actor = Actor()

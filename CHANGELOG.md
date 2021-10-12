@@ -1,4 +1,39 @@
-_See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
+_See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
+
+#### 1.10.0-b4
+
+- **[UPDATE]** Updated to Gradle 7.2.
+- **[UPDATE]** Updated to Dokka 1.5.30.
+- **[FEATURE]** (`ktx-app`) Added `Platform` object that exposes various utilities for platform-specific code.
+  - `Platform.currentPlatform` returns current `ApplicationType` or throws `GdxRuntimeException` if unable to determine.
+  - `Platform.version` returns the current version of the platform (e.g., Android API version, iOS major OS version).
+  - Boolean properties that allow to determine current platform:
+    - `Platform.isAndroid` checks if the current platform is Android.
+    - `Platform.isDesktop` checks if the current platform is desktop with graphical application.
+    - `Platform.isHeadless` checks if the current platform is desktop without graphical application.
+    - `Platform.isiOS` checks if the current platform is iOS.
+    - `Platform.isMobile` checks if the current platform is Android or iOS.
+    - `Platform.isWeb` checks if the current platform is HTML/WebGL.
+  - Inlined methods that allow to execute code on specific platforms:
+    - `Platform.runOnAndroid` executes an action if the current platform is Android. Returns action result or null.
+    - `Platform.runOnDesktop` executes an action if the current platform is desktop. Returns action result or null.
+    - `Platform.runOnHeadless` executes an action if the current platform is headless desktop. Returns action result or null.
+    - `Platform.runOniOS` executes an action if the current platform is iOS. Returns action result or null.
+    - `Platform.runOnMobile` executes an action if the current platform is Android or iOS. Returns action result or null.
+    - `Platform.runOnWeb` executes an action if the current platform is HTML/WebGL. Returns action result or null.
+  - Inlined `runOnVersion` executes an action if the current platform version is within minimum and maximum values.
+- **[FEATURE]** (`ktx-ashley`) `Mapper` abstract class designed for `companion object`s of `Component`s.
+Allows to easily obtain instances of a `ComponentMapper` corresponding to the enclosing `Component` class.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage.loadSync(String)` now supports optional loading parameters.
+- **[FEATURE]** (`ktx-collections`) `isEmpty` and `isNotEmpty` extension methods of libGDX collections now support
+Kotlin contracts. If they return `true`, the collection is implied not to be null.
+- **[CHANGE]** (`ktx-collections`) As `IdentityMap` now extends `ObjectMap`, some redundant utilities specific to
+`IdentityMap` were removed. From the user point of view, all additional functionalities are covered by the `ObjectMap`
+utilities.
+- **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontAsync` was added, mimicking `loadAsync` behavior.
+- **[FEATURE]** (`ktx-freetype-async`) `AssetStorage.loadFreeTypeFontSync` was added, mimicking `loadSync` behavior.
+- **[FEATURE]** (`ktx-freetype-async`) `AsyncAssetManager.loadFreeTypeFontAsync` was added, returning a `Deferred<BitmapFont>` instance.
+- **[CHANGE]** (`ktx-scene2d`) `Scene2DSkin.defaultSkin` now throws `IllegalStateException` when accessed before overriding.
 
 #### 1.10.0-b3
 
@@ -9,7 +44,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
   - `AsyncAssetManager.loadAsync` allows to schedule an asset for loading, returning a `Deferred` asset reference.
   - `AsyncAssetManager.getDefaultParameters` allows to create a default instance of `AssetLoaderParameters` for a selected asset.
   - `AsyncAssetManager.setLoaderParameterSupplier` has to be called for each custom asset loader in order to enable asynchronous loading without explicitly passing loader parameters.
-- **[FEATURE]** (`ktx-collections`) Factory methods for LibGDX arrays of primitives:
+- **[FEATURE]** (`ktx-collections`) Factory methods for libGDX arrays of primitives:
   - `gdxBooleanArrayOf`
   - `gdxByteArrayOf`
   - `gdxCharArrayOf`
@@ -23,7 +58,7 @@ _See also: [the official LibGDX changelog](https://github.com/libgdx/libgdx/blob
   - `bindSingleton<Type>`: creates, registers, and returns a singleton of selected class using reflection.
 - **[FEATURE]** (`ktx-reflect`) Added a new module with reflection utilities.
   - `Reflection` annotation, which requires opt-in, allows marking functionalities that rely on reflection.
-  - `ReflectedClass` is an inlined wrapper for `Class` that allows to easily use LibGDX reflection API.
+  - `ReflectedClass` is an inlined wrapper for `Class` that allows to easily use libGDX reflection API.
     - `ClassReflection` methods exposed as `ReflectedClass` read-only properties:
       - `simpleName`
       - `isMemberClass`
@@ -89,7 +124,7 @@ can be overridden when extending the `Logger` class, simplifying the usage of cu
 
 #### 1.10.0-b1
 
-- **[UPDATE]** Updated to LibGDX 1.10.0.
+- **[UPDATE]** Updated to libGDX 1.10.0.
 - **[CHANGE]** The Java source compatibility and JVM target version of the **KTX** modules was changed from 1.6 to 1.7.
 
 #### 1.9.14-b2
@@ -108,7 +143,7 @@ adding support for Scene2D and VisUI DSL.
 
 #### 1.9.14-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.14.
+- **[UPDATE]** Updated to libGDX 1.9.14.
 - **[UPDATE]** Updated to Kotlin 1.4.30.
 - **[UPDATE]** Updated to VisUI 1.4.11.
 - **[FEATURE]** (`ktx-app`) `clearScreen` now accepts additional `clearDepth` boolean parameter that controls whether 
@@ -117,12 +152,12 @@ the `GL_DEPTH_BUFFER_BIT` is added to the mask.
 for debugging purposes. Supports formatted string output with `prettyFormat`.
 - **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now includes `takeSnapshot` and `takeSnapshotAsync` methods that
 allow to copy and inspect the internal state of the storage for debugging purposes.
-- **[FEATURE]** (`ktx-collections`) Added `getOrPut` extension function for LibGDX map collections including
+- **[FEATURE]** (`ktx-collections`) Added `getOrPut` extension function for libGDX map collections including
 `ObjectMap`, `IdentityMap`, `ArrayMap` and `IntMap`.
 
 #### 1.9.13-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.13.
+- **[UPDATE]** Updated to libGDX 1.9.13.
 - **[UPDATE]** Updated to Kotlin 1.4.21-2.
 - **[UPDATE]** Updated to VisUI 1.4.8.
 - **[FEATURE]** (`ktx-style`) Added `Skin.register` extension method that allows to register widget styles with the DSL.
@@ -131,7 +166,7 @@ allow to copy and inspect the internal state of the storage for debugging purpos
 
 #### 1.9.12-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.12.
+- **[UPDATE]** Updated to libGDX 1.9.12.
 - **[UPDATE]** Updated to Kotlin 1.4.20.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.4.2.
 
@@ -143,14 +178,14 @@ allow to copy and inspect the internal state of the storage for debugging purpos
 - **[UPDATE]** Updated to Dokka 1.4.10-2.
 - **[MISC]** Groovy Gradle scripts and configuration files migrated to Kotlin.
 - **[MISC]** The generated sources documentation is vastly improved and moved to a new URL.
-- **[FEATURE]** (`ktx-collections`) Added `GdxIdentityMap` and `GdxArrayMap` aliases for LibGDX `IdentityMap` and `ArrayMap` collections.
+- **[FEATURE]** (`ktx-collections`) Added `GdxIdentityMap` and `GdxArrayMap` aliases for libGDX `IdentityMap` and `ArrayMap` collections.
 - **[FEATURE]** (`ktx-collections`) Added `set` operator extension method to `ArrayMap` to support square brackets assignment.
 - **[FEATURE]** (`ktx-graphics`) Added optional `Camera` and projection matrix parameters to `ShapeRenderer.use`.
 - **[FEATURE]** (`ktx-scene2d`) Added `image` builders for `NinePatch`, `TextureRegion`, `Texture` and `Drawable`.
 
 #### 1.9.11-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.11.
+- **[UPDATE]** Updated to libGDX 1.9.11.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.6.
 - **[UPDATE]** Updated VisUI to 1.4.6.
 - **[FEATURE]** (`ktx-scene2d`) Added a generic `container` factory method that supports adding a custom actor.
@@ -174,7 +209,7 @@ matching the `dispose` method from `ApplicationListener` and `Screen` respective
 
 - **[UPDATE]** Updated to Kotlin 1.3.72.
 - **[UPDATE]** Updated to Dokka 0.10.1.
-- **[CHANGE]** Javadocs are no longer generated with Dokka. Since KTX focuses solely on Kotlin support for LibGDX,
+- **[CHANGE]** Javadocs are no longer generated with Dokka. Since KTX focuses solely on Kotlin support for libGDX,
 usability from Java is not a priority. The generated Javadocs are not very helpful, especially for Kotlin development.
 Instead, the Javadoc jar published to Maven Central now contains exported Kotlin-compatible Dokka documentation.
 Starting from this release, GitHub releases will no longer contain the Javadoc archives.
@@ -281,13 +316,13 @@ They can still be used and work as expected, but the compiler does not ensure th
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.5.
 - **[UPDATE]** Updated to Gradle 5.6.4.
 - **[FEATURE]** (`ktx-app`) Added profiling utilities.
-    - `profile` inlined function allows to profile an operation with the LibGDX `PerformanceCounter`.
+    - `profile` inlined function allows to profile an operation with the libGDX `PerformanceCounter`.
     - `PerformanceCounter.profile` inlined extension method eases usage of `PerformanceCounter` API.
     - `PerformanceCounter.prettyPrint` allows to print basic performance data after profiling.
 - **[CHANGE]** (`ktx-app`) `LetterboxingViewport` moved from `ktx-app` to `ktx-graphics`.
 - **[FEATURE]** (`ktx-ashley`) Added `Entity.contains` (`in` operator) that checks if an `Entity` has a `Component`.
 - **[FEATURE]** (`ktx-assets-async`) Added a new KTX module: coroutines-based asset loading.
-    - `AssetStorage` is a non-blocking coroutines-based alternative to LibGDX `AssetManager`.
+    - `AssetStorage` is a non-blocking coroutines-based alternative to libGDX `AssetManager`.
          - `get` operator obtains an asset from the storage or throws a `MissingAssetException`.
          - `getOrNull` obtains an asset from the storage or return `null` if the asset is unavailable.
          - `getAsync` obtains a reference to the asset from the storage as `Deferred`.
@@ -328,9 +363,9 @@ There are no public API changes since the last released version.
     - Added `set` operators for `String`, `Int`, `Float`, `Double`, `Long`, `Boolean`, `Pair<String, Any>` and `Any`
     - Added `get` operator which automatically determines preference type and retrieves them with the correct method.
     - `get` and `set` will automatically attempt to (de)serialize non-basic preferences to and from JSON.
-    - `set(String, Double)` is deprecated, since the LibGDX `Preferences` do not support doubles.
+    - `set(String, Double)` is deprecated, since the libGDX `Preferences` do not support doubles.
     - Added `flush` inlined extension method that executes a lambda and automatically calls `Preferences.flush`.
-- **[CHANGE]** (`ktx-scene2d`) Improved typing support for `Tree.Node` widgets. Since LibGDX 1.9.10, `Tree.Node` is
+- **[CHANGE]** (`ktx-scene2d`) Improved typing support for `Tree.Node` widgets. Since libGDX 1.9.10, `Tree.Node` is
 a generic class, but KTX `KNode` remained non-generic until now. Type of stored actors must now be specified for `KNode`
 variables, but thanks to that actors from `KNode` instances are now correctly typed and easier to handle. This required
 minor internal changes - `KWidget.storeActor` is now generic.
@@ -361,7 +396,7 @@ minor internal changes - `KWidget.storeActor` is now generic.
 - **[UPDATE]** Updated to Kotlin 1.3.61.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.3.
 - **[FEATURE]** (`ktx-assets`) Added `AssetGroup` abstract class that allows to manage groups of assets.
-- **[FEATURE]** (`ktx-collections`) Added `removeAll`, `retainAll` and `transfer` extensions to LibGDX `Array` using lambda predicates to modify the array in-place.
+- **[FEATURE]** (`ktx-collections`) Added `removeAll`, `retainAll` and `transfer` extensions to libGDX `Array` using lambda predicates to modify the array in-place.
 - **[CHANGE]** (`ktx-collections`) `PooledList` now implements `MutableIterable`.
 - **[FEATURE]** (`ktx-graphics`) Added `Batch.begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4`. 
 - **[FEATURE]** (`ktx-style`) Added `Skin` extension methods with reified resource types: `optional`, `add`, `remove`, `has` and `getAll`.
@@ -386,13 +421,13 @@ minor internal changes - `KWidget.storeActor` is now generic.
 
 #### 1.9.10-b1
 
-- **[UPDATE]** Updated LibGDX to 1.9.10.
+- **[UPDATE]** Updated libGDX to 1.9.10.
 - **[UPDATE]** Updated to Kotlin 1.3.41.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.3.0-RC2.
 - **[UPDATE]** Updated VisUI to 1.4.4.
 - **[UPDATE]** Updated to Gradle 5.5.1.
 - **[CHANGE]** (`ktx-app`) `clearScreen` now also clears depth buffer to support 3D applications.
-- **[FEATURE]** (`ktx-json`) Added a new KTX module with the goal of improving LibGDX `Json` API: `ktx-json`. The following extension methods were added to avoid passing Java class instances:
+- **[FEATURE]** (`ktx-json`) Added a new KTX module with the goal of improving libGDX `Json` API: `ktx-json`. The following extension methods were added to avoid passing Java class instances:
     - `fromJson`
     - `addClassTag`
     - `getTag`
@@ -412,7 +447,7 @@ minor internal changes - `KWidget.storeActor` is now generic.
 
 #### 1.9.9-b1
 
-- **[UPDATE]** Updated LibGDX to 1.9.9.
+- **[UPDATE]** Updated libGDX to 1.9.9.
 - **[UPDATE]** Updated to Kotlin 1.3.20.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.1.1.
 - **[UPDATE]** Updated VisUI to 1.4.2.
@@ -450,14 +485,14 @@ mutates it for consistency with `Action.parallelTo`. `parallelTo` now unwraps ac
 - **[CHANGE]** (`ktx-async`) Overhaul of the `ktx-async` module.
     - `KtxAsync` is now the main coroutines scope that should be used instead of the `GlobalScope`.
     - `Dispatchers.KTX` can be used to access a coroutines dispatcher that executes tasks on the main rendering thread.
-    - `AsyncExecutorDispatcher` can be used to wrap LibGDX `AsyncExecutor` to execute tasks asynchronously.
+    - `AsyncExecutorDispatcher` can be used to wrap libGDX `AsyncExecutor` to execute tasks asynchronously.
     - `newSingleThreadAsyncContext` allows to create an `AsyncExecutorDispatcher` with a single thread.
     - `newAsyncContext` allows to create an `AsyncExecutorDispatcher` with the given max amount of threads.
     - `onRenderingThread` suspends the coroutine to execute a task on the main rendering thread and return its result.
-    - `isOnRenderingThread` allows to check whether the corouting is executed on the main rendering thread.
+    - `isOnRenderingThread` allows to check whether the coroutine is executed on the main rendering thread.
     - `skipFrame` attempts to suspend the coroutine for at least one rendering frame.
     - `httpRequest` allows to perform an asynchronous HTTP request.
-    - `schedule` and `interval` functions simplify LibGDX `Timer` API usage.
+    - `schedule` and `interval` functions simplify libGDX `Timer` API usage.
     - `AssetStorage` and associated asset loading utilities were temporarily removed. They will be added to a separate module.
     - Asynchronous tests were **significantly** simplified.
     - Assume that other utilities were either removed or integrated with the listed utilities.
@@ -530,7 +565,7 @@ not exist anymore and now is available as `matrix * vector`.
 
 #### 1.9.8-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.8.
+- **[UPDATE]** Updated to libGDX 1.9.8.
 - **[UPDATE]** Updated to Kotlin 1.2.21.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.22.
 - **[UPDATE]** Updated to Gradle 4.4.
@@ -571,16 +606,16 @@ expressions.
 - **[FEATURE]** (`ktx-freetype-async`) Implemented `ktx-freetype-async` module.
   - `AssetStorage.registerFreeTypeFontLoaders` allows to register all loaders necessary to handle FreeType font assets.
   - `AssetStorage.loadFreeTypeFont` provides Kotlin DSL for asynchronous loading of FreeType fonts.
-- **[FIX]** (`ktx-box2d`) As LibGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
+- **[FIX]** (`ktx-box2d`) As libGDX 1.9.8 fixes its `ChainShape` implementation, `ChainShape` utilities are supported
 once again.
 
 #### 1.9.7-b1
 
-- **[UPDATE]** Updated LibGDX to 1.9.7.
+- **[UPDATE]** Updated libGDX to 1.9.7.
 - **[UPDATE]** Updated to Kotlin 1.1.51.
 - **[UPDATE]** Updated to Kotlin Coroutines 0.19.3.
 - **[UPDATE]** Updated to Gradle 4.3.
-- **[BUG]** (`ktx-box2d`) `ChainShape` does not work correctly in LibGDX 1.9.7, and hence is not supported in KTX.
+- **[BUG]** (`ktx-box2d`) `ChainShape` does not work correctly in libGDX 1.9.7, and hence is not supported in KTX.
 This might break existing applications.
 
 #### 1.9.6-b7
@@ -626,10 +661,10 @@ documentation for migration guide.
 
 #### 1.9.6-b4
 
-- **[FEATURE]** (`ktx-app`) Added `KtxGame`: **KTX** equivalent of LibGDX `Game`.
-- **[FEATURE]** (`ktx-app`) Added `KtxScreen`: adapter of the LibGDX `Screen` interface making all methods optional to implement.
+- **[FEATURE]** (`ktx-app`) Added `KtxGame`: **KTX** equivalent of libGDX `Game`.
+- **[FEATURE]** (`ktx-app`) Added `KtxScreen`: adapter of the libGDX `Screen` interface making all methods optional to implement.
 - **[FEATURE]** (`ktx-app`) Added `emptyScreen` utility method returning a no-op implementation of `Screen`.
-- **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return LibGDX collections.
+- **[FEATURE]** (`ktx-collections`) Added `map`, `filter` and `flatten` extension methods that return libGDX collections.
 - **[FEATURE]** (`ktx-collections`) `PooledList` now properly implements `hashCode` and `equals`.
 - **[FEATURE]** (`ktx-inject`) `Context` now implements `Disposable` and allows to dispose of all registered singletons and providers.
 - **[FEATURE]** (`ktx-inject`) Added `Context.remove` and `removeProvider` methods. Now providers for particular types can be removed without clearing the whole context.
@@ -676,7 +711,7 @@ global `Context` were removed.
 - **[FEATURE]** (`ktx-app`) Added `KtxApplicationAdapter` interface which makes implementing all of `ApplicationListener` methods optional.
 - **[FEATURE]** (`ktx-app`) Added `KtxInputAdapter` interface which makes implementing all of `InputProcessor` methods optional.
 - **[FEATURE]** (`ktx-app`) Added `use` inlined methods to `Batch` and `ShaderProgram`, allowing to omit `begin()` and `end()` calls.
-- **[FEATURE]** (`ktx-app`) Added `color` factory method to allow constructing LibGDX `Color` instances with named parameters.
+- **[FEATURE]** (`ktx-app`) Added `color` factory method to allow constructing libGDX `Color` instances with named parameters.
 - **[FEATURE]** (`ktx-app`) Added `Color.copy` extension method that allows to copy `Color` instances with optional
 overriding of chosen values.
 - **[CHANGE]** (`ktx-app`) `KotlinApplication#timeSinceLastRender` now has a protected default getter.
@@ -686,18 +721,18 @@ will be removed in the next release.
 extension methods to `AssetManager` to provide an alternative to equivalent utility functions using static manager instance.
 - **[FEATURE]** (`ktx-assets`) Added `getLoader` and `setLoader` extension methods to `AssetManager` for `AssetLoader` handling.
 - **[FEATURE]** (`ktx-async`) Implemented a new KTX module with multi-threaded operations utilities: `ktx-async`.
-  - Implemented coroutines context using LibGDX threading model: `KtxAsync`. It resumes suspending operations on the
+  - Implemented coroutines context using libGDX threading model: `KtxAsync`. It resumes suspending operations on the
     main rendering thread with `Gdx.app.postRunnable` utility. It has to be initiated on the main thread with
     `enableKtxCoroutines`.
   - Added utility `ktxAsync` function which launches non-blocking coroutine using `KtxAsync` context.
   - Added `skipFrame` method that suspends the coroutine and resumes it on the next frame using `Gdx.app.postRunnable`.
   - Added `delay` method that offers non-blocking coroutine suspensions for the given period of time.
-  - Added `httpRequest` method that performs asynchronous suspending HTTP request using LibGDX `Net` API.
+  - Added `httpRequest` method that performs asynchronous suspending HTTP request using libGDX `Net` API.
   - Added `asynchronous` method, which allows to perform suspending operations on a separate thread.
   - `schedule` and `interval` utility methods added to ease the use of `com.badlogic.gdx.utils.Timer` API.
   - Added `HttpRequestResult`: a thread-safe `HttpResponse` wrapper that addresses [libgdx#4700](https://github.com/libgdx/libgdx/issues/4700).
-- **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to LibGDX `Array`.
-- **[FEATURE]** (`ktx-collections`) Added type aliases to LibGDX collections to avoid name collisions with standard library:
+- **[FEATURE]** (`ktx-collections`) Added `sortDescending`, `sortBy` and `sortByDescending` utility methods to libGDX `Array`.
+- **[FEATURE]** (`ktx-collections`) Added type aliases to libGDX collections to avoid name collisions with standard library:
   - **`GdxArray`**: `com.badlogic.gdx.utils.Array`
   - **`GdxIntArray`**: `com.badlogic.gdx.utils.IntArray`
   - **`GdxFloatArray`**: `com.badlogic.gdx.utils.FloatArray`
@@ -708,9 +743,9 @@ extension methods to `AssetManager` to provide an alternative to equivalent util
   - **`GdxSet`**: `com.badlogic.gdx.utils.ObjectSet`
   - **`GdxMap`**: `com.badlogic.gdx.utils.ObjectMap`
   - **`GdxList`**: `ktx.collections.PooledList`
-- **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of LibGDX arrays are now inlined.
+- **[FEATURE]** (`ktx-collections`) `lastIndex` extension properties of libGDX arrays are now inlined.
 - **[FEATURE]** (`ktx-collections`) Added `component1()` and `component2()` operator extension methods to `Entry` classes
-of LibGDX maps to support destructing syntax and simplify iteration.
+of libGDX maps to support destructing syntax and simplify iteration.
 - **[CHANGE]** (`ktx-i18n`) Static `I18NBundle` instance container was deprecated. Static access to `I18NBundle` will be
 removed in the next release.
 - **[CHANGE]** (`ktx-inject`) Static `Context` instance container was deprecated. Static access to `Context` will be
@@ -738,16 +773,16 @@ added to all parental actors.
 
 #### 1.9.6-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.6.
+- **[UPDATE]** Updated to libGDX 1.9.6.
 - **[UPDATE]** Updated to Kotlin 1.1.0.
-- **[FEATURE]** (`ktx-collections`) Added null-safe `size()` method to LibGDX `IntArray`, `FloatArray` and `BooleanArray`
+- **[FEATURE]** (`ktx-collections`) Added null-safe `size()` method to libGDX `IntArray`, `FloatArray` and `BooleanArray`
 collections.
-- **[FEATURE]** (`ktx-collections`) Added null-safe extension property `lastIndex` to LibGDX `ArrayList` equivalents:
+- **[FEATURE]** (`ktx-collections`) Added null-safe extension property `lastIndex` to libGDX `ArrayList` equivalents:
 `Array`, `IntArray`, `FloatArray` and `BooleanArray`.
 
 #### 1.9.5-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.5.
+- **[UPDATE]** Updated to libGDX 1.9.5.
 
 #### 1.9.4-b2
 
@@ -764,7 +799,7 @@ collections.
 
 #### 1.9.4-b1
 
-- **[UPDATE]** Updated to LibGDX 1.9.4.
+- **[UPDATE]** Updated to libGDX 1.9.4.
 - **[FEATURE]** (`ktx-actors`) Implemented `ktx-actors` module.
   - `isShown`, `centerPosition`, `setKeyBoardFocus` and `setScrollFocus` extension methods for `Actor`.
   - `contains` operator extension method of `Group` and `Stage` supporting `actor in group` syntax.
@@ -808,8 +843,8 @@ collections.
   - `inject` and `provider` functions allow to extract instances and providers of selected type from the global `Context`.
   - `register` allows to add singletons and providers to the global `Context`.
 - **[FEATURE]** (`ktx-log`) Implemented `ktx-log` module.
-  - `debug`, `info` and `error` functions allow to log data with the LibGDX logging API.
-  - `logger` factory function provides instances of the KTX `Logger` that wraps LibGDX logging API.
+  - `debug`, `info` and `error` functions allow to log data with the libGDX logging API.
+  - `logger` factory function provides instances of the KTX `Logger` that wraps libGDX logging API.
 - **[FEATURE]** (`ktx-math`) Implemented `ktx-math` module.
   - `vec2`, `vec3`, `mat3` and `mat4` factory methods for `Vector2`, `Vector3`, `Matrix3` and `Matrix4` respectively.
   - `+`, `-`, `*`, `/`, `-`, `++`, `--`, `<`, `>`, `<=`, `>=` operators support for `Vector2` and `Vector3`.

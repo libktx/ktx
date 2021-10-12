@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ObjectMap
  * screens, without locking into [Screen].
  *
  * @param firstScreen will be immediately used by the application. Note that it cannot use any resources initiated by
- * the LibGDX (like the OpenGL context) in the constructor, as the screen will be created before the application is
+ * the libGDX (like the OpenGL context) in the constructor, as the screen will be created before the application is
  * launched. Defaults to an empty, mock-up screen implementation that should be replaced with the first [setScreen]
  * method call in [create]. Note: `firstScreen` still has to be explicitly registered with [addScreen] if you want it to
  * be accessible with [getScreen].
@@ -176,9 +176,9 @@ open class KtxGame<ScreenType : Screen>(
   open fun <Type : ScreenType> containsScreen(type: Class<Type>): Boolean = screens.containsKey(type)
 
   /**
-   * Disposes of all registered screens with [Screen.dispose]. Catches thrown errors and logs them with LibGDX
+   * Disposes of all registered screens with [Screen.dispose]. Catches thrown errors and logs them with libGDX
    * application API by default. Override [onScreenDisposalError] method to change error handling behavior. Should be
-   * called automatically by LibGDX application lifecycle handler.
+   * called automatically by libGDX application lifecycle handler.
    */
   override fun dispose() {
     screens.values().forEach {

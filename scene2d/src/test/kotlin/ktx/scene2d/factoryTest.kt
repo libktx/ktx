@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * Tests [RootWidget] factory methods for actors that are usually added directly to a stage.
  * Leverages [scene2d], as it implements [RootWidget] and does not modify the created actors.
  */
-class RootActorFactoriesTest : NeedsLibGDX() {
+class RootActorFactoriesTest : ApplicationTest() {
   @Test
   fun `should create Window`() {
     val window = scene2d.window(title = "test")
@@ -87,7 +87,7 @@ class RootActorFactoriesTest : NeedsLibGDX() {
 /**
  * Tests factory methods without init blocks.
  */
-class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
+class NoInitBlockActorFactoriesTest : ApplicationTest() {
   private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<*>.() -> T?) {
     // Using a parental widget that allows to use invoke actors' factory methods:
     val parent = scene2d.table()
@@ -256,7 +256,7 @@ class NoInitBlockActorFactoriesTest : NeedsLibGDX() {
 /**
  * Tests inlined factory methods with init blocks.
  */
-class InlinedInitBlockActorFactoriesTest : NeedsLibGDX() {
+class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
   /**
    * Tests and showcases how generic [KWidget] API - and its additional inlined methods - give access to specific actor
    * storage objects like [Cell] or [Node] through init block parameter.

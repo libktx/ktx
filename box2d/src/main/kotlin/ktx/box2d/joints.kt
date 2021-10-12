@@ -240,7 +240,7 @@ inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> U
     body,
     RopeJointDef().apply {
       // Rope joint anchors are initiated with unexpected defaults (might be incompatible with user's Box2D world scale).
-      // Clearing LibGDX defaults:
+      // Clearing libGDX defaults:
       localAnchorA.set(0f, 0f)
       localAnchorB.set(0f, 0f)
     },

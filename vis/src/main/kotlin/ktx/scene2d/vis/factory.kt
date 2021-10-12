@@ -265,7 +265,7 @@ inline fun <I> KWidget<*>.visList(
 }
 
 /**
- * @param items optional LibGDX array of list widget items. Defaults to null.
+ * @param items optional libGDX array of list widget items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @return a [VisList] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.
@@ -310,7 +310,7 @@ inline fun <S> KWidget<S>.visProgressBar(
 }
 
 /**
- * @param items optional LibGDX array of the [VisSelectBox] items. Defaults to null.
+ * @param items optional libGDX array of the [VisSelectBox] items. Defaults to null.
  * @param style name of the widget style. Defaults to [defaultStyle].
  * @return a [VisSelectBox] instance added to this group.
  * @param I type of items stored by this widget. Usually items are converted to string and displayed.

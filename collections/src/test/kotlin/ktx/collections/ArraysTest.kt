@@ -10,7 +10,7 @@ import org.junit.Test
 import java.util.LinkedList
 
 /**
- * Tests utilities for LibGDX custom ArrayList equivalent - Array.
+ * Tests utilities for libGDX custom ArrayList equivalent - Array.
  */
 class ArraysTest {
   @Test
@@ -111,10 +111,34 @@ class ArraysTest {
   }
 
   @Test
+  fun `should verify empty status contract`() {
+    fun getArray(): GdxArray<Any>? {
+      return GdxArray.with("1")
+    }
+
+    val array = getArray()
+    if (!array.isEmpty()) {
+      assertTrue(array.size == 1)
+    }
+  }
+
+  @Test
   fun `should report non empty status`() {
     assertTrue(GdxArray.with("1", "2", "3").isNotEmpty())
     assertFalse(GdxArray<Any>().isNotEmpty())
     assertFalse((null as GdxArray<Any>?).isNotEmpty())
+  }
+
+  @Test
+  fun `should verify non empty status contract`() {
+    fun getArray(): GdxArray<Any>? {
+      return GdxArray.with("1")
+    }
+
+    val array = getArray()
+    if (array.isNotEmpty()) {
+      assertTrue(array.size == 1)
+    }
   }
 
   @Test
@@ -372,13 +396,13 @@ class ArraysTest {
     val array = GdxArray.with("1")
     val identityCheck = false // Will compare with equals(Object).
 
-    assertTrue(array.contains("1", identityCheck)) // Standard LibGDX API.
+    assertTrue(array.contains("1", identityCheck)) // Standard libGDX API.
     assertTrue("1" in array)
     assertTrue(array.contains("1")) // Operator method alias.
 
     array.removeValue("1", identityCheck)
 
-    assertFalse(array.contains("1", identityCheck)) // Standard LibGDX API.
+    assertFalse(array.contains("1", identityCheck)) // Standard libGDX API.
     assertFalse("1" in array)
     assertFalse(array.contains("1"))
   }
