@@ -2,6 +2,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Gradle 7.2.
 - **[UPDATE]** Updated to Dokka 1.5.30.
 - **[FEATURE]** (`ktx-app`) Added `Platform` object that exposes various utilities for platform-specific code.
   - `Platform.currentPlatform` returns current `ApplicationType` or throws `GdxRuntimeException` if unable to determine.
