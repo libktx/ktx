@@ -21,7 +21,13 @@ extensions.
 Before using `ktx-async`, make sure to include the Kotlin coroutines library in your Gradle script:
 
 ```groovy
-compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: coroutinesVersion
+// Groovy DSL:
+api group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: coroutinesVersion
+```
+
+```kotlin
+// Kotlin DSL:
+api(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = coroutinesVersion)
 ```
 
 The `coroutinesVersion` _must_ match the coroutines version that the `ktx-async` library was compiled against -

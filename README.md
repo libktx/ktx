@@ -66,7 +66,7 @@ in libGDX projects by default.
 All libraries follow the same naming schema:
 
 ```groovy
-compile "io.github.libktx:$module:$ktxVersion"
+api "io.github.libktx:$module:$ktxVersion"
 ```
 
 Replace `$module` with the name of the selected **KTX** library (see the table above).
@@ -75,13 +75,25 @@ For example, including the [app](app) module with the `ktx-app` identifier would
 in your `build.gradle` file:
 
 ```groovy
+// Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
   ktxVersion = '1.10.0-b3'
 }
 
 dependencies {
-  compile "io.github.libktx:ktx-app:$ktxVersion"
+  api group: 'io.github.libktx', name: 'ktx-app', version: ktxVersion
+}
+```
+
+```kotlin
+// Kotlin DSL:
+
+// Update this version to match the latest KTX release:
+val ktxVersion = "1.10.0-b3"
+
+dependencies {
+  api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
 }
 ```
 
@@ -124,6 +136,7 @@ to the `https://oss.sonatype.org/content/repositories/snapshots/` repository. To
 the following Maven repository, and modify the prefix of `ktxVersion` to `-SNAPSHOT`:
 
 ```groovy
+// Groovy DSL:
 repositories {
   // Include your other repositories here.
   maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -133,6 +146,17 @@ ext {
   // Update this version to match the latest libGDX release:
   ktxVersion = '1.10.0-SNAPSHOT'
 }
+```
+
+```kotlin
+// Kotlin DSL:
+repositories {
+  // Include your other repositories here.
+  maven("https://oss.sonatype.org/content/repositories/snapshots/")
+}
+
+// Update this version to match the latest libGDX release:
+val ktxVersion = "1.10.0-SNAPSHOT"
 ```
 
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)
