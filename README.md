@@ -177,7 +177,7 @@ Browse through the directories in the root folder to find out more about each li
 All functionalities are documented with Kotlin _KDocs_. You can access the source documentation by:
 
 - Viewing the generated Dokka files hosted on the [project website](https://libktx.github.io/docs/).
-- Extracting the `doc` folders with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
+- Extracting the `doc` folders with Dokka files from the [release archives](https://github.com/libktx/ktx/releases).
 - Reading the sources directly.
 
 ### Links
