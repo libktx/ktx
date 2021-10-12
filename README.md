@@ -78,7 +78,7 @@ in your `build.gradle` file:
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.10.0-b3'
+  ktxVersion = '1.10.0-b4'
 }
 
 dependencies {
@@ -90,7 +90,7 @@ dependencies {
 // Kotlin DSL:
 
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.10.0-b3"
+val ktxVersion = "1.10.0-b4"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
