@@ -2,6 +2,18 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.
+  - `evaluate(String)`: compiles and executes a script passed as a string.
+  - `evaluate(FileHandle)`: compiles and executes a script from the selected file.
+  - `evaluateAs<T>(String)`: compiles and executes a script passed as a string. Casts the result to `T`.
+  - `evaluateAs<T>(FileHandle)`: compiles and executes a script from the selected file. Casts the result to `T`.
+  - `set(String, Any)`: adds a variable to the script execution context.
+  - `get(String)`: returns the current value assigned to the selected variable.
+  - `remove(String)`: removes the variable registered under the given name.
+  - `import(String, String?)`: adds an import to the script context. Accepts optional alias.
+  - `importAll(vararg String)`, `importAll(Iterable<String>)`: adds the selected imports to the script context.
+  - `setPackage(String)`: sets the package for the scripts.
+
 #### 1.10.0-b4
 
 - **[UPDATE]** Updated to Gradle 7.2.

@@ -115,6 +115,8 @@ should generally consist of the following sections:
   - README.md
 ```
 
+- Include the module in the listing in the main [`README.md`](../README.md) file.
+
 ## Maintenance
 
 The following sections are for the maintainers of the repository.

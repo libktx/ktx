@@ -15,15 +15,15 @@ utilities and extensions for selected parts of libGDX with poor Kotlin support.
 
 Examples of Kotlin language features used to improve usability, performance, and readability of libGDX include:
 
-* *Operator overloads* for collections and mathematical operations.
-* *Extension methods* improving original libGDX APIs without the use of inheritance.
-* *Inline methods* with reduced runtime overhead for various listeners, builders, and loggers.
-* *Nullable types* which improve typing information of selected interfaces and functions.
-* *Default parameters* reducing boilerplate code.
-* *Type-safe builders* for GUI, styling, and physics engine.
-* *Default interface methods* for common interfaces, simplifying their implementations.
-* *Coroutines context* providing concurrency utilities and non-blocking asset loading.
-* *Reified types* that simplify usage of methods normally consuming `Class` parameters.
+- *Operator overloads* for collections and mathematical operations.
+- *Extension methods* improving original libGDX APIs without the use of inheritance.
+- *Inline methods* with reduced runtime overhead for various listeners, builders, and loggers.
+- *Nullable types* which improve typing information of selected interfaces and functions.
+- *Default parameters* reducing boilerplate code.
+- *Type-safe builders* for GUI, styling, and physics engine.
+- *Default interface methods* for common interfaces, simplifying their implementations.
+- *Coroutines context* providing concurrency utilities and non-blocking asset loading.
+- *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
 See the [_Choosing **KTX**_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
 
@@ -53,6 +53,7 @@ Module | Description
 [`ktx-preferences`](preferences) | Improved API for accessing and saving [preferences](https://github.com/libgdx/libgdx/wiki/Preferences).
 [`ktx-reflect`](reflect) | Utilities for libGDX [reflection API](https://github.com/libgdx/libgdx/wiki/Reflection).
 [`ktx-scene2d`](scene2d) | Type-safe Kotlin builders for [`Scene2D`](https://github.com/libgdx/libgdx/wiki/Scene2d) GUI.
+[`ktx-script`](script) | Kotlin scripting engine for desktop applications.
 [`ktx-style`](style) | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [`ktx-tiled`](tiled) | Utilities for [Tiled](https://www.mapeditor.org/) maps.
 [`ktx-vis`](vis) | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).
