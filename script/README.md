@@ -20,7 +20,7 @@ Returns the last expression from the script as `Any?`.
 - `evaluateAs<T>(String)`: compiles and executes a script passed as a string.
 Returns the last expression from the script as `T`. Throws `ClassCastException` if the result does not match `T` type.
 - `evaluateAs<T>(FileHandle)`: compiles and executes a script from the selected file.
-Returns the last expression from the script as `Any?`. Throws `ClassCastException` if the result does not match `T` type.
+Returns the last expression from the script as `T`. Throws `ClassCastException` if the result does not match `T` type.
 
 - `set(String, Any)`: adds a variable to the script execution context.
 The variable will be available in the scripts under the given name.
@@ -44,20 +44,25 @@ scripting engine, override this dependency in your Gradle or Maven setup.
 Performance improves with subsequent script evaluations, but it is still not on par with
 precompiled Kotlin.
 * **Script package can only be chosen once.** As of Kotlin 1.5.31, if multiple scripts define `package`,
-or if the package was already set with `KotlinScriptEngine.setPackage`, it cannot be overridden.
+or if the package was already set with `KotlinScriptEngine.setPackage`, it cannot be overridden. Once the package
+is set, all scripts will be executed from the same package, even if they attempt to override it.
 * **Lambdas cannot be set as script variables directly.**
 Instead, define lambdas or functions in the global scope and import them, or pass objects with lambda variables.
-* **Lambdas cannot be returned by the scripts.** Pass objects instead.
-Returned objects can have lambda variables.
+* **Lambdas cannot be returned by the scripts directly.** Pass objects instead.
+Note that returned objects can have lambda variables.
+* **Defined variables stay in the script scope.** While you can declare a top-level `val` or `var` that will be
+available for all future scripts, their values cannot be retrieved with `KotlinScriptEngine.get`. Instead, they
+have to be returned as script results, or otherwise passed outside the script context.
 * **IDE support for scripts might not be complete.** If you specify variables, imports, or package using
 the engine instance, IDE might not be able to pick them up without additional setup.
 * **Scripts might be unable to infer the generic types.** Avoid passing generic objects as variables to the scripts.
+* **Targets Java 8.** Using newer language features might result in exceptions.
 
 #### Advantages over using `ScriptEngine` directly
 
 * Explicit Kotlin types with nullability info.
 * `FileHandle` support.
-* Imports and package setters.
+* Import and package setters.
 
 Note that this module uses JSR-223 `ScriptEngine` internally. For more customization options,
 use the experimental scripting engine from the `org.jetbrains.kotlin:kotlin-scripting-jvm-host` package.
