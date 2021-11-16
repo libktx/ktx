@@ -2,6 +2,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.6.0.
 - **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.
   - `evaluate(String)`: compiles and executes a script passed as a string.
   - `evaluate(FileHandle)`: compiles and executes a script from the selected file.
