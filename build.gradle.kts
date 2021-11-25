@@ -28,7 +28,6 @@ plugins {
   java
   distribution
   id("io.codearte.nexus-staging") version "0.22.0"
-  id("org.jetbrains.kotlinx.kover") version "0.4.2"
 }
 
 repositories {
