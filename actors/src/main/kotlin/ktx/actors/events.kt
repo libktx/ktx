@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyDown
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyUp
 import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -83,6 +84,20 @@ inline fun <T : Actor> T.onClickEvent(
 ): ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, x, y)
+  }
+  addListener(clickListener)
+  return clickListener
+}
+
+/**
+ * Attaches a [ClickListener] to this tree.
+ * @param lsitener invoked each time a node in this tree is clicked. Consumes the triggered [InputEvent] and the
+ * [Tree] the listener was originally attached to as `this`. The received Node is the node that was clicked.
+ * @return [ClickListener] instance.
+ */
+inline fun <T : Tree<*, *>> T.onItemClick(crossinline listener: ((Tree.Node<*, *, *>) -> Unit)): ClickListener {
+  val clickListener = object : ClickListener() {
+    override fun clicked(event: InputEvent?, x: Float, y: Float) = listener(selectedNode)
   }
   addListener(clickListener)
   return clickListener

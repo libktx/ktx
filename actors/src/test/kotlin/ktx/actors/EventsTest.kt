@@ -8,10 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyUp
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchDown
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchUp
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.keyboard
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scroll
+import io.kotlintest.mock.mock
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -77,6 +79,19 @@ class EventsTest {
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
+  }
+
+  @Test
+  fun `should attach ClickListener to a Tree consuming InputEvent with clicked Node`() {
+    val style = mock<Tree.TreeStyle>()
+    style.plus = mock()
+    style.minus = mock()
+    val tree = Tree<Tree.Node<*, *, *>, Any>(style)
+
+    val listener = tree.onItemClick { }
+
+    assertNotNull(listener)
+    assertTrue(listener in tree.listeners)
   }
 
   @Test
