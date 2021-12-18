@@ -44,8 +44,8 @@ call `vec in rect` (or `vec !in rect`) to check if the rectangle contains (or do
 #### `ImmutableVector2`
 
 - `ImmutableVector2` is an immutable equivalent to `Vector2`. It provides most of the functionality of `Vector2`, but
-mutation methods return new vectors instead of mutate the reference.
-- Note that one may want to create type aliases to make the usage more concise: `typealias Vect2 = ImmutableVector2`
+mutation methods return new vectors instead of mutating the objects.
+- Note that one may want to create type aliases to make the usage more concise: `typealias Vect2 = ImmutableVector2`.
 - `ImmutableVector` is comparable (`>`, `>=`, `<`, `<=` are available). Comparison is evaluated by length.
 - Instances can be destructed: `val (x, y) = vector2`.
 - `Vector2.toImmutable()` Returns an immutable vector with same `x` and `y` attributes than this `Vector2`
