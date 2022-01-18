@@ -6,7 +6,7 @@ Utilities and extension function for libGDX preferences.
 
 ### Why?
 
-Unfortunately, libGDX [`Preferences`](https://github.com/libgdx/libgdx/wiki/Preferences) do not provide a consistent
+Unfortunately, libGDX [`Preferences`](https://libgdx.com/wiki/preferences) do not provide a consistent
 API for setting and getting values, and they do not support Kotlin operators either. Since in principle
 `Preferences` work very similarly to a `Map`, ideally they should support a similar syntax -
 especially since in Kotlin you can take advantage of the square bracket operators.
@@ -16,8 +16,8 @@ especially since in Kotlin you can take advantage of the square bracket operator
 - Values can be set and read via the new `set` and `get` operators using the square bracket (`[]`) syntax.
 It is no longer necessary to call type specific methods like `putString` or `getBoolean` for
 each type separately. `set` and `get` support objects of any type. If the type is not of `String`, `Boolean`,
-`Int`, `Float`, `Double` or `Long` type, the value is stored and retrieved using 
-[JSON](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON) serialization.
+`Int`, `Float`, `Double` or `Long` type, the value is stored and retrieved using
+[JSON](https://libgdx.com/wiki/utils/reading-and-writing-json) serialization.
   - Note that `Double` type is not supported by libGDX `Preferences` and converted to `Float`
   instead. Use explicit casts (`toFloat()`) or wrap the value with a JSON-serializable object
   when storing numbers that do not fit in a `Float`.
@@ -73,7 +73,7 @@ import ktx.preferences.*
 
 /**
  * This class will be serialized.
- * 
+ *
  * Remember to add default values for each variable,
  * so the class remains JSON-serializable!
  */
@@ -120,7 +120,7 @@ fun saveInPreferencesWithFlush(
     this["SomeFloat"] = float
     this["SomeBoolean"] = bool
     this["SomeInt"] = int
-    this["SomeLong"] = long 
+    this["SomeLong"] = long
     // preferences.flush() will be called automatically after this block.
   }
 }
@@ -162,5 +162,5 @@ fun addPreferencesUsingKotlinPairs(preferences: Preferences) {
 
 ### Additional documentation
 
-- [Official libGDX `Preferences` article](https://github.com/libgdx/libgdx/wiki/Preferences).
-- [Official libGDX `Json` article](https://github.com/libgdx/libgdx/wiki/Reading-and-writing-JSON).
+- [Official libGDX `Preferences` article](https://libgdx.com/wiki/preferences).
+- [Official libGDX `Json` article](https://libgdx.com/wiki/utils/reading-and-writing-json).

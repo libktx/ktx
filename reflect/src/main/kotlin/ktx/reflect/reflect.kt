@@ -26,7 +26,7 @@ solely by reflection must be listed in the robovm.xml file within
 the ForceLinkClasses section in order to work on iOS.
 
 Further reading:
-* https://github.com/libgdx/libgdx/wiki/Reflection
+* https://libgdx.com/wiki/utils/reflection
 * https://kotlinlang.org/docs/opt-in-requirements.html
 """
 )

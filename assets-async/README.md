@@ -966,7 +966,7 @@ and fully compatible with coroutines. It offers superior performance and better 
 should be used instead only as an intermediate step during migration from an `AssetManager` to the `AssetStorage`, or
 if an `AssetManager` is strictly required by an otherwise incompatible third-party API.
 
-`AsyncAssetManager` supports all features of the [`AssetManager`](https://github.com/libgdx/libgdx/wiki/Managing-your-assets).
+`AsyncAssetManager` supports all features of the [`AssetManager`](https://libgdx.com/wiki/managing-your-assets).
 The main difference is that `loadAsync` should be used over the standard `load` methods whenever you need a reference to
 the loaded asset or need full control over its error handling.
 
@@ -1130,7 +1130,7 @@ There seem to be no other coroutines-based asset loaders available.
 However, libGDX `AssetManager` is still viable when efficient parallel loading is not a requirement.
 Alternatives to the `AssetStorage` and `AsyncAssetManager` include:
 
-- Using [`AssetManager`](https://github.com/libgdx/libgdx/wiki/Managing-your-assets) directly.
+- Using [`AssetManager`](https://libgdx.com/wiki/managing-your-assets) directly.
 - Using [`ktx-assets`](../assets) extensions for `AssetManager`.
 - [`AnnotationAssetManager`](https://bitbucket.org/dermetfan/libgdx-utils/wiki/net.dermetfan.gdx.assets.AnnotationAssetManager)
 from [`libgdx-utils`](https://bitbucket.org/dermetfan/libgdx-utils) that extends `AssetManager` and allows
@@ -1140,4 +1140,4 @@ specifying assets for loading by marking fields with annotations.
 #### Additional documentation
 
 - [`ktx-async` module](../async), which is used extensively by this extension.
-- [Official libGDX `AssetManager` article.](https://github.com/libgdx/libgdx/wiki/Managing-your-assets)
+- [Official libGDX `AssetManager` article.](https://libgdx.com/wiki/managing-your-assets)

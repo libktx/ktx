@@ -231,4 +231,4 @@ If cross-platform compatibility is not a concern, Kotlin and Java reflection API
 
 #### Additional documentation
 
-- [Official reflection article.](https://github.com/libgdx/libgdx/wiki/Reflection)
+- [Official reflection article.](https://libgdx.com/wiki/utils/reflection)

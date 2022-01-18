@@ -61,7 +61,7 @@ existing `.properties` bundle:
 
 ```groovy
 task nls << {
-  def project = 'core'             // Will contain generated enum class. 
+  def project = 'core'             // Will contain generated enum class.
   def source = 'src/main/kotlin'   // Kotlin source path of the project.
   def pack = 'com.your.company'    // Enum target package.
   def name = 'Nls'                 // Enum class name.
@@ -193,4 +193,4 @@ libGDX `I18NBundle` API. However, it requires creating views with HTML-like temp
 
 #### Additional documentation
 
-- [`I18NBundle` article.](https://github.com/libgdx/libgdx/wiki/Internationalization-and-Localization)
+- [`I18NBundle` article.](https://libgdx.com/wiki/internationalization-and-localization)
