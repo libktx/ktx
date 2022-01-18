@@ -145,7 +145,7 @@ class LetterboxingViewport(
 
   private companion object {
     private fun isMobile() = Gdx.app.type == Android || Gdx.app.type == iOS
-    internal val defaultTargetPpi: Float
+    private val defaultTargetPpi: Float
       get() = if (isMobile()) 160f else 96f
   }
 }

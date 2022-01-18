@@ -20,6 +20,7 @@ data class Extension(val a: String, val b: String) : Tested() {
   @Suppress("unused")
   fun test(c: String): String = a + b + c
 }
+@Suppress("unused")
 class Container(@JvmField val field: String)
 enum class Enum { RED, BLUE }
 
@@ -404,8 +405,10 @@ class ReflectTest {
     // When:
     val fields = reflectedClass.fields
 
-    // Then:
-    assertEquals(0, fields.size)
+    // Then: should not find private backing fields:
+    val fieldNames = fields.map { it.name }.toSet()
+    assertFalse("a" in fieldNames)
+    assertFalse("b" in fieldNames)
   }
 
   @Test
@@ -417,7 +420,9 @@ class ReflectTest {
     val fields = reflectedClass.declaredFields
 
     // Then: should return custom fields plus internal field.
-    assertEquals(2 + 1, fields.size)
+    val fieldNames = fields.map { it.name }.toSet()
+    assertTrue("a" in fieldNames)
+    assertTrue("b" in fieldNames)
   }
 
   @Test
