@@ -25,6 +25,7 @@ include(
   "preferences",
   "reflect",
   "scene2d",
+  "script",
   "style",
   "tiled",
   "vis",

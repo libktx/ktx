@@ -1,5 +1,5 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.5.31-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.6.10-orange.svg)](http://kotlinlang.org/)
 [![libGDX](https://img.shields.io/badge/libgdx-1.10.0-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -15,15 +15,15 @@ utilities and extensions for selected parts of libGDX with poor Kotlin support.
 
 Examples of Kotlin language features used to improve usability, performance, and readability of libGDX include:
 
-* *Operator overloads* for collections and mathematical operations.
-* *Extension methods* improving original libGDX APIs without the use of inheritance.
-* *Inline methods* with reduced runtime overhead for various listeners, builders, and loggers.
-* *Nullable types* which improve typing information of selected interfaces and functions.
-* *Default parameters* reducing boilerplate code.
-* *Type-safe builders* for GUI, styling, and physics engine.
-* *Default interface methods* for common interfaces, simplifying their implementations.
-* *Coroutines context* providing concurrency utilities and non-blocking asset loading.
-* *Reified types* that simplify usage of methods normally consuming `Class` parameters.
+- *Operator overloads* for collections and mathematical operations.
+- *Extension methods* improving original libGDX APIs without the use of inheritance.
+- *Inline methods* with reduced runtime overhead for various listeners, builders, and loggers.
+- *Nullable types* which improve typing information of selected interfaces and functions.
+- *Default parameters* reducing boilerplate code.
+- *Type-safe builders* for GUI, styling, and physics engine.
+- *Default interface methods* for common interfaces, simplifying their implementations.
+- *Coroutines context* providing concurrency utilities and non-blocking asset loading.
+- *Reified types* that simplify usage of methods normally consuming `Class` parameters.
 
 See the [_Choosing **KTX**_](https://github.com/libktx/ktx/wiki/Choosing-KTX) article for pros and cons of this framework.
 
@@ -53,6 +53,7 @@ Module | Description
 [`ktx-preferences`](preferences) | Improved API for accessing and saving [preferences](https://libgdx.com/wiki/preferences).
 [`ktx-reflect`](reflect) | Utilities for libGDX [reflection API](https://libgdx.com/wiki/utils/reflection).
 [`ktx-scene2d`](scene2d) | Type-safe Kotlin builders for [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI.
+[`ktx-script`](script) | Kotlin scripting engine for desktop applications.
 [`ktx-style`](style) | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.
 [`ktx-tiled`](tiled) | Utilities for [Tiled](https://www.mapeditor.org/) maps.
 [`ktx-vis`](vis) | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).
@@ -177,7 +178,7 @@ Browse through the directories in the root folder to find out more about each li
 All functionalities are documented with Kotlin _KDocs_. You can access the source documentation by:
 
 - Viewing the generated Dokka files hosted on the [project website](https://libktx.github.io/docs/).
-- Extracting the `doc` folders with Dokka files from [release archives](https://github.com/libktx/ktx/releases).
+- Extracting the `doc` folders with Dokka files from the [release archives](https://github.com/libktx/ktx/releases).
 - Reading the sources directly.
 
 ### Links
