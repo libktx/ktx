@@ -312,4 +312,4 @@ HTML-inspired syntax.
 
 #### Additional documentation
 
-- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
+- [Scene2D UI article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui)

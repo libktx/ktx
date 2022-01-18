@@ -160,7 +160,7 @@ fun create() {
     // Will construct a new instance of MyDependency with reflection
     // each time it is requested:
     bind<MyDependency>()
-    
+
     // Will construct a single instance of MyClass with MyDependency
     // taken from Context:
     bindSingleton<MyClass>()
@@ -200,7 +200,7 @@ class Container: Disposable {
   }
 
   override fun dispose() {
-+   context.remove<Container>() 
++   context.remove<Container>()
     context.dispose()
   }
 }
@@ -270,4 +270,4 @@ obviously expected to be more efficient.
 
 #### Additional documentation
 
-- [Official reflection article.](https://github.com/libgdx/libgdx/wiki/Reflection)
+- [Official reflection article.](https://libgdx.com/wiki/utils/reflection)

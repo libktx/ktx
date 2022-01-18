@@ -113,7 +113,7 @@ fun createMenu(stage: Stage) {
       }
     }
   }
-  menu.showMenu(stage, 0f, 0f) 
+  menu.showMenu(stage, 0f, 0f)
 }
 ```
 
@@ -357,8 +357,8 @@ Additionally to changes that apply to `ktx-scene2d`, `ktx-vis` was rewritten to 
 Notable changes include:
 
 * All factory methods for VisUI widgets are now inlined.
-* `vis` prefix was added to the names of some VisUI widget factory methods to avoid clashes with Scene2D 
-and better reflect the widget class names. A complete list is available in the change log. 
+* `vis` prefix was added to the names of some VisUI widget factory methods to avoid clashes with Scene2D
+and better reflect the widget class names. A complete list is available in the change log.
 * Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
 `multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
 created or can be defined as nested children with the same DSL.
@@ -383,6 +383,6 @@ first-class Kotlin support and the flexibility of a programming language.
 #### Additional documentation
 
 - [VisUI wiki.](https://github.com/kotcrab/vis-editor/wiki/VisUI)
-- [Scene2D article.](https://github.com/libgdx/libgdx/wiki/Scene2d)
-- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
-- [`Table` article.](https://github.com/libgdx/libgdx/wiki/Table)
+- [Scene2D article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d)
+- [Scene2D UI article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui)
+- [`Table` article.](https://libgdx.com/wiki/graphics/2d/scene2d/table)

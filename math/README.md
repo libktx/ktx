@@ -60,7 +60,7 @@ mutation methods return new vectors instead of mutating the objects.
   - `withAngleDeg()` and `withAngleRad` replace `setAngle` and `setAngleRad` and return a new vector of same length and
   the given angle to x-axis.
   - `cpy` is deprecated and is not necessary. Immutable vectors can be safely shared. However, since `ImmutableVector` is
-  a `data class`, there is a `copy(x, y)` method available allowing to easily create new vectors based on existing ones. 
+  a `data class`, there is a `copy(x, y)` method available allowing to easily create new vectors based on existing ones.
   - `set(x, y)` and `setZero()` are not provided.   
   - Functions dealing with angles in degree are suffixed with `Deg` and all returns values between `-180` and `+180`.
   - All angle functions return the angle toward positive y-axis.
@@ -104,7 +104,7 @@ vector1 += ImmutableVector2.Y
 vector1 *= 3f
 
 val vector2 = vector1.withClamp(0f, 1f) * 5f // `vector1` is not modified.
-``` 
+```
 
 Creating convenience type alias to ease the use of immutable vectors:
 
@@ -166,15 +166,15 @@ new instances of matrices.
 - `Matrix4` instances can be multiplied with a `Vector3` using `*` operator.
 - `Matrix4` instances can be destructed into sixteen float variables (each representing one of its cells) thanks to the
 `component1()` - `component16()` operator functions.
-  
+
 #### Ranges
 
-- The `amid` infix function for Int and Float allows easy creation of a range by using a center and a tolerance. Such a 
+- The `amid` infix function for Int and Float allows easy creation of a range by using a center and a tolerance. Such a
 definition is a convenient way to think about a range from which random values will be selected.
-- The four arithmetic operators are available for easily shifting or scaling ranges. This allows intuitive modification 
-of ranges in code, which can be useful for code clarity when defining a range for random number selection, or for 
+- The four arithmetic operators are available for easily shifting or scaling ranges. This allows intuitive modification
+of ranges in code, which can be useful for code clarity when defining a range for random number selection, or for
 rapidly iterating a design.
-- `IntRange.random(random: java.util.Random)` allows using a Java Random to select a number from the range, and is 
+- `IntRange.random(random: java.util.Random)` allows using a Java Random to select a number from the range, and is
 provided in case there is a need to use the `MathUtils.random` instance or an instance of libGDX's fast RandomXS128.
 - `ClosedRange<Float>.random()` allows a evenly distributed random number to be selected from a range (but treating
 the `endInclusive` as exclusive for simplicity).
@@ -235,5 +235,5 @@ lib by `g-truc`.
 
 #### Additional documentation
 
-- [Official libGDX math utilities article.](https://github.com/libgdx/libgdx/wiki/Math-utilities)
-- [`Vectors` and `Matrices` article.](https://github.com/libgdx/libgdx/wiki/Vectors%2C-matrices%2C-quaternions)
+- [Official libGDX math utilities article.](https://libgdx.com/wiki/math-utils/math-utilities)
+- [`Vectors` and `Matrices` article.](https://libgdx.com/wiki/math-utils/vectors-matrices-quaternions)

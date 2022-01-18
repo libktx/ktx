@@ -169,4 +169,4 @@ templates to avoid creation of new strings (unless necessary). However, it still
 
 #### Additional documentation
 
-- [Official libGDX logging article.](https://github.com/libgdx/libgdx/wiki/Logging)
+- [Official libGDX logging article.](https://libgdx.com/wiki/app/logging)
