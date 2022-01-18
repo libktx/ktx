@@ -81,4 +81,4 @@ to use this library.
 #### Additional documentation
 
 - [VisUI wiki.](https://github.com/kotcrab/vis-editor/wiki/VisUI)
-- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)
+- [`Skin` article.](https://libgdx.com/wiki/graphics/2d/scene2d/skin)

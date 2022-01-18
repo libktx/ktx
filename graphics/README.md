@@ -6,7 +6,7 @@ General utilities for handling libGDX graphics-related API.
 
 ### Why?
 
-While libGDX API is not particularly bad in this case and the **KTX** module provides only minor improvements, 
+While libGDX API is not particularly bad in this case and the **KTX** module provides only minor improvements,
 Kotlin build-in features can greatly simplify some common operations related to graphics and prevent some
 common bugs such as forgetting to start or end batch rendering.
 
@@ -14,7 +14,7 @@ common bugs such as forgetting to start or end batch rendering.
 
 #### Miscellaneous utilities
 
-- `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the 
+- `use` inlined extension methods added to `Batch`, `ShaderProgram` and `GLFrameBuffer`. They allow safe omission of the
 `begin()` and `end()` calls when using batches, shader programs and buffers. Note that a camera or a matrix can also
 be passed to selected extension methods to have it automatically applied as the projection matrix.
 - `begin` extension methods that automatically set projection matrix from a `Camera` or `Matrix4` were added to `Batch`.
@@ -203,7 +203,7 @@ shapeRenderer.use(ShapeRenderer.ShapeType.Filled, camera) {
 */
 ```
 
-Using `ShapeRenderer` with vectors: 
+Using `ShapeRenderer` with vectors:
 
 ```kotlin
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -270,7 +270,7 @@ import ktx.graphics.center
 fun centerCamera(camera: OrthographicCamera) {
   // Sets position to the middle of the screen:
   camera.center()
-  
+
   // Sets position to the middle of the chosen rectangle:
   camera.center(x = 100f, y = 100f, width = 800f, height = 800f)
 }
@@ -324,7 +324,7 @@ library with some utilities similar to `ktx-graphics`.
 
 #### Additional documentation
 
-- [`SpriteBatch` official article.](https://github.com/libgdx/libgdx/wiki/Spritebatch%2C-Textureregions%2C-and-Sprites)
-- [Official article on shaders.](https://github.com/libgdx/libgdx/wiki/Shaders)
-- [`ShapeRenderer` official article.](https://github.com/libgdx/libgdx/wiki/Rendering-shapes)
-- [Official article on screenshots.](https://github.com/libgdx/libgdx/wiki/Taking-a-Screenshot)
+- [`SpriteBatch` official article.](https://libgdx.com/wiki/graphics/2d/spritebatch-textureregions-and-sprites)
+- [Official article on shaders.](https://libgdx.com/wiki/graphics/opengl-utils/shaders)
+- [`ShapeRenderer` official article.](https://libgdx.com/wiki/graphics/opengl-utils/rendering-shapes)
+- [Official article on screenshots.](https://libgdx.com/wiki/graphics/taking-a-screenshot)

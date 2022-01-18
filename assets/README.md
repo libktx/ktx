@@ -64,9 +64,9 @@ loaded in the first place. Typical usage: `assetManager.unloadSafely("test.png")
 exception thrown during reloading. Note that `AssetManager` can throw `GdxRuntimeException` if the asset was not loaded yet.
 - `AssetManager.getLoader` and `setLoader` extension methods with reified types added to ease handling of `AssetLoader`
 instances registered in the `AssetManager`.
-- The `AssetGroup` class is provided for easily grouping together assets so they can be managed as a group through calls 
+- The `AssetGroup` class is provided for easily grouping together assets so they can be managed as a group through calls
 such as `loadAll()` or `unloadAll()`. The intended use is to subclass `AssetGroup` and list its member assets as
-properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using a common prefix for 
+properties using `AssetGroup.asset()` or `AssetGroup.delayedAsset()`. It also allows for using a common prefix for
 the file names of the group in case they are stored in a specific subdirectory.
 
 #### `Disposable`
@@ -86,7 +86,7 @@ needed. See `Throwable.ignore()` documentation for further details.
 `DisposableContainer` is a `Disposable` implementation that stores a set of `Disposable` instances to be disposed
 all at once.
 
-When subclassed or used as a delegate via its `DisposableRegistry` interface, it provides an `alsoRegister` extension, 
+When subclassed or used as a delegate via its `DisposableRegistry` interface, it provides an `alsoRegister` extension,
 which allows to easily add items to the container so that they will be automatically disposed when the containing class is.
 
 #### `Pool`
@@ -355,7 +355,7 @@ val uiAssets = UIAssets(manager)
 // No need to queue the assets. They are queued when creating the group object.
 
 // Block until they are finished loading:
-uiAssets.finishLoading() 
+uiAssets.finishLoading()
 // Note that classic incremental loading with update() is also available.
 
 // Accessing assets - same as with regular properties:
@@ -455,5 +455,5 @@ Java applications though - **KTX** syntax should feel more natural when using Ko
 
 #### Additional documentation
 
-- [`AssetManager` article.](https://github.com/libgdx/libgdx/wiki/Managing-your-assets)
-- [`FileHandle` article.](https://github.com/libgdx/libgdx/wiki/File-handling)
+- [`AssetManager` article.](https://libgdx.com/wiki/managing-your-assets)
+- [`FileHandle` article.](https://libgdx.com/wiki/file-handling)
