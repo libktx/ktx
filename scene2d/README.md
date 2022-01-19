@@ -196,7 +196,7 @@ Also, you do not have to worry to accidentally changing properties of nested act
 that during compilation:
 
 ```kotlin
-scene2d.table { 
+scene2d.table {
   label("This would not compile") {
     pad(4f) // !!! Compilation error: `pad` belongs to the `table`, not `label`.
   }
@@ -440,7 +440,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import ktx.scene2d.*
 
 fun addActorsToStage(stage: Stage) {
-  stage.actors { 
+  stage.actors {
     table {
       label("This table will be added to the stage.")
     }
@@ -460,7 +460,7 @@ import ktx.scene2d.*
 // actors possible:
 
 val myLabel: Label
-val myTable = scene2d.table { 
+val myTable = scene2d.table {
   myLabel = label("Kotlin contracts make it possible!")
 }
 ```
@@ -516,7 +516,7 @@ val table = scene2d.table {
     cell.expand()
   }
 
-  // Cells are available only for direct children of tables (or its extensions). 
+  // Cells are available only for direct children of tables (or its extensions).
   stack {
     // These would not compile:
     label("Invalid.").cell(expand = true) // Not in a table!
@@ -589,7 +589,7 @@ val table = scene2d.table {
   }.cell(row = true)
 }
 
-val withoutBuildingBlocks = scene2d.table { 
+val withoutBuildingBlocks = scene2d.table {
   // You can also define the widgets with lists of items:
   listWidgetOf(GdxArray.with("First", "Second", "Third"))
   selectBoxOf(GdxArray.with("First", "Second", "Third"))
@@ -605,12 +605,12 @@ Adding tooltips to actors:
 ```kotlin
 import ktx.scene2d.*
 
-val labelWithTooltips = scene2d { 
+val labelWithTooltips = scene2d {
   label("Text") {
     textTooltip(text = "This is a simple text tooltip!") {
       // You can customize tooltip's Label here.
     }
-    tooltip { 
+    tooltip {
       label("This is a complex tooltip using a table!").cell(row = true)
       label("It can have multiple widgets and custom layouts.")
     }
@@ -625,10 +625,10 @@ import ktx.scene2d.*
 
 scene2d.table {
   // Extract a named asset from a Skin:
-  image("button") 
+  image("button")
 
-  // Or use the assets directly: 
-  image(Drawable(...)) 
+  // Or use the assets directly:
+  image(Drawable(...))
   image(NinePatch(...))
   image(TextureRegion(...))
   image(Texture(...))
@@ -715,10 +715,10 @@ inline fun <S> KWidget<S>.myCustomWidget(
 // Creating our custom widget with ktx-scene2d DSL:
 
 fun usageExample() {
-  scene2d.myCustomWidget { 
+  scene2d.myCustomWidget {
     // Customize your widget here!
     setFillParent(true)
-    
+
     // Since we implemented KTable, this actor can have children:
     label("A child of the custom widget!").cell(grow = true)
   }
@@ -760,7 +760,7 @@ The migration is pretty straightforward: add `scene2d.` prefix to all root actor
 the new `Stage.actors` extension method to add actors directly to a `Stage`. Note that nested actor definitions do not
 require any changes.
 
-Only 2 factory methods were changed significantly: `listWidget` and `selectBox`. Now they have only a single 
+Only 2 factory methods were changed significantly: `listWidget` and `selectBox`. Now they have only a single
 generic parameter - type of the items - and no longer consume `Cell` or `Node` instances in their building blocks.
 Instead, you have to call `cell`, `inCell`, `node` or `inNode` outside of their building blocks to configure the layout.
 
@@ -770,9 +770,9 @@ Further KTX releases do not contain the deprecated functions.
 
 ### Alternatives
 
-- Creating layouts with [Scene2D](https://github.com/libgdx/libgdx/wiki/Scene2d) directly in Kotlin or Java.
+- Creating layouts with [Scene2D](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) directly in Kotlin or Java.
 - [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) greatly extends
-[Scene2D](https://github.com/libgdx/libgdx/wiki/Scene2d.ui) API, but lacks first-class Kotlin support.
+[Scene2D](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui) API, but lacks first-class Kotlin support.
 - [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) allows building `Scene2D` views using HTML-like syntax.
 It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However, it lacks
 first-class Kotlin support and the flexibility of a programming language.
@@ -781,7 +781,7 @@ first-class Kotlin support and the flexibility of a programming language.
 
 #### Additional documentation
 
-- [Scene2D article.](https://github.com/libgdx/libgdx/wiki/Scene2d)
-- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
-- [`Table` article.](https://github.com/libgdx/libgdx/wiki/Table)
-- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)
+- [Scene2D article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d)
+- [Scene2D UI article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui)
+- [`Table` article.](https://libgdx.com/wiki/graphics/2d/scene2d/table)
+- [`Skin` article.](https://libgdx.com/wiki/graphics/2d/scene2d/skin)

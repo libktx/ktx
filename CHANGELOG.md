@@ -1,5 +1,27 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.10.0-rc1
+
+- **[UPDATE]** Updated to Kotlin 1.6.10.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.6.0.
+- **[MISC]** Links to the libGDX wiki were updated.
+- **[MISC]** Stable **KTX** releases are now marked with the `-rc` suffix.
+- **[CHANGE]** (`ktx-scene2d`) The generic `Node` type of `KTreeWidget` was changed to `KNode<*>`.
+- **[FEATURE]** Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
+- **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.
+  - `evaluate(String)`: compiles and executes a script passed as a string.
+  - `evaluate(FileHandle)`: compiles and executes a script from the selected file.
+  - `evaluateAs<T>(String)`: compiles and executes a script passed as a string. Casts the result to `T`.
+  - `evaluateAs<T>(FileHandle)`: compiles and executes a script from the selected file. Casts the result to `T`.
+  - `set(String, Any)`: adds a variable to the script execution context.
+  - `get(String)`: returns the current value assigned to the selected variable.
+  - `remove(String)`: removes the variable registered under the given name.
+  - `import(String, String?)`: adds an import to the script context. Accepts optional alias.
+  - `importAll(vararg String)`, `importAll(Iterable<String>)`: adds the selected imports to the script context.
+  - `setPackage(String)`: sets the package for the scripts.
+  - `onItemClick(Node)`: adds a listener that gets invoked when `Node` in a `Tree` gets clicked.
+- **[CHANGE]** (`ktx-vis`) The generic `Node` type of `KVisTree` was changed to `KNode<*>`.
+
 #### 1.10.0-b4
 
 - **[UPDATE]** Updated to Gradle 7.2.

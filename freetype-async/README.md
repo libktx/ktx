@@ -2,7 +2,7 @@
 
 # KTX: FreeType font asynchronous loading utilities
 
-A tiny modules that makes it easier to use [`gdx-freetype`](https://github.com/libgdx/libgdx/wiki/Gdx-freetype)
+A tiny modules that makes it easier to use [`gdx-freetype`](https://libgdx.com/wiki/extensions/gdx-freetype)
 library along with the coroutines-based `AssetStorage` from [`ktx-assets-async`](../assets-async).
 
 ### Why?
@@ -218,11 +218,11 @@ fun loadFont(assetManager: AsyncAssetManager) {
 ### Alternatives
 
 FreeType font loaders can be registered manually. See
-[this article](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler).
+[this article](https://libgdx.com/wiki/managing-your-assets#loading-a-ttf-using-the-assethandler).
 `setLoader` method can be used to add new libGDX loaders to an `AssetStorage`.
 
 #### Additional documentation
 
-- [Official `gdx-freetype` article.](https://github.com/libgdx/libgdx/wiki/Gdx-freetype)
+- [Official `gdx-freetype` article.](https://libgdx.com/wiki/extensions/gdx-freetype)
 - [`ktx-async` module.](../async)
 - [`ktx-assets-async` module.](../assets-async)

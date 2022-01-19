@@ -1,4 +1,4 @@
-[![Kotlin Coroutines](https://img.shields.io/badge/kotlin--coroutines-1.5.2-orange.svg)](http://kotlinlang.org/)
+[![Kotlin Coroutines](https://img.shields.io/badge/kotlin--coroutines-1.6.0-orange.svg)](http://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
 
 # KTX: Coroutines support and parallelization utilities
@@ -339,7 +339,7 @@ import ktx.async.httpRequest
 import ktx.async.RenderingScope
 
 class MyScreen: Screen, CoroutineScope by RenderingScope() {
-  // Implement your application screen here. 
+  // Implement your application screen here.
 
   override fun hide() {
     // Cancels any running coroutines when leaving the screen:
@@ -395,6 +395,6 @@ of compatibility with existing libGDX APIs though.
 
 #### Additional documentation
 
-- [Official libGDX threading article.](https://github.com/libgdx/libgdx/wiki/Threading)
+- [Official libGDX threading article.](https://libgdx.com/wiki/app/threading)
 - [Coroutines language reference.](https://kotlinlang.org/docs/reference/coroutines.html)
 - [Coroutines repository.](https://github.com/Kotlin/kotlin-coroutines)

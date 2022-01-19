@@ -80,7 +80,7 @@ class MyApplicationListener : KtxApplicationAdapter {
 }
 ```
 
-Implementing `KtxGame` with one screen that displays text with `Batch` utilities from `ktx-graphics`: 
+Implementing `KtxGame` with one screen that displays text with `Batch` utilities from `ktx-graphics`:
 
 ```kotlin
 import com.badlogic.gdx.Screen
@@ -170,7 +170,7 @@ Executing platform-specific code:
 import ktx.app.Platform
 
 fun runOnPlatform() {
-  Platform.runOnMobile { 
+  Platform.runOnMobile {
     println("Will print only on mobile platforms!")
   }
 }
@@ -261,6 +261,6 @@ initiates and handles annotated view instances.
 
 #### Additional documentation
 
-- [Official life cycle article.](https://github.com/libgdx/libgdx/wiki/The-life-cycle)
-- [Official viewports article.](https://github.com/libgdx/libgdx/wiki/Viewports)
-- [Official article on profiling.](https://github.com/libgdx/libgdx/wiki/Profiling)
+- [Official life cycle article.](https://libgdx.com/wiki/app/the-life-cycle)
+- [Official viewports article.](https://libgdx.com/wiki/graphics/viewports)
+- [Official article on profiling.](https://libgdx.com/wiki/graphics/profiling)

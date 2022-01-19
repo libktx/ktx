@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.async.AsyncExecutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -81,6 +82,7 @@ fun CoroutineScope.isOnRenderingThread() =
  * frame before resuming, but it will always suspend the current coroutine until the [Runnable] instances scheduled
  * with [Application.postRunnable] are executed by the [Application].
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 suspend fun skipFrame() {
   suspendCancellableCoroutine<Unit> { continuation ->
     Gdx.app.postRunnable {

@@ -7,12 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyDown
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyTyped
 import com.badlogic.gdx.scenes.scene2d.InputEvent.Type.keyUp
 import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.ui.Tree
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.keyboard
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener.FocusEvent.Type.scroll
+import com.badlogic.gdx.scenes.scene2d.utils.Selection
 
 /**
  * Attaches a [ChangeListener] to this actor.
@@ -86,6 +88,25 @@ inline fun <T : Actor> T.onClickEvent(
   }
   addListener(clickListener)
   return clickListener
+}
+
+/**
+ * Attaches a [ChangeListener] to this [Tree].
+ * @param listener invoked each time the node [Selection] is changed. Receives the [Selection] object
+ * which can be used to obtain all selected items with [Selection.items] or the latest selected item
+ * with [Selection.getLastSelected].
+ * @return [ChangeListener] instance.
+ */
+inline fun <N : Tree.Node<N, *, *>> Tree<N, *>.onSelectionChange(
+  crossinline listener: ((Selection<N>) -> Unit)
+): ChangeListener {
+  val changeListener = object : ChangeListener() {
+    override fun changed(event: ChangeEvent, actor: Actor) {
+      listener(this@onSelectionChange.selection)
+    }
+  }
+  addListener(changeListener)
+  return changeListener
 }
 
 /**

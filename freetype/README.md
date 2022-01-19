@@ -2,7 +2,7 @@
 
 # KTX: FreeType font utilities
 
-A tiny modules that makes it easier to use [`gdx-freetype`](https://github.com/libgdx/libgdx/wiki/Gdx-freetype) library.
+A tiny modules that makes it easier to use [`gdx-freetype`](https://libgdx.com/wiki/extensions/gdx-freetype) library.
 
 ### Why?
 
@@ -141,9 +141,9 @@ This module uses [`ktx-assets`](../assets) internally to improve `AssetManager` 
 ### Alternatives
 
 FreeType font loaders can be registered manually. See
-[this article](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler).
+[this article](https://libgdx.com/wiki/managing-your-assets#loading-a-ttf-using-the-assethandler).
 
 #### Additional documentation
 
-- [`gdx-freetype` article.](https://github.com/libgdx/libgdx/wiki/Gdx-freetype)
-- [`AssetManager` article.](https://github.com/libgdx/libgdx/wiki/Managing-your-assets#loading-a-ttf-using-the-assethandler)
+- [`gdx-freetype` article.](https://libgdx.com/wiki/extensions/gdx-freetype)
+- [`AssetManager` article.](https://libgdx.com/wiki/managing-your-assets#loading-a-ttf-using-the-assethandler)

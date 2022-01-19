@@ -315,5 +315,5 @@ that originally inspired `ktx-box2d`.
 
 #### Additional documentation
 
-- [Official libGDX *Box2D* article.](https://github.com/libgdx/libgdx/wiki/Box2d)
+- [Official libGDX *Box2D* article.](https://libgdx.com/wiki/extensions/physics/box2d)
 - [Official *Box2D* website.](http://box2d.org/)

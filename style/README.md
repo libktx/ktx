@@ -16,7 +16,7 @@ JSON format also suffers from no extension mechanism, which leads to data duplic
 Kotlin type-safe builders can make style definitions less verbose than usual, as easily readable as JSON and basically
 as fast to parse as hand-written Java code thanks to inlined functions and no reflection usage. By converting your JSON
 skins into `ktx-style` builders, you speed up your application startup time.
- 
+
 ### Guide
 
 `Skin` instances can be constructed with `skin` functions, both of which accept a Kotlin-style init block.
@@ -172,7 +172,7 @@ import ktx.style.*
 
 skin(myAtlas) {
   // Skin is available under `it` parameter, so you can access other resources.
-  button { 
+  button {
     up = it["buttonUp"] // Automatically extracts drawable with buttonUp name.
     down = it["buttonDown"]
   }
@@ -334,12 +334,12 @@ skin(myAtlas) {
 }
 ```
 
-What is best about it, enums do not necessarily make your code _longer_ or less readable - all while having the 
-advantage of powerful code completion of your IDE of choice and validation at compile time. As long as you 
+What is best about it, enums do not necessarily make your code _longer_ or less readable - all while having the
+advantage of powerful code completion of your IDE of choice and validation at compile time. As long as you
 do not need to create assets at runtime with custom string IDs, we encourage you to store your drawables,
 fonts, colors and styles names as enums to ensure safely at compile time.
 
-The advantage of using an `enum` over a "standard" singleton (`object`) with `String` properties or `String` 
+The advantage of using an `enum` over a "standard" singleton (`object`) with `String` properties or `String`
 constants is that you can easily extract a list of all values from an `enum`, while getting all fields from
 an object or constants from a package requires reflection.
 
@@ -365,4 +365,4 @@ suffers from the same issues as regular skin JSON.
 
 #### Additional documentation
 
-- [`Skin` article.](https://github.com/libgdx/libgdx/wiki/Skin)
+- [`Skin` article.](https://libgdx.com/wiki/graphics/2d/scene2d/skin)

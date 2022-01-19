@@ -36,7 +36,7 @@ its content.
 - Missing `addAll` and `removeAll` methods for arrays and iterables were added.
 - `iterate` method allows iterating over collection's elements, while providing reference to `MutableInterator`. Can be
 used to easily remove collection elements during iteration.
-- `removeAll` and `retainAll` higher-order functions that work like collection extensions in Kotlin stdlib. A `Pool` can 
+- `removeAll` and `retainAll` higher-order functions that work like collection extensions in Kotlin stdlib. A `Pool` can
 optionally be passed to automatically free the removed items.
 - `transfer` extension method can be used to move elements from one array to another using a lambda predicate.
 - `map`, `filter`, `flatten` and `flatMap` methods that work like methods in Kotlin stdlib but return `GdxArray`.
@@ -86,7 +86,7 @@ used to easily remove collection elements during iteration.
 libGDX features `ObjectMap` class, which works similarly to `HashMap`, but it reuses its iterators.
 
 - `ObjectMap` instances can be constructed with `gdxMapOf` methods, similarly to how you create `java.util` maps in Kotlin.
-- `IdentityMap` instances can be constructed with `gdxIdentityMapOf` methods. 
+- `IdentityMap` instances can be constructed with `gdxIdentityMapOf` methods.
 - Basic support for optimized primitive `IntIntMap`, `IntFloatMap` and `IntMap` collections.
 - Null-safe `isEmpty()`, `isNotEmpty()` and `size()` methods where added. They allow you to inspect the collection even
 if the variable is a possible null.
@@ -130,7 +130,7 @@ array[0] // "zero"
 array += "three" // array[3] == "three"; array.size == 4
 array -= "three" // "three" in array == false; array.size == 3
 array += arrayOf("three", "four") // array[3] == "three", array[4] = "four"
-  
+
 val empty = gdxArrayOf<String>()
 
 val arrayOfPrimitives = gdxIntArrayOf(1, 2, 3)
@@ -180,10 +180,10 @@ but since it is written with Java, `ktx-collections` is arguably easier to use i
 is still worth looking into for its *lazy*, *disposable* and *immutable* collections.
 - [Koloboke](https://github.com/leventov/Koloboke) contains efficient implementations of sets and maps that can use
 unboxed primitive types as keys or values. Its API design and implementation is most likely significantly better and
-more efficient than libGDX collections, it is also a major dependency due to the sheer amount of available collections 
+more efficient than libGDX collections, it is also a major dependency due to the sheer amount of available collections
 and its code generators. Note that Koloboke collections are compatible with `java.util` collections API, while libGDX
 collections are not - Koloboke maps and sets can fully benefit from Kotlin standard library utilities.
 
 #### Additional documentation
 
-- [Official libGDX collections article.](https://github.com/libgdx/libgdx/wiki/Collections)
+- [Official libGDX collections article.](https://libgdx.com/wiki/utils/collections)

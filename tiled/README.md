@@ -47,7 +47,7 @@ New extension fields include:
 Almost all objects are related to a shape except for  `TextureMapObject`. Sometimes you need
 access to these shapes like e.g. when creating [Box2D](../box2d) bodies out of those objects. For that reason
 a new extension field was added:
-- `shape`: returns the `Shape2D` of a map object. This can either be a `Rectangle`, `Circle`, 
+- `shape`: returns the `Shape2D` of a map object. This can either be a `Rectangle`, `Circle`,
 `Ellipse`, `Polyline` or `Polygon`. If there is an object that is not linked to a shape then a
 `MissingShapeException` is thrown.
 
@@ -232,7 +232,7 @@ val map: TiledMap = getTiledMap()
 
 // Iterate over all object layers and parse them.
 // Note that println is only called with layers of the exact MapLayer type.
-// For example, TiledMapTileLayer - which is a subclass of MapLayer - does not 
+// For example, TiledMapTileLayer - which is a subclass of MapLayer - does not
 // have this exact class and will not be matched.
 map.forEachLayer<MapLayer> { layer ->
   println(layer)
@@ -252,7 +252,7 @@ if (map.layers.isNotEmpty()) {
   map.layers.forEach { layer ->
     if (layer.objects.isEmpty()) {
       // nothing to do if there are no objects
-      return@forEach 
+      return@forEach
     }
     parseObjects(layer.objects)
   }
@@ -262,5 +262,5 @@ if (map.layers.isNotEmpty()) {
 #### Additional documentation
 
 - [Official Tiled website.](https://www.mapeditor.org/)
-- [Official libGDX tile maps article.](https://github.com/libgdx/libgdx/wiki/Tile-maps)
+- [Official libGDX tile maps article.](https://libgdx.com/wiki/graphics/2d/tile-maps)
 - [Official Tiled documentation.](https://doc.mapeditor.org/en/stable/)

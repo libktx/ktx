@@ -40,6 +40,12 @@ please check the  `README.md` file of the module, and add description of your ch
 should include a usage example in the module guide. Make sure to add all the necessary imports in the usage examples
 in `README.md` files to make it easier to try them out.
 
+## Donations
+
+<a href="https://opencollective.com/ktx">
+  <img alt="Contribute on OpenCollective" src="https://opencollective.com/ktx/tiers/supporter.svg?avatarHeight=60&width=600" />
+</a>
+
 ## Working from sources
 
 ```bash
@@ -114,6 +120,8 @@ should generally consist of the following sections:
   - gradle.properties
   - README.md
 ```
+
+- Include the module in the listing in the main [`README.md`](../README.md) file.
 
 ## Maintenance
 

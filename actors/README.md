@@ -42,6 +42,8 @@ and `onKeyboardFocusEvent` `Actor` extension methods were added. They consume th
 parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
 and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
 be enough for most use cases.
+- Lambda-compatible `Tree.onSelectionChange` method was added. Attaches a listener invoked each time a `Tree`'s node
+selection is modified.
 
 #### Actions
 
@@ -312,4 +314,4 @@ HTML-inspired syntax.
 
 #### Additional documentation
 
-- [Scene2D UI article.](https://github.com/libgdx/libgdx/wiki/Scene2d.ui)
+- [Scene2D UI article.](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d-ui)

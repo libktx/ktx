@@ -453,7 +453,7 @@ class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, sk
 
 /** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
-class KTreeWidget(skin: Skin, style: String) : Tree<Node<*, *, *>, Any?>(skin, style), KTree {
+class KTreeWidget(skin: Skin, style: String) : Tree<KNode<*>, Any?>(skin, style), KTree {
   override fun <A : Actor> add(actor: A): KNode<A> {
     val node = KNode(actor)
     add(node)
