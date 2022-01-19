@@ -1,10 +1,11 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.10.0-SNAPSHOT
+#### 1.10.0-rc1
 
 - **[UPDATE]** Updated to Kotlin 1.6.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.6.0.
 - **[MISC]** Links to the libGDX wiki were updated.
+- **[MISC]** Stable **KTX** releases are now marked with the `-rc` suffix.
 - **[CHANGE]** (`ktx-scene2d`) The generic `Node` type of `KTreeWidget` was changed to `KNode<*>`.
 - **[FEATURE]** Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
 - **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.

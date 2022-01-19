@@ -79,7 +79,7 @@ in your `build.gradle` file:
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.10.0-b4'
+  ktxVersion = '1.10.0-rc1'
 }
 
 dependencies {
@@ -91,7 +91,7 @@ dependencies {
 // Kotlin DSL:
 
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.10.0-b4"
+val ktxVersion = "1.10.0-rc1"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
@@ -111,8 +111,8 @@ reused throughout the build files. This will speed up updating of your project i
 #### Versioning
 
 **KTX** versions match the libGDX versions that they were compiled against. `$ktxVersion` will usually match your libGDX
-version, but it might end with `-b` postfix if it is a beta release, or `-SNAPSHOT` if you are using the development
-branch.
+version, but it might end with `-rc` suffix if it is a stable release, or `-SNAPSHOT` if you are using the development
+branch. Older **KTX** releases use the `-b` suffix to mark milestone releases.
 
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 and [on GitHub](https://github.com/libktx/ktx/releases).
