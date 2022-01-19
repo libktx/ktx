@@ -15,6 +15,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
   - `import(String, String?)`: adds an import to the script context. Accepts optional alias.
   - `importAll(vararg String)`, `importAll(Iterable<String>)`: adds the selected imports to the script context.
   - `setPackage(String)`: sets the package for the scripts.
+  - `onItemClick(Node)`: adds a listener that gets invoked when `Node` in a `Tree` gets clicked.
 
 #### 1.10.0-b4
 
