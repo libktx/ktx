@@ -17,8 +17,10 @@ import io.kotlintest.mock.mock
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Tests events and listeners utilities.
@@ -81,17 +83,46 @@ class EventsTest {
     assertTrue(listener in actor.listeners)
   }
 
+  class SampleNode : Tree.Node<SampleNode, Any, Actor>(mock())
+
   @Test
-  fun `should attach ClickListener to a Tree consuming InputEvent with clicked Node`() {
+  fun `should attach ChangeListener to a Tree consuming Selection with the selected Nodes`() {
     val style = mock<Tree.TreeStyle>()
     style.plus = mock()
     style.minus = mock()
-    val tree = Tree<Tree.Node<*, *, *>, Any>(style)
+    val tree = Tree<SampleNode, Any>(style)
 
-    val listener = tree.onItemClick { }
+    val listener = tree.onSelectionChange {}
 
     assertNotNull(listener)
     assertTrue(listener in tree.listeners)
+  }
+
+  @Test
+  fun `should invoke attached ChangeListener when tree Selection changes`() {
+    val style = mock<Tree.TreeStyle>()
+    style.plus = mock()
+    style.minus = mock()
+    val tree = Tree<SampleNode, Any>(style)
+    tree.selection.setProgrammaticChangeEvents(true)
+    val nodes = Array(3) { SampleNode() }
+    val selected = SampleNode()
+    nodes.forEach(tree::add)
+    tree.add(selected)
+    val executions = AtomicInteger()
+    val selectedNodes = mutableListOf<SampleNode>()
+    tree.selection.clear()
+    tree.onSelectionChange { selection ->
+      executions.incrementAndGet()
+      selectedNodes.clear()
+      selectedNodes.addAll(selection.items())
+    }
+
+    tree.selection.add(selected)
+
+    assertEquals(1, executions.get())
+    assertEquals(1, selectedNodes.size)
+    assertSame(selected, selectedNodes.first())
   }
 
   @Test

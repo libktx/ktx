@@ -89,6 +89,10 @@ Project contributors listed chronologically.
   * Contributed an initial implementation of reflection-based component binding for the [inject module](../inject).
 * [@fejd](https://github.com/fejd)
   * Contributed utilities to the [collections module](../collections).
+* [@manabreak](https://github.com/manabreak)
+  * Contributed utilities to the [actors module](../actors).
+* [@crykn](https://github.com/crykn)
+  * Updated links to the new libGDX wiki.
 
 ### Metrics
 

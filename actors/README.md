@@ -42,7 +42,8 @@ and `onKeyboardFocusEvent` `Actor` extension methods were added. They consume th
 parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
 and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
 be enough for most use cases.
-- Lambda-compatible `Tree.onItemClick` method was added. Allows listening to `Node`s being clicked in `Tree` structures.
+- Lambda-compatible `Tree.onSelectionChange` method was added. Attaches a listener invoked each time a `Tree`'s node
+selection is modified.
 
 #### Actions
 
