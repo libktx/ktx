@@ -28,11 +28,6 @@ to override.
 - `KtxInputAdapter` is an interface extending `InputProcessor`. Provides no-op implementations of all methods, without
 being a class like `com.badlogic.gdx.InputAdapter`.
 
-#### `EntityListener` implementations and utilities
-
-- `EntityAdditionListener` is an interface extending `EntityListener` which you can use for only working with the `entityAdded` event
-- `EntityRemovalListener` is an interface extending `EntityListener` which you can use for only working with the `entityRemoved` event
-
 #### Miscellaneous utilities
 
 - `clearScreen` is an inlined utility function that hides the OpenGL calls, allowing to clear the screen with a chosen
@@ -249,26 +244,6 @@ fun profileThreadSleep() {
   // You can also print the report manually
   // with a custom number format:
   profiler.prettyPrint(decimalFormat = "%.4f s")
-}
-```
-
-Creating an `EntitySystem` that only listens to entities being added:
-
-```kotlin
-class MySystem : EntitySystem(), EntityAdditionListener {
-  override fun entityAdded(entity: Entity?) {
-    // implement your logic here
-  }
-}
-```
-
-Creating an `EntitySystem` that only listens to entities being removed:
-
-```kotlin
-class MySystem : EntitySystem(), EntityRemovalListener {
-  override fun entityRemoved(entity: Entity?) {
-    // implement your logic here
-  }
 }
 ```
 

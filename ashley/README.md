@@ -31,6 +31,8 @@ builder DSL.
 `allOf`, `exclude`.
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
+- `EntityAdditionListener` is an interface extending `EntityListener` which you can use for only working with the `entityAdded` event
+- `EntityRemovalListener` is an interface extending `EntityListener` which you can use for only working with the `entityRemoved` event
 
 > Note that `Mapper` relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe to use
 > on the officially supported platforms, it might not work correctly with the third-party backends.
@@ -287,6 +289,26 @@ class B: Component {
 class C: Component
 // Will throw exceptions!
 object CMapper: Mapper<C>()
+```
+
+Creating an `EntitySystem` that only listens to entities being added:
+
+```kotlin
+class MySystem : EntitySystem(), EntityAdditionListener {
+  override fun entityAdded(entity: Entity?) {
+    // implement your logic here
+  }
+}
+```
+
+Creating an `EntitySystem` that only listens to entities being removed:
+
+```kotlin
+class MySystem : EntitySystem(), EntityRemovalListener {
+  override fun entityRemoved(entity: Entity?) {
+    // implement your logic here
+  }
+}
 ```
 
 #### Additional documentation
