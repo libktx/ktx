@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.EntityListener
 /**
  * An [EntityListener] only listening to the [entityAdded] event.
  *
- * A [Unit] implementation is provided for the [entityRemoved] event, as it is ignored.
+ * An empty implementation is provided for the [entityRemoved] event, as it is ignored.
  *
  * If you need both events from the [EntityListener], implement the regular [EntityListener] from Ashley.
  */
@@ -17,7 +17,7 @@ interface EntityAdditionListener : EntityListener {
 /**
  * An [EntityListener] only listening to the [entityRemoved] event.
  *
- * A [Unit] implementation is provided for the [entityAdded] event, as it is ignored.
+ * An empty implementation is provided for the [entityAdded] event, as it is ignored.
  *
  * If you need both events from the [EntityListener], implement the regular [EntityListener] from Ashley.
  */
