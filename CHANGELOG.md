@@ -22,6 +22,9 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
   - `importAll(vararg String)`, `importAll(Iterable<String>)`: adds the selected imports to the script context.
   - `setPackage(String)`: sets the package for the scripts.
 - **[CHANGE]** (`ktx-vis`) The generic `Node` type of `KVisTree` was changed to `KNode<*>`.
+- **[FEATURE]** (`ktx-ashley`) Added utilities for working with Ashley `EntityListeners`:
+  - `EntityAdditionListener`: an `EntityListener` override for only working with the `entityAdded` event
+  - `EntityRemovalListener`: an `EntityListener` override for only working with the `entityRemoved` event
 
 #### 1.10.0-b4
 
