@@ -101,14 +101,19 @@ object ListenersSpec : Spek({
       }
 
       engine.addSystem(system)
+
+      engine.entity().apply(engine::removeEntity)
+      assertThat(addAssertion).isFalse
+      assertThat(removeAssertion).isFalse
+
       val entity = engine.entity {
         with<TestComponent>()
       }
       engine.removeEntity(entity)
       engine.removeSystem(system)
 
-      assertThat(addAssertion).isTrue()
-      assertThat(removeAssertion).isTrue()
+      assertThat(addAssertion).isTrue
+      assertThat(removeAssertion).isTrue
     }
 
     it("should run listeners bound to an interval iterating system") {
@@ -146,6 +151,11 @@ object ListenersSpec : Spek({
       }
 
       engine.addSystem(system)
+
+      engine.entity().apply(engine::removeEntity)
+      assertThat(addAssertion).isFalse
+      assertThat(removeAssertion).isFalse
+
       val entity = engine.entity {
         with<TestComponent>()
       }
@@ -191,6 +201,11 @@ object ListenersSpec : Spek({
       }
 
       engine.addSystem(system)
+
+      engine.entity().apply(engine::removeEntity)
+      assertThat(addAssertion).isFalse
+      assertThat(removeAssertion).isFalse
+
       val entity = engine.entity {
         with<TestComponent>()
       }
