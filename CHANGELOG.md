@@ -8,6 +8,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
   - `Engine.onEntityAdded` and `Engine.onEntityRemoved` extension methods that create entity listeners from lambdas.
   - Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem`
     and `SortedIteratingSystem` that use system's `Family` and `Engine` automatically.
+- **[FEATURE]** (`ktx-script`) Added `KotlinScriptEngine.evaluateOn` methods that can execute scripts with a custom receiver.
+- **[CHANGE]** (`ktx-script`) Generic libGDX and Java exceptions replaced with a custom `ScriptEngineException`.
 
 #### 1.10.0-rc1
 
@@ -15,8 +17,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.6.0.
 - **[MISC]** Links to the libGDX wiki were updated.
 - **[MISC]** Stable **KTX** releases are now marked with the `-rc` suffix.
+- **[FEATURE]** (`ktx-actors`) Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
 - **[CHANGE]** (`ktx-scene2d`) The generic `Node` type of `KTreeWidget` was changed to `KNode<*>`.
-- **[FEATURE]** Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
 - **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.
   - `evaluate(String)`: compiles and executes a script passed as a string.
   - `evaluate(FileHandle)`: compiles and executes a script from the selected file.

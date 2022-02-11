@@ -2,7 +2,6 @@ package ktx.script
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Files
-import com.badlogic.gdx.utils.GdxRuntimeException
 import io.kotlintest.matchers.shouldThrow
 import org.junit.AfterClass
 import org.junit.Assert.assertEquals
@@ -118,7 +117,7 @@ class KotlinScriptEngineTest {
   @Test
   fun `should throw exception if unable to evaluate script`() {
     // Expect:
-    shouldThrow<GdxRuntimeException> {
+    shouldThrow<ScriptEngineException> {
       engine.evaluate("import")
     }
   }
@@ -141,7 +140,7 @@ class KotlinScriptEngineTest {
     val file = Gdx.files.classpath("ktx/script/broken.script")
 
     // Expect:
-    shouldThrow<GdxRuntimeException> {
+    shouldThrow<ScriptEngineException> {
       engine.evaluate(file)
     }
   }
@@ -207,6 +206,54 @@ class KotlinScriptEngineTest {
 
     // Then:
     assertEquals(GdxArray.with(Data("test"), Data("test"), Data("test")), result)
+  }
+
+  @Test
+  fun `should execute script with a receiver`() {
+    // Given:
+    val receiver = Data(text = "")
+
+    // When:
+    engine.evaluateOn(
+      receiver,
+      """
+      text = "test"
+      """.trimIndent()
+    )
+
+    // Then:
+    assertEquals("test", receiver.text)
+  }
+
+  @Test
+  fun `should fail to execute script with a receiver if it contains an import`() {
+    // Given:
+    val receiver = Data(text = "")
+
+    // Expect:
+    shouldThrow<ScriptEngineException> {
+      engine.evaluateOn(
+        receiver,
+        """
+        import com.badlogic.gdx.Gdx
+
+        text = "test"
+        """.trimIndent()
+      )
+    }
+  }
+
+  @Test
+  fun `should execute script from a file with a receiver`() {
+    // Given:
+    val receiver = Data(text = "")
+    val file = Gdx.files.classpath("ktx/script/receiver")
+
+    // When:
+    engine.evaluateOn(receiver, file)
+
+    // Then:
+    assertEquals("test", receiver.text)
   }
 
   @Test

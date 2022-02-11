@@ -21,6 +21,8 @@ Returns the last expression from the script as `Any?`.
 Returns the last expression from the script as `T`. Throws `ClassCastException` if the result does not match `T` type.
 - `evaluateAs<T>(FileHandle)`: compiles and executes a script from the selected file.
 Returns the last expression from the script as `T`. Throws `ClassCastException` if the result does not match `T` type.
+- `evaluateOn(Any, String)`: compiles and executes a script passed as string with a custom receiver available as `this`.
+- `evaluateOn(Any, FileHandle)`: compiles and executes a script from a file with a custom receiver available as `this`.
 
 - `set(String, Any)`: adds a variable to the script execution context.
 The variable will be available in the scripts under the given name.
@@ -57,6 +59,8 @@ have to be returned as script results, or otherwise passed outside the script co
 the engine instance, IDE might not be able to pick them up without additional setup.
 * **Scripts might be unable to infer the generic types.** Avoid passing generic objects as variables to the scripts.
 * **Targets Java 8.** Using newer language features might result in exceptions.
+* **Scripts with receivers cannot contain any import statements.** This only affects the `KotlinScriptEngine.evaluateOn`
+methods.
 
 #### Advantages over using `ScriptEngine` directly
 
@@ -182,6 +186,32 @@ fun executeScript(engine: KotlinScriptEngine) {
     Example(text = "Hello from script!")
   """)
   println(example)
+}
+```
+
+Executing a script with a receiver (`this`):
+
+```kotlin
+import ktx.script.KotlinScriptEngine
+
+data class Data(var text: String = "")
+
+fun executeScript(engine: KotlinScriptEngine) {
+  val receiver = Data()
+
+  engine.evaluateOn(
+    receiver,
+    """
+      // The receiver is now available as `this` in the script:
+      text = "Hello from script!"
+      println(this.text)
+
+      // Note that scripts with a receiver cannot have any imports.
+    """
+  )
+  // Property modified in the script will persist
+  // outside the script scope:
+  println(receiver.text)
 }
 ```
 

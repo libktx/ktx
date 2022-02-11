@@ -1,8 +1,8 @@
 package ktx.script
 
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.GdxRuntimeException
-import java.lang.IllegalStateException
 import javax.script.ScriptContext
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
@@ -10,12 +10,12 @@ import javax.script.ScriptEngineManager
 /**
  * Executes Kotlin scripts in runtime.
  *
- * Wraps around JSR-223 [ScriptEngine] for the Kotlin language.
+ * Wraps around the official implementation of the JSR-223 [ScriptEngine] for the Kotlin language.
  */
 class KotlinScriptEngine {
   /** Direct reference to the wrapped JSR-223 [ScriptEngine]. */
   val engine: ScriptEngine = ScriptEngineManager().getEngineByExtension("kts")
-    ?: throw IllegalStateException(
+    ?: throw ScriptEngineException(
       "Unable to find engine for extension: kts. " +
         "Make sure to include the org.jetbrains.kotlin:kotlin-scripting-jsr223 dependency."
     )
@@ -41,7 +41,7 @@ class KotlinScriptEngine {
    * The [imports] will be available in future scripts.
    *
    * To assign an alias to a specific import, use Kotlin `as` operator after the qualified name.
-   * For example: `engine.importAll("com.badlogic.gdx.utils.Array as GdxArray")
+   * For example: `engine.importAll("com.badlogic.gdx.utils.Array as GdxArray")`
    */
   fun importAll(vararg imports: String) {
     val script = imports.joinToString(separator = "\n") { "import $it" }
@@ -53,7 +53,7 @@ class KotlinScriptEngine {
    * The [imports] will be available in future scripts.
    *
    * To assign an alias to a specific import, use Kotlin `as` operator after the qualified name.
-   * For example: `engine.importAll("com.badlogic.gdx.utils.Array as GdxArray")
+   * For example: `engine.importAll("com.badlogic.gdx.utils.Array as GdxArray")`
    */
   fun importAll(imports: Iterable<String>) {
     val script = imports.joinToString(separator = "\n") { "import $it" }
@@ -93,33 +93,81 @@ class KotlinScriptEngine {
 
   /**
    * Executes the selected [script]. Returns the last script's expression as the result.
-   * If unable to execute the script, [GdxRuntimeException] will be thrown.
+   * If unable to execute the script, [ScriptEngineException] will be thrown.
    */
   fun evaluate(script: String): Any? = try {
     engine.eval(script)
   } catch (exception: Throwable) {
-    throw GdxRuntimeException("Unable to execute Kotlin script:\n$script", exception)
+    throw ScriptEngineException("Unable to execute Kotlin script:\n$script", exception)
   }
 
   /**
    * Executes the selected [scriptFile]. Returns the last script's expression as the result.
-   * If unable to execute the script, [GdxRuntimeException] will be thrown.
+   * If unable to execute the script, [ScriptEngineException] will be thrown.
    */
   fun evaluate(scriptFile: FileHandle): Any? = try {
     engine.eval(scriptFile.reader())
   } catch (exception: Throwable) {
-    throw GdxRuntimeException("Unable to execute Kotlin script from file: $scriptFile", exception)
+    throw ScriptEngineException("Unable to execute Kotlin script from file: $scriptFile", exception)
   }
 
   /**
+   * Executes the selected [script] on the [receiver] object. The [receiver] will be available as `this`
+   * throughout the script, as well as under the value of [receiverVariableName].
+   * If no variable name is given, it will be chosen randomly.
+   *
+   * Note that the script cannot contain any import statement, or it will fail with a [ScriptEngineException].
+   * Use [import] or [importAll] instead.
+   */
+  fun evaluateOn(
+    receiver: Any,
+    script: String,
+    receiverVariableName: String = getRandomReceiverName()
+  ) {
+    try {
+      this[receiverVariableName] = receiver
+      evaluate("$receiverVariableName.apply{$script}")
+    } finally {
+      remove(receiverVariableName)
+    }
+  }
+
+  /**
+   * Executes the selected [scriptFile] on the [receiver] object. The [receiver] will be available as `this`
+   * throughout the script, as well as under the value of [receiverVariableName].
+   * If no variable name is given, it will be chosen randomly.
+   *
+   * Note that the script cannot contain any import statement, or it will fail with a [ScriptEngineException].
+   * Use [import] or [importAll] instead.
+   */
+  fun evaluateOn(
+    receiver: Any,
+    scriptFile: FileHandle,
+    receiverVariableName: String = getRandomReceiverName()
+  ) {
+    try {
+      evaluateOn(receiver, scriptFile.readString(), receiverVariableName)
+    } catch (exception: Throwable) {
+      throw ScriptEngineException("Unable to execute script with a receiver from file: $scriptFile", exception)
+    }
+  }
+
+  private fun getRandomReceiverName(): String = "receiver" + MathUtils.random(0, Int.MAX_VALUE - 1)
+
+  /**
    * Executes the selected [script] and returns an instance of [T]. If the script is not an instance of [T],
-   * [ClassCastException] will be thrown. If unable to execute the script, [GdxRuntimeException] will be thrown.
+   * [ClassCastException] will be thrown. If unable to execute the script, [ScriptEngineException] will be thrown.
    */
   inline fun <reified T : Any?> evaluateAs(script: String): T = evaluate(script) as T
 
   /**
    * Executes the selected [scriptFile] and returns an instance of [T]. If the script is not an instance of [T],
-   * [ClassCastException] will be thrown. If unable to execute the script, [GdxRuntimeException] will be thrown.
+   * [ClassCastException] will be thrown. If unable to execute the script, [ScriptEngineException] will be thrown.
    */
   inline fun <reified T : Any?> evaluateAs(scriptFile: FileHandle): T = evaluate(scriptFile) as T
 }
+
+/**
+ * Thrown when unable to execute a script or configure the scripting engine.
+ */
+class ScriptEngineException(message: String, cause: Throwable? = null) : GdxRuntimeException(message, cause)
