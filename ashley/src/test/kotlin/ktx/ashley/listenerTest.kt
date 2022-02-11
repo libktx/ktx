@@ -1,3 +1,5 @@
+@file:Suppress("ClassName")
+
 package ktx.ashley
 
 import com.badlogic.ashley.core.Entity

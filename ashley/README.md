@@ -29,12 +29,16 @@ builder DSL.
 - `Entity.plusAssign` (`+=`) operator allows to add a `Component` to an existing `Entity`.
 - Top-level and `Builder` extension DSL methods for constructing `Family` builders with `KClass` instances: `oneOf`,
 `allOf`, `exclude`.
+- `EntityAdditionListener` is an interface extending `EntityListener` which provides improved typing, as well as empty
+implementations of event listening methods except for `entityAdded`.
+- `EntityRemovalListener` is an interface extending `EntityListener` which provides improved typing, as well as empty
+implementations of event listening methods except for `entityRemoved` event.
+- `Engine.onEntityAdded` and `Engine.onEntityRemoved` extension methods make it possible to attach an entity listener
+created from a passed with a lambda and add them to the `Engine` immediately.
+- Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and
+`SortedIteratingSystem` that use system's `Family` and `Engine` automatically.
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
-- `EntityAdditionListener` is an interface extending `EntityListener` which you can use for only working with the `entityAdded` event
-- `EntityRemovalListener` is an interface extending `EntityListener` which you can use for only working with the `entityRemoved` event
-- `Engine.onEntityAdded` and `Engine.onEntityRemoved` allow you to create such `EntityAdditionListener`s and `EntityRemovalListener`s with a lambda and add them to the `Engine` immediately
-- Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and `SortedIteratingSystem` that use these systems' `Family`s and `Engine`s automatically
 
 > Note that `Mapper` relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe to use
 > on the officially supported platforms, it might not work correctly with the third-party backends.
@@ -293,42 +297,42 @@ class C: Component
 object CMapper: Mapper<C>()
 ```
 
-Creating an `EntitySystem` that only listens to entities being added:
+Creating an `EntitySystem` that doubles as a listener of entity addition events:
 
 ```kotlin
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.EntitySystem
+import ktx.ashley.EntityAdditionListener
+
 class MySystem : EntitySystem(), EntityAdditionListener {
   override fun entityAdded(entity: Entity) {
-    // implement your logic here
+    println("Entity added: $entity")
   }
 }
-```
 
-Creating an `EntitySystem` that only listens to entities being removed:
-
-```kotlin
-class MySystem : EntitySystem(), EntityRemovalListener {
-  override fun entityRemoved(entity: Entity) {
-    // implement your logic here
-  }
-}
 ```
 
 Creating, storing and removing `EntityAdditionListener`s and `EntityRemovalListener`s with lambdas:
 
 ```kotlin
+import com.badlogic.ashley.core.Engine
+import ktx.ashley.onEntityAdded
+import ktx.ashley.onEntityRemoved
+
 val engine = Engine()
 
 fun registerListeners() {
   val additionListener = engine.onEntityAdded { entity ->
-    // implement your addition logic here
+    println("Entity added: $entity")
   }
 
   val removalListener = engine.onEntityRemoved { entity ->
-    // implement your removal logic here
+    println("Entity removed: $entity")
   }
 
-  // If you need to remove such listeners later, retain a reference to them
-  // and call Engine.removeEntityListener when desired:
+  // If you need to remove such listeners later,
+  // retain a reference to them and call
+  // Engine.removeEntityListener when necessary:
   engine.removeEntityListener(additionListener)
   engine.removeEntityListener(removalListener)
 }
@@ -336,35 +340,41 @@ fun registerListeners() {
 
 Managing `EntityAdditionListener`s and `EntityRemovalListener`s with an `IteratingSystem`'s `Family`:
 
-Such extensions are also available for `SortedIteratingSystem` and `IntervalIteratingSystem`.
-
 ```kotlin
-val engine = Engine()
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Engine
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.systems.IteratingSystem
+import ktx.ashley.EntityAdditionListener
+import ktx.ashley.EntityRemovalListener
+import ktx.ashley.allOf
+import ktx.ashley.onEntityAdded
+import ktx.ashley.onEntityRemoved
 
 class ExampleComponent : Component
 
 class MyIteratingSystem : IteratingSystem(allOf(ExampleComponent::class).get()) {
-  // retain references to your listeners to remove them from the engine later
+  // You can retain references to your listeners to remove them from the engine.
   private lateinit var additionListener: EntityAdditionListener
   private lateinit var removalListener: EntityRemovalListener
 
-  override fun processEntity(entity: Entity, deltaTime: Float) {
-    // some other logic
-  }
-
-  override fun addedToEngine(engine: Engine) { // add your listeners here
+  override fun addedToEngine(engine: Engine) {
     super.addedToEngine(engine)
 
     additionListener = onEntityAdded { entity ->
-      // handle entities with an ExampleComponent being added
+      // Handle entities with an ExampleComponent being added.
     }
 
     removalListener = onEntityRemoved { entity ->
-      // handle entities with an ExampleComponent being removed
+      // Handle entities with an ExampleComponent being removed.
     }
   }
 
-  override fun removedFromEngine(engine: Engine) { // dispose of your listeners here
+  override fun processEntity(entity: Entity, deltaTime: Float) {
+    // System logic goes here.
+  }
+
+  override fun removedFromEngine(engine: Engine) {
     super.removedFromEngine(engine)
 
     engine.removeEntityListener(additionListener)
