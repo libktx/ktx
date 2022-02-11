@@ -16,7 +16,13 @@ import com.badlogic.ashley.systems.SortedIteratingSystem
  * If you need both events from the [EntityListener], implement the regular [EntityListener] from Ashley.
  */
 interface EntityAdditionListener : EntityListener {
+  /**
+   * Invoked when a matching [Entity] is added to the [Engine].
+   *
+   * See [EntityListener.entityAdded].
+   */
   override fun entityAdded(entity: Entity)
+
   override fun entityRemoved(entity: Entity) = Unit
 }
 
@@ -28,7 +34,13 @@ interface EntityAdditionListener : EntityListener {
  * If you need both events from the [EntityListener], implement the regular [EntityListener] from Ashley.
  */
 interface EntityRemovalListener : EntityListener {
+  /**
+   * Invoked when a matching [Entity] is removed from the [Engine].
+   *
+   * See [EntityListener.entityRemoved].
+   */
   override fun entityRemoved(entity: Entity)
+
   override fun entityAdded(entity: Entity) = Unit
 }
 
