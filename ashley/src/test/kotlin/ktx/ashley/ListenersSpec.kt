@@ -113,18 +113,3 @@ object ListenersSpec : Spek({
 internal class TestComponent : Component {
   companion object : Mapper<TestComponent>()
 }
-
-private class TestIteratingSystem : IteratingSystem(allOf(TestComponent::class).get()) {
-  private lateinit var additionListener: EntityAdditionListener
-  private lateinit var removalListener: EntityRemovalListener
-
-  override fun processEntity(entity: Entity, deltaTime: Float) = Unit
-
-  override fun addedToEngine(engine: Engine) {
-    super.addedToEngine(engine)
-
-    additionListener = onEntityAdded { entity ->
-
-    }
-  }
-}
