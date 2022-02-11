@@ -8,7 +8,7 @@ Utilities and type-safe builders for the [Ashley](https://github.com/libgdx/ashl
 ### Why?
 
 Since [Ashley](https://github.com/libgdx/ashley) contains many generic methods consuming `Class` instances, Kotlin can
-provide a pleasant DSL via inlined methods reified generic types. Additionally, creating `Entities` and their respective
+provide a pleasant DSL via inlined methods with reified generic types. Additionally, creating `Entities` and their respective
 `Components` can result in a lot of declarative-style code which is greatly improved by an easily readable type-safe
 builder DSL. 
  
@@ -31,6 +31,10 @@ builder DSL.
 `allOf`, `exclude`.
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
+- `EntityAdditionListener` is an interface extending `EntityListener` which you can use for only working with the `entityAdded` event
+- `EntityRemovalListener` is an interface extending `EntityListener` which you can use for only working with the `entityRemoved` event
+- `Engine.onEntityAdded` and `Engine.onEntityRemoved` allow you to create such `EntityAdditionListener`s and `EntityRemovalListener`s with a lambda and add them to the `Engine` immediately
+- Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and `SortedIteratingSystem` that use these systems' `Family`s and `Engine`s automatically
 
 > Note that `Mapper` relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe to use
 > on the officially supported platforms, it might not work correctly with the third-party backends.
@@ -287,6 +291,86 @@ class B: Component {
 class C: Component
 // Will throw exceptions!
 object CMapper: Mapper<C>()
+```
+
+Creating an `EntitySystem` that only listens to entities being added:
+
+```kotlin
+class MySystem : EntitySystem(), EntityAdditionListener {
+  override fun entityAdded(entity: Entity) {
+    // implement your logic here
+  }
+}
+```
+
+Creating an `EntitySystem` that only listens to entities being removed:
+
+```kotlin
+class MySystem : EntitySystem(), EntityRemovalListener {
+  override fun entityRemoved(entity: Entity) {
+    // implement your logic here
+  }
+}
+```
+
+Creating, storing and removing `EntityAdditionListener`s and `EntityRemovalListener`s with lambdas:
+
+```kotlin
+val engine = Engine()
+
+fun registerListeners() {
+  val additionListener = engine.onEntityAdded { entity ->
+    // implement your addition logic here
+  }
+
+  val removalListener = engine.onEntityRemoved { entity ->
+    // implement your removal logic here
+  }
+
+  // If you need to remove such listeners later, retain a reference to them
+  // and call Engine.removeEntityListener when desired:
+  engine.removeEntityListener(additionListener)
+  engine.removeEntityListener(removalListener)
+}
+```
+
+Managing `EntityAdditionListener`s and `EntityRemovalListener`s with an `IteratingSystem`'s `Family`:
+
+Such extensions are also available for `SortedIteratingSystem` and `IntervalIteratingSystem`.
+
+```kotlin
+val engine = Engine()
+
+class ExampleComponent : Component
+
+class MyIteratingSystem : IteratingSystem(allOf(ExampleComponent::class).get()) {
+  // retain references to your listeners to remove them from the engine later
+  private lateinit var additionListener: EntityAdditionListener
+  private lateinit var removalListener: EntityRemovalListener
+
+  override fun processEntity(entity: Entity, deltaTime: Float) {
+    // some other logic
+  }
+
+  override fun addedToEngine(engine: Engine) { // add your listeners here
+    super.addedToEngine(engine)
+
+    additionListener = onEntityAdded { entity ->
+      // handle entities with an ExampleComponent being added
+    }
+
+    removalListener = onEntityRemoved { entity ->
+      // handle entities with an ExampleComponent being removed
+    }
+  }
+
+  override fun removedFromEngine(engine: Engine) { // dispose of your listeners here
+    super.removedFromEngine(engine)
+
+    engine.removeEntityListener(additionListener)
+    engine.removeEntityListener(removalListener)
+  }
+}
 ```
 
 #### Additional documentation

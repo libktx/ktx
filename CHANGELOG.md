@@ -2,6 +2,12 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-ashley`) Added utilities for working with Ashley `EntityListeners`:
+  - `EntityAdditionListener`: an `EntityListener` override for only working with the `entityAdded` event
+  - `EntityRemovalListener`: an `EntityListener` override for only working with the `entityRemoved` event
+  - `Engine.onEntityAdded` and `Engine.onEntityRemoved` allow you to create such `EntityAdditionListener`s and `EntityRemovalListener`s with a lambda and add them to the `Engine` immediately
+  - Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and `SortedIteratingSystem` that use these systems' `Family`s and `Engine`s automatically
+
 #### 1.10.0-rc1
 
 - **[UPDATE]** Updated to Kotlin 1.6.10.

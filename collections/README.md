@@ -7,7 +7,7 @@ Utilities and extension function for custom libGDX collections.
 ### Why?
 
 Unfortunately, libGDX collections do not implement interfaces or extend any abstract classes from the `java.util`
-package. Although standard Kotlin library features superb utilities, some of them be used along with the libGDX
+package. Although standard Kotlin library features superb utilities, some of them can be used along with the libGDX
 collections simply because they do not implement the `Collection` interface. Not to mention libGDX collections
 could use some extensions and factory methods, as well as fully benefit from the syntax sugar (like the square bracket
 operator) that Kotlin comes with.
