@@ -1,6 +1,9 @@
 package ktx.ashley
 
-import com.badlogic.ashley.core.*
+import com.badlogic.ashley.core.Engine
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.EntityListener
+import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IntervalIteratingSystem
 import com.badlogic.ashley.systems.IteratingSystem
 import com.badlogic.ashley.systems.SortedIteratingSystem
@@ -29,8 +32,8 @@ interface EntityRemovalListener : EntityListener {
   override fun entityAdded(entity: Entity) = Unit
 }
 
-// An empty family used internally to make the Family an optional parameter
-@PublishedApi internal val emptyFamily = Family.all().get()
+// A family that matches any entity in the engine. Used to make Family an optional parameter in the API.
+@PublishedApi internal val anyFamily = Family.all().get()
 
 /**
  * Adds an [EntityAdditionListener] to this [Engine] that is backed by the given lambda and returns it.
@@ -38,16 +41,16 @@ interface EntityRemovalListener : EntityListener {
  * If you want to remove this [EntityAdditionListener] from the [Engine] afterwards, retain the reference returned by
  * this method and call [Engine.removeEntityListener] with it.
  *
- * @param family The [Family] targeted by this [EntityAdditionListener]. An empty family (see [emptyFamily] by default)
+ * @param family The [Family] targeted by this [EntityAdditionListener]. An empty family (see [anyFamily] by default)
  * @param priority The priority, with which this [EntityAdditionListener] will be executed. Lower value means higher
  * priority. 0 (the highest priority) by default
- * @param implementation The lambda implementation of this [EntityAdditionListener] that must match the
+ * @param onAdded The lambda implementation of this [EntityAdditionListener] that must match the
  * [EntityAdditionListener.entityAdded] method.
  */
-inline fun Engine.onEntityAdded(family: Family = emptyFamily, priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityAdditionListener {
+inline fun Engine.onEntityAdded(family: Family = anyFamily, priority: Int = 0, crossinline onAdded: (entity: Entity) -> Unit): EntityAdditionListener {
   val listener = object : EntityAdditionListener {
     override fun entityAdded(entity: Entity) {
-      implementation.invoke(entity)
+      onAdded.invoke(entity)
     }
   }
 
@@ -61,16 +64,16 @@ inline fun Engine.onEntityAdded(family: Family = emptyFamily, priority: Int = 0,
  * If you want to remove this [EntityRemovalListener] from the [Engine] afterwards, retain the reference returned by
  * this method and call [Engine.removeEntityListener] with it.
  *
- * @param family The [Family] targeted by this [EntityRemovalListener]. An empty family (see [emptyFamily] by default)
+ * @param family The [Family] targeted by this [EntityRemovalListener]. An empty family (see [anyFamily] by default)
  * @param priority The priority, with which this [EntityRemovalListener] will be executed. Lower value means higher
  * priority. 0 (the highest priority) by default
- * @param implementation The lambda implementation of this [EntityRemovalListener] that must match the
+ * @param onRemoved The lambda implementation of this [EntityRemovalListener] that must match the
  * [EntityRemovalListener.entityRemoved] method.
  */
-inline fun Engine.onEntityRemoved(family: Family = emptyFamily, priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityRemovalListener {
+inline fun Engine.onEntityRemoved(family: Family = anyFamily, priority: Int = 0, crossinline onRemoved: (entity: Entity) -> Unit): EntityRemovalListener {
   val listener = object : EntityRemovalListener {
     override fun entityRemoved(entity: Entity) {
-      implementation.invoke(entity)
+      onRemoved.invoke(entity)
     }
   }
 
@@ -81,41 +84,41 @@ inline fun Engine.onEntityRemoved(family: Family = emptyFamily, priority: Int = 
 /**
  * A wrapper for [Engine.onEntityAdded] that uses this [IteratingSystem]'s [Family] as a filter for the [EntityAdditionListener].
  */
-inline fun IteratingSystem.onEntityAdded(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityAdditionListener {
-  return engine.onEntityAdded(family, priority, implementation)
+inline fun IteratingSystem.onEntityAdded(priority: Int = 0, crossinline onAdded: (entity: Entity) -> Unit): EntityAdditionListener {
+  return engine.onEntityAdded(family, priority, onAdded)
 }
 
 /**
  * A wrapper for [Engine.onEntityRemoved] that uses this [IteratingSystem]'s [Family] as a filter for the [EntityRemovalListener].
  */
-inline fun IteratingSystem.onEntityRemoved(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityRemovalListener {
-  return engine.onEntityRemoved(family, priority, implementation)
+inline fun IteratingSystem.onEntityRemoved(priority: Int = 0, crossinline onRemoved: (entity: Entity) -> Unit): EntityRemovalListener {
+  return engine.onEntityRemoved(family, priority, onRemoved)
 }
 
 /**
  * A wrapper for [Engine.onEntityAdded] that uses this [IntervalIteratingSystem]'s [Family] as a filter for the [EntityAdditionListener].
  */
-inline fun IntervalIteratingSystem.onEntityAdded(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityAdditionListener {
-  return engine.onEntityAdded(family, priority, implementation)
+inline fun IntervalIteratingSystem.onEntityAdded(priority: Int = 0, crossinline onAdded: (entity: Entity) -> Unit): EntityAdditionListener {
+  return engine.onEntityAdded(family, priority, onAdded)
 }
 
 /**
  * A wrapper for [Engine.onEntityRemoved] that uses this [IntervalIteratingSystem]'s [Family] as a filter for the [EntityRemovalListener].
  */
-inline fun IntervalIteratingSystem.onEntityRemoved(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityRemovalListener {
-  return engine.onEntityRemoved(family, priority, implementation)
+inline fun IntervalIteratingSystem.onEntityRemoved(priority: Int = 0, crossinline onRemoved: (entity: Entity) -> Unit): EntityRemovalListener {
+  return engine.onEntityRemoved(family, priority, onRemoved)
 }
 
 /**
  * A wrapper for [Engine.onEntityAdded] that uses this [SortedIteratingSystem]'s [Family] as a filter for the [EntityAdditionListener].
  */
-inline fun SortedIteratingSystem.onEntityAdded(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityAdditionListener {
-  return engine.onEntityAdded(family, priority, implementation)
+inline fun SortedIteratingSystem.onEntityAdded(priority: Int = 0, crossinline onAdded: (entity: Entity) -> Unit): EntityAdditionListener {
+  return engine.onEntityAdded(family, priority, onAdded)
 }
 
 /**
  * A wrapper for [Engine.onEntityRemoved] that uses this [SortedIteratingSystem]'s [Family] as a filter for the [EntityRemovalListener].
  */
-inline fun SortedIteratingSystem.onEntityRemoved(priority: Int = 0, crossinline implementation: (entity: Entity) -> Unit): EntityRemovalListener {
-  return engine.onEntityRemoved(family, priority, implementation)
+inline fun SortedIteratingSystem.onEntityRemoved(priority: Int = 0, crossinline onRemoved: (entity: Entity) -> Unit): EntityRemovalListener {
+  return engine.onEntityRemoved(family, priority, onRemoved)
 }
