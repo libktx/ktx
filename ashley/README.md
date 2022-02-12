@@ -353,6 +353,8 @@ import ktx.ashley.onEntityRemoved
 
 class ExampleComponent : Component
 
+// Listeners can be added to all Ashley iterating systems such as
+// IteratingSystem, IntervalIteratingSystem or SortedIteratingSystem.
 class MyIteratingSystem : IteratingSystem(allOf(ExampleComponent::class).get()) {
   // You can retain references to your listeners to remove them from the engine.
   private lateinit var additionListener: EntityAdditionListener
