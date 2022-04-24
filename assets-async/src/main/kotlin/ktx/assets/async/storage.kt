@@ -279,6 +279,7 @@ class AssetStorage(
    *
    * See also [get] and [getAsync].
    */
+  @OptIn(ExperimentalCoroutinesApi::class)
   fun <T> getOrNull(identifier: Identifier<T>): T? {
     val asset = assets[identifier]
     @Suppress("UNCHECKED_CAST", "EXPERIMENTAL_API_USAGE") // Avoids runBlocking call.

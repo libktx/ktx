@@ -2,6 +2,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.6.21.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.6.1.
 - **[FEATURE]** (`ktx-ashley`) Added utilities for working with Ashley's `EntityListener` interface:
   - `EntityAdditionListener`: an interface extending `EntityListener` that only requires implementation of the  `entityAdded` method.
   - `EntityRemovalListener`: an interface extending `EntityListener` that only requires implementation of the `entityRemoved` method.
