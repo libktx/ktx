@@ -96,7 +96,7 @@ class HttpRequestResult(
   override fun toString() = "HttpRequestResult(url=$url, method=$method, status=$statusCode)"
   override fun equals(other: Any?) = when (other) {
     null -> false
-    other === this -> true
+    (other === this) -> true
     is HttpRequestResult ->
       url == other.url &&
         method == other.method &&

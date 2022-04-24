@@ -1,13 +1,26 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.10.0-rc2
+
+- **[UPDATE]** Updated to Kotlin 1.6.21.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.6.1.
+- **[FEATURE]** (`ktx-ashley`) Added utilities for working with Ashley's `EntityListener` interface:
+  - `EntityAdditionListener`: an interface extending `EntityListener` that only requires implementation of the  `entityAdded` method.
+  - `EntityRemovalListener`: an interface extending `EntityListener` that only requires implementation of the `entityRemoved` method.
+  - `Engine.onEntityAdded` and `Engine.onEntityRemoved` extension methods that create entity listeners from lambdas.
+  - Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem`
+    and `SortedIteratingSystem` that use system's `Family` and `Engine` automatically.
+- **[FEATURE]** (`ktx-script`) Added `KotlinScriptEngine.evaluateOn` methods that can execute scripts with a custom receiver.
+- **[CHANGE]** (`ktx-script`) Generic libGDX and Java exceptions replaced with a custom `ScriptEngineException`.
+
 #### 1.10.0-rc1
 
 - **[UPDATE]** Updated to Kotlin 1.6.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.6.0.
 - **[MISC]** Links to the libGDX wiki were updated.
 - **[MISC]** Stable **KTX** releases are now marked with the `-rc` suffix.
+- **[FEATURE]** (`ktx-actors`) Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
 - **[CHANGE]** (`ktx-scene2d`) The generic `Node` type of `KTreeWidget` was changed to `KNode<*>`.
-- **[FEATURE]** Added `Tree.onSelectionChange` extension method that attaches a `ChangeListener` to a `Tree`.
 - **[FEATURE]** (`ktx-script`) Added a new module with `KotlinScriptEngine` evaluating Kotlin scripts in runtime.
   - `evaluate(String)`: compiles and executes a script passed as a string.
   - `evaluate(FileHandle)`: compiles and executes a script from the selected file.
@@ -19,7 +32,6 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
   - `import(String, String?)`: adds an import to the script context. Accepts optional alias.
   - `importAll(vararg String)`, `importAll(Iterable<String>)`: adds the selected imports to the script context.
   - `setPackage(String)`: sets the package for the scripts.
-  - `onItemClick(Node)`: adds a listener that gets invoked when `Node` in a `Tree` gets clicked.
 - **[CHANGE]** (`ktx-vis`) The generic `Node` type of `KVisTree` was changed to `KNode<*>`.
 
 #### 1.10.0-b4
