@@ -131,8 +131,8 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should load BitmapFont assets`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
+    val path = "com/badlogic/gdx/utils/lsans-15.fnt"
+    val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When:
     val asset = storage.testLoad<BitmapFont>(path)
@@ -154,8 +154,8 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should unload BitmapFont with dependencies`() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
+    val path = "com/badlogic/gdx/utils/lsans-15.fnt"
+    val dependency = "com/badlogic/gdx/utils/lsans-15.png"
     storage.testLoad<BitmapFont>(path)
 
     // When:
@@ -717,7 +717,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     storage.logger.level = Logger.NONE
     val assets = listOf(
       storage.getIdentifier<String>("ktx/assets/async/string.txt"),
-      storage.getIdentifier<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt"),
+      storage.getIdentifier<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt"),
       storage.getIdentifier<Music>("ktx/assets/async/sound.ogg"),
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
       storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),

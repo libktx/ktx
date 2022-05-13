@@ -222,7 +222,7 @@ import ktx.style.*
 skin(myAtlas) { skin ->
   textTooltip {
     label = skin.label("tooltipText") {
-      font = skin["arial"]
+      font = skin["lsans"]
       fontColor = skin.color("black", 0f, 0f, 0f)
     }
     background = skin["tooltipBackground"]

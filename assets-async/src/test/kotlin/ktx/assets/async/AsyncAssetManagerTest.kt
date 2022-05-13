@@ -200,8 +200,8 @@ class AsyncAssetManagerTest : AsyncTest() {
   @Test
   fun `should load BitmapFont asynchronously`() {
     // Given:
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
+    val path = "com/badlogic/gdx/utils/lsans-15.fnt"
+    val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When:
     val asset = assetManager.loadAsync<BitmapFont>(path)

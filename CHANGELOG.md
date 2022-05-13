@@ -1,7 +1,8 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.10.0-SNAPSHOT
+#### 1.11.0-SNAPSHOT
 
+- **[UPDATE]** Updated to libGDX 1.11.0.
 - **[FEATURE]** (`ktx-app`) Added `gdxError` utility that throws a `GdxRuntimeException`.
 
 #### 1.10.0-rc2

@@ -47,7 +47,7 @@ class TextUtilitiesTest {
    * omits loading the textures. For testing purposes.
    */
   class FakeFont : BitmapFont(
-    BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.fnt"), true),
+    BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"), true),
     GdxArray.with(mock()),
     true
   ) {
