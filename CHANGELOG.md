@@ -2,6 +2,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.10.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-app`) Added `gdxError` utility that throws a `GdxRuntimeException`.
+
 #### 1.10.0-rc2
 
 - **[UPDATE]** Updated to Kotlin 1.6.21.
