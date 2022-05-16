@@ -6,7 +6,7 @@ const val kotlinCoroutinesVersion = "1.6.1"
 const val ashleyVersion = "1.7.4"
 const val visUiVersion = "1.5.0"
 
-const val spekVersion = "1.2.1"
+const val spekVersion = "1.1.5"
 const val kotlinTestVersion = "2.0.7"
 const val kotlinMockitoVersion = "2.1.0"
 const val assertjVersion = "3.11.1"

@@ -3,7 +3,7 @@ import ktx.*
 val junitPlatformVersion: String by project
 
 dependencies {
-  compileOnly("com.badlogicgames.ashley:ashley:$ashleyVersion")
+  api("com.badlogicgames.ashley:ashley:$ashleyVersion")
 
   testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
   testImplementation("org.assertj:assertj-core:$assertjVersion")

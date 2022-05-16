@@ -57,13 +57,8 @@ subprojects {
 
   repositories {
     mavenLocal()
-    gradlePluginPortal()
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-  }
-
-  configurations {
-    testImplementation.get().extendsFrom(compileOnly.get())
   }
 
   group = libGroup
@@ -90,8 +85,8 @@ subprojects {
   dependencies {
     val kotlinVersion: String by project
 
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    compileOnly("com.badlogicgames.gdx:gdx:$gdxVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")

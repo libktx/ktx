@@ -3,6 +3,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.11.0-SNAPSHOT
 
 - **[UPDATE]** Updated to libGDX 1.11.0.
+- **[MISC]** Gradle dependencies changed from _compile-only_ to _API_ scope.
 - **[FEATURE]** (`ktx-app`) Added `gdxError` utility that throws a `GdxRuntimeException`.
 
 #### 1.10.0-rc2
