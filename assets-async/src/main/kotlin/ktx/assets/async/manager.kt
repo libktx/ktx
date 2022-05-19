@@ -139,7 +139,7 @@ class AsyncAssetManager(
    * dependencies. The possible exceptions include [DependencyLoadingException] if one of the asset's
    * dependencies failed to load, or any exception thrown by the asset loader.
    */
-  fun <T> AssetManager.loadAsync(assetDescriptor: AssetDescriptor<T>): Deferred<T> {
+  fun <T> loadAsync(assetDescriptor: AssetDescriptor<T>): Deferred<T> {
     synchronized(this) {
       // isLoaded and get are both synchronized. We want to perform these in a single step.
       if (isLoaded(assetDescriptor)) {
@@ -153,44 +153,47 @@ class AsyncAssetManager(
         // Returning existing callback to the asset:
         @Suppress("UNCHECKED_CAST") return callbacks[assetDescriptor.fileName] as Deferred<T>
       }
-    }
 
-    val result = CompletableDeferred<T>()
+      val result = CompletableDeferred<T>()
 
-    // The Deferred can be completed via a LoadedCallback. However, AssetLoaderParameters can be null.
-    @Suppress("UNCHECKED_CAST")
-    val parameters: AssetLoaderParameters<T> = assetDescriptor.params as AssetLoaderParameters<T>?
-      ?: getDefaultParameters(assetDescriptor)
+      // The Deferred can be completed via a LoadedCallback. However, AssetLoaderParameters can be null.
+      @Suppress("UNCHECKED_CAST")
+      val parameters: AssetLoaderParameters<T> = assetDescriptor.params as AssetLoaderParameters<T>?
+        ?: getDefaultParameters(assetDescriptor)
 
-    // Adding a custom LoadedCallback that completes the Deferred instance:
-    val userDefinedCallback = parameters.loadedCallback
-    parameters.loadedCallback = LoadedCallback { assetManager, fileName, type ->
-      if (result.isCompleted) return@LoadedCallback
-      try {
-        // If the user defined a custom callback, it should still be executed:
-        userDefinedCallback?.finishedLoading(assetManager, fileName, type)
-        // Completing the callback:
-        result.complete(assetManager.get(assetDescriptor))
-        // Restoring original user callback:
-        parameters.loadedCallback = userDefinedCallback
-      } catch (exception: Throwable) {
-        result.completeExceptionally(exception)
-      } finally {
-        synchronized(this) {
-          callbacks.remove(fileName)
+      // Adding a custom LoadedCallback that completes the Deferred instance:
+      val userDefinedCallback = parameters.loadedCallback
+      parameters.loadedCallback = LoadedCallback { assetManager, fileName, type ->
+        if (result.isCompleted) {
+          // Executing the original user callback without resolving the deferred instance:
+          userDefinedCallback?.finishedLoading(assetManager, fileName, type)
+          // No error handling, since the deferred instance was already completed.
+          parameters.loadedCallback = userDefinedCallback
+          return@LoadedCallback
+        }
+        try {
+          // If the user defined a custom callback, it should still be executed:
+          userDefinedCallback?.finishedLoading(assetManager, fileName, type)
+          // Completing the deferred:
+          result.complete(assetManager.get(assetDescriptor))
+          // Restoring original user callback:
+          parameters.loadedCallback = userDefinedCallback
+        } catch (exception: Throwable) {
+          result.completeExceptionally(exception)
+        } finally {
+          synchronized(this) {
+            callbacks.remove(fileName)
+          }
         }
       }
-    }
 
-    // Scheduling actual loading:
-    synchronized(this) {
       callbacks[assetDescriptor.fileName] = result
       // AssetDescriptor is final, and the load(AssetDescriptor) method destructs it either way.
       // In order to pass our (possibly new) parameters, `load` is called with individual properties:
       load(assetDescriptor.fileName, assetDescriptor.type, parameters)
-    }
 
-    return result
+      return result
+    }
   }
 
   /**
