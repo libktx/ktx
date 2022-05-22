@@ -1,6 +1,6 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.11.0-SNAPSHOT
+#### 1.11.0-rc1
 
 - **[UPDATE]** Updated to libGDX 1.11.0.
 - **[MISC]** Gradle dependencies changed from _compile-only_ to _API_ scope.
