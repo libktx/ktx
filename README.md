@@ -1,6 +1,6 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.6.21-orange.svg)](http://kotlinlang.org/)
-[![libGDX](https://img.shields.io/badge/libgdx-1.10.0-red.svg)](https://libgdx.com/)
+[![libGDX](https://img.shields.io/badge/libgdx-1.11.0-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -79,7 +79,7 @@ in your `build.gradle` file:
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.10.0-rc1'
+  ktxVersion = '1.11.0-rc1'
 }
 
 dependencies {
@@ -91,7 +91,7 @@ dependencies {
 // Kotlin DSL:
 
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.10.0-rc1"
+val ktxVersion = "1.11.0-rc1"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
@@ -145,7 +145,7 @@ repositories {
 
 ext {
   // Update this version to match the latest libGDX release:
-  ktxVersion = '1.10.0-SNAPSHOT'
+  ktxVersion = '1.11.0-SNAPSHOT'
 }
 ```
 
@@ -157,7 +157,7 @@ repositories {
 }
 
 // Update this version to match the latest libGDX release:
-val ktxVersion = "1.10.0-SNAPSHOT"
+val ktxVersion = "1.11.0-SNAPSHOT"
 ```
 
 The latest snapshot version name can be found on the [`develop`](https://github.com/libktx/ktx/blob/develop/version.txt)

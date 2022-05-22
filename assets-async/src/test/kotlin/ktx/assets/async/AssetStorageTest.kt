@@ -874,8 +874,8 @@ class AssetStorageTest : AsyncTest() {
       fileResolver = ClasspathFileHandleResolver(),
       asyncContext = loaders
     )
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
+    val path = "com/badlogic/gdx/utils/lsans-15.fnt"
+    val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When:
     val assets = (1..100).map {
@@ -959,8 +959,8 @@ class AssetStorageTest : AsyncTest() {
       fileResolver = ClasspathFileHandleResolver(),
       asyncContext = loaders
     )
-    val path = "com/badlogic/gdx/utils/arial-15.fnt"
-    val dependency = "com/badlogic/gdx/utils/arial-15.png"
+    val path = "com/badlogic/gdx/utils/lsans-15.fnt"
+    val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When: spawning 100 coroutines that load and unload the asset, 1 of which loads it 2 times:
     val assets = (1..100).map { id ->

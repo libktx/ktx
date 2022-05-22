@@ -33,6 +33,7 @@ being a class like `com.badlogic.gdx.InputAdapter`.
 - `clearScreen` is an inlined utility function that hides the OpenGL calls, allowing to clear the screen with a chosen
 color.
 - `emptyScreen` provides no-op implementations of `Screen`.
+- `gdxError` throws a `GdxRuntimeException` with an optional message and cause.
 
 #### Platform-specific utilities
 

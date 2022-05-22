@@ -1,5 +1,13 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.11.0-rc1
+
+- **[UPDATE]** Updated to libGDX 1.11.0.
+- **[MISC]** Gradle dependencies changed from _compile-only_ to _API_ scope.
+- **[FEATURE]** (`ktx-app`) Added `gdxError` utility that throws a `GdxRuntimeException`.
+- **[FIX]** (`ktx-assets-async`) Fixed a niche bug with `AsyncAssetManager` which could lead to missed callbacks
+after attempting to load the same asset concurrently with `loadAsync`.
+
 #### 1.10.0-rc2
 
 - **[UPDATE]** Updated to Kotlin 1.6.21.

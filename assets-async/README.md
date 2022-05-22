@@ -477,7 +477,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 // A common example of this would be getting the assets for the loading screen.
 // In this case you can use `loadSync`, which will block the current thread until
 // the asset is loaded:
-val font = assetStorage.loadSync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+val font = assetStorage.loadSync<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt")
 
 // Note that you should not use `loadSync` from within coroutines.
 
@@ -733,7 +733,7 @@ class WithAssetManager: ApplicationAdapter() {
 
     // Scheduling assets for asynchronous loading:
     assetManager.load("images/logo.png", Texture::class.java)
-    assetManager.load("com/badlogic/gdx/utils/arial-15.fnt", BitmapFont::class.java)
+    assetManager.load("com/badlogic/gdx/utils/lsans-15.fnt", BitmapFont::class.java)
   }
 
   override fun render() {
@@ -794,7 +794,7 @@ class WithAssetStorageBasic: ApplicationAdapter() {
 
     // Scheduling assets for asynchronous loading:
     assetStorage.loadAsync<Texture>("images/logo.png")
-    assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+    assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt")
   }
 
   override fun render() {
@@ -845,7 +845,7 @@ class WithAssetStorage: ApplicationAdapter() {
     // Scheduling assets for asynchronous loading:
     val assets = listOf(
       assetStorage.loadAsync<Texture>("images/logo.png"),
-      assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/arial-15.fnt")
+      assetStorage.loadAsync<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt")
     )
 
     // Instead of constantly updating or checking the progress,
