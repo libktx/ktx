@@ -2,6 +2,9 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.7.0.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.6.2.
+
 #### 1.11.0-rc1
 
 - **[UPDATE]** Updated to libGDX 1.11.0.
