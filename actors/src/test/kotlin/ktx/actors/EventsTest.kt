@@ -83,6 +83,26 @@ class EventsTest {
     assertTrue(listener in actor.listeners)
   }
 
+  @Test
+  fun `should attach InputListener for onEnter event`() {
+    val actor = Actor()
+
+    val listener = actor.onEnter { }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+  }
+
+  @Test
+  fun `should attach InputListener for onExit event`() {
+    val actor = Actor()
+
+    val listener = actor.onExit { }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+  }
+
   class SampleNode : Tree.Node<SampleNode, Any, Actor>(mock())
 
   @Test

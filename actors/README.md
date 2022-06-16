@@ -44,6 +44,8 @@ and allow to inspect the original `Event` instance that triggered the listener. 
 be enough for most use cases.
 - Lambda-compatible `Tree.onSelectionChange` method was added. Attaches a listener invoked each time a `Tree`'s node
 selection is modified.
+- `onExit` and `onEnter` `Actor` extension methods added. Attaches a listener invoked whenever a cursor/touch
+enters/exits respectfully
 
 #### Actions
 
