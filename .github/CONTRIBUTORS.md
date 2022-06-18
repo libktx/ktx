@@ -96,6 +96,8 @@ Project contributors listed chronologically.
   * Updated links to the new libGDX wiki.
 * [@mmilenkov](https://github.com/mmilenkov)
   * Contributed utilities to the [actors module](../actors).
+* [@mariorez](https://github.com/mariorez)
+  * Updated documentation links on the [libKTX website](https://github.com/libktx/libktx.github.io).
 
 ### Metrics
 
