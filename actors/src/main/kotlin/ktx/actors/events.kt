@@ -91,6 +91,41 @@ inline fun <T : Actor> T.onClickEvent(
 }
 
 /**
+ * Attaches an [InputListener] to this actor.
+ * @param listener is invoked each time the mouse cursor or finger touch is moved over an actor
+ * On desktop this will occur even when no mouse buttons are pressed. Consumes the [Actor] as `this`.
+ * @return [InputListener] instance
+ */
+inline fun <T : Actor> T.onEnter(
+  crossinline listener: T.() -> Unit
+): InputListener {
+  val inputListener = object : InputListener() {
+    override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) =
+      listener()
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+/**
+ * Attaches an [InputListener] to this actor.
+ * @param listener is invoked each time the mouse cursor or finger touch is moved out of an actor.
+ * On desktop this will occurs even when no mouse buttons are pressed. Consumes the [Actor] as `this`.
+ * @return [InputListener] instance.
+ */
+inline fun <T : Actor> T.onExit(
+  crossinline listener: T.() -> Unit
+): InputListener {
+  val inputListener = object : InputListener() {
+    override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) =
+      listener()
+  }
+  addListener(inputListener)
+  return inputListener
+}
+
+
+/**
  * Attaches a [ChangeListener] to this [Tree].
  * @param listener invoked each time the node [Selection] is changed. Receives the [Selection] object
  * which can be used to obtain all selected items with [Selection.items] or the latest selected item
