@@ -94,6 +94,8 @@ Project contributors listed chronologically.
   * Contributed utilities to the [actors module](../actors).
 * [@crykn](https://github.com/crykn)
   * Updated links to the new libGDX wiki.
+* [@mmilenkov](https://github.com/mmilenkov)
+  * Contributed utilities to the [actors module](../actors).
 
 ### Metrics
 

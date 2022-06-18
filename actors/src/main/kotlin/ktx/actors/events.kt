@@ -91,39 +91,84 @@ inline fun <T : Actor> T.onClickEvent(
 }
 
 /**
- * Attaches an [InputListener] to this actor.
- * @param listener is invoked each time the mouse cursor or finger touch is moved over an actor
+ * Attaches a [ClickListener] to this actor.
+ * @param listener invoked each time the mouse cursor or finger touch enters the actor.
  * On desktop this will occur even when no mouse buttons are pressed. Consumes the [Actor] as `this`.
- * @return [InputListener] instance
+ * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onEnter(
   crossinline listener: T.() -> Unit
 ): InputListener {
-  val inputListener = object : InputListener() {
-    override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) =
+  val clickListener = object : ClickListener() {
+    override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+      super.enter(event, x, y, pointer, fromActor)
       listener()
+    }
   }
-  addListener(inputListener)
-  return inputListener
+  addListener(clickListener)
+  return clickListener
 }
 
 /**
- * Attaches an [InputListener] to this actor.
- * @param listener is invoked each time the mouse cursor or finger touch is moved out of an actor.
- * On desktop this will occurs even when no mouse buttons are pressed. Consumes the [Actor] as `this`.
- * @return [InputListener] instance.
+ * Attaches an [ClickListener] to this actor.
+ * @param listener invoked each time the mouse cursor or finger touch is moved out of an actor.
+ * On desktop this will occur even when no mouse buttons are pressed. Consumes the [Actor] as `this`.
+ * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onExit(
   crossinline listener: T.() -> Unit
 ): InputListener {
-  val inputListener = object : InputListener() {
-    override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) =
+  val clickListener = object : ClickListener() {
+    override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+      super.exit(event, x, y, pointer, toActor)
       listener()
+    }
   }
-  addListener(inputListener)
-  return inputListener
+  addListener(clickListener)
+  return clickListener
 }
 
+/**
+ * Attaches a [ClickListener] to this actor.
+ * @param listener invoked each time the mouse cursor or finger touch enters the actor.
+ * Consumes the triggered [InputEvent] and the [Actor] that the listener was originally attached to as `this`.
+ * The received floats are local X and Y coordinates of the actor.
+ * @return [ClickListener] instance.
+ * @see onEnter
+ */
+inline fun <T : Actor> T.onEnterEvent(
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+): ClickListener {
+  val clickListener = object : ClickListener() {
+    override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+      super.enter(event, x, y, pointer, fromActor)
+      listener(event, x, y)
+    }
+  }
+  addListener(clickListener)
+  return clickListener
+}
+
+/**
+ * Attaches a [ClickListener] to this actor.
+ * @param listener invoked each time the mouse cursor or finger touch is moved out of an actor.
+ * Consumes the triggered [InputEvent] and the [Actor] that the listener was originally attached to as `this`.
+ * The received floats are local X and Y coordinates of the actor.
+ * @return [ClickListener] instance.
+ * @see onExit
+ */
+inline fun <T : Actor> T.onExitEvent(
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+): ClickListener {
+  val clickListener = object : ClickListener() {
+    override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+      super.exit(event, x, y, pointer, toActor)
+      listener(event, x, y)
+    }
+  }
+  addListener(clickListener)
+  return clickListener
+}
 
 /**
  * Attaches a [ChangeListener] to this [Tree].

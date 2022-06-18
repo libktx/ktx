@@ -84,7 +84,7 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach InputListener for onEnter event`() {
+  fun `should attach ClickListener triggered on enter events`() {
     val actor = Actor()
 
     val listener = actor.onEnter { }
@@ -94,10 +94,30 @@ class EventsTest {
   }
 
   @Test
-  fun `should attach InputListener for onExit event`() {
+  fun `should attach InputListener triggered on exit events`() {
     val actor = Actor()
 
     val listener = actor.onExit { }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+  }
+
+  @Test
+  fun `should attach ClickListener consuming onEnter events with local coordinates`() {
+    val actor = Actor()
+
+    val listener = actor.onEnterEvent { event, x, y -> }
+
+    assertNotNull(listener)
+    assertTrue(listener in actor.listeners)
+  }
+
+  @Test
+  fun `should attach ClickListener consuming onExit events with local coordinates`() {
+    val actor = Actor()
+
+    val listener = actor.onExitEvent { event, x, y -> }
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)

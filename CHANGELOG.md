@@ -4,7 +4,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 - **[UPDATE]** Updated to Kotlin 1.7.0.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.6.2.
-- **[FEATURE]** (`ktx-actors`) Added `Actor.onExit` and `Actor.onEnter` extension methods that attach `InputListener` to an `Actor`
+- **[FEATURE]** (`ktx-actors`) Added `Actor.onEnter`, `Actor.onExit`, `Actor.onEnterEvent` and `Actor.onExitEvent`
+extension methods that attach `ClickListener` instances listening for enter and exit events.
 
 #### 1.11.0-rc1
 

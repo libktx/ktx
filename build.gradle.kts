@@ -87,6 +87,7 @@ subprojects {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")

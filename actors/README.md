@@ -37,15 +37,15 @@ with `keyDown` and `keyUp` type, consuming key code of the pressed or released k
 - Lambda-compatible `Actor.onKeyboardFocus` method was added. Allows listening to `FocusEvents` with `keyboard` type.
 - `KtxInputListener` is an open class that extends `InputListener` with no-op default implementations and type
 improvements (nullability data).
-- `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onKeyEvent`, `onKeyDownEvent`, `onKeyUpEvent`, `onScrollFocusEvent`
-and `onKeyboardFocusEvent` `Actor` extension methods were added. They consume the relevant `Event` instances as lambda
-parameters. Both listener factory variants are inlined, but the ones ending with *Event* provide more lambda parameters
-and allow to inspect the original `Event` instance that triggered the listener. Regular listener factory methods should
-be enough for most use cases.
+- Lambda-compatible `Actor.onExit` and `Actor.onEnter` methods were added. They attach listeners invoked whenever
+the cursor enters or exits the actor respectively.
+- `onChangeEvent`, `onClickEvent`, `onTouchEvent`, `onEnterEvent`, `onExitEvent`, `onKeyEvent`, `onKeyDownEvent`,
+`onKeyUpEvent`, `onScrollFocusEvent` and `onKeyboardFocusEvent`
+`Actor` extension methods were added. They consume the original `Event` instances as well as some optionally some
+additional event data as lambda parameters. These listener factory methods ending with *Event* provide more information
+about the user input, and allow inspecting the original `Event` instance that triggered the listener.
 - Lambda-compatible `Tree.onSelectionChange` method was added. Attaches a listener invoked each time a `Tree`'s node
 selection is modified.
-- `onExit` and `onEnter` `Actor` extension methods added. Attaches a listener invoked whenever a cursor/touch
-enters/exits respectfully
 
 #### Actions
 
