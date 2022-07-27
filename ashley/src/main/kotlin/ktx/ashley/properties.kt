@@ -27,11 +27,14 @@ class ComponentDelegate<T : Component>(private val mapper: ComponentMapper<T>) {
  * Allows accessing and setting mandatory components assigned to entities with the property
  * syntax.
  *
+ * Passing a [mapper] is optional; if no value is given, it will create a new [ComponentMapper] for
+ * the chosen [Component] class.
+ *
  * @see optionalPropertyFor
  * @see ComponentDelegate
  **/
-inline fun <reified T : Component> propertyFor(): ComponentDelegate<T> =
-  ComponentDelegate(mapper = mapperFor())
+inline fun <reified T : Component> propertyFor(mapper: ComponentMapper<T> = mapperFor()): ComponentDelegate<T> =
+  ComponentDelegate(mapper)
 
 /**
  * Property delegate for an [Entity] wrapping around a [ComponentMapper].
@@ -61,8 +64,13 @@ class OptionalComponentDelegate<T : Component>(
  * Allows accessing and setting optional components assigned to entities with the property syntax.
  * Attempting to assign a null value to the property will remove the component it from the entity.
  *
+ * Passing a [mapper] is optional; if no value is given, it will create a new [ComponentMapper] for
+ * the chosen [Component] class.
+ *
  * @see propertyFor
  * @see OptionalComponentDelegate
  **/
-inline fun <reified T : Component> optionalPropertyFor(): OptionalComponentDelegate<T> =
-  OptionalComponentDelegate(mapperFor(), T::class.java)
+inline fun <reified T : Component> optionalPropertyFor(
+  mapper: ComponentMapper<T> = mapperFor()
+): OptionalComponentDelegate<T> =
+  OptionalComponentDelegate(mapper, T::class.java)
