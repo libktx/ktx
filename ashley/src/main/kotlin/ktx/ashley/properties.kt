@@ -10,11 +10,11 @@ import kotlin.reflect.KProperty
 
 class ComponentDelegate<T : Component>(val mapper: ComponentMapper<T>) {
 
-    operator fun getValue(thisRef: Entity, property: KProperty<*>): T =
-        mapper[thisRef]
-    operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T) {
-        thisRef.add(value)
-    }
+  operator fun getValue(thisRef: Entity, property: KProperty<*>): T =
+    mapper[thisRef]
+  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T) {
+    thisRef.add(value)
+  }
 }
 
 /**
@@ -27,19 +27,18 @@ inline fun <reified T : Component> propertyFor() = ComponentDelegate<T>(mapperFo
 Nullable version of the ComponentDelegate class, for internal use
 **/
 
-class OptionalComponentDelegate<T : Component>(val mapper: ComponentMapper<T>, private val classs : Class<T>?) {
-    operator fun getValue(thisRef: Entity, property: KProperty<*>): T? =
-        if (mapper.has(thisRef)) mapper[thisRef] else null
+class OptionalComponentDelegate<T : Component>(val mapper: ComponentMapper<T>, private val classs: Class<T>?) {
+  operator fun getValue(thisRef: Entity, property: KProperty<*>): T? =
+    if (mapper.has(thisRef)) mapper[thisRef] else null
 
-    operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T?) {
-        if(value != null) thisRef.add(value)
-        else if( mapper.has(thisRef) ) thisRef.remove(classs)
-    }
+  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T?) {
+    if (value != null) thisRef.add(value)
+    else if (mapper.has(thisRef)) thisRef.remove(classs)
+  }
 }
-
 
 /**
 Nullable version of the propertyFor function
  **/
 
-inline fun <reified T : Component> optionalPropertyFor() = OptionalComponentDelegate(mapperFor(),T::class.java)
+inline fun <reified T : Component> optionalPropertyFor() = OptionalComponentDelegate(mapperFor(), T::class.java)
