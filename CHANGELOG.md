@@ -6,6 +6,10 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.6.2.
 - **[FEATURE]** (`ktx-actors`) Added `Actor.onEnter`, `Actor.onExit`, `Actor.onEnterEvent` and `Actor.onExitEvent`
 extension methods that attach `ClickListener` instances listening for enter and exit events.
+- **[FEATURE]** (`ktx-ashley`) Added `ComponentDelegate` and `OptionalComponentDelegate` that allow accessing component
+via `Entity` extension properties.
+- **[FEATURE]** (`ktx-ashley`) Added `propertyFor<Component>` and `optionalPropertyFor<Component>` utility functions
+that automatically create a mapper for the component delegates.
 
 #### 1.11.0-rc1
 
