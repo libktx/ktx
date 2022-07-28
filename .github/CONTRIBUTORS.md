@@ -94,6 +94,12 @@ Project contributors listed chronologically.
   * Contributed utilities to the [actors module](../actors).
 * [@crykn](https://github.com/crykn)
   * Updated links to the new libGDX wiki.
+* [@mmilenkov](https://github.com/mmilenkov)
+  * Contributed utilities to the [actors module](../actors).
+* [@mariorez](https://github.com/mariorez)
+  * Updated documentation links on the [libKTX website](https://github.com/libktx/libktx.github.io).
+* [@pylvain](https://github.com/pylvain)
+  * Proposed and implemented component property delegates for the [Ashley module](../ashley).
 
 ### Metrics
 

@@ -37,11 +37,13 @@ implementations of event listening methods except for `entityRemoved` event.
 created from a passed with a lambda and add them to the `Engine` immediately.
 - Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and
 `SortedIteratingSystem` that use system's `Family` and `Engine` automatically.
+- `propertyFor` and `optionalPropertyFor` allow extending `Entity` class with properties that automatically extract
+  the chosen component types with the property syntax.
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
 
-> Note that `Mapper` relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe to use
-> on the officially supported platforms, it might not work correctly with the third-party backends.
+> Note that `Mapper` class relies on reflection API unsupported by libGDX `ClassReflection`. While it should be safe
+> to use on the officially supported platforms, it might not work correctly with the third-party backends.
 
 ### Usage examples
 
@@ -174,7 +176,7 @@ fun addComponentToEntity(entity: Entity, engine: Engine) {
 }
 ```
 
-Getting a `Component` from an `Entity`:
+Getting a `Component` from an `Entity` with a mapper:
 
 ```kotlin
 import com.badlogic.ashley.core.Component
@@ -191,7 +193,7 @@ val entity = engine.entity {
 val component: Transform = entity[transform]
 ```
 
-Checking if an `Entity` has a `Component`:
+Checking if an `Entity` has a `Component` with a mapper:
 
 ```kotlin
 import com.badlogic.ashley.core.Component
@@ -208,6 +210,69 @@ val entity = engine.entity {
 val hasTransform: Boolean = entity.has(transform)
 // Or alternatively:
 val containsTransform: Boolean = transform in entity
+```
+
+Using an `Entity` extension property to access and modify a mandatory `Component`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Transform: Component
+// Using an extension property creates a mapper internally:
+var Entity.transform by propertyFor<Transform>()
+// propertyFor creates a non-nullable property that is meant
+// to be used for mandatory components. Attempting to use the
+// property on an Entity that does not have the specific
+// component type might result in a runtime error.
+
+val engine = PooledEngine()
+val entity = engine.entity {
+  with<Transform>()
+}
+
+// Obtaining an instance of the component:
+val transform: Transform = entity.transform
+// Replacing or setting a component instance:
+fun setComponent(transform: Transform) {
+  entity.transform = transform
+}
+```
+
+Using an `Entity` extension property to access and modify an optional `Component`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Transform: Component
+// Using an extension property creates a mapper internally:
+var Entity.transform by optionalPropertyFor<Transform>()
+// optionalPropertyFor creates a nullable property that is meant
+// to be used for optional components. It might return null if
+// the entity does not contain the specific component type.
+
+val engine = PooledEngine()
+val entity = engine.entity {
+  with<Transform>()
+}
+
+// Obtaining an instance of the component:
+val transform: Transform? = entity.transform
+// Checking if the component exists:
+val exists: Boolean = entity.transform != null
+// Replacing or setting a component instance:
+fun setComponent(transform: Transform) {
+  entity.transform = transform
+}
+// Removing a component instance:
+fun removeComponent() {
+  entity.transform = null
+}
 ```
 
 Removing a `Component` from an `Entity`:

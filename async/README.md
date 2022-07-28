@@ -1,4 +1,4 @@
-[![Kotlin Coroutines](https://img.shields.io/badge/kotlin--coroutines-1.6.1-orange.svg)](http://kotlinlang.org/)
+[![Kotlin Coroutines](https://img.shields.io/badge/kotlin--coroutines-1.6.4-orange.svg)](http://kotlinlang.org/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-async)
 
 # KTX: Coroutines support and parallelization utilities

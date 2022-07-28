@@ -1,5 +1,18 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.11.0-rc2
+
+- **[UPDATE]** Updated to Kotlin 1.7.10.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.6.4.
+- **[UPDATE]** Updated to Dokka 1.7.10.
+- **[MISC]** New Dokka theme is available on the documentation website.
+- **[FEATURE]** (`ktx-actors`) Added `Actor.onEnter`, `Actor.onExit`, `Actor.onEnterEvent` and `Actor.onExitEvent`
+extension methods that attach `ClickListener` instances listening for enter and exit events.
+- **[FEATURE]** (`ktx-ashley`) Added `ComponentDelegate` and `OptionalComponentDelegate` that allow accessing component
+via `Entity` extension properties.
+- **[FEATURE]** (`ktx-ashley`) Added `propertyFor<Component>` and `optionalPropertyFor<Component>` utility functions
+that automatically create a mapper for the component delegates.
+
 #### 1.11.0-rc1
 
 - **[UPDATE]** Updated to libGDX 1.11.0.
