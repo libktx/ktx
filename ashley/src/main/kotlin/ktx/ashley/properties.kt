@@ -74,3 +74,38 @@ inline fun <reified T : Component> optionalPropertyFor(
   mapper: ComponentMapper<T> = mapperFor()
 ): OptionalComponentDelegate<T> =
   OptionalComponentDelegate(mapper, T::class.java)
+
+/**
+ * Property delegate for an [Entity] wrapping around a [ComponentMapper].
+ * Allows checking the presence of a component on an Entity.
+ * Allows assigning and removing a component from an Entity with a Boolean value
+ */
+
+class TagDelegate <T : Component> (val mapper: ComponentMapper<T>, private val componentClass: Class<T>) {
+
+  operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
+    mapper.has(thisRef)
+
+  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
+    if (value) {
+      thisRef.add(componentClass.getConstructor().newInstance())
+    } else {
+      thisRef.remove(componentClass)
+    }
+  }
+}
+
+/**
+ * Returns a delegated property for the [Entity] class to check if the given [Component] is present,
+ * creating or removing it.
+ * Assigning false to this property will remove the component from the entity.
+ * Assigning true will assign a new [Component] of class T to the [Entity], built from the default no-arg constructor of
+ * the component.
+ * Passing a [Mapper] is optional; if no value is given, it will create a new [ComponentMapper] for
+ * the chosen [Component] class.
+ *
+ *
+ * @see TagDelegate
+ **/
+
+inline fun <reified T : Component> tagFor() = TagDelegate(mapperFor(), T::class.java)
