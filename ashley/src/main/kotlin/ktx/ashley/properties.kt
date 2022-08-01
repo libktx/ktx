@@ -121,12 +121,13 @@ inline fun <reified T : Component> tagFor(noinline defaultValueProvider: () -> T
 
 inline fun <reified T : Component> tagFor(noinline defaultValueProvider: (() -> T)? = null): TagDelegate<T> {
   if (defaultValueProvider != null) {
-    return TagDelegate(mapperFor(), T::class.java,defaultValueProvider)
+    return TagDelegate(mapperFor(), T::class.java, defaultValueProvider)
   }
   val defaultConstructorIndex = T::class.java.constructors.indexOfFirst { it.parameters.isEmpty() }
   if (defaultConstructorIndex >= 0) {
     return TagDelegate(mapperFor(), T::class.java) {
-      T::class.java.constructors[defaultConstructorIndex].newInstance() as T }
+      T::class.java.constructors[defaultConstructorIndex].newInstance() as T
+    }
   }
   return TagDelegate(mapperFor(), T::class.java, null)
 }
