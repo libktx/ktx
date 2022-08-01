@@ -78,21 +78,22 @@ inline fun <reified T : Component> optionalPropertyFor(
 /**
  * Property delegate for an [Entity] wrapping around a [ComponentMapper].
  * Allows checking the presence of a component on an Entity.
- * Allows assigning the defaultValue argument and removing a component from an Entity with a Boolean value
+ * Allows assigning the result of the invocation of defaultValueProvider to the entity
+ * and removing a component from an Entity with a Boolean value
+ * Attempting to set a value when defaultValueProvider is null will throw a [NullPointerException]
  */
 
 class TagDelegate<T : Component>(
   val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
-  private val defaultValue: T
+  private val defaultValueProvider: (() -> T)?
 ) {
-
   operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
     mapper.has(thisRef)
 
   operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
     if (value) {
-      thisRef.add(defaultValue)
+      thisRef.add(defaultValueProvider!!.invoke())
     } else {
       thisRef.remove(componentClass)
     }
@@ -103,24 +104,29 @@ class TagDelegate<T : Component>(
  * Returns a delegated property for the [Entity] class to check if the given [Component] is present,
  * creating or removing it.
  * Assigning false to this property will remove the component from the entity.
- * Assigning true will assign a new [Component] with defaultValue to the [Entity]. If the defaultValue is not provided
- * the value of the default no-arg constructor will be used instead.
+ * Assigning true will assign a new [Component] with the result of the defaultValueProvider to the [Entity].
+ * If the defaultValueProvider is not provided the value of the default no-arg
+ * constructor will be used instead. If such constructor doesn't exist the property will throw a
+ * [NullPointerException] when trying to set a value.
  * Passing a [Mapper] is optional; if no value is given, it will create a new [ComponentMapper] for
  * the chosen [Component] class.
- *
  *
  * @see TagDelegate
  **/
 
-inline fun <reified T : Component> tagFor(defaultValue: T? = null): TagDelegate<T> {
-  if (defaultValue != null)
-    return TagDelegate(mapperFor(), T::class.java, defaultValue)
+/*
+inline fun <reified T : Component> tagFor(noinline defaultValueProvider: () -> T) =
+  TagDelegate(mapperFor(), T::class.java, defaultValueProvider)
+*/
+
+inline fun <reified T : Component> tagFor(noinline defaultValueProvider: (() -> T)? = null): TagDelegate<T> {
+  if (defaultValueProvider != null) {
+    return TagDelegate(mapperFor(), T::class.java,defaultValueProvider)
+  }
   val defaultConstructorIndex = T::class.java.constructors.indexOfFirst { it.parameters.isEmpty() }
-  if (defaultConstructorIndex < 0)
-    throw Exception("Class ${T::class.qualifiedName} should have a default no-arg constructor")
-  return TagDelegate(
-    mapperFor(),
-    T::class.java,
-    T::class.java.constructors[defaultConstructorIndex].newInstance() as T
-  )
+  if (defaultConstructorIndex >= 0) {
+    return TagDelegate(mapperFor(), T::class.java) {
+      T::class.java.constructors[defaultConstructorIndex].newInstance() as T }
+  }
+  return TagDelegate(mapperFor(), T::class.java, null)
 }
