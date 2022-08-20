@@ -2,6 +2,10 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-ashley`) Added `tagFor<Component>` utility functions that automatically create a mapper for
+a flag component. These properties can be used to check for `Component` presence within the `Entity`, as well as 
+automatically add and remove `Component` instances upon property modification.
+
 #### 1.11.0-rc2
 
 - **[UPDATE]** Updated to Kotlin 1.7.10.

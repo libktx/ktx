@@ -3,6 +3,7 @@ package ktx.ashley
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.utils.reflect.ClassReflection
 import kotlin.reflect.KProperty
 
 /**
@@ -76,9 +77,11 @@ inline fun <reified T : Component> optionalPropertyFor(
   OptionalComponentDelegate(mapper, T::class.java)
 
 /**
- *
+ * Common interface for property delegates wrapping around flag components.
+ * These properties should generally wrap [Component]s that do not have any fields, and instead
+ * their presence alone is used for filtering or associated logic. An example of such component
+ * could be a `Visible` class that marks entities that should be rendered.
  */
-
 interface TagDelegate<T : Component> {
   operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean
   operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean)
@@ -86,11 +89,9 @@ interface TagDelegate<T : Component> {
 
 /**
  * Property delegate for an [Entity] wrapping around a [ComponentMapper].
- * Allows checking the presence of a component on an Entity.
- * Allows assigning the result of the invocation of defaultValueProvider to the entity
- * and removing a component from an Entity with a Boolean value
+ * Allows checking the presence of a [Component] of an [Entity].
+ * Automatically creates instances of the [T] [Component] if its value is set to `true`.
  */
-
 class ProviderTagDelegate<T : Component>(
   private val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
@@ -109,21 +110,22 @@ class ProviderTagDelegate<T : Component>(
 }
 
 /**
-Version of [ProviderTagDelegate] with a nullable singleton component instead of a provider function.
-Will throw a [NullPointerException] if setValue defaultValue being null
+ * Property delegate for an [Entity] wrapping around a [ComponentMapper].
+ * Allows checking the presence of a [Component] of an [Entity].
+ * Automatically assigns a singleton instance of the [T] [Component] if its value is set to `true`.
+ * This property delegate should be used only for stateless components without any mutable properties.
  */
-
 class SingletonTagDelegate<T : Component>(
-  val mapper: ComponentMapper<T>,
+  private val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
-  private val defaultValue: T?
+  private val defaultValue: T
 ) : TagDelegate<T> {
   override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
     mapper.has(thisRef)
 
   override operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
     if (value) {
-      thisRef.add(defaultValue!!)
+      thisRef.add(defaultValue)
     } else {
       thisRef.remove(componentClass)
     }
@@ -131,30 +133,65 @@ class SingletonTagDelegate<T : Component>(
 }
 
 /**
- * Returns a delegated property for the [Entity] class to check if the given [Component] is present,
- * creating or removing it.
- * Assigning false to this property will remove the component from the entity.
- * Assigning true will assign a new [Component] with the result of the defaultValueProvider to the [Entity]
+ * Returns a delegated property for the [Entity] class that check if the given [Component] is present
+ * within the entity. Changing the boolean value of the property will either add or remove the component
+ * from the entity, depending on whether the value is `true` or `false` respectively.
+ *
+ * Assigning `true` to this property will obtain a [Component] instance with the passed [provider].
+ *
+ * If [singleton] setting is set to `true`, [provider] will be called once to obtain a component instance that will
+ * be reused by the property. If the setting is set to `false`, [provider] will be called each time `true` is assigned
+ * to the property.
+ *
  * @see ProviderTagDelegate
+ * @see SingletonTagDelegate
  **/
-
-inline fun <reified T : Component> tagFor(noinline defaultValueProvider: () -> T): TagDelegate<T> =
-  ProviderTagDelegate(mapperFor(), T::class.java, defaultValueProvider)
+inline fun <reified T : Component> tagFor(singleton: Boolean = true, noinline provider: () -> T): TagDelegate<T> {
+  val mapper = mapperFor<T>()
+  val componentClass = T::class.java
+  return if (singleton) {
+    SingletonTagDelegate(mapper, componentClass, provider())
+  } else {
+    ProviderTagDelegate(mapper, componentClass, provider)
+  }
+}
 
 /**
-Singleton version
+ * Returns a delegated property for the [Entity] class that check if the given [Component] is present
+ * within the entity. Changing the boolean value of the property will either add or remove the component
+ * from the entity, depending on whether the value is `true` or `false` respectively.
+ *
+ * If [singleton] setting is set to `true`, an instance of the [Component] will be created once with reflection
+ * and reused by the property. If the setting is set to `false`, an instance will be created each time `true` is
+ * assigned to the property.
+ *
+ * To use this property, ensure that the component class has a no-argument constructor. Otherwise,
+ * [com.badlogic.gdx.utils.reflect.ReflectionException] might be thrown.
+ *
+ * @see ProviderTagDelegate
+ * @see SingletonTagDelegate
  **/
-
-inline fun <reified T : Component> tagFor(defaultValue: T? = null): TagDelegate<T> {
-  if (defaultValue != null) {
-    return SingletonTagDelegate(mapperFor(), T::class.java, defaultValue)
+inline fun <reified T : Component> tagFor(singleton: Boolean = true): TagDelegate<T> {
+  val mapper = mapperFor<T>()
+  val componentClass = T::class.java
+  return if (singleton) {
+    val instance = ClassReflection.newInstance(componentClass)
+    SingletonTagDelegate(mapper, componentClass, instance)
+  } else {
+    ProviderTagDelegate(mapper, componentClass) { ClassReflection.newInstance(componentClass) }
   }
-  val defaultConstructorIndex = T::class.java.constructors.indexOfFirst { it.parameters.isEmpty() }
-  if (defaultConstructorIndex >= 0) {
-    return SingletonTagDelegate(
-      mapperFor(), T::class.java,
-      T::class.java.constructors[defaultConstructorIndex].newInstance() as T
-    )
-  }
-  return SingletonTagDelegate(mapperFor(), T::class.java, null)
 }
+
+/**
+ * Returns a delegated property for the [Entity] class that check if the given [Component] is present
+ * within the entity. Changing the boolean value of the property will either add or remove the component
+ * from the entity, depending on whether the value is `true` or `false` respectively.
+ *
+ * Assigning `true` to this property will assign the [component] instance to the [Entity].
+ *
+ * This property delegate should be used only for stateless components without any mutable properties.
+ *
+ * @see SingletonTagDelegate
+ **/
+inline fun <reified T : Component> tagFor(component: T): TagDelegate<T> =
+  SingletonTagDelegate(mapperFor(), T::class.java, component)

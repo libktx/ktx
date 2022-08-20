@@ -99,7 +99,9 @@ Project contributors listed chronologically.
 * [@mariorez](https://github.com/mariorez)
   * Updated documentation links on the [libKTX website](https://github.com/libktx/libktx.github.io).
 * [@pylvain](https://github.com/pylvain)
-  * Proposed and implemented component property delegates for the [Ashley module](../ashley).
+  * Proposed and implemented component and tag property delegates for the [Ashley module](../ashley).
+* [@BitsAtPlayDev](https://github.com/BitsAtPlayDev)
+  * Reported a typo in the documentation.
 
 ### Metrics
 
