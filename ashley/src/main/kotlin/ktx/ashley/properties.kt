@@ -74,3 +74,87 @@ inline fun <reified T : Component> optionalPropertyFor(
   mapper: ComponentMapper<T> = mapperFor()
 ): OptionalComponentDelegate<T> =
   OptionalComponentDelegate(mapper, T::class.java)
+
+/**
+ *
+ */
+
+interface TagDelegate<T : Component> {
+  operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean
+  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean)
+}
+
+/**
+ * Property delegate for an [Entity] wrapping around a [ComponentMapper].
+ * Allows checking the presence of a component on an Entity.
+ * Allows assigning the result of the invocation of defaultValueProvider to the entity
+ * and removing a component from an Entity with a Boolean value
+ */
+
+class ProviderTagDelegate<T : Component>(
+  private val mapper: ComponentMapper<T>,
+  private val componentClass: Class<T>,
+  private val defaultValueProvider: () -> T
+) : TagDelegate<T> {
+  override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
+    mapper.has(thisRef)
+
+  override operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
+    if (value) {
+      thisRef.add(defaultValueProvider())
+    } else {
+      thisRef.remove(componentClass)
+    }
+  }
+}
+
+/**
+Version of [ProviderTagDelegate] with a nullable singleton component instead of a provider function.
+Will throw a [NullPointerException] if setValue defaultValue being null
+ */
+
+class SingletonTagDelegate<T : Component>(
+  val mapper: ComponentMapper<T>,
+  private val componentClass: Class<T>,
+  private val defaultValue: T?
+) : TagDelegate<T> {
+  override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
+    mapper.has(thisRef)
+
+  override operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
+    if (value) {
+      thisRef.add(defaultValue!!)
+    } else {
+      thisRef.remove(componentClass)
+    }
+  }
+}
+
+/**
+ * Returns a delegated property for the [Entity] class to check if the given [Component] is present,
+ * creating or removing it.
+ * Assigning false to this property will remove the component from the entity.
+ * Assigning true will assign a new [Component] with the result of the defaultValueProvider to the [Entity]
+ * @see ProviderTagDelegate
+ **/
+
+inline fun <reified T : Component> tagFor(noinline defaultValueProvider: () -> T): TagDelegate<T> =
+  ProviderTagDelegate(mapperFor(), T::class.java, defaultValueProvider)
+
+/**
+Singleton version
+ **/
+
+inline fun <reified T : Component> tagFor(defaultValue: T? = null): TagDelegate<T> {
+  if (defaultValue != null) {
+    return SingletonTagDelegate(mapperFor(), T::class.java, defaultValue)
+  }
+  val defaultConstructorIndex = T::class.java.constructors.indexOfFirst { it.parameters.isEmpty() }
+  if (defaultConstructorIndex >= 0) {
+    return SingletonTagDelegate(
+      mapperFor(), T::class.java,
+      T::class.java.constructors[defaultConstructorIndex].newInstance() as T
+    )
+  }
+  return SingletonTagDelegate(mapperFor(), T::class.java, null)
+}
