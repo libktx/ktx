@@ -167,23 +167,6 @@ fun addComponentToEntity(entity: Entity, engine: Engine) {
 }
 ```
 
-Getting a `Component` from an `Entity` with a mapper:
-
-```kotlin
-import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.*
-
-class Transform: Component
-
-val engine = PooledEngine()
-val transform = mapperFor<Transform>()
-val entity = engine.entity {
-  with<Transform>()
-}
-val component: Transform = entity[transform]
-```
-
 Using an `Entity` extension property to access and modify a mandatory `Component`:
 
 ```kotlin
@@ -330,6 +313,23 @@ import ktx.ashley.mapperFor
 class Transform: Component
 
 val transformMapper = mapperFor<Transform>()
+```
+
+Getting a `Component` from an `Entity` with a mapper:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Transform: Component
+
+val engine = PooledEngine()
+val transform = mapperFor<Transform>()
+val entity = engine.entity {
+  with<Transform>()
+}
+val component: Transform = entity[transform]
 ```
 
 Checking if an `Entity` has a `Component` with a mapper:
