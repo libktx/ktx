@@ -76,8 +76,8 @@ fun setDefaultSkin() {
 
 Additionally, `tooltip` and `textTooltip` extension methods were added to all actors to ease creation of tooltips.
 
-When it comes to building user interfaces, you usually start with a single *parent* or *root* actor and fill it with
-widgets:
+When it comes to building user interfaces, you usually start with a single *parent* or *root* actor from the list above
+and fill it with widgets:
 
 ```kotlin
 import ktx.scene2d.*
@@ -126,7 +126,7 @@ import ktx.scene2d.*
 
 val myTable = scene2d.table {
   label("Not a real parent.") {
-    label("Invalid.") // !!! Does not compile: outside of `table` scope.
+    label("Invalid.") // !!! Does not compile: outside the `table` scope.
   }
 }
 ```
@@ -212,6 +212,39 @@ and we opted against duplicating its entire API. It is still pretty straightforw
 All building blocks are inlined during compilation, which means there is little to no runtime overhead when using
 `ktx-scene2d`. This code will be pretty much as fast as your good old Java, while remaining cleaner and safer.
 
+Note that the `scene2d.` prefix is only necessary for top-level actors to start using the DSL. In effect, it's only
+necessary if you'd like to assign the widget to a variable and add it to a `Stage` or another widget group later on.
+When inside a DSL block, `scene2d.` prefix is not only no longer necessary to define actors, but it will actually
+prevent them from being added to their immediate parent. Consider the following example:
+
+```kotlin
+import ktx.scene2d.*
+import com.badlogic.gdx.scenes.scene2d.Stage
+
+fun addActors(stage: Stage) {
+  // This actor is manually added to a Stage:
+  val table = scene2d.table {
+    label("This label is a child of the table!")
+  }
+  stage.addActor(table)
+
+  // Using `stage.actors` - scene2d. prefix is no longer necessary:
+  stage.actors {
+    table {
+      label("This table is automatically added to the stage!")
+    }
+  }
+
+  // Invalid usage - nested scene2d. prefix:
+  scene2d.table {
+    // WARNING: This label will not be added to the table!  
+    scene2d.label("This label is NOT a child of the table.")
+    // DO NOT DO THIS, unless you deliberately do NOT want
+    // the actor to be immediately added to its parent.
+  }
+}
+```
+
 #### Working with `Skin`
 
 `Skin` instances store styles of the widgets and other GUI assets - like fonts and drawables.
@@ -276,6 +309,8 @@ the resources listed at the bottom of the page.
 Initiating `Stage` instances:
 
 ```kotlin
+import com.badlogic.gdx.scenes.scene2d.Stage
+
 // Default settings:
 val stage = Stage()
 
