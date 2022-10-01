@@ -8,12 +8,14 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 
 class FlagComponent : Component
+class NoDefaultArgConstructorComponent(val text: String) : Component
 
 var Entity.singletonTagCreatedByReflection by tagFor<FlagComponent>()
 var Entity.providerTagCreatedByReflection by tagFor<FlagComponent>(singleton = false)
 var Entity.singletonTagCreatedWithProvider by tagFor<FlagComponent> { FlagComponent() }
 var Entity.providerTagCreatedWithProvider by tagFor(singleton = false) { FlagComponent() }
 var Entity.singletonTagCreatedWithInstance by tagFor(FlagComponent())
+val Entity.readOnlyTag by tagFor<NoDefaultArgConstructorComponent>()
 
 object ComponentTagSpec : Spek({
   describe("utilities tag component delegates") {
@@ -103,6 +105,12 @@ object ComponentTagSpec : Spek({
       entity.add(FlagComponent())
       entity.singletonTagCreatedWithInstance = false
       assertThat(entity.has(mapper)).isFalse()
+    }
+
+    it("should support read-only tags with no default argument constructors") {
+      assertThat(entity.readOnlyTag).isFalse()
+      entity.add(NoDefaultArgConstructorComponent("test"))
+      assertThat(entity.readOnlyTag).isTrue()
     }
   }
 })

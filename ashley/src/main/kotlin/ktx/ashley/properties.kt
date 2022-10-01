@@ -3,6 +3,7 @@ package ktx.ashley
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.reflect.ClassReflection
 import kotlin.reflect.KProperty
 
@@ -174,12 +175,20 @@ inline fun <reified T : Component> tagFor(singleton: Boolean = true, noinline pr
 inline fun <reified T : Component> tagFor(singleton: Boolean = true): TagDelegate<T> {
   val mapper = mapperFor<T>()
   val componentClass = T::class.java
-  return if (singleton) {
-    val instance = ClassReflection.newInstance(componentClass)
-    SingletonTagDelegate(mapper, componentClass, instance)
-  } else {
-    ProviderTagDelegate(mapper, componentClass) { ClassReflection.newInstance(componentClass) }
+  if (singleton) {
+    try {
+      val instance = ClassReflection.newInstance(componentClass)
+      return SingletonTagDelegate(mapper, componentClass, instance)
+    } catch (exception: Throwable) {
+      Gdx.app?.log(
+        "ktx-ashley",
+        "$componentClass does not have a no-argument constructor. " +
+          "tagFor can only be used in read-only mode. Singleton tag delegate cannot be constructed.",
+        exception
+      )
+    }
   }
+  return ProviderTagDelegate(mapper, componentClass) { ClassReflection.newInstance(componentClass) }
 }
 
 /**
