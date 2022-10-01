@@ -5,6 +5,17 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[FEATURE]** (`ktx-ashley`) Added `tagFor<Component>` utility functions that automatically create a mapper for
 a flag component. These properties can be used to check for `Component` presence within the `Entity`, as well as 
 automatically add and remove `Component` instances upon property modification.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now stores a basic path-to-type map, which allows it to support
+more `AssetManager` methods called by some `AssetLoader` implementations. These include:
+  - `AssetManager.contains(String)`
+  - `AssetManager.get(String)`
+  - `AssetManager.get(String, Boolean)`
+  - `AssetManager.get(String, Class, Boolean)`
+  - `AssetManager.getAssetType(String)`
+  - `AssetManager.isLoaded(String)`
+  - `AssetManager.unload(String)`
+  - `AssetManager.getDependencies(String)`
+  - `AssetManager.getReferenceCount(String)`
 
 #### 1.11.0-rc2
 
