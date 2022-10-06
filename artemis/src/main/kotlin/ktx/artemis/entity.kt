@@ -18,11 +18,11 @@ import kotlin.contracts.contract
 @OptIn(ExperimentalContracts::class)
 inline fun World.entity(entityEdit: EntityEdit.() -> Unit = {}): Int {
   contract { callsInPlace(entityEdit, InvocationKind.EXACTLY_ONCE) }
-  val e = create()
+  val entity = create()
 
-  edit(e).entityEdit()
+  edit(entity).entityEdit()
 
-  return e
+  return entity
 }
 
 /**
@@ -36,11 +36,11 @@ inline fun World.entity(entityEdit: EntityEdit.() -> Unit = {}): Int {
 @OptIn(ExperimentalContracts::class)
 inline fun World.entity(archetype: Archetype, entityEdit: EntityEdit.() -> Unit = {}): Int {
   contract { callsInPlace(entityEdit, InvocationKind.EXACTLY_ONCE) }
-  val e = this.create(archetype)
+  val entity = this.create(archetype)
 
-  edit(e).entityEdit()
+  edit(entity).entityEdit()
 
-  return e
+  return entity
 }
 
 /**
