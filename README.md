@@ -32,32 +32,33 @@ See the [_Choosing **KTX**_](https://github.com/libktx/ktx/wiki/Choosing-KTX) ar
 **KTX** was designed to be modular from day one - in fact, many of its libraries are just a single Kotlin file.
 You can include selected **KTX** modules based on the needs of your application.
 
-| Module | Description |
-| :---: | --- |
-| [`ktx-actors`](actors) | [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI extensions for stages, actors, actions, and event listeners. |
-| [`ktx-app`](app) | `ApplicationListener` implementations and general application utilities. |
-| [`ktx-ashley`](ashley) | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities. |
-| [`ktx-assets`](assets) | Resources management utilities. |
-| [`ktx-assets-async`](assets-async) | Non-blocking asset loading using coroutines. |
-| [`ktx-async`](async) | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on libGDX threading model. |
-| [`ktx-box2d`](box2d) | [`Box2D`](https://libgdx.com/wiki/extensions/physics/box2d) physics engine utilities. |
-| [`ktx-collections`](collections) | Extensions for libGDX custom collections. |
-| [`ktx-freetype`](freetype) | `FreeType` fonts loading utilities. |
-| [`ktx-freetype-async`](freetype-async) | Non-blocking `FreeType` fonts loading using coroutines. |
-| [`ktx-graphics`](graphics) | Utilities related to rendering tools and graphics. |
-| [`ktx-i18n`](i18n) | Internationalization API utilities. |
-| [`ktx-inject`](inject) | A dependency injection system with low overhead and no reflection usage. |
-| [`ktx-json`](json) | Utilities for libGDX [JSON](https://libgdx.com/wiki/utils/reading-and-writing-json) serialization API. |
-| [`ktx-log`](log) | Minimal runtime overhead cross-platform logging using inlined functions. |
-| [`ktx-math`](math) | Operator functions for libGDX math API and general math utilities. |
-| [`ktx-preferences`](preferences) | Improved API for accessing and saving [preferences](https://libgdx.com/wiki/preferences). |
-| [`ktx-reflect`](reflect) | Utilities for libGDX [reflection API](https://libgdx.com/wiki/utils/reflection). |
-| [`ktx-scene2d`](scene2d) | Type-safe Kotlin builders for [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI. |
-| [`ktx-script`](script) | Kotlin scripting engine for desktop applications. |
-| [`ktx-style`](style) | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API. |
-| [`ktx-tiled`](tiled) | Utilities for [Tiled](https://www.mapeditor.org/) maps. |
-| [`ktx-vis`](vis) | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/). |
-| [`ktx-vis-style`](vis-style) | Type-safe Kotlin builders for `VisUI` widget styles. |
+|                 Module                 | Description                                                                                                                       |
+|:--------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------|
+|         [`ktx-actors`](actors)         | [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI extensions for stages, actors, actions, and event listeners. |
+|            [`ktx-app`](app)            | `ApplicationListener` implementations and general application utilities.                                                          |
+|        [`ktx-artemis`](artemis)        | [`Artemis-odb`](https://github.com/junkdog/artemis-odb) entity-component-system utilities.                                              |
+|         [`ktx-ashley`](ashley)         | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.                                                   |
+|         [`ktx-assets`](assets)         | Resources management utilities.                                                                                                   |
+|   [`ktx-assets-async`](assets-async)   | Non-blocking asset loading using coroutines.                                                                                      |
+|          [`ktx-async`](async)          | [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) context based on libGDX threading model.                      |
+|          [`ktx-box2d`](box2d)          | [`Box2D`](https://libgdx.com/wiki/extensions/physics/box2d) physics engine utilities.                                             |
+|    [`ktx-collections`](collections)    | Extensions for libGDX custom collections.                                                                                         |
+|       [`ktx-freetype`](freetype)       | `FreeType` fonts loading utilities.                                                                                               |
+| [`ktx-freetype-async`](freetype-async) | Non-blocking `FreeType` fonts loading using coroutines.                                                                           |
+|       [`ktx-graphics`](graphics)       | Utilities related to rendering tools and graphics.                                                                                |
+|           [`ktx-i18n`](i18n)           | Internationalization API utilities.                                                                                               |
+|         [`ktx-inject`](inject)         | A dependency injection system with low overhead and no reflection usage.                                                          |
+|           [`ktx-json`](json)           | Utilities for libGDX [JSON](https://libgdx.com/wiki/utils/reading-and-writing-json) serialization API.                            |
+|            [`ktx-log`](log)            | Minimal runtime overhead cross-platform logging using inlined functions.                                                          |
+|           [`ktx-math`](math)           | Operator functions for libGDX math API and general math utilities.                                                                |
+|    [`ktx-preferences`](preferences)    | Improved API for accessing and saving [preferences](https://libgdx.com/wiki/preferences).                                         |
+|        [`ktx-reflect`](reflect)        | Utilities for libGDX [reflection API](https://libgdx.com/wiki/utils/reflection).                                                  |
+|        [`ktx-scene2d`](scene2d)        | Type-safe Kotlin builders for [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI.                               |
+|         [`ktx-script`](script)         | Kotlin scripting engine for desktop applications.                                                                                 |
+|          [`ktx-style`](style)          | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.                                                       |
+|          [`ktx-tiled`](tiled)          | Utilities for [Tiled](https://www.mapeditor.org/) maps.                                                                           |
+|            [`ktx-vis`](vis)            | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).                                                      |
+|      [`ktx-vis-style`](vis-style)      | Type-safe Kotlin builders for `VisUI` widget styles.                                                                              |
 
 ### Installation
 

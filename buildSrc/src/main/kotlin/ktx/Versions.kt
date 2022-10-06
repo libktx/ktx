@@ -3,6 +3,7 @@ package ktx
 const val gdxVersion = "1.11.0"
 const val kotlinCoroutinesVersion = "1.6.4"
 
+const val artemisOdbVersion = "2.3.0"
 const val ashleyVersion = "1.7.4"
 const val visUiVersion = "1.5.0"
 
