@@ -19,15 +19,6 @@ object MapperSpec : Spek({
     val transformMapper by memoized { world.getMapper(Transform::class.java) }
     val textureMapper by memoized { world.getMapper(Texture::class.java) }
 
-    describe("has component function") {
-      it("should return true if it exists") {
-        assertThat(transformMapper.has(entity)).isTrue()
-      }
-      it("should return false if it does not exists") {
-        assertThat(textureMapper.has(entity)).isFalse()
-      }
-    }
-
     describe("contains component function") {
       it("should return true if component exists") {
         assertThat(transformMapper.contains(entity)).isTrue()

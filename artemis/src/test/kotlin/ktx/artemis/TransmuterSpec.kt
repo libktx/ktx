@@ -27,7 +27,7 @@ object TransmuterSpec : Spek({
 
         transmuter.transmute(entity)
 
-        assertThat(entity in textureMapper).isTrue()
+        assertThat(textureMapper.has(entity)).isTrue()
       }
     }
     describe("remove component function") {
@@ -39,8 +39,8 @@ object TransmuterSpec : Spek({
 
         transmuter.transmute(entity)
 
-        assertThat(entity in textureMapper).isTrue()
-        assertThat(entity !in transformMapper).isTrue()
+        assertThat(textureMapper.has(entity)).isTrue()
+        assertThat(!transformMapper.has(entity)).isTrue()
       }
     }
   }

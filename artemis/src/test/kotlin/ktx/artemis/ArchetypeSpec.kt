@@ -23,7 +23,7 @@ object ArchetypeSpec : Spek({
 
         val entity = world.entity(archetype)
 
-        assertThat(entity in transformMapper).isTrue()
+        assertThat(transformMapper.has(entity)).isTrue()
       }
       it("should add multiple components") {
         val archetype = archetypeBuilder
@@ -35,8 +35,8 @@ object ArchetypeSpec : Spek({
 
         val entity = world.entity(archetype)
 
-        assertThat(entity in transformMapper).isTrue()
-        assertThat(entity in textureMapper).isTrue()
+        assertThat(transformMapper.has(entity)).isTrue()
+        assertThat(textureMapper.has(entity)).isTrue()
       }
     }
 
@@ -52,8 +52,8 @@ object ArchetypeSpec : Spek({
 
         val entity = world.entity(archetype)
 
-        assertThat(entity in transformMapper).isTrue()
-        assertThat(entity !in textureMapper).isTrue()
+        assertThat(transformMapper.has(entity)).isTrue()
+        assertThat(!textureMapper.has(entity)).isTrue()
       }
       it("should remove multiple components") {
         val archetype = archetypeBuilder
@@ -69,9 +69,9 @@ object ArchetypeSpec : Spek({
           .build(world)
 
         val entity = world.entity(archetype)
-        assertThat(entity in positionMapper).isTrue()
-        assertThat(entity !in transformMapper).isTrue()
-        assertThat(entity !in textureMapper).isTrue()
+        assertThat(positionMapper.has(entity)).isTrue()
+        assertThat(!transformMapper.has(entity)).isTrue()
+        assertThat(!textureMapper.has(entity)).isTrue()
       }
     }
   }

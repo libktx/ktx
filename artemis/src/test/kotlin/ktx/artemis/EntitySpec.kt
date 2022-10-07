@@ -50,7 +50,7 @@ object EntitySpec : Spek({
           with<Texture>()
         }
 
-        assertThat(entity in textureMapper).isTrue()
+        assertThat(textureMapper.has(entity)).isTrue()
       }
       it("should replace a component of an entity") {
         world.entity()
@@ -61,7 +61,7 @@ object EntitySpec : Spek({
           }
         }
 
-        assertThat(entity in transformMapper).isTrue()
+        assertThat(transformMapper.has(entity)).isTrue()
         assertThat(transformMapper.get(entity).x).isEqualTo(2f)
       }
       it("should configure component exactly once") {
@@ -80,7 +80,7 @@ object EntitySpec : Spek({
 
         entityEdit += Transform(1f, 0f)
 
-        assertThat(entityId in transformMapper).isTrue()
+        assertThat(transformMapper.has(entityId)).isTrue()
         assertThat(transformMapper.get(entityId).x).isEqualTo(1f)
       }
 
@@ -91,19 +91,19 @@ object EntitySpec : Spek({
 
         entityEdit += Transform(1f, 0f)
 
-        assertThat(entityId in transformMapper).isTrue()
+        assertThat(transformMapper.has(entityId)).isTrue()
         assertThat(transformMapper.get(entityId).x).isEqualTo(1f)
       }
     }
 
     describe("remove component function") {
       it("should remove component") {
-        assertThat(entity in transformMapper).isTrue()
+        assertThat(transformMapper.has(entity)).isTrue()
 
         world.edit(entity) {
           remove<Transform>()
         }
-        assertThat(entity !in transformMapper).isTrue()
+        assertThat(!transformMapper.has(entity)).isTrue()
       }
     }
   }

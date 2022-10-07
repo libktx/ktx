@@ -36,7 +36,7 @@ You can include selected **KTX** modules based on the needs of your application.
 |:--------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------|
 |         [`ktx-actors`](actors)         | [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI extensions for stages, actors, actions, and event listeners. |
 |            [`ktx-app`](app)            | `ApplicationListener` implementations and general application utilities.                                                          |
-|        [`ktx-artemis`](artemis)        | [`Artemis-odb`](https://github.com/junkdog/artemis-odb) entity-component-system utilities.                                              |
+|        [`ktx-artemis`](artemis)        | [`Artemis-odb`](https://github.com/junkdog/artemis-odb) entity-component-system utilities.                                        |
 |         [`ktx-ashley`](ashley)         | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.                                                   |
 |         [`ktx-assets`](assets)         | Resources management utilities.                                                                                                   |
 |   [`ktx-assets-async`](assets-async)   | Non-blocking asset loading using coroutines.                                                                                      |
