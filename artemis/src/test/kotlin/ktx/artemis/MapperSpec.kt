@@ -35,13 +35,11 @@ object MapperSpec : Spek({
     }
     describe("getMapper function") {
       it("should return a mapper") {
-        val transformMapper = world.mapperFor<Transform>()
-        val entity = world.entity {
-          with<Transform>()
-        }
+        val positionMapper = world.mapperFor<Position>()
+        positionMapper.create(entity)
 
-        assertThat(transformMapper.javaClass == ComponentMapper::class.java).isTrue()
-        assertThat(entity in transformMapper).isTrue()
+        assertThat(positionMapper.javaClass == ComponentMapper::class.java).isTrue()
+        assertThat(positionMapper.has(entity)).isTrue()
       }
     }
   }
