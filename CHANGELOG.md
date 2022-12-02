@@ -2,20 +2,11 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.7.22.
+- **[UPDATE]** Updated to Dokka 1.7.20.
 - **[FEATURE]** (`ktx-ashley`) Added `tagFor<Component>` utility functions that automatically create a mapper for
 a flag component. These properties can be used to check for `Component` presence within the `Entity`, as well as 
 automatically add and remove `Component` instances upon property modification.
-- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now stores a basic path-to-type map, which allows it to support
-more `AssetManager` methods called by some `AssetLoader` implementations. These include:
-  - `AssetManager.contains(String)`
-  - `AssetManager.get(String)`
-  - `AssetManager.get(String, Boolean)`
-  - `AssetManager.get(String, Class, Boolean)`
-  - `AssetManager.getAssetType(String)`
-  - `AssetManager.isLoaded(String)`
-  - `AssetManager.unload(String)`
-  - `AssetManager.getDependencies(String)`
-  - `AssetManager.getReferenceCount(String)`
 - **[FEATURE]** (`ktx-artemis`) new **KTX** module with Artemis-odb entity component system utilities: `ktx-artemis`.
   - `ArchetypeBuilder.add` and `ArchetypeBuilder.remove` extension methods for adding and removing components from an `ArchetypeBuilder`.
   - `oneOf`, `allOf`, `exclude` DSL and extension methods for `Aspect.Builder`.
@@ -29,6 +20,17 @@ more `AssetManager` methods called by some `AssetLoader` implementations. These 
   - `World.get` operator function for retrieving a system which returns null if it doesn't exist.
   - `World.getSystem` extension function for retrieving a system which throws an exception if it doesn't exist.
   - `World.mapperFor` extension function for retrieving a `ComponentMapper` instance.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage` now stores a basic path-to-type map, which allows it to support
+more `AssetManager` methods called by some `AssetLoader` implementations. These include:
+  - `AssetManager.contains(String)`
+  - `AssetManager.get(String)`
+  - `AssetManager.get(String, Boolean)`
+  - `AssetManager.get(String, Class, Boolean)`
+  - `AssetManager.getAssetType(String)`
+  - `AssetManager.isLoaded(String)`
+  - `AssetManager.unload(String)`
+  - `AssetManager.getDependencies(String)`
+  - `AssetManager.getReferenceCount(String)`
 
 #### 1.11.0-rc2
 
