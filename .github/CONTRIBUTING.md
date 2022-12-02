@@ -146,6 +146,8 @@ to update the [version.txt](../version.txt) and [milestones](https://github.com/
 [vis/README.md](../vis/README.md) file.
 - **Ashley**: update `ashleyVersion` in the versions file and Ashely version in the tag on the top of the 
 [ashley/README.md](../ashley/README.md) file.
+- **Artemis-odb**: update `artemisOdbVersion` in the versions file and Artemis-odb version in the tag on the top of the
+[artemis/README.md](../artemis/README.md) file.
 
 All the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 
