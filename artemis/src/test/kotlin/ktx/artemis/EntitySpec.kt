@@ -28,7 +28,7 @@ object EntitySpec : Spek({
     describe("create entity function") {
       it("should add an entity to the World") {
         val entityId = world.entity {
-          with<Transform>() {
+          with<Transform> {
             x = 2f
           }
         }

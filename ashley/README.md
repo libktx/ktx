@@ -526,6 +526,13 @@ class MyIteratingSystem : IteratingSystem(allOf(ExampleComponent::class).get()) 
 }
 ```
 
+### Alternatives
+
+- [Fleks](https://github.com/Quillraven/Fleks/) is a high performance Kotlin ECS library. Written with a Kotlin DSL
+from day one, it does not require similar utilities to the Java ECS frameworks.
+- [Artemis-odb](https://github.com/junkdog/artemis-odb) is a high performance Java ECS library. KTX provides utilities
+for Artemis via the [`ktx-artemis`](../artemis) module.
+
 #### Additional documentation
 
 - [Ashley repository.](https://github.com/libgdx/ashley)

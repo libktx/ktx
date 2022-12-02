@@ -7,17 +7,17 @@ import com.artemis.World
 /**
  * Checks if the entity has this type of [Component].
  *
- * @receiver the [ComponentMapper] for checking if the entity has the component
- * @param entityId - the id of entity to check
- * @return {@code true} if the entity has this component type, {@code false} if it doesn't (or if it is scheduled for delayed removal).
+ * @receiver the [ComponentMapper] for checking if the entity has the component.
+ * @param entityId the ID of entity to check.
+ * @return `true` if the entity has this component type, `false`` if it does not or is scheduled for removal.
  * @throws ArrayIndexOutOfBoundsException if the component was removed or never existed.
  */
 operator fun ComponentMapper<out Component>.contains(entityId: Int): Boolean = has(entityId)
 
 /**
- * Retrieves a ComponentMapper instance for a [Component]
+ * Retrieves a ComponentMapper instance for a [Component].
  *
- * @receiver the [World]
+ * @receiver the [World].
  * @param T type of the [ComponentMapper] to retrieve.
  * @return the [ComponentMapper] of the given type.
  */
