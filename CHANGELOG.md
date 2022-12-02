@@ -1,6 +1,6 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.11.0-SNAPSHOT
+#### 1.11.0-rc3
 
 - **[UPDATE]** Updated to Kotlin 1.7.22.
 - **[UPDATE]** Updated to Dokka 1.7.20.
