@@ -16,6 +16,19 @@ more `AssetManager` methods called by some `AssetLoader` implementations. These 
   - `AssetManager.unload(String)`
   - `AssetManager.getDependencies(String)`
   - `AssetManager.getReferenceCount(String)`
+- **[FEATURE]** (`ktx-artemis`) new **KTX** module with Artemis-odb entity component system utilities: `ktx-artemis`.
+  - `ArchetypeBuilder.add` and `ArchetypeBuilder.remove` extension methods for adding and removing components from an `ArchetypeBuilder`.
+  - `oneOf`, `allOf`, `exclude` DSL and extension methods for `Aspect.Builder`.
+  - `EntityEdit.plusAssign` operator function for adding components.
+  - `EntityEdit.with` builder function for adding components to an entity.
+  - `EntityEdit.remove` extension function for removing components from an entity.
+  - `EntityTransmuterFactory.add` and `EntityTransmuterFactory.remove` extension functions for adding and removing components from an `EntityTransmuterFactory`.
+  - `ComponentMapper.contains` operator function to check if an entity has a component.
+  - `World.edit` extension builder function to edit an entity.
+  - `World.entity` extension builder function to create and edit an entity.
+  - `World.get` operator function for retrieving a system which returns null if it doesn't exist.
+  - `World.getSystem` extension function for retrieving a system which throws an exception if it doesn't exist.
+  - `World.mapperFor` extension function for retrieving a `ComponentMapper` instance.
 
 #### 1.11.0-rc2
 
