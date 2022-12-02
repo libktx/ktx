@@ -38,7 +38,9 @@ created from a passed with a lambda and add them to the `Engine` immediately.
 - Wrappers for `Engine.onEntityAdded` and `Engine.onEntityRemoved` for `IteratingSystem`, `IntervalIteratingSystem` and
 `SortedIteratingSystem` that use system's `Family` and `Engine` automatically.
 - `propertyFor` and `optionalPropertyFor` allow extending `Entity` class with properties that automatically extract
-  the chosen component types with the property syntax.
+the chosen component types with the property syntax.
+- `tagFor` allow extending `Entity` class with properties that automatically check for presence of components used
+as boolean flags (e.g. `Visible`).
 - `mapperFor` factory method allows creating `ComponentMapper` instances.
 - `Mapper` abstract class can be extended by `companion object`s of `Component` to obtain `ComponentMapper` instances.
 
@@ -142,17 +144,6 @@ fun getSystem() {
 }
 ```
 
-Creating a `ComponentMapper`:
-
-```kotlin
-import com.badlogic.ashley.core.Component
-import ktx.ashley.mapperFor
-
-class Transform: Component
-
-val transformMapper = mapperFor<Transform>()
-```
-
 Adding a `Component` to an existing `Entity`:
 
 ```kotlin
@@ -174,42 +165,6 @@ fun addComponentToEntity(entity: Entity, engine: Engine) {
   // Or alternatively, if you already have a constructed component:
   entity += Transform(x = 1f, y = 2f)
 }
-```
-
-Getting a `Component` from an `Entity` with a mapper:
-
-```kotlin
-import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.*
-
-class Transform: Component
-
-val engine = PooledEngine()
-val transform = mapperFor<Transform>()
-val entity = engine.entity {
-  with<Transform>()
-}
-val component: Transform = entity[transform]
-```
-
-Checking if an `Entity` has a `Component` with a mapper:
-
-```kotlin
-import com.badlogic.ashley.core.Component
-import com.badlogic.ashley.core.PooledEngine
-import ktx.ashley.*
-
-class Transform: Component
-
-val engine = PooledEngine()
-val transform = mapperFor<Transform>()
-val entity = engine.entity {
-  with<Transform>()
-}
-val hasTransform: Boolean = entity.has(transform)
-// Or alternatively:
-val containsTransform: Boolean = transform in entity
 ```
 
 Using an `Entity` extension property to access and modify a mandatory `Component`:
@@ -273,6 +228,127 @@ fun setComponent(transform: Transform) {
 fun removeComponent() {
   entity.transform = null
 }
+```
+
+Using an `Entity` extension property to handle a flag `Component`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Visible: Component
+// Using an extension property creates a mapper internally:
+var Entity.isVisible by tagFor<Visible>()
+// tagFor creates a property that checks if an entity has
+// a component of the given type. When you assign "true"
+// to the property, an instance of the component is added
+// to the entity; similarly, when "false" is assigned,
+// the component is removed.
+
+val engine = PooledEngine()
+val entity = engine.entity {
+  with<Visible>()
+}
+
+// Checking if the component exists:
+val exists: Boolean = entity.isVisible
+// Adding component instance to the entity:
+fun setVisible() {
+  entity.isVisible = true
+}
+// Removing the component instance:
+fun setInvisible() {
+  entity.isVisible = false
+}
+
+// Note that tagFor should only be used for immutable components.
+```
+
+Defining `Entity` tag extension properties:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.Entity
+import ktx.ashley.*
+
+class Visible: Component
+
+// The tagFor utility offers multiple overloads with different
+// approaches to obtaining component instance.
+
+// By default, if no parameters are passed, a single instance
+// of the component will be created with reflection and reused
+// by the property:
+var Entity.isVisible by tagFor<Visible>()
+// If you'd like to create a new instance each time the flag
+// is set on an entity, set `singleton` setting to false:
+var Entity.isVisible by tagFor<Visible>(singleton = false)
+
+// The second option is to use a lambda expression that provides
+// the component. By default, the lambda will be called once
+// and its result will be reused:
+var Entity.isVisible by tagFor<Visible> { Visible() }
+// Similarly to the reflection example, you can change the
+// `singleton` setting to call the lambda each time a component
+// is required:
+var Entity.isVisible by tagFor(singleton = false) { Visible() }
+
+// The last option is to pass a component instance that will be
+// reused by the property. This is a good approach if your
+// component is already implemented as a singleton:
+var Entity.isVisible by tagFor(Visible())
+
+// Note that singleton tagFor variants should only be used
+// for immutable components.
+```
+
+Creating a `ComponentMapper`:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import ktx.ashley.mapperFor
+
+class Transform: Component
+
+val transformMapper = mapperFor<Transform>()
+```
+
+Getting a `Component` from an `Entity` with a mapper:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Transform: Component
+
+val engine = PooledEngine()
+val transform = mapperFor<Transform>()
+val entity = engine.entity {
+  with<Transform>()
+}
+val component: Transform = entity[transform]
+```
+
+Checking if an `Entity` has a `Component` with a mapper:
+
+```kotlin
+import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.PooledEngine
+import ktx.ashley.*
+
+class Transform: Component
+
+val engine = PooledEngine()
+val transform = mapperFor<Transform>()
+val entity = engine.entity {
+  with<Transform>()
+}
+val hasTransform: Boolean = entity.has(transform)
+// Or alternatively:
+val containsTransform: Boolean = transform in entity
 ```
 
 Removing a `Component` from an `Entity`:
@@ -449,6 +525,13 @@ class MyIteratingSystem : IteratingSystem(allOf(ExampleComponent::class).get()) 
   }
 }
 ```
+
+### Alternatives
+
+- [Fleks](https://github.com/Quillraven/Fleks/) is a high performance Kotlin ECS library. Written with a Kotlin DSL
+from day one, it does not require similar utilities to the Java ECS frameworks.
+- [Artemis-odb](https://github.com/junkdog/artemis-odb) is a high performance Java ECS library. KTX provides utilities
+for Artemis via the [`ktx-artemis`](../artemis) module.
 
 #### Additional documentation
 

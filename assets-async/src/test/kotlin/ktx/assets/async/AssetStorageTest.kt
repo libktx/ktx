@@ -295,6 +295,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull<String>(path))
     assertEquals("Content.", runBlocking { storage.getAsync<String>(path).await() })
     assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    assertEquals(storage.getIdentifier<String>(path), storage.getAssetIdentifiers(path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -314,6 +315,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull(identifier))
     assertEquals("Content.", runBlocking { storage.getAsync(identifier).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(identifier))
+    assertEquals(identifier, storage.getAssetIdentifiers(identifier.path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -333,6 +335,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.getOrNull(descriptor))
     assertEquals("Content.", runBlocking { storage.getAsync(descriptor).await() })
     assertEquals(emptyList<String>(), storage.getDependencies(descriptor))
+    assertEquals(descriptor.toIdentifier(), storage.getAssetIdentifiers(descriptor.fileName).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -349,6 +352,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded<String>(path))
     assertEquals(0, storage.getReferenceCount<String>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getAssetIdentifiers(path))
     checkProgress(storage, total = 0, warn = true)
   }
 
@@ -366,6 +370,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(descriptor))
     assertEquals(0, storage.getReferenceCount(descriptor))
+    assertEquals(emptyList<Identifier<*>>(), storage.getAssetIdentifiers(path))
     checkProgress(storage, total = 0, warn = true)
   }
 
@@ -383,6 +388,7 @@ class AssetStorageTest : AsyncTest() {
     // Then:
     assertFalse(storage.isLoaded(identifier))
     assertEquals(0, storage.getReferenceCount(identifier))
+    assertEquals(emptyList<Identifier<*>>(), storage.getAssetIdentifiers(path))
     checkProgress(storage, total = 0, warn = true)
   }
 
@@ -418,6 +424,7 @@ class AssetStorageTest : AsyncTest() {
     assertSame(viaPath, viaDescriptor)
     assertSame(viaDescriptor, viaIdentifier)
     assertEquals(3, storage.getReferenceCount<String>(path))
+    assertEquals(identifier, storage.getAssetIdentifiers(path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -442,6 +449,7 @@ class AssetStorageTest : AsyncTest() {
     assertSame(viaPath, viaDescriptor)
     assertSame(viaDescriptor, viaIdentifier)
     assertEquals(3, storage.getReferenceCount<String>(path))
+    assertEquals(identifier, storage.getAssetIdentifiers(path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -463,6 +471,7 @@ class AssetStorageTest : AsyncTest() {
     assertSame(viaPath, viaDescriptor)
     assertSame(viaDescriptor, viaIdentifier)
     assertEquals(3, storage.getReferenceCount<String>(path))
+    assertEquals(identifier, storage.getAssetIdentifiers(path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -480,6 +489,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Vector2>(fakePath))
     assertSame(asset, storage.get<Vector2>(fakePath))
     assertEquals(1, storage.getReferenceCount<Vector2>(fakePath))
+    assertEquals(storage.getIdentifier<Vector2>(fakePath), storage.getAssetIdentifiers(fakePath).first())
     checkProgress(storage, loaded = 1)
   }
 
@@ -498,6 +508,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(descriptor))
     assertSame(asset, storage[descriptor])
     assertEquals(1, storage.getReferenceCount(descriptor))
+    assertEquals(descriptor.toIdentifier(), storage.getAssetIdentifiers(fakePath).first())
     checkProgress(storage, loaded = 1)
   }
 
@@ -516,6 +527,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded(identifier))
     assertSame(asset, storage[identifier])
     assertEquals(1, storage.getReferenceCount(identifier))
+    assertEquals(identifier, storage.getAssetIdentifiers(fakePath).first())
     checkProgress(storage, loaded = 1)
   }
 
@@ -535,6 +547,7 @@ class AssetStorageTest : AsyncTest() {
     assertFalse(storage.isLoaded<FakeAsset>(fakePath))
     assertEquals(0, storage.getReferenceCount<FakeAsset>(fakePath))
     assertTrue(asset.isDisposed)
+    assertEquals(emptyList<Identifier<*>>(), storage.getAssetIdentifiers(fakePath))
     checkProgress(storage, total = 0, warn = true)
   }
 
@@ -570,6 +583,10 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(path))
     assertTrue(storage.isLoaded<Pixmap>(path))
     assertSame(asset, storage.get<Pixmap>(path))
+    assertEquals(
+      setOf(storage.getIdentifier<Pixmap>(path), storage.getIdentifier<Texture>(path)),
+      storage.getAssetIdentifiers(path).toSet()
+    )
 
     storage.dispose()
   }
@@ -592,6 +609,10 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
     assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path))
+    assertEquals(
+      setOf(storage.getIdentifier<Pixmap>(path), storage.getIdentifier<Texture>(path)),
+      storage.getAssetIdentifiers(path).toSet()
+    )
     checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
@@ -1763,7 +1784,7 @@ class AssetStorageTest : AsyncTest() {
     val path = "fake path"
     storage.setLoader {
       FakeAsyncLoader(
-        onAsync = { assetManager -> assetManager.get("Trying to access asset without its type.") },
+        onAsync = { assetManager -> assetManager.containsAsset("Calling an unsupported method.") },
         onSync = {}
       )
     }

@@ -8,6 +8,7 @@ pluginManagement {
 include(
   "actors",
   "app",
+  "artemis",
   "ashley",
   "assets",
   "assets-async",

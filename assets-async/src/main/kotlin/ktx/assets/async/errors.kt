@@ -69,8 +69,11 @@ class InvalidLoaderException(loader: Loader<*>) :
  * Thrown by [AssetStorage.load] or [AssetStorage.get] when the asset failed to load
  * due to an unexpected loading exception, usually thrown by the associated [AssetLoader].
  */
-class AssetLoadingException(descriptor: AssetDescriptor<*>, cause: Throwable) :
-  AssetStorageException(message = "Unable to load asset: $descriptor", cause = cause)
+class AssetLoadingException(message: String, cause: Throwable? = null) :
+  AssetStorageException(message, cause) {
+  constructor(descriptor: AssetDescriptor<*>, cause: Throwable?) :
+    this(message = "Unable to load asset: $descriptor", cause = cause)
+}
 
 /**
  * Thrown when unsupported methods are called on the [AssetManagerWrapper].
@@ -116,13 +119,16 @@ class UnsupportedMethodException(method: String) :
  * mixing synchronous [AssetStorage.loadSync] with asynchronous [AssetStorage.load] or [AssetStorage.loadAsync].
  * If it occurs otherwise, the [AssetLoader] associated with the asset might incorrectly list its dependencies.
  */
-class MissingDependencyException(identifier: Identifier<*>, cause: Throwable? = null) :
-  AssetStorageException(
-    message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
-      "This asset was either not listed in dependencies, loaded with exception, is not loaded yet " +
-      "or was unloaded asynchronously.",
-    cause = cause
-  )
+class MissingDependencyException(message: String, cause: Throwable? = null) :
+  AssetStorageException(message, cause) {
+  constructor(identifier: Identifier<*>, cause: Throwable? = null) :
+    this(
+      message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
+        "This asset was either not listed in dependencies, loaded with exception, is not loaded yet " +
+        "or was unloaded asynchronously.",
+      cause = cause
+    )
+}
 
 /**
  * This exception can be thrown when accessing [Deferred] instances returned by [AsyncAssetManager].

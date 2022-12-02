@@ -41,6 +41,7 @@ import ktx.assets.TextAssetLoader
 import ktx.async.KtxAsync
 import ktx.async.newSingleThreadAsyncContext
 import ktx.async.onRenderingThread
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.CoroutineContext
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 
@@ -71,6 +72,7 @@ class AssetStorage(
 
   private val lock = Mutex()
   private val assets = mutableMapOf<Identifier<*>, Asset<*>>()
+  private val pathToIdentifiers = ConcurrentHashMap<String, List<Identifier<*>>>()
 
   /**
    * Allows tracking progress of the loaded assets.
@@ -474,6 +476,7 @@ class AssetStorage(
         referenceCount = 1,
         loader = ManualLoader as Loader<T>
       )
+      registerAssetPath(identifier)
       progress.registerAddedAsset()
     }
   }
@@ -693,6 +696,7 @@ class AssetStorage(
     }
     return createNewAsset(descriptor).also {
       assets[identifier] = it
+      registerAssetPath(identifier)
     }
   }
 
@@ -1062,6 +1066,7 @@ class AssetStorage(
         if (asset.referenceCount == 0) {
           // The asset is no longer referenced by the user or any dependencies. Removing and disposing.
           assets.remove(asset.identifier)
+          unregisterAssetPath(asset.identifier)
           disposeOf(asset)
         }
         asset.dependencies.forEach(queue::addLast)
@@ -1199,6 +1204,27 @@ class AssetStorage(
     return dependencies?.map { it.identifier } ?: emptyList()
   }
 
+  /** Must be called with [lock]. Adds [identifier] to [pathToIdentifiers]. */
+  private fun registerAssetPath(identifier: Identifier<*>) {
+    val path = identifier.path
+    val identifiers = pathToIdentifiers.getOrDefault(path, emptyList())
+    pathToIdentifiers[path] = identifiers + listOf(identifier)
+  }
+
+  /** Must be called with [lock]. Removes [identifier] from [pathToIdentifiers]. */
+  private fun unregisterAssetPath(identifier: Identifier<*>) {
+    val path = identifier.path
+    val identifiers = pathToIdentifiers.getOrDefault(path, emptyList())
+    pathToIdentifiers[path] = identifiers.filterNot { it == identifier }
+  }
+
+  /**
+   * Internal utility method. Returns a list of asset [Identifier]s associated with the asset [path].
+   * Do not attempt to modify the returned list. Changing the list might have an unpredictable effect
+   * on the asset loaders.
+   */
+  fun getAssetIdentifiers(path: String): List<Identifier<*>> = pathToIdentifiers.getOrDefault(path, emptyList())
+
   /**
    * Creates a deep copy of the internal assets storage. Returns an [AssetStorageSnapshot]
    * with the current storage state. For debugging purposes.
@@ -1300,6 +1326,7 @@ class AssetStorage(
         asset.referenceCount = 0
       }
       assets.clear()
+      pathToIdentifiers.clear()
       progress.reset()
     }
   }
