@@ -168,7 +168,7 @@ of the framework, such as the Scene2D GUI or event handling. You can generate se
 various templates, but for working with Kotlin and KTX these are the best starting points:
   
 * **Kotlin**: a basic project template that generates Kotlin application launchers.
-* **Kotlin + KTX:** (recommended): a project template that generates the `ApplicationListener` using **KTX**
+* **Kotlin + KTX** *(recommended)*: a project template that generates the `ApplicationListener` using **KTX**
   utilities. When launched, draws the **KTX** logo on the screen. Some modules that require additional setup,
   such as `ktx-async`, are properly initiated by the template if selected during setup.
 

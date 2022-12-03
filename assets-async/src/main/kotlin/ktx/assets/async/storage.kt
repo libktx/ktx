@@ -52,21 +52,23 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleE
  *
  * [asyncContext] is used to perform asynchronous file loading. Defaults to a single-threaded context using an
  * [AsyncExecutor]. See [newSingleThreadAsyncContext] or [ktx.async.newAsyncContext] functions to create a custom
- * loading context. Multi-threaded contexts are fully supported and might boost loading performance if the assets
+ * loading context. Multithreaded contexts are fully supported and might boost loading performance if the assets
  * are loaded asynchronously in parallel.
  *
  * [fileResolver] determines how file paths are interpreted. Defaults to [InternalFileHandleResolver], which loads
  * internal files.
  *
  * If `useDefaultLoaders` is true (which is the default), all default libGDX [AssetLoader] implementations
- * will be registered.
+ * will be registered. If [silenceAssetManagerWarnings] is false (which is the default), all non-fatal asset loading
+ * issues caused by asset loaders will be logged as errors. It is encouraged not to change this setting to true during
+ * the development to avoid potential errors.
  */
 class AssetStorage(
   val asyncContext: CoroutineContext = newSingleThreadAsyncContext(threadName = "AssetStorage-Thread"),
   val fileResolver: FileHandleResolver = InternalFileHandleResolver(),
-  useDefaultLoaders: Boolean = true
+  useDefaultLoaders: Boolean = true,
+  var silenceAssetManagerWarnings: Boolean = false,
 ) : Disposable {
-  @Suppress("LeakingThis")
   private val asAssetManager: AssetManager = AssetManagerWrapper(this)
   private val loaderStorage = AssetLoaderStorage()
 
@@ -834,7 +836,7 @@ class AssetStorage(
       }
     } else {
       // The asset was unloaded asynchronously. The deferred was likely completed with an exception.
-      // Now we have to take care of the loaded value or it will remain loaded and unreferenced.
+      // Now we have to take care of the loaded value, or it will remain loaded and unreferenced.
       value.dispose(asset.identifier)
     }
   }
@@ -1157,7 +1159,7 @@ class AssetStorage(
   /**
    * Returns the amount of references to the asset under the given [path] of [T] type.
    *
-   * References include manual registration of the asset with [add],
+   * References consist of manual registration of the asset with [add],
    * scheduling the asset for loading with [load], [loadAsync] or [loadSync],
    * and the amount of times the asset was referenced as a dependency of other assets.
    */
@@ -1166,7 +1168,7 @@ class AssetStorage(
   /**
    * Returns the amount of references to the asset described by [descriptor].
    *
-   * References include manual registration of the asset with [add],
+   * References consist of manual registration of the asset with [add],
    * scheduling the asset for loading with [load], [loadAsync] or [loadSync],
    * and the amount of times the asset was referenced as a dependency of other assets.
    */
@@ -1175,7 +1177,7 @@ class AssetStorage(
   /**
    * Returns the amount of references to the asset identified by [identifier].
    *
-   * References include manual registration of the asset with [add],
+   * References consist of manual registration of the asset with [add],
    * scheduling the asset for loading with [load], [loadAsync] or [loadSync],
    * and the amount of times the asset was referenced as a dependency of other assets.
    */
@@ -1226,7 +1228,7 @@ class AssetStorage(
   fun getAssetIdentifiers(path: String): List<Identifier<*>> = pathToIdentifiers.getOrDefault(path, emptyList())
 
   /**
-   * Creates a deep copy of the internal assets storage. Returns an [AssetStorageSnapshot]
+   * Creates a deep copy of the internal asset storage. Returns an [AssetStorageSnapshot]
    * with the current storage state. For debugging purposes.
    *
    * Note that the [CompletableDeferred] that store references to assets are preserved only
@@ -1265,7 +1267,7 @@ class AssetStorage(
   }
 
   /**
-   * Creates a deep copy of the internal assets storage. Returns an [AssetStorageSnapshot]
+   * Creates a deep copy of the internal asset storage. Returns an [AssetStorageSnapshot]
    * with the current storage state. Blocks the current thread until the snapshot is complete.
    * If assets are currently being loaded, avoid calling this method from within the rendering
    * thread. For debugging purposes.

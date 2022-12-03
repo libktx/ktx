@@ -2,6 +2,10 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[MISC]** Project README now includes installation instructions for new projects using `gdx-liftoff`.
+- **[FEATURE]** (`ktx-assets-async`) `AssetStorage.silenceAssetManagerWarnings` property was added, allowing to silence logging on non-fatal `AssetLoader` issues.
+- **[FEATURE]** (`ktx-assets-async`) `AssetManagerWrapper` warnings caused by `AssetLoader` issues were extended and improved.
+
 #### 1.11.0-rc3
 
 - **[UPDATE]** Updated to Kotlin 1.7.22.

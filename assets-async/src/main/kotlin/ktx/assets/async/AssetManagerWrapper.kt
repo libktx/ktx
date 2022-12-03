@@ -45,10 +45,10 @@ internal class AssetManagerWrapper(
   )
   override fun dispose() {
     if (initiated) {
-      logger.error("Not fully supported AssetManagerWrapper.dispose called by AssetLoader.")
+      logIncompleteSupportWarning("dispose")
       KtxAsync.launch {
         assetStorage.dispose { path, error ->
-          logger.error("Unable to dispose of the asset: $path", error)
+          logWarning("Unable to dispose of the asset: $path", error)
         }
       }
     }
@@ -73,7 +73,7 @@ internal class AssetManagerWrapper(
     replaceWith = ReplaceWith("AssetStorage.add")
   )
   override fun <T : Any> addAsset(fileName: String, type: Class<T>, asset: T) {
-    logger.error("Not fully supported AssetManagerWrapper.addAsset called by AssetLoader.")
+    logIncompleteSupportWarning("addAsset")
     KtxAsync.launch {
       assetStorage.add(AssetDescriptor(fileName, type), asset)
     }
@@ -85,7 +85,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun setErrorListener(listener: AssetErrorListener?) {
-    logger.error("Not supported AssetManagerWrapper.setErrorListener called by AssetLoader.")
+    logNoSupportWarning("setErrorListener")
   }
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
@@ -103,7 +103,7 @@ internal class AssetManagerWrapper(
       assetStorage[identifier]
     } catch (exception: Throwable) {
       if (required) throw MissingDependencyException(identifier, exception) else {
-        logger.error("Missing asset requested: $fileName", exception)
+        logWarning("Missing asset requested: $fileName", exception)
         null
       }
     }
@@ -111,13 +111,13 @@ internal class AssetManagerWrapper(
 
   @Deprecated("AssetStorage requires type to find a stored asset.", replaceWith = ReplaceWith("get(fileName, type, required)"))
   override fun <Asset : Any> get(fileName: String, required: Boolean): Asset? {
-    logCollisionWarning("get(String, Boolean)")
+    logCollisionWarning("get(String, Boolean)", fileName)
     @Suppress("UNCHECKED_CAST")
     val identifier = getIdentifier(fileName) as Identifier<Asset>?
     val asset = identifier?.let { try { assetStorage[it] } catch (exception: Throwable) { null } }
     if (asset == null) {
-      if (required) throw MissingDependencyException("Required asset not found: $required")
-      else logger.error("Missing asset requested: $fileName")
+      if (required) throw MissingDependencyException("Required asset not found: $fileName")
+      else logWarning("Missing asset requested: $fileName")
     }
     return asset
   }
@@ -133,7 +133,7 @@ internal class AssetManagerWrapper(
     replaceWith = ReplaceWith("Nothing")
   )
   override fun getAssetType(fileName: String): Class<*>? {
-    logCollisionWarning("getAssetType")
+    logCollisionWarning("getAssetType", fileName)
     val identifier = getIdentifier(fileName)
     return identifier?.type
   }
@@ -144,7 +144,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun <T> getAssetFileName(asset: T): String? {
-    logger.error("Not supported AssetManagerWrapper.getAssetFileName called by AssetLoader.")
+    logNoSupportWarning("getAssetFileName")
     return null
   }
 
@@ -167,7 +167,7 @@ internal class AssetManagerWrapper(
     replaceWith = ReplaceWith("isLoaded(fileName, type)")
   )
   override fun isLoaded(fileName: String): Boolean {
-    logCollisionWarning("isLoaded(String)")
+    logCollisionWarning("isLoaded(String)", fileName)
     val identifier = getIdentifier(fileName)
     return identifier != null && assetStorage.isLoaded(identifier)
   }
@@ -177,7 +177,7 @@ internal class AssetManagerWrapper(
     replaceWith = ReplaceWith("AssetStorage.unload")
   )
   override fun unload(fileName: String) {
-    logCollisionWarning("unload")
+    logCollisionWarning("unload", fileName)
     val identifier = getIdentifier(fileName) ?: return
     KtxAsync.launch(assetStorage.asyncContext) {
       assetStorage.unload(identifier)
@@ -212,7 +212,7 @@ internal class AssetManagerWrapper(
     suffix: String?,
     loader: AssetLoader<T, P>
   ) {
-    logger.error("Not fully supported AssetManagerWrapper.setLoader called by AssetLoader.")
+    logIncompleteSupportWarning("setLoader")
     assetStorage.setLoader(type, suffix) {
       @Suppress("UNCHECKED_CAST")
       loader as Loader<T>
@@ -224,26 +224,18 @@ internal class AssetManagerWrapper(
     replaceWith = ReplaceWith("AssetStorage.getDependencies")
   )
   override fun getDependencies(fileName: String): GdxArray<String> {
-    logCollisionWarning("getDependencies")
+    logCollisionWarning("getDependencies", fileName)
     val identifier = getIdentifier(fileName)
     return if (identifier != null)
       GdxArray(assetStorage.getDependencies(identifier).map { it.path }.toTypedArray())
     else GdxArray.with()
   }
-
-  private fun logCollisionWarning(method: String) {
-    logger.error(
-      "Warning: AssetManagerWrapper.$method might throw an exception " +
-        "if multiple assets with the same path are loaded with different types."
-    )
-  }
-
   @Deprecated(
     "AssetStorage requires type to find reference count.",
     replaceWith = ReplaceWith("AssetStorage.getReferenceCount")
   )
   override fun getReferenceCount(fileName: String): Int {
-    logCollisionWarning("getReferenceCount")
+    logCollisionWarning("getReferenceCount", fileName)
     val identifier = getIdentifier(fileName) ?: return 0
     return assetStorage.getReferenceCount(identifier)
   }
@@ -260,12 +252,12 @@ internal class AssetManagerWrapper(
 
   @Deprecated("AssetStorage does not maintain an assets queue.", ReplaceWith("Nothing"))
   override fun getQueuedAssets(): Int = 0.also {
-    logger.error("Not supported AssetManagerWrapper.getQueuedAssets called by AssetLoader.")
+    logNoSupportWarning("getQueuedAssets")
   }
 
   @Deprecated("Unsupported operation.", ReplaceWith("Nothing"))
   override fun finishLoading() {
-    logger.error("Not supported AssetManagerWrapper.finishLoading called by AssetLoader.")
+    logNoSupportWarning("finishLoading")
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -274,7 +266,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated("Unsupported without asset type.", ReplaceWith("finishLoadingAsset(assetDescriptor)"))
   override fun <T : Any> finishLoadingAsset(fileName: String): T {
-    logCollisionWarning("finishLoadingAsset(String)")
+    logCollisionWarning("finishLoadingAsset(String)", fileName)
     val identifier = getIdentifier(fileName)!!
     @Suppress("UNCHECKED_CAST")
     return get(identifier.path, identifier.type as Class<T>)
@@ -287,6 +279,29 @@ internal class AssetManagerWrapper(
       1 -> identifiers.first()
       else -> throw AssetLoadingException("Found multiple assets with path $fileName: $identifiers")
     }
+  }
+
+  private fun logWarning(warning: String, cause: Throwable? = null) {
+    if (!assetStorage.silenceAssetManagerWarnings) {
+      if (cause != null) logger.error(warning, cause)
+      else logger.error(warning)
+    }
+  }
+
+  private fun logIncompleteSupportWarning(method: String) {
+    logWarning("AssetManagerWrapper.$method method with incomplete support was called by an asset loader.")
+  }
+
+  private fun logNoSupportWarning(method: String) {
+    logWarning("Unsupported AssetManagerWrapper.$method method was called by an asset loader.")
+  }
+
+  private fun logCollisionWarning(method: String, path: String) {
+    logWarning(
+      "AssetManagerWrapper.$method method called by an asset loader might throw an exception " +
+        "if multiple assets from the same path are loaded with different types. " +
+        "Warning issued for asset loaded from path: $path"
+    )
   }
 
   override fun toString(): String = "AssetManagerWrapper(storage=$assetStorage)"
