@@ -1,0 +1,55 @@
+name: publish-project-samples
+on:
+  push:
+    tags: [ '*' ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+        with:
+          repository: tommyettinger/gdx-liftoff
+      - name: JDK setup
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: temurin
+      - name: Save versions
+        shell: bash
+        run: |
+          echo "LIFTOFF_VERSION=$(cat version.txt)" >> $GITHUB_ENV 
+          echo "KTX_VERSION=$(curl https://raw.githubusercontent.com/libktx/ktx/master/version.txt)" >> $GITHUB_ENV
+      - name: Execution permission for Gradle wrapper
+        run: chmod +x gradlew
+      - name: Generate sample
+        run: ./gradlew sample --args="ktx"
+      - name: Prepare sample for release
+        run: |
+          find build/dist/sample/ -type f \( -iname \*.kt -o -iname \*.gradle -o -iname \*.json -o -iname \*.xml \) | xargs sed -i -e 's/\t/  /g'
+      - name: Publish KTX sample
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.accessToken }}
+          branch: main
+          folder: build/dist/sample
+          repository-name: libktx/ktx-sample-project
+          commit-message: 'Automatic deployment: KTX ${{ env.KTX_VERSION }}, gdx-liftoff ${{ env.LIFTOFF_VERSION }}.'
+      - name: Clean basic sample
+        run: rm -rf build/dist/sample
+      - name: Generate web sample
+        run: ./gradlew sample --args="ktx_web"
+      - name: Prepare sample for release
+        run: |
+          find build/dist/sample/ -type f \( -iname \*.kt -o -iname \*.gradle -o -iname \*.json -o -iname \*.xml \) | xargs sed -i -e 's/\t/  /g'
+      - name: Publish KTX web sample
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.accessToken }}
+          branch: main
+          folder: build/dist/sample
+          repository-name: libktx/ktx-sample-web-project
+          commit-message: 'Automatic deployment: KTX ${{ env.KTX_VERSION }}, gdx-liftoff ${{ env.LIFTOFF_VERSION }}.'

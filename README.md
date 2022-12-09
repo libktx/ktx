@@ -73,13 +73,13 @@ You can include the selected **KTX** modules based on the needs of your applicat
 #### New projects
 
 New projects with support for KTX can be generated with the [`gdx-liftoff` tool](https://github.com/tommyettinger/gdx-liftoff).
-In contrary to the official `gdx-setup` tool, `gdx-liftoff` provides greater support for libGDX extensions and a wider set of
-platforms, as well as custom project templates. You can download the latest release of the tool
+In contrary to the official `gdx-setup` tool, `gdx-liftoff` provides greater support for libGDX extensions and
+a wider set of platforms, as well as custom project templates. You can download the latest release of the tool
 [here](https://github.com/tommyettinger/gdx-liftoff/releases).
 
 Click on the sections below for instructions on how to set up a new KTX project with `gdx-liftoff`.
 
-<details><summary><b>General</b></summary>
+<details><summary><b>General</b></summary><dl><dd>
 
 ---
 
@@ -91,9 +91,9 @@ The following sections describe each tab of the setup tool available below the b
 
 ---
 
-</details>
+</dd></dl></details>
 
-<details><summary><b>Platforms</b></summary>
+<details><summary><b>Platforms</b></summary><dl><dd>
 
 ---
 
@@ -103,7 +103,7 @@ The following sections describe each tab of the setup tool available below the b
 * **Desktop:** the default desktop platform based on LWJGL3.
 * **Android:** native Android mobile platform.
 * **iOS:** mobile platform using RoboVM to support iOS.
-* **HTML (TeaVM):** unofficial expermental web platform using TeaVM.
+* **HTML (TeaVM):** unofficial experimental web platform using TeaVM.
 * Headless: a desktop platform without a graphical interface.
 * Server: a separate server application without libGDX APIs.
 * Shared: a module for sharing code between the Server and Core.
@@ -115,31 +115,32 @@ The following platforms are unsupported or untested:
 
 ---
 
-</details>
+</dd></dl></details>
 
-<details><summary><b>Languages</b></summary>
-
----
-
-Make sure to select the **Kotlin** language support.
+<details><summary><b>Languages</b></summary><dl><dd>
 
 ---
 
-</details>
+You can select the **Kotlin** language support to ensure it is correctly set up in the generated project.
+If a Kotlin project template is selected, it will automatically add the necessary Kotlin libraries and plugins.
 
-<details><summary><b>Extensions</b></summary>
+---
+
+</dd></dl></details>
+
+<details><summary><b>Extensions</b></summary><dl><dd>
 
 ---
 
 This section includes the official libGDX extensions. Each of these should be compatible with Kotlin
-projects. However, some extensions might be unavailable on selected platforms. In particular, the TeaVM
+projects. However, some extensions might be unavailable on some platforms. In particular, the TeaVM
 backend might be unable to compile libraries relying on native code or reflection.
 
 ---
 
-</details>
+</dd></dl></details>
 
-<details><summary><b>Third-party extensions</b></summary>
+<details><summary><b>Third-party extensions</b></summary><dl><dd>
 
 ---
 
@@ -156,28 +157,28 @@ in the `gradle.properties` file.
 
 ---
 
-</details>
+</dd></dl></details>
 
-<details><summary><b>Templates</b></summary>
+<details><summary><b>Templates</b></summary><dl><dd>
 
 ---
 
 Choosing a template for the project determines the initial implementation of the libGDX `ApplicationListener`,
-as well as the application launchers on each platform. Some of the templates also showcase specific parts
-of the framework, such as the Scene2D GUI or event handling. You can generate several projects and check out
-various templates, but for working with Kotlin and KTX these are the best starting points:
+as well as the application launchers on each platform. Some templates also showcase specific parts of the framework,
+such as the Scene2D GUI or event handling. You can generate several projects and check out various templates,
+but for working with Kotlin and KTX these are the best starting points:
   
 * **Kotlin**: a basic project template that generates Kotlin application launchers.
+* **Kotlin Logo**: a simple project that generates Kotlin application launchers and draws the libGDX logo on the screen.
 * **Kotlin + KTX** *(recommended)*: a project template that generates the `ApplicationListener` using **KTX**
-  utilities. When launched, draws the **KTX** logo on the screen. Some modules that require additional setup,
-  such as `ktx-async`, are properly initiated by the template if selected during setup.
+  utilities. When launched, the application draws the **KTX** logo on the screen. Some modules that require additional
+  setup, such as `ktx-async`, are properly initiated by the template if selected.
 
 ---
 
-</details>
+</dd></dl></details>
 
-
-<details><summary><b>Advanced</b></summary>
+<details><summary><b>Advanced</b></summary><dl><dd>
 
 ---
 
@@ -187,9 +188,18 @@ can use to test the available widgets, mark the *Add GUI assets* checkbox.
 
 ---
 
-</details>
+</dd></dl></details>
 
-When using the official `gdx-setup` tool, generate a project with Kotlin support and refer to the next section.
+Example **KTX** projects:
+* 
+* [`ktx-sample-project`](https://github.com/libktx/ktx-sample-project): includes all **KTX** modules and the official
+  libGDX extensions. Targets the desktop and mobile platforms.
+* [`ktx-sample-project`](https://github.com/libktx/ktx-sample-web-project): includes most **KTX** modules that are at
+  least partially supported by the web platform, as well as the official libGDX extensions. Targets the desktop, mobile
+  and web platforms.
+
+When using the official `gdx-setup` tool instead of the recommended `gdx-liftoff`, generate a project with Kotlin
+support and refer to the next section.
 
 #### Existing projects
 
@@ -243,16 +253,18 @@ You can find the latest **KTX** version on Maven Central:
 
 **KTX** currently supports the following platforms:
 
-| Platform |    Status    | Description |
-|:--------:|:------------:|-------------|
-| Desktop  |   Complete   | All major desktop platforms are supported by the official libGDX LWJGL3 backend. |
-| Android  |   Complete   | Supported natively by the official libGDX Android backend. |
-|   iOS    |   Complete   | Supported by the official libGDX iOS backend using [RoboVM](http://robovm.mobidevelop.com/). |
-|   Web    | Experimental | Partially supported by the unofficial [web backend](https://github.com/xpenatan/gdx-html5-tools/) using [TeaVM](https://teavm.org/). |
+| Platform |    Status    | Description                                                                                                                    |
+|:--------:|:------------:|--------------------------------------------------------------------------------------------------------------------------------|
+| Desktop  |   Complete   | All major desktop platforms are supported by the official libGDX LWJGL3 backend.                                               |
+| Android  |   Complete   | Supported natively by the official libGDX Android backend.                                                                     |
+|   iOS    |   Complete   | Supported by the official libGDX iOS backend using [RoboVM](http://robovm.mobidevelop.com/).                                   |
+|   Web    | Experimental | Partially supported by the unofficial [web backend](https://github.com/xpenatan/gdx-teavm/) using [TeaVM](https://teavm.org/). |
 
-> Note that some platforms outside of desktop provide limited support for features such as reflection, coroutines
-> or Java standard library emulation. Please refer to the documentation of the respective libGDX backends, as well
-> as the tools that they are based on.
+> Note that platforms other than desktop might provide limited support for features such as reflection, coroutines
+> or Java standard library emulation. In particular, mobile platforms might not support the entire Java standard
+> library including the newer additions, while the web platform currently does not support Kotlin coroutines or more
+> advanced reflection features. Please refer to the documentation of the respective libGDX backends, as well as
+> the tools that they are based on.
 
 #### Versioning
 
@@ -267,8 +279,8 @@ the latest release matching your current libGDX version.
 You can browse through our official releases [on Maven](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 and [on GitHub](https://github.com/libktx/ktx/releases).
 
-Although **KTX** technically uses beta release tags, the official releases are considered stable for production use.
-All modules are thoroughly tested with unit tests.
+Although **KTX** technically uses beta release tags, the official releases are considered suitable for production use.
+All modules are thoroughly tested with comprehensive test suites.
 
 #### Latest changes
 

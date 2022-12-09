@@ -55,6 +55,8 @@ in the core Gradle module instead of `api`.
 `ktx-async` was tested on desktop, Android and iOS, and should work on every major platform. If you encounter
 any issues with launching the coroutines, do not hesitate to create an [issue](https://github.com/libktx/ktx/issues).
 
+> Note that Kotlin coroutines are not supported by the unofficial TeaVM web platform.
+
 #### Coroutines
 
 _Please refer to Kotlin coroutines documentation or tutorials if you are having trouble with this section._
