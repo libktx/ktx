@@ -772,37 +772,6 @@ Pair this library with [`ktx-style`](../style) for type-safe actor styles buildi
 for useful extension methods for `Scene2D` API. [`ktx-assets`](../assets) or [`ktx-assets-async`](../assets-async)
 might help with `Skin` loading and management.
 
-### Migration guide
-
-`ktx-scene2d` up to `1.9.10-b5` had no `scene2d` object and instead provided root level factory functions
-only for parental actors such as `Table` or `Window`. This turned out a bit more problematic than the current
-approach, as you could not easily construct child actors (such as labels) without a parent, and the name clashes
-between root level factory function and nested factory methods could lead to subtle bugs.
-
-```kotlin
-// Up to 1.9.10-b5:
-val myTable = table {
-  label("Old approach.")
-}
-
-// Currently:
-val myTable = scene2d.table {
-  label("Current approach.")
-}
-```
-
-The migration is pretty straightforward: add `scene2d.` prefix to all root actor definitions. You can also leverage
-the new `Stage.actors` extension method to add actors directly to a `Stage`. Note that nested actor definitions do not
-require any changes.
-
-Only 2 factory methods were changed significantly: `listWidget` and `selectBox`. Now they have only a single
-generic parameter - type of the items - and no longer consume `Cell` or `Node` instances in their building blocks.
-Instead, you have to call `cell`, `inCell`, `node` or `inNode` outside of their building blocks to configure the layout.
-
-`ktx-scene2d` version `1.9.10-b6` has the deprecated root actor factory functions available with annotations
-for automatic replacement. To ease migration to the newer KTX versions, use `1.9.10-b6` to refactor your application.
-Further KTX releases do not contain the deprecated functions.
-
 ### Alternatives
 
 - Creating layouts with [Scene2D](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) directly in Kotlin or Java.
@@ -811,7 +780,7 @@ Further KTX releases do not contain the deprecated functions.
 - [LML](https://github.com/czyzby/gdx-lml/tree/master/lml) allows building `Scene2D` views using HTML-like syntax.
 It also features a [VisUI extension](https://github.com/czyzby/gdx-lml/tree/master/lml-vis). However, it lacks
 first-class Kotlin support and the flexibility of a programming language.
-- [`ktx-vis`](../vis) extends `ktx-scene2d` with type-safe builders of
+- [`ktx-vis`](../vis) extends `ktx-scene2d` with type-safe builders of the
 [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) widgets.
 
 #### Additional documentation

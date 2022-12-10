@@ -348,31 +348,6 @@ Consider using [`ktx-actors`](../actors) module to improve event handling with l
 
 [`ktx-vis-style`](../vis-style) adds DSL for defining custom VisUI widget styles.
 
-### Migration guide
-
-Since `1.9.10-b6`, `ktx-vis` extends the [`ktx-scene2d`](../scene2d) module. If you are migrating from a previous
-`ktx-vis` version, see the `ktx-scene2d` migration guide first.
-
-Additionally to changes that apply to `ktx-scene2d`, `ktx-vis` was rewritten to match the `ktx-scene2d` API.
-Notable changes include:
-
-* All factory methods for VisUI widgets are now inlined.
-* `vis` prefix was added to the names of some VisUI widget factory methods to avoid clashes with Scene2D
-and better reflect the widget class names. A complete list is available in the change log.
-* Parental actors including `collapsible`, `dragPane`, `horizontalCollapsible`, `visScrollPane`, `visSplitPane` and
-`multiSplitPane` now do not require passing widgets to their factory methods. Instead, widgets are either automatically
-created or can be defined as nested children with the same DSL.
-* `DEFAULT_STYLE` constant is removed in favor of `defaultStyle` from `ktx-scene2d`.
-* `styleName` parameters in factory methods were renamed to `style` for consistency with `ktx-scene2d`.
-* `@VisDsl` DSL marker is replaced with `@Scene2dDsl` marker from `ktx-scene2d`.
-
-Since `ktx-vis` required a complete rewrite and had to match `ktx-scene2d` API, there is no intermediate version with
-deprecated methods. All legacy APIs were removed in `1.9.10-b6`. Please refer to the [change log](../CHANGELOG.md)
-for a complete list of changes.
-
-On top of that, `HorizontalFlowGroup` and `VerticalFlowGroup` are now deprecated in VisUI. While `ktx-vis` still
-provides factory methods for these, they are deprecated - `flowGroup` with appropriate settings should be used instead.
-
 ### Alternatives
 
 - Creating layouts with [VisUI](https://github.com/kotcrab/vis-editor/wiki/VisUI) directly in Kotlin or Java.

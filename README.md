@@ -191,12 +191,12 @@ can use to test the available widgets, mark the *Add GUI assets* checkbox.
 </dd></dl></details>
 
 Example **KTX** projects:
-* 
+
 * [`ktx-sample-project`](https://github.com/libktx/ktx-sample-project): includes all **KTX** modules and the official
   libGDX extensions. Targets the desktop and mobile platforms.
-* [`ktx-sample-project`](https://github.com/libktx/ktx-sample-web-project): includes most **KTX** modules that are at
-  least partially supported by the web platform, as well as the official libGDX extensions. Targets the desktop, mobile
-  and web platforms.
+* [`ktx-sample-web-project`](https://github.com/libktx/ktx-sample-web-project): includes most **KTX** modules that are
+  at least partially supported by the web platform, as well as the official libGDX extensions. Targets the desktop,
+  mobile and web platforms.
 
 When using the official `gdx-setup` tool instead of the recommended `gdx-liftoff`, generate a project with Kotlin
 support and refer to the next section.
