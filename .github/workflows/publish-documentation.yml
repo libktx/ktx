@@ -21,8 +21,8 @@ jobs:
         shell: bash
         run: |
           echo "KTX_VERSION=$(cat version.txt)" >> $GITHUB_ENV
-      - name: Execution permission for Gradle wrapper
-        run: chmod +x gradlew
+      - name: Gradle setup
+        uses: gradle/gradle-build-action@v2
       - name: Dokka
         run: ./gradlew dokkaHtmlMultiModule
       - name: Publish GitHub pages

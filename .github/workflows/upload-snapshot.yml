@@ -16,8 +16,8 @@ jobs:
         with:
           java-version: 8
           distribution: temurin
-      - name: Execution permission for Gradle wrapper
-        run: chmod +x gradlew
+      - name: Gradle setup
+        uses: gradle/gradle-build-action@v2
       - name: Tests
         run: ./gradlew check
         env:

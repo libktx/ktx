@@ -23,8 +23,8 @@ jobs:
         run: |
           echo "LIFTOFF_VERSION=$(cat version.txt)" >> $GITHUB_ENV 
           echo "KTX_VERSION=$(curl https://raw.githubusercontent.com/libktx/ktx/master/version.txt)" >> $GITHUB_ENV
-      - name: Execution permission for Gradle wrapper
-        run: chmod +x gradlew
+      - name: Gradle setup
+        uses: gradle/gradle-build-action@v2
       - name: Generate sample
         run: ./gradlew sample --args="ktx"
       - name: Prepare sample for release

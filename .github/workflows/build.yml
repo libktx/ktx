@@ -21,8 +21,10 @@ jobs:
       with:
         java-version: ${{ matrix.java-version }}
         distribution: temurin
-    - name: Execution permission for Gradle wrapper
-      run: chmod +x gradlew
+    - name: Gradle setup
+      uses: gradle/gradle-build-action@v2
+    - name: Gradle wrapper validation
+      uses: gradle/wrapper-validation-action@v1
     - name: Build
       run: ./gradlew assemble install -x dokkaHtml -x dokkaZip
     - name: Tests
