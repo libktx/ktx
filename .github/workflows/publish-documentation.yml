@@ -3,28 +3,33 @@ name: publish-documentation
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+        uses: actions/checkout@v3
       - name: JDK setup
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: 1.11
-      - name: Execution permission for Gradle wrapper
-        run: chmod +x gradlew
+          java-version: 11
+          distribution: temurin
+      - name: Save version
+        shell: bash
+        run: |
+          echo "KTX_VERSION=$(cat version.txt)" >> $GITHUB_ENV
+      - name: Gradle setup
+        uses: gradle/gradle-build-action@v2
       - name: Dokka
         run: ./gradlew dokkaHtmlMultiModule
       - name: Publish GitHub pages
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
-          ACCESS_TOKEN: ${{ secrets.accessToken }}
-          BRANCH: gh-pages
-          FOLDER: build/dokka/htmlMultiModule
-          REPOSITORY_NAME: libktx/docs
+          token: ${{ secrets.accessToken }}
+          branch: gh-pages
+          folder: build/dokka/htmlMultiModule
+          repository-name: libktx/docs
+          commit-message: 'Documentation of KTX ${{ env.KTX_VERSION }}.'

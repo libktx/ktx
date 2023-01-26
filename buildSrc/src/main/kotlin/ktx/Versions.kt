@@ -5,7 +5,7 @@ const val kotlinCoroutinesVersion = "1.6.4"
 
 const val artemisOdbVersion = "2.3.0"
 const val ashleyVersion = "1.7.4"
-const val visUiVersion = "1.5.0"
+const val visUiVersion = "1.5.1"
 
 const val spekVersion = "1.1.5"
 const val kotlinTestVersion = "2.0.7"
