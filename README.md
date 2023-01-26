@@ -133,7 +133,7 @@ If a Kotlin project template is selected, it will automatically add the necessar
 ---
 
 This section includes the official libGDX extensions. Each of these should be compatible with Kotlin
-projects. However, some extensions might be unavailable on some platforms. In particular, the TeaVM
+projects. However, some extensions might be unavailable on specific platforms. In particular, the TeaVM
 backend might be unable to compile libraries relying on native code or reflection.
 
 ---
@@ -220,7 +220,7 @@ with the `ktx-app` identifier would require the following changes in your `build
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.11.0-rc3'
+  ktxVersion = '1.11.0-rc4'
 }
 
 dependencies {
@@ -234,7 +234,7 @@ dependencies {
 
 ```kotlin
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.11.0-rc3"
+val ktxVersion = "1.11.0-rc4"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
