@@ -2,6 +2,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[FIX]** (`ktx-assets-async`) `AssetStorage` no longer uses `ConcurrentHashMap.getOrDefault` method unsupported on older Android devices.
+
 #### 1.11.0-rc4
 
 - **[UPDATE]** Updated to Kotlin 1.8.0.

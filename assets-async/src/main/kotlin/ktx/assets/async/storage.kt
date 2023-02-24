@@ -1209,14 +1209,14 @@ class AssetStorage(
   /** Must be called with [lock]. Adds [identifier] to [pathToIdentifiers]. */
   private fun registerAssetPath(identifier: Identifier<*>) {
     val path = identifier.path
-    val identifiers = pathToIdentifiers.getOrDefault(path, emptyList())
+    val identifiers = getAssetIdentifiers(path)
     pathToIdentifiers[path] = identifiers + listOf(identifier)
   }
 
   /** Must be called with [lock]. Removes [identifier] from [pathToIdentifiers]. */
   private fun unregisterAssetPath(identifier: Identifier<*>) {
     val path = identifier.path
-    val identifiers = pathToIdentifiers.getOrDefault(path, emptyList())
+    val identifiers = getAssetIdentifiers(path)
     pathToIdentifiers[path] = identifiers.filterNot { it == identifier }
   }
 
@@ -1225,7 +1225,7 @@ class AssetStorage(
    * Do not attempt to modify the returned list. Changing the list might have an unpredictable effect
    * on the asset loaders.
    */
-  fun getAssetIdentifiers(path: String): List<Identifier<*>> = pathToIdentifiers.getOrDefault(path, emptyList())
+  fun getAssetIdentifiers(path: String): List<Identifier<*>> = pathToIdentifiers[path] ?: emptyList()
 
   /**
    * Creates a deep copy of the internal asset storage. Returns an [AssetStorageSnapshot]
