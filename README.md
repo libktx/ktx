@@ -220,7 +220,7 @@ with the `ktx-app` identifier would require the following changes in your `build
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.11.0-rc4'
+  ktxVersion = '1.11.0-rc5'
 }
 
 dependencies {
@@ -234,7 +234,7 @@ dependencies {
 
 ```kotlin
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.11.0-rc4"
+val ktxVersion = "1.11.0-rc5"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
