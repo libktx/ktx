@@ -1,5 +1,5 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.8.0-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.8.10-orange.svg)](http://kotlinlang.org/)
 [![libGDX](https://img.shields.io/badge/libgdx-1.11.0-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -220,7 +220,7 @@ with the `ktx-app` identifier would require the following changes in your `build
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.11.0-rc4'
+  ktxVersion = '1.11.0-rc5'
 }
 
 dependencies {
@@ -234,7 +234,7 @@ dependencies {
 
 ```kotlin
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.11.0-rc4"
+val ktxVersion = "1.11.0-rc5"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
