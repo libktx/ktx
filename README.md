@@ -43,6 +43,7 @@ You can include the selected **KTX** modules based on the needs of your applicat
 |                 Module                 | Description                                                                                                                       |
 |:--------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------|
 |         [`ktx-actors`](actors)         | [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI extensions for stages, actors, actions, and event listeners. |
+|             [`ktx-ai`](ai)             | Type-safe Kotlin builders and utilities for [`gdxAI`](https://github.com/libgdx/gdx-ai).                                          |
 |            [`ktx-app`](app)            | `ApplicationListener` implementations and general application utilities.                                                          |
 |        [`ktx-artemis`](artemis)        | [`Artemis-odb`](https://github.com/junkdog/artemis-odb) entity-component-system utilities.                                        |
 |         [`ktx-ashley`](ashley)         | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.                                                   |
