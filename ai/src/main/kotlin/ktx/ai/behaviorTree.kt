@@ -37,19 +37,23 @@ inline fun <E> behaviorTree(
   init: (@GdxAiTaskDsl BehaviorTree<E>).() -> Unit = {}
 ): BehaviorTree<E> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val behaviorTree = BehaviorTree(rootTask, blackboard)
+  behaviorTree.init()
+  return behaviorTree
 }
 
 /**
- * Adds a task to the BehaviorTree<E>.
+ * Adds a task to the receiver Task<E>.
  *
- * @param E the type of the behavior tree's blackboard.
+ * @param E the type of the receiving task's blackboard.
  * @param task the task to add.
  * @param init an optional inline block to configure the task.
  * @return the index where the task has been created.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <E> BehaviorTree<E>.add(task: Task<E>, init: (@GdxAiTaskDsl Task<E>).() -> Unit = {}): Int {
+@GdxAiTaskDsl
+inline fun <E, T : Task<E>> Task<E>.add(task: T, init: (@GdxAiTaskDsl T).() -> Unit = {}): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  task.init()
+  return addChild(task)
 }

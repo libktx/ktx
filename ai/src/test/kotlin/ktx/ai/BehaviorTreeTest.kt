@@ -25,7 +25,7 @@ class BehaviorTreeTest {
     val rootTaskField = BehaviorTree::class.java.getDeclaredField("rootTask").apply {
       isAccessible = true
     }
-    val blackboardField = BehaviorTree::class.java.getDeclaredField("blackboard").apply {
+    val blackboardField = BehaviorTree::class.java.getDeclaredField("object").apply {
       isAccessible = true
     }
 
@@ -46,7 +46,7 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `BehaviorTree's add function should add a task to the BehaviorTree`() {
+  fun `Task's add function should add a task to the BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
     val initialChildCount = tree.childCount
 
@@ -57,7 +57,7 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `BehaviorTree's add function should return the index where the task is added`() {
+  fun `Task's add function should return the index where the task is added`() {
     val tree = BehaviorTree<Cat>()
     val index = tree.add(mock<Task<Cat>>())
 
