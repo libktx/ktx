@@ -2,9 +2,9 @@ package ktx.ai
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.btree.Task
+import io.kotlintest.matchers.instanceOf
 import io.kotlintest.mock.mock
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Test
 
 class BehaviorTreeTest {
@@ -74,5 +74,19 @@ class BehaviorTreeTest {
     }
 
     assertEquals(initialChildCount + 1, tree.childCount)
+  }
+
+  @Test
+  fun `add function's init block allows editing properties of Task subclass`() {
+    val receiverTask = mock<Task<Cat>>()
+
+    val eatTask = EatTask(hunger = 1)
+    val initialHunger = eatTask.hunger
+
+    receiverTask.add(eatTask) {
+      hunger -= 1
+    }
+
+    assertEquals(initialHunger - 1, eatTask.hunger)
   }
 }

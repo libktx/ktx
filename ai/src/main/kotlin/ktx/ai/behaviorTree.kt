@@ -48,7 +48,7 @@ inline fun <E> behaviorTree(
  * @param E the type of the receiving task's blackboard.
  * @param task the task to add.
  * @param init an optional inline block to configure the task.
- * @return the index where the task has been created.
+ * @return the index where the task has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
