@@ -2,22 +2,22 @@ package ktx.ai
 
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.btree.Task
-import io.kotlintest.matchers.instanceOf
 import io.kotlintest.mock.mock
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class BehaviorTreeTest {
 
   @Test
-  fun `behaviorTree function without arguments should return a BehaviorTree object`() {
+  fun `behaviorTree function without arguments should return BehaviorTree object`() {
     val behaviorTree = behaviorTree<Cat>()
 
     assertNotNull(behaviorTree)
   }
 
   @Test
-  fun `behaviorTree function with non-null arguments should return a BehaviorTree object with the correct properties`() {
+  fun `behaviorTree function with non-null arguments should return BehaviorTree object with correct properties`() {
     val rootTask = mock<Task<Cat>>()
     val blackboard = mock<Cat>()
     val tree = behaviorTree(rootTask, blackboard)
@@ -46,7 +46,7 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `Task's add function should add a task to the BehaviorTree`() {
+  fun `Task's add function should add task to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
     val initialChildCount = tree.childCount
 
@@ -57,11 +57,13 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `Task's add function should return the index where the task is added`() {
-    val tree = BehaviorTree<Cat>()
-    val index = tree.add(mock<Task<Cat>>())
+  fun `Task's add function should return index where task is added`() {
+    val selector = GdxSelector<Cat>()
+    val index1 = selector.add(mock<Task<Cat>>())
+    val index2 = selector.add(mock<Task<Cat>>())
 
-    assertNotNull(index)
+    assertEquals(0, index1)
+    assertEquals(1, index2)
   }
 
   @Test
