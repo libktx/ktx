@@ -14,6 +14,9 @@ import com.badlogic.gdx.ai.btree.decorator.Repeat
 import com.badlogic.gdx.ai.btree.decorator.SemaphoreGuard
 import com.badlogic.gdx.ai.btree.decorator.UntilFail
 import com.badlogic.gdx.ai.btree.decorator.UntilSuccess
+import com.badlogic.gdx.ai.btree.leaf.Failure
+import com.badlogic.gdx.ai.btree.leaf.Success
+import com.badlogic.gdx.ai.btree.leaf.Wait
 import com.badlogic.gdx.ai.utils.random.ConstantFloatDistribution
 import com.badlogic.gdx.ai.utils.random.ConstantIntegerDistribution
 import com.badlogic.gdx.ai.utils.random.FloatDistribution
@@ -321,6 +324,74 @@ inline fun <E> Task<E>.untilFail(
 inline fun <E> Task<E>.untilSuccess(
   task: Task<E>? = null,
   init: UntilSuccess<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a Failure to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the Failure.
+ * @return the index where the Failure has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.failureLeaf(
+  init: Failure<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a Success to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the Success.
+ * @return the index where the Success has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.successLeaf(
+  init: Success<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a Wait to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param seconds the number of seconds to wait for.
+ * @param init an optional inline block to configure the Wait.
+ * @return the index where the Wait has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.waitLeaf(
+  seconds: Float,
+  init: Wait<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a Wait to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param seconds the [FloatDistribution] determining the number of seconds to wait for.
+ * @param init an optional inline block to configure the Wait.
+ * @return the index where the Wait has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.waitLeaf(
+  seconds: FloatDistribution = ConstantFloatDistribution.ZERO,
+  init: Wait<E>.() -> Unit = {}
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   TODO()
