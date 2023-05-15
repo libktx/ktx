@@ -24,7 +24,7 @@ class BranchTasksTest {
 
     val tree = behaviorTree<Cat> {
       initialChildCount = childCount
-      parallel()
+      dynamicGuardSelector()
     }
 
     assertEquals(initialChildCount + 1, tree.childCount)

@@ -4,6 +4,8 @@ import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.btree.Task
 import com.badlogic.gdx.ai.btree.branch.DynamicGuardSelector
 import com.badlogic.gdx.ai.btree.branch.Parallel
+import com.badlogic.gdx.ai.btree.branch.Parallel.Orchestrator
+import com.badlogic.gdx.ai.btree.branch.Parallel.Policy
 import com.badlogic.gdx.ai.btree.branch.RandomSelector
 import com.badlogic.gdx.ai.btree.branch.RandomSequence
 import com.badlogic.gdx.ai.btree.decorator.AlwaysFail
@@ -21,6 +23,7 @@ import com.badlogic.gdx.ai.utils.random.ConstantFloatDistribution
 import com.badlogic.gdx.ai.utils.random.ConstantIntegerDistribution
 import com.badlogic.gdx.ai.utils.random.FloatDistribution
 import com.badlogic.gdx.ai.utils.random.IntegerDistribution
+import com.badlogic.gdx.utils.Array
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -46,13 +49,13 @@ typealias GdxAiRandom<E> = com.badlogic.gdx.ai.btree.decorator.Random<E>
 annotation class GdxAiTaskDsl
 
 /**
- * Creates a BehaviorTree<E>.
+ * Creates a [BehaviorTree].
  *
  * @param E the type of the behavior tree's blackboard.
- * @param rootTask the root task of the behavior tree.
- * @param blackboard the blackboard of the behavior tree.
- * @param init an optional inline block to configure the behavior tree.
- * @return a new BehaviorTree<E> instance.
+ * @param rootTask the root task of the [BehaviorTree].
+ * @param blackboard the blackboard of the [BehaviorTree].
+ * @param init an optional inline block to configure the [BehaviorTree].
+ * @return a new [BehaviorTree] instance.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -68,7 +71,7 @@ inline fun <E> behaviorTree(
 }
 
 /**
- * Adds a task to the receiver Task<E>.
+ * Adds a task to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
  * @param task the task to add.
@@ -84,87 +87,127 @@ inline fun <E, T : Task<E>> Task<E>.add(task: T, init: (@GdxAiTaskDsl T).() -> U
 }
 
 /**
- * Creates and adds a DynamicGuardSelector to the receiver Task<E>.
+ * Creates and adds a [DynamicGuardSelector] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the DynamicGuardSelector.
- * @return the index where the DynamicGuardSelector has been added.
+ * @param tasks the children of the [DynamicGuardSelector].
+ * @param init an optional inline block to configure the [DynamicGuardSelector].
+ * @return the index where the [DynamicGuardSelector] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.dynamicGuardSelector(init: (@GdxAiTaskDsl DynamicGuardSelector<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.dynamicGuardSelector(
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl DynamicGuardSelector<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val dynamicGuardSelector = DynamicGuardSelector(tasks)
+  dynamicGuardSelector.init()
+  return addChild(dynamicGuardSelector)
 }
 
 /**
- * Creates and adds a Parallel to the receiver Task<E>.
+ * Creates and adds a [Parallel] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the Parallel.
- * @return the index where the Parallel has been added.
+ * @param policy the [Parallel.Policy] of the [Parallel].
+ * @param orchestrator the [Parallel.Orchestrator] of the [Parallel].
+ * @param tasks the children of the [Parallel].
+ * @param init an optional inline block to configure the [Parallel].
+ * @return the index where the [Parallel] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.parallel(init: (@GdxAiTaskDsl Parallel<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.parallel(
+  policy: Policy = Policy.Sequence,
+  orchestrator: Orchestrator = Orchestrator.Resume,
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl Parallel<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val parallel = Parallel(policy, orchestrator, tasks)
+  parallel.init()
+  return addChild(parallel)
 }
 
 /**
- * Creates and adds a RandomSelector to the receiver Task<E>.
+ * Creates and adds a [RandomSelector] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the RandomSelector.
- * @return the index where the RandomSelector has been added.
+ * @param tasks the children of the [RandomSelector]
+ * @param init an optional inline block to configure the [RandomSelector].
+ * @return the index where the [RandomSelector] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.randomSelector(init: (@GdxAiTaskDsl RandomSelector<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.randomSelector(
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl RandomSelector<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val randomSelector = RandomSelector(tasks)
+  randomSelector.init()
+  return addChild(randomSelector)
 }
 
 /**
- * Creates and adds a RandomSequence to the receiver Task<E>.
+ * Creates and adds a [RandomSequence] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the RandomSequence
- * @return the index where the RandomSequence has been added.
+ * @param tasks the children of the [RandomSequence]
+ * @param init an optional inline block to configure the [RandomSequence]
+ * @return the index where the [RandomSequence] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.randomSequence(init: (@GdxAiTaskDsl RandomSequence<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.randomSequence(
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl RandomSequence<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val randomSequence = RandomSequence(tasks)
+  randomSequence.init()
+  return addChild(randomSequence)
 }
 
 /**
- * Creates and adds a GdxAiSelector to the receiver Task<E>.
+ * Creates and adds a [GdxAiSelector] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the GdxAiSelector.
- * @return the index where the GdxAiSelector has been added.
+ * @param tasks the children of the [GdxAiSelector].
+ * @param init an optional inline block to configure the [GdxAiSelector].
+ * @return the index where the [GdxAiSelector] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.selector(init: (@GdxAiTaskDsl GdxAiSelector<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.selector(
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl GdxAiSelector<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val selector = GdxAiSelector(tasks)
+  selector.init()
+  return addChild(selector)
 }
 
 /**
- * Creates and adds a GdxAiSequence to the receiver Task<E>.
+ * Creates and adds a [GdxAiSequence] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the GdxAiSequence.
- * @return the index where the GdxAiSequence has been added.
+ * @param tasks the children of the [GdxAiSequence].
+ * @param init an optional inline block to configure the [GdxAiSequence].
+ * @return the index where the [GdxAiSequence] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.sequence(init: (@GdxAiTaskDsl GdxAiSequence<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.sequence(
+  tasks: Array<Task<E>> = Array(),
+  init: (@GdxAiTaskDsl GdxAiSequence<E>).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val sequence = GdxAiSequence(tasks)
+  sequence.init()
+  return addChild(sequence)
 }
 
 /**
