@@ -6,15 +6,30 @@ import com.badlogic.gdx.ai.btree.branch.DynamicGuardSelector
 import com.badlogic.gdx.ai.btree.branch.Parallel
 import com.badlogic.gdx.ai.btree.branch.RandomSelector
 import com.badlogic.gdx.ai.btree.branch.RandomSequence
+import com.badlogic.gdx.ai.btree.decorator.AlwaysFail
+import com.badlogic.gdx.ai.btree.decorator.AlwaysSucceed
+import com.badlogic.gdx.ai.btree.decorator.Include
+import com.badlogic.gdx.ai.btree.decorator.Invert
+import com.badlogic.gdx.ai.btree.decorator.Repeat
+import com.badlogic.gdx.ai.btree.decorator.SemaphoreGuard
+import com.badlogic.gdx.ai.btree.decorator.UntilFail
+import com.badlogic.gdx.ai.btree.decorator.UntilSuccess
+import com.badlogic.gdx.ai.utils.random.ConstantFloatDistribution
+import com.badlogic.gdx.ai.utils.random.ConstantIntegerDistribution
+import com.badlogic.gdx.ai.utils.random.FloatDistribution
+import com.badlogic.gdx.ai.utils.random.IntegerDistribution
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 /** Alias for [com.badlogic.gdx.ai.btree.branch.Sequence] avoiding name collision with the standard library. */
-typealias GdxSequence<E> = com.badlogic.gdx.ai.btree.branch.Sequence<E>
+typealias GdxAiSequence<E> = com.badlogic.gdx.ai.btree.branch.Sequence<E>
 
 /** Alias for [com.badlogic.gdx.ai.btree.branch.Selector] avoiding name collision with the standard library. */
-typealias GdxSelector<E> = com.badlogic.gdx.ai.btree.branch.Selector<E>
+typealias GdxAiSelector<E> = com.badlogic.gdx.ai.btree.branch.Selector<E>
+
+/** Alias for [com.badlogic.gdx.ai.btree.decorator.Random] avoiding name collision with the standard library. */
+typealias GdxAiRandom<E> = com.badlogic.gdx.ai.btree.decorator.Random<E>
 
 /** Should annotate builder methods of gdxAI [Task]. */
 @DslMarker
@@ -34,7 +49,7 @@ annotation class GdxAiTaskDsl
  * @param rootTask the root task of the behavior tree.
  * @param blackboard the blackboard of the behavior tree.
  * @param init an optional inline block to configure the behavior tree.
- * @return a new [BehaviorTree<E>] instance.
+ * @return a new BehaviorTree<E> instance.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -68,9 +83,9 @@ inline fun <E, T : Task<E>> Task<E>.add(task: T, init: (@GdxAiTaskDsl T).() -> U
 /**
  * Creates and adds a DynamicGuardSelector to the receiver Task<E>.
  *
- * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the DynamicGuardSelector
- * @return the index where the DynamicGuardSelector has been added
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the DynamicGuardSelector.
+ * @return the index where the DynamicGuardSelector has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -82,9 +97,9 @@ inline fun <E> Task<E>.dynamicGuardSelector(init: (@GdxAiTaskDsl DynamicGuardSel
 /**
  * Creates and adds a Parallel to the receiver Task<E>.
  *
- * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the Parallel
- * @return the index where the Parallel has been added
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the Parallel.
+ * @return the index where the Parallel has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -96,9 +111,9 @@ inline fun <E> Task<E>.parallel(init: (@GdxAiTaskDsl Parallel<E>).() -> Unit = {
 /**
  * Creates and adds a RandomSelector to the receiver Task<E>.
  *
- * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the RandomSelector
- * @return the index where the Parallel has been added
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the RandomSelector.
+ * @return the index where the RandomSelector has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -112,7 +127,7 @@ inline fun <E> Task<E>.randomSelector(init: (@GdxAiTaskDsl RandomSelector<E>).()
  *
  * @param E the type of the receiving task's blackboard
  * @param init an optional inline block to configure the RandomSequence
- * @return the index where the Parallel has been added
+ * @return the index where the RandomSequence has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
@@ -122,29 +137,191 @@ inline fun <E> Task<E>.randomSequence(init: (@GdxAiTaskDsl RandomSequence<E>).()
 }
 
 /**
- * Creates and adds a GdxSelector to the receiver Task<E>.
+ * Creates and adds a GdxAiSelector to the receiver Task<E>.
  *
- * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the GdxSelector
- * @return the index where the Parallel has been added
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the GdxAiSelector.
+ * @return the index where the GdxAiSelector has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.selector(init: (@GdxAiTaskDsl GdxSelector<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.selector(init: (@GdxAiTaskDsl GdxAiSelector<E>).() -> Unit = {}): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   TODO()
 }
 
 /**
- * Creates and adds a GdxSequence to the receiver Task<E>.
+ * Creates and adds a GdxAiSequence to the receiver Task<E>.
  *
- * @param E the type of the receiving task's blackboard
- * @param init an optional inline block to configure the GdxSequence
- * @return the index where the Parallel has been added
+ * @param E the type of the receiving task's blackboard.
+ * @param init an optional inline block to configure the GdxAiSequence.
+ * @return the index where the GdxAiSequence has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiTaskDsl
-inline fun <E> Task<E>.sequence(init: (@GdxAiTaskDsl GdxSequence<E>).() -> Unit = {}): Int {
+inline fun <E> Task<E>.sequence(init: (@GdxAiTaskDsl GdxAiSequence<E>).() -> Unit = {}): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an AlwaysFail to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param task the task to add to the AlwaysFail.
+ * @param init an optional inline block to configure the AlwaysFail.
+ * @return the index where the AlwaysFail has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.alwaysFail(task: Task<E>? = null, init: AlwaysFail<E>.() -> Unit = {}): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an AlwaysSucceed to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param task the task to add to the AlwaysSucceed.
+ * @param init an optional inline block to configure the AlwaysSucceed.
+ * @return the index where the AlwaysSucceed has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.alwaysSucceed(task: Task<E>? = null, init: AlwaysSucceed<E>.() -> Unit = {}): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an Include to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param subtree the path of the subtree to include.
+ * @param lazy indicates whether the subtree should be included at clone-time ({@code false}, the default) or at
+ *             run-time ({@code true}).
+ * @param init an optional inline block to configure the Include.
+ * @return the index where the Include has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.include(
+  subtree: String? = null,
+  lazy: Boolean = false,
+  init: Include<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an Invert to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param task the task to add to the Invert.
+ * @param init an optional inline block to configure the Invert.
+ * @return the index where the Invert has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.invert(task: Task<E>? = null, init: Invert<E>.() -> Unit = {}): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a GdxAiRandom to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param success the probability for the task to succeed.
+ * @param task the task to add to the Random.
+ * @param init an optional inline block to configure the GdxAiRandom.
+ * @return the index where the GdxAiRandom has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.random(
+  success: FloatDistribution = ConstantFloatDistribution.ZERO_POINT_FIVE,
+  task: Task<E>? = null,
+  init: GdxAiRandom<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a Repeat to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param times the IntegerDistribution specifying how many times the task must be repeated.
+ * @param task the task to add to the Repeat.
+ * @param init an optional inline block to configure the Repeat.
+ * @return the index where the Repeat has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.repeat(
+  times: IntegerDistribution = ConstantIntegerDistribution.NEGATIVE_ONE,
+  task: Task<E>? = null,
+  init: Repeat<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds a SemaphoreGuard to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param name the semaphore name.
+ * @param task the task to add to the SemaphoreGuard.
+ * @param init an optional inline block to configure the SemaphoreGuard.
+ * @return the index where the SemaphoreGuard has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.semaphoreGuard(
+  name: String? = null,
+  task: Task<E>? = null,
+  init: SemaphoreGuard<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an UntilFail to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param task the task to add to the UntilFail.
+ * @param init an optional inline block to configure the UntilFail.
+ * @return the index where the UntilFail has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.untilFail(
+  task: Task<E>? = null,
+  init: UntilFail<E>.() -> Unit = {}
+): Int {
+  contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
+  TODO()
+}
+
+/**
+ * Creates and adds an UntilSuccess to the receiver Task<E>.
+ *
+ * @param E the type of the receiving task's blackboard.
+ * @param task the task to add to the UntilSuccess.
+ * @param init an optional inline block to configure the UntilSuccess.
+ * @return the index where the UntilSuccess has been added.
+ */
+@OptIn(ExperimentalContracts::class)
+@GdxAiTaskDsl
+inline fun <E> Task<E>.untilSuccess(
+  task: Task<E>? = null,
+  init: UntilSuccess<E>.() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   TODO()
 }

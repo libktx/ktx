@@ -46,7 +46,7 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `Task's add function should add task to BehaviorTree`() {
+  fun `add function should add task to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
     val initialChildCount = tree.childCount
 
@@ -57,8 +57,8 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `Task's add function should return index where task is added`() {
-    val selector = GdxSelector<Cat>()
+  fun `add function should return index where task is added`() {
+    val selector = GdxAiSelector<Cat>()
     val index1 = selector.add(mock<Task<Cat>>())
     val index2 = selector.add(mock<Task<Cat>>())
 
@@ -90,5 +90,18 @@ class BehaviorTreeTest {
     }
 
     assertEquals(initialHunger - 1, eatTask.hunger)
+  }
+
+  @Test
+  fun `add function's init block should configure Task exactly once`() {
+    val variable: Int
+    val receiverTask = mock<Task<Cat>>()
+    val task = mock<Task<Cat>>()
+
+    receiverTask.add(task) {
+      variable = 42
+    }
+
+    assertEquals(42, variable)
   }
 }

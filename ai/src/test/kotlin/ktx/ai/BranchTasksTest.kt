@@ -32,7 +32,7 @@ class BranchTasksTest {
 
   @Test
   fun `dynamicGuardSelector function should return index where DynamicGuardSelector is added`() {
-    val receiverTask = GdxSelector<Cat>()
+    val receiverTask = GdxAiSelector<Cat>()
     val index1 = receiverTask.dynamicGuardSelector()
     val index2 = receiverTask.dynamicGuardSelector()
 
@@ -76,7 +76,7 @@ class BranchTasksTest {
 
   @Test
   fun `parallel function should return index where Parallel is added`() {
-    val receiverTask = GdxSelector<Cat>()
+    val receiverTask = GdxAiSelector<Cat>()
     val index1 = receiverTask.parallel()
     val index2 = receiverTask.parallel()
 
@@ -120,7 +120,7 @@ class BranchTasksTest {
 
   @Test
   fun `randomSelector function should return index where RandomSelector is added`() {
-    val receiverTask = GdxSelector<Cat>()
+    val receiverTask = GdxAiSelector<Cat>()
     val index1 = receiverTask.randomSelector()
     val index2 = receiverTask.randomSelector()
 
@@ -164,7 +164,7 @@ class BranchTasksTest {
 
   @Test
   fun `randomSequence function should return index where RandomSequence is added`() {
-    val receiverTask = GdxSelector<Cat>()
+    val receiverTask = GdxAiSelector<Cat>()
     val index1 = receiverTask.randomSequence()
     val index2 = receiverTask.randomSequence()
 
@@ -208,7 +208,7 @@ class BranchTasksTest {
 
   @Test
   fun `selector function should return index where GdxSelector is added`() {
-    val receiverTask = GdxSequence<Cat>()
+    val receiverTask = GdxAiSequence<Cat>()
     val index1 = receiverTask.selector()
     val index2 = receiverTask.selector()
 
@@ -252,7 +252,7 @@ class BranchTasksTest {
 
   @Test
   fun `sequence function should return index where GdxSequence is added`() {
-    val receiverTask = GdxSelector<Cat>()
+    val receiverTask = GdxAiSelector<Cat>()
     val index1 = receiverTask.sequence()
     val index2 = receiverTask.sequence()
 
