@@ -397,53 +397,59 @@ inline fun <E> Task<E>.untilSuccess(
 }
 
 /**
- * Creates and adds a Failure to the receiver Task<E>.
+ * Creates and adds a [Failure] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the Failure.
- * @return the index where the Failure has been added.
+ * @param init an optional inline block to configure the [Failure].
+ * @return the index where the [Failure] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
 inline fun <E> Task<E>.failureLeaf(
-  init: Failure<E>.() -> Unit = {}
+  init: (@GdxAiDsl Failure<E>).() -> Unit = {}
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val failure = Failure<E>()
+  failure.init()
+  return addChild(failure)
 }
 
 /**
- * Creates and adds a Success to the receiver Task<E>.
+ * Creates and adds a [Success] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param init an optional inline block to configure the Success.
- * @return the index where the Success has been added.
+ * @param init an optional inline block to configure the [Success].
+ * @return the index where the [Success] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
 inline fun <E> Task<E>.successLeaf(
-  init: Success<E>.() -> Unit = {}
+  init: (@GdxAiDsl Success<E>).() -> Unit = {}
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val success = Success<E>()
+  success.init()
+  return addChild(success)
 }
 
 /**
- * Creates and adds a Wait to the receiver Task<E>.
+ * Creates and adds a [Wait] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
  * @param seconds the number of seconds to wait for.
- * @param init an optional inline block to configure the Wait.
- * @return the index where the Wait has been added.
+ * @param init an optional inline block to configure the [Wait].
+ * @return the index where the [Wait] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
 inline fun <E> Task<E>.waitLeaf(
   seconds: Float,
-  init: Wait<E>.() -> Unit = {}
+  init: (@GdxAiDsl Wait<E>).() -> Unit = {}
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val wait = Wait<E>(seconds)
+  wait.init()
+  return addChild(wait)
 }
 
 /**
@@ -458,8 +464,10 @@ inline fun <E> Task<E>.waitLeaf(
 @GdxAiDsl
 inline fun <E> Task<E>.waitLeaf(
   seconds: FloatDistribution = ConstantFloatDistribution.ZERO,
-  init: Wait<E>.() -> Unit = {}
+  init: (@GdxAiDsl Wait<E>).() -> Unit = {}
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  TODO()
+  val wait = Wait<E>(seconds)
+  wait.init()
+  return addChild(wait)
 }
