@@ -3,10 +3,11 @@ package ktx.ai
 import com.badlogic.gdx.ai.btree.BehaviorTree
 import com.badlogic.gdx.ai.btree.Task
 import io.kotlintest.mock.mock
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class LeafTasksTest {
+
   @Test
   fun `failureLeaf function should add Failure to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
@@ -14,11 +15,11 @@ class LeafTasksTest {
 
     tree.failureLeaf()
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
-  fun `failureLeaf function inside of behaviorTree init block should add Failure to BehaviorTree`() {
+  fun `failureLeaf function inside of behaviorTree function's init block should add Failure to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -26,7 +27,7 @@ class LeafTasksTest {
       failureLeaf()
     }
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
@@ -36,8 +37,8 @@ class LeafTasksTest {
     val index1 = receiverTask.failureLeaf()
     val index2 = receiverTask.failureLeaf()
 
-    Assert.assertEquals(0, index1)
-    Assert.assertEquals(1, index2)
+    assertEquals(0, index1)
+    assertEquals(1, index2)
   }
 
   @Test
@@ -49,7 +50,7 @@ class LeafTasksTest {
       variable = 42
     }
 
-    Assert.assertEquals(42, variable)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -59,11 +60,11 @@ class LeafTasksTest {
 
     tree.successLeaf()
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
-  fun `successLeaf function inside of behaviorTree init block should add Success to BehaviorTree`() {
+  fun `successLeaf function inside of behaviorTree function's init block should add Success to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -71,7 +72,7 @@ class LeafTasksTest {
       successLeaf()
     }
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
@@ -81,8 +82,8 @@ class LeafTasksTest {
     val index1 = receiverTask.successLeaf()
     val index2 = receiverTask.successLeaf()
 
-    Assert.assertEquals(0, index1)
-    Assert.assertEquals(1, index2)
+    assertEquals(0, index1)
+    assertEquals(1, index2)
   }
 
   @Test
@@ -94,7 +95,7 @@ class LeafTasksTest {
       variable = 42
     }
 
-    Assert.assertEquals(42, variable)
+    assertEquals(42, variable)
   }
 
   @Test
@@ -104,11 +105,11 @@ class LeafTasksTest {
 
     tree.waitLeaf()
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
-  fun `waitLeaf function inside of behaviorTree init block should add Wait to BehaviorTree`() {
+  fun `waitLeaf function inside of behaviorTree function's init block should add Wait to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -116,7 +117,7 @@ class LeafTasksTest {
       waitLeaf()
     }
 
-    Assert.assertEquals(initialChildCount + 1, tree.childCount)
+    assertEquals(initialChildCount + 1, tree.childCount)
   }
 
   @Test
@@ -126,8 +127,8 @@ class LeafTasksTest {
     val index1 = receiverTask.waitLeaf()
     val index2 = receiverTask.waitLeaf()
 
-    Assert.assertEquals(0, index1)
-    Assert.assertEquals(1, index2)
+    assertEquals(0, index1)
+    assertEquals(1, index2)
   }
 
   @Test
@@ -139,6 +140,6 @@ class LeafTasksTest {
       variable = 42
     }
 
-    Assert.assertEquals(42, variable)
+    assertEquals(42, variable)
   }
 }

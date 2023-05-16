@@ -67,7 +67,7 @@ class BehaviorTreeTest {
   }
 
   @Test
-  fun `add function inside of behaviorTree function init block should add task to BehaviorTree`() {
+  fun `add function inside of behaviorTree function's init block should add task to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree {

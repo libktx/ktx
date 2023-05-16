@@ -19,7 +19,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `alwaysFail function inside of behaviorTree init block should add AlwaysFail to BehaviorTree`() {
+  fun `alwaysFail function inside of behaviorTree function's init block should add AlwaysFail to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -64,7 +64,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `alwaysSucceed function inside of behaviorTree init block should add AlwaysSucceed to BehaviorTree`() {
+  fun `alwaysSucceed function inside of behaviorTree function's init block should add AlwaysSucceed to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -109,7 +109,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `include function inside of behaviorTree init block should add Include to BehaviorTree`() {
+  fun `include function inside of behaviorTree function's init block should add Include to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -154,7 +154,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `invert function inside of behaviorTree init block should add Invert to BehaviorTree`() {
+  fun `invert function inside of behaviorTree function's init block should add Invert to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -199,7 +199,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `random function inside of behaviorTree init block should add GdxAiRandom to BehaviorTree`() {
+  fun `random function inside of behaviorTree function's init block should add GdxAiRandom to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -244,7 +244,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `repeat function inside of behaviorTree init block should add Repeat to BehaviorTree`() {
+  fun `repeat function inside of behaviorTree function's init block should add Repeat to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -289,7 +289,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `semaphoreGuard function inside of behaviorTree init block should add SemaphoreGuard to BehaviorTree`() {
+  fun `semaphoreGuard function inside of behaviorTree function's init block should add SemaphoreGuard to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -334,7 +334,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `untilFail function inside of behaviorTree init block should add UntilFail to BehaviorTree`() {
+  fun `untilFail function inside of behaviorTree function's init block should add UntilFail to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -379,7 +379,7 @@ class DecoratorsTest {
   }
 
   @Test
-  fun `untilSuccess function inside of behaviorTree init block should add UntilSuccess to BehaviorTree`() {
+  fun `untilSuccess function inside of behaviorTree function's init block should add UntilSuccess to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
