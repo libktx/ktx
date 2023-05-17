@@ -151,7 +151,7 @@ class BranchTasksTest {
   }
 
   @Test
-  fun `randomSequence inside of behaviorTree function's init block adds RandomSequence to BehaviorTree`() {
+  fun `randomSequence inside of behaviorTree function's init block should add RandomSequence to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {
@@ -239,7 +239,7 @@ class BranchTasksTest {
   }
 
   @Test
-  fun `sequence inside of behaviorTree function's init block adds GdxSequence to BehaviorTree`() {
+  fun `sequence inside of behaviorTree function's init block should add GdxSequence to BehaviorTree`() {
     val initialChildCount: Int
 
     val tree = behaviorTree<Cat> {

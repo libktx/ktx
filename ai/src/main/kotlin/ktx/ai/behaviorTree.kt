@@ -28,13 +28,13 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-/** Alias for [com.badlogic.gdx.ai.btree.branch.Sequence] avoiding name collision with the standard library. */
+/** Alias for [com.badlogic.gdx.ai.btree.branch.Sequence] to avoid name collisions with the standard library. */
 typealias GdxAiSequence<E> = com.badlogic.gdx.ai.btree.branch.Sequence<E>
 
-/** Alias for [com.badlogic.gdx.ai.btree.branch.Selector] avoiding name collision with the standard library. */
+/** Alias for [com.badlogic.gdx.ai.btree.branch.Selector] to avoid name collisions with the standard library. */
 typealias GdxAiSelector<E> = com.badlogic.gdx.ai.btree.branch.Selector<E>
 
-/** Alias for [com.badlogic.gdx.ai.btree.decorator.Random] avoiding name collision with the standard library. */
+/** Alias for [com.badlogic.gdx.ai.btree.decorator.Random] to avoid name collisions with the standard library. */
 typealias GdxAiRandom<E> = com.badlogic.gdx.ai.btree.decorator.Random<E>
 
 /** Should annotate builder methods of gdxAI. */
@@ -74,13 +74,17 @@ inline fun <E> behaviorTree(
  * Adds a task to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
+ * @param T the type of the task which gets added.
  * @param task the task to add.
  * @param init an optional inline block to configure the task.
  * @return the index where the task has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
-inline fun <E, T : Task<E>> Task<E>.add(task: T, init: (@GdxAiDsl T).() -> Unit = {}): Int {
+inline fun <E, T : Task<E>> Task<E>.add(
+  task: T,
+  init: (@GdxAiDsl T).() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   task.init()
   return addChild(task)
@@ -134,7 +138,7 @@ inline fun <E> Task<E>.parallel(
  * Creates and adds a [RandomSelector] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
- * @param tasks the children of the [RandomSelector]
+ * @param tasks the children of the [RandomSelector].
  * @param init an optional inline block to configure the [RandomSelector].
  * @return the index where the [RandomSelector] has been added.
  */
@@ -153,9 +157,9 @@ inline fun <E> Task<E>.randomSelector(
 /**
  * Creates and adds a [RandomSequence] to the receiver [Task].
  *
- * @param E the type of the receiving task's blackboard
- * @param tasks the children of the [RandomSequence]
- * @param init an optional inline block to configure the [RandomSequence]
+ * @param E the type of the receiving task's blackboard.
+ * @param tasks the children of the [RandomSequence].
+ * @param init an optional inline block to configure the [RandomSequence].
  * @return the index where the [RandomSequence] has been added.
  */
 @OptIn(ExperimentalContracts::class)
@@ -283,7 +287,10 @@ inline fun <E> Task<E>.include(
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
-inline fun <E> Task<E>.invert(task: Task<E>? = null, init: Invert<E>.() -> Unit = {}): Int {
+inline fun <E> Task<E>.invert(
+  task: Task<E>? = null,
+  init: Invert<E>.() -> Unit = {}
+): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val invert = Invert(task)
   invert.init()
@@ -453,12 +460,12 @@ inline fun <E> Task<E>.waitLeaf(
 }
 
 /**
- * Creates and adds a Wait to the receiver Task<E>.
+ * Creates and adds a [Wait] to the receiver [Task].
  *
  * @param E the type of the receiving task's blackboard.
  * @param seconds the [FloatDistribution] determining the number of seconds to wait for.
- * @param init an optional inline block to configure the Wait.
- * @return the index where the Wait has been added.
+ * @param init an optional inline block to configure the [Wait].
+ * @return the index where the [Wait] has been added.
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
