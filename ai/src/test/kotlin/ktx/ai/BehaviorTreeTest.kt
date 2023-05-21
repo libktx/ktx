@@ -22,16 +22,9 @@ class BehaviorTreeTest {
     val blackboard = mock<Cat>()
     val tree = behaviorTree(rootTask, blackboard)
 
-    val rootTaskField = BehaviorTree::class.java.getDeclaredField("rootTask").apply {
-      isAccessible = true
-    }
-    val blackboardField = BehaviorTree::class.java.getDeclaredField("object").apply {
-      isAccessible = true
-    }
-
     assertNotNull(tree)
-    assertEquals(rootTask, rootTaskField.get(tree))
-    assertEquals(blackboard, blackboardField.get(tree))
+    assertEquals(rootTask, tree.getChild(0))
+    assertEquals(blackboard, tree.`object`)
   }
 
   @Test

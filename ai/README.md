@@ -153,3 +153,7 @@ val tree = behaviorTree<Cat>(blackboard = Cat()) {
   }
 }
 ```
+
+#### Additional documentation
+
+- [gdxAI repository.](https://github.com/libgdx/gdx-ai)
