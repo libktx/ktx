@@ -103,7 +103,7 @@ Project contributors listed chronologically.
 * [@BitsAtPlayDev](https://github.com/BitsAtPlayDev)
   * Reported a typo in the documentation.
 * [@deviodesign](https://github.com/deviodesign)
-  * Created the [Artemis-odb module](../artemis).
+  * Created modules with DSLs for the [Artemis-odb](../artemis) and [gdxAI](../ai) libraries.
 
 ### Metrics
 

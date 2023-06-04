@@ -148,6 +148,8 @@ to update the [version.txt](../version.txt) and [milestones](https://github.com/
 [ashley/README.md](../ashley/README.md) file.
 - **Artemis-odb**: update `artemisOdbVersion` in the versions file and Artemis-odb version in the tag on the top of the
 [artemis/README.md](../artemis/README.md) file.
+- **gdxAI**: update `gdxAiVersion` in the versions file and gdxAI version in the tag on the top of the
+[ai/README.md](../ai/README.md) file.
 
 All the major dependencies updates should be added to the [changelog](../CHANGELOG.md).
 

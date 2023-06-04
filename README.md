@@ -1,5 +1,5 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-1.8.10-orange.svg)](http://kotlinlang.org/)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.8.21-orange.svg)](http://kotlinlang.org/)
 [![libGDX](https://img.shields.io/badge/libgdx-1.11.0-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
@@ -43,6 +43,7 @@ You can include the selected **KTX** modules based on the needs of your applicat
 |                 Module                 | Description                                                                                                                       |
 |:--------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------|
 |         [`ktx-actors`](actors)         | [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI extensions for stages, actors, actions, and event listeners. |
+|             [`ktx-ai`](ai)             | Type-safe Kotlin builders and utilities for [`gdxAI`](https://github.com/libgdx/gdx-ai).                                          |
 |            [`ktx-app`](app)            | `ApplicationListener` implementations and general application utilities.                                                          |
 |        [`ktx-artemis`](artemis)        | [`Artemis-odb`](https://github.com/junkdog/artemis-odb) entity-component-system utilities.                                        |
 |         [`ktx-ashley`](ashley)         | [`Ashley`](https://github.com/libgdx/ashley) entity-component-system utilities.                                                   |
@@ -220,7 +221,7 @@ with the `ktx-app` identifier would require the following changes in your `build
 // Groovy DSL:
 ext {
   // Update this version to match the latest KTX release:
-  ktxVersion = '1.11.0-rc5'
+  ktxVersion = '1.11.0-rc6'
 }
 
 dependencies {
@@ -234,7 +235,7 @@ dependencies {
 
 ```kotlin
 // Update this version to match the latest KTX release:
-val ktxVersion = "1.11.0-rc5"
+val ktxVersion = "1.11.0-rc6"
 
 dependencies {
   api(group = "io.github.libktx", name = "ktx-app", version = ktxVersion)
