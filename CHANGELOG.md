@@ -2,6 +2,33 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[FEATURE]** (`ktx-ai`) new **KTX** module with utilities and type-safe builders for gdxAI.
+  - Type aliases to avoid name clashes with common libraries:
+    - `GdxAiSequence<E>` for `com.badlogic.gdx.ai.btree.branch.Sequence<E>`
+    - `GdxAiSelector<E>` for `com.badlogic.gdx.ai.btree.branch.Selector<E>`
+    - `GdxAiRandom<E>` for `com.badlogic.gdx.ai.btree.decorator.Random<E>`
+  - Extension functions for building behavior trees:
+    - `add`
+    - `behaviorTree`
+    - `dynamicGuardSelector`
+    - `parallel`
+    - `randomSelector`
+    - `randomSequence`
+    - `selector`
+    - `sequence`
+    - `alwaysFail`
+    - `alwaysSucceed`
+    - `include`
+    - `invert`
+    - `random`
+    - `repeat`
+    - `semaphoreGuard`
+    - `untilFail`
+    - `untilSuccess`
+    - `failureLeaf`
+    - `successLeaf`
+    - `waitLeaf`
+
 #### 1.11.0-rc5
 
 - **[UPDATE]** Updated to Kotlin 1.8.10.

@@ -7,6 +7,7 @@ pluginManagement {
 
 include(
   "actors",
+  "ai",
   "app",
   "artemis",
   "ashley",
