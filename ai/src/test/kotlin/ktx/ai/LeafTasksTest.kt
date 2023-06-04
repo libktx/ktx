@@ -99,6 +99,28 @@ class LeafTasksTest {
   }
 
   @Test
+  fun `waitLeaf function with explicit seconds parameter should add Wait to BehaviorTree`() {
+    val tree = BehaviorTree<Cat>()
+    val initialChildCount = tree.childCount
+
+    tree.waitLeaf(1f)
+
+    assertEquals(initialChildCount + 1, tree.childCount)
+  }
+
+  @Test
+  fun `waitLeaf function with explicit seconds parameter inside of behaviorTree function's init block should add Wait to BehaviorTree`() {
+    val initialChildCount: Int
+
+    val tree = behaviorTree<Cat> {
+      initialChildCount = childCount
+      waitLeaf(1f)
+    }
+
+    assertEquals(initialChildCount + 1, tree.childCount)
+  }
+
+  @Test
   fun `waitLeaf function should add Wait to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
     val initialChildCount = tree.childCount

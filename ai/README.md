@@ -7,14 +7,17 @@ Utilities and type-safe builders for the [gdxAI](https://github.com/libgdx/gdx-a
 
 ### Why?
 
-Creating behavior trees programmatically with gdxAI isn't as intuitive as creating a btree text file. The text file has 
-to be loaded from an external resource.`ktx-ai` provides an alternative by using Kotlin type-safe builders.
+Creating behavior trees programmatically with gdxAI is not as intuitive as defining a _btree_ text file. However, _btree_
+text files have to be loaded as external resources and are not validated at compilation time.
+`ktx-ai` provides an alternative by defining Kotlin type-safe builders for behavior trees.
 
 ### Guide
 
 #### Type aliases
 
-Some classes of gdxAI have name clashes with common libraries. So you can use these type aliases instead:
+Some classes from gdxAI are named similarly to the types in standard library and other common dependencies.
+To avoid name clashes, you can use these type aliases instead:
+
 - `GdxAiSequence<E>` for `com.badlogic.gdx.ai.btree.branch.Sequence<E>`
 - `GdxAiSelector<E>` for `com.badlogic.gdx.ai.btree.branch.Selector<E>`
 - `GdxAiRandom<E>` for `com.badlogic.gdx.ai.btree.decorator.Random<E>`
@@ -48,8 +51,9 @@ Some classes of gdxAI have name clashes with common libraries. So you can use th
 
 ### Usage examples
 
-Creating an empty `BehaviorTree` with null rootTask and blackboard:
-```Kotlin
+Creating an empty `BehaviorTree` with no `rootTask` or `blackboard`:
+
+```kotlin
 import ktx.ai.*
 
 class Cat
@@ -58,10 +62,12 @@ val tree = behaviorTree<Cat> {
   // Edit BehaviorTree here.
 }
 ```
-Note that `BehaviorTree` requires a single root task and blackboard. So these have to be set at some point.
 
-Setting the blackboard and rootTask in the constructor:
-```Kotlin
+Note that `BehaviorTree` requires a single root task and blackboard. So these have to be set manually at some point.
+
+Setting the `blackboard` and `rootTask` in the constructor:
+
+```kotlin
 import ktx.ai.*
 
 class Cat
@@ -78,8 +84,9 @@ val tree = behaviorTree<Cat>(
 }
 ```
 
-Alternatively, you can set the rootTask and blackboard in the init block:
-```Kotlin
+Alternatively, you can set the `rootTask` and `blackboard` in the `init` block:
+
+```kotlin
 
 val tree = behaviorTree<Cat> {
     // Set the blackboard:
@@ -93,7 +100,8 @@ val tree = behaviorTree<Cat> {
 ```
 
 Adding a custom task to a receiver task:
-```Kotlin
+
+```kotlin
 import com.badlogic.gdx.ai.btree.*
 import ktx.ai.*
 
@@ -105,7 +113,8 @@ selector.add(EatTask())
 ```
 
 Adding nested branches to a `BehaviorTree`:
-```Kotlin
+
+```kotlin
 import com.badlogic.gdx.ai.btree.*
 import com.badlogic.gdx.ai.utils.random.UniformIntegerDistribution
 import ktx.ai.*
@@ -130,7 +139,8 @@ val tree = behaviorTree<Cat>(blackboard = Cat()) {
 ```
 
 Creating a custom builder function for a custom task:
-```Kotlin
+
+```kotlin
 class EatTask : LeafTask<Cat>()
 
 @OptIn(ExperimentalContracts::class)
