@@ -2,6 +2,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.11.0-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin Coroutines 1.7.1.
 - **[UPDATE]** Updated to Gradle 7.6.1.
 - **[FEATURE]** (`ktx-ai`) new **KTX** module with utilities and type-safe builders for gdxAI.
   - Type aliases to avoid name clashes with common libraries:
