@@ -180,7 +180,7 @@ fun TabbedPane.addTabContentsTo(table: Table) {
 
 /**
  * On tab switch, tab content will be added to provided widget [Group] instance.
- * Previous [group ]content will be cleared.
+ * Previous [group] content will be cleared.
  */
 fun TabbedPane.addTabContentsTo(group: Group) {
   addPaneContentListener {
@@ -194,7 +194,10 @@ fun TabbedPane.addTabContentsTo(group: Group) {
  * Previous [container] actor will be replaced.
  */
 fun TabbedPane.addTabContentsTo(container: Container<*>) {
-  addPaneContentListener { container.actor = it }
+  addPaneContentListener {
+    @Suppress("UNCHECKED_CAST")
+    (container as Container<Table>).actor = it
+  }
 }
 
 private inline fun TabbedPane.addPaneContentListener(crossinline contentChanged: (Table) -> Unit) {
