@@ -5,6 +5,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin 1.8.21.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.7.1.
 - **[UPDATE]** Updated to Gradle 7.6.1.
+- **[UPDATE]** Updated to Dokka 1.8.10.
 - **[FEATURE]** (`ktx-ai`) new **KTX** module with utilities and type-safe builders for gdxAI.
   - Type aliases to avoid name clashes with common libraries:
     - `GdxAiSequence<E>` for `com.badlogic.gdx.ai.btree.branch.Sequence<E>`
