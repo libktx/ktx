@@ -2,7 +2,7 @@
 
 ## Issues
 
-- Before submitting a bug, make sure that its source is not the libGDX framework itself.
+- Before submitting a bug report, verify that it is not caused by the libGDX framework itself.
 - Feel free to create issues or start discussions with feature requests and questions about the libraries.
 Issues and discussions are among the fastest way to contact the developers.
 
@@ -25,10 +25,9 @@ the changes. For example:
 - Make sure to include unit tests of your code. Test names should use the `` `backtick method name` `` syntax.
 JUnit and [Spek](http://spekframework.org/) can be used to write tests, although JUnit is encouraged for its commonness.
 Use [Mockito-Kotlin](https://github.com/nhaarman/mockito-kotlin) for mocking.
-- If your pull request is not a simple bug fix or small utility, make sure to link it to an existing issue or create
-an issue with your proposal first. Major API changes or new modules have to be discussed with the maintainers first.
-Skipping the issue will not get your pull request rejected outright, but note that major changes without approval might
-require a rewrite.
+- In case of a larger pull request, make sure to link it to an existing issue or create a corresponding issue first.
+Major API changes or new modules should be discussed with the maintainers. Skipping the issue will not get your pull
+request rejected outright, but note that major changes without approval might require a rewrite.
 - All notable changes should be added to the [changelog](../CHANGELOG.md) with an appropriate label:
   - **[FEATURE]** - a new functionality.
   - **[CHANGE]** - an API breaking change.
@@ -93,7 +92,7 @@ projectDesc=Description of your module as it will appear in Maven Central.
 leave it empty. By adding `import ktx.*` at the top of this file, you will be able to access the versions of major
 dependencies of the modules as defined in the [`buildSrc`](../buildSrc) directory.
 - Add a `README.md` file describing your module. Refer to other `README.md` files for examples. `README.md` files
-should generally consist of the following sections:
+can consist of the following sections:
   - _General description_ - in a single sentence, what problem does the module solve?
   - _Motivation_ - why was the module created?
   - _Guide_ - what features does the module provide? Does it require additional setup?
@@ -139,12 +138,14 @@ to update the [version.txt](../version.txt) and [milestones](https://github.com/
 - **Kotlin**: update the `kotlinVersion` in the properties file and the Kotlin tag in the [README.md](../README.md).
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` in the versions file and the tag in the
 `ktx-async` [README.md](../async/README.md).
-- **Gradle**: run `gradle wrapper` in the root project folder. Make sure that the
+- **Gradle**: run `gradle wrapper --distribution-type all` in the root project folder. Make sure that the
 [Gradle wrapper properties file](../gradle/wrapper/gradle-wrapper.properties) points the `all` Gradle release under
-`distributionUrl` rather than just the binaries (`bin`).
+`distributionUrl` rather than just the binaries (`bin`). Note that you do not have to install the corresponding Gradle
+version locally: instead, you can update the version in `gradle-wrapper.properties` first, and then run `./gradlew wrapper`
+to update the Gradle wrapper scripts and configuration files.
 - **VisUI**: update `visUiVersion` in the versions file and VisUI version in the tag on the top of the 
 [vis/README.md](../vis/README.md) file.
-- **Ashley**: update `ashleyVersion` in the versions file and Ashely version in the tag on the top of the 
+- **Ashley**: update `ashleyVersion` in the versions file and Ashley version in the tag on the top of the 
 [ashley/README.md](../ashley/README.md) file.
 - **Artemis-odb**: update `artemisOdbVersion` in the versions file and Artemis-odb version in the tag on the top of the
 [artemis/README.md](../artemis/README.md) file.
@@ -204,3 +205,8 @@ Triggered by pushing to the `develop` branch.
 * [publish-documentation](workflows/publish-documentation.yml) - builds and replaces the Dokka documentation published
 to [the official website](https://libktx.github.io/ktx/). Triggered by pushing to the `master` branch, which is
 generally only done before stable releases.
+- [publish-project-samples](workflows/publish-project-samples.yml) - generates sample projects with
+[gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff) based on the latest **KTX** version from the `master`
+branch, and pushes them to the [ktx-sample-project](https://github.com/libktx/ktx-sample-project) and
+[ktx-sample-web-project](https://github.com/libktx/ktx-sample-web-project) repositories. Triggered by creating new
+release tags.
