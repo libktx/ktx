@@ -5,6 +5,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to libGDX 1.12.0.
 - **[UPDATE]** Updated to Kotlin 1.8.22.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.7.2.
+- **[UPDATE]** Updated to VisUI 1.5.2.
 - **[FEATURE]** (`ktx-app`) `KtxInputAdapter` now supports the `touchCancelled` event handling.
 By default, it calls the `touchUp` method for consistency with the previous libGDX versions.
 
