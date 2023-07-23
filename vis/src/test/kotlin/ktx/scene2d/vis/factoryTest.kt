@@ -14,7 +14,6 @@ import com.kotcrab.vis.ui.widget.VisLabel
 import com.kotcrab.vis.ui.widget.VisWindow
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel
 import com.kotcrab.vis.ui.widget.toast.ToastTable
-import com.nhaarman.mockitokotlin2.mock
 import ktx.scene2d.ApplicationTest
 import ktx.scene2d.KWidget
 import ktx.scene2d.TOLERANCE
@@ -28,6 +27,7 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
+import org.mockito.kotlin.mock
 import com.badlogic.gdx.utils.Array as GdxArray
 
 class TopLevelActorFactoriesTest : ApplicationTest() {

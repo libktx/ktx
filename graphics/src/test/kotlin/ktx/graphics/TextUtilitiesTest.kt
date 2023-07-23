@@ -3,11 +3,11 @@ package ktx.graphics
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
 import com.badlogic.gdx.utils.Array as GdxArray
 
 class TextUtilitiesTest {

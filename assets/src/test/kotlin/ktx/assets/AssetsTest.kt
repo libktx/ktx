@@ -10,9 +10,6 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import ktx.assets.AssetsTest.MockAssetLoader.MockParameter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -23,6 +20,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 /**
  * Tests asset-related utilities and [AssetManager] extensions.

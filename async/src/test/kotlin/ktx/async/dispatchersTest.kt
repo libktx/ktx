@@ -5,7 +5,6 @@ package ktx.async
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Timer
 import com.badlogic.gdx.utils.async.AsyncExecutor
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.mock.mock
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -20,6 +19,7 @@ import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.verify
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger

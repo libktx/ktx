@@ -2,11 +2,11 @@ package ktx.app
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.PerformanceCounter
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
 
 class ProfilingTest {
   @Before

@@ -10,7 +10,7 @@ const val visUiVersion = "1.5.2"
 
 const val spekVersion = "1.1.5"
 const val kotlinTestVersion = "2.0.7"
-const val kotlinMockitoVersion = "2.1.0"
+const val kotlinMockitoVersion = "4.1.0"
 const val assertjVersion = "3.11.1"
 const val junitVersion = "4.12"
 const val slf4jVersion = "1.7.26"

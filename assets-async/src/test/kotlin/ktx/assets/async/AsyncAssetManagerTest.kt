@@ -33,7 +33,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.I18NBundle
-import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -51,6 +50,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.mockito.kotlin.mock
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 

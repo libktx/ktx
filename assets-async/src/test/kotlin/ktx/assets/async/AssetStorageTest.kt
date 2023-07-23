@@ -26,12 +26,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Logger
 import com.google.common.collect.Sets
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
@@ -60,6 +54,12 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import java.lang.Integer.min
 import java.util.IdentityHashMap
 import java.util.concurrent.CompletableFuture
@@ -294,7 +294,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage.get<String>(path))
     assertEquals("Content.", storage.getOrNull<String>(path))
     assertEquals("Content.", runBlocking { storage.getAsync<String>(path).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<String>(path))
     assertEquals(storage.getIdentifier<String>(path), storage.getAssetIdentifiers(path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
@@ -314,7 +314,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage[identifier])
     assertEquals("Content.", storage.getOrNull(identifier))
     assertEquals("Content.", runBlocking { storage.getAsync(identifier).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies(identifier))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(identifier))
     assertEquals(identifier, storage.getAssetIdentifiers(identifier.path).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
@@ -334,7 +334,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals("Content.", storage[descriptor])
     assertEquals("Content.", storage.getOrNull(descriptor))
     assertEquals("Content.", runBlocking { storage.getAsync(descriptor).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies(descriptor))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(descriptor))
     assertEquals(descriptor.toIdentifier(), storage.getAssetIdentifiers(descriptor.fileName).first())
     checkProgress(storage, loaded = 1, warn = true)
   }
@@ -608,7 +608,7 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.isLoaded<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path))
+    assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path) as Any)
     assertEquals(
       setOf(storage.getIdentifier<Pixmap>(path), storage.getIdentifier<Texture>(path)),
       storage.getAssetIdentifiers(path).toSet()

@@ -2,11 +2,11 @@ package ktx.json
 
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.JsonValue
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.matchers.shouldThrow
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 /**
  * Guarantees that [write] method is optional to implement.
