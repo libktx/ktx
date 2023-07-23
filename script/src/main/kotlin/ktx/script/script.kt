@@ -17,7 +17,7 @@ class KotlinScriptEngine {
   val engine: ScriptEngine = ScriptEngineManager().getEngineByExtension("kts")
     ?: throw ScriptEngineException(
       "Unable to find engine for extension: kts. " +
-        "Make sure to include the org.jetbrains.kotlin:kotlin-scripting-jsr223 dependency."
+        "Make sure to include the org.jetbrains.kotlin:kotlin-scripting-jsr223 dependency.",
     )
 
   /**
@@ -122,7 +122,7 @@ class KotlinScriptEngine {
   fun evaluateOn(
     receiver: Any,
     script: String,
-    receiverVariableName: String = getRandomReceiverName()
+    receiverVariableName: String = getRandomReceiverName(),
   ) {
     try {
       this[receiverVariableName] = receiver
@@ -143,7 +143,7 @@ class KotlinScriptEngine {
   fun evaluateOn(
     receiver: Any,
     scriptFile: FileHandle,
-    receiverVariableName: String = getRandomReceiverName()
+    receiverVariableName: String = getRandomReceiverName(),
   ) {
     try {
       evaluateOn(receiver, scriptFile.readString(), receiverVariableName)

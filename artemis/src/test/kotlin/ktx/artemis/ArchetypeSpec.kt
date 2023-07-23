@@ -29,7 +29,7 @@ object ArchetypeSpec : Spek({
         val archetype = archetypeBuilder
           .add(
             Transform::class,
-            Texture::class
+            Texture::class,
           )
           .build(world)
 
@@ -64,7 +64,7 @@ object ArchetypeSpec : Spek({
           )
           .remove(
             Transform::class,
-            Texture::class
+            Texture::class,
           )
           .build(world)
 

@@ -484,8 +484,9 @@ class AssetsTest {
     val group = TestAssetGroup()
     nonmember.load()
     while (true) {
-      if (group.update())
+      if (group.update()) {
         break
+      }
     }
     assertTrue(group.isLoaded())
     assertTrue(listOf(group.member1, group.member2, group.member3).all { !it.disposed })
@@ -569,15 +570,14 @@ class AssetsTest {
       manager: AssetManager,
       fileName: String,
       file: FileHandle,
-      parameter: MockParameter?
+      parameter: MockParameter?,
     ): MockAsset {
       val asset = MockAsset(file.path(), additional)
       additional = null
       return asset
     }
 
-    override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?):
-      Array<AssetDescriptor<Any>>? = null
+    override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?): Array<AssetDescriptor<Any>>? = null
 
     /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
     class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()

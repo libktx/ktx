@@ -33,6 +33,7 @@ interface KtxInputAdapter : InputProcessor {
   override fun scrolled(amountX: Float, amountY: Float) = false
   override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
   override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+
   /** Calls [InputProcessor.touchUp] for consistency with libGDX 1.11.0 and older. Override for custom handling. */
   override fun touchCancelled(screenX: Int, screenY: Int, pointer: Int, button: Int) =
     touchUp(screenX, screenY, pointer, button)

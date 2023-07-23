@@ -91,7 +91,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
   /** Apply the given affine [transformation] and return the resulting vector */
   operator fun times(transformation: Affine2): ImmutableVector2 = ImmutableVector2(
     x = x * transformation.m00 + y * transformation.m01 + transformation.m02,
-    y = x * transformation.m10 + y * transformation.m11 + transformation.m12
+    y = x * transformation.m10 + y * transformation.m11 + transformation.m12,
   )
 
   /** Calculates the 2D cross product between this and the ([otherX], [otherY]) vector */
@@ -130,7 +130,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     return ImmutableVector2(
       x = this.x * cos - this.y * sin,
-      y = this.x * sin + this.y * cos
+      y = this.x * sin + this.y * cos,
     )
   }
 
@@ -139,7 +139,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
     return ImmutableVector2(
       x = x * invAlpha + target.x * alpha,
-      y = y * invAlpha + target.y * alpha
+      y = y * invAlpha + target.y * alpha,
     )
   }
 
@@ -163,7 +163,7 @@ data class ImmutableVector2(val x: Float, val y: Float) : ImmutableVector<Immuta
 
   @Deprecated(
     message = "This function doesn't behave like its equivalent in libGDX and return an angle between -180 and 180 (some libGDX functions return between -180 and 180 and some other between 0 and 360)",
-    replaceWith = ReplaceWith("angleDeg(reference)")
+    replaceWith = ReplaceWith("angleDeg(reference)"),
   )
   inline fun angle(reference: ImmutableVector2 = X): Float = angleDeg(reference)
 

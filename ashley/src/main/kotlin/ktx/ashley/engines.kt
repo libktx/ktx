@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
 @AshleyDsl
 class EngineEntity(
   val engine: Engine,
-  val entity: Entity
+  val entity: Entity,
 )
 
 /**
@@ -122,12 +122,13 @@ operator fun <T : EntitySystem> Engine.get(type: KClass<T>): T? = getSystem(type
  * Thrown when unable to create a component of given type.
  */
 class CreateComponentException(type: KClass<*>, cause: Throwable? = null) : RuntimeException(
-  "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?", cause
+  "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?",
+  cause,
 )
 
 /**
  * Thrown when accessing an [EntitySystem] via [getSystem] that does not exist in the [Engine].
  */
 class MissingEntitySystemException(type: KClass<out EntitySystem>) : GdxRuntimeException(
-  "Could not access system of type ${type.qualifiedName} - is it added to the engine?"
+  "Could not access system of type ${type.qualifiedName} - is it added to the engine?",
 )

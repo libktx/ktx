@@ -170,7 +170,7 @@ interface KTable : KWidget<Cell<*>> {
     spaceLeft: Float? = null,
     spaceRight: Float? = null,
     spaceBottom: Float? = null,
-    row: Boolean = false
+    row: Boolean = false,
   ): T {
     val cell = this.inCell
     if (grow) cell.grow()
@@ -219,7 +219,7 @@ interface KTable : KWidget<Cell<*>> {
   val <T : Actor> T.inCell: Cell<T>
     get() = userObject as? Cell<T> ?: throw IllegalStateException(
       "This actor has no declared Cell. " +
-        "Was it properly added to the table? Was its user object cleared?"
+        "Was it properly added to the table? Was its user object cleared?",
     )
 }
 
@@ -268,7 +268,7 @@ interface KTree : KWidget<KNode<*>> {
     icon: Drawable? = null,
     expanded: Boolean? = null,
     selectable: Boolean? = null,
-    userObject: Any? = null
+    userObject: Any? = null,
   ): T {
     val node = inNode
     icon?.let { node.icon = icon }
@@ -288,7 +288,7 @@ interface KTree : KWidget<KNode<*>> {
   val <T : Actor> T.inNode: KNode<T>
     get() = userObject as? KNode<T> ?: throw IllegalStateException(
       "This actor has no declared Node. " +
-        "Was it properly added to the tree? Was its user object cleared?"
+        "Was it properly added to the tree? Was its user object cleared?",
     )
 }
 
@@ -428,7 +428,7 @@ class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
 class KSplitPane(
   vertical: Boolean,
   skin: Skin,
-  style: String
+  style: String,
 ) : SplitPane(null, null, vertical, skin, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {

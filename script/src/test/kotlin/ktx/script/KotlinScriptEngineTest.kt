@@ -78,6 +78,7 @@ class KotlinScriptEngineTest {
     // Then:
     assertEquals(Data("test"), engine.evaluateAs<Data>("""Alias("test")"""))
   }
+
   @Test
   fun `should import classes from iterable`() {
     // When:
@@ -201,7 +202,7 @@ class KotlinScriptEngineTest {
       val lambda: () -> String = { "test" }
 
       Helper().toArray(data(lambda()), data(lambda()), data(lambda()))
-      """.trimIndent()
+      """.trimIndent(),
     )
 
     // Then:
@@ -218,7 +219,7 @@ class KotlinScriptEngineTest {
       receiver,
       """
       text = "test"
-      """.trimIndent()
+      """.trimIndent(),
     )
 
     // Then:
@@ -238,7 +239,7 @@ class KotlinScriptEngineTest {
         import com.badlogic.gdx.Gdx
 
         text = "test"
-        """.trimIndent()
+        """.trimIndent(),
       )
     }
   }
@@ -279,7 +280,7 @@ class KotlinScriptEngineTest {
     engine.evaluate(
       """
       variable.text = "new"
-      """.trimIndent()
+      """.trimIndent(),
     )
 
     // Then:

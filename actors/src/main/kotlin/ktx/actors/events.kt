@@ -36,7 +36,7 @@ inline fun <T : Actor> T.onChange(crossinline listener: T.() -> Unit): ChangeLis
  * @return [ChangeListener] instance.
  */
 inline fun <T : Actor> T.onChangeEvent(
-  crossinline listener: T.(event: ChangeEvent) -> Unit
+  crossinline listener: T.(event: ChangeEvent) -> Unit,
 ): ChangeListener {
   val changeListener = object : ChangeListener() {
     override fun changed(event: ChangeEvent, actor: Actor) = listener(event)
@@ -65,7 +65,7 @@ inline fun <T : Actor> T.onClick(crossinline listener: T.() -> Unit): ClickListe
  * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onClickEvent(
-  crossinline listener: T.(event: InputEvent) -> Unit
+  crossinline listener: T.(event: InputEvent) -> Unit,
 ): ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event)
@@ -81,7 +81,7 @@ inline fun <T : Actor> T.onClickEvent(
  * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onClickEvent(
-  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit,
 ): ClickListener {
   val clickListener = object : ClickListener() {
     override fun clicked(event: InputEvent, x: Float, y: Float) = listener(event, x, y)
@@ -97,7 +97,7 @@ inline fun <T : Actor> T.onClickEvent(
  * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onEnter(
-  crossinline listener: T.() -> Unit
+  crossinline listener: T.() -> Unit,
 ): InputListener {
   val clickListener = object : ClickListener() {
     override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -116,7 +116,7 @@ inline fun <T : Actor> T.onEnter(
  * @return [ClickListener] instance.
  */
 inline fun <T : Actor> T.onExit(
-  crossinline listener: T.() -> Unit
+  crossinline listener: T.() -> Unit,
 ): InputListener {
   val clickListener = object : ClickListener() {
     override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
@@ -137,7 +137,7 @@ inline fun <T : Actor> T.onExit(
  * @see onEnter
  */
 inline fun <T : Actor> T.onEnterEvent(
-  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit,
 ): ClickListener {
   val clickListener = object : ClickListener() {
     override fun enter(event: InputEvent, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -158,7 +158,7 @@ inline fun <T : Actor> T.onEnterEvent(
  * @see onExit
  */
 inline fun <T : Actor> T.onExitEvent(
-  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit,
 ): ClickListener {
   val clickListener = object : ClickListener() {
     override fun exit(event: InputEvent, x: Float, y: Float, pointer: Int, toActor: Actor?) {
@@ -178,7 +178,7 @@ inline fun <T : Actor> T.onExitEvent(
  * @return [ChangeListener] instance.
  */
 inline fun <N : Tree.Node<N, *, *>> Tree<N, *>.onSelectionChange(
-  crossinline listener: ((Selection<N>) -> Unit)
+  crossinline listener: ((Selection<N>) -> Unit),
 ): ChangeListener {
   val changeListener = object : ChangeListener() {
     override fun changed(event: ChangeEvent, actor: Actor) {
@@ -230,7 +230,7 @@ inline fun <T : Actor> T.onTouchUp(crossinline listener: T.() -> Unit): InputLis
  */
 inline fun <T : Actor> T.onTouchEvent(
   crossinline onDown: T.(event: InputEvent) -> Unit,
-  crossinline onUp: T.(event: InputEvent) -> Unit
+  crossinline onUp: T.(event: InputEvent) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -254,7 +254,7 @@ inline fun <T : Actor> T.onTouchEvent(
  * @see InputListener.touchUp
  */
 inline fun <T : Actor> T.onTouchEvent(
-  crossinline listener: T.(event: InputEvent) -> Unit
+  crossinline listener: T.(event: InputEvent) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -280,7 +280,7 @@ inline fun <T : Actor> T.onTouchEvent(
  */
 inline fun <T : Actor> T.onTouchEvent(
   crossinline onDown: T.(event: InputEvent, x: Float, y: Float) -> Unit,
-  crossinline onUp: T.(event: InputEvent, x: Float, y: Float) -> Unit
+  crossinline onUp: T.(event: InputEvent, x: Float, y: Float) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -305,7 +305,7 @@ inline fun <T : Actor> T.onTouchEvent(
  * @see InputListener.touchUp
  */
 inline fun <T : Actor> T.onTouchEvent(
-  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -331,7 +331,7 @@ inline fun <T : Actor> T.onTouchEvent(
  */
 inline fun <T : Actor> T.onTouchEvent(
   crossinline onDown: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit,
-  crossinline onUp: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit
+  crossinline onUp: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -357,7 +357,7 @@ inline fun <T : Actor> T.onTouchEvent(
  * @see InputListener.touchUp
  */
 inline fun <T : Actor> T.onTouchEvent(
-  crossinline listener: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit
+  crossinline listener: T.(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) -> Unit,
 ): InputListener {
   val inputListener = object : KtxInputListener() {
     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -382,13 +382,15 @@ inline fun <T : Actor> T.onTouchEvent(
  */
 inline fun <T : Actor> T.onKey(
   catchEvent: Boolean = false,
-  crossinline listener: T.(character: Char) -> Unit
+  crossinline listener: T.(character: Char) -> Unit,
 ): EventListener {
   val keyListener = EventListener { event ->
     if (event is InputEvent && event.type === keyTyped) {
       listener(event.character)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyListener)
   return keyListener
@@ -404,13 +406,15 @@ inline fun <T : Actor> T.onKey(
  */
 inline fun <T : Actor> T.onKeyEvent(
   catchEvent: Boolean = false,
-  crossinline listener: T.(event: InputEvent, character: Char) -> Unit
+  crossinline listener: T.(event: InputEvent, character: Char) -> Unit,
 ): EventListener {
   val keyListener = EventListener { event ->
     if (event is InputEvent && event.type === keyTyped) {
       listener(event, event.character)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyListener)
   return keyListener
@@ -427,13 +431,15 @@ inline fun <T : Actor> T.onKeyEvent(
  */
 inline fun <T : Actor> T.onKeyDown(
   catchEvent: Boolean = false,
-  crossinline listener: T.(keyCode: Int) -> Unit
+  crossinline listener: T.(keyCode: Int) -> Unit,
 ): EventListener {
   val keyDownListener = EventListener { event ->
     if (event is InputEvent && event.type === keyDown) {
       listener(event.keyCode)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyDownListener)
   return keyDownListener
@@ -450,13 +456,15 @@ inline fun <T : Actor> T.onKeyDown(
  */
 inline fun <T : Actor> T.onKeyDownEvent(
   catchEvent: Boolean = false,
-  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit
+  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit,
 ): EventListener {
   val keyDownListener = EventListener { event ->
     if (event is InputEvent && event.type === keyDown) {
       listener(event, event.keyCode)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyDownListener)
   return keyDownListener
@@ -473,13 +481,15 @@ inline fun <T : Actor> T.onKeyDownEvent(
  */
 inline fun <T : Actor> T.onKeyUp(
   catchEvent: Boolean = false,
-  crossinline listener: T.(keyCode: Int) -> Unit
+  crossinline listener: T.(keyCode: Int) -> Unit,
 ): EventListener {
   val keyUpListener = EventListener { event ->
     if (event is InputEvent && event.type === keyUp) {
       listener(event.keyCode)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyUpListener)
   return keyUpListener
@@ -496,13 +506,15 @@ inline fun <T : Actor> T.onKeyUp(
  */
 inline fun <T : Actor> T.onKeyUpEvent(
   catchEvent: Boolean = false,
-  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit
+  crossinline listener: T.(event: InputEvent, keyCode: Int) -> Unit,
 ): EventListener {
   val keyUpListener = EventListener { event ->
     if (event is InputEvent && event.type === keyUp) {
       listener(event, event.keyCode)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(keyUpListener)
   return keyUpListener
@@ -518,13 +530,15 @@ inline fun <T : Actor> T.onKeyUpEvent(
  */
 inline fun <T : Actor> T.onScrollFocus(
   catchEvent: Boolean = false,
-  crossinline listener: T.(focused: Boolean) -> Unit
+  crossinline listener: T.(focused: Boolean) -> Unit,
 ): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === scroll) {
       listener(event.isFocused)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(focusListener)
   return focusListener
@@ -541,13 +555,15 @@ inline fun <T : Actor> T.onScrollFocus(
  */
 inline fun <T : Actor> T.onScrollFocusEvent(
   catchEvent: Boolean = false,
-  crossinline listener: T.(event: FocusEvent) -> Unit
+  crossinline listener: T.(event: FocusEvent) -> Unit,
 ): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === scroll) {
       listener(event)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(focusListener)
   return focusListener
@@ -563,13 +579,15 @@ inline fun <T : Actor> T.onScrollFocusEvent(
  */
 inline fun <T : Actor> T.onKeyboardFocus(
   catchEvent: Boolean = false,
-  crossinline listener: T.(focused: Boolean) -> Unit
+  crossinline listener: T.(focused: Boolean) -> Unit,
 ): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === keyboard) {
       listener(event.isFocused)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(focusListener)
   return focusListener
@@ -586,13 +604,15 @@ inline fun <T : Actor> T.onKeyboardFocus(
  */
 inline fun <T : Actor> T.onKeyboardFocusEvent(
   catchEvent: Boolean = false,
-  crossinline listener: T.(event: FocusEvent) -> Unit
+  crossinline listener: T.(event: FocusEvent) -> Unit,
 ): EventListener {
   val focusListener = EventListener { event ->
     if (event is FocusEvent && event.type === keyboard) {
       listener(event)
       catchEvent
-    } else false
+    } else {
+      false
+    }
   }
   addListener(focusListener)
   return focusListener

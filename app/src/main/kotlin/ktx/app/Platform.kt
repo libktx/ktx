@@ -27,7 +27,7 @@ object Platform {
    */
   @Deprecated(
     message = "Java Applets are deprecated since Java 9 in 2017.",
-    replaceWith = ReplaceWith("isWeb")
+    replaceWith = ReplaceWith("isWeb"),
   )
   val isApplet: Boolean
     get() = currentPlatform === ApplicationType.Applet
@@ -81,7 +81,7 @@ object Platform {
    */
   @Deprecated(
     message = "Java Applets are deprecated since Java 9 in 2017.",
-    replaceWith = ReplaceWith("runOnWeb")
+    replaceWith = ReplaceWith("runOnWeb"),
   )
   @Suppress("DEPRECATION")
   @OptIn(ExperimentalContracts::class)
@@ -171,7 +171,7 @@ object Platform {
     minVersion: Int? = null,
     maxVersion: Int? = null,
     platform: ApplicationType? = null,
-    action: () -> T?
+    action: () -> T?,
   ): T? {
     contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
     val matchesMinVersion = minVersion === null || minVersion <= version

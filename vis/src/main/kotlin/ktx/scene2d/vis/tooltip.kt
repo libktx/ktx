@@ -23,7 +23,7 @@ import kotlin.contracts.contract
 fun Actor.visTooltip(
   content: Actor,
   style: String = defaultStyle,
-  init: (@Scene2dDsl Tooltip).() -> Unit = {}
+  init: (@Scene2dDsl Tooltip).() -> Unit = {},
 ): Tooltip {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = Tooltip(style)
@@ -47,7 +47,7 @@ fun Actor.visTextTooltip(
   text: CharSequence,
   textAlign: Int = Align.center,
   style: String = defaultStyle,
-  init: (@Scene2dDsl Tooltip).() -> Unit = {}
+  init: (@Scene2dDsl Tooltip).() -> Unit = {},
 ): Tooltip {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val label = VisLabel(text)

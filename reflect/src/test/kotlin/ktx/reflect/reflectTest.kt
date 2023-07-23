@@ -15,11 +15,13 @@ import org.junit.Test
 interface Super
 open class Tested : Super
 annotation class Annotation(val value: String)
+
 @Annotation("Test")
 data class Extension(val a: String, val b: String) : Tested() {
   @Suppress("unused")
   fun test(c: String): String = a + b + c
 }
+
 @Suppress("unused")
 class Container(@JvmField val field: String)
 enum class Enum { RED, BLUE }
@@ -205,6 +207,7 @@ class ReflectTest {
     // Then:
     assertTrue(isArray)
   }
+
   @Test
   fun `should check if is a primitive class`() {
     // Given:
@@ -288,6 +291,7 @@ class ReflectTest {
     // Then:
     assertTrue(isInterface)
   }
+
   @Test
   fun `should check if is an abstract class`() {
     // Given:

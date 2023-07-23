@@ -17,7 +17,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertMatrixEquals(
@@ -25,7 +25,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
   }
 
@@ -35,7 +35,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = -matrix
@@ -45,14 +45,14 @@ class Matrix4Test {
       -1f, -2f, -3f, -4f,
       -5f, -6f, -7f, -8f,
       -9f, -10f, -11f, -12f,
-      -13f, -14f, -15f, -16f
+      -13f, -14f, -15f, -16f,
     )
     assertMatrixEquals(
       matrix,
       1f, 2f, 3f, 4f,
       5f, 6f, 7f, 8f,
       9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
   }
 
@@ -62,7 +62,7 @@ class Matrix4Test {
       1f, 0f, 1f, 0f,
       0f, 1f, 0f, 1f,
       0f, 0f, 1f, 0f,
-      0f, 0f, 0f, 1f
+      0f, 0f, 0f, 1f,
     )
 
     val result = !matrix
@@ -72,14 +72,14 @@ class Matrix4Test {
       1f, 0f, -1f, 0f,
       0f, 1f, 0f, -1f,
       0f, 0f, 1f, 0f,
-      0f, 0f, 0f, 1f
+      0f, 0f, 0f, 1f,
     )
     assertMatrixEquals(
       matrix,
       1f, 0f, 1f, 0f,
       0f, 1f, 0f, 1f,
       0f, 0f, 1f, 0f,
-      0f, 0f, 0f, 1f
+      0f, 0f, 0f, 1f,
     )
   }
 
@@ -89,14 +89,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     matrix += mat4(
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertMatrixEquals(
@@ -104,7 +104,7 @@ class Matrix4Test {
       +2f, +4f, +6f, +8f,
       10f, 12f, 14f, 16f,
       18f, 20f, 22f, 24f,
-      26f, 28f, 30f, 32f
+      26f, 28f, 30f, 32f,
     )
   }
 
@@ -114,14 +114,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     matrix -= mat4(
       16f, 15f, 14f, 13f,
       12f, 11f, 10f, +9f,
       +8f, +7f, +6f, +5f,
-      +4f, +3f, +2f, +1f
+      +4f, +3f, +2f, +1f,
     )
 
     assertMatrixEquals(
@@ -129,7 +129,7 @@ class Matrix4Test {
       -15f, -13f, -11f, -9f,
       -7f, -5.0f, -3f, -1f,
       1.0f, 3.0f, 5.0f, 7f,
-      9.0f, 11.0f, 13f, 15f
+      9.0f, 11.0f, 13f, 15f,
     )
   }
 
@@ -141,14 +141,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     matrix *= mat4(
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertMatrixEquals(
@@ -171,7 +171,7 @@ class Matrix4Test {
       13f * 1f + 14f * 5f + 15f * 9f + 16f * 13f,
       13f * 2f + 14f * 6f + 15f * 10f + 16f * 14f,
       13f * 3f + 14f * 7f + 15f * 11f + 16f * 15f,
-      13f * 4f + 14f * 8f + 15f * 12f + 16f * 16f
+      13f * 4f + 14f * 8f + 15f * 12f + 16f * 16f,
     )
   }
 
@@ -181,7 +181,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     matrix *= 3f
@@ -191,7 +191,7 @@ class Matrix4Test {
       +3f, +2f, +3f, +4f,
       +5f, 18f, +7f, +8f,
       +9f, 10f, 33f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
   }
 
@@ -201,7 +201,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     matrix *= vec3(3f, 4f, 5f)
@@ -211,7 +211,7 @@ class Matrix4Test {
       +3f, +2f, +3f, +4f,
       +5f, 24f, +7f, +8f,
       +9f, 10f, 55f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
   }
 
@@ -223,7 +223,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertEquals(1f * 1f + 2f * 2f + 3f * 3f + 1f * 4f, vector.x, floatTolerance)
@@ -237,14 +237,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = matrix + mat4(
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertMatrixEquals(
@@ -252,7 +252,7 @@ class Matrix4Test {
       +2f, +4f, +6f, +8f,
       10f, 12f, 14f, 16f,
       18f, 20f, 22f, 24f,
-      26f, 28f, 30f, 32f
+      26f, 28f, 30f, 32f,
     )
   }
 
@@ -262,14 +262,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = matrix - mat4(
       16f, 15f, 14f, 13f,
       12f, 11f, 10f, +9f,
       +8f, +7f, +6f, +5f,
-      +4f, +3f, +2f, +1f
+      +4f, +3f, +2f, +1f,
     )
 
     assertMatrixEquals(
@@ -277,7 +277,7 @@ class Matrix4Test {
       -15f, -13f, -11f, -9f,
       -7f, -5.0f, -3f, -1f,
       1.0f, 3.0f, 5.0f, 7f,
-      9.0f, 11.0f, 13f, 15f
+      9.0f, 11.0f, 13f, 15f,
     )
   }
 
@@ -289,14 +289,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = matrix * mat4(
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     assertMatrixEquals(
@@ -319,7 +319,7 @@ class Matrix4Test {
       13f * 1f + 14f * 5f + 15f * 9f + 16f * 13f,
       13f * 2f + 14f * 6f + 15f * 10f + 16f * 14f,
       13f * 3f + 14f * 7f + 15f * 11f + 16f * 15f,
-      13f * 4f + 14f * 8f + 15f * 12f + 16f * 16f
+      13f * 4f + 14f * 8f + 15f * 12f + 16f * 16f,
     )
   }
 
@@ -329,7 +329,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = matrix * 3f
@@ -339,7 +339,7 @@ class Matrix4Test {
       +3f, +2f, +3f, +4f,
       +5f, 18f, +7f, +8f,
       +9f, 10f, 33f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
   }
 
@@ -349,7 +349,7 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val result = matrix * vec3(3f, 4f, 5f)
@@ -365,14 +365,14 @@ class Matrix4Test {
       +1f, +2f, +3f, +4f,
       +5f, +6f, +7f, +8f,
       +9f, 10f, 11f, 12f,
-      13f, 14f, 15f, 16f
+      13f, 14f, 15f, 16f,
     )
 
     val (
       x0y0, x0y1, x0y2, x0y3,
       x1y0, x1y1, x1y2, x1y3,
       x2y0, x2y1, x2y2, x2y3,
-      x3y0, x3y1, x3y2, x3y3
+      x3y0, x3y1, x3y2, x3y3,
     ) = matrix
 
     assertEquals(1f, x0y0, floatTolerance)
@@ -414,7 +414,7 @@ class Matrix4Test {
     m31: Float,
     m32: Float,
     m33: Float,
-    tolerance: Float = floatTolerance
+    tolerance: Float = floatTolerance,
   ) {
     val values = matrix.`val`
     assertEquals(m00, values[Matrix4.M00], tolerance)

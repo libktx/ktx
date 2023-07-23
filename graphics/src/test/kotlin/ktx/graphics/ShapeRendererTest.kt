@@ -101,8 +101,11 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.rectLine(
-      positionA = Vector2(1f, 2f), positionB = Vector2(3f, 4f), width = 10f,
-      colorA = Color.BLACK, colorB = Color.WHITE
+      positionA = Vector2(1f, 2f),
+      positionB = Vector2(3f, 4f),
+      width = 10f,
+      colorA = Color.BLACK,
+      colorB = Color.WHITE,
     )
 
     verify(tested).rectLine(1f, 2f, 3f, 4f, 10f, Color.BLACK, Color.WHITE)
@@ -176,8 +179,12 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.triangle(
-      pointA = Vector2(1f, 2f), pointB = Vector2(3f, 4f), pointC = Vector2(5f, 6f),
-      colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK
+      pointA = Vector2(1f, 2f),
+      pointB = Vector2(3f, 4f),
+      pointC = Vector2(5f, 6f),
+      colorA = Color.WHITE,
+      colorB = Color.GRAY,
+      colorC = Color.BLACK,
     )
 
     verify(tested).triangle(1f, 2f, 3f, 4f, 5f, 6f, Color.WHITE, Color.GRAY, Color.BLACK)

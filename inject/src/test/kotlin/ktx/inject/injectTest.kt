@@ -389,6 +389,7 @@ class ReflectionInjectionTest {
   class Dependant(val dependency: Dependency)
 
   class InvalidClass private constructor()
+
   @Suppress("unused", "UNUSED_PARAMETER")
   class MultipleConstructors() {
     constructor(a: String) : this()

@@ -68,12 +68,12 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   protected abstract fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T
 
   private inline fun <reified T> AssetStorage.testLoad(
     path: String,
-    parameters: AssetLoaderParameters<T>? = null
+    parameters: AssetLoaderParameters<T>? = null,
   ): T = testLoad(path, T::class.java, parameters)
 
   // --- Asset support tests:
@@ -730,7 +730,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
       storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
       storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
       storage.getIdentifier<ShaderProgram>("ktx/assets/async/shader.frag"),
-      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx")
+      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx"),
     )
     assets.forEach {
       storage.testLoad(it.path, it.type, parameters = null)
@@ -943,7 +943,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     val path = "ktx/assets/async/skin.json"
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
@@ -966,7 +966,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should handle loading exceptions`() {
     // Given:
     val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -998,7 +998,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val loader = AssetStorageTest.FakeAsyncLoader(
       onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {}
+      onSync = {},
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1030,7 +1030,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val loader = AssetStorageTest.FakeAsyncLoader(
       onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") }
+      onSync = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1061,7 +1061,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should not fail to unload asset that was loaded exceptionally`() {
     // Given:
     val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake path"
@@ -1100,7 +1100,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     loaded: Int = 0,
     failed: Int = 0,
     total: Int = loaded + failed,
-    warn: Boolean = false
+    warn: Boolean = false,
   ) {
     if (warn) {
       val progress = storage.progress
@@ -1113,7 +1113,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
           loaded | ${"%8d".format(loaded)} | ${progress.loaded}
           failed | ${"%8d".format(failed)} | ${progress.failed}
           If this warning is repeated consistently, there might be a related bug in progress reporting.
-          """.trimIndent()
+          """.trimIndent(),
         )
       }
     } else {
@@ -1166,7 +1166,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadAsync : AbstractAssetStorage
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     loadAsync(AssetDescriptor(path, type, parameters)).await()
   }
@@ -1179,7 +1179,7 @@ class AssetStorageLoadingTestWithIdentifierLoadAsync : AbstractAssetStorageLoadi
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     loadAsync(Identifier(path, type), parameters).await()
   }
@@ -1192,7 +1192,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoad : AbstractAssetStorageLoadi
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     load(AssetDescriptor(path, type, parameters))
   }
@@ -1205,7 +1205,7 @@ class AssetStorageLoadingTestWithIdentifierLoad : AbstractAssetStorageLoadingTes
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     load(Identifier(path, type), parameters)
   }
@@ -1218,7 +1218,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadSync : AbstractAssetStorageL
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = loadSync(AssetDescriptor(path, type, parameters))
 }
 
@@ -1229,6 +1229,6 @@ class AssetStorageLoadingTestWithIdentifierLoadSync : AbstractAssetStorageLoadin
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = loadSync(Identifier(path, type), parameters)
 }

@@ -120,7 +120,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     )
 
     assertTrue(fixtureDef.shape is PolygonShape)
@@ -130,9 +130,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -147,7 +147,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     ) {
       density = 0.5f
       variable = 42
@@ -160,9 +160,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertEquals(0.5f, fixtureDef.density)
@@ -335,9 +335,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
@@ -360,9 +360,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -385,9 +385,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
@@ -560,7 +560,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     )
 
     assertTrue(fixture.shape is PolygonShape)
@@ -570,9 +570,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
@@ -587,7 +587,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     ) {
       density = 0.5f
       variable = 42
@@ -600,9 +600,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)

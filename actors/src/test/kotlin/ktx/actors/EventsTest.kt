@@ -191,7 +191,7 @@ class EventsTest {
 
     val listener = actor.onTouchEvent(
       onDown = { event -> },
-      onUp = { event -> }
+      onUp = { event -> },
     )
 
     assertNotNull(listener)
@@ -204,7 +204,7 @@ class EventsTest {
 
     val listener = actor.onTouchEvent(
       onDown = { event, x, y -> },
-      onUp = { event, x, y -> }
+      onUp = { event, x, y -> },
     )
 
     assertNotNull(listener)
@@ -217,7 +217,7 @@ class EventsTest {
 
     val listener = actor.onTouchEvent(
       onDown = { event, x, y, pointer, button -> },
-      onUp = { event, x, y, pointer, button -> }
+      onUp = { event, x, y, pointer, button -> },
     )
 
     assertNotNull(listener)

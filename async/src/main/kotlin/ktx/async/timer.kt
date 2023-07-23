@@ -10,14 +10,14 @@ import com.badlogic.gdx.utils.Timer
  */
 inline fun schedule(
   delaySeconds: Float,
-  crossinline task: () -> Unit
+  crossinline task: () -> Unit,
 ) = Timer.schedule(
   object : Timer.Task() {
     override fun run() {
       task()
     }
   },
-  delaySeconds
+  delaySeconds,
 )!!
 
 /**
@@ -33,12 +33,14 @@ inline fun interval(
   intervalSeconds: Float,
   delaySeconds: Float = 0f,
   repeatCount: Int = -2, // Timer.FOREVER
-  crossinline task: () -> Unit
+  crossinline task: () -> Unit,
 ) = Timer.schedule(
   object : Timer.Task() {
     override fun run() {
       task()
     }
   },
-  delaySeconds, intervalSeconds, repeatCount
+  delaySeconds,
+  intervalSeconds,
+  repeatCount,
 )!!

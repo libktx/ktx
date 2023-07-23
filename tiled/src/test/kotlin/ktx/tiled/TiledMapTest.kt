@@ -32,12 +32,12 @@ class TiledMapTest {
           add(MapObject())
           add(MapObject())
         }
-      }
+      },
     )
     layers.add(
       MapLayer().apply {
         name = "layer-2"
-      }
+      },
     )
   }
 

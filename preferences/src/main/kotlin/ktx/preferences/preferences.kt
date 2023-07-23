@@ -40,7 +40,7 @@ operator fun Preferences.set(key: String, value: Float): Preferences = putFloat(
 @Deprecated(
   message = "Doubles are not supported by libGDX Preferences. " +
     "Value will be stored as Float instead. Please add explicit cast.",
-  replaceWith = ReplaceWith("set(key, value.toFloat()")
+  replaceWith = ReplaceWith("set(key, value.toFloat()"),
 )
 operator fun Preferences.set(key: String, value: Double): Preferences = putFloat(key, value.asFloat())
 
@@ -109,14 +109,18 @@ fun Preferences.set(pair: Pair<String, Any>): Preferences {
  * Will return `null` if the key is absent in the [Preferences].
  */
 inline operator fun <reified T> Preferences.get(key: String): T? =
-  if (key !in this) null else when (T::class) {
-    String::class -> getString(key) as T
-    Boolean::class -> getBoolean(key) as T
-    Int::class -> getInteger(key) as T
-    Float::class -> getFloat(key) as T
-    Double::class -> getFloat(key).toDouble() as T
-    Long::class -> getLong(key) as T
-    else -> Json().fromJson(T::class.java, getString(key))
+  if (key !in this) {
+    null
+  } else {
+    when (T::class) {
+      String::class -> getString(key) as T
+      Boolean::class -> getBoolean(key) as T
+      Int::class -> getInteger(key) as T
+      Float::class -> getFloat(key) as T
+      Double::class -> getFloat(key).toDouble() as T
+      Long::class -> getLong(key) as T
+      else -> Json().fromJson(T::class.java, getString(key))
+    }
   }
 
 /**

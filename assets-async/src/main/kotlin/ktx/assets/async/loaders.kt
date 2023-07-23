@@ -123,7 +123,8 @@ private val <Asset> AssetDescriptor<Asset>.parameters: AssetLoaderParameters<Ass
 fun Loader<*>.getDependencies(assetDescriptor: AssetDescriptor<*>): GdxArray<AssetDescriptor<*>> =
   @Suppress("UNCHECKED_CAST")
   (this as AssetLoader<*, AssetLoaderParameters<*>>)
-    .getDependencies(assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters) ?: GdxArray(0)
+    .getDependencies(assetDescriptor.fileName, assetDescriptor.file, assetDescriptor.parameters)
+    ?: GdxArray(0)
 
 /**
  * Allows to use [SynchronousAssetLoader.load] method with [AssetDescriptor].
@@ -166,7 +167,7 @@ internal object ManualLoader : AssetLoader<Any, ManualLoadingParameters>(Absolut
   override fun getDependencies(
     fileName: String?,
     file: FileHandle?,
-    parameter: ManualLoadingParameters?
+    parameter: ManualLoadingParameters?,
   ): GdxArray<AssetDescriptor<Any>> = emptyDependencies
 }
 
@@ -175,13 +176,13 @@ internal object ManualLoader : AssetLoader<Any, ManualLoadingParameters>(Absolut
  * Tested via the [AssetStorage] test suite.
  */
 internal class AssetStoragePolygonRegionLoader(
-  fileHandleResolver: FileHandleResolver
+  fileHandleResolver: FileHandleResolver,
 ) : PolygonRegionLoader(fileHandleResolver) {
   override fun load(
     manager: AssetManager,
     fileName: String,
     file: FileHandle,
-    parameter: PolygonRegionParameters?
+    parameter: PolygonRegionParameters?,
   ): PolygonRegion {
     val assetStorage = (manager as AssetManagerWrapper).assetStorage
     val texturePath = assetStorage.getDependencies<PolygonRegion>(fileName).first().path

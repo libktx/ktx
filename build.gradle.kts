@@ -67,7 +67,7 @@ subprojects {
   val projectDesc: String by project
 
   base {
-    archivesBaseName = projectName
+    archivesName.set(projectName)
   }
 
   java {
@@ -95,9 +95,9 @@ subprojects {
   }
 
   tasks.register("lint", JavaExec::class) {
+    mainClass.set("com.pinterest.ktlint.Main")
     description = "Check Kotlin code style."
     group = "verification"
-    main = "com.pinterest.ktlint.Main"
     classpath = configurations["linter"]
     args = listOf("src/**/*.kt")
 
@@ -105,9 +105,9 @@ subprojects {
   }
 
   tasks.register("format", JavaExec::class) {
+    mainClass.set("com.pinterest.ktlint.Main")
     description = "Fix Kotlin code style."
     group = "formatting"
-    main = "com.pinterest.ktlint.Main"
     classpath = configurations["linter"]
     args = listOf("-F", "src/**/*.kt")
   }
@@ -250,8 +250,8 @@ nexusStaging {
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {
+  mainClass.set("com.pinterest.ktlint.Main")
   description = "Apply Kotlin code style changes to IntelliJ formatter."
-  main = "com.pinterest.ktlint.Main"
   classpath = configurations["linter"]
-  args = listOf("applyToIDEAProject", "-y")
+  args = listOf("applyToIDEAProject")
 }

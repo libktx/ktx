@@ -260,7 +260,9 @@ class ManualLoaderTest {
   fun `should return empty dependencies array with loading parameters`() {
     // When:
     val dependencies = ManualLoader.getDependencies(
-      "file.path", mock(), ManualLoadingParameters()
+      "file.path",
+      mock(),
+      ManualLoadingParameters(),
     )
 
     // Then:

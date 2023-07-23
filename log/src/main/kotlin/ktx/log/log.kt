@@ -8,8 +8,10 @@ import kotlin.contracts.contract
 
 /** Debug logging tag. */
 const val DEBUG = "DEBUG"
+
 /** Info logging tag. */
 const val INFO = "INFO"
+
 /** Error logging tag. */
 const val ERROR = "ERROR"
 
@@ -112,7 +114,7 @@ open class Logger(
   open val name: String,
   open val debugTag: String = DEBUG,
   open val infoTag: String = INFO,
-  open val errorTag: String = ERROR
+  open val errorTag: String = ERROR,
 ) {
   // Implementation note: tags and some internal methods are not private as they are referenced by the inlined methods
   // and can be overridden.

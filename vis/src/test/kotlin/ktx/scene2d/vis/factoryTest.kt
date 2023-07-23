@@ -170,7 +170,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visLabel("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -179,7 +179,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     validate = {
       assertEquals("Text.", it.text.toString())
       assertEquals("URL", it.url)
-    }
+    },
   )
 
   @Test
@@ -187,7 +187,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImage(VisUI.getSkin().getDrawable("button")) },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -195,7 +195,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImage("button") },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -215,7 +215,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visListOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -225,7 +225,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -236,7 +236,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visSelectBoxOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -246,7 +246,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -254,7 +254,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -262,7 +262,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { highlightTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -270,7 +270,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { scrollableTextArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -278,7 +278,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextField("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -286,7 +286,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visValidatableTextField("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -300,7 +300,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -311,7 +311,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImageTextButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -319,7 +319,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visCheckBox("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -327,7 +327,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visRadioButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -346,7 +346,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { spinner("Name", IntSpinnerModel(0, 0, 10)) },
     validate = {
       assertEquals("Name", (it.children[0] as Label).text.toString())
-    }
+    },
   )
 
   @Test
@@ -358,7 +358,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { horizontalFlowGroup(spacing = 10f) },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -367,7 +367,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { verticalFlowGroup(spacing = 10f) },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -376,7 +376,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     validate = {
       assertTrue(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -386,7 +386,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(10f, it.spacing, TOLERANCE)
       assertEquals(100f, it.itemWidth, TOLERANCE)
       assertEquals(100f, it.itemHeight, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -470,7 +470,8 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     assertTrue(child in parent.children)
     assertEquals(
       "For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
-      Color.BLUE, child!!.color
+      Color.BLUE,
+      child!!.color,
     )
     validate(child) // Performing widget-specific validation.
   }
@@ -480,7 +481,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visLabel("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -489,7 +490,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     validate = {
       assertEquals("Text.", it.text.toString())
       assertEquals("URL", it.url)
-    }
+    },
   )
 
   @Test
@@ -497,7 +498,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImage(VisUI.getSkin().getDrawable("button")) { color = Color.BLUE } },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -505,7 +506,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImage("button") { color = Color.BLUE } },
     validate = {
       assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -536,7 +537,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -546,7 +547,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -562,7 +563,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -572,7 +573,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -580,7 +581,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -588,7 +589,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { highlightTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -596,7 +597,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { scrollableTextArea("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -604,7 +605,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -612,7 +613,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visValidatableTextField("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -626,7 +627,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -637,7 +638,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visImageTextButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -645,7 +646,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visCheckBox("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -653,7 +654,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { visRadioButton("Test.") { color = Color.BLUE } },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -676,7 +677,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Name", (it.children[0] as Label).text.toString())
-    }
+    },
   )
 
   @Test
@@ -688,7 +689,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { horizontalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -697,7 +698,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { verticalFlowGroup(spacing = 10f) { color = Color.BLUE } },
     validate = {
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -706,7 +707,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     validate = {
       assertFalse(it.isVertical)
       assertEquals(10f, it.spacing, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -716,7 +717,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(10f, it.spacing, TOLERANCE)
       assertEquals(100f, it.itemWidth, TOLERANCE)
       assertEquals(100f, it.itemHeight, TOLERANCE)
-    }
+    },
   )
 
   @Test

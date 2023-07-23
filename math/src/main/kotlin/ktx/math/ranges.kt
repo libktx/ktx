@@ -100,10 +100,11 @@ fun ClosedRange<Float>.random() = MathUtils.random.nextFloat() * (endInclusive -
  */
 fun ClosedRange<Float>.randomGaussian(clamped: Boolean = true) =
   ((MathUtils.random.nextGaussian() / 6.0 + 0.5).toFloat() * (endInclusive - start) + start).let {
-    if (clamped)
+    if (clamped) {
       it.coerceIn(this)
-    else
+    } else {
       it
+    }
   }
 
 /**
@@ -127,8 +128,9 @@ fun ClosedRange<Float>.randomTriangular() = MathUtils.randomTriangular(start, en
  */
 fun ClosedRange<Float>.randomTriangular(normalizedMode: Float): Float =
   MathUtils.randomTriangular(
-    start, endInclusive,
-    normalizedMode * (endInclusive - start) + start
+    start,
+    endInclusive,
+    normalizedMode * (endInclusive - start) + start,
   )
 
 /**

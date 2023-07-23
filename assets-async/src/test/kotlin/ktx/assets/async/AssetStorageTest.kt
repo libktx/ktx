@@ -124,7 +124,7 @@ class AssetStorageTest : AsyncTest() {
     loaded: Int = 0,
     failed: Int = 0,
     total: Int = loaded + failed,
-    warn: Boolean = false
+    warn: Boolean = false,
   ) {
     if (warn) {
       val progress = storage.progress
@@ -137,7 +137,7 @@ class AssetStorageTest : AsyncTest() {
           loaded | ${"%8d".format(loaded)} | ${progress.loaded}
           failed | ${"%8d".format(failed)} | ${progress.failed}
           If this warning is repeated consistently, there might be a related bug in progress reporting.
-          """.trimIndent()
+          """.trimIndent(),
         )
       }
     } else {
@@ -585,7 +585,7 @@ class AssetStorageTest : AsyncTest() {
     assertSame(asset, storage.get<Pixmap>(path))
     assertEquals(
       setOf(storage.getIdentifier<Pixmap>(path), storage.getIdentifier<Texture>(path)),
-      storage.getAssetIdentifiers(path).toSet()
+      storage.getAssetIdentifiers(path).toSet(),
     )
 
     storage.dispose()
@@ -611,7 +611,7 @@ class AssetStorageTest : AsyncTest() {
     assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path) as Any)
     assertEquals(
       setOf(storage.getIdentifier<Pixmap>(path), storage.getIdentifier<Texture>(path)),
-      storage.getAssetIdentifiers(path).toSet()
+      storage.getAssetIdentifiers(path).toSet(),
     )
     checkProgress(storage, loaded = 2, warn = true)
 
@@ -623,7 +623,7 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = newAsyncContext(2)
+      asyncContext = newAsyncContext(2),
     )
     val firstPath = "ktx/assets/async/texture.png"
     val secondPath = "ktx/assets/async/model.obj"
@@ -780,7 +780,7 @@ class AssetStorageTest : AsyncTest() {
     val path = "ktx/assets/async/skin.json"
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
@@ -808,7 +808,7 @@ class AssetStorageTest : AsyncTest() {
     val descriptor = storage.getAssetDescriptor<Skin>("ktx/assets/async/skin.json")
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
@@ -838,7 +838,7 @@ class AssetStorageTest : AsyncTest() {
     val identifier = storage.getIdentifier<Skin>("ktx/assets/async/skin.json")
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
@@ -893,7 +893,7 @@ class AssetStorageTest : AsyncTest() {
     val loaders = newAsyncContext(threads = 4)
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders
+      asyncContext = loaders,
     )
     val path = "com/badlogic/gdx/utils/lsans-15.fnt"
     val dependency = "com/badlogic/gdx/utils/lsans-15.png"
@@ -942,7 +942,7 @@ class AssetStorageTest : AsyncTest() {
     val loaders = newAsyncContext(threads = 4)
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders
+      asyncContext = loaders,
     )
     val path = "ktx/assets/async/string.txt"
 
@@ -978,7 +978,7 @@ class AssetStorageTest : AsyncTest() {
     val loaders = newAsyncContext(threads = 4)
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders
+      asyncContext = loaders,
     )
     val path = "com/badlogic/gdx/utils/lsans-15.fnt"
     val dependency = "com/badlogic/gdx/utils/lsans-15.png"
@@ -1006,7 +1006,7 @@ class AssetStorageTest : AsyncTest() {
     assertEquals(1, storage.getReferenceCount<Texture>(dependency))
     assertSame(
       storage.get<BitmapFont>(path).region.texture,
-      storage.get<Texture>(dependency)
+      storage.get<Texture>(dependency),
     )
     checkProgress(storage, loaded = 2, warn = true)
 
@@ -1020,7 +1020,7 @@ class AssetStorageTest : AsyncTest() {
     val loaders = newAsyncContext(threads = 4)
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders
+      asyncContext = loaders,
     )
     val path = "ktx/assets/async/skin.json"
     val dependency = "ktx/assets/async/skin.atlas"
@@ -1065,7 +1065,7 @@ class AssetStorageTest : AsyncTest() {
     val loaders = newAsyncContext(threads = 4)
     val storage = AssetStorage(
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders
+      asyncContext = loaders,
     )
     val path = "ktx/assets/async/skin.json"
     val dependency = "ktx/assets/async/skin.atlas"
@@ -1324,7 +1324,7 @@ class AssetStorageTest : AsyncTest() {
       "\\path.txt" to "/path.txt",
       "dir\\path.txt" to "dir/path.txt",
       "home\\dir\\path.txt" to "home/dir/path.txt",
-      "\\home\\dir\\dir\\" to "/home/dir/dir/"
+      "\\home\\dir\\dir\\" to "/home/dir/dir/",
     )
 
     paths.forEach { (original, expected) ->
@@ -1436,7 +1436,10 @@ class AssetStorageTest : AsyncTest() {
     val loggingFinished = CompletableFuture<Boolean>()
     val exception = IllegalStateException("Expected.")
     val logger = mock<Logger> {
-      on(it.error(any(), any())) doAnswer { loggingFinished.complete(true); Unit }
+      on(it.error(any(), any())) doAnswer {
+        loggingFinished.complete(true)
+        Unit
+      }
     }
     storage.logger = logger
     val parameters = TextAssetLoaderParameters().apply {
@@ -1478,7 +1481,7 @@ class AssetStorageTest : AsyncTest() {
     val path = "ktx/assets/async/skin.json"
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
 
     // When:
@@ -1508,13 +1511,13 @@ class AssetStorageTest : AsyncTest() {
   class FakeAsyncLoader(
     private val onAsync: (assetManager: AssetManager) -> Unit,
     private val onSync: (asset: FakeAsset) -> Unit,
-    private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with()
+    private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with(),
   ) : AsynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
     override fun loadAsync(
       manager: AssetManager,
       fileName: String?,
       file: FileHandle?,
-      parameter: FakeParameters?
+      parameter: FakeParameters?,
     ) {
       onAsync(manager)
     }
@@ -1523,34 +1526,34 @@ class AssetStorageTest : AsyncTest() {
       manager: AssetManager,
       fileName: String?,
       file: FileHandle?,
-      parameter: FakeParameters?
+      parameter: FakeParameters?,
     ): FakeAsset = FakeAsset().also(onSync)
 
     @Suppress("UNCHECKED_CAST")
     override fun getDependencies(
       fileName: String?,
       file: FileHandle?,
-      parameter: FakeParameters?
+      parameter: FakeParameters?,
     ): GdxArray<AssetDescriptor<Any>> = dependencies as GdxArray<AssetDescriptor<Any>>
   }
 
   /** For loaders testing. */
   open class FakeSyncLoader(
     private val onLoad: (asset: FakeAsset) -> Unit = {},
-    private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with()
+    private val dependencies: GdxArray<AssetDescriptor<*>> = GdxArray.with(),
   ) : SynchronousAssetLoader<FakeAsset, FakeParameters>(ClasspathFileHandleResolver()) {
     @Suppress("UNCHECKED_CAST")
     override fun getDependencies(
       fileName: String?,
       file: FileHandle?,
-      parameter: FakeParameters?
+      parameter: FakeParameters?,
     ): GdxArray<AssetDescriptor<Any>> = dependencies as GdxArray<AssetDescriptor<Any>>
 
     override fun load(
       assetManager: AssetManager,
       fileName: String?,
       file: FileHandle?,
-      parameter: FakeParameters?
+      parameter: FakeParameters?,
     ): FakeAsset = FakeAsset().also(onLoad)
   }
 
@@ -1570,7 +1573,7 @@ class AssetStorageTest : AsyncTest() {
       onAsync = {
         isAsyncThread.complete(asyncThread === Thread.currentThread())
         isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread())
-      }
+      },
     )
     val storage = AssetStorage(asyncContext = asyncContext, useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1589,7 +1592,7 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val isRenderingThread = CompletableFuture<Boolean>()
     val loader = FakeSyncLoader(
-      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) }
+      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1606,7 +1609,7 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val isRenderingThread = CompletableFuture<Boolean>()
     val loader = FakeSyncLoader(
-      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) }
+      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1625,7 +1628,7 @@ class AssetStorageTest : AsyncTest() {
     val isRenderingThreadDuringSync = CompletableFuture<Boolean>()
     val loader = FakeAsyncLoader(
       onAsync = { isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread()) },
-      onSync = { isRenderingThreadDuringSync.complete(KtxAsync.isOnRenderingThread()) }
+      onSync = { isRenderingThreadDuringSync.complete(KtxAsync.isOnRenderingThread()) },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1642,7 +1645,7 @@ class AssetStorageTest : AsyncTest() {
   fun `should handle loading exceptions`() {
     // Given:
     val loader = FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1674,7 +1677,7 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val loader = FakeAsyncLoader(
       onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {}
+      onSync = {},
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1706,7 +1709,7 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val loader = FakeAsyncLoader(
       onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") }
+      onSync = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1748,7 +1751,7 @@ class AssetStorageTest : AsyncTest() {
         onLoad = {
           loadingStarted.complete(true)
           unloadingFinished.join()
-        }
+        },
       )
     }
     KtxAsync.launch {
@@ -1785,7 +1788,7 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader {
       FakeAsyncLoader(
         onAsync = { assetManager -> assetManager.containsAsset("Calling an unsupported method.") },
-        onSync = {}
+        onSync = {},
       )
     }
 
@@ -1812,7 +1815,7 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader {
       FakeAsyncLoader(
         onAsync = { assetManager -> assetManager.get("Missing", FakeAsset::class.java) },
-        onSync = {}
+        onSync = {},
       )
     }
 
@@ -1835,7 +1838,7 @@ class AssetStorageTest : AsyncTest() {
   fun `should not fail to unload asset that was loaded exceptionally`() {
     // Given:
     val loader = FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake path"
@@ -1869,7 +1872,7 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader {
       FakeSyncLoader(
         onLoad = {},
-        dependencies = GdxArray.with(storage.getAssetDescriptor<Vector2>(dependency))
+        dependencies = GdxArray.with(storage.getAssetDescriptor<Vector2>(dependency)),
       )
     }
 
@@ -1892,11 +1895,11 @@ class AssetStorageTest : AsyncTest() {
     val dependency = "path.async"
     val loader = FakeSyncLoader(
       onLoad = {},
-      dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency))
+      dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
     )
     val dependencyLoader = FakeAsyncLoader(
       onAsync = {},
-      onSync = { throw IllegalStateException("Expected.") }
+      onSync = { throw IllegalStateException("Expected.") },
     )
     storage.setLoader(suffix = ".sync") { loader }
     storage.setLoader(suffix = ".async") { dependencyLoader }
@@ -1935,7 +1938,7 @@ class AssetStorageTest : AsyncTest() {
         loadingStarted.join()
         loading.complete(true)
         loadingFinished.join()
-      }
+      },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake.path"
@@ -1974,7 +1977,7 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader {
       FakeAsyncLoader(
         onAsync = { asyncLoadingThreads.add(Thread.currentThread()) },
-        onSync = { syncLoadingThreads.add(Thread.currentThread()) }
+        onSync = { syncLoadingThreads.add(Thread.currentThread()) },
       )
     }
 
@@ -2012,7 +2015,7 @@ class AssetStorageTest : AsyncTest() {
           asset = it
           loadingStarted.complete(true)
           unloadingFinished.join()
-        }
+        },
       )
     }
 
@@ -2053,7 +2056,7 @@ class AssetStorageTest : AsyncTest() {
     val path = "fake path"
     storage.setLoader {
       FakeSyncLoader(
-        onLoad = { throw IllegalStateException("Expected.") }
+        onLoad = { throw IllegalStateException("Expected.") },
       )
     }
     runBlocking {
@@ -2081,7 +2084,7 @@ class AssetStorageTest : AsyncTest() {
     lateinit var identifier: Identifier<*>
     storage.setLoader {
       FakeSyncLoader(
-        onLoad = { throw IllegalStateException("Expected.") }
+        onLoad = { throw IllegalStateException("Expected.") },
       )
     }
     runBlocking {
@@ -2118,7 +2121,7 @@ class AssetStorageTest : AsyncTest() {
         onLoad = {
           loadingStarted.complete(true)
           loadingFinished.join()
-        }
+        },
       )
     }
     val reference = storage.loadAsync<FakeAsset>(path)
@@ -2149,13 +2152,13 @@ class AssetStorageTest : AsyncTest() {
     storage.setLoader {
       object : FakeSyncLoader(
         dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
-        onLoad = {}
+        onLoad = {},
       ) {
         override fun load(
           assetManager: AssetManager,
           fileName: String?,
           file: FileHandle?,
-          parameter: FakeParameters?
+          parameter: FakeParameters?,
         ): FakeAsset {
           assetManager.get(dependency, FakeAsset::class.java)
           return super.load(assetManager, fileName, file, parameter)
@@ -2167,7 +2170,7 @@ class AssetStorageTest : AsyncTest() {
         onLoad = {
           loadingStarted.complete(true)
           loadingFinished.join()
-        }
+        },
       )
     }
     val reference = storage.loadAsync<FakeAsset>(dependency)
@@ -2226,7 +2229,7 @@ class AssetStorageTest : AsyncTest() {
         onLoad = {
           loadingStarted.complete(true)
           loadingFinished.join()
-        }
+        },
       )
     }
     val reference = storage.loadAsync<FakeAsset>(path)
@@ -2237,7 +2240,8 @@ class AssetStorageTest : AsyncTest() {
 
     // Then:
     assertFalse(storage.isLoaded<FakeAsset>(path))
-    @Suppress("UNCHECKED_CAST") val asset: Asset<FakeAsset> = snapshot.assets[id] as Asset<FakeAsset>
+    @Suppress("UNCHECKED_CAST")
+    val asset: Asset<FakeAsset> = snapshot.assets[id] as Asset<FakeAsset>
     assertEquals(id, asset.identifier)
     assertFalse(asset.reference.isCompleted)
     assertFalse(asset.reference.isCancelled)
@@ -2271,28 +2275,32 @@ class AssetStorageTest : AsyncTest() {
   fun `should pretty print snapshot`() {
     // Given:
     val firstId = Identifier("first.file", String::class.java)
-    @Suppress("UNCHECKED_CAST") val first = Asset(
+
+    @Suppress("UNCHECKED_CAST")
+    val first = Asset(
       descriptor = firstId.toAssetDescriptor(),
       identifier = firstId,
       reference = CompletableDeferred("test"),
       dependencies = listOf(),
       loader = FakeSyncLoader() as Loader<String>,
-      referenceCount = 2
+      referenceCount = 2,
     )
     val secondId = Identifier("second.file", Int::class.java)
-    @Suppress("UNCHECKED_CAST") val second = Asset(
+
+    @Suppress("UNCHECKED_CAST")
+    val second = Asset(
       descriptor = secondId.toAssetDescriptor(),
       identifier = secondId,
       reference = CompletableDeferred(),
       dependencies = listOf(first),
       loader = FakeSyncLoader() as Loader<Int>,
-      referenceCount = 1
+      referenceCount = 1,
     )
     val snapshot = AssetStorageSnapshot(
       assets = mapOf(
         firstId to first,
-        secondId to second
-      )
+        secondId to second,
+      ),
     )
 
     // When:
@@ -2314,7 +2322,7 @@ class AssetStorageTest : AsyncTest() {
     loader=ktx.assets.async.AssetStorageTest${"$"}FakeSyncLoader,
   },
 ]""",
-      output
+      output,
     )
   }
 }

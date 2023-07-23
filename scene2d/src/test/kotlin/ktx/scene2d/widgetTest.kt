@@ -156,7 +156,7 @@ class KTableTest : ApplicationTest() {
         spaceLeft = 27f,
         spaceRight = 28f,
         spaceBottom = 29f,
-        row = true
+        row = true,
       ).inCell
 
       assertEquals(1, cell.expandX)
@@ -225,7 +225,7 @@ class KTreeTest : ApplicationTest() {
         icon = icon,
         selectable = false,
         expanded = true,
-        userObject = "Test"
+        userObject = "Test",
       ).inNode
 
       assertSame(icon, node.icon)

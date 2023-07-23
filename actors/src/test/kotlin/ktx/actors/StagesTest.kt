@@ -36,7 +36,8 @@ class StagesTest {
       }
       on(it.glGetShaderiv(any(), any(), any())) doAnswer { invocation ->
         if (invocation.arguments[1] == GL20.GL_COMPILE_STATUS) {
-          invocation.getArgument<IntBuffer>(2).put(0, 1); Unit
+          invocation.getArgument<IntBuffer>(2).put(0, 1)
+          Unit
         }
       }
     }

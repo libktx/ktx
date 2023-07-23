@@ -27,6 +27,7 @@ class TextUtilitiesTest {
     assertEquals(38.5f, position.x, 0.1f)
     assertEquals(105.5f, position.y, 0.1f)
   }
+
   @Test
   fun `should center text on a rectangle at given position`() {
     val font = FakeFont()
@@ -49,7 +50,7 @@ class TextUtilitiesTest {
   class FakeFont : BitmapFont(
     BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"), true),
     GdxArray.with(mock()),
-    true
+    true,
   ) {
     override fun load(data: BitmapFontData?) {
       // Do nothing.

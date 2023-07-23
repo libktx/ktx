@@ -822,6 +822,6 @@ class StyleTest {
 
   /** For [StyleTest] tests. */
   internal enum class TestEnum {
-    TEST
+    TEST,
   }
 }

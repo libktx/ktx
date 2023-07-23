@@ -24,15 +24,17 @@ import com.badlogic.gdx.utils.ObjectMap
  */
 open class KtxGame<ScreenType : Screen>(
   firstScreen: ScreenType? = null,
-  private val clearScreen: Boolean = true
+  private val clearScreen: Boolean = true,
 ) : KtxApplicationAdapter {
   /** Holds references to all screens registered with [addScreen]. Allows to get a reference of the screen instance
    * knowing only its type. */
   protected val screens: ObjectMap<Class<out ScreenType>, ScreenType> = ObjectMap()
+
   /** Currently shown screen. Unless overridden with [setScreen], uses an empty mock-up implementation to work around
    * nullability and `lateinit` issues. [shownScreen] is a public property exposing this value as [ScreenType].
    * @see shownScreen */
   protected var currentScreen: Screen = firstScreen ?: emptyScreen()
+
   /** Provides direct access to current [Screen] instance handling game events. */
   open val shownScreen: ScreenType
     @Suppress("UNCHECKED_CAST")

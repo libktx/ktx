@@ -26,7 +26,7 @@ fun mat3(
   m12: Float = 0f,
   m20: Float = 0f,
   m21: Float = 0f,
-  m22: Float = 0f
+  m22: Float = 0f,
 ): Matrix3 {
   val matrix = Matrix3()
   val values = matrix.`val`

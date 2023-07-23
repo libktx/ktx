@@ -182,7 +182,7 @@ class MapsTest {
   fun `should convert Iterables to GdxMap`() {
     val map = listOf("1", "2", "3").toGdxMap(
       keyProvider = { it.toInt() },
-      valueProvider = { it + it }
+      valueProvider = { it + it },
     )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
@@ -192,7 +192,7 @@ class MapsTest {
   fun `should convert customized Arrays to GdxMap`() {
     val map = arrayOf("1", "2", "3").toGdxMap(
       keyProvider = { it.toInt() },
-      valueProvider = { it + it }
+      valueProvider = { it + it },
     )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)

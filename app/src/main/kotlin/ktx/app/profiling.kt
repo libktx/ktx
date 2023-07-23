@@ -19,7 +19,7 @@ inline fun profile(
   name: String = "Profiler",
   repeats: Int = 10,
   printResults: Boolean = true,
-  operation: () -> Unit
+  operation: () -> Unit,
 ): PerformanceCounter {
   val performanceCounter = PerformanceCounter(name, repeats)
   performanceCounter.profile(repeats, printResults, operation)
@@ -40,7 +40,7 @@ inline fun profile(
 inline fun PerformanceCounter.profile(
   repeats: Int = if (time.mean != null) time.mean.windowSize else 10,
   printResults: Boolean = true,
-  operation: () -> Unit
+  operation: () -> Unit,
 ) {
   if (this.time.count == 0) tick()
   repeat(repeats) {
@@ -68,7 +68,7 @@ fun PerformanceCounter.prettyPrint(decimalFormat: String = "%.6fs") {
     Gdx.app.log(
       name,
       "Average OP time: ${decimalFormat.format(mean.mean)} " +
-        "± ${decimalFormat.format(mean.standardDeviation())}"
+        "± ${decimalFormat.format(mean.standardDeviation())}",
     )
     minimum = mean.lowest
     maximum = mean.highest

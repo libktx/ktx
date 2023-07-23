@@ -77,7 +77,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
  */
 class AsyncAssetManager(
   fileResolver: FileHandleResolver = InternalFileHandleResolver(),
-  useDefaultLoaders: Boolean = true
+  useDefaultLoaders: Boolean = true,
 ) : AssetManager(fileResolver, useDefaultLoaders) {
   private val callbacks = mutableMapOf<String, CompletableDeferred<*>>()
   private val loaderParameterSuppliers = mutableMapOf<Class<Loader<*>>, ParameterSupplier<*>>()
@@ -127,7 +127,7 @@ class AsyncAssetManager(
    */
   inline fun <reified T> loadAsync(
     path: String,
-    parameters: AssetLoaderParameters<T>? = null
+    parameters: AssetLoaderParameters<T>? = null,
   ): Deferred<T> = loadAsync(AssetDescriptor(path, T::class.java, parameters))
 
   /**
@@ -151,7 +151,8 @@ class AsyncAssetManager(
         // Increasing reference count:
         load(assetDescriptor)
         // Returning existing callback to the asset:
-        @Suppress("UNCHECKED_CAST") return callbacks[assetDescriptor.fileName] as Deferred<T>
+        @Suppress("UNCHECKED_CAST")
+        return callbacks[assetDescriptor.fileName] as Deferred<T>
       }
 
       val result = CompletableDeferred<T>()
@@ -245,14 +246,16 @@ class AsyncAssetManager(
           Gdx.app?.error(
             "KTX",
             "Unable to load $path asset with $dependencies dependencies due to $asset exception",
-            exception
+            exception,
           )
           val error = DependencyLoadingException(path, asset.fileName, exception)
           handled = callback.completeExceptionally(error) || handled
           cancelLoading(path)
           cancelLoading(dependencies)
           true
-        } else false
+        } else {
+          false
+        }
       }
     }
     // If no callback was completed, the asset was loaded non-asynchronously.

@@ -253,6 +253,7 @@ class KtxAsyncTest : AsyncTest() {
     assertNotSame(getMainRenderingThread(), executionThread.join())
     assertFalse(isOnRenderingThread.get())
   }
+
   @Test
   fun `should detect nested non-rendering threads with separate context`() {
     // Given:

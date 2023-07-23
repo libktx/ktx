@@ -98,7 +98,7 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
       Runnable {
         executionTime.set(System.currentTimeMillis() - start)
       },
-      GlobalScope.coroutineContext
+      GlobalScope.coroutineContext,
     )
 
     // Then:

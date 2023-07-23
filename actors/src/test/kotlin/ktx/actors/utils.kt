@@ -9,7 +9,7 @@ import org.mockito.kotlin.mock
 /** @return [Stage] with mocked viewport and batch. */
 internal fun getMockStage(
   viewportWidth: Float = 800f,
-  viewportHeight: Float = 600f
+  viewportHeight: Float = 600f,
 ): Stage {
   Gdx.graphics = mock() // Referenced by Stage constructor.
   val viewport = mock<Viewport> {

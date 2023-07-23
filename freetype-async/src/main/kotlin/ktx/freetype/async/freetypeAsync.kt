@@ -28,7 +28,7 @@ import kotlin.contracts.contract
  */
 fun AssetStorage.registerFreeTypeFontLoaders(
   fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
-  replaceDefaultBitmapFontLoader: Boolean = false
+  replaceDefaultBitmapFontLoader: Boolean = false,
 ) {
   setLoader<FreeTypeFontGenerator> { FreeTypeFontGeneratorLoader(fileResolver) }
 
@@ -57,7 +57,7 @@ fun AssetStorage.registerFreeTypeFontLoaders(
 @OptIn(ExperimentalContracts::class)
 suspend inline fun AssetStorage.loadFreeTypeFont(
   path: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): BitmapFont {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return load<BitmapFont>(path, parameters = freeTypeFontParameters(path, setup))
@@ -79,7 +79,7 @@ suspend inline fun AssetStorage.loadFreeTypeFont(
 @OptIn(ExperimentalContracts::class)
 inline fun AssetStorage.loadFreeTypeFontAsync(
   path: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): Deferred<BitmapFont> {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return loadAsync<BitmapFont>(path, parameters = freeTypeFontParameters(path, setup))
@@ -106,7 +106,7 @@ inline fun AssetStorage.loadFreeTypeFontAsync(
 @OptIn(ExperimentalContracts::class)
 inline fun AssetStorage.loadFreeTypeFontSync(
   path: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): BitmapFont {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return loadSync<BitmapFont>(path, parameters = freeTypeFontParameters(path, setup))
@@ -121,7 +121,7 @@ inline fun AssetStorage.loadFreeTypeFontSync(
 @OptIn(ExperimentalContracts::class)
 inline fun AsyncAssetManager.loadFreeTypeFontAsync(
   file: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): Deferred<BitmapFont> {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return loadAsync<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))

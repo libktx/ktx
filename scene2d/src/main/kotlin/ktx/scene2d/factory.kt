@@ -53,7 +53,7 @@ inline fun RootWidget.window(
   title: String,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KWindow.() -> Unit = {}
+  init: KWindow.() -> Unit = {},
 ): KWindow {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return storeActor(KWindow(title, skin, style)).apply(init)
@@ -73,7 +73,7 @@ inline fun RootWidget.dialog(
   title: String,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KDialog.() -> Unit = {}
+  init: KDialog.() -> Unit = {},
 ): KDialog {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return storeActor(KDialog(title, skin, style)).apply(init)
@@ -110,7 +110,7 @@ inline fun <S, A : Actor> KWidget<S>.actor(actor: A, init: (@Scene2dDsl A).(S) -
 inline fun <S> KWidget<S>.button(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KButton.(S) -> Unit = {}
+  init: KButton.(S) -> Unit = {},
 ): KButton {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KButton(skin, style), init)
@@ -132,7 +132,7 @@ inline fun <S> KWidget<S>.buttonGroup(
   minCheckedCount: Int,
   maxCheckedCount: Int,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KButtonTable.(S) -> Unit = {}
+  init: KButtonTable.(S) -> Unit = {},
 ): KButtonTable {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KButtonTable(minCheckedCount, maxCheckedCount, skin), init)
@@ -153,7 +153,7 @@ inline fun <S> KWidget<S>.checkBox(
   text: String,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KCheckBox.(S) -> Unit = {}
+  init: KCheckBox.(S) -> Unit = {},
 ): KCheckBox {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KCheckBox(text, skin, style), init)
@@ -168,7 +168,7 @@ inline fun <S> KWidget<S>.checkBox(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.container(
-  init: KContainer<Actor>.(S) -> Unit = {}
+  init: KContainer<Actor>.(S) -> Unit = {},
 ): KContainer<Actor> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KContainer(), init)
@@ -187,7 +187,7 @@ inline fun <S> KWidget<S>.container(
 @OptIn(ExperimentalContracts::class)
 inline fun <S, A : Actor> KWidget<S>.container(
   actor: A,
-  init: KContainer<A>.(S) -> Unit = {}
+  init: KContainer<A>.(S) -> Unit = {},
 ): KContainer<A> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KContainer(actor), init)
@@ -202,7 +202,7 @@ inline fun <S, A : Actor> KWidget<S>.container(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.horizontalGroup(
-  init: KHorizontalGroup.(S) -> Unit = {}
+  init: KHorizontalGroup.(S) -> Unit = {},
 ): KHorizontalGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KHorizontalGroup(), init)
@@ -221,7 +221,7 @@ inline fun <S> KWidget<S>.horizontalGroup(
 inline fun <S> KWidget<S>.image(
   drawableName: String,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl Image).(S) -> Unit = {}
+  init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Image(skin.getDrawable(drawableName)), init)
@@ -238,7 +238,7 @@ inline fun <S> KWidget<S>.image(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
   ninePatch: NinePatch,
-  init: (@Scene2dDsl Image).(S) -> Unit = {}
+  init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Image(ninePatch), init)
@@ -255,7 +255,7 @@ inline fun <S> KWidget<S>.image(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
   textureRegion: TextureRegion,
-  init: (@Scene2dDsl Image).(S) -> Unit = {}
+  init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Image(textureRegion), init)
@@ -272,7 +272,7 @@ inline fun <S> KWidget<S>.image(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
   texture: Texture,
-  init: (@Scene2dDsl Image).(S) -> Unit = {}
+  init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Image(texture), init)
@@ -289,7 +289,7 @@ inline fun <S> KWidget<S>.image(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
   drawable: Drawable,
-  init: (@Scene2dDsl Image).(S) -> Unit = {}
+  init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Image(drawable), init)
@@ -308,7 +308,7 @@ inline fun <S> KWidget<S>.image(
 inline fun <S> KWidget<S>.imageButton(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KImageButton.(S) -> Unit = {}
+  init: KImageButton.(S) -> Unit = {},
 ): KImageButton {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KImageButton(skin, style), init)
@@ -329,7 +329,7 @@ inline fun <S> KWidget<S>.imageTextButton(
   text: String,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KImageTextButton.(S) -> Unit = {}
+  init: KImageTextButton.(S) -> Unit = {},
 ): KImageTextButton {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KImageTextButton(text, skin, style), init)
@@ -350,7 +350,7 @@ inline fun <S> KWidget<S>.label(
   text: CharSequence,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl Label).(S) -> Unit = {}
+  init: (@Scene2dDsl Label).(S) -> Unit = {},
 ): Label {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Label(text, skin, style), init)
@@ -367,7 +367,7 @@ inline fun <S> KWidget<S>.label(
 fun <I> KWidget<*>.listWidgetOf(
   items: GdxArray<I>? = null,
   style: String = defaultStyle,
-  skin: Skin = Scene2DSkin.defaultSkin
+  skin: Skin = Scene2DSkin.defaultSkin,
 ): KListWidget<I> {
   val list = KListWidget<I>(skin, style)
   storeActor(list)
@@ -391,7 +391,7 @@ fun <I> KWidget<*>.listWidgetOf(
 inline fun <I> KWidget<*>.listWidget(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KListWidget<I>.() -> Unit = {}
+  init: KListWidget<I>.() -> Unit = {},
 ): KListWidget<I> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val list = KListWidget<I>(skin, style)
@@ -416,7 +416,7 @@ inline fun <I> KWidget<*>.listWidget(
 inline fun <S> KWidget<S>.particleEffect(
   particleEffect: ParticleEffect,
   resetOnStart: Boolean = true,
-  init: (@Scene2dDsl ParticleEffectActor).(S) -> Unit = {}
+  init: (@Scene2dDsl ParticleEffectActor).(S) -> Unit = {},
 ): ParticleEffectActor {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(ParticleEffectActor(particleEffect, resetOnStart), init)
@@ -444,7 +444,7 @@ inline fun <S> KWidget<S>.progressBar(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl ProgressBar).(S) -> Unit = {}
+  init: (@Scene2dDsl ProgressBar).(S) -> Unit = {},
 ): ProgressBar {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(ProgressBar(min, max, step, vertical, skin, style), init)
@@ -463,7 +463,7 @@ inline fun <S> KWidget<S>.progressBar(
 inline fun <S> KWidget<S>.scrollPane(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KScrollPane.(S) -> Unit = {}
+  init: KScrollPane.(S) -> Unit = {},
 ): KScrollPane {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KScrollPane(skin, style), init)
@@ -480,7 +480,7 @@ inline fun <S> KWidget<S>.scrollPane(
 fun <I> KWidget<*>.selectBoxOf(
   items: GdxArray<I>? = null,
   style: String = defaultStyle,
-  skin: Skin = Scene2DSkin.defaultSkin
+  skin: Skin = Scene2DSkin.defaultSkin,
 ): KSelectBox<I> {
   val selectBox = KSelectBox<I>(skin, style)
   storeActor(selectBox)
@@ -504,7 +504,7 @@ fun <I> KWidget<*>.selectBoxOf(
 inline fun <I> KWidget<*>.selectBox(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KSelectBox<I>.() -> Unit = {}
+  init: KSelectBox<I>.() -> Unit = {},
 ): KSelectBox<I> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val selectBox = KSelectBox<I>(skin, style)
@@ -536,7 +536,7 @@ inline fun <S> KWidget<S>.slider(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl Slider).(S) -> Unit = {}
+  init: (@Scene2dDsl Slider).(S) -> Unit = {},
 ): Slider {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Slider(min, max, step, vertical, skin, style), init)
@@ -558,7 +558,7 @@ inline fun <S> KWidget<S>.splitPane(
   vertical: Boolean = false,
   style: String = if (vertical) defaultVerticalStyle else defaultHorizontalStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KSplitPane.(S) -> Unit = {}
+  init: KSplitPane.(S) -> Unit = {},
 ): KSplitPane {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KSplitPane(vertical, skin, style), init)
@@ -573,7 +573,7 @@ inline fun <S> KWidget<S>.splitPane(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.stack(
-  init: KStack.(S) -> Unit = {}
+  init: KStack.(S) -> Unit = {},
 ): KStack {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KStack(), init)
@@ -590,7 +590,7 @@ inline fun <S> KWidget<S>.stack(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.table(
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KTableWidget.(S) -> Unit = {}
+  init: KTableWidget.(S) -> Unit = {},
 ): KTableWidget {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KTableWidget(skin), init)
@@ -611,7 +611,7 @@ inline fun <S> KWidget<S>.textArea(
   text: String = "",
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl TextArea).(S) -> Unit = {}
+  init: (@Scene2dDsl TextArea).(S) -> Unit = {},
 ): TextArea {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(TextArea(text, skin, style), init)
@@ -632,7 +632,7 @@ inline fun <S> KWidget<S>.textField(
   text: String = "",
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl TextField).(S) -> Unit = {}
+  init: (@Scene2dDsl TextField).(S) -> Unit = {},
 ): TextField {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(TextField(text, skin, style), init)
@@ -653,7 +653,7 @@ inline fun <S> KWidget<S>.textButton(
   text: String,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KTextButton.(S) -> Unit = {}
+  init: KTextButton.(S) -> Unit = {},
 ): KTextButton {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KTextButton(text, skin, style), init)
@@ -674,7 +674,7 @@ inline fun <S> KWidget<S>.touchpad(
   deadzone: Float,
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: (@Scene2dDsl Touchpad).(S) -> Unit = {}
+  init: (@Scene2dDsl Touchpad).(S) -> Unit = {},
 ): Touchpad {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(Touchpad(deadzone, skin, style), init)
@@ -693,7 +693,7 @@ inline fun <S> KWidget<S>.touchpad(
 inline fun <S> KWidget<S>.tree(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KTreeWidget.(S) -> Unit = {}
+  init: KTreeWidget.(S) -> Unit = {},
 ): KTreeWidget {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KTreeWidget(skin, style), init)
@@ -708,7 +708,7 @@ inline fun <S> KWidget<S>.tree(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.verticalGroup(
-  init: KVerticalGroup.(S) -> Unit = {}
+  init: KVerticalGroup.(S) -> Unit = {},
 ): KVerticalGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KVerticalGroup(), init)

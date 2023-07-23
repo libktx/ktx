@@ -50,7 +50,7 @@ class AlreadyLoadedAssetException(identifier: Identifier<*>) :
 class MissingLoaderException(descriptor: AssetDescriptor<*>) :
   AssetStorageException(
     message = "No loader available for assets of type: ${descriptor.type} " +
-      "with path: ${descriptor.fileName}."
+      "with path: ${descriptor.fileName}.",
   )
 
 /**
@@ -62,7 +62,7 @@ class MissingLoaderException(descriptor: AssetDescriptor<*>) :
 class InvalidLoaderException(loader: Loader<*>) :
   AssetStorageException(
     message = "Invalid loader: $loader. It must extend either " +
-      "SynchronousAssetLoader or AsynchronousAssetLoader."
+      "SynchronousAssetLoader or AsynchronousAssetLoader.",
   )
 
 /**
@@ -93,7 +93,7 @@ class AssetLoadingException(message: String, cause: Throwable? = null) :
 class UnsupportedMethodException(method: String) :
   AssetStorageException(
     message = "AssetLoader used unsupported operation of AssetManager wrapper: $method " +
-      "Please refactor AssetLoader not to call this method on AssetManager."
+      "Please refactor AssetLoader not to call this method on AssetManager.",
   )
 
 /**
@@ -126,7 +126,7 @@ class MissingDependencyException(message: String, cause: Throwable? = null) :
       message = "A loader has requested an instance of ${identifier.type} at path ${identifier.path}. " +
         "This asset was either not listed in dependencies, loaded with exception, is not loaded yet " +
         "or was unloaded asynchronously.",
-      cause = cause
+      cause = cause,
     )
 }
 
@@ -138,5 +138,5 @@ class MissingDependencyException(message: String, cause: Throwable? = null) :
 class DependencyLoadingException(path: String, dependency: String, cause: Throwable) :
   AssetStorageException(
     message = "The asset at path $path cannot be loaded due to the $dependency dependency loading exception.",
-    cause = cause
+    cause = cause,
   )

@@ -36,7 +36,7 @@ class ImmutableVector2Test {
     // small vectors
     ImmutableVector2(0.001f, 0f),
     ImmutableVector2(0f, 0.001f),
-    ImmutableVector2(0f, -0.001f)
+    ImmutableVector2(0f, -0.001f),
   )
 
   /** List scalar values to use in tests */
@@ -53,7 +53,7 @@ class ImmutableVector2Test {
     Interpolation.pow2In,
     Interpolation.pow2Out,
     Interpolation.smooth,
-    Interpolation.smooth2
+    Interpolation.smooth2,
   )
 
   @Test
@@ -555,7 +555,7 @@ class ImmutableVector2Test {
         preTranslate(-2f, 3f)
         preRotate(18f)
         preScale(1.5f, 2f)
-      }
+      },
     )
 
     transformations.forEach { transformation ->
@@ -892,7 +892,7 @@ class ImmutableVector2Test {
           interpolations.forEach { interpolation ->
             assertEquals(
               v1.toMutable().interpolate(v2.toMutable(), alpha, interpolation).toImmutable(),
-              v1.withInterpolation(v2, alpha, interpolation)
+              v1.withInterpolation(v2, alpha, interpolation),
             )
           }
         }

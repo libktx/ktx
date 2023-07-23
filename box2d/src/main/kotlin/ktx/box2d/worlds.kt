@@ -101,7 +101,7 @@ typealias KtxRayCastCallback = (
   fixture: Fixture,
   point: Vector2,
   normal: Vector2,
-  fraction: Float
+  fraction: Float,
 ) -> Float
 
 /**
@@ -141,7 +141,7 @@ object RayCast {
 fun World.rayCast(
   start: Vector2,
   end: Vector2,
-  callback: KtxRayCastCallback
+  callback: KtxRayCastCallback,
 ) {
   rayCast(callback, start, end)
 }
@@ -163,7 +163,7 @@ fun World.rayCast(
   startY: Float,
   endX: Float,
   endY: Float,
-  callback: KtxRayCastCallback
+  callback: KtxRayCastCallback,
 ) {
   rayCast(callback, startX, startY, endX, endY)
 }
@@ -183,7 +183,7 @@ fun World.query(
   lowerY: Float,
   upperX: Float,
   upperY: Float,
-  callback: KtxQueryCallback
+  callback: KtxQueryCallback,
 ) {
   QueryAABB(callback, lowerX, lowerY, upperX, upperY)
 }
