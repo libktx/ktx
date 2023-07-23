@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader
 import com.kotcrab.vis.ui.VisUI
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
+import org.mockito.kotlin.mock
 
 /**
  * Utility value for numeric tests.

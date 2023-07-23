@@ -1,5 +1,16 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.12.0-rc1
+
+- **[UPDATE]** Updated to libGDX 1.12.0.
+- **[UPDATE]** Updated to Kotlin 1.9.0.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.7.2.
+- **[UPDATE]** Updated to VisUI 1.5.2.
+- **[UPDATE]** Updated to Dokka 1.8.20.
+- **[MISC]** **KTX** project should now work locally under JDK 17, including the test suite.
+- **[FEATURE]** (`ktx-app`) `KtxInputAdapter` now supports the `touchCancelled` event handling.
+By default, it calls the `touchUp` method for consistency with the previous libGDX versions.
+
 #### 1.11.0-rc6
 
 - **[UPDATE]** Updated to Kotlin 1.8.21.

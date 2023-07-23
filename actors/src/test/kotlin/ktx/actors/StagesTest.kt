@@ -9,15 +9,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Scaling.stretch
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import java.nio.IntBuffer
 
 class StagesTest {
@@ -36,7 +36,8 @@ class StagesTest {
       }
       on(it.glGetShaderiv(any(), any(), any())) doAnswer { invocation ->
         if (invocation.arguments[1] == GL20.GL_COMPILE_STATUS) {
-          invocation.getArgument<IntBuffer>(2).put(0, 1); Unit
+          invocation.getArgument<IntBuffer>(2).put(0, 1)
+          Unit
         }
       }
     }

@@ -6,12 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.mock
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
@@ -112,7 +112,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { checkBox("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -126,7 +126,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { image(drawableName = "button") },
     validate = {
       assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -143,7 +143,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { image(VisUI.getSkin().getDrawable("button")) },
     validate = {
       Assert.assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -154,7 +154,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { imageTextButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -162,7 +162,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { label("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -173,7 +173,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -183,7 +183,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -197,7 +197,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -207,7 +207,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -224,7 +224,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { textArea("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -232,7 +232,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { textButton("Test.") },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -240,7 +240,7 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
     widget = { textField("Test.") },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -305,7 +305,8 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     assertTrue(child in parent.children)
     assertEquals(
       "For the purpose of this test, the actor must include 'color = Color.BLUE' in its init block.",
-      Color.BLUE, child!!.color
+      Color.BLUE,
+      child!!.color,
     )
     validate(child) // Performing widget-specific validation.
   }
@@ -333,7 +334,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -354,7 +355,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertTrue(it.actor is Label)
       val label = it.actor as Label
       assertEquals("Test.", label.text.toString())
-    }
+    },
   )
 
   @Test
@@ -373,7 +374,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
-    }
+    },
   )
 
   @Test
@@ -392,7 +393,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -404,7 +405,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -420,7 +421,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -432,7 +433,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertTrue(it.isResetOnStart)
-    }
+    },
   )
 
   @Test
@@ -446,7 +447,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -469,7 +470,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    }
+    },
   )
 
   @Test
@@ -483,7 +484,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
       assertEquals(1f, it.minValue, TOLERANCE)
       assertEquals(2f, it.maxValue, TOLERANCE)
       assertEquals(0.5f, it.stepSize, TOLERANCE)
-    }
+    },
   )
 
   @Test
@@ -509,7 +510,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals(Scene2DSkin.defaultSkin, it.skin)
-    }
+    },
   )
 
   @Test
@@ -521,7 +522,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test
@@ -533,7 +534,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text.toString())
-    }
+    },
   )
 
   @Test
@@ -545,7 +546,7 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     },
     validate = {
       assertEquals("Test.", it.text)
-    }
+    },
   )
 
   @Test

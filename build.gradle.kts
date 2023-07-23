@@ -67,17 +67,17 @@ subprojects {
   val projectDesc: String by project
 
   base {
-    archivesBaseName = projectName
+    archivesName.set(projectName)
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_1_7 // For RoboVM compatibility.
+    sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
   }
 
   tasks.withType<KotlinCompile> {
     kotlinOptions {
-      jvmTarget = "1.8"
+      jvmTarget = JavaVersion.VERSION_1_8.toString()
       freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
   }
@@ -90,14 +90,14 @@ subprojects {
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     testImplementation("junit:junit:$junitVersion")
     testImplementation("io.kotlintest:kotlintest:$kotlinTestVersion")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:$kotlinMockitoVersion")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:$kotlinMockitoVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
   }
 
   tasks.register("lint", JavaExec::class) {
+    mainClass.set("com.pinterest.ktlint.Main")
     description = "Check Kotlin code style."
     group = "verification"
-    main = "com.pinterest.ktlint.Main"
     classpath = configurations["linter"]
     args = listOf("src/**/*.kt")
 
@@ -105,9 +105,9 @@ subprojects {
   }
 
   tasks.register("format", JavaExec::class) {
+    mainClass.set("com.pinterest.ktlint.Main")
     description = "Fix Kotlin code style."
     group = "formatting"
-    main = "com.pinterest.ktlint.Main"
     classpath = configurations["linter"]
     args = listOf("-F", "src/**/*.kt")
   }
@@ -250,8 +250,8 @@ nexusStaging {
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {
+  mainClass.set("com.pinterest.ktlint.Main")
   description = "Apply Kotlin code style changes to IntelliJ formatter."
-  main = "com.pinterest.ktlint.Main"
   classpath = configurations["linter"]
-  args = listOf("applyToIDEAProject", "-y")
+  args = listOf("applyToIDEAProject")
 }

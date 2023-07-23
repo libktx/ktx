@@ -52,7 +52,7 @@ abstract class AsyncTest {
     executor(
       Runnable {
         thread.complete(Thread.currentThread())
-      }
+      },
     )
     return thread.get(5L, SECONDS)
   }

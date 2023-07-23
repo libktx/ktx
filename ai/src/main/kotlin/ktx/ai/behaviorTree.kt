@@ -44,7 +44,7 @@ typealias GdxAiRandom<E> = com.badlogic.gdx.ai.btree.decorator.Random<E>
   AnnotationTarget.TYPE_PARAMETER,
   AnnotationTarget.FUNCTION,
   AnnotationTarget.TYPE,
-  AnnotationTarget.TYPEALIAS
+  AnnotationTarget.TYPEALIAS,
 )
 annotation class GdxAiDsl
 
@@ -62,7 +62,7 @@ annotation class GdxAiDsl
 inline fun <E> behaviorTree(
   rootTask: Task<E>? = null,
   blackboard: E? = null,
-  init: (@GdxAiDsl BehaviorTree<E>).() -> Unit = {}
+  init: (@GdxAiDsl BehaviorTree<E>).() -> Unit = {},
 ): BehaviorTree<E> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val behaviorTree = BehaviorTree(rootTask, blackboard)
@@ -83,7 +83,7 @@ inline fun <E> behaviorTree(
 @GdxAiDsl
 inline fun <E, T : Task<E>> Task<E>.add(
   task: T,
-  init: (@GdxAiDsl T).() -> Unit = {}
+  init: (@GdxAiDsl T).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   task.init()
@@ -102,7 +102,7 @@ inline fun <E, T : Task<E>> Task<E>.add(
 @GdxAiDsl
 inline fun <E> Task<E>.dynamicGuardSelector(
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl DynamicGuardSelector<E>).() -> Unit = {}
+  init: (@GdxAiDsl DynamicGuardSelector<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val dynamicGuardSelector = DynamicGuardSelector(tasks)
@@ -126,7 +126,7 @@ inline fun <E> Task<E>.parallel(
   policy: Policy = Policy.Sequence,
   orchestrator: Orchestrator = Orchestrator.Resume,
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl Parallel<E>).() -> Unit = {}
+  init: (@GdxAiDsl Parallel<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val parallel = Parallel(policy, orchestrator, tasks)
@@ -146,7 +146,7 @@ inline fun <E> Task<E>.parallel(
 @GdxAiDsl
 inline fun <E> Task<E>.randomSelector(
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl RandomSelector<E>).() -> Unit = {}
+  init: (@GdxAiDsl RandomSelector<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val randomSelector = RandomSelector(tasks)
@@ -166,7 +166,7 @@ inline fun <E> Task<E>.randomSelector(
 @GdxAiDsl
 inline fun <E> Task<E>.randomSequence(
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl RandomSequence<E>).() -> Unit = {}
+  init: (@GdxAiDsl RandomSequence<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val randomSequence = RandomSequence(tasks)
@@ -186,7 +186,7 @@ inline fun <E> Task<E>.randomSequence(
 @GdxAiDsl
 inline fun <E> Task<E>.selector(
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl GdxAiSelector<E>).() -> Unit = {}
+  init: (@GdxAiDsl GdxAiSelector<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val selector = GdxAiSelector(tasks)
@@ -206,7 +206,7 @@ inline fun <E> Task<E>.selector(
 @GdxAiDsl
 inline fun <E> Task<E>.sequence(
   tasks: Array<Task<E>> = Array(),
-  init: (@GdxAiDsl GdxAiSequence<E>).() -> Unit = {}
+  init: (@GdxAiDsl GdxAiSequence<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val sequence = GdxAiSequence(tasks)
@@ -226,7 +226,7 @@ inline fun <E> Task<E>.sequence(
 @GdxAiDsl
 inline fun <E> Task<E>.alwaysFail(
   task: Task<E>? = null,
-  init: (@GdxAiDsl AlwaysFail<E>).() -> Unit = {}
+  init: (@GdxAiDsl AlwaysFail<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val alwaysFail = AlwaysFail(task)
@@ -246,7 +246,7 @@ inline fun <E> Task<E>.alwaysFail(
 @GdxAiDsl
 inline fun <E> Task<E>.alwaysSucceed(
   task: Task<E>? = null,
-  init: (@GdxAiDsl AlwaysSucceed<E>).() -> Unit = {}
+  init: (@GdxAiDsl AlwaysSucceed<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val alwaysSucceed = AlwaysSucceed(task)
@@ -269,7 +269,7 @@ inline fun <E> Task<E>.alwaysSucceed(
 inline fun <E> Task<E>.include(
   subtree: String? = null,
   lazy: Boolean = false,
-  init: (@GdxAiDsl Include<E>).() -> Unit = {}
+  init: (@GdxAiDsl Include<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val include = Include<E>(subtree, lazy)
@@ -289,7 +289,7 @@ inline fun <E> Task<E>.include(
 @GdxAiDsl
 inline fun <E> Task<E>.invert(
   task: Task<E>? = null,
-  init: Invert<E>.() -> Unit = {}
+  init: Invert<E>.() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val invert = Invert(task)
@@ -311,7 +311,7 @@ inline fun <E> Task<E>.invert(
 inline fun <E> Task<E>.random(
   success: FloatDistribution = ConstantFloatDistribution.ZERO_POINT_FIVE,
   task: Task<E>? = null,
-  init: (@GdxAiDsl GdxAiRandom<E>).() -> Unit = {}
+  init: (@GdxAiDsl GdxAiRandom<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val random = GdxAiRandom(success, task)
@@ -333,7 +333,7 @@ inline fun <E> Task<E>.random(
 inline fun <E> Task<E>.repeat(
   times: IntegerDistribution = ConstantIntegerDistribution.NEGATIVE_ONE,
   task: Task<E>? = null,
-  init: (@GdxAiDsl Repeat<E>).() -> Unit = {}
+  init: (@GdxAiDsl Repeat<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val repeat = Repeat(times, task)
@@ -355,7 +355,7 @@ inline fun <E> Task<E>.repeat(
 inline fun <E> Task<E>.semaphoreGuard(
   name: String? = null,
   task: Task<E>? = null,
-  init: (@GdxAiDsl SemaphoreGuard<E>).() -> Unit = {}
+  init: (@GdxAiDsl SemaphoreGuard<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val semaphoreGuard = SemaphoreGuard(name, task)
@@ -375,7 +375,7 @@ inline fun <E> Task<E>.semaphoreGuard(
 @GdxAiDsl
 inline fun <E> Task<E>.untilFail(
   task: Task<E>? = null,
-  init: (@GdxAiDsl UntilFail<E>).() -> Unit = {}
+  init: (@GdxAiDsl UntilFail<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val untilFail = UntilFail(task)
@@ -395,7 +395,7 @@ inline fun <E> Task<E>.untilFail(
 @GdxAiDsl
 inline fun <E> Task<E>.untilSuccess(
   task: Task<E>? = null,
-  init: (@GdxAiDsl UntilSuccess<E>).() -> Unit = {}
+  init: (@GdxAiDsl UntilSuccess<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val untilSuccess = UntilSuccess(task)
@@ -413,7 +413,7 @@ inline fun <E> Task<E>.untilSuccess(
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
 inline fun <E> Task<E>.failureLeaf(
-  init: (@GdxAiDsl Failure<E>).() -> Unit = {}
+  init: (@GdxAiDsl Failure<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val failure = Failure<E>()
@@ -431,7 +431,7 @@ inline fun <E> Task<E>.failureLeaf(
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
 inline fun <E> Task<E>.successLeaf(
-  init: (@GdxAiDsl Success<E>).() -> Unit = {}
+  init: (@GdxAiDsl Success<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val success = Success<E>()
@@ -451,7 +451,7 @@ inline fun <E> Task<E>.successLeaf(
 @GdxAiDsl
 inline fun <E> Task<E>.waitLeaf(
   seconds: Float,
-  init: (@GdxAiDsl Wait<E>).() -> Unit = {}
+  init: (@GdxAiDsl Wait<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val wait = Wait<E>(seconds)
@@ -471,7 +471,7 @@ inline fun <E> Task<E>.waitLeaf(
 @GdxAiDsl
 inline fun <E> Task<E>.waitLeaf(
   seconds: FloatDistribution = ConstantFloatDistribution.ZERO,
-  init: (@GdxAiDsl Wait<E>).() -> Unit = {}
+  init: (@GdxAiDsl Wait<E>).() -> Unit = {},
 ): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val wait = Wait<E>(seconds)

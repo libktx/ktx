@@ -23,14 +23,14 @@ class JsonTest {
       "int": 10,
       "bool": true,
       "str": "Hello world"
-    }"""
+    }""",
     )
 
     // Then:
     simple shouldEqual Simple(
       int = 10,
       bool = true,
-      str = "Hello world"
+      str = "Hello world",
     )
   }
 
@@ -49,7 +49,7 @@ class JsonTest {
         "str": "a"
       },
       "list": [1, 1, 2, 3, 5, 8, 13]
-    }"""
+    }""",
     )
 
     // Then:
@@ -58,9 +58,9 @@ class JsonTest {
       simple = Simple(
         int = 31,
         bool = true,
-        str = "a"
+        str = "a",
       ),
-      list = listOf(1, 1, 2, 3, 5, 8, 13)
+      list = listOf(1, 1, 2, 3, 5, 8, 13),
     )
   }
 
@@ -77,7 +77,7 @@ class JsonTest {
     simple shouldEqual Simple(
       int = 10,
       bool = true,
-      str = "test"
+      str = "test",
     )
   }
 
@@ -160,7 +160,7 @@ class JsonTest {
     // Expect:
     json.readValue<String>(JsonReader().parse("str")) shouldEqual "str"
     json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldEqual arrayListOf(
-      1, 2, 3, 4, 5, 6
+      1, 2, 3, 4, 5, 6,
     )
   }
 
@@ -182,15 +182,15 @@ class JsonTest {
           "str": "yes"
         }
       ]
-    }"""
+    }""",
     )
 
     // Then:
     container shouldEqual ListContainer(
       listOf(
         Simple(bool = true, int = 42),
-        Simple(str = "yes")
-      )
+        Simple(str = "yes"),
+      ),
     )
   }
 
@@ -200,7 +200,7 @@ class JsonTest {
   private data class Simple(
     var int: Int = 0,
     var bool: Boolean = false,
-    var str: String = ""
+    var str: String = "",
   )
 
   /**
@@ -209,14 +209,14 @@ class JsonTest {
   private data class Complex(
     var bool: Boolean = false,
     var simple: Simple = Simple(),
-    var list: List<Int> = emptyList()
+    var list: List<Int> = emptyList(),
   )
 
   /**
    * Serializable class with a list of [Simple] objects.
    */
   private data class ListContainer(
-    var list: List<Simple> = emptyList()
+    var list: List<Simple> = emptyList(),
   )
 
   /**
@@ -225,7 +225,7 @@ class JsonTest {
   private data class Custom(
     var float: Float = 0f,
     var simple: Simple = Simple(),
-    var list: List<Simple> = emptyList()
+    var list: List<Simple> = emptyList(),
   ) : Json.Serializable {
 
     override fun read(json: Json, jsonData: JsonValue) {

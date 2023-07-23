@@ -63,7 +63,7 @@ interface EntityRemovalListener : EntityListener {
 inline fun Engine.onEntityAdded(
   family: Family = anyFamily,
   priority: Int = 0,
-  crossinline onAdded: (entity: Entity) -> Unit
+  crossinline onAdded: (entity: Entity) -> Unit,
 ): EntityAdditionListener {
   val listener = object : EntityAdditionListener {
     override fun entityAdded(entity: Entity) {
@@ -91,7 +91,7 @@ inline fun Engine.onEntityAdded(
 inline fun Engine.onEntityRemoved(
   family: Family = anyFamily,
   priority: Int = 0,
-  crossinline onRemoved: (entity: Entity) -> Unit
+  crossinline onRemoved: (entity: Entity) -> Unit,
 ): EntityRemovalListener {
   val listener = object : EntityRemovalListener {
     override fun entityRemoved(entity: Entity) {
@@ -109,7 +109,7 @@ inline fun Engine.onEntityRemoved(
  */
 inline fun IteratingSystem.onEntityAdded(
   priority: Int = 0,
-  crossinline onAdded: (entity: Entity) -> Unit
+  crossinline onAdded: (entity: Entity) -> Unit,
 ): EntityAdditionListener = engine.onEntityAdded(family, priority, onAdded)
 
 /**
@@ -118,7 +118,7 @@ inline fun IteratingSystem.onEntityAdded(
  */
 inline fun IteratingSystem.onEntityRemoved(
   priority: Int = 0,
-  crossinline onRemoved: (entity: Entity) -> Unit
+  crossinline onRemoved: (entity: Entity) -> Unit,
 ): EntityRemovalListener = engine.onEntityRemoved(family, priority, onRemoved)
 
 /**
@@ -127,7 +127,7 @@ inline fun IteratingSystem.onEntityRemoved(
  */
 inline fun IntervalIteratingSystem.onEntityAdded(
   priority: Int = 0,
-  crossinline onAdded: (entity: Entity) -> Unit
+  crossinline onAdded: (entity: Entity) -> Unit,
 ): EntityAdditionListener = engine.onEntityAdded(family, priority, onAdded)
 
 /**
@@ -136,7 +136,7 @@ inline fun IntervalIteratingSystem.onEntityAdded(
  */
 inline fun IntervalIteratingSystem.onEntityRemoved(
   priority: Int = 0,
-  crossinline onRemoved: (entity: Entity) -> Unit
+  crossinline onRemoved: (entity: Entity) -> Unit,
 ): EntityRemovalListener = engine.onEntityRemoved(family, priority, onRemoved)
 
 /**
@@ -145,7 +145,7 @@ inline fun IntervalIteratingSystem.onEntityRemoved(
  */
 inline fun SortedIteratingSystem.onEntityAdded(
   priority: Int = 0,
-  crossinline onAdded: (entity: Entity) -> Unit
+  crossinline onAdded: (entity: Entity) -> Unit,
 ): EntityAdditionListener = engine.onEntityAdded(family, priority, onAdded)
 
 /**
@@ -154,5 +154,5 @@ inline fun SortedIteratingSystem.onEntityAdded(
  */
 inline fun SortedIteratingSystem.onEntityRemoved(
   priority: Int = 0,
-  crossinline onRemoved: (entity: Entity) -> Unit
+  crossinline onRemoved: (entity: Entity) -> Unit,
 ): EntityRemovalListener = engine.onEntityRemoved(family, priority, onRemoved)

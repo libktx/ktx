@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 
 class ShapeRendererTest {
   @Test
@@ -101,8 +101,11 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.rectLine(
-      positionA = Vector2(1f, 2f), positionB = Vector2(3f, 4f), width = 10f,
-      colorA = Color.BLACK, colorB = Color.WHITE
+      positionA = Vector2(1f, 2f),
+      positionB = Vector2(3f, 4f),
+      width = 10f,
+      colorA = Color.BLACK,
+      colorB = Color.WHITE,
     )
 
     verify(tested).rectLine(1f, 2f, 3f, 4f, 10f, Color.BLACK, Color.WHITE)
@@ -176,8 +179,12 @@ class ShapeRendererTest {
     val tested = mock<ShapeRenderer>()
 
     tested.triangle(
-      pointA = Vector2(1f, 2f), pointB = Vector2(3f, 4f), pointC = Vector2(5f, 6f),
-      colorA = Color.WHITE, colorB = Color.GRAY, colorC = Color.BLACK
+      pointA = Vector2(1f, 2f),
+      pointB = Vector2(3f, 4f),
+      pointC = Vector2(5f, 6f),
+      colorA = Color.WHITE,
+      colorB = Color.GRAY,
+      colorC = Color.BLACK,
     )
 
     verify(tested).triangle(1f, 2f, 3f, 4f, 5f, 6f, Color.WHITE, Color.GRAY, Color.BLACK)

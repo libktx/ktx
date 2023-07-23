@@ -12,15 +12,6 @@ import com.badlogic.gdx.utils.async.AsyncExecutor
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.async
@@ -34,6 +25,15 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 
 /**
  * Tests [HttpRequest] API utilities.
@@ -154,12 +154,13 @@ class HttpTest {
     method: String = "GET",
     content: ByteArray = ByteArray(0),
     status: Int = 200,
-    headers: Map<String, List<String>> = emptyMap()
+    headers: Map<String, List<String>> = emptyMap(),
   ) = HttpRequestResult(url, method, status, content, headers)
 }
 
 abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration) : AsyncTest() {
   private val port = FreePortFinder.findFreeLocalPort()
+
   @get:Rule
   val wireMock = WireMockRule(port)
 
@@ -172,8 +173,8 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
         aResponse()
           .withStatus(200)
           .withHeader("Content-Type", "text/plain")
-          .withBody("Test HTTP request.")
-      )
+          .withBody("Test HTTP request."),
+      ),
     )
 
     // When:
@@ -181,7 +182,7 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
       httpRequest(
         url = "http://localhost:$port/test",
         method = "GET",
-        headers = mapOf("Accept" to "text/plain")
+        headers = mapOf("Accept" to "text/plain"),
       )
     }
 
@@ -223,8 +224,8 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
           .withStatus(200)
           .withHeader("Content-Type", "text/plain")
           .withBody("Test HTTP request.")
-          .withFixedDelay(1000)
-      )
+          .withFixedDelay(1000),
+      ),
     )
 
     // When:
@@ -249,7 +250,7 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
 class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(
   LwjglApplicationConfiguration().apply {
     maxNetThreads = 1
-  }
+  },
 )
 
 /**
@@ -330,7 +331,7 @@ class KtxHttpResponseListenerTest {
 
     // Then:
     verify(coroutine, times(1)).resumeWith(Result.failure(exception))
-    verifyZeroInteractions(onCancel)
+    verifyNoInteractions(onCancel)
   }
 
   @Test

@@ -146,7 +146,7 @@ class AssetStorage(
   inline fun <reified T> getAssetDescriptor(
     path: String,
     parameters: AssetLoaderParameters<T>? = null,
-    fileHandle: FileHandle? = null
+    fileHandle: FileHandle? = null,
   ): AssetDescriptor<T> {
     val descriptor = AssetDescriptor(path.normalizePath(), T::class.java, parameters)
     descriptor.file = fileHandle ?: fileResolver.resolve(path)
@@ -476,7 +476,7 @@ class AssetStorage(
         reference = CompletableDeferred(asset),
         dependencies = emptyList(),
         referenceCount = 1,
-        loader = ManualLoader as Loader<T>
+        loader = ManualLoader as Loader<T>,
       )
       registerAssetPath(identifier)
       progress.registerAddedAsset()
@@ -712,7 +712,7 @@ class AssetStorage(
         descriptor = descriptor,
         dependencies = dependencies.map { obtainAsset(it) },
         loader = loader,
-        referenceCount = 0
+        referenceCount = 0,
       )
     }
 
@@ -743,7 +743,7 @@ class AssetStorage(
   }
 
   private suspend fun <T> loadAsset(
-    asset: Asset<T>
+    asset: Asset<T>,
   ): T {
     asset.dependencies.forEach { dependency ->
       withAssetLoadingErrorHandling(asset) {
@@ -783,7 +783,7 @@ class AssetStorage(
 
   private suspend fun <T> loadWithSynchronousLoader(
     synchronousLoader: SynchronousLoader<T>,
-    asset: Asset<T>
+    asset: Asset<T>,
   ) {
     // If any of the isCompleted checks returns true, asset is likely to be unloaded asynchronously.
     if (asset.reference.isCompleted) {
@@ -799,7 +799,7 @@ class AssetStorage(
 
   private suspend fun <T> loadWithAsynchronousLoader(
     asynchronousLoader: AsynchronousLoader<T>,
-    asset: Asset<T>
+    asset: Asset<T>,
   ) {
     // If any of the isCompleted checks returns true, asset is likely to be unloaded asynchronously.
     withContext(asyncContext) {
@@ -825,13 +825,15 @@ class AssetStorage(
       try {
         // Notifying the libGDX loading callback to support AssetManager behavior:
         asset.descriptor.params?.loadedCallback?.finishedLoading(
-          asAssetManager, asset.identifier.path, asset.identifier.type
+          asAssetManager,
+          asset.identifier.path,
+          asset.identifier.type,
         )
       } catch (exception: Throwable) {
         // We are unable to propagate the exception at this point, so we just log it:
         logger.error(
           "Exception occurred during execution of loaded callback of asset: ${asset.identifier}",
-          exception
+          exception,
         )
       }
     } else {
@@ -962,7 +964,10 @@ class AssetStorage(
         // Preparing an exception if such a dependency occurs:
         .map { MissingDependencyException(it.identifier) }
         // Setting parent asset as exceptionally loaded:
-        .forEach { exception -> setLoadedExceptionally(asset, exception); exceptions.add(exception) }
+        .forEach { exception ->
+          setLoadedExceptionally(asset, exception)
+          exceptions.add(exception)
+        }
     }
     // Throwing one of the exceptions if any occurs:
     exceptions.firstOrNull()?.let { throw it }
@@ -1240,7 +1245,8 @@ class AssetStorage(
     lock.withLock {
       // Creating a safe copy of all assets without unfinished internal completable deferred instances:
       val assetsCopy = assets.mapValues {
-        @Suppress("UNCHECKED_CAST") val asset: Asset<Any> = it.value as Asset<Any>
+        @Suppress("UNCHECKED_CAST")
+        val asset: Asset<Any> = it.value as Asset<Any>
         val reference: CompletableDeferred<Any> = if (asset.reference.isCompleted || asset.reference.isCancelled) {
           asset.reference
         } else {
@@ -1258,10 +1264,10 @@ class AssetStorage(
             asset.copy(
               dependencies = asset.dependencies.mapNotNull { dependency ->
                 assetsCopy[dependency.identifier]
-              }
+              },
             )
           }
-        }
+        },
       )
     }
   }
@@ -1334,7 +1340,7 @@ class AssetStorage(
   }
 
   override fun toString(): String = "AssetStorage(assets=${
-  assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
+    assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
   })"
 }
 
@@ -1354,7 +1360,7 @@ data class Asset<T>(
   val loader: Loader<T>,
   /** Control variable. Lists how many times the asset is referenced by other assets as dependency
    * or by direct manual load requests. */
-  @Volatile var referenceCount: Int = 0
+  @Volatile var referenceCount: Int = 0,
 )
 
 /**
@@ -1371,7 +1377,7 @@ data class Identifier<T>(
   /** File path to the asset compatible with the [AssetStorage.fileResolver]. Must be normalized. */
   val path: String,
   /** [Class] of the asset specified during loading. */
-  val type: Class<T>
+  val type: Class<T>,
 ) {
   /**
    * Converts this [Identifier] to an [AssetDescriptor] that describes the asset and its loading data.
@@ -1388,7 +1394,7 @@ data class Identifier<T>(
    */
   fun toAssetDescriptor(
     parameters: AssetLoaderParameters<T>? = null,
-    fileHandle: FileHandle? = null
+    fileHandle: FileHandle? = null,
   ): AssetDescriptor<T> =
     AssetDescriptor(path, type, parameters).apply {
       if (fileHandle != null) {
@@ -1415,7 +1421,7 @@ fun <T> AssetDescriptor<T>.toIdentifier(): Identifier<T> = Identifier(fileName, 
  * Stores a copy of state of an [AssetStorage]. For debugging purposes.
  */
 data class AssetStorageSnapshot(
-  val assets: Map<Identifier<*>, Asset<*>>
+  val assets: Map<Identifier<*>, Asset<*>>,
 ) {
   /**
    * Prints [AssetStorage] state for debugging. Lists registered assets with their dependencies
@@ -1424,21 +1430,21 @@ data class AssetStorageSnapshot(
   fun prettyPrint(): String {
     return """[
 ${
-    assets.values
-      .sortedBy { it.identifier.type.name }
-      .sortedBy { it.identifier.path }
-      .joinToString(separator = "\n") {
-        """  "${it.identifier.path}" (${it.identifier.type.name}) {
+      assets.values
+        .sortedBy { it.identifier.type.name }
+        .sortedBy { it.identifier.path }
+        .joinToString(separator = "\n") {
+          """  "${it.identifier.path}" (${it.identifier.type.name}) {
     references=${it.referenceCount},
     dependencies=${
-        it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
-          "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
-        }
-        },
+            it.dependencies.joinToString(separator = ", ", prefix = "[", postfix = "]") { dependency ->
+              "\"${dependency.identifier.path}\" (${dependency.identifier.type.name})"
+            }
+          },
     loaded=${it.reference.isCompleted || it.reference.isCancelled},
     loader=${it.loader.javaClass.name},
   },"""
-      }
+        }
     }
 ]"""
   }

@@ -3,11 +3,11 @@ package ktx.graphics
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
 import com.badlogic.gdx.utils.Array as GdxArray
 
 class TextUtilitiesTest {
@@ -27,6 +27,7 @@ class TextUtilitiesTest {
     assertEquals(38.5f, position.x, 0.1f)
     assertEquals(105.5f, position.y, 0.1f)
   }
+
   @Test
   fun `should center text on a rectangle at given position`() {
     val font = FakeFont()
@@ -49,7 +50,7 @@ class TextUtilitiesTest {
   class FakeFont : BitmapFont(
     BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"), true),
     GdxArray.with(mock()),
-    true
+    true,
   ) {
     override fun load(data: BitmapFontData?) {
       // Do nothing.

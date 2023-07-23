@@ -38,7 +38,7 @@ suspend fun httpRequest(
   contentStream: Pair<InputStream, Long>? = null,
   followRedirects: Boolean = true,
   includeCredentials: Boolean = false,
-  onCancel: ((HttpRequest) -> Unit)? = null
+  onCancel: ((HttpRequest) -> Unit)? = null,
 ): HttpRequestResult = coroutineScope {
   suspendCancellableCoroutine<HttpRequestResult> { continuation ->
     val httpRequest = HttpRequest(method).apply {
@@ -74,10 +74,11 @@ class HttpRequestResult(
   val method: String,
   val statusCode: Int,
   val content: ByteArray,
-  val headers: Map<String, List<String>>
+  val headers: Map<String, List<String>>,
 ) {
   /** Returns cached representation of the response stored as a string with default encoding.*/
   val contentAsString by lazy { getContentAsString() }
+
   /** Returns a new instance of [ByteArrayInputStream] with raw response bytes each time the getter is invoked. */
   val contentAsStream get() = ByteArrayInputStream(content)
 
@@ -131,7 +132,7 @@ fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResu
   method = requestData.method,
   statusCode = this.status?.statusCode ?: -1, // -1 matches libGDX default behaviour on unknown status.
   content = this.result ?: ByteArray(0),
-  headers = this.headers ?: emptyMap()
+  headers = this.headers ?: emptyMap(),
 )
 
 /**
@@ -143,7 +144,7 @@ fun HttpResponse.toHttpRequestResult(requestData: HttpRequest) = HttpRequestResu
 internal class KtxHttpResponseListener(
   val httpRequest: HttpRequest,
   val continuation: CancellableContinuation<HttpRequestResult>,
-  val onCancel: ((HttpRequest) -> Unit)?
+  val onCancel: ((HttpRequest) -> Unit)?,
 ) : HttpResponseListener {
   @Volatile
   var completed = false

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
  * Min value of alpha in libGDX Color instances.
  */
 const val MIN_ALPHA = 0f
+
 /**
  * Max value of alpha in libGDX Color instances.
  */

@@ -73,7 +73,7 @@ class KVisCheckBox(text: String, styleName: String) : VisCheckBox(text, styleNam
 @Scene2dDsl
 class KVisRadioButton(
   text: String,
-  styleName: String
+  styleName: String,
 ) : VisRadioButton(text, VisUI.getSkin()[styleName, VisCheckBoxStyle::class.java]), KTable
 
 /** Extends [VisTextButton] with type-safe widget builders. */
@@ -158,7 +158,7 @@ inline fun KTabbedPane.tab(
   title: String,
   savable: Boolean = false,
   closeableByUser: Boolean = true,
-  init: KTab.() -> Unit = {}
+  init: KTab.() -> Unit = {},
 ): Tab {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tab = KTab(title, savable, closeableByUser)
@@ -213,7 +213,7 @@ private inline fun TabbedPane.addPaneContentListener(crossinline contentChanged:
 class KTab(
   private val title: String,
   savable: Boolean,
-  closeableByUser: Boolean
+  closeableByUser: Boolean,
 ) : Tab(savable, closeableByUser), KTable {
   private val content = VisTable()
   override fun <T : Actor> add(actor: T): Cell<T> = content.add(actor)
@@ -269,7 +269,7 @@ class KVisSelectBox<T>(style: String) : VisSelectBox<T>(style) {
 @Scene2dDsl
 class KVisSplitPane(
   vertical: Boolean,
-  style: String
+  style: String,
 ) : VisSplitPane(null, null, vertical, style), KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
@@ -308,7 +308,7 @@ class KCollapsible(val table: KVisTable) : CollapsibleWidget(table), KTable {
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
-    replaceWith = ReplaceWith("Nothing")
+    replaceWith = ReplaceWith("Nothing"),
   )
   override fun setTable(table: Table?) {
     throw GdxRuntimeException("Use default table instead.")
@@ -322,7 +322,7 @@ class KHorizontalCollapsible(val table: KVisTable) : HorizontalCollapsibleWidget
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
-    replaceWith = ReplaceWith("Nothing")
+    replaceWith = ReplaceWith("Nothing"),
   )
   override fun setTable(table: Table?) {
     throw GdxRuntimeException("Use default table instead.")

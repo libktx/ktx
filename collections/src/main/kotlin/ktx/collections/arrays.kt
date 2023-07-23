@@ -440,7 +440,7 @@ inline fun <Type, R> GdxArray<Type>.flatMap(transform: (Type) -> Iterable<R>): G
  */
 fun <Type : Any> GdxArray<Type>.toGdxSet(
   initialCapacity: Int = this.size,
-  loadFactor: Float = defaultLoadFactor
+  loadFactor: Float = defaultLoadFactor,
 ): GdxSet<Type> {
   val set = GdxSet<Type>(initialCapacity, loadFactor)
   set.addAll(this)
@@ -455,7 +455,7 @@ fun <Type : Any> GdxArray<Type>.toGdxSet(
  */
 inline fun <reified Type : Any> Iterable<Type>.toGdxArray(
   ordered: Boolean = true,
-  initialCapacity: Int = defaultArraySize
+  initialCapacity: Int = defaultArraySize,
 ): GdxArray<Type> {
   val array = GdxArray<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
@@ -470,7 +470,7 @@ inline fun <reified Type : Any> Iterable<Type>.toGdxArray(
  */
 inline fun <reified Type : Any> Array<Type>.toGdxArray(
   ordered: Boolean = true,
-  initialCapacity: Int = this.size
+  initialCapacity: Int = this.size,
 ): GdxArray<Type> {
   val array = GdxArray<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this, 0, this.size)

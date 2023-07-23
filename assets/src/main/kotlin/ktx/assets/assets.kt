@@ -113,7 +113,7 @@ class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor
  */
 inline fun <reified Type : Any> AssetManager.load(
   path: String,
-  parameters: AssetLoaderParameters<Type>? = null
+  parameters: AssetLoaderParameters<Type>? = null,
 ): Asset<Type> {
   val assetDescriptor = AssetDescriptor(path, Type::class.java, parameters)
   this.load(assetDescriptor)
@@ -137,7 +137,7 @@ fun <Type> AssetManager.loadAsset(assetDescriptor: AssetDescriptor<Type>): Asset
  */
 inline fun <reified Type : Any> AssetManager.loadOnDemand(
   path: String,
-  parameters: AssetLoaderParameters<Type>? = null
+  parameters: AssetLoaderParameters<Type>? = null,
 ): Asset<Type> = DelayedAsset(this, AssetDescriptor(path, Type::class.java, parameters))
 
 /**
@@ -154,8 +154,7 @@ fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): As
  * @param parameters optional loading parameters that might affect how the asset is loaded.
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
-inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetLoaderParameters<Type>? = null):
-  AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
+inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetLoaderParameters<Type>? = null): AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
 
 /**
  * Allows to quickly prepare a typed [AssetDescriptor] instance with more Kotlin-friendly syntax.
@@ -163,8 +162,7 @@ inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetL
  * @param parameters optional loading parameters that might affect how the asset is loaded.
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
-inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: AssetLoaderParameters<Type>? = null):
-  AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
+inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: AssetLoaderParameters<Type>? = null): AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
 
 /**
  * @param path path of the asset. Note that the asset must have been already scheduled for loading and fully loaded for
@@ -221,7 +219,7 @@ inline fun <reified Type : Any> AssetManager.getLoader(suffix: String? = null): 
  */
 inline fun <reified Type : Any, Parameters : AssetLoaderParameters<Type>> AssetManager.setLoader(
   assetLoader: AssetLoader<Type, Parameters>,
-  suffix: String? = null
+  suffix: String? = null,
 ) {
   setLoader(Type::class.java, suffix, assetLoader)
 }

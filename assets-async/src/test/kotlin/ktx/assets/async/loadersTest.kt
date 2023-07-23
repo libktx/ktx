@@ -6,15 +6,15 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader
 import com.badlogic.gdx.files.FileHandle
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import java.io.File
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -260,7 +260,9 @@ class ManualLoaderTest {
   fun `should return empty dependencies array with loading parameters`() {
     // When:
     val dependencies = ManualLoader.getDependencies(
-      "file.path", mock(), ManualLoadingParameters()
+      "file.path",
+      mock(),
+      ManualLoadingParameters(),
     )
 
     // Then:

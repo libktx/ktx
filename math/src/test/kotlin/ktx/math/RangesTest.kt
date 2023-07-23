@@ -175,7 +175,7 @@ class RangesTest {
     val resultsToExpected = listOf(
       withinRange.toFloat() / count to 0.9973f,
       withinFourSigma.toFloat() / count to 0.9545f,
-      withinTwoSigma.toFloat() / count to 0.6827f
+      withinTwoSigma.toFloat() / count to 0.6827f,
     )
     for ((result, expected) in resultsToExpected) {
       assertTrue(abs(result - expected) / expected <= allowableError)

@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:class-naming")
+
 package ktx.app
 
 @Suppress("unused")

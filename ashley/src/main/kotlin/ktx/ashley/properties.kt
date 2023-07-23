@@ -47,7 +47,7 @@ inline fun <reified T : Component> propertyFor(mapper: ComponentMapper<T> = mapp
  */
 class OptionalComponentDelegate<T : Component>(
   private val mapper: ComponentMapper<T>,
-  private val componentClass: Class<T>
+  private val componentClass: Class<T>,
 ) {
   operator fun getValue(thisRef: Entity, property: KProperty<*>): T? =
     if (mapper.has(thisRef)) mapper[thisRef] else null
@@ -73,7 +73,7 @@ class OptionalComponentDelegate<T : Component>(
  * @see OptionalComponentDelegate
  **/
 inline fun <reified T : Component> optionalPropertyFor(
-  mapper: ComponentMapper<T> = mapperFor()
+  mapper: ComponentMapper<T> = mapperFor(),
 ): OptionalComponentDelegate<T> =
   OptionalComponentDelegate(mapper, T::class.java)
 
@@ -96,7 +96,7 @@ interface TagDelegate<T : Component> {
 class ProviderTagDelegate<T : Component>(
   private val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
-  private val defaultValueProvider: () -> T
+  private val defaultValueProvider: () -> T,
 ) : TagDelegate<T> {
   override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
     mapper.has(thisRef)
@@ -119,7 +119,7 @@ class ProviderTagDelegate<T : Component>(
 class SingletonTagDelegate<T : Component>(
   private val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
-  private val defaultValue: T
+  private val defaultValue: T,
 ) : TagDelegate<T> {
   override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
     mapper.has(thisRef)
@@ -184,7 +184,7 @@ inline fun <reified T : Component> tagFor(singleton: Boolean = true): TagDelegat
         "ktx-ashley",
         "$componentClass does not have a no-argument constructor. " +
           "tagFor can only be used in read-only mode. Singleton tag delegate cannot be constructed.",
-        exception
+        exception,
       )
     }
   }

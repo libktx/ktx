@@ -4,8 +4,6 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Application.ApplicationType
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -13,6 +11,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 /**
  * Tests [Platform] utilities.

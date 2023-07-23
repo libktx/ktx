@@ -160,7 +160,7 @@ fun ShapeRenderer.triangle(
   pointC: Vector2,
   colorA: Color,
   colorB: Color,
-  colorC: Color
+  colorC: Color,
 ) {
   triangle(pointA.x, pointA.y, pointB.x, pointB.y, pointC.x, pointC.y, colorA, colorB, colorC)
 }

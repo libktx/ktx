@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array as GdxArray
  */
 @Suppress("DEPRECATION")
 internal class AssetManagerWrapper(
-  val assetStorage: AssetStorage
+  val assetStorage: AssetStorage,
 ) : AssetManager(assetStorage.fileResolver, false) {
   private var initiated = false
 
@@ -35,13 +35,13 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "This operation is non-blocking. Assets might still be loaded after this call.",
-    replaceWith = ReplaceWith("AssetStorage.dispose")
+    replaceWith = ReplaceWith("AssetStorage.dispose"),
   )
   override fun clear() = dispose()
 
   @Deprecated(
     "This operation is non-blocking. Assets might still be loaded after this call.",
-    replaceWith = ReplaceWith("AssetStorage.dispose")
+    replaceWith = ReplaceWith("AssetStorage.dispose"),
   )
   override fun dispose() {
     if (initiated) {
@@ -56,7 +56,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "AssetStorage requires asset class to check if it is loaded.",
-    replaceWith = ReplaceWith("contains(fileName, type)")
+    replaceWith = ReplaceWith("contains(fileName, type)"),
   )
   override fun contains(fileName: String): Boolean = try {
     getIdentifier(fileName) != null
@@ -70,7 +70,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "This operation is non-blocking. Assets might not be available in storage after call.",
-    replaceWith = ReplaceWith("AssetStorage.add")
+    replaceWith = ReplaceWith("AssetStorage.add"),
   )
   override fun <T : Any> addAsset(fileName: String, type: Class<T>, asset: T) {
     logIncompleteSupportWarning("addAsset")
@@ -102,7 +102,9 @@ internal class AssetManagerWrapper(
     return try {
       assetStorage[identifier]
     } catch (exception: Throwable) {
-      if (required) throw MissingDependencyException(identifier, exception) else {
+      if (required) {
+        throw MissingDependencyException(identifier, exception)
+      } else {
         logWarning("Missing asset requested: $fileName", exception)
         null
       }
@@ -116,8 +118,11 @@ internal class AssetManagerWrapper(
     val identifier = getIdentifier(fileName) as Identifier<Asset>?
     val asset = identifier?.let { try { assetStorage[it] } catch (exception: Throwable) { null } }
     if (asset == null) {
-      if (required) throw MissingDependencyException("Required asset not found: $fileName")
-      else logWarning("Missing asset requested: $fileName")
+      if (required) {
+        throw MissingDependencyException("Required asset not found: $fileName")
+      } else {
+        logWarning("Missing asset requested: $fileName")
+      }
     }
     return asset
   }
@@ -130,7 +135,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "Multiple assets with different types can be listed under the same path.",
-    replaceWith = ReplaceWith("Nothing")
+    replaceWith = ReplaceWith("Nothing"),
   )
   override fun getAssetType(fileName: String): Class<*>? {
     logCollisionWarning("getAssetType", fileName)
@@ -164,7 +169,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "AssetStorage requires asset type to check if it is loaded.",
-    replaceWith = ReplaceWith("isLoaded(fileName, type)")
+    replaceWith = ReplaceWith("isLoaded(fileName, type)"),
   )
   override fun isLoaded(fileName: String): Boolean {
     logCollisionWarning("isLoaded(String)", fileName)
@@ -174,7 +179,7 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "AssetStorage requires type of asset to unload.",
-    replaceWith = ReplaceWith("AssetStorage.unload")
+    replaceWith = ReplaceWith("AssetStorage.unload"),
   )
   override fun unload(fileName: String) {
     logCollisionWarning("unload", fileName)
@@ -197,7 +202,7 @@ internal class AssetManagerWrapper(
   @Deprecated(
     "AssetLoader instances can be mutable." +
       "AssetStorage requires functional providers of loaders rather than singular instances.",
-    replaceWith = ReplaceWith("AssetStorage.setLoader")
+    replaceWith = ReplaceWith("AssetStorage.setLoader"),
   )
   override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(type: Class<T>, loader: AssetLoader<T, P>) =
     setLoader(type, null, loader)
@@ -205,12 +210,12 @@ internal class AssetManagerWrapper(
   @Deprecated(
     "AssetLoader instances can be mutable." +
       "AssetStorage requires functional providers of loaders rather than singular instances.",
-    replaceWith = ReplaceWith("AssetStorage.setLoader")
+    replaceWith = ReplaceWith("AssetStorage.setLoader"),
   )
   override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(
     type: Class<T>,
     suffix: String?,
-    loader: AssetLoader<T, P>
+    loader: AssetLoader<T, P>,
   ) {
     logIncompleteSupportWarning("setLoader")
     assetStorage.setLoader(type, suffix) {
@@ -221,18 +226,21 @@ internal class AssetManagerWrapper(
 
   @Deprecated(
     "AssetStorage requires type to find exact dependencies.",
-    replaceWith = ReplaceWith("AssetStorage.getDependencies")
+    replaceWith = ReplaceWith("AssetStorage.getDependencies"),
   )
   override fun getDependencies(fileName: String): GdxArray<String> {
     logCollisionWarning("getDependencies", fileName)
     val identifier = getIdentifier(fileName)
-    return if (identifier != null)
+    return if (identifier != null) {
       GdxArray(assetStorage.getDependencies(identifier).map { it.path }.toTypedArray())
-    else GdxArray.with()
+    } else {
+      GdxArray.with()
+    }
   }
+
   @Deprecated(
     "AssetStorage requires type to find reference count.",
-    replaceWith = ReplaceWith("AssetStorage.getReferenceCount")
+    replaceWith = ReplaceWith("AssetStorage.getReferenceCount"),
   )
   override fun getReferenceCount(fileName: String): Int {
     logCollisionWarning("getReferenceCount", fileName)
@@ -283,8 +291,11 @@ internal class AssetManagerWrapper(
 
   private fun logWarning(warning: String, cause: Throwable? = null) {
     if (!assetStorage.silenceAssetManagerWarnings) {
-      if (cause != null) logger.error(warning, cause)
-      else logger.error(warning)
+      if (cause != null) {
+        logger.error(warning, cause)
+      } else {
+        logger.error(warning)
+      }
     }
   }
 
@@ -300,7 +311,7 @@ internal class AssetManagerWrapper(
     logWarning(
       "AssetManagerWrapper.$method method called by an asset loader might throw an exception " +
         "if multiple assets from the same path are loaded with different types. " +
-        "Warning issued for asset loaded from path: $path"
+        "Warning issued for asset loaded from path: $path",
     )
   }
 

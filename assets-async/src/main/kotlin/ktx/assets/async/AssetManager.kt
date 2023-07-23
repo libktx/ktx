@@ -1,6 +1,7 @@
 @file:Suppress("PackageDirectoryMismatch")
 
-// This extension method has to appear in the libGDX package in order to access package-private fields.
+// This extension methods have to appear in the libGDX package in order to access package-private fields.
+
 package com.badlogic.gdx.assets
 
 /** Attempts to cancel loading of asset identified by [fileName]. For internal use. */

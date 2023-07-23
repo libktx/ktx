@@ -4,12 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.GdxRuntimeException
 import com.badlogic.gdx.utils.reflect.ReflectionException
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
 import ktx.reflect.Reflection
 import org.junit.After
@@ -21,6 +15,12 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import java.util.Random
 
 /**
@@ -389,6 +389,7 @@ class ReflectionInjectionTest {
   class Dependant(val dependency: Dependency)
 
   class InvalidClass private constructor()
+
   @Suppress("unused", "UNUSED_PARAMETER")
   class MultipleConstructors() {
     constructor(a: String) : this()

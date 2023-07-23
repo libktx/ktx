@@ -3,13 +3,13 @@ package ktx.assets
 import com.badlogic.gdx.assets.loaders.AssetLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.GdxRuntimeException
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import io.kotlintest.matchers.shouldThrow
 import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
 import org.junit.Assert
 import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 /**
  * Tests [TextAssetLoader]: [AssetLoader] implementation for asynchronous reading of text files.

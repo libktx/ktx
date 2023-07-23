@@ -38,12 +38,12 @@ abstract class Mapper<T : Component> {
     val enclosingClass = javaClass.enclosingClass
       ?: throw GdxRuntimeException(
         "Classes extending ktx.ashley.Mapper must be nested objects inside component classes. ${javaClass.name} " +
-          "is a top-level class defined outside of the corresponding com.badlogic.ashley.core.Component."
+          "is a top-level class defined outside of the corresponding com.badlogic.ashley.core.Component.",
       )
     if (!ClassReflection.isAssignableFrom(Component::class.java, enclosingClass)) {
       throw GdxRuntimeException(
         "Classes extending ktx.ashley.Mapper must be nested objects inside component classes. ${javaClass.name} " +
-          "is defined in ${enclosingClass.name}, which does not implement com.badlogic.ashley.core.Component."
+          "is defined in ${enclosingClass.name}, which does not implement com.badlogic.ashley.core.Component.",
       )
     }
     @Suppress("UNCHECKED_CAST")

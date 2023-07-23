@@ -22,7 +22,7 @@ inline fun validator(
   targetToDisable: Disableable? = null,
   messageLabel: Label? = null,
   style: String = defaultStyle,
-  init: FormValidator.() -> Unit
+  init: FormValidator.() -> Unit,
 ): FormValidator {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return FormValidator(targetToDisable, messageLabel, style).apply(init)

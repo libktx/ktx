@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.Logger
-import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.runBlocking
 import ktx.assets.TextAssetLoader
@@ -40,6 +39,7 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
+import org.mockito.kotlin.mock
 import java.util.IdentityHashMap
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect as ParticleEffect3D
 
@@ -68,12 +68,12 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   protected abstract fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T
 
   private inline fun <reified T> AssetStorage.testLoad(
     path: String,
-    parameters: AssetLoaderParameters<T>? = null
+    parameters: AssetLoaderParameters<T>? = null,
   ): T = testLoad(path, T::class.java, parameters)
 
   // --- Asset support tests:
@@ -92,7 +92,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<String>(path))
     assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<String>(path))
   }
 
   @Test
@@ -109,7 +109,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<String>(path))
     assertSame(asset, storage.get<String>(path))
     assertEquals(1, storage.getReferenceCount<String>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<String>(path))
   }
 
   @Test
@@ -181,7 +181,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Music>(path))
     assertSame(asset, storage.get<Music>(path))
     assertEquals(1, storage.getReferenceCount<Music>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Music>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Music>(path))
 
     storage.dispose()
   }
@@ -214,7 +214,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Sound>(path))
     assertSame(asset, storage.get<Sound>(path))
     assertEquals(1, storage.getReferenceCount<Sound>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Sound>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Sound>(path))
 
     storage.dispose()
   }
@@ -288,7 +288,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Texture>(path))
     assertSame(asset, storage.get<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Texture>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Texture>(path))
 
     storage.dispose()
   }
@@ -321,7 +321,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Pixmap>(path))
     assertSame(asset, storage.get<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Pixmap>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Pixmap>(path))
 
     storage.dispose()
   }
@@ -406,7 +406,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertEquals("Value.", asset["key"])
     assertSame(asset, storage.get<I18NBundle>(path))
     assertEquals(1, storage.getReferenceCount<I18NBundle>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<I18NBundle>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<I18NBundle>(path))
 
     storage.dispose()
   }
@@ -439,7 +439,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<ParticleEffect>(path))
     assertSame(asset, storage.get<ParticleEffect>(path))
     assertEquals(1, storage.getReferenceCount<ParticleEffect>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ParticleEffect>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<ParticleEffect>(path))
 
     storage.dispose()
   }
@@ -554,7 +554,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Model>(path))
     assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Model>(path))
 
     storage.dispose()
   }
@@ -587,7 +587,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Model>(path))
     assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Model>(path))
 
     storage.dispose()
   }
@@ -620,7 +620,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Model>(path))
     assertSame(asset, storage.get<Model>(path))
     assertEquals(1, storage.getReferenceCount<Model>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Model>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Model>(path))
 
     storage.dispose()
   }
@@ -655,7 +655,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<ShaderProgram>(path))
     assertSame(asset, storage.get<ShaderProgram>(path))
     assertEquals(1, storage.getReferenceCount<ShaderProgram>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<ShaderProgram>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<ShaderProgram>(path))
 
     storage.dispose()
   }
@@ -690,7 +690,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Cubemap>(path))
     assertSame(asset, storage.get<Cubemap>(path))
     assertEquals(1, storage.getReferenceCount<Cubemap>(path))
-    assertEquals(emptyList<String>(), storage.getDependencies<Cubemap>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<Cubemap>(path))
 
     storage.dispose()
   }
@@ -730,7 +730,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
       storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
       storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
       storage.getIdentifier<ShaderProgram>("ktx/assets/async/shader.frag"),
-      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx")
+      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx"),
     )
     assets.forEach {
       storage.testLoad(it.path, it.type, parameters = null)
@@ -745,7 +745,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
       assertFalse(it in storage)
       assertFalse(storage.isLoaded(it))
       assertEquals(0, storage.getReferenceCount(it))
-      assertEquals(emptyList<String>(), storage.getDependencies(it))
+      assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(it))
       shouldThrow<MissingAssetException> {
         storage[it]
       }
@@ -789,7 +789,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertEquals("Content.", storage.get<String>(path))
     assertEquals("Content.", storage.getOrNull<String>(path))
     assertEquals("Content.", runBlocking { storage.getAsync<String>(path).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies<String>(path))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<String>(path))
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -808,7 +808,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertEquals("Content.", storage[identifier])
     assertEquals("Content.", storage.getOrNull(identifier))
     assertEquals("Content.", runBlocking { storage.getAsync(identifier).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies(identifier))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(identifier))
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -827,7 +827,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertEquals("Content.", storage[descriptor])
     assertEquals("Content.", storage.getOrNull(descriptor))
     assertEquals("Content.", runBlocking { storage.getAsync(descriptor).await() })
-    assertEquals(emptyList<String>(), storage.getDependencies(descriptor))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(descriptor))
     checkProgress(storage, loaded = 1, warn = true)
   }
 
@@ -896,7 +896,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     assertTrue(storage.isLoaded<Pixmap>(path))
     assertEquals(1, storage.getReferenceCount<Texture>(path))
     assertEquals(1, storage.getReferenceCount<Pixmap>(path))
-    assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path))
+    assertNotSame(storage.get<Texture>(path), storage.get<Pixmap>(path) as Any)
     checkProgress(storage, loaded = 2, warn = true)
 
     storage.dispose()
@@ -943,7 +943,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     val path = "ktx/assets/async/skin.json"
     val dependencies = arrayOf(
       storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png")
+      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
     )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
@@ -966,7 +966,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should handle loading exceptions`() {
     // Given:
     val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -998,7 +998,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val loader = AssetStorageTest.FakeAsyncLoader(
       onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {}
+      onSync = {},
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1030,7 +1030,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val loader = AssetStorageTest.FakeAsyncLoader(
       onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") }
+      onSync = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
@@ -1061,7 +1061,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   fun `should not fail to unload asset that was loaded exceptionally`() {
     // Given:
     val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") }
+      onLoad = { throw IllegalStateException("Expected.") },
     )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake path"
@@ -1100,7 +1100,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     loaded: Int = 0,
     failed: Int = 0,
     total: Int = loaded + failed,
-    warn: Boolean = false
+    warn: Boolean = false,
   ) {
     if (warn) {
       val progress = storage.progress
@@ -1113,7 +1113,7 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
           loaded | ${"%8d".format(loaded)} | ${progress.loaded}
           failed | ${"%8d".format(failed)} | ${progress.failed}
           If this warning is repeated consistently, there might be a related bug in progress reporting.
-          """.trimIndent()
+          """.trimIndent(),
         )
       }
     } else {
@@ -1166,7 +1166,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadAsync : AbstractAssetStorage
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     loadAsync(AssetDescriptor(path, type, parameters)).await()
   }
@@ -1179,7 +1179,7 @@ class AssetStorageLoadingTestWithIdentifierLoadAsync : AbstractAssetStorageLoadi
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     loadAsync(Identifier(path, type), parameters).await()
   }
@@ -1192,7 +1192,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoad : AbstractAssetStorageLoadi
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     load(AssetDescriptor(path, type, parameters))
   }
@@ -1205,7 +1205,7 @@ class AssetStorageLoadingTestWithIdentifierLoad : AbstractAssetStorageLoadingTes
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = runBlocking {
     load(Identifier(path, type), parameters)
   }
@@ -1218,7 +1218,7 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadSync : AbstractAssetStorageL
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = loadSync(AssetDescriptor(path, type, parameters))
 }
 
@@ -1229,6 +1229,6 @@ class AssetStorageLoadingTestWithIdentifierLoadSync : AbstractAssetStorageLoadin
   override fun <T> AssetStorage.testLoad(
     path: String,
     type: Class<T>,
-    parameters: AssetLoaderParameters<T>?
+    parameters: AssetLoaderParameters<T>?,
   ): T = loadSync(Identifier(path, type), parameters)
 }

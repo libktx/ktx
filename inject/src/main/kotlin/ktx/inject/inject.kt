@@ -195,7 +195,7 @@ open class Context : Disposable {
    */
   fun <Type : Any> bindSingleton(
     vararg to: KClass<out Type>,
-    singleton: Type
+    singleton: Type,
   ) = bind(*to, provider = SingletonProvider(singleton))
 
   /**
@@ -207,7 +207,7 @@ open class Context : Disposable {
    */
   inline fun <Type : Any> bindSingleton(
     vararg to: KClass<out Type>,
-    provider: () -> Type
+    provider: () -> Type,
   ) = bind(*to, provider = SingletonProvider(provider()))
 
   /**

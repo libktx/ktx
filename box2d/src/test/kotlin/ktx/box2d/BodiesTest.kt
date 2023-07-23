@@ -11,15 +11,15 @@ import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.physics.box2d.Shape
 import com.badlogic.gdx.physics.box2d.World
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 
 // TODO Kotlin Contracts in 1.3 do not support vararg methods such as polygon, chain or loop.
 // Once that compiler bug is fixed, their tests with init blocks should be extended to test the contracts.
@@ -120,7 +120,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     )
 
     assertTrue(fixtureDef.shape is PolygonShape)
@@ -130,9 +130,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -147,7 +147,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     ) {
       density = 0.5f
       variable = 42
@@ -160,9 +160,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertEquals(0.5f, fixtureDef.density)
@@ -335,9 +335,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
@@ -360,9 +360,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
     assertTrue(fixtureDef.disposeOfShape)
@@ -385,9 +385,9 @@ class BodiesTest : Box2DTest() {
         Vector2(1f, 1f),
         Vector2(2f, 2f),
         Vector2(1f, 2f),
-        Vector2(1f, 1f)
+        Vector2(1f, 1f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixtureDef.density)
     assertTrue(fixtureDef in bodyDefinition.fixtureDefinitions)
@@ -560,7 +560,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     )
 
     assertTrue(fixture.shape is PolygonShape)
@@ -570,9 +570,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertSame(body, fixture.body)
     assertTrue(fixture in body.fixtureList)
@@ -587,7 +587,7 @@ class BodiesTest : Box2DTest() {
       width = 2f,
       height = 2f,
       position = Vector2(1f, 1f),
-      angle = 90f * MathUtils.degreesToRadians
+      angle = 90f * MathUtils.degreesToRadians,
     ) {
       density = 0.5f
       variable = 42
@@ -600,9 +600,9 @@ class BodiesTest : Box2DTest() {
         Vector2(2f, 0f),
         Vector2(2f, 2f),
         Vector2(0f, 2f),
-        Vector2(0f, 0f)
+        Vector2(0f, 0f),
       ),
-      shape
+      shape,
     )
     assertEquals(0.5f, fixture.density)
     assertSame(body, fixture.body)

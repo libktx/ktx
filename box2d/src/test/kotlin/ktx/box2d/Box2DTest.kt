@@ -18,7 +18,8 @@ abstract class Box2DTest {
   protected fun assertChainEquals(vertices: Array<Vector2>, shape: ChainShape) {
     assertEquals(
       "${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
-      vertices.size, shape.vertexCount
+      vertices.size,
+      shape.vertexCount,
     )
     val vertex = Vector2()
     vertices.forEachIndexed { index, expected ->
@@ -32,7 +33,8 @@ abstract class Box2DTest {
   protected fun assertPolygonEquals(vertices: Array<Vector2>, shape: PolygonShape) {
     assertEquals(
       "${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
-      vertices.size, shape.vertexCount
+      vertices.size,
+      shape.vertexCount,
     )
     val vertex = Vector2()
     vertices.forEachIndexed { index, expected ->

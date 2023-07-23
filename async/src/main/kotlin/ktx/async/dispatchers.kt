@@ -72,7 +72,7 @@ class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
  */
 class AsyncExecutorDispatcher(
   val executor: AsyncExecutor,
-  val threads: Int = -1
+  val threads: Int = -1,
 ) : AbstractKtxDispatcher(), Closeable, Disposable {
   override fun execute(block: Runnable) {
     executor.submit(block::run)

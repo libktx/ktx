@@ -29,7 +29,7 @@ inline fun Actor.textTooltip(
   style: String = defaultStyle,
   skin: Skin = Scene2DSkin.defaultSkin,
   tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {}
+  init: (@Scene2dDsl Label).(TextTooltip) -> Unit = {},
 ): TextTooltip {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val tooltip = TextTooltip(text, tooltipManager, skin, style)
@@ -55,7 +55,7 @@ inline fun Actor.tooltip(
   background: String? = null,
   skin: Skin = Scene2DSkin.defaultSkin,
   tooltipManager: TooltipManager = TooltipManager.getInstance(),
-  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {}
+  init: KTableWidget.(Tooltip<KTableWidget>) -> Unit = {},
 ): Tooltip<KTableWidget> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val table = KTableWidget(skin)

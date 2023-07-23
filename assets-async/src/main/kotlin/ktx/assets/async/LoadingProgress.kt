@@ -31,12 +31,15 @@ class LoadingProgress {
   /** Total number of scheduled assets. */
   val total: Int
     get() = totalCounter.get()
+
   /** Total number of successfully loaded assets. */
   val loaded: Int
     get() = loadedCounter.get()
+
   /** Total number of assets that failed to load. */
   val failed: Int
     get() = failedCounter.get()
+
   /** Current asset loading percent. Does not take [failed] assets into account. */
   val percent: Float
     get() {
@@ -57,6 +60,7 @@ class LoadingProgress {
    */
   val isFinished: Boolean
     get() = total > 0 && (loadedCounter.get() + failedCounter.get()) == totalCounter.get()
+
   /** True if there are any [failed] assets. */
   val isFailed: Boolean
     get() = failedCounter.get() > 0

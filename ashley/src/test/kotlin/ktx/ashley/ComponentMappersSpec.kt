@@ -13,6 +13,7 @@ import org.jetbrains.spek.api.dsl.it
 class CustomComponent : Component {
   companion object : Mapper<CustomComponent>()
 }
+
 /** For [Mapper] testing. Must not be enclosed by another class for test purposes. */
 class TopLevelMapper : Mapper<CustomComponent>()
 

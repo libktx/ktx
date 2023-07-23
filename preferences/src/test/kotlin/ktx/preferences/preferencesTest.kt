@@ -156,7 +156,7 @@ class PreferencesTest {
     assertEquals(true, preferences.getBoolean("Key6"))
     assertEquals(
       JsonSerializable("test"),
-      Json().fromJson(JsonSerializable::class.java, preferences.getString("Key7"))
+      Json().fromJson(JsonSerializable::class.java, preferences.getString("Key7")),
     )
   }
 
@@ -172,7 +172,7 @@ class PreferencesTest {
     assertTrue("Key" in preferences)
     assertEquals(
       JsonSerializable("test"),
-      Json().fromJson(JsonSerializable::class.java, preferences.getString("Key"))
+      Json().fromJson(JsonSerializable::class.java, preferences.getString("Key")),
     )
   }
 

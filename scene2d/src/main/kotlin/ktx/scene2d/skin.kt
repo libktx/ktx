@@ -8,10 +8,12 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * chosen.
  */
 const val defaultStyle = "default"
+
 /**
  * Style used by default by constructors of some aligned widgets like SplitPane.
  */
 const val defaultVerticalStyle = "default-vertical"
+
 /**
  * Style used by default by constructors of some aligned widgets like SplitPane.
  */
@@ -33,7 +35,7 @@ object Scene2DSkin {
     get() = skin ?: throw IllegalStateException(
       "Default Scene2D Skin was accessed before initiation. In order to avoid this exception, " +
         "import ktx.scene2d.Scene2DSkin and override its defaultSkin property. For example: " +
-        "Scene2DSkin.defaultSkin = Skin(); Scene2DSkin.defaultSkin = VisUI.getSkin()"
+        "Scene2DSkin.defaultSkin = Skin(); Scene2DSkin.defaultSkin = VisUI.getSkin()",
     )
     set(value) {
       skin = value

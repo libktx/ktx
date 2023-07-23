@@ -25,7 +25,7 @@ import kotlin.contracts.contract
  */
 fun AssetManager.registerFreeTypeFontLoaders(
   fileExtensions: Array<String> = arrayOf(".ttf", ".otf"),
-  replaceDefaultBitmapFontLoader: Boolean = false
+  replaceDefaultBitmapFontLoader: Boolean = false,
 ) {
   val fontGeneratorLoader = FreeTypeFontGeneratorLoader(fileHandleResolver)
   setLoader<FreeTypeFontGenerator, FreeTypeFontGeneratorParameters>(fontGeneratorLoader)
@@ -49,7 +49,7 @@ fun AssetManager.registerFreeTypeFontLoaders(
 @OptIn(ExperimentalContracts::class)
 inline fun AssetManager.loadFreeTypeFont(
   file: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): Asset<BitmapFont> {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return load<BitmapFont>(file, parameters = freeTypeFontParameters(file, setup))
@@ -63,7 +63,7 @@ inline fun AssetManager.loadFreeTypeFont(
 @OptIn(ExperimentalContracts::class)
 inline fun freeTypeFontParameters(
   file: String,
-  setup: FreeTypeFontParameter.() -> Unit = {}
+  setup: FreeTypeFontParameter.() -> Unit = {},
 ): FreeTypeFontLoaderParameter {
   contract { callsInPlace(setup, InvocationKind.EXACTLY_ONCE) }
   return FreeTypeFontLoaderParameter().apply {

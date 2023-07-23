@@ -24,7 +24,7 @@ import ktx.assets.TextAssetLoader.TextAssetLoaderParameters
  */
 class TextAssetLoader(
   fileResolver: FileHandleResolver = InternalFileHandleResolver(),
-  private val charset: String = "UTF-8"
+  private val charset: String = "UTF-8",
 ) : AsynchronousAssetLoader<String, TextAssetLoaderParameters>(fileResolver) {
   @Volatile
   var fileContent: String? = null
@@ -33,7 +33,7 @@ class TextAssetLoader(
     assetManager: AssetManager?,
     fileName: String?,
     file: FileHandle,
-    parameter: TextAssetLoaderParameters?
+    parameter: TextAssetLoaderParameters?,
   ) {
     fileContent = file.readString(parameter?.charset ?: charset)
   }
@@ -42,15 +42,14 @@ class TextAssetLoader(
     assetManager: AssetManager?,
     fileName: String?,
     file: FileHandle,
-    parameter: TextAssetLoaderParameters?
+    parameter: TextAssetLoaderParameters?,
   ): String = try {
     fileContent ?: throw GdxRuntimeException("File $fileName was not loaded asynchronously. Call #loadAsync first.")
   } finally {
     fileContent = null
   }
 
-  override fun getDependencies(fileName: String?, file: FileHandle?, parameter: TextAssetLoaderParameters?):
-    Array<AssetDescriptor<Any>>? = null
+  override fun getDependencies(fileName: String?, file: FileHandle?, parameter: TextAssetLoaderParameters?): Array<AssetDescriptor<Any>>? = null
 
   /**
    * Optional parameters used to load text files.

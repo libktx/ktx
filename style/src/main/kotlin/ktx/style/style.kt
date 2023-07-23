@@ -185,7 +185,7 @@ fun Skin.color(
   red: Float,
   green: Float,
   blue: Float,
-  alpha: Float = 1f
+  alpha: Float = 1f,
 ): Color {
   val color = Color(red, green, blue, alpha)
   this.add(name, color)
@@ -204,7 +204,7 @@ fun Skin.color(
 inline fun Skin.button(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ButtonStyle).() -> Unit = {}
+  init: (@SkinDsl ButtonStyle).() -> Unit = {},
 ): ButtonStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ButtonStyle() else ButtonStyle(get(extend)), init)
@@ -222,7 +222,7 @@ inline fun Skin.button(
 inline fun Skin.checkBox(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl CheckBoxStyle).() -> Unit = {}
+  init: (@SkinDsl CheckBoxStyle).() -> Unit = {},
 ): CheckBoxStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) CheckBoxStyle() else CheckBoxStyle(get(extend)), init)
@@ -240,7 +240,7 @@ inline fun Skin.checkBox(
 inline fun Skin.imageButton(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ImageButtonStyle).() -> Unit = {}
+  init: (@SkinDsl ImageButtonStyle).() -> Unit = {},
 ): ImageButtonStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ImageButtonStyle() else ImageButtonStyle(get(extend)), init)
@@ -258,7 +258,7 @@ inline fun Skin.imageButton(
 inline fun Skin.imageTextButton(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ImageTextButtonStyle).() -> Unit = {}
+  init: (@SkinDsl ImageTextButtonStyle).() -> Unit = {},
 ): ImageTextButtonStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ImageTextButtonStyle() else ImageTextButtonStyle(get(extend)), init)
@@ -276,7 +276,7 @@ inline fun Skin.imageTextButton(
 inline fun Skin.label(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl LabelStyle).() -> Unit = {}
+  init: (@SkinDsl LabelStyle).() -> Unit = {},
 ): LabelStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) LabelStyle() else LabelStyle(get(extend)), init)
@@ -294,7 +294,7 @@ inline fun Skin.label(
 inline fun Skin.list(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ListStyle).() -> Unit = {}
+  init: (@SkinDsl ListStyle).() -> Unit = {},
 ): ListStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ListStyle() else ListStyle(get(extend)), init)
@@ -312,7 +312,7 @@ inline fun Skin.list(
 inline fun Skin.progressBar(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ProgressBarStyle).() -> Unit = {}
+  init: (@SkinDsl ProgressBarStyle).() -> Unit = {},
 ): ProgressBarStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ProgressBarStyle() else ProgressBarStyle(get(extend)), init)
@@ -330,7 +330,7 @@ inline fun Skin.progressBar(
 inline fun Skin.scrollPane(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl ScrollPaneStyle).() -> Unit = {}
+  init: (@SkinDsl ScrollPaneStyle).() -> Unit = {},
 ): ScrollPaneStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) ScrollPaneStyle() else ScrollPaneStyle(get(extend)), init)
@@ -348,7 +348,7 @@ inline fun Skin.scrollPane(
 inline fun Skin.selectBox(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl SelectBoxStyle).() -> Unit = {}
+  init: (@SkinDsl SelectBoxStyle).() -> Unit = {},
 ): SelectBoxStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) SelectBoxStyle() else SelectBoxStyle(get(extend)), init)
@@ -366,7 +366,7 @@ inline fun Skin.selectBox(
 inline fun Skin.slider(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl SliderStyle).() -> Unit = {}
+  init: (@SkinDsl SliderStyle).() -> Unit = {},
 ): SliderStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) SliderStyle() else SliderStyle(get(extend)), init)
@@ -384,7 +384,7 @@ inline fun Skin.slider(
 inline fun Skin.splitPane(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl SplitPaneStyle).() -> Unit = {}
+  init: (@SkinDsl SplitPaneStyle).() -> Unit = {},
 ): SplitPaneStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) SplitPaneStyle() else SplitPaneStyle(get<SplitPaneStyle>(extend)), init)
@@ -402,7 +402,7 @@ inline fun Skin.splitPane(
 inline fun Skin.textButton(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl TextButtonStyle).() -> Unit = {}
+  init: (@SkinDsl TextButtonStyle).() -> Unit = {},
 ): TextButtonStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) TextButtonStyle() else TextButtonStyle(get(extend)), init)
@@ -420,7 +420,7 @@ inline fun Skin.textButton(
 inline fun Skin.textField(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl TextFieldStyle).() -> Unit = {}
+  init: (@SkinDsl TextFieldStyle).() -> Unit = {},
 ): TextFieldStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) TextFieldStyle() else TextFieldStyle(get(extend)), init)
@@ -438,7 +438,7 @@ inline fun Skin.textField(
 inline fun Skin.textTooltip(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl TextTooltipStyle).() -> Unit = {}
+  init: (@SkinDsl TextTooltipStyle).() -> Unit = {},
 ): TextTooltipStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) TextTooltipStyle() else TextTooltipStyle(get(extend)), init)
@@ -456,7 +456,7 @@ inline fun Skin.textTooltip(
 inline fun Skin.touchpad(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl TouchpadStyle).() -> Unit = {}
+  init: (@SkinDsl TouchpadStyle).() -> Unit = {},
 ): TouchpadStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) TouchpadStyle() else TouchpadStyle(get(extend)), init)
@@ -474,7 +474,7 @@ inline fun Skin.touchpad(
 inline fun Skin.tree(
   name: String = defaultStyle,
   extend: String? = null,
-  init: TreeStyle.() -> Unit = {}
+  init: TreeStyle.() -> Unit = {},
 ): TreeStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) TreeStyle() else TreeStyle(get(extend)), init)
@@ -492,7 +492,7 @@ inline fun Skin.tree(
 inline fun Skin.window(
   name: String = defaultStyle,
   extend: String? = null,
-  init: (@SkinDsl WindowStyle).() -> Unit = {}
+  init: (@SkinDsl WindowStyle).() -> Unit = {},
 ): WindowStyle {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return addStyle(name, if (extend == null) WindowStyle() else WindowStyle(get(extend)), init)

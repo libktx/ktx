@@ -28,7 +28,7 @@ the ForceLinkClasses section in order to work on iOS.
 Further reading:
 * https://libgdx.com/wiki/utils/reflection
 * https://kotlinlang.org/docs/opt-in-requirements.html
-"""
+""",
 )
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
@@ -95,11 +95,13 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
   val constructor: Constructor
     get() {
       val constructors = ClassReflection.getConstructors(javaClass)
-      return if (constructors.size == 1)
+      return if (constructors.size == 1) {
         constructors.first()
-      else throw ReflectionException(
-        "Expected constructors for class $simpleName: 1, found: ${constructors.size}."
-      )
+      } else {
+        throw ReflectionException(
+          "Expected constructors for class $simpleName: 1, found: ${constructors.size}.",
+        )
+      }
     }
 
   /** @see Class.getMethods */

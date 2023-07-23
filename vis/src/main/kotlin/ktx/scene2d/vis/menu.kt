@@ -23,9 +23,10 @@ import kotlin.contracts.contract
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun @Suppress("unused") scene2d.popupMenu(
+@Suppress("UnusedReceiverParameter")
+inline fun scene2d.popupMenu(
   style: String = defaultStyle,
-  init: (@Scene2dDsl PopupMenu).() -> Unit = {}
+  init: (@Scene2dDsl PopupMenu).() -> Unit = {},
 ): PopupMenu {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val popupMenu = PopupMenu(style)
@@ -44,7 +45,7 @@ inline fun @Suppress("unused") scene2d.popupMenu(
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.menuBar(
   style: String = defaultStyle,
-  init: (@Scene2dDsl MenuBar).(S) -> Unit = {}
+  init: (@Scene2dDsl MenuBar).(S) -> Unit = {},
 ): MenuBar {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val menuBar = MenuBar(style)
@@ -63,7 +64,7 @@ inline fun <S> KWidget<S>.menuBar(
 fun MenuBar.menu(
   title: String,
   style: String = defaultStyle,
-  init: (@Scene2dDsl PopupMenu).() -> Unit = {}
+  init: (@Scene2dDsl PopupMenu).() -> Unit = {},
 ): Menu {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val menu = Menu(title, style)
@@ -82,7 +83,7 @@ fun MenuBar.menu(
 @OptIn(ExperimentalContracts::class)
 fun MenuItem.subMenu(
   style: String = defaultStyle,
-  init: (@Scene2dDsl PopupMenu).() -> Unit = {}
+  init: (@Scene2dDsl PopupMenu).() -> Unit = {},
 ): PopupMenu {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val subMenu = PopupMenu(style)
@@ -103,7 +104,7 @@ fun MenuItem.subMenu(
 fun PopupMenu.menuItem(
   text: String,
   style: String = defaultStyle,
-  init: (@Scene2dDsl MenuItem).() -> Unit = {}
+  init: (@Scene2dDsl MenuItem).() -> Unit = {},
 ): MenuItem {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val item = MenuItem(text, style)
@@ -126,7 +127,7 @@ fun PopupMenu.menuItem(
   text: String,
   image: Image,
   style: String = defaultStyle,
-  init: (@Scene2dDsl MenuItem).() -> Unit = {}
+  init: (@Scene2dDsl MenuItem).() -> Unit = {},
 ): MenuItem {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val item = MenuItem(text, image, style)
@@ -149,7 +150,7 @@ fun PopupMenu.menuItem(
   text: String,
   drawable: Drawable,
   style: String = defaultStyle,
-  init: (@Scene2dDsl MenuItem).() -> Unit = {}
+  init: (@Scene2dDsl MenuItem).() -> Unit = {},
 ): MenuItem {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val item = MenuItem(text, drawable, style)
@@ -172,7 +173,7 @@ fun PopupMenu.menuItem(
   text: String,
   drawableName: String,
   style: String = defaultStyle,
-  init: (@Scene2dDsl MenuItem).() -> Unit = {}
+  init: (@Scene2dDsl MenuItem).() -> Unit = {},
 ): MenuItem {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return menuItem(text, VisUI.getSkin().getDrawable(drawableName), style, init)

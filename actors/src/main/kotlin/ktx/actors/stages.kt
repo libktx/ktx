@@ -23,5 +23,5 @@ private fun getDefaultViewport() = ScalingViewport(
   stretch,
   Gdx.graphics.width.toFloat(),
   Gdx.graphics.height.toFloat(),
-  OrthographicCamera()
+  OrthographicCamera(),
 )

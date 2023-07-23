@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
-import com.nhaarman.mockitokotlin2.mock
 import io.kotlintest.matchers.shouldThrow
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import ktx.assets.async.AssetStorage
 import ktx.assets.async.AsyncAssetManager
+import ktx.assets.async.Identifier
 import ktx.assets.async.MissingAssetException
 import ktx.async.AsyncTest
 import ktx.async.newAsyncContext
@@ -27,6 +27,7 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
 import org.junit.Test
+import org.mockito.kotlin.mock
 
 /**
  * Tests FreeType font loading utilities for [AssetStorage].
@@ -114,7 +115,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -137,7 +138,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -160,7 +161,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -188,7 +189,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -216,7 +217,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -242,7 +243,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -282,7 +283,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -305,7 +306,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -328,7 +329,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -356,7 +357,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -384,7 +385,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -410,7 +411,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -454,7 +455,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$otfFile.gen")),
-      storage.getDependencies<BitmapFont>(otfFile)
+      storage.getDependencies<BitmapFont>(otfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$otfFile.gen"))
 
@@ -481,7 +482,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Automatically loads a generator for the font:
     assertEquals(
       listOf(storage.getIdentifier<FreeTypeFontGenerator>("$ttfFile.gen")),
-      storage.getDependencies<BitmapFont>(ttfFile)
+      storage.getDependencies<BitmapFont>(ttfFile),
     )
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>("$ttfFile.gen"))
 
@@ -501,7 +502,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>(otfFile))
     assertSame(asset, storage.get<FreeTypeFontGenerator>(otfFile))
     assertEquals(1, storage.getReferenceCount<FreeTypeFontGenerator>(otfFile))
-    assertEquals(emptyList<String>(), storage.getDependencies<FreeTypeFontGenerator>(otfFile))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<FreeTypeFontGenerator>(otfFile))
 
     storage.dispose()
   }
@@ -519,7 +520,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     assertTrue(storage.isLoaded<FreeTypeFontGenerator>(ttfFile))
     assertSame(asset, storage.get<FreeTypeFontGenerator>(ttfFile))
     assertEquals(1, storage.getReferenceCount<FreeTypeFontGenerator>(ttfFile))
-    assertEquals(emptyList<String>(), storage.getDependencies<FreeTypeFontGenerator>(ttfFile))
+    assertEquals(emptyList<Identifier<*>>(), storage.getDependencies<FreeTypeFontGenerator>(ttfFile))
 
     storage.dispose()
   }
@@ -548,7 +549,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     val storage = AssetStorage(
       useDefaultLoaders = false,
       fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = newAsyncContext(threads = 4)
+      asyncContext = newAsyncContext(threads = 4),
     )
     storage.registerFreeTypeFontLoaders()
 
@@ -559,7 +560,10 @@ class AssetStorageFreeTypeTest : AsyncTest() {
       val otfGenerator = async { storage.load<FreeTypeFontGenerator>(otfFile) }
       val ttfGenerator = async { storage.load<FreeTypeFontGenerator>(ttfFile) }
 
-      otf.await(); ttf.await(); otfGenerator.await(); ttfGenerator.await()
+      otf.await()
+      ttf.await()
+      otfGenerator.await()
+      ttfGenerator.await()
     }
 
     // Then:
@@ -589,7 +593,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
       storage.getAssetDescriptor<BitmapFont>(otfFile, parameters = freeTypeFontParameters(otfFile)),
       storage.getAssetDescriptor<BitmapFont>(ttfFile, parameters = freeTypeFontParameters(otfFile)),
       storage.getAssetDescriptor<FreeTypeFontGenerator>(otfFile),
-      storage.getAssetDescriptor<FreeTypeFontGenerator>(ttfFile)
+      storage.getAssetDescriptor<FreeTypeFontGenerator>(ttfFile),
     )
     runBlocking {
       assets.forEach {
@@ -606,7 +610,7 @@ class AssetStorageFreeTypeTest : AsyncTest() {
       assertFalse(it in storage)
       assertFalse(storage.isLoaded(it))
       assertEquals(0, storage.getReferenceCount(it))
-      assertEquals(emptyList<String>(), storage.getDependencies(it))
+      assertEquals(emptyList<Identifier<*>>(), storage.getDependencies(it))
       shouldThrow<MissingAssetException> {
         storage[it]
       }

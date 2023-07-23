@@ -29,5 +29,5 @@ operator fun <T : BaseSystem> World.get(type: KClass<T>): T? = getSystem(type.ja
  * Thrown when accessing an [BaseSystem] via [getSystem] that does not exist in the [World].
  */
 class MissingBaseSystemException(type: Class<out BaseSystem>) : GdxRuntimeException(
-  "Could not access system of type ${type.simpleName} - is it added to the world?"
+  "Could not access system of type ${type.simpleName} - is it added to the world?",
 )

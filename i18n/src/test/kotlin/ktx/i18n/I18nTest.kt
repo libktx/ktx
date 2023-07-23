@@ -82,11 +82,15 @@ keyWithArgument=Value with {0} argument.
   }
 
   /** For [BundleLine] tests. */
+  @Suppress("ktlint:standard:enum-entry-name-case")
   internal enum class BundleEnum : BundleLine {
     /** "Value." */
     key,
+
     /** "Value with {0} argument." */
-    keyWithArgument;
+    keyWithArgument,
+
+    ;
 
     override val bundle: I18NBundle
       get() = i18nBundle!!

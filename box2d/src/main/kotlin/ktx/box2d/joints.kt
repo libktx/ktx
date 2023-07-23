@@ -53,7 +53,7 @@ import kotlin.contracts.contract
 inline fun <J : JointDef> Body.jointWith(
   body: Body,
   jointDefinition: J,
-  init: (@Box2DDsl J).() -> Unit = {}
+  init: (@Box2DDsl J).() -> Unit = {},
 ): Joint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   jointDefinition.bodyA = this
@@ -133,7 +133,7 @@ inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() 
       localAnchorA.set(0f, 0f)
       localAnchorB.set(0f, 0f)
     },
-    init
+    init,
   ) as PulleyJoint
 }
 
@@ -244,7 +244,7 @@ inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> U
       localAnchorA.set(0f, 0f)
       localAnchorB.set(0f, 0f)
     },
-    init
+    init,
   ) as RopeJoint
 }
 

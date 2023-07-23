@@ -66,7 +66,7 @@ class KVisTreeTest : ApplicationTest() {
         icon = icon,
         selectable = false,
         expanded = true,
-        userObject = "Test"
+        userObject = "Test",
       ).inNode
 
       assertSame(icon, node.icon)
