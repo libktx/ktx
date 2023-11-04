@@ -7,6 +7,13 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.7.3.
 - **[UPDATE]** Updated to VisUI 1.5.3.
 - **[UPDATE]** Updated to Dokka 1.9.10.
+- **[FEATURE]** (`ktx-math`) New extension and factory function were introduced to `Vector4`, offering similar utilities to other vectors.
+  - `vec4` factory methods allow creating new `Vector4` instances with default and named parameters.
+  - `+=`, `-=`, `*=`, `/=` mutating operators are now supported.
+  - `+`, `-` (including unary `-`), `++`, `--`, `*`, `/` operators are now supported, returning new instances of vectors as a result.
+  - Vectors are now comparable by length, adding support for `<`, `>`, `<=`, `>=` operators.
+  - `Vector4` instances can now be deconstructed into 4 four values (X, Y, Z, W) using extension component methods.
+  - `dot` infix function allows calculating the dot product of 2 vectors.
 
 #### 1.12.0-rc1
 
