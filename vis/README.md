@@ -1,4 +1,4 @@
-[![VisUI](https://img.shields.io/badge/vis--ui-1.5.2-blue.svg)](https://github.com/kotcrab/vis-ui)
+[![VisUI](https://img.shields.io/badge/vis--ui-1.5.3-blue.svg)](https://github.com/kotcrab/vis-ui)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-vis.svg)](https://search.maven.org/artifact/io.github.libktx/ktx-vis)
 
 # KTX: VisUI type-safe builders
