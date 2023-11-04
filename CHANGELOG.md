@@ -3,6 +3,9 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 #### 1.12.1-SNAPSHOT
 
 - **[UPDATE]** Updated to libGDX 1.12.1.
+- **[UPDATE]** Updated to Kotlin 1.9.20.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.7.3.
+- **[UPDATE]** Updated to Dokka 1.9.10.
 
 #### 1.12.0-rc1
 
