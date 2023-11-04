@@ -19,9 +19,9 @@ numbers.
 #### `Vector2`
 
 - `vec2` is a global factory function that can create `Vector2` instances with named parameters for extra readability.
-- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second
+- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply (`scl`) or divide current values according to the second
 vector or number. Use these operators to _mutate_ existing vectors.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector or
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply (`scl`) or divide vectors according to the second vector or
 number, resulting in a new vector. Use these operators to _create_ new instances of vectors.
 - Unary `-` operator (a single minus before the vector) allows to negate both vector values, creating a new vector.
 - `++` and `--` operators can be used to increment and decrement both x and y values of the vector, resulting in a new
@@ -123,19 +123,36 @@ var v2 = Vec2(1f, 2f).withLength(3f)
 
 - `vec3` is a global factory function that can create `Vector3` instances with named parameters for extra readability.
 It is also overloaded with a second variant that allows to convert `Vector2` instances to `Vector3`.
-- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply or divide current values according to the second
+- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply (`scl`) or divide current values according to the second
 vector or number. Use these operators to _mutate_ existing vectors.
-- `+`, `-`, `*` and `/` can be used to add, subtract, multiply or divide vectors according to the second vector or
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply (`scl`) or divide vectors according to the second vector or
 number, resulting in a new vector. Use these operators to _create_ new instances of vectors.
 - Unary `-` operator (a single minus before the vector) allows to negate both vector values, creating a new vector.
 - `++` and `--` operators can be used to increment and decrement x, y and z values of the vector, resulting in a new
 vector. To avoid creating new vectors, prefer `+= 1` and `-= 1` instead.
-- `Vector3` instances can be destructed to tree float variables in one step with `val (x, y, z) = vector3` syntax thanks
+- `Vector3` instances can be destructed to three float variables in one step with `val (x, y, z) = vector3` syntax thanks
 to `component1()`, `component2()` and `component3` operator methods.
 - `Vector3` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
 (or equal) overall length, similarly to how `Vector2` now works.
 - `dot` infix function allows to calculate the dot product of 2 vectors.
 - `x` infix function allows to calculate the cross product of 2 vectors.
+
+#### `Vector4`
+
+- `vec4` is a global factory function that can create `Vector4` instances with named parameters for extra readability.
+  It is also overloaded with a second variant that allows to convert `Vector2` and `Vector3` instances to `Vector4`.
+- `+=`, `-=`, `*=` and `/=` can be used to add, subtract, multiply (`scl`) or divide current values according to the second
+  vector or number. Use these operators to _mutate_ existing vectors.
+- `+`, `-`, `*` and `/` can be used to add, subtract, multiply (`scl`) or divide vectors according to the second vector or
+  number, resulting in a new vector. Use these operators to _create_ new instances of vectors.
+- Unary `-` operator (a single minus before the vector) allows to negate both vector values, creating a new vector.
+- `++` and `--` operators can be used to increment and decrement x, y, z, and w values of the vector, resulting in a new
+  vector. To avoid creating new vectors, prefer `+= 1` and `-= 1` instead.
+- `Vector4` instances can be destructed to four float variables in one step with `val (x, y, z, w) = vector4` syntax thanks
+  to `component1()`, `component2()` and `component3` operator methods.
+- `Vector3` instances are now comparable - `<`, `>`, `<=`, `>=` operators can be used to determine which vector has greater
+  (or equal) overall length.
+- `dot` infix function allows to calculate the dot product of 2 vectors.
 
 #### `Matrix3`
 
