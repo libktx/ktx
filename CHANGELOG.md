@@ -1,5 +1,7 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.12.1-SNAPSHOT
+
 #### 1.12.1-rc1
 
 - **[UPDATE]** Updated to libGDX 1.12.1.
@@ -7,7 +9,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.7.3.
 - **[UPDATE]** Updated to VisUI 1.5.3.
 - **[UPDATE]** Updated to Dokka 1.9.10.
-- **[FEATURE]** (`ktx-math`) New extension and factory function were introduced to `Vector4`, offering similar utilities to other vectors.
+- **[FEATURE]** (`ktx-math`) New extension and factory functions were introduced to `Vector4`, offering similar utilities to the other vectors.
   - `vec4` factory methods allow creating new `Vector4` instances with default and named parameters.
   - `+=`, `-=`, `*=`, `/=` mutating operators are now supported.
   - `+`, `-` (including unary `-`), `++`, `--`, `*`, `/` operators are now supported, returning new instances of vectors as a result.
