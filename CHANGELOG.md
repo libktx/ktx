@@ -2,6 +2,9 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.12.1-SNAPSHOT
 
+- **[CHANGE]** (`ktx-assets`) The `pool` factory method now attempts to reset `Poolable` objects with the default `discard` lambda
+to match the default libGDX pool behavior. Pass a custom function to override it.
+
 #### 1.12.1-rc1
 
 - **[UPDATE]** Updated to libGDX 1.12.1.
