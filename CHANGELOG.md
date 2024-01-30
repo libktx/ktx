@@ -2,6 +2,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.12.1-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 1.9.22.
+- **[UPDATE]** Updated to Gradle 7.6.3.
 - **[CHANGE]** (`ktx-assets`) The `pool` factory method now attempts to reset `Poolable` objects with the default `discard` lambda
 to match the default libGDX pool behavior. Pass a custom function to override it.
 
