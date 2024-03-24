@@ -36,6 +36,12 @@ used to quickly determine which velocity or force is greater. Note that length *
 much faster to calculate and yields the same results in most cases.
 - `dot` infix function allows to calculate the dot product of 2 vectors.
 - `x` infix function allows to calculate the cross product of 2 vectors.
+- `Rectangle` and `Ellipse` instances can be destructed to four float variables in one step with
+  `val (x, y, w, h) = rectangle/ellipse` syntax thanks to `component1()`, `component2()`, `component3()` and `component4()` operator methods.
+- `Circle` instances can be destructed to three float variables in one step with
+  `val (x, y, radius) = circle` syntax thanks to `component1()`, `component2()` and `component3()` operator methods.
+- `Polygon` and `Polyline` instances can be destructed to two float variables in one step with
+  `val (x, y) = polygon/polyline` syntax thanks to `component1()` and `component2()` operator methods.
 
 Note that since `Shape2D` has `contains(Vector2)` method, `in` operator can be used for any `Shape2D` implementation
 (like `Rectangle`, `Ellipse` or `Circle`). For example, given `vec: Vector2` and `rect: Rectangle` variables, you can
