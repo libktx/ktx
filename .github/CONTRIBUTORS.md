@@ -43,10 +43,11 @@ Project contributors listed chronologically.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
   * Author of the [Tiled](../tiled) module.
-  * Contributed [actors](../actors), [ashley](../ashley) and [collections](../collections) utilities.
+  * Contributed [actors](../actors), [ashley](../ashley), [collections](../collections) and [math](../math) utilities.
   * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original libGDX introduction.
   * Author of the [preferences](../preferences) module.
   * Tested and reviewed the [assets async](../assets-async) module.
+  * Creator of a [Youtube channel](https://www.youtube.com/c/Quillraven/videos) on Kotlin game development.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
