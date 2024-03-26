@@ -6,7 +6,7 @@
 
 ### Why?
 
-libGDX brings its own set of Tiled map utilities, including loading and handling of maps exported from the editor.
+LibGDX brings its own set of Tiled map utilities, including loading and handling of maps exported from the editor.
 However, the API contains many wrapped non-standard collections, which makes accessing the loaded maps cumbersome.
 With Kotlin's reified types and extension methods, the Tiled API can be significantly improved.
 
@@ -82,6 +82,11 @@ a certain function on them.
 ### `MapLayers` and `MapObjects`
 
 `isEmpty` and `isNotEmpty` extension method to check if the specific collection is empty or not.
+
+### `BatchTiledMapRenderer`
+
+`use` extension method to call `beginRender()` and `endRender()` automatically before
+your render logic.
 
 ### Usage examples
 
@@ -256,6 +261,26 @@ if (map.layers.isNotEmpty()) {
     }
     parseObjects(layer.objects)
   }
+}
+```
+
+Using the `use` extension function to render background layers:
+
+```kotlin
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+
+val tiledMap = TiledMap()
+val renderer = OrthogonalTiledMapRenderer(tiledMap)
+val camera = OrthographicCamera()
+val bgdLayers: List<TiledMapTileLayer> = tiledMap.layers
+    .filter { it.name.startsWith("bgd") }
+    .filterIsInstance<TiledMapTileLayer>()
+
+renderer.use(camera) { mapRenderer ->
+    bgdLayers.forEach { mapRenderer.renderTileLayer(it) }
 }
 ```
 
