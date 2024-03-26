@@ -88,12 +88,6 @@ a certain function on them.
 `use` extension method to call `beginRender()` and `endRender()` automatically before
 your render logic.
 
-**Careful**: Since `beginRender()` and `endRender()` are protected methods, they are
-not called directly by the `use` extension. Instead, their current implementation of the
-`BatchTiledMapRenderer` is duplicated inside this extension. This means,  that if you have your own
-custom `BatchTiledMapRenderer` that overrides those two methods then this extension will
-not call your custom `beginRender()` and `endRender()`.
-
 ### Usage examples
 
 #### General
