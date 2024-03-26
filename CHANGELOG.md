@@ -6,6 +6,14 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Gradle 7.6.3.
 - **[CHANGE]** (`ktx-assets`) The `pool` factory method now attempts to reset `Poolable` objects with the default `discard` lambda
 to match the default libGDX pool behavior. Pass a custom function to override it.
+- **[FEATURE]** (`ktx-math`) Added component deconstructing operators for 2D shapes:
+  - `Rectangle`: _x, y, width, height_
+  - `Ellipse`: _x, y, width, height_
+  - `Circle`: _x, y, radius_
+  - `Polygon`: _x, y_
+  - `Polyline`: _x, y_
+- **[FEATURE]** (`ktx-tiled`) Added `use` extension method to `BatchTiledMapRenderer` that
+  automatically calls `beginRender()` and `endRender()`.
 
 #### 1.12.1-rc1
 
