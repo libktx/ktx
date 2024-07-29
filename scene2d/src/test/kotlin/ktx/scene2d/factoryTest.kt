@@ -6,10 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
-import org.junit.Assert
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.kotlin.mock
 import com.badlogic.gdx.utils.Array as GdxArray
@@ -130,6 +127,18 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   )
 
   @Test
+  fun `should create Image with null drawable name`() = test(
+    widget = {
+      image(drawableName = null) {
+        color = Color.BLUE
+      }
+    },
+    validate = {
+      assertNull(it.drawable)
+    },
+  )
+
+  @Test
   fun `should create Image with nine patch`() = test { image(VisUI.getSkin().getPatch("button")) }
 
   @Test
@@ -142,7 +151,15 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create Image with drawable`() = test(
     widget = { image(VisUI.getSkin().getDrawable("button")) },
     validate = {
-      Assert.assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
+      assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
+    },
+  )
+
+  @Test
+  fun `should create Image with null drawable`() = test(
+    widget = { image(drawable = null) },
+    validate = {
+      assertNull(it.drawable)
     },
   )
 
