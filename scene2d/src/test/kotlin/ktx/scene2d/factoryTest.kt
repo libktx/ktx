@@ -6,9 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node
 import com.kotcrab.vis.ui.VisUI
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -142,7 +143,23 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create Image with drawable`() = test(
     widget = { image(VisUI.getSkin().getDrawable("button")) },
     validate = {
-      Assert.assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
+      assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
+    },
+  )
+
+  @Test
+  fun `should create Image with null drawable passing null argument`() = test(
+    widget = { image(drawable = null) },
+    validate = {
+      assertNull(it.drawable)
+    },
+  )
+
+  @Test
+  fun `should create Image with null drawable passing no arguments`() = test(
+    widget = { image() },
+    validate = {
+      assertNull(it.drawable)
     },
   )
 
