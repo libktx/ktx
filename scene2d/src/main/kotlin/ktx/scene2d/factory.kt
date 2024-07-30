@@ -209,7 +209,7 @@ inline fun <S> KWidget<S>.horizontalGroup(
 }
 
 /**
- * @param drawableName optional name of a drawable stored in the chosen skin.
+ * @param drawableName name of a drawable stored in the chosen skin.
  * @param skin [Skin] instance that contains the widget style. Defaults to [Scene2DSkin.defaultSkin].
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
@@ -219,16 +219,12 @@ inline fun <S> KWidget<S>.horizontalGroup(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
-  drawableName: String? = null,
+  drawableName: String,
   skin: Skin = Scene2DSkin.defaultSkin,
   init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  return if (drawableName == null) {
-    actor(Image(), init)
-  } else {
-    actor(Image(skin.getDrawable(drawableName)), init)
-  }
+  return actor(Image(skin.getDrawable(drawableName)), init)
 }
 
 /**
