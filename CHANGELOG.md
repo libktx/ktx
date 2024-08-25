@@ -1,5 +1,7 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.12.1-SNAPSHOT
+
 #### 1.12.1-rc2
 
 - **[UPDATE]** Updated to Kotlin 1.9.25.
