@@ -5,7 +5,7 @@ Project contributors listed chronologically.
 * [@czyzby](https://github.com/czyzby)
   * Author of most of the libraries, main maintainer.
 * [@kotcrab](https://github.com/kotcrab)
-  * Author of the [`VisUI` extension](../vis).
+  * Author of the initial iteration of the [`VisUI` extension](../vis).
 * [@MrPlow442](https://github.com/MrPlow442)
   * Contributed libGDX [collections](../collections) utilities.
 * [@sreich](https://github.com/sreich)
@@ -42,11 +42,11 @@ Project contributors listed chronologically.
   * Prepared several KTX template projects and showcases.
   * Improved [app](../app) utilities.
 * [@Quillraven](https://github.com/Quillraven)
-  * Author of the [Tiled](../tiled) module.
-  * Contributed [actors](../actors), [ashley](../ashley) and [collections](../collections) utilities.
-  * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original libGDX introduction.
-  * Author of the [preferences](../preferences) module.
+  * Author of the [Tiled](../tiled) and [preferences](../preferences) modules.
+  * Contributed [actors](../actors), [ashley](../ashley), [collections](../collections), [math](../math), and [scene2d](../scene2d) utilities.
+  * Wrote a complete [KTX tutorial](https://github.com/Quillraven/SimpleKtxGame/wiki) based on the original libGDX introduction app.
   * Tested and reviewed the [assets async](../assets-async) module.
+  * Creator of a [Youtube channel](https://www.youtube.com/c/Quillraven/videos) on Kotlin game development including several tutorials with KTX.
 * [@FocusPo1nt](https://github.com/FocusPo1nt)
   * Added utilities to [style module](../style).
 * [@maltaisn](https://github.com/maltaisn)
@@ -108,3 +108,5 @@ Project contributors listed chronologically.
 ### Metrics
 
 See [the GitHub insights](https://github.com/libktx/ktx/graphs/contributors).
+
+![Star history](https://api.star-history.com/svg?repos=libktx/ktx&type=Date)

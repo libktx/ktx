@@ -1,5 +1,25 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
+#### 1.12.1-rc2
+
+- **[UPDATE]** Updated to Kotlin 1.9.25.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.8.1.
+- **[UPDATE]** Updated to Gradle 7.6.4.
+- **[UPDATE]** Updated to Dokka 1.9.20.
+- **[MISC]** JDK 11 or newer is now required to build the KTX project.
+- **[CHANGE]** (`ktx-assets`) The `pool` factory method now attempts to reset `Poolable` objects with the default `discard` lambda
+  to match the default libGDX pool behavior. Pass a custom function to override it.
+- **[FEATURE]** (`ktx-math`) Added component deconstructing operators for 2D shapes:
+  - `Rectangle`: _x, y, width, height_
+  - `Ellipse`: _x, y, width, height_
+  - `Circle`: _x, y, radius_
+  - `Polygon`: _x, y_
+  - `Polyline`: _x, y_
+- **[CHANGE]** (`ktx-scene2d`) `image` factory method can now be called without parameters or with `null` to create
+  an `Image` without a `Drawable`.
+- **[FEATURE]** (`ktx-tiled`) Added `use` extension method to `BatchTiledMapRenderer` that
+  automatically calls `beginRender()` and `endRender()`.
+
 #### 1.12.1-rc1
 
 - **[UPDATE]** Updated to libGDX 1.12.1.
@@ -7,7 +27,7 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to Kotlin Coroutines 1.7.3.
 - **[UPDATE]** Updated to VisUI 1.5.3.
 - **[UPDATE]** Updated to Dokka 1.9.10.
-- **[FEATURE]** (`ktx-math`) New extension and factory function were introduced to `Vector4`, offering similar utilities to other vectors.
+- **[FEATURE]** (`ktx-math`) New extension and factory functions were introduced to `Vector4`, offering similar utilities to the other vectors.
   - `vec4` factory methods allow creating new `Vector4` instances with default and named parameters.
   - `+=`, `-=`, `*=`, `/=` mutating operators are now supported.
   - `+`, `-` (including unary `-`), `++`, `--`, `*`, `/` operators are now supported, returning new instances of vectors as a result.

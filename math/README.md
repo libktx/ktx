@@ -240,6 +240,15 @@ val spawners = listOf(
 )
 ```
 
+#### `Shape2D` extensions
+
+- `Rectangle` and `Ellipse` instances can be destructed to four float variables in one step with
+  `val (x, y, w, h) = rectangle/ellipse` syntax thanks to `component1()`, `component2()`, `component3()` and `component4()` operator methods.
+- `Circle` instances can be destructed to three float variables in one step with
+  `val (x, y, radius) = circle` syntax thanks to `component1()`, `component2()` and `component3()` operator methods.
+- `Polygon` and `Polyline` instances can be destructed to two float variables in one step with
+  `val (x, y) = polygon/polyline` syntax thanks to `component1()` and `component2()` operator methods.
+
 ### Alternatives
 
 You can use libGDX APIs directly or rely on third-party math libraries:

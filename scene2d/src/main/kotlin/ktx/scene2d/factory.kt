@@ -279,7 +279,7 @@ inline fun <S> KWidget<S>.image(
 }
 
 /**
- * @param drawable will be drawn by the [Image].
+ * @param drawable will be drawn by the [Image]. Per default it is null.
  * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
  * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
  * Inlined.
@@ -288,7 +288,7 @@ inline fun <S> KWidget<S>.image(
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.image(
-  drawable: Drawable,
+  drawable: Drawable? = null,
   init: (@Scene2dDsl Image).(S) -> Unit = {},
 ): Image {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }

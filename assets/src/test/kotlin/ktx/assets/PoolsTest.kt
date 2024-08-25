@@ -1,9 +1,11 @@
 package ktx.assets
 
 import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.utils.Pool.Poolable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -74,6 +76,30 @@ class PoolsTest {
 
     // Then:
     assertEquals(listOf("Value6", "Value7", "Value8", "Value9", "Value10"), discarded)
+  }
+
+  @Test
+  fun `should create new pools that reset discarded objects by default`() {
+    // Given:
+    val pool = pool(max = 1) { SamplePoolable() }
+    val freed = pool()
+    val discarded = pool()
+    pool.free(freed)
+
+    // When:
+    pool.free(discarded)
+
+    // Then:
+    assertTrue(discarded.isReset)
+  }
+
+  /**
+   * A simple data object implementing the [Poolable] interface.
+   */
+  private class SamplePoolable(var isReset: Boolean = false) : Poolable {
+    override fun reset() {
+      this.isReset = true
+    }
   }
 
   /**
