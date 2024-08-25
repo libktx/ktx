@@ -2,6 +2,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.12.1-SNAPSHOT
 
+- **[UPDATE]** Updated to Kotlin 2.0.20.
+
 #### 1.12.1-rc2
 
 - **[UPDATE]** Updated to Kotlin 1.9.25.

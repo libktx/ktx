@@ -102,7 +102,7 @@ operator fun <Key, Value> GdxMap<Key, Value>.set(key: Key, value: Value): Value?
  */
 inline fun <Key, Value> GdxMap<Key, Value>.iterate(action: (Key, Value, MutableIterator<Entry<Key, Value>>) -> Unit) {
   val iterator = this.iterator()
-  while (iterator.hasNext) {
+  while (iterator.hasNext()) {
     val next = iterator.next()
     action(next.key, next.value, iterator)
   }
