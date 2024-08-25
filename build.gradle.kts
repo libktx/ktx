@@ -81,6 +81,8 @@ subprojects {
       freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
   }
+  val compileTestKotlin: KotlinCompile by tasks
+  compileTestKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
 
   dependencies {
     val kotlinVersion: String by project

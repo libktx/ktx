@@ -2,8 +2,11 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 
 #### 1.12.1-SNAPSHOT
 
-- **[UPDATE]** Updated to Kotlin 1.9.22.
-- **[UPDATE]** Updated to Gradle 7.6.3.
+- **[UPDATE]** Updated to Kotlin 1.9.25.
+- **[UPDATE]** Updated to Kotlin Coroutines 1.8.1.
+- **[UPDATE]** Updated to Gradle 7.6.4.
+- **[UPDATE]** Updated to Dokka 1.9.20.
+- **[MISC]** JDK 11 or newer is now required to build the KTX project.
 - **[CHANGE]** (`ktx-assets`) The `pool` factory method now attempts to reset `Poolable` objects with the default `discard` lambda
   to match the default libGDX pool behavior. Pass a custom function to override it.
 - **[FEATURE]** (`ktx-math`) Added component deconstructing operators for 2D shapes:
