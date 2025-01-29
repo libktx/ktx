@@ -41,13 +41,13 @@ open class KtxGame<ScreenType : Screen>(
     get() = currentScreen as ScreenType
 
   /**
-   * By default, this method resizes ([Screen.resize]) and shows ([Screen.show]) initial view. You do not have to call
+   * By default, this method shows ([Screen.show]) and resizes ([Screen.resize]) the initial view. You do not have to call
    * super if you used [setScreen] in the overridden [create] method or the selected first view does not need to be
    * resized and showed before usage.
    */
   override fun create() {
-    currentScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
     currentScreen.show()
+    currentScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
   }
 
   override fun render() {
@@ -118,8 +118,8 @@ open class KtxGame<ScreenType : Screen>(
   open fun <Type : ScreenType> setScreen(type: Class<Type>) {
     currentScreen.hide()
     currentScreen = getScreen(type)
-    currentScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
     currentScreen.show()
+    currentScreen.resize(Gdx.graphics.width, Gdx.graphics.height)
   }
 
   /**

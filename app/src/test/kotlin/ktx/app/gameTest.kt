@@ -43,8 +43,8 @@ class KtxGameTest {
     game.create()
 
     assertSame(screen, game.shownScreen)
-    verify(screen).resize(800, 600)
     verify(screen).show()
+    verify(screen).resize(800, 600)
     // addScreen must be called manually to keep firstScreen in context - should not contain initial Screen:
     assertFalse(game.containsScreen<Screen>())
   }
@@ -180,8 +180,8 @@ class KtxGameTest {
 
     assertSame(secondScreen, game.shownScreen)
     verify(firstScreen).hide()
-    verify(secondScreen).resize(800, 600)
     verify(secondScreen).show()
+    verify(secondScreen).resize(800, 600)
   }
 
   @Test(expected = GdxRuntimeException::class)
