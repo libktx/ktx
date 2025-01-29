@@ -40,6 +40,7 @@ class StagesTest {
           Unit
         }
       }
+      on(it.glGenBuffer()) doReturn 1
     }
     Gdx.gl20 = Gdx.gl
     Gdx.graphics = mock {

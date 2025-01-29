@@ -1,6 +1,6 @@
 [![GitHub Build](https://github.com/libktx/ktx/workflows/build/badge.svg)](https://github.com/libktx/ktx/actions?query=workflow%3Abuild)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.0.20-orange.svg)](http://kotlinlang.org/)
-[![libGDX](https://img.shields.io/badge/libgdx-1.12.1-red.svg)](https://libgdx.com/)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.1.10-orange.svg)](http://kotlinlang.org/)
+[![libGDX](https://img.shields.io/badge/libgdx-1.13.1-red.svg)](https://libgdx.com/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.libktx/ktx-async.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.libktx%22)
 
 [![KTX](.github/ktx-logo.png "KTX")](http://libktx.github.io)
@@ -305,7 +305,7 @@ repositories {
 
 ext {
   // Update this version to match the latest libGDX release:
-  ktxVersion = '1.12.1-SNAPSHOT'
+  ktxVersion = '1.13.1-SNAPSHOT'
 }
 ```
 
@@ -320,7 +320,7 @@ repositories {
 }
 
 // Update this version to match the latest libGDX release:
-val ktxVersion = "1.12.1-SNAPSHOT"
+val ktxVersion = "1.13.1-SNAPSHOT"
 ```
 
 </details>

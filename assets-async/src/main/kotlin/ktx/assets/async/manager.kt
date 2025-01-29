@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.PolygonRegionLoader
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader
+import com.badlogic.gdx.maps.tiled.BaseTiledMapLoader
 import com.badlogic.gdx.maps.tiled.BaseTmxMapLoader
 import com.badlogic.gdx.maps.tiled.TideMapLoader
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -34,7 +35,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import ktx.assets.TextAssetLoader
 import ktx.assets.setLoader
-import java.lang.RuntimeException
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader as ParticleEffect3dLoader
 import com.badlogic.gdx.utils.Array as GdxArray
 
@@ -102,7 +102,7 @@ class AsyncAssetManager(
     setLoaderParameterSupplier<TextureLoader> { TextureLoader.TextureParameter() }
     // Tiled map loaders:
     setLoaderParameterSupplier<AtlasTmxMapLoader> { AtlasTmxMapLoader.AtlasTiledMapLoaderParameters() }
-    setLoaderParameterSupplier<BaseTmxMapLoader<*>> { BaseTmxMapLoader.Parameters() }
+    setLoaderParameterSupplier<BaseTmxMapLoader<*>> { BaseTiledMapLoader.Parameters() }
     setLoaderParameterSupplier<TideMapLoader> { TideMapLoader.Parameters() }
     setLoaderParameterSupplier<TmxMapLoader> { TmxMapLoader.Parameters() }
     // KTX loaders:

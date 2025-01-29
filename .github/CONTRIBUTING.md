@@ -134,8 +134,10 @@ should keep all the dependencies (outside of testing scope) up-to-date. Major de
 
 - **libGDX**: update `gdxVersion` in the versions file and libGDX version in the tag on the top of the 
 [README.md](../README.md) file. Note that updating libGDX also affects the **KTX** version and milestones, so make sure
-to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well.
+to update the [version.txt](../version.txt) and [milestones](https://github.com/libktx/ktx/milestones) as well. After
+the release, update GitHub project's `Custom properties`.
 - **Kotlin**: update the `kotlinVersion` in the properties file and the Kotlin tag in the [README.md](../README.md).
+After the release, update GitHub project's `Custom properties`.
 - **Kotlin Coroutines**: update `kotlinCoroutinesVersion` in the versions file and the tag in the
 `ktx-async` [README.md](../async/README.md).
 - **Gradle**: run `gradle wrapper --distribution-type all` in the root project folder. Make sure that the
