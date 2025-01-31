@@ -43,7 +43,7 @@ allprojects {
   val linter = configurations.create("linter")
 
   dependencies {
-    linter("com.pinterest:ktlint:$ktlintVersion")
+    linter("com.pinterest.ktlint:ktlint-cli:$ktlintVersion")
   }
 }
 
