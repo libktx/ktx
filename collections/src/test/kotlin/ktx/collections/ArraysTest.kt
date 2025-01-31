@@ -112,9 +112,7 @@ class ArraysTest {
 
   @Test
   fun `should verify empty status contract`() {
-    fun getArray(): GdxArray<Any>? {
-      return GdxArray.with("1")
-    }
+    fun getArray(): GdxArray<Any>? = GdxArray.with("1")
 
     val array = getArray()
     if (!array.isEmpty()) {
@@ -131,9 +129,7 @@ class ArraysTest {
 
   @Test
   fun `should verify non empty status contract`() {
-    fun getArray(): GdxArray<Any>? {
-      return GdxArray.with("1")
-    }
+    fun getArray(): GdxArray<Any>? = GdxArray.with("1")
 
     val array = getArray()
     if (array.isNotEmpty()) {
@@ -467,9 +463,10 @@ class ArraysTest {
   @Test
   fun `should free removed elements`() {
     val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
-    val pool = object : Pool<Vector2>() {
-      override fun newObject() = Vector2()
-    }
+    val pool =
+      object : Pool<Vector2>() {
+        override fun newObject() = Vector2()
+      }
     array.removeAll(pool) { it.len() > 0.5f }
     assertEquals(pool.peak, 2)
   }
@@ -562,9 +559,10 @@ class ArraysTest {
   @Test
   fun `should free unretained elements`() {
     val array = GdxArray.with(Vector2(), Vector2(1f, 1f), Vector2(2f, 2f))
-    val pool = object : Pool<Vector2>() {
-      override fun newObject() = Vector2()
-    }
+    val pool =
+      object : Pool<Vector2>() {
+        override fun newObject() = Vector2()
+      }
     array.retainAll(pool) { it.len() < 0.5f }
     assertEquals(pool.peak, 2)
   }

@@ -57,7 +57,10 @@ open class KtxGame<ScreenType : Screen>(
     currentScreen.render(Gdx.graphics.deltaTime)
   }
 
-  override fun resize(width: Int, height: Int) {
+  override fun resize(
+    width: Int,
+    height: Int,
+  ) {
     currentScreen.resize(width, height)
   }
 
@@ -93,7 +96,10 @@ open class KtxGame<ScreenType : Screen>(
    * @see setScreen
    * @see removeScreen
    */
-  open fun <Type : ScreenType> addScreen(type: Class<Type>, screen: Type) {
+  open fun <Type : ScreenType> addScreen(
+    type: Class<Type>,
+    screen: Type,
+  ) {
     !screens.containsKey(type) || throw GdxRuntimeException("Screen already registered to type: $type.")
     screens.put(type, screen)
   }
@@ -197,7 +203,10 @@ open class KtxGame<ScreenType : Screen>(
    * @param screen thrown [exception] during disposal.
    * @param exception unexpected screen disposal exception.
    */
-  protected open fun onScreenDisposalError(screen: ScreenType, exception: Throwable) {
+  protected open fun onScreenDisposalError(
+    screen: ScreenType,
+    exception: Throwable,
+  ) {
     Gdx.app.error("KTX", "Unable to dispose of ${screen.javaClass} screen.", exception)
   }
 }
@@ -209,13 +218,24 @@ open class KtxGame<ScreenType : Screen>(
  * which allows to leverage [Disposable] utilities.
  * @see KtxGame
  */
-interface KtxScreen : Screen, Disposable {
+interface KtxScreen :
+  Screen,
+  Disposable {
   override fun show() = Unit
+
   override fun render(delta: Float) = Unit
-  override fun resize(width: Int, height: Int) = Unit
+
+  override fun resize(
+    width: Int,
+    height: Int,
+  ) = Unit
+
   override fun pause() = Unit
+
   override fun resume() = Unit
+
   override fun hide() = Unit
+
   override fun dispose() = Unit
 }
 

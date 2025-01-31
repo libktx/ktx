@@ -8,8 +8,17 @@ import com.badlogic.gdx.utils.JsonValue
  * Improves typing by adding nullability information and changes default parameter names.
  */
 interface JsonSerializer<T> : Json.Serializer<T> {
-  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T
-  override fun write(json: Json, value: T, type: Class<*>?)
+  override fun read(
+    json: Json,
+    jsonValue: JsonValue,
+    type: Class<*>?,
+  ): T
+
+  override fun write(
+    json: Json,
+    value: T,
+    type: Class<*>?,
+  )
 }
 
 /**
@@ -19,8 +28,11 @@ interface JsonSerializer<T> : Json.Serializer<T> {
  * the [write] method throws [UnsupportedOperationException].
  */
 interface ReadOnlyJsonSerializer<T> : JsonSerializer<T> {
-  override fun write(json: Json, value: T, type: Class<*>?) =
-    throw UnsupportedOperationException("Read-only serializers do not support write method.")
+  override fun write(
+    json: Json,
+    value: T,
+    type: Class<*>?,
+  ) = throw UnsupportedOperationException("Read-only serializers do not support write method.")
 }
 
 /**
@@ -28,7 +40,11 @@ interface ReadOnlyJsonSerializer<T> : JsonSerializer<T> {
  */
 inline fun <T> readOnlySerializer(crossinline reader: (Json, JsonValue, Class<*>?) -> T): Json.Serializer<T> =
   object : ReadOnlyJsonSerializer<T> {
-    override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = reader(json, jsonValue, type)
+    override fun read(
+      json: Json,
+      jsonValue: JsonValue,
+      type: Class<*>?,
+    ): T = reader(json, jsonValue, type)
   }
 
 /**
@@ -36,5 +52,9 @@ inline fun <T> readOnlySerializer(crossinline reader: (Json, JsonValue, Class<*>
  */
 inline fun <T> readOnlySerializer(crossinline read: (JsonValue) -> T): Json.Serializer<T> =
   object : ReadOnlyJsonSerializer<T> {
-    override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = read(jsonValue)
+    override fun read(
+      json: Json,
+      jsonValue: JsonValue,
+      type: Class<*>?,
+    ): T = read(jsonValue)
   }

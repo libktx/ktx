@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DecoratorsTest {
-
   @Test
   fun `alwaysFail function should add AlwaysFail to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
@@ -22,10 +21,11 @@ class DecoratorsTest {
   fun `alwaysFail function inside of behaviorTree function's init block should add AlwaysFail to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      alwaysFail()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        alwaysFail()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -67,10 +67,11 @@ class DecoratorsTest {
   fun `alwaysSucceed function inside of behaviorTree function's init block should add AlwaysSucceed to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      alwaysSucceed()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        alwaysSucceed()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -112,10 +113,11 @@ class DecoratorsTest {
   fun `include function inside of behaviorTree function's init block should add Include to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      include()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        include()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -157,10 +159,11 @@ class DecoratorsTest {
   fun `invert function inside of behaviorTree function's init block should add Invert to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      invert()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        invert()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -202,10 +205,11 @@ class DecoratorsTest {
   fun `random function inside of behaviorTree function's init block should add GdxAiRandom to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      random()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        random()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -247,10 +251,11 @@ class DecoratorsTest {
   fun `repeat function inside of behaviorTree function's init block should add Repeat to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      repeat()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        repeat()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -292,10 +297,11 @@ class DecoratorsTest {
   fun `semaphoreGuard function inside of behaviorTree function's init block should add SemaphoreGuard to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      semaphoreGuard()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        semaphoreGuard()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -337,10 +343,11 @@ class DecoratorsTest {
   fun `untilFail function inside of behaviorTree function's init block should add UntilFail to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      untilFail()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        untilFail()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -382,10 +389,11 @@ class DecoratorsTest {
   fun `untilSuccess function inside of behaviorTree function's init block should add UntilSuccess to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      untilSuccess()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        untilSuccess()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }

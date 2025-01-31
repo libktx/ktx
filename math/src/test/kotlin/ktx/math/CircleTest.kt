@@ -5,7 +5,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class CircleTest {
-
   @Test
   fun `should destructure Circle`() {
     val circle = Circle(1f, 2f, 3f)
@@ -16,5 +15,4 @@ class CircleTest {
     assertEquals(2f, y)
     assertEquals(3f, radius)
   }
-
 }

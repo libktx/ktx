@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class LeafTasksTest {
-
   @Test
   fun `failureLeaf function should add Failure to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
@@ -22,10 +21,11 @@ class LeafTasksTest {
   fun `failureLeaf function inside of behaviorTree function's init block should add Failure to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      failureLeaf()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        failureLeaf()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -67,10 +67,11 @@ class LeafTasksTest {
   fun `successLeaf function inside of behaviorTree function's init block should add Success to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      successLeaf()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        successLeaf()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -112,10 +113,11 @@ class LeafTasksTest {
   fun `waitLeaf function with explicit seconds parameter inside of behaviorTree function's init block should add Wait to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      waitLeaf(1f)
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        waitLeaf(1f)
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -134,10 +136,11 @@ class LeafTasksTest {
   fun `waitLeaf function inside of behaviorTree function's init block should add Wait to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      waitLeaf()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        waitLeaf()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }

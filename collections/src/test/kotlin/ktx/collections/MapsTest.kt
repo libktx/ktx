@@ -85,9 +85,7 @@ class MapsTest {
   @Test
   fun `should verify empty status contract`() {
     @Suppress("RedundantNullableReturnType")
-    fun getMap(): GdxMap<Any, Any>? {
-      return gdxMapOf(1 to "1")
-    }
+    fun getMap(): GdxMap<Any, Any>? = gdxMapOf(1 to "1")
 
     val map = getMap()
     if (!map.isEmpty()) {
@@ -105,9 +103,7 @@ class MapsTest {
   @Test
   fun `should verify non empty status contract`() {
     @Suppress("RedundantNullableReturnType")
-    fun getMap(): GdxMap<Any, Any>? {
-      return gdxMapOf(1 to "1")
-    }
+    fun getMap(): GdxMap<Any, Any>? = gdxMapOf(1 to "1")
 
     val map = getMap()
     if (map.isNotEmpty()) {
@@ -180,20 +176,22 @@ class MapsTest {
 
   @Test
   fun `should convert Iterables to GdxMap`() {
-    val map = listOf("1", "2", "3").toGdxMap(
-      keyProvider = { it.toInt() },
-      valueProvider = { it + it },
-    )
+    val map =
+      listOf("1", "2", "3").toGdxMap(
+        keyProvider = { it.toInt() },
+        valueProvider = { it + it },
+      )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
   }
 
   @Test
   fun `should convert customized Arrays to GdxMap`() {
-    val map = arrayOf("1", "2", "3").toGdxMap(
-      keyProvider = { it.toInt() },
-      valueProvider = { it + it },
-    )
+    val map =
+      arrayOf("1", "2", "3").toGdxMap(
+        keyProvider = { it.toInt() },
+        valueProvider = { it + it },
+      )
 
     assertEquals(gdxMapOf(1 to "11", 2 to "22", 3 to "33"), map)
   }

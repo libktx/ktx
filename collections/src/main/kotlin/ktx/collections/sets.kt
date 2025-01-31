@@ -25,8 +25,10 @@ const val defaultLoadFactor = 0.8f
  * @param loadFactor decides under what load the set is resized.
  * @return a new [ObjectSet].
  */
-fun <Type> gdxSetOf(initialCapacity: Int = defaultSetSize, loadFactor: Float = defaultLoadFactor): GdxSet<Type> =
-  GdxSet(initialCapacity, loadFactor)
+fun <Type> gdxSetOf(
+  initialCapacity: Int = defaultSetSize,
+  loadFactor: Float = defaultLoadFactor,
+): GdxSet<Type> = GdxSet(initialCapacity, loadFactor)
 
 /**
  * @param elements will be initially stored in the set.
@@ -75,20 +77,17 @@ inline fun <Type> GdxSet<Type>?.isNotEmpty(): Boolean {
 /**
  * @param elements will be iterated over and added to the set.
  */
-fun <Type> GdxSet<Type>.addAll(elements: Iterable<Type>) =
-  elements.forEach { this.add(it) }
+fun <Type> GdxSet<Type>.addAll(elements: Iterable<Type>) = elements.forEach { this.add(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> GdxSet<Type>.removeAll(elements: Iterable<Type>) =
-  elements.forEach { this.remove(it) }
+fun <Type> GdxSet<Type>.removeAll(elements: Iterable<Type>) = elements.forEach { this.remove(it) }
 
 /**
  * @param elements will be iterated over and removed from the set.
  */
-fun <Type> GdxSet<Type>.removeAll(elements: Array<out Type>) =
-  elements.forEach { this.remove(it) }
+fun <Type> GdxSet<Type>.removeAll(elements: Array<out Type>) = elements.forEach { this.remove(it) }
 
 /**
  * Allows to append elements to sets with `set + element` syntax.
@@ -257,9 +256,7 @@ inline fun <Type, C : Iterable<Type>> GdxSet<out C>.flatten(): GdxSet<Type> {
  * Returns a single [GdxSet] of all elements yielded from results of transform function being invoked
  * on each element of original [GdxSet].
  */
-inline fun <Type, R> GdxSet<Type>.flatMap(transform: (Type) -> Iterable<R>): GdxSet<R> {
-  return this.map(transform).flatten()
-}
+inline fun <Type, R> GdxSet<Type>.flatMap(transform: (Type) -> Iterable<R>): GdxSet<R> = this.map(transform).flatten()
 
 /**
  * @param ordered if false, methods that remove elements may change the order of other elements in the array,
@@ -271,7 +268,9 @@ inline fun <reified Type : Any> GdxSet<Type>.toGdxArray(
   ordered: Boolean = true,
   initialCapacity: Int = this.size,
 ): GdxArray<Type> {
-  val array = com.badlogic.gdx.utils.Array<Type>(ordered, initialCapacity, Type::class.java)
+  val array =
+    com.badlogic.gdx.utils
+      .Array<Type>(ordered, initialCapacity, Type::class.java)
   array.addAll(this)
   return array
 }
@@ -305,7 +304,10 @@ fun <Type> Array<Type>.toGdxSet(
  * @param loadFactor decides how many elements the set might contain in relation to its total capacity before it is resized.
  * @return values copied from this iterable stored in an optimized libGDX int set.
  */
-fun IntArray.toGdxSet(initialCapacity: Int = this.size, loadFactor: Float = defaultLoadFactor): IntSet {
+fun IntArray.toGdxSet(
+  initialCapacity: Int = this.size,
+  loadFactor: Float = defaultLoadFactor,
+): IntSet {
   val set = IntSet(initialCapacity, loadFactor)
   set.addAll(this, 0, this.size)
   return set

@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Rectangle
  */
 inline fun <T : BatchTiledMapRenderer> T.use(
   camera: OrthographicCamera,
-  block: (T) -> Unit
+  block: (T) -> Unit,
 ) {
   this.setView(camera)
   this.use(block)
@@ -31,9 +31,11 @@ inline fun <T : BatchTiledMapRenderer> T.use(
  */
 inline fun <T : BatchTiledMapRenderer> T.use(
   projection: Matrix4,
-  x: Float, y: Float,
-  width: Float, height: Float,
-  block: (T) -> Unit
+  x: Float,
+  y: Float,
+  width: Float,
+  height: Float,
+  block: (T) -> Unit,
 ) {
   this.setView(projection, x, y, width, height)
   this.use(block)
@@ -48,7 +50,7 @@ inline fun <T : BatchTiledMapRenderer> T.use(
 inline fun <T : BatchTiledMapRenderer> T.use(
   projection: Matrix4,
   mapBoundary: Rectangle,
-  block: (T) -> Unit
+  block: (T) -> Unit,
 ) = this.use(projection, mapBoundary.x, mapBoundary.y, mapBoundary.width, mapBoundary.height, block)
 
 /**

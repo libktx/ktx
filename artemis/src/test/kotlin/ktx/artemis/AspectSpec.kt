@@ -56,11 +56,12 @@ object AspectSpec : Spek({
     }
 
     it("should create an aspect that matches all, one of and excludes components") {
-      val aspect = exclude(Remove::class)
-        .oneOf(Position::class, RigidBody::class)
-        .allOf(Texture::class, Transform::class)
-        .exclude(Dead::class)
-        .build(world)
+      val aspect =
+        exclude(Remove::class)
+          .oneOf(Position::class, RigidBody::class)
+          .allOf(Texture::class, Transform::class)
+          .exclude(Dead::class)
+          .build(world)
 
       assertThat(aspect.isInterested(rigidBodyEntity)).isFalse()
       assertThat(aspect.isInterested(threeComponentsEntity)).isTrue()

@@ -9,11 +9,7 @@ class EatTask(
   @TaskAttribute(required = true)
   var hunger: Int,
 ) : LeafTask<Cat>() {
-  override fun copyTo(task: Task<Cat>): Task<Cat> {
-    return this
-  }
+  override fun copyTo(task: Task<Cat>): Task<Cat> = this
 
-  override fun execute(): Status {
-    return Status.SUCCEEDED
-  }
+  override fun execute(): Status = Status.SUCCEEDED
 }

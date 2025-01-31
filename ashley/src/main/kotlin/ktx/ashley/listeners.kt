@@ -65,11 +65,12 @@ inline fun Engine.onEntityAdded(
   priority: Int = 0,
   crossinline onAdded: (entity: Entity) -> Unit,
 ): EntityAdditionListener {
-  val listener = object : EntityAdditionListener {
-    override fun entityAdded(entity: Entity) {
-      onAdded.invoke(entity)
+  val listener =
+    object : EntityAdditionListener {
+      override fun entityAdded(entity: Entity) {
+        onAdded.invoke(entity)
+      }
     }
-  }
 
   addEntityListener(family, priority, listener)
   return listener
@@ -93,11 +94,12 @@ inline fun Engine.onEntityRemoved(
   priority: Int = 0,
   crossinline onRemoved: (entity: Entity) -> Unit,
 ): EntityRemovalListener {
-  val listener = object : EntityRemovalListener {
-    override fun entityRemoved(entity: Entity) {
-      onRemoved.invoke(entity)
+  val listener =
+    object : EntityRemovalListener {
+      override fun entityRemoved(entity: Entity) {
+        onRemoved.invoke(entity)
+      }
     }
-  }
 
   addEntityListener(family, priority, listener)
   return listener

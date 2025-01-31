@@ -10,7 +10,12 @@ import com.badlogic.gdx.graphics.Color
  * @param alpha color alpha value. Optional, defaults to 1f (non-transparent).
  * @return a new [Color] instance.
  */
-fun color(red: Float, green: Float, blue: Float, alpha: Float = 1f) = Color(red, green, blue, alpha)
+fun color(
+  red: Float,
+  green: Float,
+  blue: Float,
+  alpha: Float = 1f,
+) = Color(red, green, blue, alpha)
 
 /**
  * Allows to copy this [Color] instance, optionally changing chosen properties.
@@ -19,8 +24,12 @@ fun color(red: Float, green: Float, blue: Float, alpha: Float = 1f) = Color(red,
  * @param blue blue color value. If null, will be copied from [Color.b]. Defaults to null.
  * @param alpha color alpha value. If null, will be copied from [Color.a]. Defaults to null.
  * @return a new [Color] instance with values copied from this color and optionally overridden by the parameters. */
-fun Color.copy(red: Float? = null, green: Float? = null, blue: Float? = null, alpha: Float? = null) =
-  Color(red ?: r, green ?: g, blue ?: b, alpha ?: a)
+fun Color.copy(
+  red: Float? = null,
+  green: Float? = null,
+  blue: Float? = null,
+  alpha: Float? = null,
+) = Color(red ?: r, green ?: g, blue ?: b, alpha ?: a)
 
 /**
  * Returns the red component of the color.

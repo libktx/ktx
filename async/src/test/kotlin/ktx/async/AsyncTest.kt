@@ -38,11 +38,10 @@ abstract class AsyncTest {
    * thread, this method will return only the first one that happens to execute the extraction task. When relying on
    * this method to find the executor thread, make sure the executor is single-threaded.
    */
-  protected fun getExecutionThread(executor: AsyncExecutor): Thread {
-    return getExecutionThread { task ->
+  protected fun getExecutionThread(executor: AsyncExecutor): Thread =
+    getExecutionThread { task ->
       executor.submit { task.run() }
     }
-  }
 
   /**
    * Finds the [Thread] that executes the passed [Runnable].

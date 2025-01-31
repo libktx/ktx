@@ -5,7 +5,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class EllipseTest {
-
   @Test
   fun `should destructure Ellipse`() {
     val ellipse = Ellipse(1f, 2f, 3f, 4f)
@@ -17,5 +16,4 @@ class EllipseTest {
     assertEquals(3f, w)
     assertEquals(4f, h)
   }
-
 }

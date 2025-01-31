@@ -17,44 +17,85 @@ class TestPreferences : Preferences {
   var flushed = false
 
   override fun contains(key: String) = map.containsKey(key)
+
   override fun get(): MutableMap<String, *> = map
+
   override fun getBoolean(key: String) = map[key] as Boolean
-  override fun getBoolean(key: String, defValue: Boolean) = map.getOrDefault(key, defValue) as Boolean
+
+  override fun getBoolean(
+    key: String,
+    defValue: Boolean,
+  ) = map.getOrDefault(key, defValue) as Boolean
+
   override fun getInteger(key: String) = map[key] as Int
-  override fun getInteger(key: String, defValue: Int) = map.getOrDefault(key, defValue) as Int
+
+  override fun getInteger(
+    key: String,
+    defValue: Int,
+  ) = map.getOrDefault(key, defValue) as Int
+
   override fun getLong(key: String) = map[key] as Long
-  override fun getLong(key: String, defValue: Long) = map.getOrDefault(key, defValue) as Long
+
+  override fun getLong(
+    key: String,
+    defValue: Long,
+  ) = map.getOrDefault(key, defValue) as Long
+
   override fun getFloat(key: String) = map[key] as Float
-  override fun getFloat(key: String, defValue: Float) = map.getOrDefault(key, defValue) as Float
+
+  override fun getFloat(
+    key: String,
+    defValue: Float,
+  ) = map.getOrDefault(key, defValue) as Float
+
   override fun getString(key: String) = map[key] as String
-  override fun getString(key: String, defValue: String) = map.getOrDefault(key, defValue) as String
+
+  override fun getString(
+    key: String,
+    defValue: String,
+  ) = map.getOrDefault(key, defValue) as String
 
   override fun put(vals: MutableMap<String, *>): Preferences {
     vals.forEach { map[it.key] = it.value as Any }
     return this
   }
 
-  override fun putLong(key: String, value: Long): Preferences {
+  override fun putLong(
+    key: String,
+    value: Long,
+  ): Preferences {
     map[key] = value
     return this
   }
 
-  override fun putInteger(key: String, value: Int): Preferences {
+  override fun putInteger(
+    key: String,
+    value: Int,
+  ): Preferences {
     map[key] = value
     return this
   }
 
-  override fun putBoolean(key: String, value: Boolean): Preferences {
+  override fun putBoolean(
+    key: String,
+    value: Boolean,
+  ): Preferences {
     map[key] = value
     return this
   }
 
-  override fun putFloat(key: String, value: Float): Preferences {
+  override fun putFloat(
+    key: String,
+    value: Float,
+  ): Preferences {
     map[key] = value
     return this
   }
 
-  override fun putString(key: String, value: String): Preferences {
+  override fun putString(
+    key: String,
+    value: String,
+  ): Preferences {
     map[key] = value
     return this
   }
@@ -64,6 +105,7 @@ class TestPreferences : Preferences {
   }
 
   override fun clear() = map.clear()
+
   override fun flush() {
     flushed = true
   }
@@ -72,7 +114,9 @@ class TestPreferences : Preferences {
 /**
  * For JSON serialization tests.
  */
-data class JsonSerializable(val data: String = "")
+data class JsonSerializable(
+  val data: String = "",
+)
 
 class PreferencesTest {
   private val preferences: Preferences = TestPreferences()

@@ -18,20 +18,22 @@ class JsonTest {
     val json = Json()
 
     // When:
-    val simple = json.fromJson<Simple>(
-      """{
+    val simple =
+      json.fromJson<Simple>(
+        """{
       "int": 10,
       "bool": true,
       "str": "Hello world"
     }""",
-    )
+      )
 
     // Then:
-    simple shouldEqual Simple(
-      int = 10,
-      bool = true,
-      str = "Hello world",
-    )
+    simple shouldEqual
+      Simple(
+        int = 10,
+        bool = true,
+        str = "Hello world",
+      )
   }
 
   @Test
@@ -40,8 +42,9 @@ class JsonTest {
     val json = Json()
 
     // When:
-    val complex = json.fromJson<Complex>(
-      """{
+    val complex =
+      json.fromJson<Complex>(
+        """{
       "bool": true,
       "simple": {
         "int": 31,
@@ -50,18 +53,20 @@ class JsonTest {
       },
       "list": [1, 1, 2, 3, 5, 8, 13]
     }""",
-    )
+      )
 
     // Then:
-    complex shouldEqual Complex(
-      bool = true,
-      simple = Simple(
-        int = 31,
+    complex shouldEqual
+      Complex(
         bool = true,
-        str = "a",
-      ),
-      list = listOf(1, 1, 2, 3, 5, 8, 13),
-    )
+        simple =
+          Simple(
+            int = 31,
+            bool = true,
+            str = "a",
+          ),
+        list = listOf(1, 1, 2, 3, 5, 8, 13),
+      )
   }
 
   @Test
@@ -74,11 +79,12 @@ class JsonTest {
     val simple = json.fromJson<Simple>(fileHandle)
 
     // Then:
-    simple shouldEqual Simple(
-      int = 10,
-      bool = true,
-      str = "test",
-    )
+    simple shouldEqual
+      Simple(
+        int = 10,
+        bool = true,
+        str = "test",
+      )
   }
 
   @Test
@@ -109,11 +115,12 @@ class JsonTest {
   fun `should recreate object with equal properties`() {
     // Given:
     val json = Json()
-    val serialized = Custom().apply {
-      float = 100f
-      simple = Simple().apply { int = 1 }
-      list = List(3) { Simple().apply { int = it } }
-    }
+    val serialized =
+      Custom().apply {
+        float = 100f
+        simple = Simple().apply { int = 1 }
+        list = List(3) { Simple().apply { int = it } }
+      }
 
     // When:
     val deserialized = json.fromJson<Custom>(json.toJson(serialized))
@@ -131,21 +138,31 @@ class JsonTest {
     val simple = Simple(int = 12, str = "b")
 
     // When:
-    json.setSerializer(object : Json.Serializer<Simple> {
-      override fun read(json: Json, jsonData: JsonValue, type: Class<*>?): Simple {
-        val deserialized = Simple()
-        deserialized.int = jsonData.getInt("integer")
-        deserialized.str = jsonData.getString("string")
-        return deserialized
-      }
+    json.setSerializer(
+      object : Json.Serializer<Simple> {
+        override fun read(
+          json: Json,
+          jsonData: JsonValue,
+          type: Class<*>?,
+        ): Simple {
+          val deserialized = Simple()
+          deserialized.int = jsonData.getInt("integer")
+          deserialized.str = jsonData.getString("string")
+          return deserialized
+        }
 
-      override fun write(json: Json, obj: Simple, knownType: Class<*>?) {
-        json.writeObjectStart()
-        json.writeValue("integer", obj.int)
-        json.writeValue("string", obj.str)
-        json.writeObjectEnd()
-      }
-    })
+        override fun write(
+          json: Json,
+          obj: Simple,
+          knownType: Class<*>?,
+        ) {
+          json.writeObjectStart()
+          json.writeValue("integer", obj.int)
+          json.writeValue("string", obj.str)
+          json.writeObjectEnd()
+        }
+      },
+    )
 
     // Then:
     json.toJson(simple) shouldEqual "{integer:12,string:b}"
@@ -159,9 +176,15 @@ class JsonTest {
 
     // Expect:
     json.readValue<String>(JsonReader().parse("str")) shouldEqual "str"
-    json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldEqual arrayListOf(
-      1, 2, 3, 4, 5, 6,
-    )
+    json.readArrayValue<ArrayList<Int>, Int>(JsonReader().parse("[1,2,3,4,5,6]")) shouldEqual
+      arrayListOf(
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+      )
   }
 
   @Test
@@ -171,8 +194,9 @@ class JsonTest {
     json.setElementType<ListContainer, Simple>("list")
 
     // When:
-    val container = json.fromJson<ListContainer>(
-      """{
+    val container =
+      json.fromJson<ListContainer>(
+        """{
       "list": [
         {
           "bool": true,
@@ -183,15 +207,16 @@ class JsonTest {
         }
       ]
     }""",
-    )
+      )
 
     // Then:
-    container shouldEqual ListContainer(
-      listOf(
-        Simple(bool = true, int = 42),
-        Simple(str = "yes"),
-      ),
-    )
+    container shouldEqual
+      ListContainer(
+        listOf(
+          Simple(bool = true, int = 42),
+          Simple(str = "yes"),
+        ),
+      )
   }
 
   /**
@@ -227,8 +252,10 @@ class JsonTest {
     var simple: Simple = Simple(),
     var list: List<Simple> = emptyList(),
   ) : Json.Serializable {
-
-    override fun read(json: Json, jsonData: JsonValue) {
+    override fun read(
+      json: Json,
+      jsonData: JsonValue,
+    ) {
       float = json.readValue(jsonData, "float")
       simple = json.readValue(jsonData, "simple")
       list = json.readArrayValue(jsonData, "list")

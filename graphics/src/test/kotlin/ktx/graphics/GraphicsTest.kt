@@ -172,10 +172,11 @@ class GraphicsTest {
   fun `should take screenshot`() {
     LwjglNativesLoader.load()
     Gdx.gl = mock()
-    Gdx.graphics = mock {
-      on { backBufferHeight } doReturn 4
-      on { backBufferWidth } doReturn 4
-    }
+    Gdx.graphics =
+      mock {
+        on { backBufferHeight } doReturn 4
+        on { backBufferWidth } doReturn 4
+      }
     val fileHandle = spy(FileHandle(File.createTempFile("screenshot", ".png")))
 
     takeScreenshot(fileHandle)

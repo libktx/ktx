@@ -20,13 +20,14 @@ import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver.Resoluti
  * Creates a [FileHandleResolver].
  * @return a new [FileHandleResolver] instance providing files matching this type.
  */
-fun FileType.getResolver(): FileHandleResolver = when (this) {
-  Classpath -> ClasspathFileHandleResolver()
-  Internal -> InternalFileHandleResolver()
-  Local -> LocalFileHandleResolver()
-  External -> ExternalFileHandleResolver()
-  Absolute -> AbsoluteFileHandleResolver()
-}
+fun FileType.getResolver(): FileHandleResolver =
+  when (this) {
+    Classpath -> ClasspathFileHandleResolver()
+    Internal -> InternalFileHandleResolver()
+    Local -> LocalFileHandleResolver()
+    External -> ExternalFileHandleResolver()
+    Absolute -> AbsoluteFileHandleResolver()
+  }
 
 /**
  * Decorates this [FileHandleResolver] with a [PrefixFileHandleResolver].
@@ -56,4 +57,8 @@ fun FileHandleResolver.forResolutions(vararg resolutions: Resolution) = Resoluti
  * @see Resolution
  * @see ResolutionFileResolver
  */
-fun resolution(width: Int, height: Int, folder: String = "${width}x$height") = Resolution(width, height, folder)
+fun resolution(
+  width: Int,
+  height: Int,
+  folder: String = "${width}x$height",
+) = Resolution(width, height, folder)

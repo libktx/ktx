@@ -15,7 +15,10 @@ import kotlin.contracts.contract
  * @param allowSleep if true, inactive bodies will not be simulated. Improves performance. Defaults to true.
  * @return a new [World] instance with given parameters.
  */
-fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = World(gravity, allowSleep)
+fun createWorld(
+  gravity: Vector2 = Vector2.Zero,
+  allowSleep: Boolean = true,
+) = World(gravity, allowSleep)
 
 /**
  * Type-safe [Body] building DSL.
@@ -28,7 +31,10 @@ fun createWorld(gravity: Vector2 = Vector2.Zero, allowSleep: Boolean = true) = W
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun World.body(type: BodyType = BodyType.StaticBody, init: BodyDefinition.() -> Unit = {}): Body {
+inline fun World.body(
+  type: BodyType = BodyType.StaticBody,
+  init: BodyDefinition.() -> Unit = {},
+): Body {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val bodyDefinition = BodyDefinition()
   bodyDefinition.type = type

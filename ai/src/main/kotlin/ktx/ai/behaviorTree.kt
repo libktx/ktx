@@ -412,9 +412,7 @@ inline fun <E> Task<E>.untilSuccess(
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
-inline fun <E> Task<E>.failureLeaf(
-  init: (@GdxAiDsl Failure<E>).() -> Unit = {},
-): Int {
+inline fun <E> Task<E>.failureLeaf(init: (@GdxAiDsl Failure<E>).() -> Unit = {}): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val failure = Failure<E>()
   failure.init()
@@ -430,9 +428,7 @@ inline fun <E> Task<E>.failureLeaf(
  */
 @OptIn(ExperimentalContracts::class)
 @GdxAiDsl
-inline fun <E> Task<E>.successLeaf(
-  init: (@GdxAiDsl Success<E>).() -> Unit = {},
-): Int {
+inline fun <E> Task<E>.successLeaf(init: (@GdxAiDsl Success<E>).() -> Unit = {}): Int {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val success = Success<E>()
   success.init()

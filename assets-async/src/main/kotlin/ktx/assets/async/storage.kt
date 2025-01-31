@@ -372,9 +372,10 @@ class AssetStorage(
     return if (asset != null) asset.reference as Deferred<T> else getMissingAssetAsync(identifier)
   }
 
-  private fun <T> getMissingAssetAsync(identifier: Identifier<T>): Deferred<T> = CompletableDeferred<T>().apply {
-    completeExceptionally(MissingAssetException(identifier))
-  }
+  private fun <T> getMissingAssetAsync(identifier: Identifier<T>): Deferred<T> =
+    CompletableDeferred<T>().apply {
+      completeExceptionally(MissingAssetException(identifier))
+    }
 
   /**
    * Checks whether an asset in the selected [path] with [T] type is already loaded.
@@ -404,8 +405,7 @@ class AssetStorage(
    * also report as loaded, but trying to obtain their instance will cause rethrowing of that
    * exception, forcing the user to handle it.
    */
-  fun isLoaded(identifier: Identifier<*>): Boolean =
-    assets[identifier]?.reference?.isCompleted ?: false
+  fun isLoaded(identifier: Identifier<*>): Boolean = assets[identifier]?.reference?.isCompleted ?: false
 
   /**
    * Checks whether an asset in the selected [path] and [T] type is currently managed by the storage.
@@ -435,8 +435,10 @@ class AssetStorage(
    *
    * Throws [AlreadyLoadedAssetException] if an asset with the same path is already loaded or scheduled for loading.
    */
-  suspend inline fun <reified T> add(path: String, asset: T) =
-    add(getAssetDescriptor(path), asset)
+  suspend inline fun <reified T> add(
+    path: String,
+    asset: T,
+  ) = add(getAssetDescriptor(path), asset)
 
   /**
    * Adds a fully loaded [asset] to the storage. Allows to avoid loading the asset with the [AssetStorage]
@@ -448,8 +450,10 @@ class AssetStorage(
    *
    * Throws [AlreadyLoadedAssetException] if an asset with the same path is already loaded or scheduled for loading.
    */
-  suspend fun <T> add(identifier: Identifier<T>, asset: T) =
-    add(identifier.toAssetDescriptor(), asset)
+  suspend fun <T> add(
+    identifier: Identifier<T>,
+    asset: T,
+  ) = add(identifier.toAssetDescriptor(), asset)
 
   /**
    * Adds a fully loaded [asset] to the storage. Allows to avoid loading the asset with the [AssetStorage]
@@ -460,7 +464,10 @@ class AssetStorage(
    *
    * Throws [AlreadyLoadedAssetException] if an asset with the same path is already loaded or scheduled for loading.
    */
-  suspend fun <T> add(descriptor: AssetDescriptor<T>, asset: T) {
+  suspend fun <T> add(
+    descriptor: AssetDescriptor<T>,
+    asset: T,
+  ) {
     val identifier = descriptor.toIdentifier()
     lock.withLock {
       @Suppress("UNCHECKED_CAST")
@@ -471,13 +478,14 @@ class AssetStorage(
       }
       // Asset is currently not stored. Creating.
       @Suppress("UNCHECKED_CAST")
-      assets[identifier] = Asset(
-        descriptor = descriptor,
-        reference = CompletableDeferred(asset),
-        dependencies = emptyList(),
-        referenceCount = 1,
-        loader = ManualLoader as Loader<T>,
-      )
+      assets[identifier] =
+        Asset(
+          descriptor = descriptor,
+          reference = CompletableDeferred(asset),
+          dependencies = emptyList(),
+          referenceCount = 1,
+          loader = ManualLoader as Loader<T>,
+        )
       registerAssetPath(identifier)
       progress.registerAddedAsset()
     }
@@ -512,8 +520,10 @@ class AssetStorage(
    * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
-  inline fun <reified T> loadAsync(path: String, parameters: AssetLoaderParameters<T>? = null): Deferred<T> =
-    loadAsync(getAssetDescriptor(path, parameters))
+  inline fun <reified T> loadAsync(
+    path: String,
+    parameters: AssetLoaderParameters<T>? = null,
+  ): Deferred<T> = loadAsync(getAssetDescriptor(path, parameters))
 
   /**
    * Schedules loading of an asset with path and type specified by [identifier].
@@ -544,8 +554,10 @@ class AssetStorage(
    * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
-  fun <T> loadAsync(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null): Deferred<T> =
-    loadAsync(identifier.toAssetDescriptor(parameters))
+  fun <T> loadAsync(
+    identifier: Identifier<T>,
+    parameters: AssetLoaderParameters<T>? = null,
+  ): Deferred<T> = loadAsync(identifier.toAssetDescriptor(parameters))
 
   /**
    * Schedules loading of an asset of [T] type described by the [descriptor].
@@ -573,9 +585,10 @@ class AssetStorage(
    * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
-  fun <T> loadAsync(descriptor: AssetDescriptor<T>): Deferred<T> = KtxAsync.async(asyncContext) {
-    load(descriptor)
-  }
+  fun <T> loadAsync(descriptor: AssetDescriptor<T>): Deferred<T> =
+    KtxAsync.async(asyncContext) {
+      load(descriptor)
+    }
 
   /**
    * Schedules loading of an asset of [T] type located at [path].
@@ -606,8 +619,10 @@ class AssetStorage(
    * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
-  suspend inline fun <reified T> load(path: String, parameters: AssetLoaderParameters<T>? = null): T =
-    load(getAssetDescriptor(path, parameters))
+  suspend inline fun <reified T> load(
+    path: String,
+    parameters: AssetLoaderParameters<T>? = null,
+  ): T = load(getAssetDescriptor(path, parameters))
 
   /**
    * Schedules loading of an asset with path and type specified by [identifier].
@@ -638,8 +653,10 @@ class AssetStorage(
    * It is encouraged not to rely on [AssetLoaderParameters.LoadedCallback] and use coroutines instead.
    * Exceptions thrown by callbacks will not be propagated, and will be logged with [logger] instead.
    */
-  suspend fun <T> load(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null): T =
-    load(identifier.toAssetDescriptor(parameters))
+  suspend fun <T> load(
+    identifier: Identifier<T>,
+    parameters: AssetLoaderParameters<T>? = null,
+  ): T = load(identifier.toAssetDescriptor(parameters))
 
   /**
    * Schedules loading of an asset of [T] type described by the [descriptor].
@@ -742,9 +759,7 @@ class AssetStorage(
     return newAssets
   }
 
-  private suspend fun <T> loadAsset(
-    asset: Asset<T>,
-  ): T {
+  private suspend fun <T> loadAsset(asset: Asset<T>): T {
     asset.dependencies.forEach { dependency ->
       withAssetLoadingErrorHandling(asset) {
         dependency.reference.await()
@@ -764,7 +779,10 @@ class AssetStorage(
     return asset.reference.await()
   }
 
-  private inline fun withAssetLoadingErrorHandling(asset: Asset<*>, operation: () -> Unit) {
+  private inline fun withAssetLoadingErrorHandling(
+    asset: Asset<*>,
+    operation: () -> Unit,
+  ) {
     try {
       operation()
     } catch (exception: AssetStorageException) {
@@ -774,7 +792,10 @@ class AssetStorage(
     }
   }
 
-  private fun setLoadedExceptionally(asset: Asset<*>, exception: AssetStorageException) {
+  private fun setLoadedExceptionally(
+    asset: Asset<*>,
+    exception: AssetStorageException,
+  ) {
     if (asset.reference.completeExceptionally(exception)) {
       // This the passed exception managed to complete the loading, we record a failed asset loading:
       progress.registerFailedAsset()
@@ -818,7 +839,10 @@ class AssetStorage(
     }
   }
 
-  private fun <T> setLoaded(asset: Asset<T>, value: T) {
+  private fun <T> setLoaded(
+    asset: Asset<T>,
+    value: T,
+  ) {
     if (asset.reference.complete(value)) {
       // The asset was correctly loaded and assigned.
       progress.registerLoadedAsset()
@@ -867,8 +891,10 @@ class AssetStorage(
    * immediately if it is loaded, or throw [MissingAssetException] if it is unloaded. In either case, it will
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
-  inline fun <reified T> loadSync(path: String, parameters: AssetLoaderParameters<T>? = null): T =
-    loadSync(getAssetDescriptor(path, parameters))
+  inline fun <reified T> loadSync(
+    path: String,
+    parameters: AssetLoaderParameters<T>? = null,
+  ): T = loadSync(getAssetDescriptor(path, parameters))
 
   /**
    * Blocks the current thread until the asset with [T] type is loaded with data specified by the [identifier]
@@ -895,8 +921,10 @@ class AssetStorage(
    * immediately if it is loaded, or throw [MissingAssetException] if it is unloaded. In either case, it will
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
-  fun <T> loadSync(identifier: Identifier<T>, parameters: AssetLoaderParameters<T>? = null) =
-    loadSync(identifier.toAssetDescriptor(parameters))
+  fun <T> loadSync(
+    identifier: Identifier<T>,
+    parameters: AssetLoaderParameters<T>? = null,
+  ) = loadSync(identifier.toAssetDescriptor(parameters))
 
   /**
    * Blocks the current thread until the asset with [T] type is loaded using the asset [descriptor].
@@ -922,15 +950,17 @@ class AssetStorage(
    * immediately if it is loaded, or throw [MissingAssetException] if it is unloaded. In either case, it will
    * increase the reference count of the asset - see [getReferenceCount] and [unload] for details.
    */
-  fun <T> loadSync(descriptor: AssetDescriptor<T>): T = runBlocking {
-    val asset: Asset<T>
-    val newAssets = lock.withLock {
-      asset = obtainAsset(descriptor)
-      updateReferences(asset)
+  fun <T> loadSync(descriptor: AssetDescriptor<T>): T =
+    runBlocking {
+      val asset: Asset<T>
+      val newAssets =
+        lock.withLock {
+          asset = obtainAsset(descriptor)
+          updateReferences(asset)
+        }
+      loadSync(newAssets)
+      getOrThrow(asset)
     }
-    loadSync(newAssets)
-    getOrThrow(asset)
-  }
 
   private suspend fun loadSync(assets: List<Asset<*>>) {
     val queue = Queue<Asset<*>>(assets.size)
@@ -960,7 +990,8 @@ class AssetStorage(
     val exceptions = mutableListOf<AssetStorageException>()
     assets.forEach { asset ->
       // Gathering all dependencies that are not loaded and were scheduled for asynchronous loading:
-      asset.dependencies.filter { !it.reference.isCompleted && it.identifier !in identifiers }
+      asset.dependencies
+        .filter { !it.reference.isCompleted && it.identifier !in identifiers }
         // Preparing an exception if such a dependency occurs:
         .map { MissingDependencyException(it.identifier) }
         // Setting parent asset as exceptionally loaded:
@@ -1059,29 +1090,30 @@ class AssetStorage(
    * of an asset that is still loaded), the asset will not be disposed of and will remain
    * in the storage even if `true` is returned.
    */
-  suspend fun unload(identifier: Identifier<*>): Boolean = lock.withLock {
-    val root = assets[identifier]
-    if (root == null) {
-      // Asset is absent in the storage. Returning false - unsuccessful unload:
-      false
-    } else {
-      val queue = Queue<Asset<*>>()
-      queue.addLast(root)
-      while (!queue.isEmpty) {
-        val asset = queue.removeFirst()
-        asset.referenceCount--
-        if (asset.referenceCount == 0) {
-          // The asset is no longer referenced by the user or any dependencies. Removing and disposing.
-          assets.remove(asset.identifier)
-          unregisterAssetPath(asset.identifier)
-          disposeOf(asset)
+  suspend fun unload(identifier: Identifier<*>): Boolean =
+    lock.withLock {
+      val root = assets[identifier]
+      if (root == null) {
+        // Asset is absent in the storage. Returning false - unsuccessful unload:
+        false
+      } else {
+        val queue = Queue<Asset<*>>()
+        queue.addLast(root)
+        while (!queue.isEmpty) {
+          val asset = queue.removeFirst()
+          asset.referenceCount--
+          if (asset.referenceCount == 0) {
+            // The asset is no longer referenced by the user or any dependencies. Removing and disposing.
+            assets.remove(asset.identifier)
+            unregisterAssetPath(asset.identifier)
+            disposeOf(asset)
+          }
+          asset.dependencies.forEach(queue::addLast)
         }
-        asset.dependencies.forEach(queue::addLast)
+        // Asset was present in the storage. Returning true - successful unload:
+        true
       }
-      // Asset was present in the storage. Returning true - successful unload:
-      true
     }
-  }
 
   @OptIn(ExperimentalCoroutinesApi::class) // Allows disposing of assets without suspending calls.
   private fun disposeOf(asset: Asset<*>) {
@@ -1122,16 +1154,17 @@ class AssetStorage(
    * of the loaded file. [path] might be necessary to choose the correct loader, as some loaders
    * might be assigned to specific file  suffixes or extensions.
    */
-  inline fun <reified Asset> getLoader(path: String? = null): Loader<Asset>? =
-    getLoader(Asset::class.java, path)
+  inline fun <reified Asset> getLoader(path: String? = null): Loader<Asset>? = getLoader(Asset::class.java, path)
 
   /**
    * Internal API exposed for inlined method. See inlined [getLoader] with generics.
    * [type] is the class of the loaded asset, while path is used to determine if
    * a loader specifically assigned to a file suffix or extension is necessary.
    */
-  fun <Asset> getLoader(type: Class<Asset>, path: String?): Loader<Asset>? =
-    loaderStorage.getLoader(type, path?.normalizePath())
+  fun <Asset> getLoader(
+    type: Class<Asset>,
+    path: String?,
+  ): Loader<Asset>? = loaderStorage.getLoader(type, path?.normalizePath())
 
   /**
    * Associates the [AssetLoader] with specific asset type determined by [T].
@@ -1142,8 +1175,10 @@ class AssetStorage(
    * Throws [InvalidLoaderException] if the [AssetLoader] does not extend
    * [SynchronousAssetLoader] or [AsynchronousAssetLoader].
    */
-  inline fun <reified T> setLoader(suffix: String? = null, noinline loaderProvider: () -> Loader<T>) =
-    setLoader(T::class.java, suffix, loaderProvider)
+  inline fun <reified T> setLoader(
+    suffix: String? = null,
+    noinline loaderProvider: () -> Loader<T>,
+  ) = setLoader(T::class.java, suffix, loaderProvider)
 
   /**
    * Internal API exposed for inlined method. See inlined [setLoader] with reified generics.
@@ -1152,7 +1187,11 @@ class AssetStorage(
    * Throws [InvalidLoaderException] if the [AssetLoader] does not extend
    * [SynchronousAssetLoader] or [AsynchronousAssetLoader].
    */
-  fun <T> setLoader(type: Class<T>, suffix: String? = null, loaderProvider: () -> Loader<T>) {
+  fun <T> setLoader(
+    type: Class<T>,
+    suffix: String? = null,
+    loaderProvider: () -> Loader<T>,
+  ) {
     loaderStorage.setLoaderProvider(type, suffix, loaderProvider)
   }
 
@@ -1192,15 +1231,13 @@ class AssetStorage(
    * Returns a copy of the list of dependencies of the asset under [path] with [T] type.
    * If the asset is not loaded or has no dependencies, an empty list is returned.
    */
-  inline fun <reified T> getDependencies(path: String): List<Identifier<*>> =
-    getDependencies(getIdentifier<T>(path))
+  inline fun <reified T> getDependencies(path: String): List<Identifier<*>> = getDependencies(getIdentifier<T>(path))
 
   /**
    * Returns a copy of the list of dependencies of the asset described by [descriptor].
    * If the asset is not loaded or has no dependencies, an empty list is returned.
    */
-  fun getDependencies(descriptor: AssetDescriptor<*>): List<Identifier<*>> =
-    getDependencies(descriptor.toIdentifier())
+  fun getDependencies(descriptor: AssetDescriptor<*>): List<Identifier<*>> = getDependencies(descriptor.toIdentifier())
 
   /**
    * Returns a copy of the list of dependencies of the asset identified by [identifier].
@@ -1244,30 +1281,34 @@ class AssetStorage(
   suspend fun takeSnapshotAsync(): AssetStorageSnapshot {
     lock.withLock {
       // Creating a safe copy of all assets without unfinished internal completable deferred instances:
-      val assetsCopy = assets.mapValues {
-        @Suppress("UNCHECKED_CAST")
-        val asset: Asset<Any> = it.value as Asset<Any>
-        val reference: CompletableDeferred<Any> = if (asset.reference.isCompleted || asset.reference.isCancelled) {
-          asset.reference
-        } else {
-          CompletableDeferred()
+      val assetsCopy =
+        assets.mapValues {
+          @Suppress("UNCHECKED_CAST")
+          val asset: Asset<Any> = it.value as Asset<Any>
+          val reference: CompletableDeferred<Any> =
+            if (asset.reference.isCompleted || asset.reference.isCancelled) {
+              asset.reference
+            } else {
+              CompletableDeferred()
+            }
+          asset.copy(reference = reference)
         }
-        asset.copy(reference = reference)
-      }
       // Replacing dependencies with safe copies:
       return AssetStorageSnapshot(
-        assets = assetsCopy.mapValues {
-          val asset = it.value
-          if (asset.dependencies.isEmpty()) {
-            asset
-          } else {
-            asset.copy(
-              dependencies = asset.dependencies.mapNotNull { dependency ->
-                assetsCopy[dependency.identifier]
-              },
-            )
-          }
-        },
+        assets =
+          assetsCopy.mapValues {
+            val asset = it.value
+            if (asset.dependencies.isEmpty()) {
+              asset
+            } else {
+              asset.copy(
+                dependencies =
+                  asset.dependencies.mapNotNull { dependency ->
+                    assetsCopy[dependency.identifier]
+                  },
+              )
+            }
+          },
       )
     }
   }
@@ -1283,9 +1324,7 @@ class AssetStorage(
    * the [CompletableDeferred] instances are completed manually, they will not affect the
    * internal state of the storage.
    */
-  fun takeSnapshot(): AssetStorageSnapshot {
-    return runBlocking { takeSnapshotAsync() }
-  }
+  fun takeSnapshot(): AssetStorageSnapshot = runBlocking { takeSnapshotAsync() }
 
   /**
    * Unloads all assets. Blocks current thread until are assets are unloaded.
@@ -1339,9 +1378,10 @@ class AssetStorage(
     }
   }
 
-  override fun toString(): String = "AssetStorage(assets=${
-    assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
-  })"
+  override fun toString(): String =
+    "AssetStorage(assets=${
+      assets.keys.sortedBy { it.path }.joinToString(separator = ", ", prefix = "[", postfix = "]")
+    })"
 }
 
 /**
@@ -1427,8 +1467,8 @@ data class AssetStorageSnapshot(
    * Prints [AssetStorage] state for debugging. Lists registered assets with their dependencies
    * and reference counts.
    */
-  fun prettyPrint(): String {
-    return """[
+  fun prettyPrint(): String =
+    """[
 ${
       assets.values
         .sortedBy { it.identifier.type.name }
@@ -1447,5 +1487,4 @@ ${
         }
     }
 ]"""
-  }
 }

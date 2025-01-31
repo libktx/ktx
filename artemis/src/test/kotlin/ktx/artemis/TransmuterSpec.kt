@@ -21,9 +21,10 @@ object TransmuterSpec : Spek({
 
     describe("add component function") {
       it("should add a component to an entity") {
-        val transmuter = transmuterFactory
-          .add<Texture>()
-          .build()
+        val transmuter =
+          transmuterFactory
+            .add<Texture>()
+            .build()
 
         transmuter.transmute(entity)
 
@@ -32,10 +33,11 @@ object TransmuterSpec : Spek({
     }
     describe("remove component function") {
       it("should remove a component from an entity") {
-        val transmuter = transmuterFactory
-          .add<Texture>()
-          .remove<Transform>()
-          .build()
+        val transmuter =
+          transmuterFactory
+            .add<Texture>()
+            .remove<Transform>()
+            .build()
 
         transmuter.transmute(entity)
 

@@ -23,8 +23,9 @@ import com.badlogic.gdx.math.Shape2D
  * @return value of the property.
  * @throws MissingPropertyException If the property is not defined.
  */
-inline fun <reified T> MapObject.property(key: String): T = properties[key, T::class.java]
-  ?: throw MissingPropertyException("Property $key does not exist for object $name")
+inline fun <reified T> MapObject.property(key: String): T =
+  properties[key, T::class.java]
+    ?: throw MissingPropertyException("Property $key does not exist for object $name")
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. The type is automatically
@@ -34,7 +35,10 @@ inline fun <reified T> MapObject.property(key: String): T = properties[key, T::c
  * @param defaultValue default value in case the property is missing.
  * @return value of the property or defaultValue if property is missing.
  */
-inline fun <reified T> MapObject.property(key: String, defaultValue: T): T = properties[key, defaultValue, T::class.java]
+inline fun <reified T> MapObject.property(
+  key: String,
+  defaultValue: T,
+): T = properties[key, defaultValue, T::class.java]
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapObject]. If the property
@@ -113,14 +117,15 @@ val MapObject.type: String?
  * @throws MissingShapeException If the object does not have any shape
  */
 val MapObject.shape: Shape2D
-  get() = when (this) {
-    is CircleMapObject -> circle
-    is EllipseMapObject -> ellipse
-    is PolylineMapObject -> polyline
-    is PolygonMapObject -> polygon
-    is RectangleMapObject -> rectangle
-    else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape.")
-  }
+  get() =
+    when (this) {
+      is CircleMapObject -> circle
+      is EllipseMapObject -> ellipse
+      is PolylineMapObject -> polyline
+      is PolygonMapObject -> polygon
+      is RectangleMapObject -> rectangle
+      else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape.")
+    }
 
 /**
  * Returns **true** if and only if the [MapObjects] collection is empty.

@@ -34,8 +34,10 @@ const val defaultMapSize = 51
  * @param loadFactor decides under what load the map is resized.
  * @return a new [ObjectMap].
  */
-fun <Key, Value> gdxMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): GdxMap<Key, Value> =
-  GdxMap(initialCapacity, loadFactor)
+fun <Key, Value> gdxMapOf(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+): GdxMap<Key, Value> = GdxMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -92,7 +94,10 @@ operator fun <Key> GdxMap<Key, *>.contains(key: Key): Boolean = this.containsKey
  * @param value will be stored in the map, accessible by the passed key.
  * @return old value associated with the key or null if none.
  */
-operator fun <Key, Value> GdxMap<Key, Value>.set(key: Key, value: Value): Value? = this.put(key, value)
+operator fun <Key, Value> GdxMap<Key, Value>.set(
+  key: Key,
+  value: Value,
+): Value? = this.put(key, value)
 
 /**
  * Allows to iterate over the map with Kotlin lambda syntax and direct access to [MutableIterator], which can remove
@@ -186,7 +191,10 @@ inline fun <Type, Key, Value> Array<Type>.toGdxMap(
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IdentityMap], which compares keys by references.
  */
-fun <Key, Value> gdxIdentityMapOf(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
+fun <Key, Value> gdxIdentityMapOf(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+): GdxIdentityMap<Key, Value> = IdentityMap(initialCapacity, loadFactor)
 
 /**
  * @param keysToValues will be added to the map.
@@ -211,8 +219,10 @@ inline fun <Key, Value> gdxIdentityMapOf(
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntIntMap] with primitive int keys and values.
  */
-fun gdxIntIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntIntMap =
-  IntIntMap(initialCapacity, loadFactor)
+fun gdxIntIntMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+): IntIntMap = IntIntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -224,7 +234,10 @@ operator fun IntIntMap.contains(key: Int): Boolean = this.containsKey(key)
  * @param key the passed value will be linked with this key.
  * @param value will be stored in the map, accessible by the passed key.
  */
-operator fun IntIntMap.set(key: Int, value: Int) = this.put(key, value)
+operator fun IntIntMap.set(
+  key: Int,
+  value: Int,
+) = this.put(key, value)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -239,8 +252,10 @@ operator fun IntIntMap.get(key: Int): Int = this.get(key, 0)
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntFloatMap] with primitive int keys and primitive float values.
  */
-fun gdxIntFloatMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntFloatMap =
-  IntFloatMap(initialCapacity, loadFactor)
+fun gdxIntFloatMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+): IntFloatMap = IntFloatMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -252,7 +267,10 @@ operator fun IntFloatMap.contains(key: Int): Boolean = this.containsKey(key)
  * @param key the passed value will be linked with this key.
  * @param value will be stored in the map, accessible by the passed key.
  */
-operator fun IntFloatMap.set(key: Int, value: Float) = this.put(key, value)
+operator fun IntFloatMap.set(
+  key: Int,
+  value: Float,
+) = this.put(key, value)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -267,8 +285,10 @@ operator fun IntFloatMap.get(key: Int): Float = this.get(key, 0f)
  * @param loadFactor decides under what load the map is resized.
  * @return a new [IntMap] with primitive int keys.
  */
-fun <Value> gdxIntMap(initialCapacity: Int = defaultMapSize, loadFactor: Float = defaultLoadFactor): IntMap<Value> =
-  IntMap(initialCapacity, loadFactor)
+fun <Value> gdxIntMap(
+  initialCapacity: Int = defaultMapSize,
+  loadFactor: Float = defaultLoadFactor,
+): IntMap<Value> = IntMap(initialCapacity, loadFactor)
 
 /**
  * @param key a value might be assigned to this key and stored in the map.
@@ -281,14 +301,20 @@ operator fun IntMap<*>.contains(key: Int): Boolean = this.containsKey(key)
  * @param value will be stored in the map, accessible by the passed key.
  * @return old value associated with the key or null if none.
  */
-operator fun <Value> IntMap<Value>.set(key: Int, value: Value): Value? = this.put(key, value)
+operator fun <Value> IntMap<Value>.set(
+  key: Int,
+  value: Value,
+): Value? = this.put(key, value)
 
 /**
  * @param key the passed value will be linked with this key.
  * @param value will be stored in the map, accessible by the passed key.
  * @return index of the key and value in the underlying arrays.
  */
-operator fun <Key, Value> GdxArrayMap<Key, Value>.set(key: Key, value: Value): Int = this.put(key, value)
+operator fun <Key, Value> GdxArrayMap<Key, Value>.set(
+  key: Key,
+  value: Value,
+): Int = this.put(key, value)
 
 /**
  * Allows to destruct [ObjectMap.Entry] into key and value components.
@@ -402,9 +428,8 @@ inline fun <Key, Type, Value : Iterable<Type>> GdxMap<Key, out Value>.flatten():
  * Returns a single [GdxArray] of all elements yielded from results of transform function being invoked
  * on each entry of original [GdxMap].
  */
-inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Value>) -> Iterable<R>): GdxArray<R> {
-  return this.map(transform).flatten()
-}
+inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Value>) -> Iterable<R>): GdxArray<R> =
+  this.map(transform).flatten()
 
 /**
  * Returns the value for the given [key]. If the [key] is not found in the map,
@@ -412,7 +437,10 @@ inline fun <Key, Value, R> GdxMap<Key, Value>.flatMap(transform: (Entry<Key, Val
  *
  * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
  */
-inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(
+  key: Key,
+  defaultValue: () -> Value,
+): Value {
   var value = this[key]
 
   if (value == null && key !in this) {
@@ -429,7 +457,10 @@ inline fun <Key, Value> GdxMap<Key, Value>.getOrPut(key: Key, defaultValue: () -
  *
  * Throws an [IllegalArgumentException][java.lang.IllegalArgumentException] when key is null.
  */
-inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(
+  key: Key,
+  defaultValue: () -> Value,
+): Value {
   var value = this[key]
 
   if (value == null && key !in this) {
@@ -444,7 +475,10 @@ inline fun <Key, Value> GdxIdentityMap<Key, Value>.getOrPut(key: Key, defaultVal
  * Returns the value for the given [key]. If the [key] is not found in the map,
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
-inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue: () -> Value): Value {
+inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(
+  key: Key,
+  defaultValue: () -> Value,
+): Value {
   var value = this[key]
 
   if (value == null && !this.containsKey(key)) {
@@ -459,7 +493,10 @@ inline fun <Key, Value> GdxArrayMap<Key, Value>.getOrPut(key: Key, defaultValue:
  * Returns the value for the given [key]. If the [key] is not found in the map,
  * calls the [defaultValue] function, puts its result into the map under the given [key] and returns it.
  */
-inline fun <Value> IntMap<Value>.getOrPut(key: Int, defaultValue: () -> Value): Value {
+inline fun <Value> IntMap<Value>.getOrPut(
+  key: Int,
+  defaultValue: () -> Value,
+): Value {
   var value = this[key]
 
   if (value == null && key !in this) {

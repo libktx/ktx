@@ -396,7 +396,9 @@ class LogTest {
 
   @Test
   fun `should create custom logger with modified message format`() {
-    class CustomLogger(name: String) : Logger(name, debugTag = "D", infoTag = "I", errorTag = "E") {
+    class CustomLogger(
+      name: String,
+    ) : Logger(name, debugTag = "D", infoTag = "I", errorTag = "E") {
       override fun buildMessage(message: String): String = "$name ||| $message"
     }
 
@@ -423,54 +425,93 @@ class LogTest {
     }
 
     override fun getLogLevel(): Int = level
+
     override fun setLogLevel(logLevel: Int) {
       level = logLevel
     }
 
-    override fun debug(tag: String?, message: String?) {
+    override fun debug(
+      tag: String?,
+      message: String?,
+    ) {
       logs.add("[$tag] $message")
     }
 
-    override fun debug(tag: String?, message: String?, exception: Throwable) {
-      logs.add("[$tag] $message")
-      logs.add(exception.message!!)
-    }
-
-    override fun log(tag: String?, message: String?) {
-      logs.add("[$tag] $message")
-    }
-
-    override fun log(tag: String?, message: String?, exception: Throwable) {
+    override fun debug(
+      tag: String?,
+      message: String?,
+      exception: Throwable,
+    ) {
       logs.add("[$tag] $message")
       logs.add(exception.message!!)
     }
 
-    override fun error(tag: String?, message: String?) {
+    override fun log(
+      tag: String?,
+      message: String?,
+    ) {
       logs.add("[$tag] $message")
     }
 
-    override fun error(tag: String?, message: String?, exception: Throwable) {
+    override fun log(
+      tag: String?,
+      message: String?,
+      exception: Throwable,
+    ) {
+      logs.add("[$tag] $message")
+      logs.add(exception.message!!)
+    }
+
+    override fun error(
+      tag: String?,
+      message: String?,
+    ) {
+      logs.add("[$tag] $message")
+    }
+
+    override fun error(
+      tag: String?,
+      message: String?,
+      exception: Throwable,
+    ) {
       logs.add("[$tag] $message")
       logs.add(exception.message!!)
     }
 
     override fun getClipboard(): Clipboard? = null
+
     override fun getFiles(): Files? = null
+
     override fun getApplicationListener(): ApplicationListener? = null
+
     override fun removeLifecycleListener(listener: LifecycleListener?) = Unit
+
     override fun getPreferences(name: String?): Preferences? = null
+
     override fun addLifecycleListener(listener: LifecycleListener?) = Unit
+
     override fun getVersion(): Int = 0
+
     override fun postRunnable(runnable: Runnable?) = Unit
+
     override fun getGraphics(): Graphics? = null
+
     override fun getAudio(): Audio? = null
+
     override fun exit() = Unit
+
     override fun getType(): ApplicationType = HeadlessDesktop
+
     override fun getInput(): Input? = null
+
     override fun getNativeHeap(): Long = 0L
+
     override fun getNet(): Net? = null
+
     override fun getJavaHeap(): Long = 0L
+
     override fun setApplicationLogger(applicationLogger: ApplicationLogger?) = Unit
+
     override fun getApplicationLogger(): ApplicationLogger? = null
   }
 }

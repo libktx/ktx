@@ -9,12 +9,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MapLayerTest {
-  private val mapLayer = MapLayer().apply {
-    properties.apply {
-      put("active", true)
-      put("customProperty", 123)
+  private val mapLayer =
+    MapLayer().apply {
+      properties.apply {
+        put("active", true)
+        put("customProperty", 123)
+      }
     }
-  }
 
   @Test
   fun `should retrieve properties from MapLayer`() {

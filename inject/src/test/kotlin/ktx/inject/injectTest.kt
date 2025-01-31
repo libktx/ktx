@@ -326,9 +326,10 @@ class DependencyInjectionTest {
   @Test
   fun `should dispose of Disposable components with error handling`() {
     Gdx.app = mock()
-    val singleton = mock<Disposable> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
+    val singleton =
+      mock<Disposable> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
     context.bindSingleton(singleton)
     val provider = mock<DisposableProvider<Random>>()
     context.bind(provider)
@@ -348,7 +349,9 @@ class DependencyInjectionTest {
   }
 
   /** Implements both [Disposable] and provider interfaces. */
-  interface DisposableProvider<out Type> : Disposable, () -> Type
+  interface DisposableProvider<out Type> :
+    Disposable,
+    () -> Type
 }
 
 /**
@@ -374,9 +377,10 @@ class SingletonProviderTest {
 
   @Test(expected = GdxRuntimeException::class)
   fun `should rethrow Disposable exceptions`() {
-    val singleton = mock<Disposable> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
+    val singleton =
+      mock<Disposable> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
     val singletonProvider = SingletonProvider(singleton)
 
     singletonProvider.dispose()
@@ -386,7 +390,10 @@ class SingletonProviderTest {
 @OptIn(Reflection::class)
 class ReflectionInjectionTest {
   class Dependency
-  class Dependant(val dependency: Dependency)
+
+  class Dependant(
+    val dependency: Dependency,
+  )
 
   class InvalidClass private constructor()
 

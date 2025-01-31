@@ -773,9 +773,7 @@ inline fun <S> KWidget<S>.gridGroup(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.floatingGroup(
-  init: KFloatingGroup.(S) -> Unit = {},
-): KFloatingGroup {
+inline fun <S> KWidget<S>.floatingGroup(init: KFloatingGroup.(S) -> Unit = {}): KFloatingGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KFloatingGroup(), init)
 }
@@ -788,9 +786,7 @@ inline fun <S> KWidget<S>.floatingGroup(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.dragPane(
-  init: KDragPane.(S) -> Unit = {},
-): KDragPane {
+inline fun <S> KWidget<S>.dragPane(init: KDragPane.(S) -> Unit = {}): KDragPane {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KDragPane(), init)
 }

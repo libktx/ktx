@@ -108,10 +108,11 @@ class KtxAsyncTest : AsyncTest() {
 
     // When:
     GlobalScope.launch {
-      val value = onRenderingThread {
-        executionThread.complete(Thread.currentThread())
-        42
-      }
+      val value =
+        onRenderingThread {
+          executionThread.complete(Thread.currentThread())
+          42
+        }
       result.set(value)
       mainThread.complete(Thread.currentThread())
     }
@@ -298,16 +299,18 @@ class KtxAsyncTest : AsyncTest() {
   fun `should create non-global scope`() {
     // Given:
     val scope = RenderingScope()
-    val localJob = scope.launch {
-      while (true) {
-        delay(50)
+    val localJob =
+      scope.launch {
+        while (true) {
+          delay(50)
+        }
       }
-    }
-    val globalJob = KtxAsync.launch {
-      while (true) {
-        delay(50)
+    val globalJob =
+      KtxAsync.launch {
+        while (true) {
+          delay(50)
+        }
       }
-    }
 
     // When:
     scope.cancel()

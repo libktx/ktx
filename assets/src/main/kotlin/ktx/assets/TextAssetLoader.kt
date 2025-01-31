@@ -43,17 +43,24 @@ class TextAssetLoader(
     fileName: String?,
     file: FileHandle,
     parameter: TextAssetLoaderParameters?,
-  ): String = try {
-    fileContent ?: throw GdxRuntimeException("File $fileName was not loaded asynchronously. Call #loadAsync first.")
-  } finally {
-    fileContent = null
-  }
+  ): String =
+    try {
+      fileContent ?: throw GdxRuntimeException("File $fileName was not loaded asynchronously. Call #loadAsync first.")
+    } finally {
+      fileContent = null
+    }
 
-  override fun getDependencies(fileName: String?, file: FileHandle?, parameter: TextAssetLoaderParameters?): Array<AssetDescriptor<Any>>? = null
+  override fun getDependencies(
+    fileName: String?,
+    file: FileHandle?,
+    parameter: TextAssetLoaderParameters?,
+  ): Array<AssetDescriptor<Any>>? = null
 
   /**
    * Optional parameters used to load text files.
    * @param charset name of the charset used to read text. Should match text file encoding. Defaults to UTF-8.
    */
-  class TextAssetLoaderParameters(var charset: String = "UTF-8") : AssetLoaderParameters<String>()
+  class TextAssetLoaderParameters(
+    var charset: String = "UTF-8",
+  ) : AssetLoaderParameters<String>()
 }

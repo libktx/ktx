@@ -47,19 +47,21 @@ abstract class TiledMapTileTest<T : TiledMapTile> {
 }
 
 class StaticTiledMapTileTest : TiledMapTileTest<StaticTiledMapTile>() {
-  override val tile = StaticTiledMapTile(TextureRegion()).apply {
-    properties.apply {
-      put("prop1", true)
-      put("prop2", "text")
+  override val tile =
+    StaticTiledMapTile(TextureRegion()).apply {
+      properties.apply {
+        put("prop1", true)
+        put("prop2", "text")
+      }
     }
-  }
 }
 
 class AnimatedTiledMapTileTest : TiledMapTileTest<AnimatedTiledMapTile>() {
-  override val tile = AnimatedTiledMapTile(1f, Array<StaticTiledMapTile>()).apply {
-    properties.apply {
-      put("prop1", true)
-      put("prop2", "text")
+  override val tile =
+    AnimatedTiledMapTile(1f, Array<StaticTiledMapTile>()).apply {
+      properties.apply {
+        put("prop1", true)
+        put("prop2", "text")
+      }
     }
-  }
 }

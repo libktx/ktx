@@ -189,10 +189,11 @@ class EventsTest {
   fun `should attach InputListener consuming InputEvent for touch events`() {
     val actor = Actor()
 
-    val listener = actor.onTouchEvent(
-      onDown = { event -> },
-      onUp = { event -> },
-    )
+    val listener =
+      actor.onTouchEvent(
+        onDown = { event -> },
+        onUp = { event -> },
+      )
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -202,10 +203,11 @@ class EventsTest {
   fun `should attach InputListener consuming InputEvent for touch events with local coordinates`() {
     val actor = Actor()
 
-    val listener = actor.onTouchEvent(
-      onDown = { event, x, y -> },
-      onUp = { event, x, y -> },
-    )
+    val listener =
+      actor.onTouchEvent(
+        onDown = { event, x, y -> },
+        onUp = { event, x, y -> },
+      )
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)
@@ -215,10 +217,11 @@ class EventsTest {
   fun `should attach InputListener consuming InputEvent for touch events with local coordinates, pointer and button`() {
     val actor = Actor()
 
-    val listener = actor.onTouchEvent(
-      onDown = { event, x, y, pointer, button -> },
-      onUp = { event, x, y, pointer, button -> },
-    )
+    val listener =
+      actor.onTouchEvent(
+        onDown = { event, x, y, pointer, button -> },
+        onUp = { event, x, y, pointer, button -> },
+      )
 
     assertNotNull(listener)
     assertTrue(listener in actor.listeners)

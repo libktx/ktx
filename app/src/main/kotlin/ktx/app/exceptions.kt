@@ -7,5 +7,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException
  * The [cause] is an optional exception cause. See also: [error].
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun gdxError(message: Any? = null, cause: Throwable? = null): Nothing =
-  throw GdxRuntimeException(message.toString(), cause)
+inline fun gdxError(
+  message: Any? = null,
+  cause: Throwable? = null,
+): Nothing = throw GdxRuntimeException(message.toString(), cause)

@@ -19,9 +19,10 @@ class TopLevelMapper : Mapper<CustomComponent>()
 
 object ComponentMappersSpec : Spek({
   describe("utilities for component mappers") {
-    val entity = Entity().apply {
-      add(Texture())
-    }
+    val entity =
+      Entity().apply {
+        add(Texture())
+      }
     it("should return a component mapper for the provided a reified type") {
       val mapper = mapperFor<Texture>()
       assertThat(mapper.has(entity)).isTrue()
@@ -29,9 +30,10 @@ object ComponentMappersSpec : Spek({
   }
 
   describe("Mapper abstract class") {
-    val entity = Entity().apply {
-      add(CustomComponent())
-    }
+    val entity =
+      Entity().apply {
+        add(CustomComponent())
+      }
     it("should create a component mapper of the enclosing component class") {
       assertThat(CustomComponent.mapper.has(entity)).isTrue()
     }

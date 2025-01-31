@@ -16,27 +16,30 @@ class ExceptionsTest {
 
   @Test
   fun `should throw error given a null message`() {
-    val exception = shouldThrow<GdxRuntimeException> {
-      gdxError(null)
-    }
+    val exception =
+      shouldThrow<GdxRuntimeException> {
+        gdxError(null)
+      }
 
     assertEquals("null", exception.message)
   }
 
   @Test
   fun `should throw error given a string message`() {
-    val exception = shouldThrow<GdxRuntimeException> {
-      gdxError("Test")
-    }
+    val exception =
+      shouldThrow<GdxRuntimeException> {
+        gdxError("Test")
+      }
 
     assertEquals("Test", exception.message)
   }
 
   @Test
   fun `should throw error given an object message`() {
-    val exception = shouldThrow<GdxRuntimeException> {
-      gdxError(42)
-    }
+    val exception =
+      shouldThrow<GdxRuntimeException> {
+        gdxError(42)
+      }
 
     assertEquals("42", exception.message)
   }
@@ -45,9 +48,10 @@ class ExceptionsTest {
   fun `should throw error given a cause`() {
     val cause = Exception()
 
-    val exception = shouldThrow<GdxRuntimeException> {
-      gdxError("Message", cause)
-    }
+    val exception =
+      shouldThrow<GdxRuntimeException> {
+        gdxError("Message", cause)
+      }
 
     assertEquals("Message", exception.message)
     assertSame(cause, exception.cause)

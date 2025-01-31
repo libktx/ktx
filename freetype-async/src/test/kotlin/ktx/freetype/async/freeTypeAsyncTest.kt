@@ -175,12 +175,13 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      storage.loadFreeTypeFont(otfFile) {
-        size = 12
-        borderWidth = 1f
+    val asset =
+      runBlocking {
+        storage.loadFreeTypeFont(otfFile) {
+          size = 12
+          borderWidth = 1f
+        }
       }
-    }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(otfFile))
@@ -203,12 +204,14 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      storage.loadFreeTypeFontAsync(otfFile) {
-        size = 12
-        borderWidth = 1f
-      }.await()
-    }
+    val asset =
+      runBlocking {
+        storage
+          .loadFreeTypeFontAsync(otfFile) {
+            size = 12
+            borderWidth = 1f
+          }.await()
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(otfFile))
@@ -231,10 +234,11 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = storage.loadFreeTypeFontSync(otfFile) {
-      size = 12
-      borderWidth = 1f
-    }
+    val asset =
+      storage.loadFreeTypeFontSync(otfFile) {
+        size = 12
+        borderWidth = 1f
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(otfFile))
@@ -343,12 +347,13 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      storage.loadFreeTypeFont(ttfFile) {
-        size = 12
-        borderWidth = 1f
+    val asset =
+      runBlocking {
+        storage.loadFreeTypeFont(ttfFile) {
+          size = 12
+          borderWidth = 1f
+        }
       }
-    }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
@@ -371,12 +376,14 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      storage.loadFreeTypeFontAsync(ttfFile) {
-        size = 12
-        borderWidth = 1f
-      }.await()
-    }
+    val asset =
+      runBlocking {
+        storage
+          .loadFreeTypeFontAsync(ttfFile) {
+            size = 12
+            borderWidth = 1f
+          }.await()
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
@@ -399,10 +406,11 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = storage.loadFreeTypeFontSync(ttfFile) {
-      size = 12
-      borderWidth = 1f
-    }
+    val asset =
+      storage.loadFreeTypeFontSync(ttfFile) {
+        size = 12
+        borderWidth = 1f
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
@@ -442,11 +450,12 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      // Note that this method uses "raw" AssetStorage API without font loading utilities.
-      // Without the freeTypeFontParameters, this will fail to load.
-      storage.load<BitmapFont>(otfFile, parameters = freeTypeFontParameters(otfFile))
-    }
+    val asset =
+      runBlocking {
+        // Note that this method uses "raw" AssetStorage API without font loading utilities.
+        // Without the freeTypeFontParameters, this will fail to load.
+        storage.load<BitmapFont>(otfFile, parameters = freeTypeFontParameters(otfFile))
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(otfFile))
@@ -469,11 +478,12 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     storage.registerFreeTypeFontLoaders()
 
     // When:
-    val asset = runBlocking {
-      // Note that this method uses "raw" AssetStorage API without font loading utilities.
-      // Without the freeTypeFontParameters, this will fail to load.
-      storage.load<BitmapFont>(ttfFile, parameters = freeTypeFontParameters(ttfFile))
-    }
+    val asset =
+      runBlocking {
+        // Note that this method uses "raw" AssetStorage API without font loading utilities.
+        // Without the freeTypeFontParameters, this will fail to load.
+        storage.load<BitmapFont>(ttfFile, parameters = freeTypeFontParameters(ttfFile))
+      }
 
     // Then:
     assertTrue(storage.isLoaded<BitmapFont>(ttfFile))
@@ -546,11 +556,12 @@ class AssetStorageFreeTypeTest : AsyncTest() {
   @Test
   fun `should allow to load BitmapFont and FreeTypeFontGenerator assets in parallel`() {
     // Given:
-    val storage = AssetStorage(
-      useDefaultLoaders = false,
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = newAsyncContext(threads = 4),
-    )
+    val storage =
+      AssetStorage(
+        useDefaultLoaders = false,
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = newAsyncContext(threads = 4),
+      )
     storage.registerFreeTypeFontLoaders()
 
     // When:
@@ -589,12 +600,13 @@ class AssetStorageFreeTypeTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false, fileResolver = ClasspathFileHandleResolver())
     storage.registerFreeTypeFontLoaders()
-    val assets = listOf(
-      storage.getAssetDescriptor<BitmapFont>(otfFile, parameters = freeTypeFontParameters(otfFile)),
-      storage.getAssetDescriptor<BitmapFont>(ttfFile, parameters = freeTypeFontParameters(otfFile)),
-      storage.getAssetDescriptor<FreeTypeFontGenerator>(otfFile),
-      storage.getAssetDescriptor<FreeTypeFontGenerator>(ttfFile),
-    )
+    val assets =
+      listOf(
+        storage.getAssetDescriptor<BitmapFont>(otfFile, parameters = freeTypeFontParameters(otfFile)),
+        storage.getAssetDescriptor<BitmapFont>(ttfFile, parameters = freeTypeFontParameters(otfFile)),
+        storage.getAssetDescriptor<FreeTypeFontGenerator>(otfFile),
+        storage.getAssetDescriptor<FreeTypeFontGenerator>(ttfFile),
+      )
     runBlocking {
       assets.forEach {
         storage.load(it)
@@ -660,11 +672,12 @@ class AsyncAssetManagerFreeTypeTest : FreeTypeTest() {
     val variable: Int
 
     // When:
-    val reference = assetManager.loadFreeTypeFontAsync(otfFile) {
-      size = 12
-      borderWidth = 1f
-      variable = 42
-    }
+    val reference =
+      assetManager.loadFreeTypeFontAsync(otfFile) {
+        size = 12
+        borderWidth = 1f
+        variable = 42
+      }
 
     // Then:
     assetManager.finishLoading()
@@ -702,11 +715,12 @@ class AsyncAssetManagerFreeTypeTest : FreeTypeTest() {
     val variable: Int
 
     // When:
-    val reference = assetManager.loadFreeTypeFontAsync(ttfFile) {
-      size = 12
-      borderWidth = 1f
-      variable = 42
-    }
+    val reference =
+      assetManager.loadFreeTypeFontAsync(ttfFile) {
+        size = 12
+        borderWidth = 1f
+        variable = 42
+      }
 
     // Then:
     assetManager.finishLoading()

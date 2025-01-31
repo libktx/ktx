@@ -25,28 +25,30 @@ class StagesTest {
   fun `mock libGDX statics`() {
     LwjglNativesLoader.load()
     Gdx.app = mock()
-    Gdx.gl = mock {
-      // Mocking shader compilation, so SpriteBatch can be initiated:
-      on(it.glCreateShader(any())) doReturn 1
-      on(it.glCreateProgram()) doReturn 1
-      on(it.glGetProgramiv(any(), any(), any())) doAnswer { invocation ->
-        if (invocation.arguments[1] == GL20.GL_LINK_STATUS) {
-          invocation.getArgument<IntBuffer>(2).put(0, 1)
+    Gdx.gl =
+      mock {
+        // Mocking shader compilation, so SpriteBatch can be initiated:
+        on(it.glCreateShader(any())) doReturn 1
+        on(it.glCreateProgram()) doReturn 1
+        on(it.glGetProgramiv(any(), any(), any())) doAnswer { invocation ->
+          if (invocation.arguments[1] == GL20.GL_LINK_STATUS) {
+            invocation.getArgument<IntBuffer>(2).put(0, 1)
+          }
         }
-      }
-      on(it.glGetShaderiv(any(), any(), any())) doAnswer { invocation ->
-        if (invocation.arguments[1] == GL20.GL_COMPILE_STATUS) {
-          invocation.getArgument<IntBuffer>(2).put(0, 1)
-          Unit
+        on(it.glGetShaderiv(any(), any(), any())) doAnswer { invocation ->
+          if (invocation.arguments[1] == GL20.GL_COMPILE_STATUS) {
+            invocation.getArgument<IntBuffer>(2).put(0, 1)
+            Unit
+          }
         }
+        on(it.glGenBuffer()) doReturn 1
       }
-      on(it.glGenBuffer()) doReturn 1
-    }
     Gdx.gl20 = Gdx.gl
-    Gdx.graphics = mock {
-      on(it.width) doReturn 800
-      on(it.height) doReturn 600
-    }
+    Gdx.graphics =
+      mock {
+        on(it.width) doReturn 800
+        on(it.height) doReturn 600
+      }
   }
 
   @Test

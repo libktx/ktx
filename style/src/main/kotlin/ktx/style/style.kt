@@ -60,7 +60,10 @@ inline fun skin(init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
  * @return a new instance of [Skin].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun skin(atlas: TextureAtlas, init: (@SkinDsl Skin).(Skin) -> Unit = {}): Skin {
+inline fun skin(
+  atlas: TextureAtlas,
+  init: (@SkinDsl Skin).(Skin) -> Unit = {},
+): Skin {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   val skin = Skin(atlas)
   skin.init(skin)
@@ -84,8 +87,7 @@ inline fun Skin.register(styles: (@SkinDsl Skin).(Skin) -> Unit) {
  * @return resource of the specified type with the selected name.
  * @throws GdxRuntimeException if unable to find the resource.
  */
-inline operator fun <reified Resource : Any> Skin.get(name: String = defaultStyle): Resource =
-  this[name, Resource::class.java]
+inline operator fun <reified Resource : Any> Skin.get(name: String = defaultStyle): Resource = this[name, Resource::class.java]
 
 /**
  * Utility function that makes it easier to access [Skin] assets.
@@ -100,61 +102,62 @@ inline operator fun <reified Resource : Any, E : Enum<E>> Skin.get(name: E): Res
  * @param name name of the requested resource. Defaults to [defaultStyle].
  * @return resource of the specified type with the selected name, or `null` if it doesn't exist.
  */
-inline fun <reified Resource : Any> Skin.optional(name: String = defaultStyle): Resource? =
-  this.optional(name, Resource::class.java)
+inline fun <reified Resource : Any> Skin.optional(name: String = defaultStyle): Resource? = this.optional(name, Resource::class.java)
 
 /**
  * Utility function that makes it easier to add [Skin] assets.
  * @param name name of the passed resource.
  * @param resource will be added to the skin and mapped to the selected name.
  */
-inline operator fun <reified Resource : Any> Skin.set(name: String, resource: Resource) =
-  this.add(name, resource, Resource::class.java)
+inline operator fun <reified Resource : Any> Skin.set(
+  name: String,
+  resource: Resource,
+) = this.add(name, resource, Resource::class.java)
 
 /**
  * Utility function that makes it easier to add [Skin] assets.
  * @param name name of the passed resource.
  * @param resource will be added to the skin and mapped to the selected name.
  */
-inline operator fun <reified Resource : Any, E : Enum<E>> Skin.set(name: E, resource: Resource) =
-  this.set(name.toString(), resource)
+inline operator fun <reified Resource : Any, E : Enum<E>> Skin.set(
+  name: E,
+  resource: Resource,
+) = this.set(name.toString(), resource)
 
 /**
  * Utility function that makes it easier to add [Skin] assets.
  * @param name name of the passed resource. Defaults to [defaultStyle].
  * @param resource will be added to the skin and mapped to the selected name.
  */
-inline fun <reified Resource : Any> Skin.add(resource: Resource, name: String = defaultStyle) =
-  this.add(name, resource, Resource::class.java)
+inline fun <reified Resource : Any> Skin.add(
+  resource: Resource,
+  name: String = defaultStyle,
+) = this.add(name, resource, Resource::class.java)
 
 /**
  * Utility function that makes it easier to add [Skin] assets under the [defaultStyle] name.
  * @param resource will be added to the skin and mapped to the selected name.
  */
-inline operator fun <reified Resource : Any> Skin.plusAssign(resource: Resource) =
-  this.add(resource)
+inline operator fun <reified Resource : Any> Skin.plusAssign(resource: Resource) = this.add(resource)
 
 /**
  * Utility function that makes it easier to remove [Skin] assets.
  * @param name name of the passed resource. Defaults to [defaultStyle].
  * @throws NullPointerException if unable to find the resource.
  */
-inline fun <reified Resource : Any> Skin.remove(name: String = defaultStyle) =
-  this.remove(name, Resource::class.java)
+inline fun <reified Resource : Any> Skin.remove(name: String = defaultStyle) = this.remove(name, Resource::class.java)
 
 /**
  * Utility function that makes it easier to check if [Skin] contains assets.
  * @param name name of the resource to look for. Defaults to [defaultStyle].
  */
-inline fun <reified Resource : Any> Skin.has(name: String = defaultStyle): Boolean =
-  this.has(name, Resource::class.java)
+inline fun <reified Resource : Any> Skin.has(name: String = defaultStyle): Boolean = this.has(name, Resource::class.java)
 
 /**
  * Utility function that makes it easier to access all [Skin] assets of a certain type.
  * @return map of the resources for the [Resource] type, or `null` if no resources of that type is in the skin.
  */
-inline fun <reified Resource : Any> Skin.getAll(): ObjectMap<String, Resource>? =
-  this.getAll(Resource::class.java)
+inline fun <reified Resource : Any> Skin.getAll(): ObjectMap<String, Resource>? = this.getAll(Resource::class.java)
 
 /**
  * Utility function for adding existing styles to the skin. Mostly for internal use.
@@ -164,7 +167,11 @@ inline fun <reified Resource : Any> Skin.getAll(): ObjectMap<String, Resource>? 
  * @return passed style instance (for chaining).
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <Style> Skin.addStyle(name: String, style: Style, init: Style.() -> Unit = {}): Style {
+inline fun <Style> Skin.addStyle(
+  name: String,
+  style: Style,
+  init: Style.() -> Unit = {},
+): Style {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   style.init()
   this.add(name, style)

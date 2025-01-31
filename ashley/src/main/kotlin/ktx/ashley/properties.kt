@@ -15,11 +15,19 @@ import kotlin.reflect.KProperty
  *
  * @see OptionalComponentDelegate
  */
-class ComponentDelegate<T : Component>(private val mapper: ComponentMapper<T>) {
-  operator fun getValue(thisRef: Entity, property: KProperty<*>): T =
-    mapper[thisRef]!!
+class ComponentDelegate<T : Component>(
+  private val mapper: ComponentMapper<T>,
+) {
+  operator fun getValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+  ): T = mapper[thisRef]!!
 
-  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T) {
+  operator fun setValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+    value: T,
+  ) {
     thisRef.add(value)
   }
 }
@@ -35,8 +43,7 @@ class ComponentDelegate<T : Component>(private val mapper: ComponentMapper<T>) {
  * @see optionalPropertyFor
  * @see ComponentDelegate
  **/
-inline fun <reified T : Component> propertyFor(mapper: ComponentMapper<T> = mapperFor()): ComponentDelegate<T> =
-  ComponentDelegate(mapper)
+inline fun <reified T : Component> propertyFor(mapper: ComponentMapper<T> = mapperFor()): ComponentDelegate<T> = ComponentDelegate(mapper)
 
 /**
  * Property delegate for an [Entity] wrapping around a [ComponentMapper].
@@ -49,10 +56,16 @@ class OptionalComponentDelegate<T : Component>(
   private val mapper: ComponentMapper<T>,
   private val componentClass: Class<T>,
 ) {
-  operator fun getValue(thisRef: Entity, property: KProperty<*>): T? =
-    if (mapper.has(thisRef)) mapper[thisRef] else null
+  operator fun getValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+  ): T? = if (mapper.has(thisRef)) mapper[thisRef] else null
 
-  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: T?) {
+  operator fun setValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+    value: T?,
+  ) {
     if (value != null) {
       thisRef.add(value)
     } else if (mapper.has(thisRef)) {
@@ -72,9 +85,7 @@ class OptionalComponentDelegate<T : Component>(
  * @see propertyFor
  * @see OptionalComponentDelegate
  **/
-inline fun <reified T : Component> optionalPropertyFor(
-  mapper: ComponentMapper<T> = mapperFor(),
-): OptionalComponentDelegate<T> =
+inline fun <reified T : Component> optionalPropertyFor(mapper: ComponentMapper<T> = mapperFor()): OptionalComponentDelegate<T> =
   OptionalComponentDelegate(mapper, T::class.java)
 
 /**
@@ -84,8 +95,16 @@ inline fun <reified T : Component> optionalPropertyFor(
  * could be a `Visible` class that marks entities that should be rendered.
  */
 interface TagDelegate<T : Component> {
-  operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean
-  operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean)
+  operator fun getValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+  ): Boolean
+
+  operator fun setValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+    value: Boolean,
+  )
 }
 
 /**
@@ -98,10 +117,16 @@ class ProviderTagDelegate<T : Component>(
   private val componentClass: Class<T>,
   private val defaultValueProvider: () -> T,
 ) : TagDelegate<T> {
-  override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
-    mapper.has(thisRef)
+  override operator fun getValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+  ): Boolean = mapper.has(thisRef)
 
-  override operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
+  override operator fun setValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+    value: Boolean,
+  ) {
     if (value) {
       thisRef.add(defaultValueProvider())
     } else {
@@ -121,10 +146,16 @@ class SingletonTagDelegate<T : Component>(
   private val componentClass: Class<T>,
   private val defaultValue: T,
 ) : TagDelegate<T> {
-  override operator fun getValue(thisRef: Entity, property: KProperty<*>): Boolean =
-    mapper.has(thisRef)
+  override operator fun getValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+  ): Boolean = mapper.has(thisRef)
 
-  override operator fun setValue(thisRef: Entity, property: KProperty<*>, value: Boolean) {
+  override operator fun setValue(
+    thisRef: Entity,
+    property: KProperty<*>,
+    value: Boolean,
+  ) {
     if (value) {
       thisRef.add(defaultValue)
     } else {
@@ -147,7 +178,10 @@ class SingletonTagDelegate<T : Component>(
  * @see ProviderTagDelegate
  * @see SingletonTagDelegate
  **/
-inline fun <reified T : Component> tagFor(singleton: Boolean = true, noinline provider: () -> T): TagDelegate<T> {
+inline fun <reified T : Component> tagFor(
+  singleton: Boolean = true,
+  noinline provider: () -> T,
+): TagDelegate<T> {
   val mapper = mapperFor<T>()
   val componentClass = T::class.java
   return if (singleton) {
@@ -202,5 +236,4 @@ inline fun <reified T : Component> tagFor(singleton: Boolean = true): TagDelegat
  *
  * @see SingletonTagDelegate
  **/
-inline fun <reified T : Component> tagFor(component: T): TagDelegate<T> =
-  SingletonTagDelegate(mapperFor(), T::class.java, component)
+inline fun <reified T : Component> tagFor(component: T): TagDelegate<T> = SingletonTagDelegate(mapperFor(), T::class.java, component)

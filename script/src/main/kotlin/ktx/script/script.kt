@@ -14,11 +14,12 @@ import javax.script.ScriptEngineManager
  */
 class KotlinScriptEngine {
   /** Direct reference to the wrapped JSR-223 [ScriptEngine]. */
-  val engine: ScriptEngine = ScriptEngineManager().getEngineByExtension("kts")
-    ?: throw ScriptEngineException(
-      "Unable to find engine for extension: kts. " +
-        "Make sure to include the org.jetbrains.kotlin:kotlin-scripting-jsr223 dependency.",
-    )
+  val engine: ScriptEngine =
+    ScriptEngineManager().getEngineByExtension("kts")
+      ?: throw ScriptEngineException(
+        "Unable to find engine for extension: kts. " +
+          "Make sure to include the org.jetbrains.kotlin:kotlin-scripting-jsr223 dependency.",
+      )
 
   /**
    * Imports the selected [import] using an optional [alias]. Wildcard imports using `*` are supported, but they
@@ -31,7 +32,10 @@ class KotlinScriptEngine {
    *
    * When performing multiple imports at once, use [importAll] instead.
    */
-  fun import(import: String, alias: String? = null) {
+  fun import(
+    import: String,
+    alias: String? = null,
+  ) {
     val script = if (alias.isNullOrBlank()) "import $import" else "import $import as $alias"
     evaluate(script)
   }
@@ -74,42 +78,44 @@ class KotlinScriptEngine {
   /**
    * Retrieves the value assigned to [variable] in the context of this [engine].
    */
-  inline operator fun <reified T : Any?> get(variable: String): T? =
-    engine.get(variable) as? T
+  inline operator fun <reified T : Any?> get(variable: String): T? = engine.get(variable) as? T
 
   /**
    * Assigns the selected [value] to the [variable] name in the context of this [engine].
    * The [variable] will be available in the future scripts.
    */
-  operator fun <T : Any?> set(variable: String, value: T) =
-    engine.put(variable, value)
+  operator fun <T : Any?> set(
+    variable: String,
+    value: T,
+  ) = engine.put(variable, value)
 
   /**
    * Removes the [variable] from the context of this [engine]. Returns the value assigned to the [variable].
    * Returns null if no value is assigned to [variable].
    */
-  fun remove(variable: String): Any? =
-    engine.context.removeAttribute(variable, ScriptContext.ENGINE_SCOPE)
+  fun remove(variable: String): Any? = engine.context.removeAttribute(variable, ScriptContext.ENGINE_SCOPE)
 
   /**
    * Executes the selected [script]. Returns the last script's expression as the result.
    * If unable to execute the script, [ScriptEngineException] will be thrown.
    */
-  fun evaluate(script: String): Any? = try {
-    engine.eval(script)
-  } catch (exception: Throwable) {
-    throw ScriptEngineException("Unable to execute Kotlin script:\n$script", exception)
-  }
+  fun evaluate(script: String): Any? =
+    try {
+      engine.eval(script)
+    } catch (exception: Throwable) {
+      throw ScriptEngineException("Unable to execute Kotlin script:\n$script", exception)
+    }
 
   /**
    * Executes the selected [scriptFile]. Returns the last script's expression as the result.
    * If unable to execute the script, [ScriptEngineException] will be thrown.
    */
-  fun evaluate(scriptFile: FileHandle): Any? = try {
-    engine.eval(scriptFile.reader())
-  } catch (exception: Throwable) {
-    throw ScriptEngineException("Unable to execute Kotlin script from file: $scriptFile", exception)
-  }
+  fun evaluate(scriptFile: FileHandle): Any? =
+    try {
+      engine.eval(scriptFile.reader())
+    } catch (exception: Throwable) {
+      throw ScriptEngineException("Unable to execute Kotlin script from file: $scriptFile", exception)
+    }
 
   /**
    * Executes the selected [script] on the [receiver] object. The [receiver] will be available as `this`
@@ -170,4 +176,7 @@ class KotlinScriptEngine {
 /**
  * Thrown when unable to execute a script or configure the scripting engine.
  */
-class ScriptEngineException(message: String, cause: Throwable? = null) : GdxRuntimeException(message, cause)
+class ScriptEngineException(
+  message: String,
+  cause: Throwable? = null,
+) : GdxRuntimeException(message, cause)

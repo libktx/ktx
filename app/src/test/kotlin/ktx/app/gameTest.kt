@@ -35,10 +35,11 @@ class KtxGameTest {
   fun `should display firstScreen without registration`() {
     val screen = mock<Screen>()
     val game = KtxGame(firstScreen = screen)
-    Gdx.graphics = mock {
-      on(it.width) doReturn 800
-      on(it.height) doReturn 600
-    }
+    Gdx.graphics =
+      mock {
+        on(it.width) doReturn 800
+        on(it.height) doReturn 600
+      }
 
     game.create()
 
@@ -171,10 +172,11 @@ class KtxGameTest {
     val secondScreen = mock<KtxScreen>()
     val game = KtxGame(firstScreen)
     game.addScreen(secondScreen)
-    Gdx.graphics = mock {
-      on(it.width) doReturn 800
-      on(it.height) doReturn 600
-    }
+    Gdx.graphics =
+      mock {
+        on(it.width) doReturn 800
+        on(it.height) doReturn 600
+      }
 
     game.setScreen<KtxScreen>()
 
@@ -209,12 +211,14 @@ class KtxGameTest {
   fun `should dispose of all registered Screen instances with error handling`() {
     Gdx.app = mock()
     val screen = mock<Screen>()
-    val ktxScreen = mock<KtxScreen> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
-    val mockScreen = mock<MockScreen> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
+    val ktxScreen =
+      mock<KtxScreen> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
+    val mockScreen =
+      mock<MockScreen> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
     val game = KtxGame<Screen>()
     game.addScreen(screen)
     game.addScreen(ktxScreen)

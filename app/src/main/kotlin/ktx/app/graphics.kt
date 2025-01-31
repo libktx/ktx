@@ -13,6 +13,12 @@ import com.badlogic.gdx.utils.ScreenUtils
  * @see ScreenUtils.clear
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun clearScreen(red: Float, green: Float, blue: Float, alpha: Float = 1f, clearDepth: Boolean = true) {
+inline fun clearScreen(
+  red: Float,
+  green: Float,
+  blue: Float,
+  alpha: Float = 1f,
+  clearDepth: Boolean = true,
+) {
   ScreenUtils.clear(red, green, blue, alpha, clearDepth)
 }

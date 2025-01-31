@@ -60,8 +60,10 @@ fun newSingleThreadAsyncContext(threadName: String = "AsyncExecutor-Thread") = n
  *
  * [AsyncExecutor] threads will be named according to the [threadName] pattern.
  */
-fun newAsyncContext(threads: Int, threadName: String = "AsyncExecutor-Thread") =
-  AsyncExecutorDispatcher(AsyncExecutor(threads, threadName), threads)
+fun newAsyncContext(
+  threads: Int,
+  threadName: String = "AsyncExecutor-Thread",
+) = AsyncExecutorDispatcher(AsyncExecutor(threads, threadName), threads)
 
 /**
  * Suspends the coroutine to execute the defined [block] on the main rendering thread and return its result.

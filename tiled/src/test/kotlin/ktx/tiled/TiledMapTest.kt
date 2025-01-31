@@ -12,34 +12,35 @@ import org.junit.Assert.fail
 import org.junit.Test
 
 class TiledMapTest {
-  private val tiledMap = TiledMap().apply {
-    properties.apply {
-      put("width", 16)
-      put("height", 8)
-      put("tilewidth", 32)
-      put("tileheight", 32)
-      put("backgroundcolor", "#ffffff")
-      put("orientation", "orthogonal")
-      put("hexsidelength", 0)
-      put("staggeraxis", "Y")
-      put("staggerindex", "Odd")
+  private val tiledMap =
+    TiledMap().apply {
+      properties.apply {
+        put("width", 16)
+        put("height", 8)
+        put("tilewidth", 32)
+        put("tileheight", 32)
+        put("backgroundcolor", "#ffffff")
+        put("orientation", "orthogonal")
+        put("hexsidelength", 0)
+        put("staggeraxis", "Y")
+        put("staggerindex", "Odd")
+      }
+      layers.add(
+        MapLayer().apply {
+          name = "layer-1"
+          objects.apply {
+            add(MapObject())
+            add(MapObject())
+            add(MapObject())
+          }
+        },
+      )
+      layers.add(
+        MapLayer().apply {
+          name = "layer-2"
+        },
+      )
     }
-    layers.add(
-      MapLayer().apply {
-        name = "layer-1"
-        objects.apply {
-          add(MapObject())
-          add(MapObject())
-          add(MapObject())
-        }
-      },
-    )
-    layers.add(
-      MapLayer().apply {
-        name = "layer-2"
-      },
-    )
-  }
 
   @Test
   fun `should retrieve properties from TiledMap`() {

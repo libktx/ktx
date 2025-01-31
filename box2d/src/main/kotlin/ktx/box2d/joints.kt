@@ -74,7 +74,10 @@ inline fun <J : JointDef> Body.jointWith(
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.revoluteJointWith(body: Body, init: (@Box2DDsl RevoluteJointDef).() -> Unit = {}): RevoluteJoint {
+inline fun Body.revoluteJointWith(
+  body: Body,
+  init: (@Box2DDsl RevoluteJointDef).() -> Unit = {},
+): RevoluteJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, RevoluteJointDef(), init) as RevoluteJoint
 }
@@ -91,7 +94,10 @@ inline fun Body.revoluteJointWith(body: Body, init: (@Box2DDsl RevoluteJointDef)
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.prismaticJointWith(body: Body, init: (@Box2DDsl PrismaticJointDef).() -> Unit = {}): PrismaticJoint {
+inline fun Body.prismaticJointWith(
+  body: Body,
+  init: (@Box2DDsl PrismaticJointDef).() -> Unit = {},
+): PrismaticJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, PrismaticJointDef(), init) as PrismaticJoint
 }
@@ -108,7 +114,10 @@ inline fun Body.prismaticJointWith(body: Body, init: (@Box2DDsl PrismaticJointDe
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.distanceJointWith(body: Body, init: (@Box2DDsl DistanceJointDef).() -> Unit = {}): DistanceJoint {
+inline fun Body.distanceJointWith(
+  body: Body,
+  init: (@Box2DDsl DistanceJointDef).() -> Unit = {},
+): DistanceJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, DistanceJointDef(), init) as DistanceJoint
 }
@@ -125,7 +134,10 @@ inline fun Body.distanceJointWith(body: Body, init: (@Box2DDsl DistanceJointDef)
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() -> Unit = {}): PulleyJoint {
+inline fun Body.pulleyJointWith(
+  body: Body,
+  init: (@Box2DDsl PulleyJointDef).() -> Unit = {},
+): PulleyJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(
     body,
@@ -149,7 +161,10 @@ inline fun Body.pulleyJointWith(body: Body, init: (@Box2DDsl PulleyJointDef).() 
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.mouseJointWith(body: Body, init: (@Box2DDsl MouseJointDef).() -> Unit = {}): MouseJoint {
+inline fun Body.mouseJointWith(
+  body: Body,
+  init: (@Box2DDsl MouseJointDef).() -> Unit = {},
+): MouseJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, MouseJointDef(), init) as MouseJoint
 }
@@ -166,7 +181,10 @@ inline fun Body.mouseJointWith(body: Body, init: (@Box2DDsl MouseJointDef).() ->
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.gearJointWith(body: Body, init: (@Box2DDsl GearJointDef).() -> Unit = {}): GearJoint {
+inline fun Body.gearJointWith(
+  body: Body,
+  init: (@Box2DDsl GearJointDef).() -> Unit = {},
+): GearJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, GearJointDef(), init) as GearJoint
 }
@@ -183,7 +201,10 @@ inline fun Body.gearJointWith(body: Body, init: (@Box2DDsl GearJointDef).() -> U
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.wheelJointWith(body: Body, init: (@Box2DDsl WheelJointDef).() -> Unit = {}): WheelJoint {
+inline fun Body.wheelJointWith(
+  body: Body,
+  init: (@Box2DDsl WheelJointDef).() -> Unit = {},
+): WheelJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, WheelJointDef(), init) as WheelJoint
 }
@@ -200,7 +221,10 @@ inline fun Body.wheelJointWith(body: Body, init: (@Box2DDsl WheelJointDef).() ->
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.weldJointWith(body: Body, init: (@Box2DDsl WeldJointDef).() -> Unit = {}): WeldJoint {
+inline fun Body.weldJointWith(
+  body: Body,
+  init: (@Box2DDsl WeldJointDef).() -> Unit = {},
+): WeldJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, WeldJointDef(), init) as WeldJoint
 }
@@ -217,7 +241,10 @@ inline fun Body.weldJointWith(body: Body, init: (@Box2DDsl WeldJointDef).() -> U
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.frictionJointWith(body: Body, init: (@Box2DDsl FrictionJointDef).() -> Unit = {}): FrictionJoint {
+inline fun Body.frictionJointWith(
+  body: Body,
+  init: (@Box2DDsl FrictionJointDef).() -> Unit = {},
+): FrictionJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, FrictionJointDef(), init) as FrictionJoint
 }
@@ -234,7 +261,10 @@ inline fun Body.frictionJointWith(body: Body, init: (@Box2DDsl FrictionJointDef)
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> Unit = {}): RopeJoint {
+inline fun Body.ropeJointWith(
+  body: Body,
+  init: (@Box2DDsl RopeJointDef).() -> Unit = {},
+): RopeJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(
     body,
@@ -260,7 +290,10 @@ inline fun Body.ropeJointWith(body: Body, init: (@Box2DDsl RopeJointDef).() -> U
  */
 @Box2DDsl
 @OptIn(ExperimentalContracts::class)
-inline fun Body.motorJointWith(body: Body, init: (@Box2DDsl MotorJointDef).() -> Unit = {}): MotorJoint {
+inline fun Body.motorJointWith(
+  body: Body,
+  init: (@Box2DDsl MotorJointDef).() -> Unit = {},
+): MotorJoint {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return jointWith(body, MotorJointDef(), init) as MotorJoint
 }

@@ -30,7 +30,7 @@ import kotlin.contracts.contract
 import com.badlogic.gdx.scenes.scene2d.ui.List as GdxList
 import com.badlogic.gdx.utils.Array as GdxArray
 
-/* Implementations of actors and widget interfaces required to set up type-safe GUI builders. */
+// Implementations of actors and widget interfaces required to set up type-safe GUI builders.
 
 /**
  * Common interface applied to so-called "parental" widgets.
@@ -217,10 +217,11 @@ interface KTable : KWidget<Cell<*>> {
    */
   @Suppress("UNCHECKED_CAST")
   val <T : Actor> T.inCell: Cell<T>
-    get() = userObject as? Cell<T> ?: throw IllegalStateException(
-      "This actor has no declared Cell. " +
-        "Was it properly added to the table? Was its user object cleared?",
-    )
+    get() =
+      userObject as? Cell<T> ?: throw IllegalStateException(
+        "This actor has no declared Cell. " +
+          "Was it properly added to the table? Was its user object cleared?",
+      )
 }
 
 /**
@@ -286,15 +287,20 @@ interface KTree : KWidget<KNode<*>> {
    */
   @Suppress("UNCHECKED_CAST")
   val <T : Actor> T.inNode: KNode<T>
-    get() = userObject as? KNode<T> ?: throw IllegalStateException(
-      "This actor has no declared Node. " +
-        "Was it properly added to the tree? Was its user object cleared?",
-    )
+    get() =
+      userObject as? KNode<T> ?: throw IllegalStateException(
+        "This actor has no declared Node. " +
+          "Was it properly added to the tree? Was its user object cleared?",
+      )
 }
 
 /** Extends [Button] API with type-safe widget builders. */
 @Scene2dDsl
-class KButton(skin: Skin, style: String) : Button(skin, style), KTable
+class KButton(
+  skin: Skin,
+  style: String,
+) : Button(skin, style),
+  KTable
 
 /**
  * Extends [Table] API with type-safe widget builders. All [Button] instances added to this table will be automatically
@@ -304,7 +310,12 @@ class KButton(skin: Skin, style: String) : Button(skin, style), KTable
  * @param maxCheckCount maximum amount of checked buttons.
  */
 @Scene2dDsl
-class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(skin), KTable {
+class KButtonTable(
+  minCheckCount: Int,
+  maxCheckCount: Int,
+  skin: Skin,
+) : Table(skin),
+  KTable {
   val buttonGroup = ButtonGroup<Button>()
 
   init {
@@ -320,11 +331,19 @@ class KButtonTable(minCheckCount: Int, maxCheckCount: Int, skin: Skin) : Table(s
 
 /** Extends [CheckBox] API with type-safe widget builders. */
 @Scene2dDsl
-class KCheckBox(text: String, skin: Skin, style: String) : CheckBox(text, skin, style), KTable
+class KCheckBox(
+  text: String,
+  skin: Skin,
+  style: String,
+) : CheckBox(text, skin, style),
+  KTable
 
 /** Extends [Container] API with type-safe widget builders. Note that this widget may store only a single child. */
 @Scene2dDsl
-class KContainer<T : Actor>(actor: T? = null) : Container<T>(actor), KGroup {
+class KContainer<T : Actor>(
+  actor: T? = null,
+) : Container<T>(actor),
+  KGroup {
   @Suppress("UNCHECKED_CAST")
   override fun addActor(actor: Actor?) {
     this.actor == null || throw IllegalStateException("Container may store only a single child.")
@@ -334,23 +353,42 @@ class KContainer<T : Actor>(actor: T? = null) : Container<T>(actor), KGroup {
 
 /** Extends [Dialog] API with type-safe widget builders. */
 @Scene2dDsl
-class KDialog(title: String, skin: Skin, style: String) : Dialog(title, skin, style), KTable
+class KDialog(
+  title: String,
+  skin: Skin,
+  style: String,
+) : Dialog(title, skin, style),
+  KTable
 
 /** Extends [HorizontalGroup] API with type-safe widget builders. */
 @Scene2dDsl
-class KHorizontalGroup : HorizontalGroup(), KGroup
+class KHorizontalGroup :
+  HorizontalGroup(),
+  KGroup
 
 /** Extends [ImageButton] API with type-safe widget builders. */
 @Scene2dDsl
-class KImageButton(skin: Skin, style: String) : ImageButton(skin, style), KTable
+class KImageButton(
+  skin: Skin,
+  style: String,
+) : ImageButton(skin, style),
+  KTable
 
 /** Extends [ImageTextButton] API with type-safe widget builders. */
 @Scene2dDsl
-class KImageTextButton(text: String, skin: Skin, style: String) : ImageTextButton(text, skin, style), KTable
+class KImageTextButton(
+  text: String,
+  skin: Skin,
+  style: String,
+) : ImageTextButton(text, skin, style),
+  KTable
 
 /** Extends libGDX List widget with items building method. */
 @Scene2dDsl
-class KListWidget<T>(skin: Skin, style: String) : GdxList<T>(skin, style) {
+class KListWidget<T>(
+  skin: Skin,
+  style: String,
+) : GdxList<T>(skin, style) {
   /**
    * Allows to add items to the list with builder-like syntax.
    */
@@ -370,7 +408,10 @@ class KListWidget<T>(skin: Skin, style: String) : GdxList<T>(skin, style) {
 
 /** Extends [Tree] [Node] API with type-safe widget builders. */
 @Scene2dDsl
-class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
+class KNode<T : Actor>(
+  actor: T,
+) : Node<KNode<*>, Any?, T>(actor),
+  KTree {
   override fun <T : Actor> add(actor: T): KNode<T> {
     val node = KNode(actor)
     add(node)
@@ -393,7 +434,11 @@ class KNode<T : Actor>(actor: T) : Node<KNode<*>, Any?, T>(actor), KTree {
 
 /** Extends [ScrollPane] API with type-safe widget builders. Note that this widget may store only a single child. */
 @Scene2dDsl
-class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KGroup {
+class KScrollPane(
+  skin: Skin,
+  style: String,
+) : ScrollPane(null, skin, style),
+  KGroup {
   override fun addActor(actor: Actor?) {
     this.actor == null || throw IllegalStateException("ScrollPane may store only a single child.")
     this.actor = actor
@@ -402,7 +447,10 @@ class KScrollPane(skin: Skin, style: String) : ScrollPane(null, skin, style), KG
 
 /** Extends [SelectBox] with items building method. */
 @Scene2dDsl
-class KSelectBox<T>(skin: Skin, style: String) : SelectBox<T>(skin, style) {
+class KSelectBox<T>(
+  skin: Skin,
+  style: String,
+) : SelectBox<T>(skin, style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
    */
@@ -429,7 +477,8 @@ class KSplitPane(
   vertical: Boolean,
   skin: Skin,
   style: String,
-) : SplitPane(null, null, vertical, skin, style), KGroup {
+) : SplitPane(null, null, vertical, skin, style),
+  KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
       0 -> setFirstWidget(actor)
@@ -441,19 +490,33 @@ class KSplitPane(
 
 /** Extends [Stack] API with type-safe widget builders. */
 @Scene2dDsl
-class KStack : Stack(), KGroup
+class KStack :
+  Stack(),
+  KGroup
 
 /** Extends [Table] API with type-safe widget builders. */
 @Scene2dDsl
-class KTableWidget(skin: Skin) : Table(skin), KTable
+class KTableWidget(
+  skin: Skin,
+) : Table(skin),
+  KTable
 
 /** Extends [TextButton] API with type-safe widget builders. */
 @Scene2dDsl
-class KTextButton(text: String, skin: Skin, style: String) : TextButton(text, skin, style), KTable
+class KTextButton(
+  text: String,
+  skin: Skin,
+  style: String,
+) : TextButton(text, skin, style),
+  KTable
 
 /** Extends [Tree] API with type-safe widget builders. */
 @Scene2dDsl
-class KTreeWidget(skin: Skin, style: String) : Tree<KNode<*>, Any?>(skin, style), KTree {
+class KTreeWidget(
+  skin: Skin,
+  style: String,
+) : Tree<KNode<*>, Any?>(skin, style),
+  KTree {
   override fun <A : Actor> add(actor: A): KNode<A> {
     val node = KNode(actor)
     add(node)
@@ -463,8 +526,15 @@ class KTreeWidget(skin: Skin, style: String) : Tree<KNode<*>, Any?>(skin, style)
 
 /** Extends [VerticalGroup] API with type-safe widget builders. */
 @Scene2dDsl
-class KVerticalGroup : VerticalGroup(), KGroup
+class KVerticalGroup :
+  VerticalGroup(),
+  KGroup
 
 /** Extends [Window] API with type-safe widget builders. */
 @Scene2dDsl
-class KWindow(title: String, skin: Skin, style: String) : Window(title, skin, style), KTable
+class KWindow(
+  title: String,
+  skin: Skin,
+  style: String,
+) : Window(title, skin, style),
+  KTable

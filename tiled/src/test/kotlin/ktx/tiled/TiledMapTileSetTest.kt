@@ -8,12 +8,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TiledMapTileSetTest {
-  private val tileset = TiledMapTileSet().apply {
-    properties.apply {
-      put("tilesetProp1", true)
-      put("tilesetProp2", 123)
+  private val tileset =
+    TiledMapTileSet().apply {
+      properties.apply {
+        put("tilesetProp1", true)
+        put("tilesetProp2", 123)
+      }
     }
-  }
 
   @Test
   fun `should retrieve properties from TileSet`() {

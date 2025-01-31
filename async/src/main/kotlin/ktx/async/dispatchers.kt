@@ -23,17 +23,26 @@ import kotlin.coroutines.resume
  * Base interface of [CoroutineContext] for dispatchers using the libGDX threading model.
  * Uses libGDX [Timer] API to support [delay].
  */
-interface KtxDispatcher : CoroutineContext, Delay {
+interface KtxDispatcher :
+  CoroutineContext,
+  Delay {
   /**
    * Immediately executes or schedules execution of the passed [block].
    */
   fun execute(block: Runnable)
 
-  override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) {
+  override fun scheduleResumeAfterDelay(
+    timeMillis: Long,
+    continuation: CancellableContinuation<Unit>,
+  ) {
     schedule(delaySeconds = timeMillis.toSeconds()) { continuation.resume(Unit) }
   }
 
-  override fun invokeOnTimeout(timeMillis: Long, block: Runnable, context: CoroutineContext): DisposableHandle {
+  override fun invokeOnTimeout(
+    timeMillis: Long,
+    block: Runnable,
+    context: CoroutineContext,
+  ): DisposableHandle {
     val task = schedule(delaySeconds = timeMillis.toSeconds()) { execute(block) }
     return DisposableTimerTask(task)
   }
@@ -46,8 +55,13 @@ interface KtxDispatcher : CoroutineContext, Delay {
  * Base extension of [CoroutineDispatcher] for dispatchers using the libGDX threading model.
  * Uses libGDX [Timer] API to support [delay].
  */
-abstract class AbstractKtxDispatcher : CoroutineDispatcher(), KtxDispatcher {
-  override fun dispatch(context: CoroutineContext, block: Runnable) {
+abstract class AbstractKtxDispatcher :
+  CoroutineDispatcher(),
+  KtxDispatcher {
+  override fun dispatch(
+    context: CoroutineContext,
+    block: Runnable,
+  ) {
     execute(block)
   }
 }
@@ -56,7 +70,10 @@ abstract class AbstractKtxDispatcher : CoroutineDispatcher(), KtxDispatcher {
  * Wraps around libGDX [Timer.Task] to make it possible to cancel scheduled tasks. Holds a reference to the original
  * scheduled [task].
  */
-class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
+class DisposableTimerTask(
+  val task: Timer.Task,
+) : DisposableHandle,
+  Disposable {
   override fun dispose() {
     task.cancel()
   }
@@ -73,12 +90,15 @@ class DisposableTimerTask(val task: Timer.Task) : DisposableHandle, Disposable {
 class AsyncExecutorDispatcher(
   val executor: AsyncExecutor,
   val threads: Int = -1,
-) : AbstractKtxDispatcher(), Closeable, Disposable {
+) : AbstractKtxDispatcher(),
+  Closeable,
+  Disposable {
   override fun execute(block: Runnable) {
     executor.submit(block::run)
   }
 
   override fun close() = dispose()
+
   override fun dispose() {
     try {
       executor.dispose()
@@ -96,12 +116,18 @@ class AsyncExecutorDispatcher(
  * A [CoroutineDispatcher] that wraps around libGDX runnable execution API to execute tasks
  * on the main rendering thread. Uses libGDX [Timer] API to support [delay].
  */
-sealed class RenderingThreadDispatcher : MainCoroutineDispatcher(), KtxDispatcher, Delay {
+sealed class RenderingThreadDispatcher :
+  MainCoroutineDispatcher(),
+  KtxDispatcher,
+  Delay {
   override fun execute(block: Runnable) {
     Gdx.app.postRunnable(block)
   }
 
-  override fun dispatch(context: CoroutineContext, block: Runnable) {
+  override fun dispatch(
+    context: CoroutineContext,
+    block: Runnable,
+  ) {
     execute(block)
   }
 
@@ -113,6 +139,7 @@ sealed class RenderingThreadDispatcher : MainCoroutineDispatcher(), KtxDispatche
  */
 class RenderingThreadDispatcherFactory : MainDispatcherFactory {
   override val loadPriority: Int = 0
+
   override fun createDispatcher(allFactories: List<MainDispatcherFactory>): MainCoroutineDispatcher = MainDispatcher
 }
 

@@ -22,7 +22,10 @@ import kotlin.contracts.contract
  * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> Unit) {
+inline fun <B : Batch> B.use(
+  projectionMatrix: Matrix4? = null,
+  action: (B) -> Unit,
+) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   if (projectionMatrix != null) {
     this.projectionMatrix = projectionMatrix
@@ -38,7 +41,10 @@ inline fun <B : Batch> B.use(projectionMatrix: Matrix4? = null, action: (B) -> U
  * @param action inlined. Executed after [Batch.begin] and before [Batch.end].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <B : Batch> B.use(camera: Camera, action: (B) -> Unit) {
+inline fun <B : Batch> B.use(
+  camera: Camera,
+  action: (B) -> Unit,
+) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   use(camera.combined, action)
 }

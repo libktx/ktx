@@ -34,11 +34,12 @@ open class FreeTypeTest {
   fun `should initiate font loading parameters`() {
     val variable: Int
 
-    val parameters = freeTypeFontParameters("file.ttf") {
-      size = 12
-      flip = false
-      variable = 42
-    }
+    val parameters =
+      freeTypeFontParameters("file.ttf") {
+        size = 12
+        flip = false
+        variable = 42
+      }
 
     assertEquals("file.ttf", parameters.fontFileName)
     assertEquals(12, parameters.fontParameters.size)
@@ -100,11 +101,12 @@ open class FreeTypeTest {
     assetManager.registerFreeTypeFontLoaders()
     val variable: Int
 
-    val asset = assetManager.loadFreeTypeFont(otfFile) {
-      size = 12
-      borderWidth = 1f
-      variable = 42
-    }
+    val asset =
+      assetManager.loadFreeTypeFont(otfFile) {
+        size = 12
+        borderWidth = 1f
+        variable = 42
+      }
 
     asset.finishLoading()
     val font = assetManager.get<BitmapFont>(otfFile)
@@ -134,11 +136,12 @@ open class FreeTypeTest {
     assetManager.registerFreeTypeFontLoaders()
     val variable: Int
 
-    val asset = assetManager.loadFreeTypeFont(ttfFile) {
-      size = 12
-      borderWidth = 1f
-      variable = 42
-    }
+    val asset =
+      assetManager.loadFreeTypeFont(ttfFile) {
+        size = 12
+        borderWidth = 1f
+        variable = 42
+      }
 
     asset.finishLoading()
     val font = assetManager.get<BitmapFont>(ttfFile)
@@ -216,10 +219,11 @@ open class FreeTypeTest {
     val generator = FreeTypeFontGenerator(Gdx.files.classpath(ttfFile))
     val variable: Int
 
-    val font = generator.generateFont {
-      size = 40
-      variable = 42
-    }
+    val font =
+      generator.generateFont {
+        size = 40
+        variable = 42
+      }
 
     assertNotNull(font)
     assertEquals(42, variable)
@@ -239,10 +243,11 @@ open class FreeTypeTest {
     val generator = FreeTypeFontGenerator(Gdx.files.classpath(otfFile))
     val variable: Int
 
-    val font = generator.generateFont {
-      size = 40
-      variable = 42
-    }
+    val font =
+      generator.generateFont {
+        size = 40
+        variable = 42
+      }
 
     assertNotNull(font)
     assertEquals(42, variable)

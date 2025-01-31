@@ -17,44 +17,43 @@ import kotlin.math.sqrt
 
 class ImmutableVector2Test {
   /** List of vector to use in tests */
-  private val vectors = sequenceOf(
-    // vector zero
-    ImmutableVector2.ZERO,
-
-    // axis
-    ImmutableVector2.X,
-    -ImmutableVector2.X,
-    ImmutableVector2.Y,
-    -ImmutableVector2.Y,
-
-    // quadrants
-    ImmutableVector2(3f, 4f),
-    ImmutableVector2(3f, -4f),
-    ImmutableVector2(-3f, 4f),
-    ImmutableVector2(-3f, -4f),
-
-    // small vectors
-    ImmutableVector2(0.001f, 0f),
-    ImmutableVector2(0f, 0.001f),
-    ImmutableVector2(0f, -0.001f),
-  )
+  private val vectors =
+    sequenceOf(
+      // vector zero
+      ImmutableVector2.ZERO,
+      // axis
+      ImmutableVector2.X,
+      -ImmutableVector2.X,
+      ImmutableVector2.Y,
+      -ImmutableVector2.Y,
+      // quadrants
+      ImmutableVector2(3f, 4f),
+      ImmutableVector2(3f, -4f),
+      ImmutableVector2(-3f, 4f),
+      ImmutableVector2(-3f, -4f),
+      // small vectors
+      ImmutableVector2(0.001f, 0f),
+      ImmutableVector2(0f, 0.001f),
+      ImmutableVector2(0f, -0.001f),
+    )
 
   /** List scalar values to use in tests */
   private val scalars = sequenceOf(0f, Float.MIN_VALUE, 0.42f, 1f, 42f)
 
-  private val interpolations = sequenceOf(
-    Interpolation.bounce,
-    Interpolation.bounceIn,
-    Interpolation.bounceOut,
-    Interpolation.circle,
-    Interpolation.circleIn,
-    Interpolation.circleOut,
-    Interpolation.pow2,
-    Interpolation.pow2In,
-    Interpolation.pow2Out,
-    Interpolation.smooth,
-    Interpolation.smooth2,
-  )
+  private val interpolations =
+    sequenceOf(
+      Interpolation.bounce,
+      Interpolation.bounceIn,
+      Interpolation.bounceOut,
+      Interpolation.circle,
+      Interpolation.circleIn,
+      Interpolation.circleOut,
+      Interpolation.pow2,
+      Interpolation.pow2In,
+      Interpolation.pow2Out,
+      Interpolation.smooth,
+      Interpolation.smooth2,
+    )
 
   @Test
   fun `equals should return true for equivalent vectors`() {
@@ -549,14 +548,15 @@ class ImmutableVector2Test {
 
   @Test
   fun `times should return same value as Vector2 mul`() {
-    val transformations = listOf(
-      Affine2(),
-      Affine2().apply {
-        preTranslate(-2f, 3f)
-        preRotate(18f)
-        preScale(1.5f, 2f)
-      },
-    )
+    val transformations =
+      listOf(
+        Affine2(),
+        Affine2().apply {
+          preTranslate(-2f, 3f)
+          preRotate(18f)
+          preScale(1.5f, 2f)
+        },
+      )
 
     transformations.forEach { transformation ->
       vectors.forEach { vector ->
@@ -570,14 +570,21 @@ class ImmutableVector2Test {
   fun `applying affine transformation should be equivalent of doing the operations`() {
     val vector = ImmutableVector2(3f, 4f)
 
-    val transformation = Affine2().apply {
-      preTranslate(-2f, 3f) // (1f, 7f)
-      preRotate(90f) // (-7f, 1f)
-      preScale(0.5f, 2f) // (-3.5f, 2f)
-    }
+    val transformation =
+      Affine2().apply {
+        preTranslate(-2f, 3f) // (1f, 7f)
+        preRotate(90f) // (-7f, 1f)
+        preScale(0.5f, 2f) // (-3.5f, 2f)
+      }
 
     assertTrue(ImmutableVector2(-3.5f, 2f).epsilonEquals(vector * transformation, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(vector.plus(-2f, 3f).withRotationDeg(90f).times(0.5f, 2f).epsilonEquals(vector * transformation, MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      vector
+        .plus(-2f, 3f)
+        .withRotationDeg(90f)
+        .times(0.5f, 2f)
+        .epsilonEquals(vector * transformation, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -761,10 +768,30 @@ class ImmutableVector2Test {
 
   @Test
   fun `withAngleDeg should return rotated vector`() {
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2(0.6f, 0.8f)
+        .withAngleDeg(90f)
+        .epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(0.6f, 0.8f)
+        .withAngleDeg(-90f)
+        .epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(
+        0.6f,
+        0.8f,
+      ).withAngleDeg(45f)
+        .epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(
+        0.6f,
+        0.8f,
+      ).withAngleDeg(-45f)
+        .epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -780,8 +807,18 @@ class ImmutableVector2Test {
   fun `withAngleRad should return rotated vector`() {
     assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
     assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(0.6f, 0.8f).withAngleDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2(
+        0.6f,
+        0.8f,
+      ).withAngleDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(
+        0.6f,
+        0.8f,
+      ).withAngleDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -798,11 +835,19 @@ class ImmutableVector2Test {
     assertTrue(ImmutableVector2.X.withRotationDeg(90f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
     assertTrue(ImmutableVector2.X.withRotationDeg(-90f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
 
-    assertTrue(ImmutableVector2.X.withRotationDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2.X.withRotationDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2.X.withRotationDeg(45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2.X.withRotationDeg(-45f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
 
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(45f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(-45f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(45f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationDeg(-45f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -819,11 +864,31 @@ class ImmutableVector2Test {
     assertTrue(ImmutableVector2.X.withRotationRad(MathUtils.PI / 2f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
     assertTrue(ImmutableVector2.X.withRotationRad(-MathUtils.PI / 2f).epsilonEquals(-ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
 
-    assertTrue(ImmutableVector2.X.withRotationRad(MathUtils.PI / 4f).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2.X.withRotationRad(-MathUtils.PI / 4f).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2.X
+        .withRotationRad(
+          MathUtils.PI / 4f,
+        ).epsilonEquals(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2.X
+        .withRotationRad(
+          -MathUtils.PI / 4f,
+        ).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
 
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationRad(MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotationRad(-MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2(
+        sqrt(0.5f),
+        sqrt(0.5f),
+      ).withRotationRad(MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.Y, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(
+        sqrt(0.5f),
+        sqrt(0.5f),
+      ).withRotationRad(-MathUtils.PI / 4f).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -842,8 +907,18 @@ class ImmutableVector2Test {
     assertTrue(ImmutableVector2.Y.withRotation90(1).epsilonEquals(-ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
     assertTrue(ImmutableVector2.Y.withRotation90(-1).epsilonEquals(ImmutableVector2.X, MathUtils.FLOAT_ROUNDING_ERROR))
 
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotation90(1).epsilonEquals(ImmutableVector2(-sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2(sqrt(0.5f), sqrt(0.5f)).withRotation90(-1).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2(
+        sqrt(0.5f),
+        sqrt(0.5f),
+      ).withRotation90(1).epsilonEquals(ImmutableVector2(-sqrt(0.5f), sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2(
+        sqrt(0.5f),
+        sqrt(0.5f),
+      ).withRotation90(-1).epsilonEquals(ImmutableVector2(sqrt(0.5f), -sqrt(0.5f)), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test
@@ -859,11 +934,17 @@ class ImmutableVector2Test {
 
   @Test
   fun `withLerp should return interpolated vector`() {
-    assertTrue(ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.5f).epsilonEquals(ImmutableVector2(0.5f, 0.5f), MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.3f).epsilonEquals(ImmutableVector2(0.7f, 0.3f), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.5f).epsilonEquals(ImmutableVector2(0.5f, 0.5f), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
+    assertTrue(
+      ImmutableVector2.X.withLerp(ImmutableVector2.Y, 0.3f).epsilonEquals(ImmutableVector2(0.7f, 0.3f), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
 
     assertTrue(ImmutableVector2.X.withLerp(-ImmutableVector2.X, 0.5f).epsilonEquals(ImmutableVector2.ZERO, MathUtils.FLOAT_ROUNDING_ERROR))
-    assertTrue(ImmutableVector2.X.withLerp(-ImmutableVector2.X, 0.3f).epsilonEquals(ImmutableVector2(0.4f, 0f), MathUtils.FLOAT_ROUNDING_ERROR))
+    assertTrue(
+      ImmutableVector2.X.withLerp(-ImmutableVector2.X, 0.3f).epsilonEquals(ImmutableVector2(0.4f, 0f), MathUtils.FLOAT_ROUNDING_ERROR),
+    )
   }
 
   @Test

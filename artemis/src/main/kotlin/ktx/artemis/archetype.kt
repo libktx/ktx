@@ -30,8 +30,7 @@ inline fun <reified T : Component> ArchetypeBuilder.remove(): ArchetypeBuilder =
  * @param components the components to add to the [ArchetypeBuilder].
  * @return the [ArchetypeBuilder].
  */
-fun ArchetypeBuilder.add(vararg components: KClass<out Component>): ArchetypeBuilder =
-  add(*components.asJavaClasses())
+fun ArchetypeBuilder.add(vararg components: KClass<out Component>): ArchetypeBuilder = add(*components.asJavaClasses())
 
 /**
  * Removes multiple components from an [ArchetypeBuilder].
@@ -40,5 +39,4 @@ fun ArchetypeBuilder.add(vararg components: KClass<out Component>): ArchetypeBui
  * @param components - the components to remove from the [ArchetypeBuilder]
  * @return the [ArchetypeBuilder].
  */
-fun ArchetypeBuilder.remove(vararg components: KClass<out Component>): ArchetypeBuilder =
-  remove(*components.asJavaClasses())
+fun ArchetypeBuilder.remove(vararg components: KClass<out Component>): ArchetypeBuilder = remove(*components.asJavaClasses())

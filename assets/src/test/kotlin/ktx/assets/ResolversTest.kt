@@ -106,16 +106,20 @@ class ResolversTest {
    * Extracts protected [FileHandleResolver] field.
    */
   val ResolutionFileResolver.baseResolver: FileHandleResolver
-    get() = ResolutionFileResolver::class.java.getDeclaredField("baseResolver")
-      .apply { isAccessible = true }
-      .get(this) as FileHandleResolver
+    get() =
+      ResolutionFileResolver::class.java
+        .getDeclaredField("baseResolver")
+        .apply { isAccessible = true }
+        .get(this) as FileHandleResolver
 
   /**
    * Extracts protected [Resolution] array field.
    */
   @Suppress("UNCHECKED_CAST")
   val ResolutionFileResolver.resolutions: Array<Resolution>
-    get() = ResolutionFileResolver::class.java.getDeclaredField("descriptors")
-      .apply { isAccessible = true }
-      .get(this) as Array<Resolution>
+    get() =
+      ResolutionFileResolver::class.java
+        .getDeclaredField("descriptors")
+        .apply { isAccessible = true }
+        .get(this) as Array<Resolution>
 }

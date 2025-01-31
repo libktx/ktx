@@ -8,7 +8,10 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 
 class FlagComponent : Component
-class NoDefaultArgConstructorComponent(val text: String) : Component
+
+class NoDefaultArgConstructorComponent(
+  val text: String,
+) : Component
 
 var Entity.singletonTagCreatedByReflection by tagFor<FlagComponent>()
 var Entity.providerTagCreatedByReflection by tagFor<FlagComponent>(singleton = false)

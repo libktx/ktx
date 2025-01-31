@@ -162,9 +162,10 @@ class AssetsTest {
 
   @Test
   fun `should ignore exceptions thrown during unloading`() {
-    val assetManager = mock<AssetManager> {
-      on { unload("test") } doThrow GdxRuntimeException("Expected.")
-    }
+    val assetManager =
+      mock<AssetManager> {
+        on { unload("test") } doThrow GdxRuntimeException("Expected.")
+      }
     assetManager.unloadSafely("test")
     verify(assetManager).unload("test")
   }
@@ -214,9 +215,10 @@ class AssetsTest {
 
   @Test
   fun `should handle exceptions thrown during unloading`() {
-    val assetManager = mock<AssetManager> {
-      on { unload("test") } doThrow GdxRuntimeException("Expected.")
-    }
+    val assetManager =
+      mock<AssetManager> {
+        on { unload("test") } doThrow GdxRuntimeException("Expected.")
+      }
     assetManager.unload("test") { exception ->
       assertTrue(exception is GdxRuntimeException)
     }
@@ -467,8 +469,9 @@ class AssetsTest {
     val mockAssets = listOf(group.member1, group.member2)
     group.unloadAll()
     assertTrue(!group.isLoaded())
-    for (mockAsset in mockAssets)
+    for (mockAsset in mockAssets) {
       assertTrue(mockAsset.disposed)
+    }
   }
 
   @Test
@@ -520,10 +523,11 @@ class AssetsTest {
       val member2 = delayedAsset<MockAsset>("member2")
     }
 
-    val group = TestAssetGroup().apply {
-      loadAll()
-      manager.finishLoading()
-    }
+    val group =
+      TestAssetGroup().apply {
+        loadAll()
+        manager.finishLoading()
+      }
 
     for (index in 1..2) {
       assertTrue(group.manager.isLoaded("prefix/member$index"))
@@ -535,17 +539,22 @@ class AssetsTest {
   /**
    * Creates an [AssetManager] with registered [MockAssetLoader].
    */
-  private fun managerWithMockAssetLoader() = AssetManager().apply {
-    setLoader(MockAssetLoader(fileHandleResolver))
-  }
+  private fun managerWithMockAssetLoader() =
+    AssetManager().apply {
+      setLoader(MockAssetLoader(fileHandleResolver))
+    }
 
   /**
    * Represents a mock-up asset. Implements [Disposable] for testing utility.
    * @param data path of the file.
    * @param additional optional string value passed with [MockParameter].
    */
-  class MockAsset(val data: String, val additional: String?) : Disposable {
+  class MockAsset(
+    val data: String,
+    val additional: String?,
+  ) : Disposable {
     var disposed = false
+
     override fun dispose() {
       require(!disposed) { "Was already disposed!" } // Simulate behavior of some Gdx assets
       disposed = true
@@ -556,11 +565,18 @@ class AssetsTest {
    * Mocks asynchronous file loading. Sets [MockAsset.data] as file path. Extracts [MockAsset.additional] from
    * [MockParameter] (if present).
    */
-  class MockAssetLoader(fileHandleResolver: FileHandleResolver) :
-    AsynchronousAssetLoader<MockAsset, MockParameter>(fileHandleResolver) {
+  class MockAssetLoader(
+    fileHandleResolver: FileHandleResolver,
+  ) : AsynchronousAssetLoader<MockAsset, MockParameter>(fileHandleResolver) {
     @Volatile
     private var additional: String? = null
-    override fun loadAsync(manager: AssetManager, fileName: String, file: FileHandle, parameter: MockParameter?) {
+
+    override fun loadAsync(
+      manager: AssetManager,
+      fileName: String,
+      file: FileHandle,
+      parameter: MockParameter?,
+    ) {
       if (parameter != null) {
         additional = parameter.additional
       }
@@ -577,9 +593,15 @@ class AssetsTest {
       return asset
     }
 
-    override fun getDependencies(fileName: String?, file: FileHandle?, parameter: MockParameter?): Array<AssetDescriptor<Any>>? = null
+    override fun getDependencies(
+      fileName: String?,
+      file: FileHandle?,
+      parameter: MockParameter?,
+    ): Array<AssetDescriptor<Any>>? = null
 
     /** Allows to set [MockAsset.additional] via loader. Tests assets parameters API. */
-    class MockParameter(val additional: String?) : AssetLoaderParameters<MockAsset>()
+    class MockParameter(
+      val additional: String?,
+    ) : AssetLoaderParameters<MockAsset>()
   }
 }

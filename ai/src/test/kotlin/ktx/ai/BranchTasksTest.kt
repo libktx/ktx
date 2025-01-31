@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class BranchTasksTest {
-
   @Test
   fun `dynamicGuardSelector function should add DynamicGuardSelector to BehaviorTree`() {
     val tree = BehaviorTree<Cat>()
@@ -22,10 +21,11 @@ class BranchTasksTest {
   fun `dynamicGuardSelector function inside of behaviorTree function's init block should add DynamicGuardSelector to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      dynamicGuardSelector()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        dynamicGuardSelector()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -66,10 +66,11 @@ class BranchTasksTest {
   fun `parallel function inside of behaviorTree function's init block should add Parallel to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      parallel()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        parallel()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -110,10 +111,11 @@ class BranchTasksTest {
   fun `randomSelector function inside of behaviorTree function's init block should add RandomSelector to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      randomSelector()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        randomSelector()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -154,10 +156,11 @@ class BranchTasksTest {
   fun `randomSequence inside of behaviorTree function's init block should add RandomSequence to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      randomSequence()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        randomSequence()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -198,10 +201,11 @@ class BranchTasksTest {
   fun `selector inside of behaviorTree function's init block adds GdxSelector to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      selector()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        selector()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }
@@ -242,10 +246,11 @@ class BranchTasksTest {
   fun `sequence inside of behaviorTree function's init block should add GdxSequence to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree<Cat> {
-      initialChildCount = childCount
-      sequence()
-    }
+    val tree =
+      behaviorTree<Cat> {
+        initialChildCount = childCount
+        sequence()
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }

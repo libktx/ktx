@@ -32,11 +32,12 @@ object Scene2DSkin {
    * registered listeners. Throws [IllegalStateException] when accessed before overriding.
    */
   var defaultSkin: Skin
-    get() = skin ?: throw IllegalStateException(
-      "Default Scene2D Skin was accessed before initiation. In order to avoid this exception, " +
-        "import ktx.scene2d.Scene2DSkin and override its defaultSkin property. For example: " +
-        "Scene2DSkin.defaultSkin = Skin(); Scene2DSkin.defaultSkin = VisUI.getSkin()",
-    )
+    get() =
+      skin ?: throw IllegalStateException(
+        "Default Scene2D Skin was accessed before initiation. In order to avoid this exception, " +
+          "import ktx.scene2d.Scene2DSkin and override its defaultSkin property. For example: " +
+          "Scene2DSkin.defaultSkin = Skin(); Scene2DSkin.defaultSkin = VisUI.getSkin()",
+      )
     set(value) {
       skin = value
       for (listener in listeners) {

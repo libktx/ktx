@@ -24,7 +24,10 @@ fun Actor?.isShown(): Boolean = this != null && this.stage != null
  * @param x actor's position on X axis in stage units.
  * @param y actor's position on Y axis in stage units.
  */
-fun Actor.setPosition(x: Int, y: Int) = setPosition(x.toFloat(), y.toFloat())
+fun Actor.setPosition(
+  x: Int,
+  y: Int,
+) = setPosition(x.toFloat(), y.toFloat())
 
 /**
  * Modifies this actor position to be centered within the passed bounds. Uses actor's size to calculate the offsets.
@@ -32,7 +35,11 @@ fun Actor.setPosition(x: Int, y: Int) = setPosition(x.toFloat(), y.toFloat())
  * @param height total available height in stage units. Defaults to stage height.
  * @param normalize if true, position will be converted to ints. Defaults to true
  */
-fun Actor.centerPosition(width: Float = this.stage.width, height: Float = this.stage.height, normalize: Boolean = true) {
+fun Actor.centerPosition(
+  width: Float = this.stage.width,
+  height: Float = this.stage.height,
+  normalize: Boolean = true,
+) {
   val x = (width - this.width) / 2f
   val y = (height - this.height) / 2f
   if (normalize) {

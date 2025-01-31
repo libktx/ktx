@@ -9,7 +9,10 @@ import com.badlogic.gdx.math.Vector2
  * @param y the Y component. Defaults to 0f.
  * @return a new [Vector2] instance storing the passed values.
  */
-fun vec2(x: Float = 0f, y: Float = 0f): Vector2 = Vector2(x, y)
+fun vec2(
+  x: Float = 0f,
+  y: Float = 0f,
+): Vector2 = Vector2(x, y)
 
 /**
  * Inverts currently stored X and Y values.

@@ -24,7 +24,10 @@ const val ERROR = "ERROR"
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun debug(tag: String = DEBUG, message: () -> String) {
+inline fun debug(
+  tag: String = DEBUG,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_DEBUG) Gdx.app.debug(tag, message())
 }
@@ -39,7 +42,11 @@ inline fun debug(tag: String = DEBUG, message: () -> String) {
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun debug(cause: Throwable, tag: String = DEBUG, message: () -> String) {
+inline fun debug(
+  cause: Throwable,
+  tag: String = DEBUG,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_DEBUG) Gdx.app.debug(tag, message(), cause)
 }
@@ -53,7 +60,10 @@ inline fun debug(cause: Throwable, tag: String = DEBUG, message: () -> String) {
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun info(tag: String = INFO, message: () -> String) {
+inline fun info(
+  tag: String = INFO,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(tag, message())
 }
@@ -68,7 +78,11 @@ inline fun info(tag: String = INFO, message: () -> String) {
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun info(cause: Throwable, tag: String = INFO, message: () -> String) {
+inline fun info(
+  cause: Throwable,
+  tag: String = INFO,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(tag, message(), cause)
 }
@@ -82,7 +96,10 @@ inline fun info(cause: Throwable, tag: String = INFO, message: () -> String) {
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun error(tag: String = ERROR, message: () -> String) {
+inline fun error(
+  tag: String = ERROR,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(tag, message())
 }
@@ -97,7 +114,11 @@ inline fun error(tag: String = ERROR, message: () -> String) {
  * @see Application.getLogLevel
  */
 @OptIn(ExperimentalContracts::class)
-inline fun error(cause: Throwable, tag: String = ERROR, message: () -> String) {
+inline fun error(
+  cause: Throwable,
+  tag: String = ERROR,
+  message: () -> String,
+) {
   contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
   if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(tag, message(), cause)
 }
@@ -148,7 +169,10 @@ open class Logger(
    * @see Application.LOG_INFO
    * @see Application.getLogLevel
    */
-  inline operator fun invoke(cause: Throwable, message: () -> String) {
+  inline operator fun invoke(
+    cause: Throwable,
+    message: () -> String,
+  ) {
     if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(infoTag, buildMessage(message()), cause)
   }
 
@@ -174,7 +198,10 @@ open class Logger(
    * @see Application.getLogLevel
    */
   @OptIn(ExperimentalContracts::class)
-  inline fun debug(cause: Throwable, message: () -> String) {
+  inline fun debug(
+    cause: Throwable,
+    message: () -> String,
+  ) {
     contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
     if (Gdx.app.logLevel >= Application.LOG_DEBUG) Gdx.app.debug(debugTag, buildMessage(message()), cause)
   }
@@ -201,7 +228,10 @@ open class Logger(
    * @see Application.getLogLevel
    */
   @OptIn(ExperimentalContracts::class)
-  inline fun info(cause: Throwable, message: () -> String) {
+  inline fun info(
+    cause: Throwable,
+    message: () -> String,
+  ) {
     contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
     if (Gdx.app.logLevel >= Application.LOG_INFO) Gdx.app.log(infoTag, buildMessage(message()), cause)
   }
@@ -228,7 +258,10 @@ open class Logger(
    * @see Application.getLogLevel
    */
   @OptIn(ExperimentalContracts::class)
-  inline fun error(cause: Throwable, message: () -> String) {
+  inline fun error(
+    cause: Throwable,
+    message: () -> String,
+  ) {
     contract { callsInPlace(message, InvocationKind.AT_MOST_ONCE) }
     if (Gdx.app.logLevel >= Application.LOG_ERROR) Gdx.app.error(errorTag, buildMessage(message()), cause)
   }

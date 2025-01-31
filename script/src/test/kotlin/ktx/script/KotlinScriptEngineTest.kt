@@ -17,7 +17,10 @@ import com.badlogic.gdx.utils.Array as GdxArray
  * Tests the [KotlinScriptEngine].
  */
 class KotlinScriptEngineTest {
-  data class Data(var text: String)
+  data class Data(
+    var text: String,
+  )
+
   private val engine = KotlinScriptEngine()
 
   companion object {
@@ -193,17 +196,18 @@ class KotlinScriptEngineTest {
     engine.import("com.badlogic.gdx.utils.Array", alias = "GdxArray")
 
     // When:
-    val result = engine.evaluate(
-      """
-      class Helper {
-        fun toArray(vararg objects: Any) = GdxArray.with(*objects)
-      }
-      fun data(text: String) = KotlinScriptEngineTest.Data(text)
-      val lambda: () -> String = { "test" }
+    val result =
+      engine.evaluate(
+        """
+        class Helper {
+          fun toArray(vararg objects: Any) = GdxArray.with(*objects)
+        }
+        fun data(text: String) = KotlinScriptEngineTest.Data(text)
+        val lambda: () -> String = { "test" }
 
-      Helper().toArray(data(lambda()), data(lambda()), data(lambda()))
-      """.trimIndent(),
-    )
+        Helper().toArray(data(lambda()), data(lambda()), data(lambda()))
+        """.trimIndent(),
+      )
 
     // Then:
     assertEquals(GdxArray.with(Data("test"), Data("test"), Data("test")), result)

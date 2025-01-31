@@ -27,11 +27,12 @@ object EntitySpec : Spek({
 
     describe("create entity function") {
       it("should add an entity to the World") {
-        val entityId = world.entity {
-          with<Transform> {
-            x = 2f
+        val entityId =
+          world.entity {
+            with<Transform> {
+              x = 2f
+            }
           }
-        }
 
         assertThat(transformMapper.get(entityId).x == 2f).isTrue()
       }
