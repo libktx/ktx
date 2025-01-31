@@ -1,3 +1,6 @@
 # .git-blame-ignore-revs
+# Ktlint 0.50.0 -> 1.5.0 update:
+dc3b14bee634a5e25fee71e2fef856e2024b5deb
+
 # Ktlint 0.42.1 -> 0.50.0 update:
 2e91decb0f3cea8fd7ab953639cae74f01ce8a04
