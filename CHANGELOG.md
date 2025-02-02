@@ -5,6 +5,8 @@ _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob
 - **[UPDATE]** Updated to libGDX 1.13.1.
 - **[UPDATE]** Updated to Kotlin 2.1.10.
 - **[UPDATE]** Updated to Kotlin Coroutines 1.10.1.
+- **[UPDATE]** Updated to VisUI 1.5.5.
+- **[UPDATE]** Updated to Dokka 2.0.0.
 - **[CHANGE]** (`ktx-app`) `KtxGame` now calls `resize` _after_ `show` when `create` or `setScreen` are called.
   This behavior now matches the official `Game` implementation.
 
