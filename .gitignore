@@ -6,6 +6,9 @@
 *.ear
 hs_err_pid*
 
+## Kotlin
+.kotlin/
+
 ## Android Studio, IntelliJ, Android
 android/libs/armeabi/
 android/libs/armeabi-v7a/
