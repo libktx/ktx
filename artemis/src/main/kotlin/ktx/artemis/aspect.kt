@@ -53,5 +53,4 @@ fun Aspect.Builder.allOf(vararg components: KClass<out Component>): Aspect.Build
  * @param components all the components the entities cannot have.
  * @return an [Aspect.Builder] for the [Aspect].
  */
-fun Aspect.Builder.exclude(vararg components: KClass<out Component>): Aspect.Builder =
-  exclude(*components.asJavaClasses())
+fun Aspect.Builder.exclude(vararg components: KClass<out Component>): Aspect.Builder = exclude(*components.asJavaClasses())

@@ -19,9 +19,10 @@ class TextAssetLoaderTest {
   fun `should read text data from FileHandle`() {
     // Given:
     val loader = TextAssetLoader(charset = "UTF-8")
-    val file = mock<FileHandle> {
-      on(it.readString("UTF-8")) doReturn "Content."
-    }
+    val file =
+      mock<FileHandle> {
+        on(it.readString("UTF-8")) doReturn "Content."
+      }
 
     // When:
     loader.loadAsync(mock(), "test.txt", file, null)
@@ -36,9 +37,10 @@ class TextAssetLoaderTest {
   fun `should read text data from FileHandle with loading parameters`() {
     // Given:
     val loader = TextAssetLoader(charset = "UTF-8")
-    val file = mock<FileHandle> {
-      on(it.readString("UTF-16")) doReturn "Content."
-    }
+    val file =
+      mock<FileHandle> {
+        on(it.readString("UTF-16")) doReturn "Content."
+      }
 
     // When:
     loader.loadAsync(mock(), "test.txt", file, TextAssetLoaderParameters(charset = "UTF-16"))

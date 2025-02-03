@@ -18,19 +18,20 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MapObjectTest {
-  private val mapObject = MapObject().apply {
-    properties.apply {
-      put("id", 13)
-      put("x", 1)
-      put("y", 0f)
-      put("rotation", -2.33f)
-      put("type", "SomeType")
-      put("width", 20f)
-      put("height", 30f)
-      put("name", "Property")
-      put("active", true)
+  private val mapObject =
+    MapObject().apply {
+      properties.apply {
+        put("id", 13)
+        put("x", 1)
+        put("y", 0f)
+        put("rotation", -2.33f)
+        put("type", "SomeType")
+        put("width", 20f)
+        put("height", 30f)
+        put("name", "Property")
+        put("active", true)
+      }
     }
-  }
 
   @Test
   fun `should retrieve properties from MapObject`() {

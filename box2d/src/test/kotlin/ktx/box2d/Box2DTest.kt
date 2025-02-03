@@ -15,7 +15,10 @@ import org.junit.BeforeClass
 abstract class Box2DTest {
   protected val floatTolerance = 0.0001f
 
-  protected fun assertChainEquals(vertices: Array<Vector2>, shape: ChainShape) {
+  protected fun assertChainEquals(
+    vertices: Array<Vector2>,
+    shape: ChainShape,
+  ) {
     assertEquals(
       "${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
       vertices.size,
@@ -30,7 +33,10 @@ abstract class Box2DTest {
     }
   }
 
-  protected fun assertPolygonEquals(vertices: Array<Vector2>, shape: PolygonShape) {
+  protected fun assertPolygonEquals(
+    vertices: Array<Vector2>,
+    shape: PolygonShape,
+  ) {
     assertEquals(
       "${vertices.size} vertices expected, ${shape.vertexCount} found instead.",
       vertices.size,
@@ -45,7 +51,11 @@ abstract class Box2DTest {
     }
   }
 
-  protected fun assertEdgeEquals(from: Vector2, to: Vector2, edgeShape: EdgeShape) {
+  protected fun assertEdgeEquals(
+    from: Vector2,
+    to: Vector2,
+    edgeShape: EdgeShape,
+  ) {
     val vertex = Vector2()
     edgeShape.getVertex1(vertex)
     assertEquals(from, vertex)

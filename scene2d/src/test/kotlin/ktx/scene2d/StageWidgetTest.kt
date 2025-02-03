@@ -36,9 +36,10 @@ class StageWidgetTest : ApplicationTest() {
 
     stage.actors {
       label = label("Test")
-      table = table {
-        button = button()
-      }
+      table =
+        table {
+          button = button()
+        }
       assertSame(stage, this.stage)
     }
 
@@ -72,9 +73,10 @@ class StageWidgetTest : ApplicationTest() {
 
     stage.actors {
       window = window("Test")
-      dialog = dialog("Test") {
-        label = label("Test")
-      }
+      dialog =
+        dialog("Test") {
+          label = label("Test")
+        }
     }
 
     assertTrue(window in stage.actors)

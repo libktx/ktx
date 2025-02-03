@@ -12,136 +12,239 @@ class Matrix3Test {
 
   @Test
   fun `should create matrix`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     assertMatrixEquals(
       matrix,
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
+      1f,
+      2f,
+      3f,
+      4f,
+      5f,
+      6f,
+      7f,
+      8f,
+      9f,
     )
   }
 
   @Test
   fun `should negate matrix values`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     val result = -matrix
 
     assertMatrixEquals(
       result,
-      -1f, -2f, -3f,
-      -4f, -5f, -6f,
-      -7f, -8f, -9f,
+      -1f,
+      -2f,
+      -3f,
+      -4f,
+      -5f,
+      -6f,
+      -7f,
+      -8f,
+      -9f,
     )
     assertMatrixEquals(
       matrix,
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
+      1f,
+      2f,
+      3f,
+      4f,
+      5f,
+      6f,
+      7f,
+      8f,
+      9f,
     )
   }
 
   @Test
   fun `should invert matrix`() {
-    val matrix = mat3(
-      1f, 2f, 1f,
-      0f, 1f, 1f,
-      0f, 0f, 1f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        1f,
+        0f,
+        1f,
+        1f,
+        0f,
+        0f,
+        1f,
+      )
 
     val result = !matrix
 
     assertMatrixEquals(
       result,
-      +1f, -2f, +1f,
-      +0f, +1f, -1f,
-      +0f, +0f, +1f,
+      +1f,
+      -2f,
+      +1f,
+      +0f,
+      +1f,
+      -1f,
+      +0f,
+      +0f,
+      +1f,
     )
     assertMatrixEquals(
       matrix,
-      1f, 2f, 1f,
-      0f, 1f, 1f,
-      0f, 0f, 1f,
+      1f,
+      2f,
+      1f,
+      0f,
+      1f,
+      1f,
+      0f,
+      0f,
+      1f,
     )
   }
 
   @Test
   fun `should addAssign matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    matrix += mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    matrix +=
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     assertMatrixEquals(
       matrix,
-      +2f, +4f, +6f,
-      +8f, 10f, 12f,
-      14f, 16f, 18f,
+      +2f,
+      +4f,
+      +6f,
+      +8f,
+      10f,
+      12f,
+      14f,
+      16f,
+      18f,
     )
   }
 
   @Test
   fun `should subtractAssign matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    matrix -= mat3(
-      9f, 8f, 7f,
-      6f, 5f, 4f,
-      3f, 2f, 1f,
-    )
+    matrix -=
+      mat3(
+        9f,
+        8f,
+        7f,
+        6f,
+        5f,
+        4f,
+        3f,
+        2f,
+        1f,
+      )
 
     assertMatrixEquals(
       matrix,
-      -8f, -6f, -4f,
-      -2f, +0f, +2f,
-      +4f, +6f, +8f,
+      -8f,
+      -6f,
+      -4f,
+      -2f,
+      +0f,
+      +2f,
+      +4f,
+      +6f,
+      +8f,
     )
   }
 
   @Test
   fun `should multiplyAssign matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    matrix *= mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    matrix *=
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     assertMatrixEquals(
       matrix,
       1f * 1f + 2f * 4f + 3f * 7f,
       1f * 2f + 2f * 5f + 3f * 8f,
       1f * 3f + 2f * 6f + 3f * 9f,
-
       4f * 1f + 5f * 4f + 6f * 7f,
       4f * 2f + 5f * 5f + 6f * 8f,
       4f * 3f + 5f * 6f + 6f * 9f,
-
       7f * 1f + 8f * 4f + 9f * 7f,
       7f * 2f + 8f * 5f + 9f * 8f,
       7f * 3f + 8f * 6f + 9f * 9f,
@@ -150,55 +253,94 @@ class Matrix3Test {
 
   @Test
   fun `should multiplyAssign matrices with scalar`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     matrix *= 3f
 
     assertMatrixEquals(
       matrix,
-      3f, +2f, 3f,
-      4f, 15f, 6f,
-      7f, +8f, 9f,
+      3f,
+      +2f,
+      3f,
+      4f,
+      15f,
+      6f,
+      7f,
+      +8f,
+      9f,
     )
   }
 
   @Test
   fun `should multiply matricesAssign with Vector2 scale`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     matrix *= vec2(3f, 2f / 5f)
 
     assertMatrixEquals(
       matrix,
-      3f, 2f, 3f,
-      4f, 2f, 6f,
-      7f, 8f, 9f,
+      3f,
+      2f,
+      3f,
+      4f,
+      2f,
+      6f,
+      7f,
+      8f,
+      9f,
     )
   }
 
   @Test
   fun `should multiplyAssign matrices with Vector3 scale`() {
-    val matrix = mat3(
-      3f, 2f, 3f,
-      4f, 2f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        3f,
+        2f,
+        3f,
+        4f,
+        2f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     matrix *= vec3(3f, 2f, 0f) // Last value is ignored.
 
     assertMatrixEquals(
       matrix,
-      9f, 2f, 3f,
-      4f, 4f, 6f,
-      7f, 8f, 9f,
+      9f,
+      2f,
+      3f,
+      4f,
+      4f,
+      6f,
+      7f,
+      8f,
+      9f,
     )
   }
 
@@ -206,11 +348,18 @@ class Matrix3Test {
   fun `should multiplyAssign Vector2 with matrices`() {
     val vector = vec2(1f, 2f)
 
-    vector *= mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    vector *=
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     assertEquals(1f * 1f + 2f * 2f + 1f * 3f, vector.x, floatTolerance)
     assertEquals(1f * 4f + 2f * 5f + 1f * 6f, vector.y, floatTolerance)
@@ -218,72 +367,127 @@ class Matrix3Test {
 
   @Test
   fun `should add matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    val result = matrix + mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val result =
+      matrix +
+        mat3(
+          1f,
+          2f,
+          3f,
+          4f,
+          5f,
+          6f,
+          7f,
+          8f,
+          9f,
+        )
 
     assertMatrixEquals(
       result,
-      +2f, +4f, +6f,
-      +8f, 10f, 12f,
-      14f, 16f, 18f,
+      +2f,
+      +4f,
+      +6f,
+      +8f,
+      10f,
+      12f,
+      14f,
+      16f,
+      18f,
     )
   }
 
   @Test
   fun `should subtract matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    val result = matrix - mat3(
-      9f, 8f, 7f,
-      6f, 5f, 4f,
-      3f, 2f, 1f,
-    )
+    val result =
+      matrix -
+        mat3(
+          9f,
+          8f,
+          7f,
+          6f,
+          5f,
+          4f,
+          3f,
+          2f,
+          1f,
+        )
 
     assertMatrixEquals(
       result,
-      -8f, -6f, -4f,
-      -2f, +0f, +2f,
-      +4f, +6f, +8f,
+      -8f,
+      -6f,
+      -4f,
+      -2f,
+      +0f,
+      +2f,
+      +4f,
+      +6f,
+      +8f,
     )
   }
 
   @Test
   fun `should multiply matrices`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
-    val result = matrix * mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val result =
+      matrix *
+        mat3(
+          1f,
+          2f,
+          3f,
+          4f,
+          5f,
+          6f,
+          7f,
+          8f,
+          9f,
+        )
 
     assertMatrixEquals(
       result,
       1f * 1f + 2f * 4f + 3f * 7f,
       1f * 2f + 2f * 5f + 3f * 8f,
       1f * 3f + 2f * 6f + 3f * 9f,
-
       4f * 1f + 5f * 4f + 6f * 7f,
       4f * 2f + 5f * 5f + 6f * 8f,
       4f * 3f + 5f * 6f + 6f * 9f,
-
       7f * 1f + 8f * 4f + 9f * 7f,
       7f * 2f + 8f * 5f + 9f * 8f,
       7f * 3f + 8f * 6f + 9f * 9f,
@@ -292,29 +496,49 @@ class Matrix3Test {
 
   @Test
   fun `should multiply matrices with scalar`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     val result = matrix * 3f
 
     assertMatrixEquals(
       result,
-      3f, +2f, 3f,
-      4f, 15f, 6f,
-      7f, +8f, 9f,
+      3f,
+      +2f,
+      3f,
+      4f,
+      15f,
+      6f,
+      7f,
+      +8f,
+      9f,
     )
   }
 
   @Test
   fun `should multiply matrices with Vector2`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     val result = matrix * vec2(3f, 2f)
 
@@ -324,11 +548,18 @@ class Matrix3Test {
 
   @Test
   fun `should destruct matrices into nine floats`() {
-    val matrix = mat3(
-      1f, 2f, 3f,
-      4f, 5f, 6f,
-      7f, 8f, 9f,
-    )
+    val matrix =
+      mat3(
+        1f,
+        2f,
+        3f,
+        4f,
+        5f,
+        6f,
+        7f,
+        8f,
+        9f,
+      )
 
     val (
       x0y0, x0y1, x0y2,

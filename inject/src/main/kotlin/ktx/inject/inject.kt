@@ -79,7 +79,10 @@ open class Context : Disposable {
    * @see bind
    * @see bindSingleton
    */
-  open fun setProvider(forClass: Class<*>, provider: () -> Any) {
+  open fun setProvider(
+    forClass: Class<*>,
+    provider: () -> Any,
+  ) {
     forClass !in providers || throw InjectionException("Provider already defined for class: $forClass")
     providers[forClass] = provider
   }
@@ -182,7 +185,10 @@ open class Context : Disposable {
    * @param provider provides instances of classes compatible with the passed types.
    * @throws InjectionException if provider for any of the selected types is already defined.
    */
-  fun <Type : Any> bind(vararg to: KClass<out Type>, provider: () -> Type) = to.forEach {
+  fun <Type : Any> bind(
+    vararg to: KClass<out Type>,
+    provider: () -> Type,
+  ) = to.forEach {
     setProvider(it.java, provider)
   }
 
@@ -263,7 +269,10 @@ inline fun Context.register(init: Context.() -> Unit): Context {
  * @param singleton will be always provided by this provider.
  * @see Disposable
  */
-data class SingletonProvider<out Type : Any>(val singleton: Type) : Disposable, () -> Type {
+data class SingletonProvider<out Type : Any>(
+  val singleton: Type,
+) : Disposable,
+  () -> Type {
   /** @return [singleton]. */
   override operator fun invoke(): Type = singleton
 
@@ -276,4 +285,7 @@ data class SingletonProvider<out Type : Any>(val singleton: Type) : Disposable, 
 /**
  * Thrown in case of any problems with the dependency injection mechanism.
  */
-class InjectionException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
+class InjectionException(
+  message: String,
+  cause: Throwable? = null,
+) : RuntimeException(message, cause)

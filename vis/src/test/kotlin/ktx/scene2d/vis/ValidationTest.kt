@@ -10,9 +10,10 @@ class ValidationTest : ApplicationTest() {
   fun `should create FormValidator`() {
     var invoked: Boolean
 
-    val formValidator = validator {
-      invoked = true
-    }
+    val formValidator =
+      validator {
+        invoked = true
+      }
 
     assertNotNull(formValidator)
     assertTrue(invoked)

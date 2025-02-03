@@ -14,7 +14,6 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 
 class TiledMapRendererTest {
-
   @Test
   fun `should call beginRender and endRender without setView`() {
     val renderer = mock<BatchTiledMapRenderer>()
@@ -71,5 +70,4 @@ class TiledMapRendererTest {
     }
     verify(renderer).endInternal()
   }
-
 }

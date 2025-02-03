@@ -1,6 +1,7 @@
 import ktx.*
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+import org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -42,7 +43,7 @@ allprojects {
   val linter = configurations.create("linter")
 
   dependencies {
-    linter("com.pinterest:ktlint:$ktlintVersion")
+    linter("com.pinterest.ktlint:ktlint-cli:$ktlintVersion")
   }
 }
 
@@ -80,6 +81,7 @@ subprojects {
       jvmTarget = JavaVersion.VERSION_1_8.toString()
       freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
+    jvmTargetValidationMode.set(JvmTargetValidationMode.IGNORE)
   }
   val compileTestKotlin: KotlinCompile by tasks
   compileTestKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()

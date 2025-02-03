@@ -58,21 +58,28 @@ internal class AssetManagerWrapper(
     "AssetStorage requires asset class to check if it is loaded.",
     replaceWith = ReplaceWith("contains(fileName, type)"),
   )
-  override fun contains(fileName: String): Boolean = try {
-    getIdentifier(fileName) != null
-  } catch (exception: AssetLoadingException) {
-    // Multiple assets with the same path.
-    true
-  }
+  override fun contains(fileName: String): Boolean =
+    try {
+      getIdentifier(fileName) != null
+    } catch (exception: AssetLoadingException) {
+      // Multiple assets with the same path.
+      true
+    }
 
-  override fun contains(fileName: String, type: Class<*>?): Boolean =
-    assetStorage.contains(AssetDescriptor(fileName, type))
+  override fun contains(
+    fileName: String,
+    type: Class<*>?,
+  ): Boolean = assetStorage.contains(AssetDescriptor(fileName, type))
 
   @Deprecated(
     "This operation is non-blocking. Assets might not be available in storage after call.",
     replaceWith = ReplaceWith("AssetStorage.add"),
   )
-  override fun <T : Any> addAsset(fileName: String, type: Class<T>, asset: T) {
+  override fun <T : Any> addAsset(
+    fileName: String,
+    type: Class<T>,
+    asset: T,
+  ) {
     logIncompleteSupportWarning("addAsset")
     KtxAsync.launch {
       assetStorage.add(AssetDescriptor(fileName, type), asset)
@@ -80,8 +87,10 @@ internal class AssetManagerWrapper(
   }
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
-  override fun taskFailed(assetDesc: AssetDescriptor<*>?, ex: RuntimeException?) =
-    throw UnsupportedMethodException("taskFailed")
+  override fun taskFailed(
+    assetDesc: AssetDescriptor<*>?,
+    ex: RuntimeException?,
+  ) = throw UnsupportedMethodException("taskFailed")
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun setErrorListener(listener: AssetErrorListener?) {
@@ -91,13 +100,19 @@ internal class AssetManagerWrapper(
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun <T : Any> containsAsset(asset: T): Boolean = throw UnsupportedMethodException("containsAsset")
 
-  override fun <Asset : Any> get(fileName: String, type: Class<Asset>): Asset =
-    get(fileName, type, required = true)!!
+  override fun <Asset : Any> get(
+    fileName: String,
+    type: Class<Asset>,
+  ): Asset = get(fileName, type, required = true)!!
 
   override fun <Asset : Any> get(assetDescriptor: AssetDescriptor<Asset>): Asset =
     get(assetDescriptor.fileName, assetDescriptor.type, required = true)!!
 
-  override fun <Asset : Any> get(fileName: String, type: Class<Asset>, required: Boolean): Asset? {
+  override fun <Asset : Any> get(
+    fileName: String,
+    type: Class<Asset>,
+    required: Boolean,
+  ): Asset? {
     val identifier = Identifier(fileName, type)
     return try {
       assetStorage[identifier]
@@ -112,11 +127,21 @@ internal class AssetManagerWrapper(
   }
 
   @Deprecated("AssetStorage requires type to find a stored asset.", replaceWith = ReplaceWith("get(fileName, type, required)"))
-  override fun <Asset : Any> get(fileName: String, required: Boolean): Asset? {
+  override fun <Asset : Any> get(
+    fileName: String,
+    required: Boolean,
+  ): Asset? {
     logCollisionWarning("get(String, Boolean)", fileName)
     @Suppress("UNCHECKED_CAST")
     val identifier = getIdentifier(fileName) as Identifier<Asset>?
-    val asset = identifier?.let { try { assetStorage[it] } catch (exception: Throwable) { null } }
+    val asset =
+      identifier?.let {
+        try {
+          assetStorage[it]
+        } catch (exception: Throwable) {
+          null
+        }
+      }
     if (asset == null) {
       if (required) {
         throw MissingDependencyException("Required asset not found: $fileName")
@@ -144,8 +169,10 @@ internal class AssetManagerWrapper(
   }
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
-  override fun <Asset : Any> getAll(type: Class<Asset>, out: GdxArray<Asset>): GdxArray<Asset> =
-    throw UnsupportedMethodException("getAll")
+  override fun <Asset : Any> getAll(
+    type: Class<Asset>,
+    out: GdxArray<Asset>,
+  ): GdxArray<Asset> = throw UnsupportedMethodException("getAll")
 
   @Deprecated("Not supported by AssetStorage.", replaceWith = ReplaceWith("Nothing"))
   override fun <T> getAssetFileName(asset: T): String? {
@@ -154,18 +181,28 @@ internal class AssetManagerWrapper(
   }
 
   override fun getDiagnostics(): String = assetStorage.toString()
+
   override fun getFileHandleResolver(): FileHandleResolver = assetStorage.fileResolver
 
   override fun getProgress(): Float = assetStorage.progress.percent
+
   override fun getLoadedAssets(): Int = assetStorage.progress.loaded
+
   override fun isFinished(): Boolean = assetStorage.progress.isFinished
 
   override fun <Asset : Any> getLoader(type: Class<Asset>): AssetLoader<*, *>? = getLoader(type, "")
-  override fun <T : Any> getLoader(type: Class<T>, fileName: String): AssetLoader<*, *>? =
-    assetStorage.getLoader(type, fileName)
+
+  override fun <T : Any> getLoader(
+    type: Class<T>,
+    fileName: String,
+  ): AssetLoader<*, *>? = assetStorage.getLoader(type, fileName)
 
   override fun isLoaded(assetDesc: AssetDescriptor<*>): Boolean = assetStorage.isLoaded(assetDesc)
-  override fun isLoaded(fileName: String, type: Class<*>): Boolean = isLoaded(AssetDescriptor(fileName, type))
+
+  override fun isLoaded(
+    fileName: String,
+    type: Class<*>,
+  ): Boolean = isLoaded(AssetDescriptor(fileName, type))
 
   @Deprecated(
     "AssetStorage requires asset type to check if it is loaded.",
@@ -189,9 +226,16 @@ internal class AssetManagerWrapper(
     }
   }
 
-  override fun <T : Any> load(fileName: String, type: Class<T>) = load(fileName, type, null)
-  override fun <T : Any> load(fileName: String, type: Class<T>, parameters: AssetLoaderParameters<T>?) =
-    load(AssetDescriptor(fileName, type, parameters))
+  override fun <T : Any> load(
+    fileName: String,
+    type: Class<T>,
+  ) = load(fileName, type, null)
+
+  override fun <T : Any> load(
+    fileName: String,
+    type: Class<T>,
+    parameters: AssetLoaderParameters<T>?,
+  ) = load(AssetDescriptor(fileName, type, parameters))
 
   override fun load(descriptor: AssetDescriptor<*>) {
     KtxAsync.launch(assetStorage.asyncContext) {
@@ -204,8 +248,10 @@ internal class AssetManagerWrapper(
       "AssetStorage requires functional providers of loaders rather than singular instances.",
     replaceWith = ReplaceWith("AssetStorage.setLoader"),
   )
-  override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(type: Class<T>, loader: AssetLoader<T, P>) =
-    setLoader(type, null, loader)
+  override fun <T : Any?, P : AssetLoaderParameters<T>?> setLoader(
+    type: Class<T>,
+    loader: AssetLoader<T, P>,
+  ) = setLoader(type, null, loader)
 
   @Deprecated(
     "AssetLoader instances can be mutable." +
@@ -255,13 +301,16 @@ internal class AssetManagerWrapper(
   override fun update(): Boolean = isFinished
 
   @Deprecated("Unsupported operation.", ReplaceWith("Nothing"))
-  override fun setReferenceCount(fileName: String, refCount: Int) =
-    throw UnsupportedMethodException("setReferenceCount")
+  override fun setReferenceCount(
+    fileName: String,
+    refCount: Int,
+  ) = throw UnsupportedMethodException("setReferenceCount")
 
   @Deprecated("AssetStorage does not maintain an assets queue.", ReplaceWith("Nothing"))
-  override fun getQueuedAssets(): Int = 0.also {
-    logNoSupportWarning("getQueuedAssets")
-  }
+  override fun getQueuedAssets(): Int =
+    0.also {
+      logNoSupportWarning("getQueuedAssets")
+    }
 
   @Deprecated("Unsupported operation.", ReplaceWith("Nothing"))
   override fun finishLoading() {
@@ -269,8 +318,7 @@ internal class AssetManagerWrapper(
   }
 
   @Suppress("UNCHECKED_CAST")
-  override fun <T : Any> finishLoadingAsset(assetDesc: AssetDescriptor<*>): T =
-    get(assetDesc as AssetDescriptor<T>)
+  override fun <T : Any> finishLoadingAsset(assetDesc: AssetDescriptor<*>): T = get(assetDesc as AssetDescriptor<T>)
 
   @Deprecated("Unsupported without asset type.", ReplaceWith("finishLoadingAsset(assetDescriptor)"))
   override fun <T : Any> finishLoadingAsset(fileName: String): T {
@@ -289,7 +337,10 @@ internal class AssetManagerWrapper(
     }
   }
 
-  private fun logWarning(warning: String, cause: Throwable? = null) {
+  private fun logWarning(
+    warning: String,
+    cause: Throwable? = null,
+  ) {
     if (!assetStorage.silenceAssetManagerWarnings) {
       if (cause != null) {
         logger.error(warning, cause)
@@ -307,7 +358,10 @@ internal class AssetManagerWrapper(
     logWarning("Unsupported AssetManagerWrapper.$method method was called by an asset loader.")
   }
 
-  private fun logCollisionWarning(method: String, path: String) {
+  private fun logCollisionWarning(
+    method: String,
+    path: String,
+  ) {
     logWarning(
       "AssetManagerWrapper.$method method called by an asset loader might throw an exception " +
         "if multiple assets from the same path are loaded with different types. " +
@@ -316,7 +370,8 @@ internal class AssetManagerWrapper(
   }
 
   override fun toString(): String = "AssetManagerWrapper(storage=$assetStorage)"
+
   override fun hashCode(): Int = assetStorage.hashCode()
-  override fun equals(other: Any?): Boolean =
-    other is AssetManagerWrapper && other.assetStorage === assetStorage
+
+  override fun equals(other: Any?): Boolean = other is AssetManagerWrapper && other.assetStorage === assetStorage
 }

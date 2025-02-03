@@ -48,9 +48,10 @@ infix fun Action.then(action: Action): SequenceAction = Actions.sequence(this, a
  * @return this [SequenceAction].
  * @see plus for a non-mutating alternative.
  */
-infix fun SequenceAction.then(action: Action): SequenceAction = apply {
-  addAction(action)
-}
+infix fun SequenceAction.then(action: Action): SequenceAction =
+  apply {
+    addAction(action)
+  }
 
 /**
  * Wraps this action and the passed action in a [SequenceAction].

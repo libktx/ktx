@@ -13,8 +13,7 @@ import kotlin.reflect.KClass
  * @return the [BaseSystem] of the given type.
  * @throws MissingBaseSystemException if no system under [T] type is registered.
  */
-inline fun <reified T : BaseSystem> World.getSystem(): T =
-  getSystem(T::class.java) ?: throw MissingBaseSystemException(T::class.java)
+inline fun <reified T : BaseSystem> World.getSystem(): T = getSystem(T::class.java) ?: throw MissingBaseSystemException(T::class.java)
 
 /**
  * Retrieves a system from the [World].
@@ -28,6 +27,8 @@ operator fun <T : BaseSystem> World.get(type: KClass<T>): T? = getSystem(type.ja
 /**
  * Thrown when accessing an [BaseSystem] via [getSystem] that does not exist in the [World].
  */
-class MissingBaseSystemException(type: Class<out BaseSystem>) : GdxRuntimeException(
-  "Could not access system of type ${type.simpleName} - is it added to the world?",
-)
+class MissingBaseSystemException(
+  type: Class<out BaseSystem>,
+) : GdxRuntimeException(
+    "Could not access system of type ${type.simpleName} - is it added to the world?",
+  )

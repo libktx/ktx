@@ -10,7 +10,9 @@ import kotlin.contracts.contract
  * A dummy widget that allows to add actors directly to the [stage] with Scene2D DSL.
  */
 @Scene2dDsl
-class StageWidget(val stage: Stage) : RootWidget {
+class StageWidget(
+  val stage: Stage,
+) : RootWidget {
   override fun <T : Actor> storeActor(actor: T): T {
     stage.addActor(actor)
     return actor

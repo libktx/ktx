@@ -291,6 +291,7 @@ class ActionsTest {
   /** Action testing utility. */
   class MockAction : Action() {
     private var acted = false
+
     override fun act(delta: Float): Boolean {
       acted = true
       return true

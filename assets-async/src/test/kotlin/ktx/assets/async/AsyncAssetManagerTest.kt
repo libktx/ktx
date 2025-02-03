@@ -141,9 +141,10 @@ class AsyncAssetManagerTest : AsyncTest() {
     val path = "ktx/assets/async/string.txt"
     val loaderParameters = TextAssetLoader.TextAssetLoaderParameters()
     val callbackParameters = mutableListOf<Any>()
-    val callback = AssetLoaderParameters.LoadedCallback { assetManager, fileName, type ->
-      callbackParameters.addAll(listOf(assetManager, fileName, type))
-    }
+    val callback =
+      AssetLoaderParameters.LoadedCallback { assetManager, fileName, type ->
+        callbackParameters.addAll(listOf(assetManager, fileName, type))
+      }
     loaderParameters.loadedCallback = callback
 
     // When:

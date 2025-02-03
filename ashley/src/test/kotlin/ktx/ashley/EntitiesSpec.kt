@@ -106,9 +106,10 @@ object EntitiesSpec : Spek({
 
     describe("add component function") {
       it("should add a component with a configuration and return it") {
-        val component = entity.addComponent<Transform>(engine) {
-          x = 3f
-        }
+        val component =
+          entity.addComponent<Transform>(engine) {
+            x = 3f
+          }
         assertThat(Transform.mapper in entity).isTrue()
         assertThat(entity[Transform.mapper]).isEqualTo(component)
         assertThat(component.x).isEqualTo(3f)

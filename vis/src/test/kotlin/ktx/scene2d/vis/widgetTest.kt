@@ -27,7 +27,7 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/* Tests of customized VisUI parent widgets. */
+// Tests of customized VisUI parent widgets.
 
 /**
  * Tests KTX-adapted widget: [KVisTree].
@@ -62,12 +62,14 @@ class KVisTreeTest : ApplicationTest() {
     val tree = scene2d.visTree()
     val icon = mock<Drawable>()
     tree.apply {
-      val node: KNode<Label> = label("Test") {}.node(
-        icon = icon,
-        selectable = false,
-        expanded = true,
-        userObject = "Test",
-      ).inNode
+      val node: KNode<Label> =
+        label("Test") {}
+          .node(
+            icon = icon,
+            selectable = false,
+            expanded = true,
+            userObject = "Test",
+          ).inNode
 
       assertSame(icon, node.icon)
       assertFalse(node.isSelectable)
@@ -99,10 +101,11 @@ class KDragPaneTest : ApplicationTest() {
     val label: Label
     val image: Image
 
-    val pane = scene2d.dragPane {
-      label = label("Test")
-      image = visImage("white")
-    }
+    val pane =
+      scene2d.dragPane {
+        label = label("Test")
+        image = visImage("white")
+      }
 
     assertTrue(label in pane.table.children)
     assertTrue(image in pane.table.children)
@@ -118,11 +121,13 @@ class KTabbedPaneTest : ApplicationTest() {
     val tab: Tab
     val label: Label
 
-    val pane = scene2d.tabbedPane {
-      tab = tab(title = "Test", savable = true, closeableByUser = true) {
-        label = label("Test")
+    val pane =
+      scene2d.tabbedPane {
+        tab =
+          tab(title = "Test", savable = true, closeableByUser = true) {
+            label = label("Test")
+          }
       }
-    }
 
     assertTrue(tab in pane.tabs)
     assertTrue(label in tab.contentTable.children)
@@ -173,11 +178,12 @@ class KTabbedPaneTest : ApplicationTest() {
   fun `should allow to add content to Table`() {
     val table = Table()
     val tab: Tab
-    val pane = scene2d.tabbedPane {
-      addTabContentsTo(table)
-      tab("Inactive")
-      tab = tab("Active")
-    }
+    val pane =
+      scene2d.tabbedPane {
+        addTabContentsTo(table)
+        tab("Inactive")
+        tab = tab("Active")
+      }
 
     pane.switchTab(tab)
 
@@ -188,11 +194,12 @@ class KTabbedPaneTest : ApplicationTest() {
   fun `should allow to add content to Group`() {
     val group = Group()
     val tab: Tab
-    val pane = scene2d.tabbedPane {
-      addTabContentsTo(group)
-      tab("Inactive")
-      tab = tab("Active")
-    }
+    val pane =
+      scene2d.tabbedPane {
+        addTabContentsTo(group)
+        tab("Inactive")
+        tab = tab("Active")
+      }
 
     pane.switchTab(tab)
 
@@ -203,11 +210,12 @@ class KTabbedPaneTest : ApplicationTest() {
   fun `should allow to add content to Container`() {
     val container = Container<Actor>()
     val tab: Tab
-    val pane = scene2d.tabbedPane {
-      addTabContentsTo(container)
-      tab("Inactive")
-      tab = tab("Active")
-    }
+    val pane =
+      scene2d.tabbedPane {
+        addTabContentsTo(container)
+        tab("Inactive")
+        tab = tab("Active")
+      }
 
     pane.switchTab(tab)
 
@@ -375,10 +383,11 @@ class KCollapsibleTest : ApplicationTest() {
     val label: Label
     val image: Image
 
-    val collapsible = scene2d.collapsible {
-      label = label("Test").cell(expand = true)
-      image = visImage("white")
-    }
+    val collapsible =
+      scene2d.collapsible {
+        label = label("Test").cell(expand = true)
+        image = visImage("white")
+      }
 
     assertTrue(label in collapsible.table.children)
     assertTrue(image in collapsible.table.children)
@@ -394,10 +403,11 @@ class KHorizontalCollapsibleTest : ApplicationTest() {
     val label: Label
     val image: Image
 
-    val collapsible = scene2d.horizontalCollapsible {
-      label = label("Test").cell(expand = true)
-      image = visImage("white")
-    }
+    val collapsible =
+      scene2d.horizontalCollapsible {
+        label = label("Test").cell(expand = true)
+        image = visImage("white")
+      }
 
     assertTrue(label in collapsible.table.children)
     assertTrue(image in collapsible.table.children)

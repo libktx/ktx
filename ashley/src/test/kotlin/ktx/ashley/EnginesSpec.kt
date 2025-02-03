@@ -24,7 +24,9 @@ object EnginesSpec : Spek({
     }
     describe("creating a component without a no-arg constructor") {
       @Suppress("UNUSED_PARAMETER")
-      class MissingNoArgConstructorComponent(body: String) : Component
+      class MissingNoArgConstructorComponent(
+        body: String,
+      ) : Component
 
       it("should throw an exception if the non-pooled engine was unable to create the component") {
         val nonPooledEngine = Engine()
@@ -47,22 +49,25 @@ object EnginesSpec : Spek({
       }
       it("should throw an exception if the non-pooled engine was unable to create the corrupted component") {
         val nonPooledEngine = Engine()
-        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
-          nonPooledEngine.create<CorruptedComponent>()
-        }.withRootCauseInstanceOf(IllegalStateException::class.java)
+        assertThatExceptionOfType(CreateComponentException::class.java)
+          .isThrownBy {
+            nonPooledEngine.create<CorruptedComponent>()
+          }.withRootCauseInstanceOf(IllegalStateException::class.java)
       }
 
       it("should throw an exception if the pooled engine was unable to create the corrupted component") {
-        assertThatExceptionOfType(CreateComponentException::class.java).isThrownBy {
-          engine.create<CorruptedComponent>()
-        }.withRootCauseInstanceOf(IllegalStateException::class.java)
+        assertThatExceptionOfType(CreateComponentException::class.java)
+          .isThrownBy {
+            engine.create<CorruptedComponent>()
+          }.withRootCauseInstanceOf(IllegalStateException::class.java)
       }
     }
     describe("creating a component with configuration") {
-      val component = engine.create<Transform> {
-        x = 1f
-        y = 2f
-      }
+      val component =
+        engine.create<Transform> {
+          x = 1f
+          y = 2f
+        }
       it("should create a pooled component with reified type") {
         assertThat(component.x).isEqualTo(1f)
         assertThat(component.y).isEqualTo(2f)

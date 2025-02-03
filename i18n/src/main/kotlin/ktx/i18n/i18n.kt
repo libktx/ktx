@@ -7,7 +7,10 @@ import com.badlogic.gdx.utils.I18NBundle
  * @param args will replace the argument placeholders in the selected bundle line. The order is preserved and honored.
  * @return formatted value mapped to the key extracted from the bundle.
  */
-operator fun I18NBundle.get(key: String, vararg args: Any?): String = this.format(key, *args)
+operator fun I18NBundle.get(
+  key: String,
+  vararg args: Any?,
+): String = this.format(key, *args)
 
 /**
  * @param line value mapped to its ID will be extracted. Its [toString] method should match property name in i18n bundle.
@@ -20,7 +23,10 @@ operator fun I18NBundle.get(line: BundleLine): String = this.get(line.toString()
  * @param args will replace the argument placeholders in the selected bundle line. The order is preserved and honored.
  * @return formatted value mapped to the key extracted from the bundle.
  */
-operator fun I18NBundle.get(line: BundleLine, vararg args: Any?): String = this.format(line.toString(), *args)
+operator fun I18NBundle.get(
+  line: BundleLine,
+  vararg args: Any?,
+): String = this.format(line.toString(), *args)
 
 /**
  * Represents a single [I18NBundle]. Expects that its [toString] method returns a valid bundle line ID. Advised to be

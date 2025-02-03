@@ -42,7 +42,9 @@ annotation class Reflection
  */
 @JvmInline
 @Reflection
-value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
+value class ReflectedClass<T : Any>(
+  val javaClass: Class<T>,
+) {
   /** @see Class.getSimpleName */
   val simpleName: String
     get() = ClassReflection.getSimpleName(javaClass)
@@ -180,11 +182,12 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @throws ReflectionException when unable to create an array instance.
    */
   @Suppress("UNCHECKED_CAST")
-  fun newArrayInstance(size: Int): Array<T> = try {
-    ArrayReflection.newInstance(javaClass, size) as Array<T>
-  } catch (exception: Exception) {
-    throw ReflectionException("Unable to create an array of $javaClass with size $size.", exception)
-  }
+  fun newArrayInstance(size: Int): Array<T> =
+    try {
+      ArrayReflection.newInstance(javaClass, size) as Array<T>
+    } catch (exception: Exception) {
+      throw ReflectionException("Unable to create an array of $javaClass with size $size.", exception)
+    }
 
   /**
    * Finds a constructor given the selected [parameterTypes].
@@ -193,8 +196,7 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @see Class.getConstructor
    * @throws ReflectionException if unable to find the constructor.
    */
-  fun getConstructor(vararg parameterTypes: KClass<*>): Constructor =
-    getConstructor(*parameterTypes.map { it.java }.toTypedArray())
+  fun getConstructor(vararg parameterTypes: KClass<*>): Constructor = getConstructor(*parameterTypes.map { it.java }.toTypedArray())
 
   /**
    * Finds a constructor given the selected [parameterTypes].
@@ -203,8 +205,7 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @see Class.getConstructor
    * @throws ReflectionException if unable to find the constructor.
    */
-  fun getConstructor(vararg parameterTypes: Class<*>): Constructor =
-    ClassReflection.getConstructor(javaClass, *parameterTypes)
+  fun getConstructor(vararg parameterTypes: Class<*>): Constructor = ClassReflection.getConstructor(javaClass, *parameterTypes)
 
   /**
    * Finds a declared constructor given the selected [parameterTypes].
@@ -233,8 +234,10 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @return a [Method] matching the criteria.
    * @throws ReflectionException if unable to find the method.
    */
-  fun getMethod(name: String, vararg parameterTypes: KClass<*>): Method =
-    getMethod(name, *parameterTypes.map { it.java }.toTypedArray())
+  fun getMethod(
+    name: String,
+    vararg parameterTypes: KClass<*>,
+  ): Method = getMethod(name, *parameterTypes.map { it.java }.toTypedArray())
 
   /**
    * Finds a method with the given [name] consuming given [parameterTypes].
@@ -243,8 +246,10 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @return a [Method] matching the criteria.
    * @throws ReflectionException if unable to find the method.
    */
-  fun getMethod(name: String, vararg parameterTypes: Class<*>): Method =
-    ClassReflection.getMethod(javaClass, name, *parameterTypes)
+  fun getMethod(
+    name: String,
+    vararg parameterTypes: Class<*>,
+  ): Method = ClassReflection.getMethod(javaClass, name, *parameterTypes)
 
   /**
    * Finds a declared method with the given [name] consuming given [parameterTypes].
@@ -253,8 +258,10 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @return a [Method] matching the criteria.
    * @throws ReflectionException if unable to find the method.
    */
-  fun getDeclaredMethod(name: String, vararg parameterTypes: KClass<*>): Method =
-    getDeclaredMethod(name, *parameterTypes.map { it.java }.toTypedArray())
+  fun getDeclaredMethod(
+    name: String,
+    vararg parameterTypes: KClass<*>,
+  ): Method = getDeclaredMethod(name, *parameterTypes.map { it.java }.toTypedArray())
 
   /**
    * Finds a declared method with the given [name] consuming given [parameterTypes].
@@ -263,8 +270,10 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @return a [Method] matching the criteria.
    * @throws ReflectionException if unable to find the method.
    */
-  fun getDeclaredMethod(name: String, vararg parameterTypes: Class<*>): Method =
-    ClassReflection.getDeclaredMethod(javaClass, name, *parameterTypes)
+  fun getDeclaredMethod(
+    name: String,
+    vararg parameterTypes: Class<*>,
+  ): Method = ClassReflection.getDeclaredMethod(javaClass, name, *parameterTypes)
 
   /**
    * Finds a field with the given [name].
@@ -286,16 +295,14 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * Checks if [javaClass] is annotated with [T] annotation.
    * @return true if [javaClass] is annotated with [T].
    */
-  inline fun <reified T : JavaAnnotation> isAnnotationPresent(): Boolean =
-    isAnnotationPresent(T::class)
+  inline fun <reified T : JavaAnnotation> isAnnotationPresent(): Boolean = isAnnotationPresent(T::class)
 
   /**
    * Checks if [javaClass] is annotated with [T] annotation.
    * @param annotationType class of the annotation to check.
    * @return true if [javaClass] is annotated with [T].
    */
-  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: KClass<T>): Boolean =
-    isAnnotationPresent(annotationType.java)
+  fun <T : JavaAnnotation> isAnnotationPresent(annotationType: KClass<T>): Boolean = isAnnotationPresent(annotationType.java)
 
   /**
    * Checks if [javaClass] is annotated with [T] annotation.
@@ -316,31 +323,27 @@ value class ReflectedClass<T : Any>(val javaClass: Class<T>) {
    * @param annotationClass type of the annotation to search for.
    * @return an instance of [T] wrapped in [Annotation] or null if the [javaClass] is not annotated.
    */
-  fun <T : JavaAnnotation> getAnnotation(annotationClass: KClass<T>): Annotation? =
-    getAnnotation(annotationClass.java)
+  fun <T : JavaAnnotation> getAnnotation(annotationClass: KClass<T>): Annotation? = getAnnotation(annotationClass.java)
 
   /**
    * Finds an [Annotation] of the selected [T] type.
    * @param annotationClass type of the annotation to search for.
    * @return an instance of [T] wrapped in [Annotation] or null if the [javaClass] is not annotated.
    */
-  fun <T : JavaAnnotation> getAnnotation(annotationClass: Class<T>): Annotation? =
-    ClassReflection.getAnnotation(javaClass, annotationClass)
+  fun <T : JavaAnnotation> getAnnotation(annotationClass: Class<T>): Annotation? = ClassReflection.getAnnotation(javaClass, annotationClass)
 
   /**
    * Finds an [Annotation] of the selected [T] type.
    * @return an instance of [T] wrapped in [Annotation] or null if the [javaClass] is not annotated.
    */
-  inline fun <reified T : JavaAnnotation> getDeclaredAnnotation(): Annotation? =
-    getDeclaredAnnotation(T::class)
+  inline fun <reified T : JavaAnnotation> getDeclaredAnnotation(): Annotation? = getDeclaredAnnotation(T::class)
 
   /**
    * Finds an [Annotation] of the selected [T] type.
    * @param annotationClass type of the annotation to search for.
    * @return an instance of [T] wrapped in [Annotation] or null if the [javaClass] is not annotated.
    */
-  fun <T : JavaAnnotation> getDeclaredAnnotation(annotationClass: KClass<T>): Annotation? =
-    getDeclaredAnnotation(annotationClass.java)
+  fun <T : JavaAnnotation> getDeclaredAnnotation(annotationClass: KClass<T>): Annotation? = getDeclaredAnnotation(annotationClass.java)
 
   /**
    * Finds an [Annotation] of the selected [T] type.
@@ -390,5 +393,6 @@ fun reflect(name: String): ReflectedClass<*> = ReflectedClass(ClassReflection.fo
  * @throws ReflectionException if unable to get the instance due to a type mismatch.
  */
 @Reflection
-inline fun <reified T : JavaAnnotation> Annotation.get(): T = getAnnotation(T::class.java)
-  ?: throw ReflectionException("Unable to get instance of ${T::class.java} from annotation with type $annotationType")
+inline fun <reified T : JavaAnnotation> Annotation.get(): T =
+  getAnnotation(T::class.java)
+    ?: throw ReflectionException("Unable to get instance of ${T::class.java} from annotation with type $annotationType")

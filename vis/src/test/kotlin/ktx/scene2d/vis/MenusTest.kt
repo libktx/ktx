@@ -23,9 +23,10 @@ class MenusTest : ApplicationTest() {
   fun `should create PopupMenu`() {
     var initInvoked: Boolean
 
-    val menu = scene2d.popupMenu {
-      initInvoked = true
-    }
+    val menu =
+      scene2d.popupMenu {
+        initInvoked = true
+      }
 
     assertNotNull(menu)
     assertTrue(initInvoked)
@@ -35,9 +36,10 @@ class MenusTest : ApplicationTest() {
   fun `should create MenuBar`() {
     var initInvoked: Boolean
 
-    val menu = scene2d.menuBar {
-      initInvoked = true
-    }
+    val menu =
+      scene2d.menuBar {
+        initInvoked = true
+      }
 
     assertNotNull(menu)
     assertTrue(initInvoked)
@@ -47,9 +49,10 @@ class MenusTest : ApplicationTest() {
   fun `should add MenuBar table to parent`() {
     val menuBar: MenuBar
 
-    val table = scene2d.table {
-      menuBar = menuBar()
-    }
+    val table =
+      scene2d.table {
+        menuBar = menuBar()
+      }
 
     assertTrue(menuBar.table in table.children)
   }
@@ -59,11 +62,13 @@ class MenusTest : ApplicationTest() {
     var initInvoked: Boolean
     val menu: Menu
 
-    val menuBar = scene2d.menuBar {
-      menu = menu("Test menu") {
-        initInvoked = true
+    val menuBar =
+      scene2d.menuBar {
+        menu =
+          menu("Test menu") {
+            initInvoked = true
+          }
       }
-    }
 
     assertEquals("Test menu", menu.title)
     assertEquals(menuBar.table.children.size, 1)
@@ -76,9 +81,10 @@ class MenusTest : ApplicationTest() {
     val menuItem: MenuItem
 
     scene2d.popupMenu {
-      menuItem = menuItem("Test item") {
-        initInvoked = true
-      }
+      menuItem =
+        menuItem("Test item") {
+          initInvoked = true
+        }
     }
 
     assertEquals("Test item", menuItem.text.toString())
@@ -92,9 +98,10 @@ class MenusTest : ApplicationTest() {
     val menuItem: MenuItem
 
     scene2d.popupMenu {
-      menuItem = menuItem("Test item", drawable) {
-        initInvoked = true
-      }
+      menuItem =
+        menuItem("Test item", drawable) {
+          initInvoked = true
+        }
     }
 
     assertEquals("Test item", menuItem.text.toString())
@@ -109,9 +116,10 @@ class MenusTest : ApplicationTest() {
     val menuItem: MenuItem
 
     scene2d.popupMenu {
-      menuItem = menuItem("Test item", drawableName = drawableName) {
-        initInvoked = true
-      }
+      menuItem =
+        menuItem("Test item", drawableName = drawableName) {
+          initInvoked = true
+        }
     }
 
     assertEquals("Test item", menuItem.text.toString())
@@ -126,9 +134,10 @@ class MenusTest : ApplicationTest() {
     val menuItem: MenuItem
 
     scene2d.popupMenu {
-      menuItem = menuItem("Test item", image) {
-        initInvoked = true
-      }
+      menuItem =
+        menuItem("Test item", image) {
+          initInvoked = true
+        }
     }
 
     assertEquals("Test item", menuItem.text.toString())
@@ -143,11 +152,13 @@ class MenusTest : ApplicationTest() {
     val subMenu: PopupMenu
 
     scene2d.popupMenu {
-      menuItem = menuItem("") {
-        subMenu = subMenu {
-          initInvoked = true
+      menuItem =
+        menuItem("") {
+          subMenu =
+            subMenu {
+              initInvoked = true
+            }
         }
-      }
     }
 
     assertNotNull(subMenu)

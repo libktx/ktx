@@ -59,9 +59,10 @@ fun <Asset : Disposable> Iterable<Asset?>?.disposeSafely() = this?.forEach { it.
  * @param onError will be invoked each time an exception (except for JVM internal [Error]s, which should not be caught
  *    anyway) is thrown during asset disposing.
  */
-inline fun <Asset : Disposable> Iterable<Asset?>?.dispose(onError: (Exception) -> Unit) = this?.forEach {
-  it.dispose(onError)
-}
+inline fun <Asset : Disposable> Iterable<Asset?>?.dispose(onError: (Exception) -> Unit) =
+  this?.forEach {
+    it.dispose(onError)
+  }
 
 /**
  * Allows to dispose a collection of resources implementing [Disposable] interface. Will silently ignore stored nulls.
@@ -83,9 +84,10 @@ fun <Asset : Disposable> Array<Asset>?.disposeSafely() = this?.forEach { it.disp
  * @param onError will be invoked each time an exception (except for JVM internal [Error]s, which should not be caught
  *    anyway) is thrown during asset disposing.
  */
-inline fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Unit) = this?.forEach {
-  it.dispose(onError)
-}
+inline fun <Asset : Disposable> Array<Asset>?.dispose(onError: (Exception) -> Unit) =
+  this?.forEach {
+    it.dispose(onError)
+  }
 
 /**
  * This method does nothing. This is a null-safe call that allows to clearly mark an exception as ignored. This approach
@@ -177,6 +179,7 @@ open class DisposableContainer : DisposableRegistry {
   override val registeredDisposables: List<Disposable> get() = registry.toList()
 
   override fun register(disposable: Disposable): Boolean = registry.add(disposable)
+
   override fun deregister(disposable: Disposable): Boolean = registry.remove(disposable)
 
   override fun deregisterAll(): Boolean {

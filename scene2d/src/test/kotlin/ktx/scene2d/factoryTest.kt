@@ -31,9 +31,10 @@ class RootActorFactoriesTest : ApplicationTest() {
 
   @Test
   fun `should create Window with init block`() {
-    val window = scene2d.window(title = "test") {
-      height = 100f
-    }
+    val window =
+      scene2d.window(title = "test") {
+        height = 100f
+      }
 
     assertNotNull(window)
     assertEquals(Scene2DSkin.defaultSkin, window.skin)
@@ -45,9 +46,10 @@ class RootActorFactoriesTest : ApplicationTest() {
   fun `should create Window with nested children`() {
     val label: Label
 
-    val window = scene2d.window(title = "test") {
-      label = label("Test")
-    }
+    val window =
+      scene2d.window(title = "test") {
+        label = label("Test")
+      }
 
     assertTrue(label in window.children)
   }
@@ -63,9 +65,10 @@ class RootActorFactoriesTest : ApplicationTest() {
 
   @Test
   fun `should create Dialog with init block`() {
-    val dialog = scene2d.dialog(title = "test") {
-      height = 100f
-    }
+    val dialog =
+      scene2d.dialog(title = "test") {
+        height = 100f
+      }
 
     assertNotNull(dialog)
     assertEquals(Scene2DSkin.defaultSkin, dialog.skin)
@@ -77,9 +80,10 @@ class RootActorFactoriesTest : ApplicationTest() {
   fun `should create Dialog with nested children`() {
     val label: Label
 
-    val dialog = scene2d.dialog(title = "test") {
-      label = label("Test")
-    }
+    val dialog =
+      scene2d.dialog(title = "test") {
+        label = label("Test")
+      }
 
     assertTrue(label in dialog.children)
   }
@@ -89,7 +93,10 @@ class RootActorFactoriesTest : ApplicationTest() {
  * Tests factory methods without init blocks.
  */
 class NoInitBlockActorFactoriesTest : ApplicationTest() {
-  private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<*>.() -> T?) {
+  private fun <T : Actor> test(
+    validate: (T) -> Unit = {},
+    widget: KWidget<*>.() -> T?,
+  ) {
     // Using a parental widget that allows to use invoke actors' factory methods:
     val parent = scene2d.table()
 
@@ -109,12 +116,13 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create ButtonGroup`() = test { buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) }
 
   @Test
-  fun `should create CheckBox`() = test(
-    widget = { checkBox("Test.") },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
+  fun `should create CheckBox`() =
+    test(
+      widget = { checkBox("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
 
   @Test
   fun `should create Container`() = test { container() }
@@ -123,12 +131,13 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create HorizontalGroup`() = test { horizontalGroup() }
 
   @Test
-  fun `should create Image with drawable name`() = test(
-    widget = { image(drawableName = "button") },
-    validate = {
-      assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
-    },
-  )
+  fun `should create Image with drawable name`() =
+    test(
+      widget = { image(drawableName = "button") },
+      validate = {
+        assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
+      },
+    )
 
   @Test
   fun `should create Image with nine patch`() = test { image(VisUI.getSkin().getPatch("button")) }
@@ -140,68 +149,75 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create Image with texture`() = test { image(VisUI.getSkin().getRegion("button").texture) }
 
   @Test
-  fun `should create Image with drawable`() = test(
-    widget = { image(VisUI.getSkin().getDrawable("button")) },
-    validate = {
-      assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
-    },
-  )
+  fun `should create Image with drawable`() =
+    test(
+      widget = { image(VisUI.getSkin().getDrawable("button")) },
+      validate = {
+        assertSame(VisUI.getSkin().getDrawable("button"), it.drawable)
+      },
+    )
 
   @Test
-  fun `should create Image with null drawable passing null argument`() = test(
-    widget = { image(drawable = null) },
-    validate = {
-      assertNull(it.drawable)
-    },
-  )
+  fun `should create Image with null drawable passing null argument`() =
+    test(
+      widget = { image(drawable = null) },
+      validate = {
+        assertNull(it.drawable)
+      },
+    )
 
   @Test
-  fun `should create Image with null drawable passing no arguments`() = test(
-    widget = { image() },
-    validate = {
-      assertNull(it.drawable)
-    },
-  )
+  fun `should create Image with null drawable passing no arguments`() =
+    test(
+      widget = { image() },
+      validate = {
+        assertNull(it.drawable)
+      },
+    )
 
   @Test
   fun `should create ImageButton`() = test { imageButton() }
 
   @Test
-  fun `should create ImageTextButton`() = test(
-    widget = { imageTextButton("Test.") },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
+  fun `should create ImageTextButton`() =
+    test(
+      widget = { imageTextButton("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
 
   @Test
-  fun `should create Label`() = test(
-    widget = { label("Test.") },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
+  fun `should create Label`() =
+    test(
+      widget = { label("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
 
   @Test
   fun `should create List`() = test { listWidgetOf<String>() }
 
   @Test
-  fun `should create List with items`() = test(
-    widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
-    validate = {
-      assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    },
-  )
+  fun `should create List with items`() =
+    test(
+      widget = { listWidgetOf(GdxArray.with("one", "two", "three")) },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      },
+    )
 
   @Test
-  fun `should create ProgressBar`() = test(
-    widget = { progressBar(min = 1f, max = 2f, step = 0.5f) },
-    validate = {
-      assertEquals(1f, it.minValue, TOLERANCE)
-      assertEquals(2f, it.maxValue, TOLERANCE)
-      assertEquals(0.5f, it.stepSize, TOLERANCE)
-    },
-  )
+  fun `should create ProgressBar`() =
+    test(
+      widget = { progressBar(min = 1f, max = 2f, step = 0.5f) },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      },
+    )
 
   @Test
   fun `should create ScrollPane`() = test { scrollPane() }
@@ -210,22 +226,24 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create SelectBox`() = test { selectBoxOf<String>() }
 
   @Test
-  fun `should create SelectBox with items`() = test(
-    widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
-    validate = {
-      assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    },
-  )
+  fun `should create SelectBox with items`() =
+    test(
+      widget = { selectBoxOf(GdxArray.with("one", "two", "three")) },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      },
+    )
 
   @Test
-  fun `should create Slider`() = test(
-    widget = { slider(min = 1f, max = 2f, step = 0.5f) },
-    validate = {
-      assertEquals(1f, it.minValue, TOLERANCE)
-      assertEquals(2f, it.maxValue, TOLERANCE)
-      assertEquals(0.5f, it.stepSize, TOLERANCE)
-    },
-  )
+  fun `should create Slider`() =
+    test(
+      widget = { slider(min = 1f, max = 2f, step = 0.5f) },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      },
+    )
 
   @Test
   fun `should create SplitPane`() = test { splitPane() }
@@ -237,28 +255,31 @@ class NoInitBlockActorFactoriesTest : ApplicationTest() {
   fun `should create Table`() = test { table() }
 
   @Test
-  fun `should create TextArea`() = test(
-    widget = { textArea("Test.") },
-    validate = {
-      assertEquals("Test.", it.text)
-    },
-  )
+  fun `should create TextArea`() =
+    test(
+      widget = { textArea("Test.") },
+      validate = {
+        assertEquals("Test.", it.text)
+      },
+    )
 
   @Test
-  fun `should create TextButton`() = test(
-    widget = { textButton("Test.") },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
+  fun `should create TextButton`() =
+    test(
+      widget = { textButton("Test.") },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
 
   @Test
-  fun `should create TextField`() = test(
-    widget = { textField("Test.") },
-    validate = {
-      assertEquals("Test.", it.text)
-    },
-  )
+  fun `should create TextField`() =
+    test(
+      widget = { textField("Test.") },
+      validate = {
+        assertEquals("Test.", it.text)
+      },
+    )
 
   @Test
   fun `should create Touchpad`() = test { touchpad(deadzone = 10f) }
@@ -310,7 +331,10 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
     }
   }
 
-  private fun <T : Actor> test(validate: (T) -> Unit = {}, widget: KWidget<Cell<*>>.() -> T?) {
+  private fun <T : Actor> test(
+    validate: (T) -> Unit = {},
+    widget: KWidget<Cell<*>>.() -> T?,
+  ) {
     // Creating builder context that allows to use actors factory methods:
     val parent = scene2d.table()
 
@@ -329,261 +353,286 @@ class InlinedInitBlockActorFactoriesTest : ApplicationTest() {
   }
 
   @Test
-  fun `should create Button`() = test {
-    button {
-      color = Color.BLUE
+  fun `should create Button`() =
+    test {
+      button {
+        color = Color.BLUE
+      }
     }
-  }
 
   @Test
-  fun `should create ButtonGroup`() = test {
-    buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
-      color = Color.BLUE
+  fun `should create ButtonGroup`() =
+    test {
+      buttonGroup(minCheckedCount = 1, maxCheckedCount = 2) {
+        color = Color.BLUE
+      }
     }
-  }
 
   @Test
-  fun `should create CheckBox`() = test(
-    widget = {
-      checkBox("Test.") {
+  fun `should create CheckBox`() =
+    test(
+      widget = {
+        checkBox("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
+
+  @Test
+  fun `should create Container`() =
+    test {
+      container {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
-
-  @Test
-  fun `should create Container`() = test {
-    container {
-      color = Color.BLUE
     }
-  }
 
   @Test
-  fun `should create Container with a custom actor`() = test(
-    widget = {
-      container(scene2d.label("Test.")) {
+  fun `should create Container with a custom actor`() =
+    test(
+      widget = {
+        container(scene2d.label("Test.")) {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertTrue(it.actor is Label)
+        val label = it.actor as Label
+        assertEquals("Test.", label.text.toString())
+      },
+    )
+
+  @Test
+  fun `should create HorizontalGroup`() =
+    test {
+      horizontalGroup {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertTrue(it.actor is Label)
-      val label = it.actor as Label
-      assertEquals("Test.", label.text.toString())
-    },
-  )
-
-  @Test
-  fun `should create HorizontalGroup`() = test {
-    horizontalGroup {
-      color = Color.BLUE
     }
-  }
 
   @Test
-  fun `should create Image`() = test(
-    widget = {
-      image(drawableName = "button") {
+  fun `should create Image`() =
+    test(
+      widget = {
+        image(drawableName = "button") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
+      },
+    )
+
+  @Test
+  fun `should create ImageButton`() =
+    test {
+      imageButton {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals(VisUI.getSkin().getDrawable("button"), it.drawable)
-    },
-  )
-
-  @Test
-  fun `should create ImageButton`() = test {
-    imageButton {
-      color = Color.BLUE
     }
-  }
 
   @Test
-  fun `should create ImageTextButton`() = test(
-    widget = {
-      imageTextButton("Test.") {
+  fun `should create ImageTextButton`() =
+    test(
+      widget = {
+        imageTextButton("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
+
+  @Test
+  fun `should create Label`() =
+    test(
+      widget = {
+        label("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
+
+  @Test
+  fun `should create List`() =
+    test(
+      widget = {
+        listWidget<String> {
+          color = Color.BLUE
+          // Adding list items:
+          -"one"
+          -"two"
+          -"three"
+        }
+      },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      },
+    )
+
+  @Test
+  fun `should create ParticleEffectActor`() =
+    test(
+      widget = {
+        particleEffect(mock(), resetOnStart = true) {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertTrue(it.isResetOnStart)
+      },
+    )
+
+  @Test
+  fun `should create ProgressBar`() =
+    test(
+      widget = {
+        progressBar(min = 1f, max = 2f, step = 0.5f) {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      },
+    )
+
+  @Test
+  fun `should create ScrollPane`() =
+    test {
+      scrollPane {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
-
-  @Test
-  fun `should create Label`() = test(
-    widget = {
-      label("Test.") {
-        color = Color.BLUE
-      }
-    },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
-
-  @Test
-  fun `should create List`() = test(
-    widget = {
-      listWidget<String> {
-        color = Color.BLUE
-        // Adding list items:
-        -"one"
-        -"two"
-        -"three"
-      }
-    },
-    validate = {
-      assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    },
-  )
-
-  @Test
-  fun `should create ParticleEffectActor`() = test(
-    widget = {
-      particleEffect(mock(), resetOnStart = true) {
-        color = Color.BLUE
-      }
-    },
-    validate = {
-      assertTrue(it.isResetOnStart)
-    },
-  )
-
-  @Test
-  fun `should create ProgressBar`() = test(
-    widget = {
-      progressBar(min = 1f, max = 2f, step = 0.5f) {
-        color = Color.BLUE
-      }
-    },
-    validate = {
-      assertEquals(1f, it.minValue, TOLERANCE)
-      assertEquals(2f, it.maxValue, TOLERANCE)
-      assertEquals(0.5f, it.stepSize, TOLERANCE)
-    },
-  )
-
-  @Test
-  fun `should create ScrollPane`() = test {
-    scrollPane {
-      color = Color.BLUE
     }
-  }
 
   @Test
-  fun `should create SelectBox`() = test(
-    widget = {
-      selectBox<String> {
+  fun `should create SelectBox`() =
+    test(
+      widget = {
+        selectBox<String> {
+          color = Color.BLUE
+          // Adding select box items:
+          -"one"
+          -"two"
+          -"three"
+        }
+      },
+      validate = {
+        assertEquals(GdxArray.with("one", "two", "three"), it.items)
+      },
+    )
+
+  @Test
+  fun `should create Slider`() =
+    test(
+      widget = {
+        slider(min = 1f, max = 2f, step = 0.5f) {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals(1f, it.minValue, TOLERANCE)
+        assertEquals(2f, it.maxValue, TOLERANCE)
+        assertEquals(0.5f, it.stepSize, TOLERANCE)
+      },
+    )
+
+  @Test
+  fun `should create SplitPane`() =
+    test {
+      splitPane {
         color = Color.BLUE
-        // Adding select box items:
-        -"one"
-        -"two"
-        -"three"
       }
-    },
-    validate = {
-      assertEquals(GdxArray.with("one", "two", "three"), it.items)
-    },
-  )
-
-  @Test
-  fun `should create Slider`() = test(
-    widget = {
-      slider(min = 1f, max = 2f, step = 0.5f) {
-        color = Color.BLUE
-      }
-    },
-    validate = {
-      assertEquals(1f, it.minValue, TOLERANCE)
-      assertEquals(2f, it.maxValue, TOLERANCE)
-      assertEquals(0.5f, it.stepSize, TOLERANCE)
-    },
-  )
-
-  @Test
-  fun `should create SplitPane`() = test {
-    splitPane {
-      color = Color.BLUE
     }
-  }
 
   @Test
-  fun `should create Stack`() = test {
-    stack {
-      color = Color.BLUE
-    }
-  }
-
-  @Test
-  fun `should create Table`() = test(
-    widget = {
-      table {
+  fun `should create Stack`() =
+    test {
+      stack {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals(Scene2DSkin.defaultSkin, it.skin)
-    },
-  )
+    }
 
   @Test
-  fun `should create TextArea`() = test(
-    widget = {
-      textArea("Test.") {
+  fun `should create Table`() =
+    test(
+      widget = {
+        table {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals(Scene2DSkin.defaultSkin, it.skin)
+      },
+    )
+
+  @Test
+  fun `should create TextArea`() =
+    test(
+      widget = {
+        textArea("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text)
+      },
+    )
+
+  @Test
+  fun `should create TextButton`() =
+    test(
+      widget = {
+        textButton("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text.toString())
+      },
+    )
+
+  @Test
+  fun `should create TextField`() =
+    test(
+      widget = {
+        textField("Test.") {
+          color = Color.BLUE
+        }
+      },
+      validate = {
+        assertEquals("Test.", it.text)
+      },
+    )
+
+  @Test
+  fun `should create Touchpad`() =
+    test {
+      touchpad(deadzone = 10f) {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals("Test.", it.text)
-    },
-  )
+    }
 
   @Test
-  fun `should create TextButton`() = test(
-    widget = {
-      textButton("Test.") {
+  fun `should create Tree`() =
+    test {
+      tree {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals("Test.", it.text.toString())
-    },
-  )
+    }
 
   @Test
-  fun `should create TextField`() = test(
-    widget = {
-      textField("Test.") {
+  fun `should create VerticalGroup`() =
+    test {
+      verticalGroup {
         color = Color.BLUE
       }
-    },
-    validate = {
-      assertEquals("Test.", it.text)
-    },
-  )
-
-  @Test
-  fun `should create Touchpad`() = test {
-    touchpad(deadzone = 10f) {
-      color = Color.BLUE
     }
-  }
-
-  @Test
-  fun `should create Tree`() = test {
-    tree {
-      color = Color.BLUE
-    }
-  }
-
-  @Test
-  fun `should create VerticalGroup`() = test {
-    verticalGroup {
-      color = Color.BLUE
-    }
-  }
 }

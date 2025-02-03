@@ -46,9 +46,10 @@ class Scene2DTest : ApplicationTest() {
 
   @Test
   fun `should support creating actors via DSL building block`() {
-    val label = scene2d {
-      label("Test")
-    }
+    val label =
+      scene2d {
+        label("Test")
+      }
 
     assertEquals("Test", label.text.toString())
   }
@@ -58,12 +59,13 @@ class Scene2DTest : ApplicationTest() {
     val variable: Int
     val nestedLabel: Label
 
-    val table = scene2d {
-      variable = 42
-      table {
-        nestedLabel = label("Test")
+    val table =
+      scene2d {
+        variable = 42
+        table {
+          nestedLabel = label("Test")
+        }
       }
-    }
 
     assertSame(table, nestedLabel.parent)
     assertEquals("Test", nestedLabel.text.toString())
@@ -88,7 +90,9 @@ class KGroupTest {
     assertSame(actor, result)
   }
 
-  class TestGroup : Group(), KGroup
+  class TestGroup :
+    Group(),
+    KGroup
 }
 
 /**
@@ -123,41 +127,43 @@ class KTableTest : ApplicationTest() {
   fun `should allow to configure children cells`() {
     val table = TestTable()
     table.apply {
-      val cell: Cell<Label> = label("Test") {}.cell(
-        grow = true, // Overridden.
-        growX = false, // Overridden.
-        growY = false, // Overridden.
-        expand = true, // Overridden.
-        expandX = true,
-        expandY = false,
-        fill = true, // Overridden.
-        fillX = false,
-        fillY = true,
-        uniform = true, // Overridden.
-        uniformX = false,
-        uniformY = true,
-        align = Align.center,
-        colspan = 3,
-        width = 100f, // Overridden.
-        minWidth = 10f,
-        preferredWidth = 50f,
-        maxWidth = 150f,
-        height = 75f, // Overridden.
-        minHeight = 5f,
-        preferredHeight = 25f,
-        maxHeight = 55f,
-        pad = 42f, // Overridden.
-        padTop = 6f,
-        padLeft = 7f,
-        padRight = 8f,
-        padBottom = 9f,
-        space = 24f, // Overridden.
-        spaceTop = 26f,
-        spaceLeft = 27f,
-        spaceRight = 28f,
-        spaceBottom = 29f,
-        row = true,
-      ).inCell
+      val cell: Cell<Label> =
+        label("Test") {}
+          .cell(
+            grow = true, // Overridden.
+            growX = false, // Overridden.
+            growY = false, // Overridden.
+            expand = true, // Overridden.
+            expandX = true,
+            expandY = false,
+            fill = true, // Overridden.
+            fillX = false,
+            fillY = true,
+            uniform = true, // Overridden.
+            uniformX = false,
+            uniformY = true,
+            align = Align.center,
+            colspan = 3,
+            width = 100f, // Overridden.
+            minWidth = 10f,
+            preferredWidth = 50f,
+            maxWidth = 150f,
+            height = 75f, // Overridden.
+            minHeight = 5f,
+            preferredHeight = 25f,
+            maxHeight = 55f,
+            pad = 42f, // Overridden.
+            padTop = 6f,
+            padLeft = 7f,
+            padRight = 8f,
+            padBottom = 9f,
+            space = 24f, // Overridden.
+            spaceTop = 26f,
+            spaceLeft = 27f,
+            spaceRight = 28f,
+            spaceBottom = 29f,
+            row = true,
+          ).inCell
 
       assertEquals(1, cell.expandX)
       assertEquals(0, cell.expandY)
@@ -185,7 +191,9 @@ class KTableTest : ApplicationTest() {
     }
   }
 
-  class TestTable : Table(), KTable
+  class TestTable :
+    Table(),
+    KTable
 }
 
 /**
@@ -221,12 +229,14 @@ class KTreeTest : ApplicationTest() {
     val tree = TestTree()
     val icon = mock<Drawable>()
     tree.apply {
-      val node: KNode<Label> = label("Test") {}.node(
-        icon = icon,
-        selectable = false,
-        expanded = true,
-        userObject = "Test",
-      ).inNode
+      val node: KNode<Label> =
+        label("Test") {}
+          .node(
+            icon = icon,
+            selectable = false,
+            expanded = true,
+            userObject = "Test",
+          ).inNode
 
       assertSame(icon, node.icon)
       assertFalse(node.isSelectable)
@@ -235,7 +245,9 @@ class KTreeTest : ApplicationTest() {
     }
   }
 
-  class TestTree : Tree<Node<*, *, *>, Any?>(VisUI.getSkin()), KTree {
+  class TestTree :
+    Tree<Node<*, *, *>, Any?>(VisUI.getSkin()),
+    KTree {
     override fun <T : Actor> add(actor: T): KNode<T> {
       val node = KNode(actor)
       add(node)

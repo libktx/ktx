@@ -61,22 +61,32 @@ interface Asset<out Type> {
  * Extension function that allows [Asset] instances to be delegates using the "by" keyword.
  */
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <Type> Asset<Type>.getValue(receiver: Any?, property: KProperty<*>): Type = asset
+inline operator fun <Type> Asset<Type>.getValue(
+  receiver: Any?,
+  property: KProperty<*>,
+): Type = asset
 
 /**
  * Default implementation of [Asset]. Keeps asset data in an [AssetDescriptor] and delegates asset loading to an
  * [AssetManager]. Assumes the asset was already scheduled for loading.
  */
-class ManagedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class ManagedAsset<Type>(
+  val manager: AssetManager,
+  override val assetDescriptor: AssetDescriptor<Type>,
+) : Asset<Type> {
   override val asset: Type
     get() = manager[assetDescriptor]
 
   override fun isLoaded(): Boolean = manager.isLoaded(assetDescriptor.fileName, assetDescriptor.type)
+
   override fun load() = manager.load(assetDescriptor)
+
   override fun unload() = manager.unload(assetDescriptor.fileName)
+
   override fun finishLoading() {
     if (!isLoaded()) manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
   }
+
   override fun toString(): String = "ManagedAsset<${assetDescriptor.type.simpleName}>(${assetDescriptor.fileName})"
 }
 
@@ -87,7 +97,10 @@ class ManagedAsset<Type>(val manager: AssetManager, override val assetDescriptor
  * so it is advised to load eager assets with another [AssetManager] instance or use them after all regular assets are
  * already loaded.
  */
-class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor: AssetDescriptor<Type>) : Asset<Type> {
+class DelayedAsset<Type>(
+  val manager: AssetManager,
+  override val assetDescriptor: AssetDescriptor<Type>,
+) : Asset<Type> {
   override val asset: Type
     get() {
       if (!isLoaded()) finishLoading()
@@ -95,14 +108,18 @@ class DelayedAsset<Type>(val manager: AssetManager, override val assetDescriptor
     }
 
   override fun isLoaded(): Boolean = manager.isLoaded(assetDescriptor.fileName, assetDescriptor.type)
+
   override fun load() = manager.load(assetDescriptor)
+
   override fun unload() = manager.unload(assetDescriptor.fileName)
+
   override fun finishLoading() {
     if (!isLoaded()) {
       manager.load(assetDescriptor)
       manager.finishLoadingAsset<Type>(assetDescriptor.fileName)
     }
   }
+
   override fun toString(): String = "DelayedAsset<${assetDescriptor.type.simpleName}>(${assetDescriptor.fileName})"
 }
 
@@ -145,8 +162,7 @@ inline fun <reified Type : Any> AssetManager.loadOnDemand(
  * @return [Asset] wrapper which will eagerly load the asset on first request.
  * @see DelayedAsset
  */
-fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): Asset<Type> =
-  DelayedAsset(this, assetDescriptor)
+fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): Asset<Type> = DelayedAsset(this, assetDescriptor)
 
 /**
  * Allows to quickly prepare a typed [AssetDescriptor] instance with more Kotlin-friendly syntax.
@@ -154,7 +170,10 @@ fun <Type> AssetManager.loadOnDemand(assetDescriptor: AssetDescriptor<Type>): As
  * @param parameters optional loading parameters that might affect how the asset is loaded.
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
-inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetLoaderParameters<Type>? = null): AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
+inline fun <reified Type : Any> assetDescriptor(
+  path: String,
+  parameters: AssetLoaderParameters<Type>? = null,
+): AssetDescriptor<Type> = AssetDescriptor(path, Type::class.java, parameters)
 
 /**
  * Allows to quickly prepare a typed [AssetDescriptor] instance with more Kotlin-friendly syntax.
@@ -162,7 +181,10 @@ inline fun <reified Type : Any> assetDescriptor(path: String, parameters: AssetL
  * @param parameters optional loading parameters that might affect how the asset is loaded.
  * @return typed [AssetDescriptor] instance storing the passed data.
  */
-inline fun <reified Type : Any> assetDescriptor(file: FileHandle, parameters: AssetLoaderParameters<Type>? = null): AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
+inline fun <reified Type : Any> assetDescriptor(
+  file: FileHandle,
+  parameters: AssetLoaderParameters<Type>? = null,
+): AssetDescriptor<Type> = AssetDescriptor(file, Type::class.java, parameters)
 
 /**
  * @param path path of the asset. Note that the asset must have been already scheduled for loading and fully loaded for
@@ -189,7 +211,10 @@ fun AssetManager.unloadSafely(path: String) {
  * @param onError any thrown exceptions will be passed to this handler.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun AssetManager.unload(path: String, onError: (Exception) -> Unit) {
+inline fun AssetManager.unload(
+  path: String,
+  onError: (Exception) -> Unit,
+) {
   contract { callsInPlace(onError, InvocationKind.AT_MOST_ONCE) }
   try {
     unload(path)
@@ -240,7 +265,10 @@ inline fun <reified Type : Any, Parameters : AssetLoaderParameters<Type>> AssetM
  * @param manager The [AssetManager] that will handle loading and unloading of this group.
  * @param filePrefix A string that will be prefixed to any file path parameter passed to [asset] or [delayedAsset].
  */
-abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: String = "") {
+abstract class AssetGroup(
+  val manager: AssetManager,
+  protected val filePrefix: String = "",
+) {
   /** The backing set containing the assets of this group. There is no need to manually add assets to this set if using
    * [asset] or [delayedAsset]. */
   protected val members = ObjectSet<Asset<*>>()
@@ -248,16 +276,18 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
   /** Queues all assets of this group for loading by the associated [AssetManager].
    * If any assets of this group are already loaded, their load counts in the AssetManager will still be incremented. */
   fun loadAll() {
-    for (member in members)
+    for (member in members) {
       member.load()
+    }
   }
 
   /** Unloads all of the assets in this group. If any of the assets are dependencies of assets outside this group, or if
    * they were loaded more than once, their load counts will only be decremented by one and the associated [AssetManager]
    * will retain them. */
   fun unloadAll() {
-    for (member in members)
+    for (member in members) {
       member.unload()
+    }
   }
 
   /** Unloads all of the assets in this group, catching any exceptions. If any of the assets are dependencies of
@@ -300,8 +330,10 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * @param params optional asset loading parameters which might affect how the assets are loaded. Can be null.
    * @return an [Asset], registered as a member of this AssetGroup.
    * */
-  protected inline fun <reified T : Any> asset(fileName: String, params: AssetLoaderParameters<T>? = null) =
-    manager.load("$filePrefix$fileName", params).also { members.add(it) }
+  protected inline fun <reified T : Any> asset(
+    fileName: String,
+    params: AssetLoaderParameters<T>? = null,
+  ) = manager.load("$filePrefix$fileName", params).also { members.add(it) }
 
   /** Creates a delegate for an asset and registers it as a member of this group. It is not queued for loading. Beware
    * that if the asset property (or delegated property) of the returned [Asset] is accessed before it is queued for
@@ -312,6 +344,8 @@ abstract class AssetGroup(val manager: AssetManager, protected val filePrefix: S
    * @param params optional asset loading parameters which might affect how the assets are loaded. Can be null.
    * @return an [Asset], registered as a member of this AssetGroup.
    * */
-  protected inline fun <reified T : Any> delayedAsset(fileName: String, params: AssetLoaderParameters<T>? = null) =
-    manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
+  protected inline fun <reified T : Any> delayedAsset(
+    fileName: String,
+    params: AssetLoaderParameters<T>? = null,
+  ) = manager.loadOnDemand("$filePrefix$fileName", params).also { members.add(it) }
 }

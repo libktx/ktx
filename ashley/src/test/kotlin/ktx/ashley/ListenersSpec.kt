@@ -18,11 +18,12 @@ object ListenersSpec : Spek({
 
     it("should invoke an addition entity listener") {
       var invoked = false
-      val listener = object : EntityAdditionListener {
-        override fun entityAdded(entity: Entity) {
-          invoked = true
+      val listener =
+        object : EntityAdditionListener {
+          override fun entityAdded(entity: Entity) {
+            invoked = true
+          }
         }
-      }
       engine.addEntityListener(listener)
       val entity = engine.entity()
       engine.removeEntity(entity)
@@ -32,11 +33,12 @@ object ListenersSpec : Spek({
 
     it("should invoke a removal entity listener") {
       var invoked = false
-      val listener = object : EntityRemovalListener {
-        override fun entityRemoved(entity: Entity) {
-          invoked = true
+      val listener =
+        object : EntityRemovalListener {
+          override fun entityRemoved(entity: Entity) {
+            invoked = true
+          }
         }
-      }
       val entity = engine.entity()
       engine.addEntityListener(listener)
       engine.removeEntity(entity)
@@ -46,9 +48,10 @@ object ListenersSpec : Spek({
 
     it("should invoke an addition entity listener made with a lambda") {
       var invoked = false
-      val listener = engine.onEntityAdded {
-        invoked = true
-      }
+      val listener =
+        engine.onEntityAdded {
+          invoked = true
+        }
       val entity = engine.entity()
       assertThat(invoked).isTrue()
       engine.removeEntity(entity)
@@ -58,9 +61,10 @@ object ListenersSpec : Spek({
     it("should invoke a removal entity listener made with a lambda") {
       var invoked = false
       val entity = engine.entity()
-      val listener = engine.onEntityRemoved {
-        invoked = true
-      }
+      val listener =
+        engine.onEntityRemoved {
+          invoked = true
+        }
       engine.removeEntity(entity)
       assertThat(invoked).isTrue()
       engine.removeEntityListener(listener)
@@ -70,35 +74,41 @@ object ListenersSpec : Spek({
       var addAssertion = false
       var removeAssertion = false
 
-      val system = object : IteratingSystem(allOf(TestComponent::class).get()) {
-        private lateinit var additionListener: EntityAdditionListener
-        private lateinit var removalListener: EntityRemovalListener
+      val system =
+        object : IteratingSystem(allOf(TestComponent::class).get()) {
+          private lateinit var additionListener: EntityAdditionListener
+          private lateinit var removalListener: EntityRemovalListener
 
-        override fun processEntity(entity: Entity, deltaTime: Float) = Unit
+          override fun processEntity(
+            entity: Entity,
+            deltaTime: Float,
+          ) = Unit
 
-        override fun addedToEngine(engine: Engine) {
-          super.addedToEngine(engine)
+          override fun addedToEngine(engine: Engine) {
+            super.addedToEngine(engine)
 
-          additionListener = onEntityAdded { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              addAssertion = true
-            }
+            additionListener =
+              onEntityAdded { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  addAssertion = true
+                }
+              }
+
+            removalListener =
+              onEntityRemoved { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  removeAssertion = true
+                }
+              }
           }
 
-          removalListener = onEntityRemoved { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              removeAssertion = true
-            }
+          override fun removedFromEngine(engine: Engine) {
+            super.removedFromEngine(engine)
+
+            engine.removeEntityListener(additionListener)
+            engine.removeEntityListener(removalListener)
           }
         }
-
-        override fun removedFromEngine(engine: Engine) {
-          super.removedFromEngine(engine)
-
-          engine.removeEntityListener(additionListener)
-          engine.removeEntityListener(removalListener)
-        }
-      }
 
       engine.addSystem(system)
 
@@ -106,9 +116,10 @@ object ListenersSpec : Spek({
       assertThat(addAssertion).isFalse
       assertThat(removeAssertion).isFalse
 
-      val entity = engine.entity {
-        with<TestComponent>()
-      }
+      val entity =
+        engine.entity {
+          with<TestComponent>()
+        }
       engine.removeEntity(entity)
       engine.removeSystem(system)
 
@@ -120,35 +131,38 @@ object ListenersSpec : Spek({
       var addAssertion = false
       var removeAssertion = false
 
-      val system = object : IntervalIteratingSystem(allOf(TestComponent::class).get(), 0f) {
-        private lateinit var additionListener: EntityAdditionListener
-        private lateinit var removalListener: EntityRemovalListener
+      val system =
+        object : IntervalIteratingSystem(allOf(TestComponent::class).get(), 0f) {
+          private lateinit var additionListener: EntityAdditionListener
+          private lateinit var removalListener: EntityRemovalListener
 
-        override fun processEntity(entity: Entity) = Unit
+          override fun processEntity(entity: Entity) = Unit
 
-        override fun addedToEngine(engine: Engine) {
-          super.addedToEngine(engine)
+          override fun addedToEngine(engine: Engine) {
+            super.addedToEngine(engine)
 
-          additionListener = onEntityAdded { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              addAssertion = true
-            }
+            additionListener =
+              onEntityAdded { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  addAssertion = true
+                }
+              }
+
+            removalListener =
+              onEntityRemoved { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  removeAssertion = true
+                }
+              }
           }
 
-          removalListener = onEntityRemoved { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              removeAssertion = true
-            }
+          override fun removedFromEngine(engine: Engine) {
+            super.removedFromEngine(engine)
+
+            engine.removeEntityListener(additionListener)
+            engine.removeEntityListener(removalListener)
           }
         }
-
-        override fun removedFromEngine(engine: Engine) {
-          super.removedFromEngine(engine)
-
-          engine.removeEntityListener(additionListener)
-          engine.removeEntityListener(removalListener)
-        }
-      }
 
       engine.addSystem(system)
 
@@ -156,9 +170,10 @@ object ListenersSpec : Spek({
       assertThat(addAssertion).isFalse
       assertThat(removeAssertion).isFalse
 
-      val entity = engine.entity {
-        with<TestComponent>()
-      }
+      val entity =
+        engine.entity {
+          with<TestComponent>()
+        }
       engine.removeEntity(entity)
       engine.removeSystem(system)
 
@@ -170,35 +185,41 @@ object ListenersSpec : Spek({
       var addAssertion = false
       var removeAssertion = false
 
-      val system = object : SortedIteratingSystem(allOf(TestComponent::class).get(), Comparator.comparing(Any::hashCode)) {
-        private lateinit var additionListener: EntityAdditionListener
-        private lateinit var removalListener: EntityRemovalListener
+      val system =
+        object : SortedIteratingSystem(allOf(TestComponent::class).get(), Comparator.comparing(Any::hashCode)) {
+          private lateinit var additionListener: EntityAdditionListener
+          private lateinit var removalListener: EntityRemovalListener
 
-        override fun processEntity(entity: Entity, deltaTime: Float) = Unit
+          override fun processEntity(
+            entity: Entity,
+            deltaTime: Float,
+          ) = Unit
 
-        override fun addedToEngine(engine: Engine) {
-          super.addedToEngine(engine)
+          override fun addedToEngine(engine: Engine) {
+            super.addedToEngine(engine)
 
-          additionListener = onEntityAdded { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              addAssertion = true
-            }
+            additionListener =
+              onEntityAdded { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  addAssertion = true
+                }
+              }
+
+            removalListener =
+              onEntityRemoved { entity ->
+                if (entity[TestComponent.mapper] != null) {
+                  removeAssertion = true
+                }
+              }
           }
 
-          removalListener = onEntityRemoved { entity ->
-            if (entity[TestComponent.mapper] != null) {
-              removeAssertion = true
-            }
+          override fun removedFromEngine(engine: Engine) {
+            super.removedFromEngine(engine)
+
+            engine.removeEntityListener(additionListener)
+            engine.removeEntityListener(removalListener)
           }
         }
-
-        override fun removedFromEngine(engine: Engine) {
-          super.removedFromEngine(engine)
-
-          engine.removeEntityListener(additionListener)
-          engine.removeEntityListener(removalListener)
-        }
-      }
 
       engine.addSystem(system)
 
@@ -206,9 +227,10 @@ object ListenersSpec : Spek({
       assertThat(addAssertion).isFalse
       assertThat(removeAssertion).isFalse
 
-      val entity = engine.entity {
-        with<TestComponent>()
-      }
+      val entity =
+        engine.entity {
+          with<TestComponent>()
+        }
       engine.removeEntity(entity)
       engine.removeSystem(system)
 

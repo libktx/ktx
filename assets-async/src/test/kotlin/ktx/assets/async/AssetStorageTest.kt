@@ -621,10 +621,11 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should support loading assets in parallel`() {
     // Given:
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = newAsyncContext(2),
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = newAsyncContext(2),
+      )
     val firstPath = "ktx/assets/async/texture.png"
     val secondPath = "ktx/assets/async/model.obj"
     val scheduler = newAsyncContext(2)
@@ -778,10 +779,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/skin.json"
-    val dependencies = arrayOf(
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-    )
+    val dependencies =
+      arrayOf(
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+      )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
     // When:
@@ -806,10 +808,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val descriptor = storage.getAssetDescriptor<Skin>("ktx/assets/async/skin.json")
-    val dependencies = arrayOf(
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-    )
+    val dependencies =
+      arrayOf(
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+      )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
     // When:
@@ -836,10 +839,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val identifier = storage.getIdentifier<Skin>("ktx/assets/async/skin.json")
-    val dependencies = arrayOf(
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-    )
+    val dependencies =
+      arrayOf(
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+      )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
     // When:
@@ -891,22 +895,24 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val schedulers = newAsyncContext(threads = 16)
     val loaders = newAsyncContext(threads = 4)
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders,
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = loaders,
+      )
     val path = "com/badlogic/gdx/utils/lsans-15.fnt"
     val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When:
-    val assets = (1..100).map {
-      val result = CompletableDeferred<BitmapFont>()
-      KtxAsync.launch(schedulers) {
-        val asset = storage.load<BitmapFont>(path)
-        result.complete(asset)
+    val assets =
+      (1..100).map {
+        val result = CompletableDeferred<BitmapFont>()
+        KtxAsync.launch(schedulers) {
+          val asset = storage.load<BitmapFont>(path)
+          result.complete(asset)
+        }
+        result
       }
-      result
-    }
 
     // Then:
     runBlocking { assets.joinAll() }
@@ -927,7 +933,10 @@ class AssetStorageTest : AsyncTest() {
    * before they are fully loaded, resulting in [UnloadedAssetException] caught by the
    * coroutines waiting for or loading the asset. This method allows to ignore these exceptions.
    */
-  private suspend inline fun <reified T : Any> loadIgnoringUnloadException(storage: AssetStorage, path: String) {
+  private suspend inline fun <reified T : Any> loadIgnoringUnloadException(
+    storage: AssetStorage,
+    path: String,
+  ) {
     try {
       storage.load<T>(path)
     } catch (exception: UnloadedAssetException) {
@@ -940,26 +949,28 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val schedulers = newAsyncContext(threads = 16)
     val loaders = newAsyncContext(threads = 4)
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders,
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = loaders,
+      )
     val path = "ktx/assets/async/string.txt"
 
     // When: spawning 100 coroutines that load and unload the asset, 1 of which loads it 2 times:
-    val assets = (1..100).map { id ->
-      val result = CompletableDeferred<Boolean>()
-      KtxAsync.launch(schedulers) {
-        loadIgnoringUnloadException<String>(storage, path)
-        storage.unload<String>(path)
-        if (id == 99) {
-          // Loading 1 additional asset:
+    val assets =
+      (1..100).map { id ->
+        val result = CompletableDeferred<Boolean>()
+        KtxAsync.launch(schedulers) {
           loadIgnoringUnloadException<String>(storage, path)
+          storage.unload<String>(path)
+          if (id == 99) {
+            // Loading 1 additional asset:
+            loadIgnoringUnloadException<String>(storage, path)
+          }
+          result.complete(true)
         }
-        result.complete(true)
+        result
       }
-      result
-    }
 
     // Then:
     runBlocking { assets.joinAll() }
@@ -976,27 +987,29 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val schedulers = newAsyncContext(threads = 16)
     val loaders = newAsyncContext(threads = 4)
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders,
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = loaders,
+      )
     val path = "com/badlogic/gdx/utils/lsans-15.fnt"
     val dependency = "com/badlogic/gdx/utils/lsans-15.png"
 
     // When: spawning 100 coroutines that load and unload the asset, 1 of which loads it 2 times:
-    val assets = (1..100).map { id ->
-      val result = CompletableDeferred<Boolean>()
-      KtxAsync.launch(schedulers) {
-        loadIgnoringUnloadException<BitmapFont>(storage, path)
-        storage.unload<BitmapFont>(path)
-        if (id == 1) {
-          // Loading 1 additional asset:
+    val assets =
+      (1..100).map { id ->
+        val result = CompletableDeferred<Boolean>()
+        KtxAsync.launch(schedulers) {
           loadIgnoringUnloadException<BitmapFont>(storage, path)
+          storage.unload<BitmapFont>(path)
+          if (id == 1) {
+            // Loading 1 additional asset:
+            loadIgnoringUnloadException<BitmapFont>(storage, path)
+          }
+          result.complete(true)
         }
-        result.complete(true)
+        result
       }
-      result
-    }
 
     // Then:
     runBlocking { assets.joinAll() }
@@ -1018,27 +1031,29 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val schedulers = newAsyncContext(threads = 16)
     val loaders = newAsyncContext(threads = 4)
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders,
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = loaders,
+      )
     val path = "ktx/assets/async/skin.json"
     val dependency = "ktx/assets/async/skin.atlas"
     val nestedDependency = "ktx/assets/async/texture.png"
 
     // When: spawning 100 coroutines that load and unload the asset, 1 of which loads it 2 times:
-    val assets = (1..100).map { id ->
-      val result = CompletableDeferred<Boolean>()
-      KtxAsync.launch(schedulers) {
-        loadIgnoringUnloadException<Skin>(storage, path)
-        storage.unload<Skin>(path)
-        if (id == 1) {
+    val assets =
+      (1..100).map { id ->
+        val result = CompletableDeferred<Boolean>()
+        KtxAsync.launch(schedulers) {
           loadIgnoringUnloadException<Skin>(storage, path)
+          storage.unload<Skin>(path)
+          if (id == 1) {
+            loadIgnoringUnloadException<Skin>(storage, path)
+          }
+          result.complete(true)
         }
-        result.complete(true)
+        result
       }
-      result
-    }
 
     // Then:
     runBlocking { assets.joinAll() }
@@ -1063,10 +1078,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val schedulers = newAsyncContext(threads = 16)
     val loaders = newAsyncContext(threads = 4)
-    val storage = AssetStorage(
-      fileResolver = ClasspathFileHandleResolver(),
-      asyncContext = loaders,
-    )
+    val storage =
+      AssetStorage(
+        fileResolver = ClasspathFileHandleResolver(),
+        asyncContext = loaders,
+      )
     val path = "ktx/assets/async/skin.json"
     val dependency = "ktx/assets/async/skin.atlas"
     val nestedDependency = "ktx/assets/async/texture.png"
@@ -1074,29 +1090,30 @@ class AssetStorageTest : AsyncTest() {
     val unloads = AtomicInteger()
 
     // When: spawning 1000 coroutines that randomly load or unload the asset and try to access it:
-    val assets = (1..1000).map {
-      val result = CompletableDeferred<Boolean>()
-      KtxAsync.launch(schedulers) {
-        repeat(ThreadLocalRandom.current().nextInt(50)) { skipFrame() }
-        if (ThreadLocalRandom.current().nextFloat() < 0.4f) {
-          // Some unloads are expected to miss and loads are longer,
-          // so there's a lower probability for load.
-          loads.incrementAndGet()
-          loadIgnoringUnloadException<Skin>(storage, path)
-        } else {
-          val unloaded = storage.unload<Skin>(path)
-          if (unloaded) unloads.incrementAndGet()
+    val assets =
+      (1..1000).map {
+        val result = CompletableDeferred<Boolean>()
+        KtxAsync.launch(schedulers) {
+          repeat(ThreadLocalRandom.current().nextInt(50)) { skipFrame() }
+          if (ThreadLocalRandom.current().nextFloat() < 0.4f) {
+            // Some unloads are expected to miss and loads are longer,
+            // so there's a lower probability for load.
+            loads.incrementAndGet()
+            loadIgnoringUnloadException<Skin>(storage, path)
+          } else {
+            val unloaded = storage.unload<Skin>(path)
+            if (unloaded) unloads.incrementAndGet()
+          }
+          try {
+            // Concurrent access:
+            storage.getOrNull<Skin>(path)
+          } catch (expected: UnloadedAssetException) {
+            // Assets can be unloaded asynchronously. This is OK.
+          }
+          result.complete(true)
         }
-        try {
-          // Concurrent access:
-          storage.getOrNull<Skin>(path)
-        } catch (expected: UnloadedAssetException) {
-          // Assets can be unloaded asynchronously. This is OK.
-        }
-        result.complete(true)
+        result
       }
-      result
-    }
 
     // Then:
     runBlocking { assets.joinAll() }
@@ -1169,9 +1186,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
     val paths = (1..5).map { storage.getIdentifier<FakeAsset>(it.toString()) }
-    val assets = paths.map { it to FakeAsset() }
-      .onEach { (identifier, asset) -> runBlocking { storage.add(identifier, asset) } }
-      .map { (_, asset) -> asset }
+    val assets =
+      paths
+        .map { it to FakeAsset() }
+        .onEach { (identifier, asset) -> runBlocking { storage.add(identifier, asset) } }
+        .map { (_, asset) -> asset }
 
     // When:
     storage.dispose()
@@ -1187,9 +1206,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
     val paths = (1..5).map { storage.getIdentifier<FakeAsset>(it.toString()) }
-    val assets = paths.map { it to FakeAsset() }
-      .onEach { (identifier, asset) -> runBlocking { storage.add(identifier, asset) } }
-      .map { (_, asset) -> asset }
+    val assets =
+      paths
+        .map { it to FakeAsset() }
+        .onEach { (identifier, asset) -> runBlocking { storage.add(identifier, asset) } }
+        .map { (_, asset) -> asset }
 
     // When:
     runBlocking {
@@ -1209,9 +1230,10 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
     val validAsset = mock<Disposable>()
-    val brokenAsset = mock<Disposable> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
+    val brokenAsset =
+      mock<Disposable> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
     runBlocking {
       storage.add("broken", brokenAsset)
       storage.add("valid", validAsset)
@@ -1239,9 +1261,10 @@ class AssetStorageTest : AsyncTest() {
     storage.logger = logger
     val validAsset = mock<Disposable>()
     val exception = GdxRuntimeException("Expected.")
-    val brokenAsset = mock<Disposable> {
-      on(it.dispose()) doThrow exception
-    }
+    val brokenAsset =
+      mock<Disposable> {
+        on(it.dispose()) doThrow exception
+      }
     runBlocking {
       storage.add("broken", brokenAsset)
       storage.add("valid", validAsset)
@@ -1318,14 +1341,15 @@ class AssetStorageTest : AsyncTest() {
   fun `should normalize file paths`() {
     // Given:
     val storage = AssetStorage(useDefaultLoaders = false)
-    val paths = mapOf(
-      "path.txt" to "path.txt",
-      "dir/path.txt" to "dir/path.txt",
-      "\\path.txt" to "/path.txt",
-      "dir\\path.txt" to "dir/path.txt",
-      "home\\dir\\path.txt" to "home/dir/path.txt",
-      "\\home\\dir\\dir\\" to "/home/dir/dir/",
-    )
+    val paths =
+      mapOf(
+        "path.txt" to "path.txt",
+        "dir/path.txt" to "dir/path.txt",
+        "\\path.txt" to "/path.txt",
+        "dir\\path.txt" to "dir/path.txt",
+        "home\\dir\\path.txt" to "home/dir/path.txt",
+        "\\home\\dir\\dir\\" to "/home/dir/dir/",
+      )
 
     paths.forEach { (original, expected) ->
       // When:
@@ -1404,16 +1428,18 @@ class AssetStorageTest : AsyncTest() {
     lateinit var callbackManager: AssetManager
     var callbackPath = ""
     var callbackType = Any::class.java
-    val parameters = TextAssetLoaderParameters().apply {
-      loadedCallback = AssetLoaderParameters.LoadedCallback { assetManager, fileName, type ->
-        callbackExecutions.incrementAndGet()
-        callbackExecutedOnRenderingThread = KtxAsync.isOnRenderingThread()
-        callbackManager = assetManager
-        callbackPath = fileName
-        callbackType = type
-        callbackFinished.complete(true)
+    val parameters =
+      TextAssetLoaderParameters().apply {
+        loadedCallback =
+          AssetLoaderParameters.LoadedCallback { assetManager, fileName, type ->
+            callbackExecutions.incrementAndGet()
+            callbackExecutedOnRenderingThread = KtxAsync.isOnRenderingThread()
+            callbackManager = assetManager
+            callbackPath = fileName
+            callbackType = type
+            callbackFinished.complete(true)
+          }
       }
-    }
 
     // When:
     runBlocking { storage.load(path, parameters) }
@@ -1435,18 +1461,21 @@ class AssetStorageTest : AsyncTest() {
     val path = "ktx/assets/async/string.txt"
     val loggingFinished = CompletableFuture<Boolean>()
     val exception = IllegalStateException("Expected.")
-    val logger = mock<Logger> {
-      on(it.error(any(), any())) doAnswer {
-        loggingFinished.complete(true)
-        Unit
+    val logger =
+      mock<Logger> {
+        on(it.error(any(), any())) doAnswer {
+          loggingFinished.complete(true)
+          Unit
+        }
       }
-    }
     storage.logger = logger
-    val parameters = TextAssetLoaderParameters().apply {
-      loadedCallback = AssetLoaderParameters.LoadedCallback { _, _, _ ->
-        throw exception
+    val parameters =
+      TextAssetLoaderParameters().apply {
+        loadedCallback =
+          AssetLoaderParameters.LoadedCallback { _, _, _ ->
+            throw exception
+          }
       }
-    }
 
     // When:
     runBlocking { storage.load(path, parameters) }
@@ -1465,9 +1494,10 @@ class AssetStorageTest : AsyncTest() {
     val path = "ktx/assets/async/string.txt"
 
     // When:
-    val asset = runBlocking(KtxAsync.coroutineContext) {
-      storage.loadSync<String>(path)
-    }
+    val asset =
+      runBlocking(KtxAsync.coroutineContext) {
+        storage.loadSync<String>(path)
+      }
 
     // Then:
     assertEquals("Content.", asset)
@@ -1479,15 +1509,17 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/skin.json"
-    val dependencies = arrayOf(
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-    )
+    val dependencies =
+      arrayOf(
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+      )
 
     // When:
-    val asset = runBlocking(KtxAsync.coroutineContext) {
-      storage.loadSync<Skin>(path)
-    }
+    val asset =
+      runBlocking(KtxAsync.coroutineContext) {
+        storage.loadSync<Skin>(path)
+      }
 
     // Then:
     assertTrue(storage.isLoaded<Skin>(path))
@@ -1501,6 +1533,7 @@ class AssetStorageTest : AsyncTest() {
   class FakeAsset : Disposable {
     val disposingFinished = CompletableFuture<Boolean>()
     var isDisposed: Boolean = false
+
     override fun dispose() {
       isDisposed = true
       disposingFinished.complete(true)
@@ -1568,13 +1601,14 @@ class AssetStorageTest : AsyncTest() {
     val isAsyncThread = CompletableFuture<Boolean>()
     val isRenderingThread = CompletableFuture<Boolean>()
     val isRenderingThreadDuringAsync = CompletableFuture<Boolean>()
-    val loader = FakeAsyncLoader(
-      onSync = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
-      onAsync = {
-        isAsyncThread.complete(asyncThread === Thread.currentThread())
-        isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread())
-      },
-    )
+    val loader =
+      FakeAsyncLoader(
+        onSync = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
+        onAsync = {
+          isAsyncThread.complete(asyncThread === Thread.currentThread())
+          isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread())
+        },
+      )
     val storage = AssetStorage(asyncContext = asyncContext, useDefaultLoaders = false)
     storage.setLoader { loader }
 
@@ -1591,9 +1625,10 @@ class AssetStorageTest : AsyncTest() {
   fun `should load assets on rendering thread with synchronous loading `() {
     // Given:
     val isRenderingThread = CompletableFuture<Boolean>()
-    val loader = FakeSyncLoader(
-      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
 
@@ -1608,9 +1643,10 @@ class AssetStorageTest : AsyncTest() {
   fun `should load assets synchronously on rendering thread with synchronous loader`() {
     // Given:
     val isRenderingThread = CompletableFuture<Boolean>()
-    val loader = FakeSyncLoader(
-      onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = { isRenderingThread.complete(KtxAsync.isOnRenderingThread()) },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
 
@@ -1626,10 +1662,11 @@ class AssetStorageTest : AsyncTest() {
     // Given:
     val isRenderingThreadDuringAsync = CompletableFuture<Boolean>()
     val isRenderingThreadDuringSync = CompletableFuture<Boolean>()
-    val loader = FakeAsyncLoader(
-      onAsync = { isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread()) },
-      onSync = { isRenderingThreadDuringSync.complete(KtxAsync.isOnRenderingThread()) },
-    )
+    val loader =
+      FakeAsyncLoader(
+        onAsync = { isRenderingThreadDuringAsync.complete(KtxAsync.isOnRenderingThread()) },
+        onSync = { isRenderingThreadDuringSync.complete(KtxAsync.isOnRenderingThread()) },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
 
@@ -1644,9 +1681,10 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should handle loading exceptions`() {
     // Given:
-    val loader = FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -1675,10 +1713,11 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should handle asynchronous loading exceptions`() {
     // Given:
-    val loader = FakeAsyncLoader(
-      onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {},
-    )
+    val loader =
+      FakeAsyncLoader(
+        onAsync = { throw IllegalStateException("Expected.") },
+        onSync = {},
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -1707,10 +1746,11 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should handle synchronous loading exceptions`() {
     // Given:
-    val loader = FakeAsyncLoader(
-      onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      FakeAsyncLoader(
+        onAsync = { },
+        onSync = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -1837,9 +1877,10 @@ class AssetStorageTest : AsyncTest() {
   @Test
   fun `should not fail to unload asset that was loaded exceptionally`() {
     // Given:
-    val loader = FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake path"
     storage.setLoader { loader }
@@ -1853,9 +1894,10 @@ class AssetStorageTest : AsyncTest() {
     }
 
     // When:
-    val unloaded = runBlocking {
-      storage.unload<FakeAsset>(path)
-    }
+    val unloaded =
+      runBlocking {
+        storage.unload<FakeAsset>(path)
+      }
 
     // Then:
     assertTrue(unloaded)
@@ -1893,14 +1935,16 @@ class AssetStorageTest : AsyncTest() {
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "path.sync"
     val dependency = "path.async"
-    val loader = FakeSyncLoader(
-      onLoad = {},
-      dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
-    )
-    val dependencyLoader = FakeAsyncLoader(
-      onAsync = {},
-      onSync = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = {},
+        dependencies = GdxArray.with(storage.getAssetDescriptor<FakeAsset>(dependency)),
+      )
+    val dependencyLoader =
+      FakeAsyncLoader(
+        onAsync = {},
+        onSync = { throw IllegalStateException("Expected.") },
+      )
     storage.setLoader(suffix = ".sync") { loader }
     storage.setLoader(suffix = ".async") { dependencyLoader }
     storage.logger.level = Logger.NONE // Disposing exception will be logged.
@@ -1915,9 +1959,10 @@ class AssetStorageTest : AsyncTest() {
     assertTrue(storage.contains<FakeAsset>(dependency))
 
     // When:
-    val unloaded = runBlocking {
-      storage.unload<FakeAsset>(path)
-    }
+    val unloaded =
+      runBlocking {
+        storage.unload<FakeAsset>(path)
+      }
 
     // Then:
     assertTrue(unloaded)
@@ -1933,13 +1978,14 @@ class AssetStorageTest : AsyncTest() {
     val loadingStarted = CompletableFuture<Boolean>()
     val loading = CompletableFuture<Boolean>()
     val loadingFinished = CompletableFuture<Boolean>()
-    val loader = FakeSyncLoader(
-      onLoad = {
-        loadingStarted.join()
-        loading.complete(true)
-        loadingFinished.join()
-      },
-    )
+    val loader =
+      FakeSyncLoader(
+        onLoad = {
+          loadingStarted.join()
+          loading.complete(true)
+          loadingFinished.join()
+        },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake.path"
     val identifier = storage.getIdentifier<FakeAsset>(path)
@@ -1982,14 +2028,15 @@ class AssetStorageTest : AsyncTest() {
     }
 
     // When: asynchronously loading multiple assets:
-    val tasks = (1..100).map { index ->
-      val finished = CompletableDeferred<Boolean>()
-      KtxAsync.launch(schedulers) {
-        storage.load<FakeAsset>(path = index.toString())
-        finished.complete(true)
+    val tasks =
+      (1..100).map { index ->
+        val finished = CompletableDeferred<Boolean>()
+        KtxAsync.launch(schedulers) {
+          storage.load<FakeAsset>(path = index.toString())
+          finished.complete(true)
+        }
+        finished
       }
-      finished
-    }
 
     // Then:
     runBlocking { tasks.joinAll() }
@@ -2277,31 +2324,35 @@ class AssetStorageTest : AsyncTest() {
     val firstId = Identifier("first.file", String::class.java)
 
     @Suppress("UNCHECKED_CAST")
-    val first = Asset(
-      descriptor = firstId.toAssetDescriptor(),
-      identifier = firstId,
-      reference = CompletableDeferred("test"),
-      dependencies = listOf(),
-      loader = FakeSyncLoader() as Loader<String>,
-      referenceCount = 2,
-    )
+    val first =
+      Asset(
+        descriptor = firstId.toAssetDescriptor(),
+        identifier = firstId,
+        reference = CompletableDeferred("test"),
+        dependencies = listOf(),
+        loader = FakeSyncLoader() as Loader<String>,
+        referenceCount = 2,
+      )
     val secondId = Identifier("second.file", Int::class.java)
 
     @Suppress("UNCHECKED_CAST")
-    val second = Asset(
-      descriptor = secondId.toAssetDescriptor(),
-      identifier = secondId,
-      reference = CompletableDeferred(),
-      dependencies = listOf(first),
-      loader = FakeSyncLoader() as Loader<Int>,
-      referenceCount = 1,
-    )
-    val snapshot = AssetStorageSnapshot(
-      assets = mapOf(
-        firstId to first,
-        secondId to second,
-      ),
-    )
+    val second =
+      Asset(
+        descriptor = secondId.toAssetDescriptor(),
+        identifier = secondId,
+        reference = CompletableDeferred(),
+        dependencies = listOf(first),
+        loader = FakeSyncLoader() as Loader<Int>,
+        referenceCount = 1,
+      )
+    val snapshot =
+      AssetStorageSnapshot(
+        assets =
+          mapOf(
+            firstId to first,
+            secondId to second,
+          ),
+      )
 
     // When:
     val output = snapshot.prettyPrint()

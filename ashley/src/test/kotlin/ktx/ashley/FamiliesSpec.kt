@@ -8,24 +8,28 @@ import org.jetbrains.spek.api.dsl.it
 
 object FamiliesSpec : Spek({
   describe("utilities for component families") {
-    val textureEntity = Entity().apply {
-      add(Texture())
-    }
+    val textureEntity =
+      Entity().apply {
+        add(Texture())
+      }
 
-    val rigidBodyEntity = Entity().apply {
-      add(RigidBody())
-    }
+    val rigidBodyEntity =
+      Entity().apply {
+        add(RigidBody())
+      }
 
-    val textureAndTransformEntity = Entity().apply {
-      add(Texture())
-      add(Transform())
-    }
+    val textureAndTransformEntity =
+      Entity().apply {
+        add(Texture())
+        add(Transform())
+      }
 
-    val allComponentsEntity = Entity().apply {
-      add(Texture())
-      add(Transform())
-      add(RigidBody())
-    }
+    val allComponentsEntity =
+      Entity().apply {
+        add(Texture())
+        add(Transform())
+        add(RigidBody())
+      }
 
     it("should create a family that matches one of component") {
       val family = oneOf(Texture::class, Transform::class).get()

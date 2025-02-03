@@ -47,11 +47,12 @@ class TextUtilitiesTest {
    * Loads the .fnt settings file of the default libGDX Arial font, but
    * omits loading the textures. For testing purposes.
    */
-  class FakeFont : BitmapFont(
-    BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"), true),
-    GdxArray.with(mock()),
-    true,
-  ) {
+  class FakeFont :
+    BitmapFont(
+      BitmapFontData(Gdx.files.classpath("com/badlogic/gdx/utils/lsans-15.fnt"), true),
+      GdxArray.with(mock()),
+      true,
+    ) {
     override fun load(data: BitmapFontData?) {
       // Do nothing.
     }

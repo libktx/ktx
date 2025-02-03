@@ -37,4 +37,7 @@ inline fun String?.toAbsoluteFile(): FileHandle = Gdx.files.absolute(this)
  * @param type type of the requested file. Defaults to [FileType.Internal].
  * @return [FileHandle] instance pointing to a file with the selected path and type.
  */
-inline fun file(path: String, type: FileType = Internal): FileHandle = Gdx.files.getFileHandle(path, type)
+inline fun file(
+  path: String,
+  type: FileType = Internal,
+): FileHandle = Gdx.files.getFileHandle(path, type)

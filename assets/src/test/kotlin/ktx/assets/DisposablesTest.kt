@@ -31,9 +31,10 @@ class DisposablesTest {
 
   @Test
   fun `should silently ignore exceptions during safe disposing`() {
-    val disposable = mock<Disposable> {
-      on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-    }
+    val disposable =
+      mock<Disposable> {
+        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+      }
 
     disposable.disposeSafely() // Should not throw any exceptions.
 
@@ -62,9 +63,10 @@ class DisposablesTest {
   fun `should pass exceptions to catch block`() {
     val exception = GdxRuntimeException("Expected.")
     var thrown: Exception? = null
-    val disposable = mock<Disposable> {
-      on(it.dispose()) doThrow exception
-    }
+    val disposable =
+      mock<Disposable> {
+        on(it.dispose()) doThrow exception
+      }
 
     disposable.dispose { thrown = it }
 
@@ -92,13 +94,14 @@ class DisposablesTest {
 
   @Test
   fun shouldSafelyDisposeIterablesOfAssets() {
-    val disposables = GdxArray.with(
-      mock<Disposable>(),
-      null,
-      mock {
-        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-      },
-    )
+    val disposables =
+      GdxArray.with(
+        mock<Disposable>(),
+        null,
+        mock {
+          on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+        },
+      )
 
     disposables.disposeSafely()
 
@@ -117,13 +120,14 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of iterables of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = GdxArray.with(
-      mock<Disposable>(),
-      null,
-      mock {
-        on(it.dispose()) doThrow exception
-      },
-    )
+    val disposables =
+      GdxArray.with(
+        mock<Disposable>(),
+        null,
+        mock {
+          on(it.dispose()) doThrow exception
+        },
+      )
 
     disposables.dispose { assertSame(exception, it) }
 
@@ -141,13 +145,14 @@ class DisposablesTest {
 
   @Test
   fun `should safely dispose arrays of assets`() {
-    val disposables = arrayOf(
-      mock<Disposable>(),
-      mock(),
-      mock {
-        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-      },
-    )
+    val disposables =
+      arrayOf(
+        mock<Disposable>(),
+        mock(),
+        mock {
+          on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+        },
+      )
 
     disposables.disposeSafely()
 
@@ -166,13 +171,14 @@ class DisposablesTest {
   @Test
   fun `should pass exception on dispose of arrays of assets with catch block`() {
     val exception = GdxRuntimeException("Expected.")
-    val disposables = arrayOf(
-      mock<Disposable>(),
-      mock(),
-      mock {
-        on(it.dispose()) doThrow exception
-      },
-    )
+    val disposables =
+      arrayOf(
+        mock<Disposable>(),
+        mock(),
+        mock {
+          on(it.dispose()) doThrow exception
+        },
+      )
 
     disposables.dispose { assertSame(exception, it) }
 
@@ -216,6 +222,7 @@ class DisposablesTest {
     class Parent : DisposableRegistry by DisposableContainer() {
       val disposableA = mock<Disposable>().alsoRegister()
       val disposableB = mock<Disposable>().alsoRegister()
+
       fun deregisterB() = disposableB.alsoDeregister()
     }
 
@@ -265,9 +272,10 @@ class DisposablesTest {
   @Test
   fun `should safely dispose registered disposables`() {
     class Parent : DisposableRegistry by DisposableContainer() {
-      val disposable = mock<Disposable> {
-        on(it.dispose()) doThrow GdxRuntimeException("Expected.")
-      }.alsoRegister()
+      val disposable =
+        mock<Disposable> {
+          on(it.dispose()) doThrow GdxRuntimeException("Expected.")
+        }.alsoRegister()
     }
 
     val instance = Parent()

@@ -34,7 +34,11 @@ fun Camera.center(
  *
  * Note that [Camera.update] should be called in order to update to the new position.
  */
-fun Camera.moveTo(target: Vector2, x: Float = 0f, y: Float = 0f) {
+fun Camera.moveTo(
+  target: Vector2,
+  x: Float = 0f,
+  y: Float = 0f,
+) {
   position.set(target.x + x, target.y + y, 0f)
 }
 
@@ -50,7 +54,12 @@ fun Camera.moveTo(target: Vector2, x: Float = 0f, y: Float = 0f) {
  * Note that [Camera.update] should be called in order to update to the new position.
  * [moveTo] can be used to set the initial position while honoring the same [x] and [y] offset.
  */
-fun Camera.lerpTo(target: Vector2, lerp: Float, x: Float = 0f, y: Float = 0f) {
+fun Camera.lerpTo(
+  target: Vector2,
+  lerp: Float,
+  x: Float = 0f,
+  y: Float = 0f,
+) {
   val newX = this.position.x + ((target.x - position.x) * lerp) + x
   val newY = this.position.y + ((target.y - position.y) * lerp) + y
   position.set(newX, newY, 0f)
@@ -118,7 +127,11 @@ class LetterboxingViewport(
     scaleY = targetPpiY / Gdx.graphics.ppiY
   }
 
-  override fun update(screenWidth: Int, screenHeight: Int, centerCamera: Boolean) {
+  override fun update(
+    screenWidth: Int,
+    screenHeight: Int,
+    centerCamera: Boolean,
+  ) {
     updateWorldSize(screenWidth, screenHeight)
     super.update(screenWidth, screenHeight, centerCamera)
   }
@@ -133,7 +146,10 @@ class LetterboxingViewport(
    * @param screenWidth current screen width.
    * @param screenHeight current screen height.
    */
-  private fun updateWorldSize(screenWidth: Int, screenHeight: Int) {
+  private fun updateWorldSize(
+    screenWidth: Int,
+    screenHeight: Int,
+  ) {
     val width = screenWidth * scaleX
     val height = screenHeight * scaleY
     val fitHeight = width / aspectRatio
@@ -146,6 +162,7 @@ class LetterboxingViewport(
 
   private companion object {
     private fun isMobile() = Gdx.app.type == Android || Gdx.app.type == iOS
+
     private val defaultTargetPpi: Float
       get() = if (isMobile()) 160f else 96f
   }

@@ -26,10 +26,11 @@ class TooltipsTest : ApplicationTest() {
     val actor = Actor()
     var initInvoked: Boolean
 
-    val tooltip = actor.visTooltip(VisTable()) {
-      initInvoked = true
-      fadeTime = 0.5f
-    }
+    val tooltip =
+      actor.visTooltip(VisTable()) {
+        initInvoked = true
+        fadeTime = 0.5f
+      }
 
     assertEquals(0.5f, tooltip.fadeTime, TOLERANCE)
     assertTrue(initInvoked)
@@ -52,10 +53,11 @@ class TooltipsTest : ApplicationTest() {
     val text = "text tooltip"
     var initInvoked: Boolean
 
-    val tooltip = actor.visTextTooltip(text) {
-      initInvoked = true
-      fadeTime = 0.5f
-    }
+    val tooltip =
+      actor.visTextTooltip(text) {
+        initInvoked = true
+        fadeTime = 0.5f
+      }
 
     assertEquals(0.5f, tooltip.fadeTime, TOLERANCE)
     assertEquals(text, (tooltip.content as VisLabel).text.toString())

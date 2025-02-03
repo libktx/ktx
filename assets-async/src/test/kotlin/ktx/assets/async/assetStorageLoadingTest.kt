@@ -715,23 +715,24 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     storage.logger.level = Logger.NONE
-    val assets = listOf(
-      storage.getIdentifier<String>("ktx/assets/async/string.txt"),
-      storage.getIdentifier<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt"),
-      storage.getIdentifier<Music>("ktx/assets/async/sound.ogg"),
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-      storage.getIdentifier<Skin>("ktx/assets/async/skin.json"),
-      storage.getIdentifier<I18NBundle>("ktx/assets/async/i18n"),
-      storage.getIdentifier<ParticleEffect>("ktx/assets/async/particle.p2d"),
-      storage.getIdentifier<ParticleEffect3D>("ktx/assets/async/particle.p3d"),
-      storage.getIdentifier<PolygonRegion>("ktx/assets/async/polygon.psh"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.obj"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
-      storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
-      storage.getIdentifier<ShaderProgram>("ktx/assets/async/shader.frag"),
-      storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx"),
-    )
+    val assets =
+      listOf(
+        storage.getIdentifier<String>("ktx/assets/async/string.txt"),
+        storage.getIdentifier<BitmapFont>("com/badlogic/gdx/utils/lsans-15.fnt"),
+        storage.getIdentifier<Music>("ktx/assets/async/sound.ogg"),
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+        storage.getIdentifier<Skin>("ktx/assets/async/skin.json"),
+        storage.getIdentifier<I18NBundle>("ktx/assets/async/i18n"),
+        storage.getIdentifier<ParticleEffect>("ktx/assets/async/particle.p2d"),
+        storage.getIdentifier<ParticleEffect3D>("ktx/assets/async/particle.p3d"),
+        storage.getIdentifier<PolygonRegion>("ktx/assets/async/polygon.psh"),
+        storage.getIdentifier<Model>("ktx/assets/async/model.obj"),
+        storage.getIdentifier<Model>("ktx/assets/async/model.g3dj"),
+        storage.getIdentifier<Model>("ktx/assets/async/model.g3db"),
+        storage.getIdentifier<ShaderProgram>("ktx/assets/async/shader.frag"),
+        storage.getIdentifier<Cubemap>("ktx/assets/async/cubemap.zktx"),
+      )
     assets.forEach {
       storage.testLoad(it.path, it.type, parameters = null)
       assertTrue(storage.isLoaded(it))
@@ -941,10 +942,11 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     // Given:
     val storage = AssetStorage(fileResolver = ClasspathFileHandleResolver())
     val path = "ktx/assets/async/skin.json"
-    val dependencies = arrayOf(
-      storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
-      storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
-    )
+    val dependencies =
+      arrayOf(
+        storage.getIdentifier<TextureAtlas>("ktx/assets/async/skin.atlas"),
+        storage.getIdentifier<Texture>("ktx/assets/async/texture.png"),
+      )
     val loadedAssets = IdentityHashMap<Skin, Boolean>()
 
     // When:
@@ -965,9 +967,10 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Test
   fun `should handle loading exceptions`() {
     // Given:
-    val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      AssetStorageTest.FakeSyncLoader(
+        onLoad = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -996,10 +999,11 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Test
   fun `should handle asynchronous loading exceptions`() {
     // Given:
-    val loader = AssetStorageTest.FakeAsyncLoader(
-      onAsync = { throw IllegalStateException("Expected.") },
-      onSync = {},
-    )
+    val loader =
+      AssetStorageTest.FakeAsyncLoader(
+        onAsync = { throw IllegalStateException("Expected.") },
+        onSync = {},
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -1028,10 +1032,11 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Test
   fun `should handle synchronous loading exceptions`() {
     // Given:
-    val loader = AssetStorageTest.FakeAsyncLoader(
-      onAsync = { },
-      onSync = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      AssetStorageTest.FakeAsyncLoader(
+        onAsync = { },
+        onSync = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     storage.setLoader { loader }
     val path = "fake path"
@@ -1060,9 +1065,10 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
   @Test
   fun `should not fail to unload asset that was loaded exceptionally`() {
     // Given:
-    val loader = AssetStorageTest.FakeSyncLoader(
-      onLoad = { throw IllegalStateException("Expected.") },
-    )
+    val loader =
+      AssetStorageTest.FakeSyncLoader(
+        onLoad = { throw IllegalStateException("Expected.") },
+      )
     val storage = AssetStorage(useDefaultLoaders = false)
     val path = "fake path"
     storage.setLoader { loader }
@@ -1074,9 +1080,10 @@ abstract class AbstractAssetStorageLoadingTest : AsyncTest() {
     }
 
     // When:
-    val unloaded = runBlocking {
-      storage.unload<AssetStorageTest.FakeAsset>(path)
-    }
+    val unloaded =
+      runBlocking {
+        storage.unload<AssetStorageTest.FakeAsset>(path)
+      }
 
     // Then:
     assertTrue(unloaded)
@@ -1167,9 +1174,10 @@ class AssetStorageLoadingTestWithAssetDescriptorLoadAsync : AbstractAssetStorage
     path: String,
     type: Class<T>,
     parameters: AssetLoaderParameters<T>?,
-  ): T = runBlocking {
-    loadAsync(AssetDescriptor(path, type, parameters)).await()
-  }
+  ): T =
+    runBlocking {
+      loadAsync(AssetDescriptor(path, type, parameters)).await()
+    }
 }
 
 /**
@@ -1180,9 +1188,10 @@ class AssetStorageLoadingTestWithIdentifierLoadAsync : AbstractAssetStorageLoadi
     path: String,
     type: Class<T>,
     parameters: AssetLoaderParameters<T>?,
-  ): T = runBlocking {
-    loadAsync(Identifier(path, type), parameters).await()
-  }
+  ): T =
+    runBlocking {
+      loadAsync(Identifier(path, type), parameters).await()
+    }
 }
 
 /**
@@ -1193,9 +1202,10 @@ class AssetStorageLoadingTestWithAssetDescriptorLoad : AbstractAssetStorageLoadi
     path: String,
     type: Class<T>,
     parameters: AssetLoaderParameters<T>?,
-  ): T = runBlocking {
-    load(AssetDescriptor(path, type, parameters))
-  }
+  ): T =
+    runBlocking {
+      load(AssetDescriptor(path, type, parameters))
+    }
 }
 
 /**
@@ -1206,9 +1216,10 @@ class AssetStorageLoadingTestWithIdentifierLoad : AbstractAssetStorageLoadingTes
     path: String,
     type: Class<T>,
     parameters: AssetLoaderParameters<T>?,
-  ): T = runBlocking {
-    load(Identifier(path, type), parameters)
-  }
+  ): T =
+    runBlocking {
+      load(Identifier(path, type), parameters)
+    }
 }
 
 /**

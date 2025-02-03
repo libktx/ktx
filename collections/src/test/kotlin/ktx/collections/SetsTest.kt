@@ -65,9 +65,7 @@ class SetsTest {
 
   @Test
   fun `should verify empty status contract`() {
-    fun getSet(): GdxSet<Any>? {
-      return ObjectSet.with("1")
-    }
+    fun getSet(): GdxSet<Any>? = ObjectSet.with("1")
 
     val set = getSet()
     if (!set.isEmpty()) {
@@ -84,9 +82,7 @@ class SetsTest {
 
   @Test
   fun `should verify non empty status contract`() {
-    fun getSet(): GdxSet<Any>? {
-      return ObjectSet.with("1")
-    }
+    fun getSet(): GdxSet<Any>? = ObjectSet.with("1")
 
     val set = getSet()
     if (set.isNotEmpty()) {
@@ -261,10 +257,11 @@ class SetsTest {
 
   @Test
   fun `should chain collection operators`() {
-    val set = ObjectSet.with("1", "2", "3", "4") +
-      ObjectSet.with("3", "5") -
-      arrayOf("2", "4", "6") +
-      arrayOf("5", "7")
+    val set =
+      ObjectSet.with("1", "2", "3", "4") +
+        ObjectSet.with("3", "5") -
+        arrayOf("2", "4", "6") +
+        arrayOf("5", "7")
 
     assertEquals(ObjectSet.with("1", "3", "5", "7"), set)
   }

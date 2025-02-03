@@ -14,14 +14,18 @@ import com.badlogic.gdx.utils.viewport.Viewport
  * the [Stage], while [viewport]'s camera will affect how the [Stage] is rendered. If any of the parameters are
  * not given, the used default values match [Stage] no-arg constructor.
  */
-fun stage(batch: Batch = SpriteBatch(), viewport: Viewport = getDefaultViewport()) = Stage(viewport, batch)
+fun stage(
+  batch: Batch = SpriteBatch(),
+  viewport: Viewport = getDefaultViewport(),
+) = Stage(viewport, batch)
 
 /**
  * Returns an instance of [Viewport] compatible with the [Stage] default constructor.
  */
-private fun getDefaultViewport() = ScalingViewport(
-  stretch,
-  Gdx.graphics.width.toFloat(),
-  Gdx.graphics.height.toFloat(),
-  OrthographicCamera(),
-)
+private fun getDefaultViewport() =
+  ScalingViewport(
+    stretch,
+    Gdx.graphics.width.toFloat(),
+    Gdx.graphics.height.toFloat(),
+    OrthographicCamera(),
+  )

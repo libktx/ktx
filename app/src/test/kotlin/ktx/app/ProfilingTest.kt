@@ -18,10 +18,11 @@ class ProfilingTest {
   fun `should profile operation`() {
     var repeats = 0
 
-    val performanceCounter = profile(name = "Thread.sleep", repeats = 10) {
-      repeats++
-      Thread.sleep(10L)
-    }
+    val performanceCounter =
+      profile(name = "Thread.sleep", repeats = 10) {
+        repeats++
+        Thread.sleep(10L)
+      }
 
     assertEquals("Thread.sleep", performanceCounter.name)
     assertEquals(10, performanceCounter.time.mean.windowSize)

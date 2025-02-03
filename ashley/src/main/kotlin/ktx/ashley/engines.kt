@@ -97,7 +97,10 @@ inline fun Engine.entity(configure: EngineEntity.() -> Unit = {}): Entity {
  * @see with
  */
 @OptIn(ExperimentalContracts::class)
-inline fun Engine.configureEntity(entity: Entity, configure: EngineEntity.() -> Unit) {
+inline fun Engine.configureEntity(
+  entity: Entity,
+  configure: EngineEntity.() -> Unit,
+) {
   contract { callsInPlace(configure, InvocationKind.EXACTLY_ONCE) }
   EngineEntity(this, entity).configure()
 }
@@ -108,8 +111,7 @@ inline fun Engine.configureEntity(entity: Entity, configure: EngineEntity.() -> 
  * @throws MissingEntitySystemException if no system under [T] type is registered.
  * @see Engine.getSystem
  */
-inline fun <reified T : EntitySystem> Engine.getSystem(): T =
-  getSystem(T::class.java) ?: throw MissingEntitySystemException(T::class)
+inline fun <reified T : EntitySystem> Engine.getSystem(): T = getSystem(T::class.java) ?: throw MissingEntitySystemException(T::class)
 
 /**
  * @param type type of the system to retrieve.
@@ -121,14 +123,19 @@ operator fun <T : EntitySystem> Engine.get(type: KClass<T>): T? = getSystem(type
 /**
  * Thrown when unable to create a component of given type.
  */
-class CreateComponentException(type: KClass<*>, cause: Throwable? = null) : RuntimeException(
-  "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?",
-  cause,
-)
+class CreateComponentException(
+  type: KClass<*>,
+  cause: Throwable? = null,
+) : RuntimeException(
+    "Could not create component ${type.javaObjectType} - is a visible no-arg constructor available?",
+    cause,
+  )
 
 /**
  * Thrown when accessing an [EntitySystem] via [getSystem] that does not exist in the [Engine].
  */
-class MissingEntitySystemException(type: KClass<out EntitySystem>) : GdxRuntimeException(
-  "Could not access system of type ${type.qualifiedName} - is it added to the engine?",
-)
+class MissingEntitySystemException(
+  type: KClass<out EntitySystem>,
+) : GdxRuntimeException(
+    "Could not access system of type ${type.qualifiedName} - is it added to the engine?",
+  )

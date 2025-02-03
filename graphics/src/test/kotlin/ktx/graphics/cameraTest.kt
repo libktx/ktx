@@ -19,10 +19,11 @@ class CameraUtilitiesTest {
   @Before
   fun `mock graphics`() {
     LwjglNativesLoader.load()
-    Gdx.graphics = mock {
-      on { width } doReturn 800
-      on { height } doReturn 600
-    }
+    Gdx.graphics =
+      mock {
+        on { width } doReturn 800
+        on { height } doReturn 600
+      }
   }
 
   @Test
@@ -129,12 +130,13 @@ class LetterboxingViewportTest {
   @Before
   fun `mock graphics`() {
     LwjglNativesLoader.load()
-    Gdx.graphics = mock {
-      on(it.ppiX) doReturn 100f
-      on(it.ppiY) doReturn 100f
-      on(it.width) doReturn 800
-      on(it.height) doReturn 600
-    }
+    Gdx.graphics =
+      mock {
+        on(it.ppiX) doReturn 100f
+        on(it.ppiY) doReturn 100f
+        on(it.width) doReturn 800
+        on(it.height) doReturn 600
+      }
     Gdx.gl20 = mock()
     Gdx.gl = Gdx.gl20
   }

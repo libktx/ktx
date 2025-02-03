@@ -51,46 +51,79 @@ import kotlin.contracts.contract
 
 /** Extends [VisTable] with type-safe widget builders. */
 @Scene2dDsl
-class KVisTable(useVisDefaults: Boolean) : VisTable(useVisDefaults), KTable
+class KVisTable(
+  useVisDefaults: Boolean,
+) : VisTable(useVisDefaults),
+  KTable
 
 /** Extends [ToastTable] with type-safe widget builders. */
 @Scene2dDsl
-class KToastTable(useVisDefaults: Boolean) : ToastTable(useVisDefaults), KTable
+class KToastTable(
+  useVisDefaults: Boolean,
+) : ToastTable(useVisDefaults),
+  KTable
 
 /** Extends [VisWindow] with type-safe widget builders. */
 @Scene2dDsl
-class KVisWindow(title: String, styleName: String) : VisWindow(title, styleName), KTable
+class KVisWindow(
+  title: String,
+  styleName: String,
+) : VisWindow(title, styleName),
+  KTable
 
 /** Extends [VisDialog] with type-safe widget builders. */
 @Scene2dDsl
-class KVisDialog(title: String, styleName: String) : VisDialog(title, styleName), KTable
+class KVisDialog(
+  title: String,
+  styleName: String,
+) : VisDialog(title, styleName),
+  KTable
 
 /** Extends [VisCheckBox] with type-safe widget builders. */
 @Scene2dDsl
-class KVisCheckBox(text: String, styleName: String) : VisCheckBox(text, styleName), KTable
+class KVisCheckBox(
+  text: String,
+  styleName: String,
+) : VisCheckBox(text, styleName),
+  KTable
 
 /** Extends [VisRadioButton] with type-safe widget builders. */
 @Scene2dDsl
 class KVisRadioButton(
   text: String,
   styleName: String,
-) : VisRadioButton(text, VisUI.getSkin()[styleName, VisCheckBoxStyle::class.java]), KTable
+) : VisRadioButton(text, VisUI.getSkin()[styleName, VisCheckBoxStyle::class.java]),
+  KTable
 
 /** Extends [VisTextButton] with type-safe widget builders. */
 @Scene2dDsl
-class KVisTextButton(text: String, styleName: String) : VisTextButton(text, styleName), KTable
+class KVisTextButton(
+  text: String,
+  styleName: String,
+) : VisTextButton(text, styleName),
+  KTable
 
 /** Extends [VisImageButton] with type-safe widget builders. */
 @Scene2dDsl
-class KVisImageButton(styleName: String) : VisImageButton(styleName), KTable
+class KVisImageButton(
+  styleName: String,
+) : VisImageButton(styleName),
+  KTable
 
 /** Extends [VisImageTextButton] with type-safe widget builders. */
 @Scene2dDsl
-class KVisImageTextButton(text: String, styleName: String) : VisImageTextButton(text, styleName), KTable
+class KVisImageTextButton(
+  text: String,
+  styleName: String,
+) : VisImageTextButton(text, styleName),
+  KTable
 
 /** Extends [VisTree] with type-safe widget builders. */
 @Scene2dDsl
-class KVisTree(styleName: String) : VisTree<KNode<*>, Any?>(styleName), KTree {
+class KVisTree(
+  styleName: String,
+) : VisTree<KNode<*>, Any?>(styleName),
+  KTree {
   override fun <T : Actor> add(actor: T): KNode<T> {
     val node = KNode(actor)
     add(node)
@@ -100,41 +133,70 @@ class KVisTree(styleName: String) : VisTree<KNode<*>, Any?>(styleName), KTree {
 
 /** Extends [BasicColorPicker] with type-safe widget builders. */
 @Scene2dDsl
-class KBasicColorPicker(styleName: String) : BasicColorPicker(styleName, null), KTable
+class KBasicColorPicker(
+  styleName: String,
+) : BasicColorPicker(styleName, null),
+  KTable
 
 /** Extends [ExtendedColorPicker] with type-safe widget builders. */
 @Scene2dDsl
-class KExtendedColorPicker(styleName: String) : ExtendedColorPicker(styleName, null), KTable
+class KExtendedColorPicker(
+  styleName: String,
+) : ExtendedColorPicker(styleName, null),
+  KTable
 
 /** Extends [Spinner] with type-safe widget builders. */
 @Scene2dDsl
-class KSpinner(styleName: String, name: String, model: SpinnerModel) : Spinner(styleName, name, model), KTable
+class KSpinner(
+  styleName: String,
+  name: String,
+  model: SpinnerModel,
+) : Spinner(styleName, name, model),
+  KTable
 
 /** Extends [HorizontalFlowGroup] with type-safe widget builders. */
 @Scene2dDsl
 @Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("KFlowGroup"))
-class KHorizontalFlowGroup(spacing: Float) : HorizontalFlowGroup(spacing), KGroup
+class KHorizontalFlowGroup(
+  spacing: Float,
+) : HorizontalFlowGroup(spacing),
+  KGroup
 
 /** Extends [VerticalFlowGroup] with type-safe widget builders. */
 @Scene2dDsl
 @Deprecated("Use KFlowGroup instead.", replaceWith = ReplaceWith("KFlowGroup"))
-class KVerticalFlowGroup(spacing: Float) : VerticalFlowGroup(spacing), KGroup
+class KVerticalFlowGroup(
+  spacing: Float,
+) : VerticalFlowGroup(spacing),
+  KGroup
 
 /** Extends [FlowGroup] with type-safe widget builders. */
 @Scene2dDsl
-class KFlowGroup(vertical: Boolean, spacing: Float) : FlowGroup(vertical, spacing), KGroup
+class KFlowGroup(
+  vertical: Boolean,
+  spacing: Float,
+) : FlowGroup(vertical, spacing),
+  KGroup
 
 /** Extends [GridGroup] with type-safe widget builders. */
 @Scene2dDsl
-class KGridGroup(itemSize: Float, spacing: Float) : GridGroup(itemSize, spacing), KGroup
+class KGridGroup(
+  itemSize: Float,
+  spacing: Float,
+) : GridGroup(itemSize, spacing),
+  KGroup
 
 /** Extends [FloatingGroup] with type-safe widget builders. */
 @Scene2dDsl
-class KFloatingGroup : FloatingGroup(), KGroup
+class KFloatingGroup :
+  FloatingGroup(),
+  KGroup
 
 /** Extends [DragPane] with type-safe widget builders. */
 @Scene2dDsl
-class KDragPane : DragPane(KVisTable(false)), KGroup {
+class KDragPane :
+  DragPane(KVisTable(false)),
+  KGroup {
   /** Allows to access [KVisTable] storing [KDragPane] children. */
   val table: KVisTable
     get() = group as KVisTable
@@ -142,7 +204,9 @@ class KDragPane : DragPane(KVisTable(false)), KGroup {
 
 /** Extends [TabbedPane] with type-safe widget builders. */
 @Scene2dDsl
-class KTabbedPane(styleName: String) : TabbedPane(styleName)
+class KTabbedPane(
+  styleName: String,
+) : TabbedPane(styleName)
 
 /**
  * Begins creation of new [Tab] using type-safe builder. Newly created tab will be added to tabbed pane automatically
@@ -201,11 +265,13 @@ fun TabbedPane.addTabContentsTo(container: Container<*>) {
 }
 
 private inline fun TabbedPane.addPaneContentListener(crossinline contentChanged: (Table) -> Unit) {
-  addListener(object : TabbedPaneAdapter() {
-    override fun switchedTab(tab: Tab) {
-      contentChanged(tab.contentTable)
-    }
-  })
+  addListener(
+    object : TabbedPaneAdapter() {
+      override fun switchedTab(tab: Tab) {
+        contentChanged(tab.contentTable)
+      }
+    },
+  )
 }
 
 /** See [Tab]. Note that [KTab] is only intended to by used with type-safe builder from within [KTabbedPane.tab]. */
@@ -214,16 +280,22 @@ class KTab(
   private val title: String,
   savable: Boolean,
   closeableByUser: Boolean,
-) : Tab(savable, closeableByUser), KTable {
+) : Tab(savable, closeableByUser),
+  KTable {
   private val content = VisTable()
+
   override fun <T : Actor> add(actor: T): Cell<T> = content.add(actor)
+
   override fun getContentTable(): Table = content
+
   override fun getTabTitle(): String = title
 }
 
 /** Extends [VisList] widget with items building method. */
 @Scene2dDsl
-class KVisList<T>(style: String) : VisList<T>(style) {
+class KVisList<T>(
+  style: String,
+) : VisList<T>(style) {
   /**
    * Allows to add items to the list with builder-like syntax.
    */
@@ -244,7 +316,9 @@ class KVisList<T>(style: String) : VisList<T>(style) {
 
 /** Extends [VisSelectBox] with items building method. */
 @Scene2dDsl
-class KVisSelectBox<T>(style: String) : VisSelectBox<T>(style) {
+class KVisSelectBox<T>(
+  style: String,
+) : VisSelectBox<T>(style) {
   /**
    * Allows to add items to the select box with builder-like syntax.
    */
@@ -270,7 +344,8 @@ class KVisSelectBox<T>(style: String) : VisSelectBox<T>(style) {
 class KVisSplitPane(
   vertical: Boolean,
   style: String,
-) : VisSplitPane(null, null, vertical, style), KGroup {
+) : VisSplitPane(null, null, vertical, style),
+  KGroup {
   override fun addActor(actor: Actor?) {
     when (this.children.size) {
       0 -> setFirstWidget(actor)
@@ -282,7 +357,10 @@ class KVisSplitPane(
 
 /** Extends [VisScrollPane] API with type-safe widget builders. Note that this widget may store only a single child. */
 @Scene2dDsl
-class KVisScrollPane(style: String) : VisScrollPane(null, style), KGroup {
+class KVisScrollPane(
+  style: String,
+) : VisScrollPane(null, style),
+  KGroup {
   override fun addActor(actor: Actor?) {
     this.actor == null || throw IllegalStateException("ScrollPane may store only a single child.")
     this.actor = actor
@@ -291,7 +369,11 @@ class KVisScrollPane(style: String) : VisScrollPane(null, style), KGroup {
 
 /** Extends [MultiSplitPane] with type-safe widget builders. */
 @Scene2dDsl
-class KMultiSplitPane(vertical: Boolean, style: String) : MultiSplitPane(vertical, style), KGroup {
+class KMultiSplitPane(
+  vertical: Boolean,
+  style: String,
+) : MultiSplitPane(vertical, style),
+  KGroup {
   override fun addActor(actor: Actor?) {
     if (children.size == 0) {
       setWidgets(actor)
@@ -303,28 +385,30 @@ class KMultiSplitPane(vertical: Boolean, style: String) : MultiSplitPane(vertica
 
 /** Extends [CollapsibleWidget] with type-safe widget builders. Adds children to collapsible's [table]. */
 @Scene2dDsl
-class KCollapsible(val table: KVisTable) : CollapsibleWidget(table), KTable {
+class KCollapsible(
+  val table: KVisTable,
+) : CollapsibleWidget(table),
+  KTable {
   override fun <T : Actor> add(actor: T): Cell<T> = table.add(actor)
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
     replaceWith = ReplaceWith("Nothing"),
   )
-  override fun setTable(table: Table?) {
-    throw GdxRuntimeException("Use default table instead.")
-  }
+  override fun setTable(table: Table?): Unit = throw GdxRuntimeException("Use default table instead.")
 }
 
 /** Extends [HorizontalCollapsibleWidget] with type-safe widget builders. Adds children to collapsible's [table]. */
 @Scene2dDsl
-class KHorizontalCollapsible(val table: KVisTable) : HorizontalCollapsibleWidget(table), KTable {
+class KHorizontalCollapsible(
+  val table: KVisTable,
+) : HorizontalCollapsibleWidget(table),
+  KTable {
   override fun <T : Actor> add(actor: T): Cell<T> = table.add(actor)
 
   @Deprecated(
     message = "Table is set on construction and should not be changed.",
     replaceWith = ReplaceWith("Nothing"),
   )
-  override fun setTable(table: Table?) {
-    throw GdxRuntimeException("Use default table instead.")
-  }
+  override fun setTable(table: Table?): Unit = throw GdxRuntimeException("Use default table instead.")
 }

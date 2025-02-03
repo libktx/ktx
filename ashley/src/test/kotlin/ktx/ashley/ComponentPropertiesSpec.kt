@@ -7,8 +7,13 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 
-class ComponentWithString(var string: String = "") : Component
-class ComponentWithInt(var integer: Int = 0) : Component
+class ComponentWithString(
+  var string: String = "",
+) : Component
+
+class ComponentWithInt(
+  var integer: Int = 0,
+) : Component
 
 var Entity.mandatoryComponent by propertyFor<ComponentWithString>()
 var Entity.optionalComponent by optionalPropertyFor<ComponentWithInt>()
@@ -17,10 +22,11 @@ object ComponentPropertiesSpec : Spek({
   describe("utilities for component properties") {
     val mandatory = ComponentWithString()
     val optional = ComponentWithInt()
-    val entity = Entity().apply {
-      add(mandatory)
-      add(optional)
-    }
+    val entity =
+      Entity().apply {
+        add(mandatory)
+        add(optional)
+      }
     it("should return a mandatory component value via property") {
       assertThat(entity.mandatoryComponent).isNotNull()
     }

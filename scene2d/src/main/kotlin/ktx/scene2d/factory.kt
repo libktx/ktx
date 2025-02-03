@@ -91,7 +91,10 @@ inline fun RootWidget.dialog(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S, A : Actor> KWidget<S>.actor(actor: A, init: (@Scene2dDsl A).(S) -> Unit = {}): A {
+inline fun <S, A : Actor> KWidget<S>.actor(
+  actor: A,
+  init: (@Scene2dDsl A).(S) -> Unit = {},
+): A {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   actor.init(storeActor(actor))
   return actor
@@ -167,9 +170,7 @@ inline fun <S> KWidget<S>.checkBox(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.container(
-  init: KContainer<Actor>.(S) -> Unit = {},
-): KContainer<Actor> {
+inline fun <S> KWidget<S>.container(init: KContainer<Actor>.(S) -> Unit = {}): KContainer<Actor> {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KContainer(), init)
 }
@@ -201,9 +202,7 @@ inline fun <S, A : Actor> KWidget<S>.container(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.horizontalGroup(
-  init: KHorizontalGroup.(S) -> Unit = {},
-): KHorizontalGroup {
+inline fun <S> KWidget<S>.horizontalGroup(init: KHorizontalGroup.(S) -> Unit = {}): KHorizontalGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KHorizontalGroup(), init)
 }
@@ -572,9 +571,7 @@ inline fun <S> KWidget<S>.splitPane(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.stack(
-  init: KStack.(S) -> Unit = {},
-): KStack {
+inline fun <S> KWidget<S>.stack(init: KStack.(S) -> Unit = {}): KStack {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KStack(), init)
 }
@@ -707,9 +704,7 @@ inline fun <S> KWidget<S>.tree(
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
-inline fun <S> KWidget<S>.verticalGroup(
-  init: KVerticalGroup.(S) -> Unit = {},
-): KVerticalGroup {
+inline fun <S> KWidget<S>.verticalGroup(init: KVerticalGroup.(S) -> Unit = {}): KVerticalGroup {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
   return actor(KVerticalGroup(), init)
 }

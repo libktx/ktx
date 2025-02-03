@@ -11,7 +11,6 @@ import kotlin.math.abs
  * Tests [ClosedRange]-related utilities.
  */
 class RangesTest {
-
   @Test
   fun `should produce expected int range`() {
     val center = -300
@@ -66,9 +65,10 @@ class RangesTest {
     val allowableError = 0.03f
 
     val range = -4060..24500
-    val values = Array(count) {
-      range.random(MathUtils.random)
-    }
+    val values =
+      Array(count) {
+        range.random(MathUtils.random)
+      }
 
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
@@ -136,9 +136,10 @@ class RangesTest {
     val allowableError = 0.03f
 
     val range = -4060f..24500f
-    val values = Array(count) {
-      range.random()
-    }
+    val values =
+      Array(count) {
+        range.random()
+      }
 
     val numInnerRanges = 5
     val expectedCountEach = count / numInnerRanges.toFloat()
@@ -172,11 +173,12 @@ class RangesTest {
       if (value in twoSigma) withinTwoSigma++
     }
 
-    val resultsToExpected = listOf(
-      withinRange.toFloat() / count to 0.9973f,
-      withinFourSigma.toFloat() / count to 0.9545f,
-      withinTwoSigma.toFloat() / count to 0.6827f,
-    )
+    val resultsToExpected =
+      listOf(
+        withinRange.toFloat() / count to 0.9973f,
+        withinFourSigma.toFloat() / count to 0.9545f,
+        withinTwoSigma.toFloat() / count to 0.6827f,
+      )
     for ((result, expected) in resultsToExpected) {
       assertTrue(abs(result - expected) / expected <= allowableError)
     }
@@ -189,9 +191,10 @@ class RangesTest {
 
     val range = -240f..9800f
     val span = range.endInclusive - range.start
-    val values = Array(count) {
-      range.randomTriangular()
-    }
+    val values =
+      Array(count) {
+        range.randomTriangular()
+      }
 
     val center = 0.5 * (range.endInclusive + range.start)
     val beforeModeSpan = center - range.start
@@ -215,9 +218,10 @@ class RangesTest {
     val range = -240f..9800f
     val span = range.endInclusive - range.start
     val fractionalMode = 0.73f
-    val values = Array(count) {
-      range.randomTriangular(fractionalMode)
-    }
+    val values =
+      Array(count) {
+        range.randomTriangular(fractionalMode)
+      }
 
     val expectedMode = fractionalMode * (range.endInclusive - range.start) + range.start
     val beforeModeSpan = expectedMode - range.start

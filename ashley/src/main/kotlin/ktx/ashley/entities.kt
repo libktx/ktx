@@ -87,7 +87,10 @@ operator fun Entity.plusAssign(component: Component) {
  * @see Entity.add
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <reified T : Component> Entity.addComponent(engine: Engine, configure: (@AshleyDsl T).() -> Unit = {}): T {
+inline fun <reified T : Component> Entity.addComponent(
+  engine: Engine,
+  configure: (@AshleyDsl T).() -> Unit = {},
+): T {
   contract { callsInPlace(configure, InvocationKind.EXACTLY_ONCE) }
   val component = engine.create<T>()
   component.configure()

@@ -12,9 +12,10 @@ internal fun getMockStage(
   viewportHeight: Float = 600f,
 ): Stage {
   Gdx.graphics = mock() // Referenced by Stage constructor.
-  val viewport = mock<Viewport> {
-    on(it.worldWidth) doReturn viewportWidth
-    on(it.worldHeight) doReturn viewportHeight
-  }
+  val viewport =
+    mock<Viewport> {
+      on(it.worldWidth) doReturn viewportWidth
+      on(it.worldHeight) doReturn viewportHeight
+    }
   return Stage(viewport, mock())
 }

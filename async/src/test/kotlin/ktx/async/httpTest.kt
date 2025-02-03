@@ -112,11 +112,12 @@ class HttpTest {
     val status = HttpStatus(200)
     val request = HttpRequest(method)
     request.url = url
-    val response = mock<HttpResponse> {
-      on(it.result) doReturn content
-      on(it.status) doReturn status
-      on(it.headers) doReturn headers
-    }
+    val response =
+      mock<HttpResponse> {
+        on(it.result) doReturn content
+        on(it.status) doReturn status
+        on(it.headers) doReturn headers
+      }
 
     // When:
     val result = response.toHttpRequestResult(request)
@@ -158,7 +159,9 @@ class HttpTest {
   ) = HttpRequestResult(url, method, status, content, headers)
 }
 
-abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglApplicationConfiguration) : AsyncTest() {
+abstract class AsynchronousHttpRequestsTest(
+  private val configuration: LwjglApplicationConfiguration,
+) : AsyncTest() {
   private val port = FreePortFinder.findFreeLocalPort()
 
   @get:Rule
@@ -178,13 +181,14 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
     )
 
     // When:
-    val response = runBlocking {
-      httpRequest(
-        url = "http://localhost:$port/test",
-        method = "GET",
-        headers = mapOf("Accept" to "text/plain"),
-      )
-    }
+    val response =
+      runBlocking {
+        httpRequest(
+          url = "http://localhost:$port/test",
+          method = "GET",
+          headers = mapOf("Accept" to "text/plain"),
+        )
+      }
 
     // Then:
     assertEquals("http://localhost:$port/test", response.url)
@@ -197,16 +201,17 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
   @Test
   fun `should rethrown exceptions of asynchronous HTTP request`() {
     // Given:
-    Gdx.net = mock {
-      // Always reports the action as failed to the listener:
-      on(it.sendHttpRequest(any(), any())) doAnswer { invocation ->
-        val listener = invocation.getArgument<HttpResponseListener>(1)
-        AsyncExecutor(1).submit {
-          listener.failed(GdxRuntimeException("Expected."))
+    Gdx.net =
+      mock {
+        // Always reports the action as failed to the listener:
+        on(it.sendHttpRequest(any(), any())) doAnswer { invocation ->
+          val listener = invocation.getArgument<HttpResponseListener>(1)
+          AsyncExecutor(1).submit {
+            listener.failed(GdxRuntimeException("Expected."))
+          }
+          Unit
         }
-        Unit
       }
-    }
 
     // Expect:
     shouldThrow<GdxRuntimeException> {
@@ -247,11 +252,12 @@ abstract class AsynchronousHttpRequestsTest(private val configuration: LwjglAppl
 /**
  * Tests [httpRequest] API with a single-threaded [LwjglNet].
  */
-class SingleThreadAsynchronousHttpRequestsTest : AsynchronousHttpRequestsTest(
-  LwjglApplicationConfiguration().apply {
-    maxNetThreads = 1
-  },
-)
+class SingleThreadAsynchronousHttpRequestsTest :
+  AsynchronousHttpRequestsTest(
+    LwjglApplicationConfiguration().apply {
+      maxNetThreads = 1
+    },
+  )
 
 /**
  * Tests [httpRequest] API with a multithreaded [LwjglNet].
@@ -278,9 +284,10 @@ class KtxHttpResponseListenerTest {
   fun `should exceptionally resume coroutine once`() {
     // Given:
     val exception = GdxRuntimeException("Expected.")
-    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
-      on(it.isActive) doReturn true
-    }
+    val coroutine =
+      mock<CancellableContinuation<HttpRequestResult>> {
+        on(it.isActive) doReturn true
+      }
     val listener = KtxHttpResponseListener(mock(), coroutine, mock())
 
     // When:
@@ -295,13 +302,15 @@ class KtxHttpResponseListenerTest {
   @Test
   fun `should resume coroutine once`() {
     // Given:
-    val request = mock<HttpRequest> {
-      on(it.url) doReturn "http://example.com"
-      on(it.method) doReturn "GET"
-    }
-    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
-      on(it.isActive) doReturn true
-    }
+    val request =
+      mock<HttpRequest> {
+        on(it.url) doReturn "http://example.com"
+        on(it.method) doReturn "GET"
+      }
+    val coroutine =
+      mock<CancellableContinuation<HttpRequestResult>> {
+        on(it.isActive) doReturn true
+      }
     val response = mock<HttpResponse>()
     val listener = KtxHttpResponseListener(request, coroutine, mock())
 
@@ -319,9 +328,10 @@ class KtxHttpResponseListenerTest {
     // Given:
     val exception = GdxRuntimeException("Expected.")
     val onCancel = mock<(HttpRequest) -> Unit>()
-    val coroutine = mock<CancellableContinuation<HttpRequestResult>> {
-      on(it.isActive) doReturn true
-    }
+    val coroutine =
+      mock<CancellableContinuation<HttpRequestResult>> {
+        on(it.isActive) doReturn true
+      }
     val listener = KtxHttpResponseListener(mock(), coroutine, mock())
 
     // When:
@@ -354,10 +364,11 @@ class KtxHttpResponseListenerTest {
     val coroutine = mock<CancellableContinuation<HttpRequestResult>>()
     val listener = KtxHttpResponseListener(mock(), coroutine, mock())
     val response = mock<HttpResponse>()
-    val request = mock<HttpRequest> {
-      on(it.url) doReturn "http://example.com"
-      on(it.method) doReturn "GET"
-    }
+    val request =
+      mock<HttpRequest> {
+        on(it.url) doReturn "http://example.com"
+        on(it.method) doReturn "GET"
+      }
 
     // When:
     listener.handleHttpResponse(response)

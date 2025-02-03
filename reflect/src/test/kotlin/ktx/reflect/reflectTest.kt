@@ -13,17 +13,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 interface Super
+
 open class Tested : Super
-annotation class Annotation(val value: String)
+
+annotation class Annotation(
+  val value: String,
+)
 
 @Annotation("Test")
-data class Extension(val a: String, val b: String) : Tested() {
+data class Extension(
+  val a: String,
+  val b: String,
+) : Tested() {
   @Suppress("unused")
   fun test(c: String): String = a + b + c
 }
 
 @Suppress("unused")
-class Container(@JvmField val field: String)
+class Container(
+  @JvmField val field: String,
+)
+
 enum class Enum { RED, BLUE }
 
 @OptIn(Reflection::class)

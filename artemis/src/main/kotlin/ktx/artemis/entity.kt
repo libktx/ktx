@@ -34,7 +34,10 @@ inline fun World.entity(entityEdit: EntityEdit.() -> Unit = {}): Int {
  * @return the entity's ID as [Int].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun World.entity(archetype: Archetype, entityEdit: EntityEdit.() -> Unit = {}): Int {
+inline fun World.entity(
+  archetype: Archetype,
+  entityEdit: EntityEdit.() -> Unit = {},
+): Int {
   contract { callsInPlace(entityEdit, InvocationKind.EXACTLY_ONCE) }
   val entity = this.create(archetype)
   edit(entity).entityEdit()
@@ -50,7 +53,10 @@ inline fun World.entity(archetype: Archetype, entityEdit: EntityEdit.() -> Unit 
  * @return the [EntityEdit].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun World.edit(entityId: Int, entityEdit: EntityEdit.() -> Unit = {}): EntityEdit {
+inline fun World.edit(
+  entityId: Int,
+  entityEdit: EntityEdit.() -> Unit = {},
+): EntityEdit {
   contract { callsInPlace(entityEdit, InvocationKind.EXACTLY_ONCE) }
   return edit(entityId).apply(entityEdit)
 }

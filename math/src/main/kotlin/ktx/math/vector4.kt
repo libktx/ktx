@@ -13,7 +13,12 @@ import com.badlogic.gdx.math.Vector4
  * @param w the W component. Defaults to 0f.
  * @return a new [Vector4] instance storing the passed values.
  */
-fun vec4(x: Float = 0f, y: Float = 0f, z: Float = 0f, w: Float = 0f): Vector4 = Vector4(x, y, z, w)
+fun vec4(
+  x: Float = 0f,
+  y: Float = 0f,
+  z: Float = 0f,
+  w: Float = 0f,
+): Vector4 = Vector4(x, y, z, w)
 
 /**
  * Constructs a new [Vector4] instance. An equivalent of [Vector4] constructor that supports Kotlin syntax features:
@@ -23,7 +28,11 @@ fun vec4(x: Float = 0f, y: Float = 0f, z: Float = 0f, w: Float = 0f): Vector4 = 
  * @param w the W component. Defaults to 0f.
  * @return a new [Vector4] instance storing the passed values.
  */
-fun vec4(xy: Vector2, z: Float = 0f, w: Float = 0f): Vector4 = Vector4(xy, z, w)
+fun vec4(
+  xy: Vector2,
+  z: Float = 0f,
+  w: Float = 0f,
+): Vector4 = Vector4(xy, z, w)
 
 /**
  * Constructs a new [Vector4] instance copying values from the passed [Vector2] instances.
@@ -31,7 +40,10 @@ fun vec4(xy: Vector2, z: Float = 0f, w: Float = 0f): Vector4 = Vector4(xy, z, w)
  * @param zw its X component will be used as Z, while the Y component will be copied as W.
  * @return a new [Vector4] instance storing the passed values.
  */
-fun vec4(xy: Vector2, zw: Vector2): Vector4 = Vector4(xy, zw.x, zw.y)
+fun vec4(
+  xy: Vector2,
+  zw: Vector2,
+): Vector4 = Vector4(xy, zw.x, zw.y)
 
 /**
  * Constructs a new [Vector4] instance copying values from the passed [Vector3] instance. An equivalent of [Vector4]
@@ -40,7 +52,10 @@ fun vec4(xy: Vector2, zw: Vector2): Vector4 = Vector4(xy, zw.x, zw.y)
  * @param w the W component. Defaults to 0f.
  * @return a new [Vector4] instance storing the passed values.
  */
-fun vec4(xyz: Vector3, w: Float = 0f): Vector4 = Vector4(xyz, w)
+fun vec4(
+  xyz: Vector3,
+  w: Float = 0f,
+): Vector4 = Vector4(xyz, w)
 
 /**
  * Inverts stored X, Y, Z, and W values.
@@ -183,8 +198,7 @@ operator fun Vector4.divAssign(scalar: Int) {
  * @param vector4 values from this vector will be added to this vector.
  * @return a new [Vector4] instance with the operation result.
  */
-operator fun Vector4.plus(vector4: Vector4): Vector4 =
-  Vector4(x + vector4.x, y + vector4.y, z + vector4.z, w + vector4.w)
+operator fun Vector4.plus(vector4: Vector4): Vector4 = Vector4(x + vector4.x, y + vector4.y, z + vector4.z, w + vector4.w)
 
 /**
  * @param vector2 values from this vector will be added to this vector.
@@ -214,8 +228,7 @@ operator fun Vector4.plus(addend: Int): Vector4 = plus(addend.toFloat())
  * @param vector4 values from this vector will be subtracted from this vector.
  * @return a new [Vector4] instance with the operation result.
  */
-operator fun Vector4.minus(vector4: Vector4): Vector4 =
-  Vector4(x - vector4.x, y - vector4.y, z - vector4.z, w - vector4.w)
+operator fun Vector4.minus(vector4: Vector4): Vector4 = Vector4(x - vector4.x, y - vector4.y, z - vector4.z, w - vector4.w)
 
 /**
  * @param vector2 values from this vector will be subtracted from this vector.
@@ -233,8 +246,7 @@ operator fun Vector4.minus(vector3: Vector3): Vector4 = Vector4(x - vector3.x, y
  * @param subtrahend will be subtracted from to X, Y, Z and W componentsof this vector.
  * @return a new [Vector4] instance with the operation result.
  */
-operator fun Vector4.minus(subtrahend: Float): Vector4 =
-  Vector4(x - subtrahend, y - subtrahend, z - subtrahend, w - subtrahend)
+operator fun Vector4.minus(subtrahend: Float): Vector4 = Vector4(x - subtrahend, y - subtrahend, z - subtrahend, w - subtrahend)
 
 /**
  * @param subtrahend will be subtracted from to X, Y, Z and W components of this vector.
@@ -246,8 +258,7 @@ operator fun Vector4.minus(subtrahend: Int): Vector4 = minus(subtrahend.toFloat(
  * @param vector4 values from this vector will multiply this vector element-wise similarly to [Vector4.scl].
  * @return a new [Vector4] instance with the operation result.
  */
-operator fun Vector4.times(vector4: Vector4): Vector4 =
-  Vector4(x * vector4.x, y * vector4.y, z * vector4.z, w * vector4.w)
+operator fun Vector4.times(vector4: Vector4): Vector4 = Vector4(x * vector4.x, y * vector4.y, z * vector4.z, w * vector4.w)
 
 /**
  * @param scalar will be used to multiply all vector values.
@@ -265,8 +276,7 @@ operator fun Vector4.times(scalar: Int): Vector4 = Vector4(x * scalar, y * scala
  * @param vector4 values from this vector will divide this vector element-wise.
  * @return a new [vector4] instance with the operation result.
  */
-operator fun Vector4.div(vector4: Vector4): Vector4 =
-  Vector4(x / vector4.x, y / vector4.y, z / vector4.z, w / vector4.w)
+operator fun Vector4.div(vector4: Vector4): Vector4 = Vector4(x / vector4.x, y / vector4.y, z / vector4.z, w / vector4.w)
 
 /**
  * @param scalar will be used to divide all vector values.

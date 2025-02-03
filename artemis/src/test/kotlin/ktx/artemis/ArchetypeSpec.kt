@@ -17,21 +17,22 @@ object ArchetypeSpec : Spek({
 
     describe("add component function") {
       it("should add a component") {
-        val archetype = archetypeBuilder
-          .add<Transform>()
-          .build(world)
+        val archetype =
+          archetypeBuilder
+            .add<Transform>()
+            .build(world)
 
         val entity = world.entity(archetype)
 
         assertThat(transformMapper.has(entity)).isTrue()
       }
       it("should add multiple components") {
-        val archetype = archetypeBuilder
-          .add(
-            Transform::class,
-            Texture::class,
-          )
-          .build(world)
+        val archetype =
+          archetypeBuilder
+            .add(
+              Transform::class,
+              Texture::class,
+            ).build(world)
 
         val entity = world.entity(archetype)
 
@@ -42,13 +43,13 @@ object ArchetypeSpec : Spek({
 
     describe("remove component function") {
       it("should remove a component") {
-        val archetype = archetypeBuilder
-          .add(
-            Transform::class,
-            Texture::class,
-          )
-          .remove<Texture>()
-          .build(world)
+        val archetype =
+          archetypeBuilder
+            .add(
+              Transform::class,
+              Texture::class,
+            ).remove<Texture>()
+            .build(world)
 
         val entity = world.entity(archetype)
 
@@ -56,17 +57,16 @@ object ArchetypeSpec : Spek({
         assertThat(!textureMapper.has(entity)).isTrue()
       }
       it("should remove multiple components") {
-        val archetype = archetypeBuilder
-          .add(
-            Position::class,
-            Transform::class,
-            Texture::class,
-          )
-          .remove(
-            Transform::class,
-            Texture::class,
-          )
-          .build(world)
+        val archetype =
+          archetypeBuilder
+            .add(
+              Position::class,
+              Transform::class,
+              Texture::class,
+            ).remove(
+              Transform::class,
+              Texture::class,
+            ).build(world)
 
         val entity = world.entity(archetype)
         assertThat(positionMapper.has(entity)).isTrue()

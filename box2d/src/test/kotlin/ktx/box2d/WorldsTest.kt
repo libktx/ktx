@@ -72,12 +72,13 @@ class WorldsTest : Box2DTest() {
   fun `should construct a customized Body with a Fixture`() {
     val world = createWorld()
 
-    val body = world.body {
-      type = DynamicBody
-      circle(radius = 2f) {
-        density = 0.5f
+    val body =
+      world.body {
+        type = DynamicBody
+        circle(radius = 2f) {
+          density = 0.5f
+        }
       }
-    }
 
     assertSame(world, body.world)
     assertEquals(DynamicBody, body.type)
@@ -93,15 +94,16 @@ class WorldsTest : Box2DTest() {
   fun `should construct a customized Body with multiple Fixture instances`() {
     val world = createWorld()
 
-    val body = world.body {
-      type = DynamicBody
-      circle(radius = 2f) {
-        density = 0.5f
+    val body =
+      world.body {
+        type = DynamicBody
+        circle(radius = 2f) {
+          density = 0.5f
+        }
+        edge(from = Vector2(1f, 1f), to = Vector2(2f, 2f)) {
+          density = 0.75f
+        }
       }
-      edge(from = Vector2(1f, 1f), to = Vector2(2f, 2f)) {
-        density = 0.75f
-      }
-    }
 
     assertSame(world, body.world)
     assertEquals(DynamicBody, body.type)
@@ -152,9 +154,10 @@ class WorldsTest : Box2DTest() {
     val world = createWorld()
     val data = Any()
 
-    val body = world.body {
-      userData = data
-    }
+    val body =
+      world.body {
+        userData = data
+      }
 
     assertSame(data, body.userData)
     world.dispose()
@@ -166,14 +169,15 @@ class WorldsTest : Box2DTest() {
     val circleData = Any()
     val boxData = Any()
 
-    val body = world.body {
-      circle {
-        userData = circleData
+    val body =
+      world.body {
+        circle {
+          userData = circleData
+        }
+        box {
+          userData = boxData
+        }
       }
-      box {
-        userData = boxData
-      }
-    }
 
     val circle = body.fixtureList[0]
     assertSame(circleData, circle.userData)
@@ -187,11 +191,12 @@ class WorldsTest : Box2DTest() {
     val world = createWorld()
     var callbackParameter: Body? = null
 
-    val body = world.body {
-      onCreate {
-        callbackParameter = it
+    val body =
+      world.body {
+        onCreate {
+          callbackParameter = it
+        }
       }
-    }
 
     assertSame(body, callbackParameter)
     world.dispose()
@@ -202,13 +207,14 @@ class WorldsTest : Box2DTest() {
     val world = createWorld()
     var callbackParameter: Fixture? = null
 
-    val body = world.body {
-      circle {
-        onCreate {
-          callbackParameter = it
+    val body =
+      world.body {
+        circle {
+          onCreate {
+            callbackParameter = it
+          }
         }
       }
-    }
 
     assertSame(body.fixtureList[0], callbackParameter)
     world.dispose()

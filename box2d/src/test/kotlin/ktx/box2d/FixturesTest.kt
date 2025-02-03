@@ -43,11 +43,12 @@ class FixturesTest : Box2DTest() {
   @Test
   fun `should copy filter properties into filter of FixtureDef`() {
     val fixtureDefinition = FixtureDef()
-    val filter = Filter().apply {
-      categoryBits = 1
-      maskBits = 2
-      groupIndex = 3
-    }
+    val filter =
+      Filter().apply {
+        categoryBits = 1
+        maskBits = 2
+        groupIndex = 3
+      }
 
     fixtureDefinition.filter(filter)
 

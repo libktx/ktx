@@ -236,16 +236,17 @@ class LoadingProgressTest {
     val progress = LoadingProgress()
 
     // When:
-    val jobs = (1..1000).map { id ->
-      GlobalScope.launch {
-        when (id % 4) {
-          0 -> progress.registerScheduledAsset()
-          1 -> progress.registerLoadedAsset()
-          2 -> progress.registerFailedAsset()
-          3 -> progress.registerAddedAsset()
+    val jobs =
+      (1..1000).map { id ->
+        GlobalScope.launch {
+          when (id % 4) {
+            0 -> progress.registerScheduledAsset()
+            1 -> progress.registerLoadedAsset()
+            2 -> progress.registerFailedAsset()
+            3 -> progress.registerAddedAsset()
+          }
         }
       }
-    }
 
     // Then:
     runBlocking { jobs.joinAll() }
@@ -261,22 +262,23 @@ class LoadingProgressTest {
     val progress = LoadingProgress()
 
     // When:
-    val jobs = (1..1000).map { id ->
-      GlobalScope.launch {
-        when (id % 4) {
-          0 -> progress.registerScheduledAsset()
-          1 -> progress.registerLoadedAsset()
-          2 -> progress.registerFailedAsset()
-          3 -> progress.registerAddedAsset()
-        }
-        when (id % 5) {
-          0 -> progress.removeScheduledAsset()
-          1 -> progress.removeLoadedAsset()
-          2 -> progress.removeFailedAsset()
-          else -> progress.registerScheduledAsset()
+    val jobs =
+      (1..1000).map { id ->
+        GlobalScope.launch {
+          when (id % 4) {
+            0 -> progress.registerScheduledAsset()
+            1 -> progress.registerLoadedAsset()
+            2 -> progress.registerFailedAsset()
+            3 -> progress.registerAddedAsset()
+          }
+          when (id % 5) {
+            0 -> progress.removeScheduledAsset()
+            1 -> progress.removeLoadedAsset()
+            2 -> progress.removeFailedAsset()
+            else -> progress.registerScheduledAsset()
+          }
         }
       }
-    }
 
     // Then:
     runBlocking { jobs.joinAll() }

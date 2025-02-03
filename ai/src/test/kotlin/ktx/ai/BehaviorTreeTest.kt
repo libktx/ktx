@@ -8,7 +8,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class BehaviorTreeTest {
-
   @Test
   fun `behaviorTree function without arguments should return BehaviorTree object`() {
     val behaviorTree = behaviorTree<Cat>()
@@ -63,10 +62,11 @@ class BehaviorTreeTest {
   fun `add function inside of behaviorTree function's init block should add task to BehaviorTree`() {
     val initialChildCount: Int
 
-    val tree = behaviorTree {
-      initialChildCount = childCount
-      add(mock<Task<Cat>>())
-    }
+    val tree =
+      behaviorTree {
+        initialChildCount = childCount
+        add(mock<Task<Cat>>())
+      }
 
     assertEquals(initialChildCount + 1, tree.childCount)
   }

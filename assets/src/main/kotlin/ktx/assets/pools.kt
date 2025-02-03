@@ -42,6 +42,7 @@ inline fun <Type> pool(
 ): Pool<Type> =
   object : Pool<Type>(initialCapacity, max) {
     override fun newObject(): Type = provider()
+
     override fun discard(element: Type) {
       discard(element)
     }

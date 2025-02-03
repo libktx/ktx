@@ -30,7 +30,9 @@ import java.util.concurrent.atomic.AtomicLong
  */
 abstract class CoroutineDispatcherTest : AsyncTest() {
   abstract val tested: KtxDispatcher
+
   abstract fun getExecutorThread(): Thread
+
   open val isConcurrent: Boolean = false
 
   @Test
@@ -156,6 +158,7 @@ abstract class CoroutineDispatcherTest : AsyncTest() {
 
 class AsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   override val tested = AsyncExecutorDispatcher(AsyncExecutor(1), threads = 1)
+
   override fun getExecutorThread(): Thread = getExecutionThread(tested.executor)
 
   @Test
@@ -181,7 +184,9 @@ class AsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
 
 class ConcurrentAsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
   override val tested = AsyncExecutorDispatcher(AsyncExecutor(4), threads = 4)
+
   override fun getExecutorThread(): Thread = getExecutionThread(tested.executor)
+
   override val isConcurrent: Boolean = true
 
   @Test
@@ -205,6 +210,7 @@ class ConcurrentAsyncExecutorDispatcherTest : CoroutineDispatcherTest() {
 
 class RenderingThreadDispatcherTest : CoroutineDispatcherTest() {
   override val tested = MainDispatcher
+
   override fun getExecutorThread(): Thread = getMainRenderingThread()
 
   @Test

@@ -13,15 +13,24 @@ import org.mockito.kotlin.verify
  */
 @Suppress("unused", "ClassName")
 class `should implement ReadOnlyJsonSerializer with no 'write' method overridden`<T> : ReadOnlyJsonSerializer<T> {
-  override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): T = throw NotImplementedError()
+  override fun read(
+    json: Json,
+    jsonValue: JsonValue,
+    type: Class<*>?,
+  ): T = throw NotImplementedError()
 }
 
 class ReadOnlyJsonSerializerTest {
   @Test
   fun `default implementation for 'write' method should throw UnsupportedOperationException`() {
-    val readOnlyJsonSerializer = object : ReadOnlyJsonSerializer<Any> {
-      override fun read(json: Json, jsonValue: JsonValue, type: Class<*>?): Any = throw NotImplementedError()
-    }
+    val readOnlyJsonSerializer =
+      object : ReadOnlyJsonSerializer<Any> {
+        override fun read(
+          json: Json,
+          jsonValue: JsonValue,
+          type: Class<*>?,
+        ): Any = throw NotImplementedError()
+      }
 
     shouldThrow<UnsupportedOperationException> {
       readOnlyJsonSerializer.write(Json(), JsonValue(JsonValue.ValueType.`object`), Any::class.java)
@@ -73,5 +82,9 @@ class ReadOnlyJsonSerializerFactoryTest {
     value shouldEqual data
   }
 
-  data class Data(val intField: Int, val stringField: String, val doubleField: Double)
+  data class Data(
+    val intField: Int,
+    val stringField: String,
+    val doubleField: Double,
+  )
 }

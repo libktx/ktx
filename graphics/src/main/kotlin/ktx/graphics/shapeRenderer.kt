@@ -32,7 +32,10 @@ fun ShapeRenderer.scale(scale: Vector3) {
 /** See [ShapeRenderer.rotate]. Multiplies the current transformation matrix by a rotation matrix.
  * @param axis supplies x, y and z parameters.
  * @param degrees rotation angle in degrees. */
-fun ShapeRenderer.rotate(axis: Vector3, degrees: Float) {
+fun ShapeRenderer.rotate(
+  axis: Vector3,
+  degrees: Float,
+) {
   rotate(axis.x, axis.y, axis.z, degrees)
 }
 
@@ -41,14 +44,22 @@ fun ShapeRenderer.rotate(axis: Vector3, degrees: Float) {
  * @param width width of the rendered box.
  * @param height height of the rendered box.
  * @param depth depth of the rendered box. */
-fun ShapeRenderer.box(position: Vector3, width: Float, height: Float, depth: Float) {
+fun ShapeRenderer.box(
+  position: Vector3,
+  width: Float,
+  height: Float,
+  depth: Float,
+) {
   box(position.x, position.y, position.z, width, height, depth)
 }
 
 /** See [ShapeRenderer.circle]. Estimates the number of segments needed for a smooth circle.
  * @param position supplies x and y parameters.
  * @param radius radius of the rendered circle. */
-fun ShapeRenderer.circle(position: Vector2, radius: Float) {
+fun ShapeRenderer.circle(
+  position: Vector2,
+  radius: Float,
+) {
   circle(position.x, position.y, radius)
 }
 
@@ -56,7 +67,11 @@ fun ShapeRenderer.circle(position: Vector2, radius: Float) {
  * @param position supplies x and y parameters.
  * @param radius radius of the rendered circle.
  * @param segments amount of segments used to render the circle. */
-fun ShapeRenderer.circle(position: Vector2, radius: Float, segments: Int) {
+fun ShapeRenderer.circle(
+  position: Vector2,
+  radius: Float,
+  segments: Int,
+) {
   circle(position.x, position.y, radius, segments)
 }
 
@@ -64,14 +79,21 @@ fun ShapeRenderer.circle(position: Vector2, radius: Float, segments: Int) {
  * @param position supplies x and y parameters.
  * @param width width of the rendered rectangle.
  * @param height height of the rendered rectangle. */
-fun ShapeRenderer.rect(position: Vector2, width: Float, height: Float) {
+fun ShapeRenderer.rect(
+  position: Vector2,
+  width: Float,
+  height: Float,
+) {
   rect(position.x, position.y, width, height)
 }
 
 /** See [ShapeRenderer.rect].
  * @param position supplies x and y parameters.
  * @param size supplies width and height parameters. */
-fun ShapeRenderer.rect(position: Vector2, size: Vector2) {
+fun ShapeRenderer.rect(
+  position: Vector2,
+  size: Vector2,
+) {
   rect(position.x, position.y, size.x, size.y)
 }
 
@@ -80,7 +102,13 @@ fun ShapeRenderer.rect(position: Vector2, size: Vector2) {
  * @param positionB position of edge B.
  * @param colorA color of edge A.
  * @param colorB color of edge B*/
-fun ShapeRenderer.rectLine(positionA: Vector2, positionB: Vector2, width: Float, colorA: Color, colorB: Color) {
+fun ShapeRenderer.rectLine(
+  positionA: Vector2,
+  positionB: Vector2,
+  width: Float,
+  colorA: Color,
+  colorB: Color,
+) {
   rectLine(positionA.x, positionA.y, positionB.x, positionB.y, width, colorA, colorB)
 }
 
@@ -88,7 +116,11 @@ fun ShapeRenderer.rectLine(positionA: Vector2, positionB: Vector2, width: Float,
  * @param position supplies x, y and z parameters.
  * @param radius radius of the rendered cone.
  * @param height height of the rendered cone. */
-fun ShapeRenderer.cone(position: Vector3, radius: Float, height: Float) {
+fun ShapeRenderer.cone(
+  position: Vector3,
+  radius: Float,
+  height: Float,
+) {
   cone(position.x, position.y, position.z, radius, height)
 }
 
@@ -97,7 +129,12 @@ fun ShapeRenderer.cone(position: Vector3, radius: Float, height: Float) {
  * @param radius radius of the rendered cone.
  * @param height height of the rendered cone.
  * @param segments amount of segments used to render the cone. */
-fun ShapeRenderer.cone(position: Vector3, radius: Float, height: Float, segments: Int) {
+fun ShapeRenderer.cone(
+  position: Vector3,
+  radius: Float,
+  height: Float,
+  segments: Int,
+) {
   cone(position.x, position.y, position.z, radius, height, segments)
 }
 
@@ -106,7 +143,12 @@ fun ShapeRenderer.cone(position: Vector3, radius: Float, height: Float, segments
  * @param radius radius of the rendered arc.
  * @param start start of the rendered arc.
  * @param degrees angle of the rendered arc in degrees. */
-fun ShapeRenderer.arc(position: Vector2, radius: Float, start: Float, degrees: Float) {
+fun ShapeRenderer.arc(
+  position: Vector2,
+  radius: Float,
+  start: Float,
+  degrees: Float,
+) {
   arc(position.x, position.y, radius, start, degrees)
 }
 
@@ -116,7 +158,13 @@ fun ShapeRenderer.arc(position: Vector2, radius: Float, start: Float, degrees: F
  * @param start start of the rendered arc.
  * @param degrees angle of the rendered arc in degrees.
  * @param segments amount of segments used to render the arc. */
-fun ShapeRenderer.arc(position: Vector2, radius: Float, start: Float, degrees: Float, segments: Int) {
+fun ShapeRenderer.arc(
+  position: Vector2,
+  radius: Float,
+  start: Float,
+  degrees: Float,
+  segments: Int,
+) {
   arc(position.x, position.y, radius, start, degrees, segments)
 }
 
@@ -125,7 +173,12 @@ fun ShapeRenderer.arc(position: Vector2, radius: Float, start: Float, degrees: F
  * @param width width of the rendered ellipse.
  * @param height height of the rendered ellipse.
  * @param degrees rotation of the rendered ellipse in degrees. */
-fun ShapeRenderer.ellipse(position: Vector2, width: Float, height: Float, degrees: Float) {
+fun ShapeRenderer.ellipse(
+  position: Vector2,
+  width: Float,
+  height: Float,
+  degrees: Float,
+) {
   ellipse(position.x, position.y, width, height, degrees)
 }
 
@@ -135,7 +188,13 @@ fun ShapeRenderer.ellipse(position: Vector2, width: Float, height: Float, degree
  * @param height height of the rendered ellipse.
  * @param degrees rotation of the rendered ellipse in degrees.
  * @param segments amount of segments used to render the arc. */
-fun ShapeRenderer.ellipse(position: Vector2, width: Float, height: Float, degrees: Float, segments: Int) {
+fun ShapeRenderer.ellipse(
+  position: Vector2,
+  width: Float,
+  height: Float,
+  degrees: Float,
+  segments: Int,
+) {
   ellipse(position.x, position.y, width, height, degrees, segments)
 }
 
@@ -143,7 +202,11 @@ fun ShapeRenderer.ellipse(position: Vector2, width: Float, height: Float, degree
  * @param pointA position of point A.
  * @param pointB position of point B.
  * @param pointC position of point C. */
-fun ShapeRenderer.triangle(pointA: Vector2, pointB: Vector2, pointC: Vector2) {
+fun ShapeRenderer.triangle(
+  pointA: Vector2,
+  pointB: Vector2,
+  pointC: Vector2,
+) {
   triangle(pointA.x, pointA.y, pointB.x, pointB.y, pointC.x, pointC.y)
 }
 
@@ -174,7 +237,11 @@ fun ShapeRenderer.triangle(
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, projectionMatrix: Matrix4? = null, action: (SR) -> Unit) {
+inline fun <SR : ShapeRenderer> SR.use(
+  type: ShapeType,
+  projectionMatrix: Matrix4? = null,
+  action: (SR) -> Unit,
+) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   if (projectionMatrix != null) {
     this.projectionMatrix = projectionMatrix
@@ -192,7 +259,11 @@ inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, projectionMatrix: Matrix
  * @param action inlined. Executed after [ShapeRenderer.begin] and before [ShapeRenderer.end].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <SR : ShapeRenderer> SR.use(type: ShapeType, camera: Camera, action: (SR) -> Unit) {
+inline fun <SR : ShapeRenderer> SR.use(
+  type: ShapeType,
+  camera: Camera,
+  action: (SR) -> Unit,
+) {
   contract { callsInPlace(action, InvocationKind.EXACTLY_ONCE) }
   use(type, camera.combined, action)
 }

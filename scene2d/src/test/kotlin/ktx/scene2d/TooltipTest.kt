@@ -29,11 +29,12 @@ class TooltipTest : ApplicationTest() {
     val actor = Actor()
     val variable: Int
 
-    val tooltip = actor.textTooltip("Test.") {
-      // Changing Label color:
-      color = Color.BLUE
-      variable = 42
-    }
+    val tooltip =
+      actor.textTooltip("Test.") {
+        // Changing Label color:
+        color = Color.BLUE
+        variable = 42
+      }
 
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)
@@ -47,13 +48,14 @@ class TooltipTest : ApplicationTest() {
     val actor = Actor()
     val variable: Int
 
-    val tooltip = actor.tooltip {
-      // Changing Table color:
-      color = Color.BLUE
-      // Adding child to Table content:
-      label("Test.")
-      variable = 42
-    }
+    val tooltip =
+      actor.tooltip {
+        // Changing Table color:
+        color = Color.BLUE
+        // Adding child to Table content:
+        label("Test.")
+        variable = 42
+      }
 
     assertNotNull(tooltip)
     assertTrue(tooltip in actor.listeners)

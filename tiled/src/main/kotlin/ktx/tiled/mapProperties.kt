@@ -16,4 +16,7 @@ operator fun MapProperties.contains(key: String): Boolean = containsKey(key)
  * @param key name of the property.
  * @param value value of the property.
  */
-operator fun MapProperties.set(key: String, value: Any) = put(key, value)
+operator fun MapProperties.set(
+  key: String,
+  value: Any,
+) = put(key, value)

@@ -18,11 +18,12 @@ class JointsTest {
     val jointDefinition = DistanceJointDef()
     val variable: Int
 
-    val joint = bodyA.jointWith(bodyB, jointDefinition) {
-      length = 2f
-      assertSame(jointDefinition, this)
-      variable = 42
-    }
+    val joint =
+      bodyA.jointWith(bodyB, jointDefinition) {
+        length = 2f
+        assertSame(jointDefinition, this)
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -39,10 +40,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.revoluteJointWith(bodyB) {
-      motorSpeed = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.revoluteJointWith(bodyB) {
+        motorSpeed = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -58,10 +60,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.prismaticJointWith(bodyB) {
-      motorSpeed = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.prismaticJointWith(bodyB) {
+        motorSpeed = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -77,10 +80,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.distanceJointWith(bodyB) {
-      length = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.distanceJointWith(bodyB) {
+        length = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -96,10 +100,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.pulleyJointWith(bodyB) {
-      ratio = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.pulleyJointWith(bodyB) {
+        ratio = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -115,10 +120,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.mouseJointWith(bodyB) {
-      dampingRatio = 0.2f
-      variable = 42
-    }
+    val joint =
+      bodyA.mouseJointWith(bodyB) {
+        dampingRatio = 0.2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -135,11 +141,12 @@ class JointsTest {
     val jointB = bodyA.revoluteJointWith(bodyB)
     val variable: Int
 
-    val joint = bodyA.gearJointWith(bodyB) {
-      joint1 = jointA
-      joint2 = jointB
-      variable = 42
-    }
+    val joint =
+      bodyA.gearJointWith(bodyB) {
+        joint1 = jointA
+        joint2 = jointB
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -156,10 +163,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.wheelJointWith(bodyB) {
-      motorSpeed = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.wheelJointWith(bodyB) {
+        motorSpeed = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -175,10 +183,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.weldJointWith(bodyB) {
-      dampingRatio = 0.2f
-      variable = 42
-    }
+    val joint =
+      bodyA.weldJointWith(bodyB) {
+        dampingRatio = 0.2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -194,10 +203,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.frictionJointWith(bodyB) {
-      maxForce = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.frictionJointWith(bodyB) {
+        maxForce = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -213,10 +223,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.ropeJointWith(bodyB) {
-      maxLength = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.ropeJointWith(bodyB) {
+        maxLength = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -232,10 +243,11 @@ class JointsTest {
     val (bodyA, bodyB) = getBodies()
     val variable: Int
 
-    val joint = bodyA.motorJointWith(bodyB) {
-      maxForce = 2f
-      variable = 42
-    }
+    val joint =
+      bodyA.motorJointWith(bodyB) {
+        maxForce = 2f
+        variable = 42
+      }
 
     assertSame(bodyA, joint.bodyA)
     assertSame(bodyB, joint.bodyB)
@@ -248,14 +260,16 @@ class JointsTest {
 
   private fun getBodies(): Pair<Body, Body> {
     val world = createWorld()
-    val bodyA = world.body {
-      position.set(-1f, 0f)
-      box(1f, 1f)
-    }
-    val bodyB = world.body {
-      position.set(1f, 0f)
-      box(1f, 1f)
-    }
+    val bodyA =
+      world.body {
+        position.set(-1f, 0f)
+        box(1f, 1f)
+      }
+    val bodyB =
+      world.body {
+        position.set(1f, 0f)
+        box(1f, 1f)
+      }
     return bodyA to bodyB
   }
 }

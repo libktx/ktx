@@ -11,38 +11,57 @@ import kotlin.contracts.contract
 /**
  * Stores a [String] [value] under the given [key] in the [Preferences].
  */
-operator fun Preferences.set(key: String, value: String): Preferences = putString(key, value)
+operator fun Preferences.set(
+  key: String,
+  value: String,
+): Preferences = putString(key, value)
 
 /**
  * Stores a [Boolean] [value] under the given [key] in the [Preferences].
  */
-operator fun Preferences.set(key: String, value: Boolean): Preferences = putBoolean(key, value)
+operator fun Preferences.set(
+  key: String,
+  value: Boolean,
+): Preferences = putBoolean(key, value)
 
 /**
  * Stores an [Int] [value] under the given [key] in the [Preferences].
  */
-operator fun Preferences.set(key: String, value: Int): Preferences = putInteger(key, value)
+operator fun Preferences.set(
+  key: String,
+  value: Int,
+): Preferences = putInteger(key, value)
 
 /**
  * Stores a [Long] [value] under the given [key] in the [Preferences].
  */
-operator fun Preferences.set(key: String, value: Long): Preferences = putLong(key, value)
+operator fun Preferences.set(
+  key: String,
+  value: Long,
+): Preferences = putLong(key, value)
 
 /**
  * Stores a [Float] [value] under the given [key] in the [Preferences].
  */
-operator fun Preferences.set(key: String, value: Float): Preferences = putFloat(key, value)
+operator fun Preferences.set(
+  key: String,
+  value: Float,
+): Preferences = putFloat(key, value)
 
 /**
  * Stores a [Double] [value] as [Float] under the given [key] in the [Preferences].
  * Throws [GdxRuntimeException] if [value] is outside the [Float] range.
  */
 @Deprecated(
-  message = "Doubles are not supported by libGDX Preferences. " +
-    "Value will be stored as Float instead. Please add explicit cast.",
+  message =
+    "Doubles are not supported by libGDX Preferences. " +
+      "Value will be stored as Float instead. Please add explicit cast.",
   replaceWith = ReplaceWith("set(key, value.toFloat()"),
 )
-operator fun Preferences.set(key: String, value: Double): Preferences = putFloat(key, value.asFloat())
+operator fun Preferences.set(
+  key: String,
+  value: Double,
+): Preferences = putFloat(key, value.asFloat())
 
 private fun Double.asFloat(): Float {
   if (this < Float.MIN_VALUE.toDouble() || this > Float.MAX_VALUE.toDouble()) {
@@ -59,7 +78,10 @@ private fun Double.asFloat(): Float {
  * and excessive object creation might be a concern, consider manual serialization and storing the
  * value as a [String].
  */
-operator fun Preferences.set(key: String, value: Any): Preferences = putString(key, Json().toJson(value))
+operator fun Preferences.set(
+  key: String,
+  value: Any,
+): Preferences = putString(key, Json().toJson(value))
 
 /**
  * Stores any value under the given key in the [Preferences]. The first value of the [pair] is considered
@@ -138,7 +160,10 @@ inline operator fun <reified T> Preferences.get(key: String): T? =
  * and converted to [Double]. Consider using a JSON-serializable object if you need to store [Double] values
  * with high precision.
  */
-inline operator fun <reified T> Preferences.get(key: String, defaultValue: T): T = this[key] ?: defaultValue
+inline operator fun <reified T> Preferences.get(
+  key: String,
+  defaultValue: T,
+): T = this[key] ?: defaultValue
 
 /**
  * Calls [Preferences.flush] after executing the given [operations].

@@ -19,10 +19,14 @@ import org.mockito.kotlin.mock
  */
 @Suppress("DEPRECATION") // For Applet tests.
 class PlatformTest {
-  private fun fakeApp(platform: ApplicationType? = null, version: Int = 0): Application = mock {
-    on { it.type } doReturn platform
-    on { it.version } doReturn version
-  }
+  private fun fakeApp(
+    platform: ApplicationType? = null,
+    version: Int = 0,
+  ): Application =
+    mock {
+      on { it.type } doReturn platform
+      on { it.version } doReturn version
+    }
 
   @After
   fun `clean libGDX application`() {
@@ -573,9 +577,10 @@ class PlatformTest {
     Gdx.app = fakeApp(platform = ApplicationType.Android, version = 25)
 
     // When:
-    val executed = Platform.runOnVersion(minVersion = 20, maxVersion = 30, platform = ApplicationType.Android) {
-      true
-    } ?: false
+    val executed =
+      Platform.runOnVersion(minVersion = 20, maxVersion = 30, platform = ApplicationType.Android) {
+        true
+      } ?: false
 
     // Then:
     assertTrue(executed)
@@ -587,9 +592,10 @@ class PlatformTest {
     Gdx.app = fakeApp(platform = ApplicationType.Android, version = 25)
 
     // When:
-    val executed = Platform.runOnVersion(minVersion = 8, maxVersion = 12, platform = ApplicationType.iOS) {
-      true
-    } ?: false
+    val executed =
+      Platform.runOnVersion(minVersion = 8, maxVersion = 12, platform = ApplicationType.iOS) {
+        true
+      } ?: false
 
     // Then:
     assertFalse(executed)

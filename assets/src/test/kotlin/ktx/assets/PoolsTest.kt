@@ -96,7 +96,9 @@ class PoolsTest {
   /**
    * A simple data object implementing the [Poolable] interface.
    */
-  private class SamplePoolable(var isReset: Boolean = false) : Poolable {
+  private class SamplePoolable(
+    var isReset: Boolean = false,
+  ) : Poolable {
     override fun reset() {
       this.isReset = true
     }

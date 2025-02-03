@@ -11,7 +11,8 @@ class Scene2DSkinTest {
   @Test
   fun `should throw exception if defaultSkin is not initialized`() {
     // Resetting Scene2DSkin with reflection to ensure that `skin` is null:
-    Scene2DSkin::class.declaredMemberProperties
+    Scene2DSkin::class
+      .declaredMemberProperties
       .filter { it.name == "skin" }
       .map { it.javaField!! }
       .onEach { it.isAccessible = true }
