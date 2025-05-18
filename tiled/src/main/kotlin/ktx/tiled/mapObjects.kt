@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.objects.TextMapObject
 import com.badlogic.gdx.maps.objects.TextureMapObject
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Ellipse
@@ -105,7 +106,7 @@ val MapObject.type: String?
 
 /**
  * Extension method to retrieve the [Shape2D] instance of a [MapObject].
- * Depending on the type of the object a different shape will be returned:
+ * Depending on the type of the object, a different shape will be returned:
  *
  * - [CircleMapObject] -> [Circle]
  * - [EllipseMapObject] -> [Ellipse]
@@ -124,6 +125,7 @@ val MapObject.shape: Shape2D
       is PolylineMapObject -> polyline
       is PolygonMapObject -> polygon
       is RectangleMapObject -> rectangle
+      is TextMapObject -> rectangle
       else -> throw MissingShapeException("MapObject of type ${this::class.java} does not have a shape.")
     }
 

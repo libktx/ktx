@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Box2D
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.utils.GdxNativesLoader
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 
@@ -67,6 +68,7 @@ abstract class Box2DTest {
     @JvmStatic
     @BeforeClass
     fun `initiate Box2D`() {
+      GdxNativesLoader.load()
       Box2D.init()
     }
   }

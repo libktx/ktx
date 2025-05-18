@@ -1,6 +1,9 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
-#### 1.13.1-SNAPSHOT
+#### 1.13.5-SNAPSHOT
+- **[UPDATE]** Updated to libGDX 1.13.5.
+- **[UPDATE]** Updated `shape` extension function for tiled to support the new `TextMapObject`.
+- **[FEATURE]** Add a new `forEachCell` extension function for `TiledMapTileLayer` objects.
 
 #### 1.13.1-rc1
 

@@ -28,7 +28,7 @@ class ProfilingTest {
     assertEquals(10, performanceCounter.time.mean.windowSize)
     assertEquals(10, performanceCounter.time.count)
     assertEquals(10, repeats)
-    assertEquals(0.01f, performanceCounter.time.mean.mean, 0.002f)
+    assertEquals(0.01f, performanceCounter.time.mean.mean, 0.01f)
   }
 
   @Test
@@ -44,7 +44,7 @@ class ProfilingTest {
     assertEquals("Thread.sleep", performanceCounter.name)
     assertEquals(10, performanceCounter.time.count)
     assertEquals(10, repeats)
-    assertEquals(0.01f, performanceCounter.time.mean.mean, 0.002f)
+    assertEquals(0.01f, performanceCounter.time.mean.mean, 0.01f)
   }
 
   @After

@@ -3,6 +3,8 @@ package ktx.tiled
 import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.MapLayers
 import com.badlogic.gdx.maps.MapProperties
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 
 /**
  * Extension method to directly access the [MapProperties] of a [MapLayer]. If the property
@@ -53,3 +55,15 @@ fun MapLayers.isEmpty() = this.count <= 0
  * Returns **true** if and only if the [MapLayers] collection is not empty.
  */
 fun MapLayers.isNotEmpty() = this.count > 0
+
+/**
+ * Iterates through all cells in the [TiledMapTileLayer], executing the given [action] for each cell.
+ * The action receives the cell and its coordinates within the layer.
+ */
+fun TiledMapTileLayer.forEachCell(action: (cell: Cell, cellX: Int, cellY: Int) -> (Unit)) {
+  for (y in 0 until this.height) {
+    for (x in 0 until this.width) {
+      this.getCell(x, y)?.let { action(it, x, y) }
+    }
+  }
+}

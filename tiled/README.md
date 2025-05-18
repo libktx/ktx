@@ -81,7 +81,8 @@ a certain function on them.
 
 ### `MapLayers` and `MapObjects`
 
-`isEmpty` and `isNotEmpty` extension method to check if the specific collection is empty or not.
+- `isEmpty` and `isNotEmpty` extension method to check if the specific collection is empty or not.
+- `forEachCell` extension method iterates through all cells in a `TiledMapTileLayer`, executing the given action for each cell along with its coordinates. Non-null cells only are processed during iteration.
 
 ### `BatchTiledMapRenderer`
 
@@ -241,6 +242,22 @@ val map: TiledMap = getTiledMap()
 // have this exact class and will not be matched.
 map.forEachLayer<MapLayer> { layer ->
   println(layer)
+}
+```
+
+Iterating over all non-null cells of a `TiledMapTileLayer`:
+
+```kotlin
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
+import ktx.tiled.*
+
+val map: TiledMap = getTiledMap()
+map.forEachLayer<TiledMapTileLayer> { layer ->
+    layer.forEachCell { cell, cellX, cellY ->
+        println("Processing cell $cell. Coordinates($cellX/$cellY)")
+    }
 }
 ```
 

@@ -305,7 +305,7 @@ repositories {
 
 ext {
   // Update this version to match the latest libGDX release:
-  ktxVersion = '1.13.1-SNAPSHOT'
+  ktxVersion = '1.13.5-SNAPSHOT'
 }
 ```
 
@@ -320,7 +320,7 @@ repositories {
 }
 
 // Update this version to match the latest libGDX release:
-val ktxVersion = "1.13.1-SNAPSHOT"
+val ktxVersion = "1.13.5-SNAPSHOT"
 ```
 
 </details>

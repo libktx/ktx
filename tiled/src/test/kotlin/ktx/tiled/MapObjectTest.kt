@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.objects.TextMapObject
 import com.badlogic.gdx.maps.objects.TextureMapObject
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Ellipse
@@ -111,6 +112,13 @@ class MapObjectTest {
   @Test
   fun `should retrieve shape from MapObject with Rectangle type`() {
     val rectObject = RectangleMapObject()
+
+    assertEquals(Rectangle(0f, 0f, 1f, 1f), rectObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Text type`() {
+    val rectObject = TextMapObject()
 
     assertEquals(Rectangle(0f, 0f, 1f, 1f), rectObject.shape)
   }
