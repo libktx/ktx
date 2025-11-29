@@ -101,10 +101,10 @@ class AsyncAssetManager(
     setLoaderParameterSupplier<TextureAtlasLoader> { TextureAtlasLoader.TextureAtlasParameter() }
     setLoaderParameterSupplier<TextureLoader> { TextureLoader.TextureParameter() }
     // Tiled map loaders:
-    setLoaderParameterSupplier<AtlasTmxMapLoader> { AtlasTmxMapLoader.AtlasTiledMapLoaderParameters() }
+    setLoaderParameterSupplier<AtlasTmxMapLoader> { BaseTiledMapLoader.Parameters() }
     setLoaderParameterSupplier<BaseTmxMapLoader<*>> { BaseTiledMapLoader.Parameters() }
     setLoaderParameterSupplier<TideMapLoader> { TideMapLoader.Parameters() }
-    setLoaderParameterSupplier<TmxMapLoader> { TmxMapLoader.Parameters() }
+    setLoaderParameterSupplier<TmxMapLoader> { BaseTiledMapLoader.Parameters() }
     // KTX loaders:
     setLoaderParameterSupplier<TextAssetLoader> { TextAssetLoader.TextAssetLoaderParameters() }
 

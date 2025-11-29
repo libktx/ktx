@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PointMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
@@ -110,9 +111,11 @@ val MapObject.type: String?
  *
  * - [CircleMapObject] -> [Circle]
  * - [EllipseMapObject] -> [Ellipse]
+ * - [PointMapObject] -> [Rectangle] with width and height of zero
  * - [PolylineMapObject] -> [Polyline]
  * - [PolygonMapObject] -> [Polygon]
  * - [RectangleMapObject] -> [Rectangle]
+ * - [TextMapObject] -> [Rectangle]
  *
  * Note that objects that do not have any shape like [TextureMapObject] will throw a [MissingShapeException]
  * @throws MissingShapeException If the object does not have any shape
@@ -122,6 +125,7 @@ val MapObject.shape: Shape2D
     when (this) {
       is CircleMapObject -> circle
       is EllipseMapObject -> ellipse
+      is PointMapObject -> Rectangle(point.x, point.y, 0f, 0f)
       is PolylineMapObject -> polyline
       is PolygonMapObject -> polygon
       is RectangleMapObject -> rectangle

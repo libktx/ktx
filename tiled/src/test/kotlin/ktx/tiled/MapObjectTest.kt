@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
+import com.badlogic.gdx.maps.objects.PointMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
@@ -121,6 +122,13 @@ class MapObjectTest {
     val rectObject = TextMapObject()
 
     assertEquals(Rectangle(0f, 0f, 1f, 1f), rectObject.shape)
+  }
+
+  @Test
+  fun `should retrieve shape from MapObject with Point type`() {
+    val pointObject = PointMapObject()
+
+    assertEquals(Rectangle(0f, 0f, 0f, 0f), pointObject.shape)
   }
 
   @Test(expected = MissingShapeException::class)
