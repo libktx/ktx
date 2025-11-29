@@ -1,8 +1,11 @@
 import ktx.*
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.jvm.JvmTargetValidationMode
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 
 buildscript {
   repositories {
@@ -24,11 +27,12 @@ buildscript {
 val libGroup: String by project
 val ossrhUsername: String by project
 val ossrhPassword: String by project
+val mavenPublishingPluginVersion: String by project
 
 plugins {
   java
   distribution
-  id("io.codearte.nexus-staging") version "0.22.0"
+  id("com.vanniktech.maven.publish") version "0.33.0"
 }
 
 repositories {
@@ -48,11 +52,11 @@ allprojects {
 }
 
 subprojects {
-  apply(plugin = "maven-publish")
   apply(plugin = "java")
   apply(plugin = "kotlin")
   apply(plugin = "signing")
   apply(plugin = "jacoco")
+  apply(plugin = "com.vanniktech.maven.publish.base")
 
   val isReleaseVersion = !libVersion.endsWith("SNAPSHOT")
 
@@ -77,14 +81,14 @@ subprojects {
   }
 
   tasks.withType<KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = JavaVersion.VERSION_1_8.toString()
-      freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+    compilerOptions {
+      jvmTarget.set(JvmTarget.JVM_1_8)
+      freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
     }
     jvmTargetValidationMode.set(JvmTargetValidationMode.IGNORE)
   }
   val compileTestKotlin: KotlinCompile by tasks
-  compileTestKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+  compileTestKotlin.compilerOptions.jvmTarget.set(JvmTarget.JVM_11)
 
   dependencies {
     val kotlinVersion: String by project
@@ -140,117 +144,54 @@ subprojects {
   }
 
   val dokkaHtml by tasks.getting
-
   tasks.register<Zip>("dokkaZip") {
-    from("$buildDir/dokka/html")
+    from("${layout.buildDirectory}/dokka/html")
     dependsOn(dokkaHtml)
   }
 
-  val javadocJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("javadoc")
-    from("$buildDir/dokka/html")
-    dependsOn(dokkaHtml)
-  }
+  mavenPublishing {
+    publishToMavenCentral(automaticRelease = true)
+    if (isReleaseVersion) {
+      signAllPublications()
+    }
+    configure(KotlinJvm(
+      javadocJar = if (isReleaseVersion) JavadocJar.Dokka("dokkaHtml") else JavadocJar.None(),
+      sourcesJar = true
+    ))
 
-  val sourcesJar by tasks.registering(Jar::class) {
-    from(sourceSets.main.get().allSource)
-    archiveClassifier.set("sources")
-  }
+    coordinates(libGroup, projectName, libVersion)
 
-  artifacts {
-    archives(javadocJar)
-    archives(sourcesJar)
-  }
-
-  afterEvaluate {
-    rootProject.distributions {
-      main {
-        distributionBaseName.set(libVersion)
-        contents {
-          into("lib") {
-            from(tasks.jar)
-          }
-          into("doc") {
-            from(tasks["dokkaZip"])
-          }
-          into("src") {
-            from(tasks["sourcesJar"])
-          }
+    pom {
+      name.set(projectName)
+      description.set(projectDesc)
+      inceptionYear.set("2016")
+      url.set("https://github.com/libktx/ktx")
+      licenses {
+        license {
+          name.set("CC0-1.0")
+          url.set("https://creativecommons.org/publicdomain/zero/1.0/")
         }
+      }
+      developers {
+        developer {
+          id.set("mj")
+          name.set("MJ")
+          url.set("https://github.com/czyzby")
+        }
+      }
+      scm {
+        url.set("https://github.com/libktx/ktx")
+        connection.set("scm:git:git://github.com/libktx/ktx.git")
+        developerConnection.set("scm:git:ssh://git@github.com/libktx/ktx.git")
       }
     }
   }
 
   tasks.register("uploadSnapshot") {
-    if (!isReleaseVersion) finalizedBy(tasks["publishAllPublicationsToMavenRepository"])
-  }
-
-  configure<PublishingExtension> {
-    repositories {
-      maven {
-        val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-        val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-        url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-
-        credentials {
-          username = ossrhUsername
-          password = ossrhPassword
-        }
-      }
-    }
-
-    publications {
-      create<MavenPublication>("mavenKtx") {
-        pom {
-          name.set(projectName)
-          packaging = "jar"
-          description.set(projectDesc)
-          afterEvaluate {
-            artifactId = tasks.jar.get().archiveBaseName.get()
-          }
-
-          from(components["kotlin"])
-          artifact(sourcesJar)
-          artifact(javadocJar)
-
-          url.set("https://libktx.github.io/")
-
-          licenses {
-            license {
-              name.set("CC0-1.0")
-              url.set("https://creativecommons.org/publicdomain/zero/1.0/")
-            }
-          }
-
-          scm {
-            connection.set("scm:git:git@github.com:libktx/ktx.git")
-            developerConnection.set("scm:git:git@github.com:libktx/ktx.git")
-            url.set("https://github.com/libktx/ktx/")
-          }
-
-          developers {
-            developer {
-              id.set("mj")
-              name.set("MJ")
-            }
-          }
-        }
-      }
-    }
+    if (!isReleaseVersion) finalizedBy(tasks["publishToMavenCentral"])
   }
 
   tasks.withType<Sign> { onlyIf { isReleaseVersion } }
-
-  configure<SigningExtension> {
-    setRequired { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
-    sign(extensions.getByType<PublishingExtension>().publications["mavenKtx"])
-  }
-}
-
-nexusStaging {
-  packageGroup = libGroup
-  username = ossrhUsername
-  password = ossrhPassword
 }
 
 tasks.register<JavaExec>("linterIdeSetup") {

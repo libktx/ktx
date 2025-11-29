@@ -1,9 +1,12 @@
 _See also: [the official libGDX changelog](https://github.com/libgdx/libgdx/blob/master/CHANGES)._
 
 #### 1.13.5-SNAPSHOT
+
 - **[UPDATE]** Updated to libGDX 1.13.5.
-- **[UPDATE]** Updated `shape` extension function for tiled to support the new `TextMapObject`.
-- **[FEATURE]** Add a new `forEachCell` extension function for `TiledMapTileLayer` objects.
+- **[UPDATE]** Updated to Gradle 8.14.2.
+- **[MISC]** Migrated publishing from OSSRH to Maven Central Portal.
+- **[CHANGE]** (`ktx-tiled`) Updated `shape` extension function to support the new `TextMapObject`.
+- **[FEATURE]** (`ktx-tiled`) Add a new `forEachCell` extension function for `TiledMapTileLayer` objects.
 
 #### 1.13.1-rc1
 

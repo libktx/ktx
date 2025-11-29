@@ -67,11 +67,9 @@ Some useful Gradle tasks include:
 - `check` - runs all tests in all projects.
 - `clean` - removes the `build` directories, which forces rebuilds of the modules.
 - `distZip` - prepares a zip archive with all jars in `build/distributions` folder. Useful for releases.
-- `publish` - pushes the archives to _Maven Central_ or the snapshot repository, depending on the
-[version](../version.txt). Requires complete `gradle.properties` with archive signing and _Sonatype_ logging data.
-- `closeAndReleaseRepository` - closes and releases the Nexus repository. Should be run after `publish` in case of
-a non-snapshot upload to _Maven Central_. Might fail at times on the release task; running `releaseRepository`
-separately should fix the issue.
+- `publishToMavenCentral` - pushes the archives to _Maven Central Portal_ or the snapshot repository, depending on 
+the [version](../version.txt). Requires complete `gradle.properties` with _Sonatype_ credentials as well as the archive
+signing properties for non-snapshot releases.
 
 ### Adding a new KTX module
 
@@ -168,9 +166,7 @@ Apply `dev` label and milestone corresponding to the libGDX version. An example 
 - Create a pull request from the `develop` branch to the `master` branch. Review and merge the changes to the `master`
 branch.
 - Checkout the `master` branch. Fetch the latest changes.
-- Run `gradle build publish closeAndReleaseRepository` to push artifacts to _Maven Central_. Note that the Maven plugin
-has its issues and might fail with an error, but usually the release will be successful. You can check if the staging
-repository was properly close, promoted and released at [Nexus Repository Manager](https://oss.sonatype.org/).
+- Run `gradle build publishToMavenCentral` to push artifacts to the _Maven Central Portal_.
 - Run `gradle distZip` to prepare an archive with **KTX** sources, compiled binary and documentation.
 - Upload the archive to [releases](https://github.com/libktx/ktx/releases) section. The tag should be made from the
 `master` branch and its name should match the released version. Name of the release should match `KTX $libVersion`.
@@ -193,8 +189,8 @@ that the library was compiled against.
 if the current [version](../version.txt) is not a snapshot to avoid accidentally pushing a stable release.
 
 Note that snapshots are automatically uploaded to Maven Central (OSS Sonatype)
-[snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/io/github/libktx/) after pushing
-to the `develop` branch.
+[snapshots repository](https://central.sonatype.com/repository/maven-snapshots/)
+after pushing to the `develop` branch.
 
 #### Automated tasks
 

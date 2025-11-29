@@ -25,5 +25,5 @@ jobs:
       - name: Upload snapshot to Maven Central
         run: ./gradlew build uploadSnapshot -x dokkaHtml
         env:
-          ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.ossrhUsername }}
-          ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.ossrhPassword }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
