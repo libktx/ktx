@@ -29,6 +29,7 @@ include(
   "scene2d",
   "script",
   "style",
+  "textratypist",
   "tiled",
   "vis",
   "vis-style"

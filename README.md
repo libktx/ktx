@@ -65,6 +65,7 @@ You can include the selected **KTX** modules based on the needs of your applicat
 |        [`ktx-scene2d`](scene2d)        | Type-safe Kotlin builders for [`Scene2D`](https://libgdx.com/wiki/graphics/2d/scene2d/scene2d) GUI.                               |
 |         [`ktx-script`](script)         | Kotlin scripting engine for desktop applications.                                                                                 |
 |          [`ktx-style`](style)          | Type-safe Kotlin builders for `Scene2D` widget styles extending `Skin` API.                                                       |
+|   [`ktx-textratypist`](textratypist)   | Type-safe Kotlin builders for [TextraTypist](https://github.com/tommyettinger/textratypist) widgets.                                                                           |
 |          [`ktx-tiled`](tiled)          | Utilities for [Tiled](https://www.mapeditor.org/) maps.                                                                           |
 |            [`ktx-vis`](vis)            | Type-safe Kotlin builders for [`VisUI`](https://github.com/kotcrab/vis-ui/).                                                      |
 |      [`ktx-vis-style`](vis-style)      | Type-safe Kotlin builders for `VisUI` widget styles.                                                                              |

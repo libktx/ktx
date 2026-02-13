@@ -7,6 +7,7 @@ const val artemisOdbVersion = "2.3.0"
 const val ashleyVersion = "1.7.4"
 const val gdxAiVersion = "1.8.2"
 const val visUiVersion = "1.5.5"
+const val textraTypistVersion = "2.1.11" // Cannot upgrade to 2.2.x until gdx 1.14.x.
 
 const val spekVersion = "1.1.5"
 const val kotlinTestVersion = "2.0.7"

@@ -1,0 +1,20 @@
+
+test-skin.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Roboto-Black
+  rotate: false
+  xy: 1, 443
+  size: 506, 62
+  orig: 506, 62
+  offset: 0, 0
+  index: -1
+blob
+  rotate: false
+  xy: 1, 417
+  size: 38, 24
+  orig: 38, 24
+  offset: 0, 0
+  index: -1
