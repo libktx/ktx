@@ -18,7 +18,7 @@ and leave non-table built-in factory APIs unchanged.
 ### In scope
 
 - Add `mount(actor, placement, init)` as the separated builder primitive.
-- Add `Scene2dFactory<A : Actor>` and `scene2dFactory` for reusable actor recipes.
+- Add `Scene2dFactoryDescriptor<A : Actor>` and `scene2dFactory` for reusable actor recipes.
 - Add a member-extension `invoke` operator so factory values are callable inside any `KWidget`
   scope.
 - Convert `table` to separated `placement` and actor `init` callbacks.
@@ -31,6 +31,8 @@ and leave non-table built-in factory APIs unchanged.
 - Converting every built-in factory to `mount`.
 - Source-compatible legacy/new overloads for `table`; those overloads risk ambiguous calls with
   trailing lambdas and are deferred to the broader migration.
+- Factory metadata annotation; the prototype keeps descriptor API minimal and avoids optional
+  tooling.
 - Removing `Scene2DSkin.defaultSkin`.
 - Two-typed factories with a separate actor scope.
 - Reflection, KSP, compiler plugins, registration, or generated adapters.
@@ -66,13 +68,13 @@ semantics.
 
 ```kotlin
 @Scene2dDsl
-class Scene2dFactory<A : Actor> internal constructor(
+class Scene2dFactoryDescriptor<A : Actor> internal constructor(
   internal val build: RootWidget.() -> A,
 )
 
-inline fun <A : Actor> scene2dFactory(
-  noinline build: RootWidget.() -> A,
-): Scene2dFactory<A>
+fun <A : Actor> scene2dFactory(
+  build: RootWidget.() -> A,
+): Scene2dFactoryDescriptor<A>
 ```
 
 A factory stores a recipe, not an actor. Each invocation executes the recipe through `scene2d`
@@ -81,7 +83,7 @@ and therefore creates a fresh actor tree.
 `KWidget` exposes:
 
 ```kotlin
-operator fun <A : Actor> Scene2dFactory<A>.invoke(
+operator fun <A : Actor> Scene2dFactoryDescriptor<A>.invoke(
   placement: @UnsafeVariance Storage.() -> Unit = {},
   init: A.() -> Unit = {},
 ): A
@@ -90,17 +92,6 @@ operator fun <A : Actor> Scene2dFactory<A>.invoke(
 The operator builds the detached root, then uses `mount` to store and configure it. The
 `@UnsafeVariance` annotation is limited to the placement receiver required by covariant
 `KWidget<out Storage>`.
-
-### Metadata annotation
-
-```kotlin
-@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.BINARY)
-annotation class Scene2dFactory
-```
-
-The annotation is optional metadata for documentation, future static analysis, and possible
-future tooling. Runtime behavior must not depend on it.
 
 ### Table factory
 
@@ -123,7 +114,6 @@ current callback shapes during this prototype.
 Private reusable component:
 
 ```kotlin
-@Scene2dFactory
 private val sidePane = scene2dFactory {
   table {
     label("Inventory")
@@ -152,7 +142,6 @@ Semantic fragments remain ordinary scoped functions and do not require an `Actor
 
 ## Files
 
-- `scene2d/src/main/kotlin/ktx/scene2d/Scene2dDsl.kt`: metadata annotation.
 - `scene2d/src/main/kotlin/ktx/scene2d/widget.kt`: `KWidget` factory invocation operator.
 - `scene2d/src/main/kotlin/ktx/scene2d/factory.kt`: `mount`, factory descriptor creation, and
   separated `table` implementation.
