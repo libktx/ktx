@@ -40,6 +40,48 @@ import kotlin.contracts.contract
 import com.badlogic.gdx.utils.Array as GdxArray
 
 /**
+ * Recipe for creating fresh Scene2D actor trees in any [KWidget] scope.
+ * @param build creates the root actor using [RootWidget] DSL.
+ */
+@Scene2dDsl
+class Scene2dFactoryDescriptor<A : Actor> internal constructor(
+  internal val build: RootWidget.() -> A,
+)
+
+/**
+ * Creates a reusable Scene2D actor recipe.
+ * @param build creates the root actor using [RootWidget] DSL. Invoked every time the factory is mounted.
+ * @return descriptor that can be called inside any [KWidget] scope.
+ */
+@Scene2dDsl
+fun <A : Actor> scene2dFactory(build: RootWidget.() -> A): Scene2dFactoryDescriptor<A> =
+  Scene2dFactoryDescriptor(build)
+
+/**
+ * Adds [actor] to this widget, configures the parent-specific storage, then initializes the actor.
+ * @param actor will be added to this widget.
+ * @param placement configures the storage object returned by [KWidget.storeActor].
+ * @param init configures [actor] after it is stored.
+ * @return the passed [actor].
+ */
+@Scene2dDsl
+@OptIn(ExperimentalContracts::class)
+inline fun <S, A : Actor> KWidget<S>.mount(
+  actor: A,
+  placement: S.() -> Unit = {},
+  init: A.() -> Unit = {},
+): A {
+  contract {
+    callsInPlace(placement, InvocationKind.EXACTLY_ONCE)
+    callsInPlace(init, InvocationKind.EXACTLY_ONCE)
+  }
+  val stored = storeActor(actor)
+  stored.placement()
+  actor.init()
+  return actor
+}
+
+/**
  * Constructs a top-level [Window] widget.
  * @param title will be displayed as window's title.
  * @param style name of the widget style. Defaults to [defaultStyle].

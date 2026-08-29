@@ -45,6 +45,18 @@ interface KWidget<out Storage> {
    * @see Cell
    */
   fun <T : Actor> storeActor(actor: T): Storage
+
+  /**
+   * Creates and stores a fresh actor tree from the factory descriptor.
+   * @param placement configures the storage object returned by [storeActor].
+   * @param init configures the actor created by the factory.
+   * @return actor created by the factory.
+   */
+  @Scene2dDsl
+  operator fun <A : Actor> Scene2dFactoryDescriptor<A>.invoke(
+    placement: @UnsafeVariance Storage.() -> Unit = {},
+    init: A.() -> Unit = {},
+  ): A = this@KWidget.mount(scene2d(build), placement, init)
 }
 
 /**
