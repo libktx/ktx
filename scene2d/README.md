@@ -212,6 +212,44 @@ and we opted against duplicating its entire API. It is still pretty straightforw
 All building blocks are inlined during compilation, which means there is little to no runtime overhead when using
 `ktx-scene2d`. This code will be pretty much as fast as your good old Java, while remaining cleaner and safer.
 
+### Composable Scene2D factories
+
+`scene2dFactory` stores a recipe and creates fresh actors on every invocation. That lets private, reusable DSL fragments
+behave like built-in widgets without extra registry or tooling.
+
+```kotlin
+private val sidePane = scene2dFactory {
+  table {
+    label("Inventory")
+  }
+}
+
+val root = scene2d.table {
+  sidePane(placement = { growY() }) {
+    label("Extra content")
+  }
+}
+```
+
+The trailing lambda configures the created actor. `placement` configures the parent storage object, such as a `Cell`
+from `table`.
+
+When a reusable component needs parameters or depends on current parent, keep it as an ordinary `KWidget` extension
+function. For example:
+
+```kotlin
+inline fun <S> KWidget<S>.healthBar(
+  value: Float,
+  placement: S.() -> Unit = {},
+  init: HealthBar.() -> Unit = {},
+): HealthBar = mount(HealthBar(value), placement, init)
+```
+
+Factories do not cache actors. Each call builds a fresh actor tree, then mounts it into current parent.
+
+Only `table` uses separated placement/init callbacks in this prototype. Other built-ins keep existing callback forms,
+and compiler plugins, KSP, or reflection are not required.
+
 Note that the `scene2d.` prefix is only necessary for top-level actors to start using the DSL. In effect, it's only
 necessary if you'd like to assign the widget to a variable and add it to a `Stage` or another widget group later on.
 When inside a DSL block, `scene2d.` prefix is not only no longer necessary to define actors, but it will actually
