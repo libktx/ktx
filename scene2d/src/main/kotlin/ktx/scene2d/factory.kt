@@ -620,19 +620,23 @@ inline fun <S> KWidget<S>.stack(init: KStack.(S) -> Unit = {}): KStack {
 
 /**
  * @param skin [Skin] instance that will be applied to some table children. Defaults to [Scene2DSkin.defaultSkin].
- * @param init will be invoked with the widget as "this". Consumes actor container (usually a [Cell] or [Node]) that
- * contains the widget. Might consume the actor itself if this group does not keep actors in dedicated containers.
- * Inlined.
+ * @param placement configures the parent-specific storage object that contains this table.
+ * @param init will be invoked with the widget as "this". Inlined.
  * @return a [Table] instance added to this group.
  */
 @Scene2dDsl
 @OptIn(ExperimentalContracts::class)
 inline fun <S> KWidget<S>.table(
   skin: Skin = Scene2DSkin.defaultSkin,
-  init: KTableWidget.(S) -> Unit = {},
+  placement: S.() -> Unit = {},
+  init: KTableWidget.() -> Unit = {},
 ): KTableWidget {
   contract { callsInPlace(init, InvocationKind.EXACTLY_ONCE) }
-  return actor(KTableWidget(skin), init)
+  return mount(
+    actor = KTableWidget(skin),
+    placement = placement,
+    init = init,
+  )
 }
 
 /**
