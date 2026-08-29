@@ -46,7 +46,7 @@ and leave non-table built-in factory APIs unchanged.
 inline fun <S, A : Actor> KWidget<S>.mount(
   actor: A,
   placement: S.() -> Unit = {},
-  init: A.() -> Unit = {},
+  init: (@Scene2dDsl A).() -> Unit = {},
 ): A
 ```
 
@@ -85,7 +85,7 @@ and therefore creates a fresh actor tree.
 ```kotlin
 operator fun <A : Actor> Scene2dFactoryDescriptor<A>.invoke(
   placement: @UnsafeVariance Storage.() -> Unit = {},
-  init: A.() -> Unit = {},
+  init: (@Scene2dDsl A).() -> Unit = {},
 ): A
 ```
 
@@ -133,7 +133,7 @@ Custom actor factory:
 inline fun <S> KWidget<S>.healthBar(
   value: Float,
   placement: S.() -> Unit = {},
-  init: HealthBar.() -> Unit = {},
+  init: (@Scene2dDsl HealthBar).() -> Unit = {},
 ): HealthBar = mount(HealthBar(value), placement, init)
 ```
 

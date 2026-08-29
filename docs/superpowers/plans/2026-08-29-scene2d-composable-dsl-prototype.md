@@ -90,7 +90,7 @@ private class HealthBar(val value: Float) : Actor()
 private inline fun <S> KWidget<S>.healthBar(
   value: Float,
   placement: S.() -> Unit = {},
-  init: HealthBar.() -> Unit = {},
+  init: (@Scene2dDsl HealthBar).() -> Unit = {},
 ): HealthBar = mount(HealthBar(value), placement, init)
 
 @Test
@@ -163,7 +163,7 @@ In `factory.kt`, add:
 inline fun <S, A : Actor> KWidget<S>.mount(
   actor: A,
   placement: S.() -> Unit = {},
-  init: A.() -> Unit = {},
+  init: (@Scene2dDsl A).() -> Unit = {},
 ): A {
   val stored = storeActor(actor)
   stored.placement()
@@ -182,7 +182,7 @@ Inside `KWidget<out Storage>` in `widget.kt`, add:
 @Scene2dDsl
 operator fun <A : Actor> Scene2dFactoryDescriptor<A>.invoke(
   placement: @UnsafeVariance Storage.() -> Unit = {},
-  init: A.() -> Unit = {},
+  init: (@Scene2dDsl A).() -> Unit = {},
 ): A {
   return mount(scene2d(build), placement, init)
 }
@@ -309,7 +309,7 @@ Include this custom actor extension:
 inline fun <S> KWidget<S>.healthBar(
   value: Float,
   placement: S.() -> Unit = {},
-  init: HealthBar.() -> Unit = {},
+  init: (@Scene2dDsl HealthBar).() -> Unit = {},
 ): HealthBar = mount(HealthBar(value), placement, init)
 ```
 

@@ -55,7 +55,7 @@ interface KWidget<out Storage> {
   @Scene2dDsl
   operator fun <A : Actor> Scene2dFactoryDescriptor<A>.invoke(
     placement: @UnsafeVariance Storage.() -> Unit = {},
-    init: A.() -> Unit = {},
+    init: (@Scene2dDsl A).() -> Unit = {},
   ): A = this@KWidget.mount(scene2d(build), placement, init)
 }
 

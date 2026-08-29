@@ -209,12 +209,14 @@ providing some syntax sugar. Keep in mind that Scene2D was written in Java, so w
 (`color = Color.RED`), most are not (`setWrap(true)`). This is because we wanted to create a thin wrapper over Scene2D,
 and we opted against duplicating its entire API. It is still pretty straightforward to configure most actors.
 
-All building blocks are inlined during compilation, which means there is little to no runtime overhead when using
-`ktx-scene2d`. This code will be pretty much as fast as your good old Java, while remaining cleaner and safer.
+Built-in actor factory building blocks are inlined during compilation, which means there is little to no runtime
+overhead when using `ktx-scene2d`. This code will be pretty much as fast as your good old Java, while remaining cleaner
+and safer.
 
 ### Composable Scene2D factories
 
-`scene2dFactory` stores a recipe and creates fresh actors on every invocation. That lets private, reusable DSL fragments
+`scene2dFactory` stores a recipe and creates fresh actors on every invocation. Descriptor construction is intentionally
+not inlined; invoking the resulting recipe still composes through the same DSL. That lets private, reusable DSL fragments
 behave like built-in widgets without extra registry or tooling.
 
 ```kotlin
@@ -241,7 +243,7 @@ function. For example:
 inline fun <S> KWidget<S>.healthBar(
   value: Float,
   placement: S.() -> Unit = {},
-  init: HealthBar.() -> Unit = {},
+  init: (@Scene2dDsl HealthBar).() -> Unit = {},
 ): HealthBar = mount(HealthBar(value), placement, init)
 ```
 

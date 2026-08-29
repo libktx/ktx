@@ -69,7 +69,7 @@ fun <A : Actor> scene2dFactory(build: RootWidget.() -> A): Scene2dFactoryDescrip
 inline fun <S, A : Actor> KWidget<S>.mount(
   actor: A,
   placement: S.() -> Unit = {},
-  init: A.() -> Unit = {},
+  init: (@Scene2dDsl A).() -> Unit = {},
 ): A {
   contract {
     callsInPlace(placement, InvocationKind.EXACTLY_ONCE)

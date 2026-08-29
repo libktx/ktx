@@ -53,11 +53,41 @@ class Scene2dFactoryTest : ApplicationTest() {
 
   private class HealthBar(val value: Float) : Actor()
 
+  private val healthBarFactory = scene2dFactory { actor(HealthBar(1f)) }
+
   private inline fun <S> KWidget<S>.healthBar(
     value: Float,
     placement: S.() -> Unit = {},
-    init: HealthBar.() -> Unit = {},
+    init: (@Scene2dDsl HealthBar).() -> Unit = {},
   ): HealthBar = mount(HealthBar(value), placement, init)
+
+  @Test
+  fun `mount accepts isolated custom actor init receiver`() {
+    val init: (@Scene2dDsl HealthBar).() -> Unit = {
+      name = "isolated mount"
+      // KWidget functions such as label() require an explicit outer receiver in this block.
+    }
+
+    val root = scene2d.table {
+      mount(HealthBar(1f), init = init)
+    }
+
+    assertEquals("isolated mount", root.children.first().name)
+  }
+
+  @Test
+  fun `factory accepts isolated custom actor init receiver`() {
+    val init: (@Scene2dDsl HealthBar).() -> Unit = {
+      name = "isolated factory"
+      // KWidget functions such as label() require an explicit outer receiver in this block.
+    }
+
+    val root = scene2d.table {
+      healthBarFactory(init = init)
+    }
+
+    assertEquals("isolated factory", root.children.first().name)
+  }
 
   @Test
   fun `custom actor factory uses mount`() {
